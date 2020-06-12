@@ -1,0 +1,47 @@
+{
+  "tempGitRepoLoc": "/home/rubix/src/aiondigital.bk/rubix",
+  "tempImagesLoc": "/home/rubix/src/images/rubix",
+  "downloadImagesLoc": "/home/rubix/src/images.download/",
+  "s3StorageLoc": "images/rubix/",
+  "s3ClientObj": {
+    "bucketName": "aiondigital",
+    "regionName": "sgp1",
+    "endpointURL": "https://sgp1.digitaloceanspaces.com",
+    "accessKey": "AWS ACCESS KEY",
+    "secretKey": "AWS SECRET KEY"
+  },
+  "gitRepoURL": "https://{0}:{1}@github.com/aiondigital/rubix.git",
+  "tagPostFix": "rubix",
+  "configurations": [
+    {
+      "serviceName": "conduit.gateway",
+      "repoName": "fs.mw.gateway.api",
+      "lastVersion": "0.0.1"
+    },
+    {
+      "serviceName": "conduit.customer",
+      "repoName": "cb.bs.customer.api",
+      "lastVersion": "0.0.1"
+    },
+    {
+      "serviceName": "conduit.identityx",
+      "repoName": "dn.bs.identityx.api",
+      "lastVersion": "0.0.1"
+    },
+    {
+      "serviceName": "conduit.authorities",
+      "repoName": "fs.bs.db.cdtauthority.api",
+      "lastVersion": "0.0.1"
+    },
+    {
+      "serviceName": "conduit.authentication",
+      "repoName": "fs.es.authentication.api",
+      "lastVersion": "0.0.8"
+    },
+    {
+      "serviceName": "conduit.bbyn",
+      "repoName": "mw.bs.bbyn.api",
+      "lastVersion": "0.0.9"
+    }
+  ]
+}
