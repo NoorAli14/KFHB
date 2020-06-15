@@ -1,26 +1,30 @@
 </p>
 <h1 align="center">Retail Platform</h1>
 <br />
+
 ## **❯ Table of Contents**
-- [Introduction](#-introduction)
-- [Tech Stack](#-tech)
+
+- [**Introduction**](#-introduction)
+- [**Tech Stack**](#-tech)
 - [Relational Schema](#-schema)
 - [System Requirements](#-system-requirements)
 - [Prerequisite Installation](#-pre-installation)
 - [Up and Running](#-up-and-running)
-    - [Local Setup](#-local-setup)
-		- [Docker Setup](#-docker-setup)
-		- [Manual Setup](#-manual-setup)
-	- [Production Setup](#-production-setup)
-- [REST API]
-	- [Endpoints]
+  - [Local Setup](#-local-setup) - [Docker Setup](#-docker-setup) - [Manual Setup](#-manual-setup) - [Production Setup](#-production-setup)
+- [REST API] - [Endpoints]
 - [Deployment](#-deployment)
-    - Via Docker
-    - Via Manual
+  - Via Docker
+  - Via Manual
 
 ## **❯ Introduction**
 
 ## **❯ Tech**
+
+- [node.js] - evented I/O for the backend
+- [Express] - fast node.js network app framework.
+- [knex] - In addition, we're going to use knex, which is a query builder that will interface with the **MySQL**, **PostgreSQL**, **SQLite**, **Oracle**, **MSSQL Server** and **MariaDB** databases for us.
+- [GraphQL] provides as a awesome query language for our api [GraphQL](http://graphql.org/).
+- [TypeGraphQL] thanks to [TypeGraphQL](https://19majkel94.github.io/type-graphql/) we have a some cool decorators to simplify the usage of GraphQL.
 
 ## **❯ Relational Schema**
 
