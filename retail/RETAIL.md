@@ -2,20 +2,21 @@
 <h1 align="center">Retail Platform</h1>
 <br />
 ## **❯ Table of Contents**
-- [**Introduction**](#-introduction)
-- [**Tech**](#-tech)
-- [**Relational Schema**](#-schema)
-- [**System Requirements**](#-system-requirements)
-- [**Prerequisite Installation**](#-pre-installation)
-- [**Up and Running**](#-up-and-running)
+- [Introduction](#-introduction)
+- [Tech Stack](#-tech)
+- [Relational Schema](#-schema)
+- [System Requirements](#-system-requirements)
+- [Prerequisite Installation](#-pre-installation)
+- [Up and Running](#-up-and-running)
     - [Local Setup](#-local-setup)
 		- [Docker Setup](#-docker-setup)
 		- [Manual Setup](#-manual-setup)
 	- [Production Setup](#-production-setup)
-- [**REST API**]
+- [REST API]
 	- [Endpoints]
-- [**Deployment**](#-deployment)
+- [Deployment](#-deployment)
     - Via Docker
+    - Via Manual
 
 ## **❯ Introduction**
 
@@ -56,4 +57,4 @@ instructions - https://docs.docker.com/compose/production/
 
 ### **Via Manual**
 
-![divider](./divider.png)
+![divider](../divider.png)
