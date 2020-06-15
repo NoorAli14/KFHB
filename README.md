@@ -9,6 +9,9 @@
 ## ❯ Table of Contents
 
 - [Getting Started](#-getting-started)
+- [Corporate Platform](https://github.com/aiondigital/rubix/blob/master/corporate/middleware/CORPORATE.md)
+- [Retail Platform](https://github.com/aiondigital/rubix/blob/master/retail/RETAIL.md)
+- [Starter Kits](https://github.com/aiondigital/rubix/blob/master/starter-kits/STARTERKIT.md)
 - [License](#-license)
 
 ![divider](./divider.png)
