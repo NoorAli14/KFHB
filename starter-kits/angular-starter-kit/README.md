@@ -9,6 +9,11 @@
 - [Local Setup](#-local-setup)
 - [Docker setup](#-docker-setup)
 - [Folder Structure](#-folder-structure)
+- [API Calling Mechanism](#-api-call)
+- [Global Exception Handler](#-global-exception)
+- [Global Notification Handler](#-global-notification)
+- [How to Secure Local Storage information](#-secure-storage)
+- [How to set up the environment Variables Dynamically](#-dynamic-variable)
 
 ![divider](./divider.png)
 
@@ -63,3 +68,32 @@ Each feature has its own HTTP service, which calls the global generic HTTP servi
 ### Global HTTP Service
 
 There is a generic HTTP service `Network Service` which has all the HTTP generic methods. Each feature calls these methods to interact with backend.
+
+## ❯ Global Exception Handler
+
+There is a generic HTTP service `Network Service` which has all the HTTP generic methods. Each feature calls these methods to interact with backend.
+
+## ❯ Global Notification Handler
+
+There is a global event bus service inside core module, which is used to register global events. It will trigger that event whenever that event calls.
+
+## ❯ How to Secure Local Storage information
+
+A third party `crypto-js` packages has been used to secure the storage. There is a storage service inside core module which will encrypt the item before storing and decrypt before retreiving the item.
+
+## ❯ How to set up the environment Variables Dynamically
+
+To add the environment variable dynamically, there is a file `env.template.js` inside `assets` folder. All the variables are added there. This file will be replace by `env.js` when `startup.sh` will be executed through `Docker` file. Finally `env.js` is imported inside `index.html` which will replace all environment variables in respective environment like `staging`, `production` etc.
+
+## ❯ Environments
+
+There four environments files added inside environment folder. We will build the project with specific environment `ng build --configuration staging`
+
+- [environment]
+- [environment.prod]
+- [environment.staging]
+- [environment.qa]
+
+## ❯ Access Token & Refresh Token Strategy
+
+There is an global interceptor added inside core module, where access-token is being added on each request. If access-token is expired, a request to refresh the token will be executed.
