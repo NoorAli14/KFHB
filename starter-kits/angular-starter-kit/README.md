@@ -15,7 +15,6 @@
 - [Environments](#-environments)
 - [Access Token and Refresh Token Strategy](#-access-token-and-refresh-token-strategy)
 
-![divider](./divider.png)
 
 ## ❯ Local Setup
 
