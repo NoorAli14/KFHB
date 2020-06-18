@@ -97,6 +97,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 	 * Form Submit
 	 */
 	submit() {
+		debugger
+
 		const controls = this.loginForm.controls;
 		/** check form */
 		if (this.loginForm.invalid) {
