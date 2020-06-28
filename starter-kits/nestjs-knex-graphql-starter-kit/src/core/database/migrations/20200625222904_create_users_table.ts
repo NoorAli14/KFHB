@@ -1,7 +1,7 @@
 import * as Knex from 'knex';
-
+import { TABLE } from '@common/constants';
 export async function up(knex: Knex): Promise<any> {
-  return knex.schema.createTable('users', function(table) {
+  return knex.schema.createTable(TABLE.USER, function(table) {
     table.increments();
     table.string('email').notNullable();
     table.string('password').notNullable();
@@ -11,5 +11,5 @@ export async function up(knex: Knex): Promise<any> {
 }
 
 export async function down(knex: Knex): Promise<any> {
-  return knex.schema.dropTable('users');
+  return knex.schema.dropTable(TABLE.USER);
 }
