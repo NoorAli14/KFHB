@@ -2,7 +2,7 @@ import { Injectable, NotImplementedException } from '@nestjs/common';
 import * as Knex from 'knex';
 import { get } from 'lodash';
 import * as dotenv from 'dotenv';
-import { fullPath, isTruthy } from '@common/utilties';
+import { isTruthy } from '@common/utilties';
 import {
   iAPP,
   iDATABASE,
@@ -45,7 +45,6 @@ export class ConfigurationService {
   env: NodeJS.ProcessEnv = process.env;
   private environmentHosting: string = process.env.NODE_ENV || 'development';
   constructor() {
-    console.log('Init Config' + __dirname);
     dotenv.config();
   }
 
@@ -81,7 +80,7 @@ export class ConfigurationService {
       ),
       DIALECT: this.get('ENV_RBX_DB_DIALECT', DEFAULT_ENV.DATABASE.DIALECT),
       TIMEZONE: this.get('ENV_RBX_DB_TIMEZONE', DEFAULT_ENV.DATABASE.TIMEZONE),
-      IS_DEBUG: this.isDevelopment
+      IS_DEBUG: this.IS_DEVELOPMENT
         ? true
         : isTruthy(this.get('ENV_RBX_DB_DEBUG', DEFAULT_ENV.DATABASE.IS_DEBUG)),
     };
@@ -89,7 +88,7 @@ export class ConfigurationService {
 
   get SWAGGER(): iSWAGGER {
     return {
-      ROUTE: this.get('ENV_RBX_DB_SWAGGER_ROUTE', DEFAULT_ENV.SWAGGER.ROUTE),
+      ROUTE: this.get('ENV_RBX_SWAGGER_ROUTE', DEFAULT_ENV.SWAGGER.ROUTE),
     };
   }
   databaseConfig(): Knex.Config {
@@ -123,20 +122,20 @@ export class ConfigurationService {
   get connectionConfig(): Knex.StaticConnectionConfig {
     switch (this.DATABASE.DIALECT) {
       case 'mssql':
-        return this.mssql;
-      //     case 'pg':
-      //       return this.pg();
-      //     case 'mysql':
-      //       return this.mysql();
-      //     case 'oracledb':
-      //       return this.oracle();
+        return this.MSSQL;
+      case 'pg':
+        return this.PG;
+      case 'mysql':
+        return this.MYSQL;
+      case 'oracledb':
+        return this.ORACLE;
       default:
         throw new NotImplementedException(
           `Database type '${this.DATABASE.DIALECT}' not supported`,
         );
     }
   }
-  private get mssql(): Knex.MsSqlConnectionConfig {
+  private get MSSQL(): Knex.MsSqlConnectionConfig {
     return {
       user: this.DATABASE.USERNAME,
       password: this.DATABASE.DB_PASS,
@@ -153,53 +152,62 @@ export class ConfigurationService {
     };
   }
 
-  // private pg(): Knex.PgConnectionConfig {
-  //   return {
-  //     user: this.config.USERNAME,
-  //     database: this.config.DB_NAME,
-  //     host: this.config.HOST,
-  //     connectionTimeoutMillis: this.config.TIMEOUT,
-  //     password: this.config.DB_PASS,
-  //   };
-  // }
+  private get PG(): Knex.PgConnectionConfig {
+    return {
+      user: this.DATABASE.USERNAME,
+      database: this.DATABASE.DB_NAME,
+      host: this.DATABASE.HOST,
+      connectionTimeoutMillis: this.DATABASE.TIMEOUT,
+      password: this.DATABASE.DB_PASS,
+    };
+  }
 
-  // private oracle(): Knex.OracleDbConnectionConfig {
-  //   return {
-  //     user: this.config.USERNAME,
-  //     host: this.config.HOST,
-  //     password: this.config.DB_PASS,
-  //     requestTimeout: this.config.TIMEOUT,
-  //     connectString:
-  //       '(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(Host=' +
-  //       this.config.HOST +
-  //       ')(Port=' +
-  //       this.config.PORT +
-  //       '))(CONNECT_DATA=(SID=' +
-  //       this.config.DB_NAME +
-  //       ')))',
-  //     debug: this.config.IS_DEBUG,
-  //   };
-  // }
+  private get ORACLE(): Knex.OracleDbConnectionConfig {
+    return {
+      user: this.DATABASE.USERNAME,
+      host: this.DATABASE.HOST,
+      password: this.DATABASE.DB_PASS,
+      requestTimeout: this.DATABASE.TIMEOUT,
+      connectString:
+        '(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(Host=' +
+        this.DATABASE.HOST +
+        ')(Port=' +
+        this.DATABASE.PORT +
+        '))(CONNECT_DATA=(SID=' +
+        this.DATABASE.DB_NAME +
+        ')))',
+      debug: this.DATABASE.IS_DEBUG,
+    };
+  }
 
-  // private mysql(): Knex.MySqlConnectionConfig {
-  //   return {
-  //     host: this.config.HOST,
-  //     port: this.config.PORT,
-  //     user: this.config.USERNAME,
-  //     password: this.config.DB_PASS,
-  //     database: this.config.DB_NAME,
-  //     timezone: this.config.TIMEZONE,
-  //     connectTimeout: this.config.TIMEOUT,
-  //     insecureAuth: false,
-  //   };
-  // }
+  private get MYSQL(): Knex.MySqlConnectionConfig {
+    return {
+      host: this.DATABASE.HOST,
+      port: this.DATABASE.PORT,
+      user: this.DATABASE.USERNAME,
+      password: this.DATABASE.DB_PASS,
+      database: this.DATABASE.DB_NAME,
+      timezone: this.DATABASE.TIMEZONE,
+      connectTimeout: this.DATABASE.TIMEOUT,
+      insecureAuth: false,
+    };
+  }
   get(name: string, _default: any = undefined): string {
     return get(this.env, name, _default);
   }
-  get isSwaggerEnabled(): boolean {
-    return true;
+  get IS_SWAGGER_ENABLED(): boolean {
+    return this.IS_DEVELOPMENT
+      ? true
+      : isTruthy(
+          this.get('ENV_RBX_SWAGGER_ENABLED', DEFAULT_ENV.DATABASE.IS_DEBUG),
+        );
   }
-  get isDevelopment(): boolean {
+  get APPLICATION_HOST(): string {
+    return this.IS_DEVELOPMENT
+      ? `http://localhost:${this.APP.PORT}`
+      : this.APP.HOST;
+  }
+  get IS_DEVELOPMENT(): boolean {
     return this.environmentHosting === 'development';
   }
   get isProduction(): boolean {
