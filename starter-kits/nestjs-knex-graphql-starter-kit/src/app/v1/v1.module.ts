@@ -1,9 +1,25 @@
 import { Module } from '@nestjs/common';
-import { DatabaseModule } from 'src/core/database/database.module';
 
 import { UsersModule } from './users/users.module';
+import { Routes } from 'nest-router';
 
 @Module({
-  imports: [DatabaseModule, UsersModule],
+  imports: [UsersModule],
 })
-export class V1Module {}
+export class V1Module {
+  static Routes(): Routes {
+    const routes: Routes = [
+      {
+        path: '/v1',
+        module: V1Module,
+        children: [
+          {
+            path: '/users',
+            module: UsersModule,
+          },
+        ],
+      },
+    ];
+    return routes;
+  }
+}
