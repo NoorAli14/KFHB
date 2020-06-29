@@ -1,8 +1,10 @@
 // Anglar
 import { NgModule,ErrorHandler } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 // Layout Directives
 import { GlobalErrorService } from './services/global-error/global-error.service';
+import {AuthInterceptorService} from './services/auth-interceptor/auth-interceptor.service'
 // Services
 import {
   ContentAnimateDirective,
@@ -59,7 +61,13 @@ import {
     SafePipe,
     FirstLetterPipe,
   ],
-  providers: [{provide: ErrorHandler, useClass: GlobalErrorService}]
+  providers: [
+    {provide: ErrorHandler, useClass: GlobalErrorService},
+  {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptorService,
+      multi: true
+    },]
 })
 export class CoreModule {
 }
