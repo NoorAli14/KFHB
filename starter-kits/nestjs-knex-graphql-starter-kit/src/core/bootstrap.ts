@@ -44,7 +44,7 @@ export async function bootstrap(): Promise<INestApplication> {
     setupSwagger(app);
   }
   app.enableShutdownHooks();
-  app.useGlobalInterceptors(new LoggingInterceptor());
+  // app.useGlobalInterceptors(new LoggingInterceptor());
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalPipes(new ValidationPipe());
   app.listen(config.APP.PORT, '0.0.0.0', () => {
