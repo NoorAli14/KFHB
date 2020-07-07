@@ -21,7 +21,19 @@
         "paths": {
             "@fuse": [
                 "@fuse/"
-            ]
+            ],
+            "@core/*": [
+                "app/core/*"
+              ],
+              "@feature/*": [
+                "app/features/*"
+              ],
+              "@shared/*": [
+                "app/shared/*"
+              ],
+              "@env/*": [
+                "environments/*"
+              ]
         }
     },
     "angularCompilerOptions": {
