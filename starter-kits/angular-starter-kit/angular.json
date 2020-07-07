@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "metronic": {
+    "fuse": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -12,34 +12,26 @@
       },
       "root": "",
       "sourceRoot": "src",
-      "prefix": "kt",
+      "prefix": "app",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist",
+            "aot": true,
+            "outputPath": "dist/fuse",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "aot": true,
             "assets": [
               "src/favicon.ico",
-              "src/assets",
-              "src/.htaccess"
+              "src/assets"
             ],
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": [
-              "node_modules/popper.js/dist/umd/popper.js",
-              "node_modules/tooltip.js/dist/umd/tooltip.min.js",
-              "node_modules/perfect-scrollbar/dist/perfect-scrollbar.js",
-              "node_modules/clipboard/dist/clipboard.js",
-              "node_modules/apexcharts/dist/apexcharts.min.js",
-              "src/assets/js/layout/extended/examples.js"
-            ],
-            "es5BrowserSupport": true
+            "scripts": [],
+            "showCircularDependencies": false
           },
           "configurations": {
             "production": {
@@ -61,37 +53,36 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "7mb",
-                  "maximumError": "10mb"
+                  "maximumWarning": "4mb",
+                  "maximumError": "6mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "16kb",
-                  "maximumError": "100kb"
+                  "maximumWarning": "6kb"
                 }
               ]
             },
-            "staging": {
-              "fileReplacements": [
+            "ec": {
+              "budgets": [
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.staging.ts"
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
                 }
-              ]
+              ],
+              "sourceMap": true,
+              "extractCss": true
             },
-            "test": {
-              "fileReplacements": [
+            "hmr": {
+              "budgets": [
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.test.ts"
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
                 }
-              ]
-            },
-             "develop": {
+              ],
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.develop.ts"
+                  "with": "src/environments/environment.hmr.ts"
                 }
               ]
             }
@@ -100,18 +91,25 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "metronic:build"
+            "browserTarget": "fuse:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "metronic:build:production"
+              "browserTarget": "fuse:build:production"
+            },
+            "hmr": {
+              "hmr": true,
+              "browserTarget": "fuse:build:hmr"
+            },
+            "ec": {
+              "browserTarget": "fuse:build:ec"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "metronic:build"
+            "browserTarget": "fuse:build"
           }
         },
         "test": {
@@ -121,13 +119,14 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ],
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": [],
-            "assets": [
-              "src/assets"
-            ]
+            "scripts": []
           }
         },
         "lint": {
@@ -135,46 +134,31 @@
           "options": {
             "tsConfig": [
               "tsconfig.app.json",
-              "tsconfig.spec.json"
+              "tsconfig.spec.json",
+              "e2e/tsconfig.json"
             ],
             "exclude": [
               "**/node_modules/**"
             ]
           }
-        }
-      }
-    },
-    "metronic-e2e": {
-      "root": "e2e/",
-      "projectType": "application",
-      "prefix": "",
-      "architect": {
+        },
         "e2e": {
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "metronic:serve"
+            "devServerTarget": "fuse:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "metronic:serve:production"
+              "devServerTarget": "fuse:serve:production"
             }
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": "e2e/tsconfig.e2e.json",
-            "exclude": [
-              "**/node_modules/**"
-            ]
           }
         }
       }
     }
   },
-  "defaultProject": "metronic",
+  "defaultProject": "fuse",
   "cli": {
-    "analytics": "b1dfc39d-aa30-4e3a-8d5a-d646228c4f05"
+    "analytics": false
   }
 }

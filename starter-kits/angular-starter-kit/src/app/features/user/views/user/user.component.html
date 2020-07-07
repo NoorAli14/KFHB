@@ -1,0 +1,111 @@
+<div id="users" class="page-layout carded fullwidth inner-scroll">
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg accent"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header accent" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-between center">
+
+            <!-- APP TITLE -->
+            <div class="logo mb-24 mb-md-0"
+                 fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+                people
+                </mat-icon>
+                <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                    Users
+                </span>
+            </div>
+            <!-- / APP TITLE -->
+
+            <!-- SEARCH -->
+            <div class="search-wrapper mx-32 mx-md-0">
+                <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
+                    <mat-icon>search</mat-icon>
+                    <input  placeholder="Search for a user">
+                </div>
+            </div>
+            <!-- / SEARCH -->
+
+            <!-- ADD BUTTON -->
+            <button mat-raised-button color="accent"
+                    (click)="createDialogue()"
+                    class="add-product-button fuse-white mt-24 mt-md-0">
+                <span>ADD NEW USER</span>
+            </button>
+            <!-- / ADD BUTTON -->
+
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT CARD -->
+        <div class="content-card" fusePerfectScrollbar>
+            <mat-table #table [dataSource]="dataSource" [@animateStagger]="{value:'50'}">
+
+                <!-- Type Column -->
+                <ng-container matColumnDef="icon">
+                    <mat-header-cell *matHeaderCellDef fxFlex="64px"></mat-header-cell>
+                    <mat-cell *matCellDef="let row" fxFlex="64px">
+                        <mat-icon class="type-icon" [ngClass]="row.type"></mat-icon>
+                    </mat-cell>
+                </ng-container>
+            
+                <!-- Name Column -->
+                <ng-container matColumnDef="name">
+                    <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+                    <mat-cell *matCellDef="let row"> {{row.name}}</mat-cell>
+                </ng-container>
+            
+                <!-- Type Column -->
+                <ng-container matColumnDef="type">
+                    <mat-header-cell *matHeaderCellDef fxHide fxShow.gt-md>Type</mat-header-cell>
+                    <mat-cell *matCellDef="let row" fxHide fxShow.gt-md> {{row.type}}</mat-cell>
+                </ng-container>
+            
+                <!-- Owner Column -->
+                <ng-container matColumnDef="owner">
+                    <mat-header-cell *matHeaderCellDef fxHide.xs>Owner</mat-header-cell>
+                    <mat-cell *matCellDef="let row" fxHide.xs> {{row.owner}}</mat-cell>
+                </ng-container>
+            
+                <!-- Size Column -->
+                <ng-container matColumnDef="size">
+                    <mat-header-cell *matHeaderCellDef fxHide.xs>Size</mat-header-cell>
+                    <mat-cell *matCellDef="let row" fxHide.xs>{{row.size === '' ? '-': row.size}}</mat-cell>
+                </ng-container>
+            
+                <!-- Modified Column -->
+                <ng-container matColumnDef="modified">
+                    <mat-header-cell *matHeaderCellDef fxHide fxShow.gt-md>Modified</mat-header-cell>
+                    <mat-cell *matCellDef="let row" fxHide fxShow.gt-md>{{row.modified}}</mat-cell>
+                </ng-container>
+            
+            	<ng-container matColumnDef="actions">
+					<mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+					<mat-cell *matCellDef="let row">
+							<button mat-icon-button color="primary" >
+								<mat-icon>mode_edit</mat-icon>
+							</button>&nbsp;
+							<button mat-icon-button color="warn"  type="button">
+								<mat-icon>delete</mat-icon>
+							</button>&nbsp;
+					</mat-cell>
+				</ng-container>
+   
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"
+                         (click)="onSelect(row)"
+                         [ngClass]="{'selected' : row == selected}"
+                         [@animate]="{value:'*',params:{y:'100%'}}"
+                >
+                </mat-row>
+            </mat-table>
+        </div>
+        <!-- / CONTENT CARD -->
+    </div>
+    <!-- / CENTER -->
+</div>
