@@ -1,6 +1,6 @@
 export const environment = {
-	production: true,
-	staging: false,
+	production: false,
+	staging: true,
 	test: false,
 	develop:false,
 	isMockEnabled: true, // You have to switch this, when your real back-end is done
