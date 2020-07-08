@@ -84,7 +84,8 @@ $typography: mat-typography-config(
 @import "src/app/auth/views/register/register.theme";
 @import "src/app/auth/views/forgot-password/forgot-password.theme";
 @import "src/app/auth/views/reset-password/reset-password.theme";
-@import "src/app/features/user/views/user/user.theme";
+@import "src/app/features/user/user.theme";
+@import "src/app/features/role/role.theme";
 
 // Define a mixin for easier access
 @mixin components-theme($theme) {
@@ -98,6 +99,7 @@ $typography: mat-typography-config(
     @include reset-password-theme($theme);
     @include reset-password-theme($theme);
     @include app-user-theme($theme);
+    @include app-role-theme($theme);
 }
 
 // -----------------------------------------------------------------------------------------------------

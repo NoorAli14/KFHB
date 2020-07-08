@@ -31,7 +31,7 @@ import { FakeDbService } from './fake-db/fake-db.service';
         AppRoutingModule,
         TranslateModule.forRoot(),
         InMemoryWebApiModule.forRoot(FakeDbService, {
-            delay             : 1000,
+            delay             : 500,
             passThruUnknownUrl: true
         }),
         // Material moment date module
