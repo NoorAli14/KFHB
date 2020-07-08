@@ -33,7 +33,6 @@ export class UserFormComponent implements OnInit {
         });
     }
     onSubmit() {
-        console.log(this.userForm);
         this.matDialogRef.close({data: this.userForm.value});
     }
 }

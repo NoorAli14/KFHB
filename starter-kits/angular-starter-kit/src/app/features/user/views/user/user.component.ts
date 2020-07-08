@@ -49,7 +49,7 @@ export class UserComponent implements OnInit {
             });
     }
 
-    createDialogue(): void {
+    onCreateDialog(): void {
         const user = new User();
         user.userId = "1";
         this.dialogRef = this._matDialog.open(UserFormComponent, {
@@ -64,8 +64,17 @@ export class UserComponent implements OnInit {
                 });
         });
     }
+    onEditDialog(user:User){
+        debugger
+        this.dialogRef = this._matDialog.open(UserFormComponent, {
+            data: user,
+            panelClass: "app-user-form",
+        });
+        this.dialogRef.afterClosed().subscribe((response) => {
+            
+        });
+    }
     ngOnDestroy(): void {
-        // Unsubscribe from all subscriptions
         this._unsubscribeAll.next();
         this._unsubscribeAll.complete();
     }
@@ -73,8 +82,6 @@ export class UserComponent implements OnInit {
     onSelect(selected): void {
         this._userService.onFileSelected.next(selected);
     }
-
-    
 }
 
 export class FilesDataSource extends DataSource<any> {
