@@ -1,8 +1,13 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { RoleComponent } from './views/role/role.component';
 
-
-const routes: Routes = [];
+const routes: Routes = [
+  {
+      path: "",
+      component: RoleComponent,
+  },
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
