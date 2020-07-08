@@ -12,7 +12,11 @@ const routes: Routes = [
     loadChildren: () => import('./role/role.module').then(m => m.RoleModule)
   },
   {
-    path: '**', redirectTo:''
+    path: 'error',
+    loadChildren: () => import('./error/error.module').then(m => m.ErrorModule)
+  },
+  {
+    path: '**', redirectTo:'error'
   }
 ];
 

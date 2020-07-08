@@ -86,6 +86,7 @@ $typography: mat-typography-config(
 @import "src/app/auth/views/reset-password/reset-password.theme";
 @import "src/app/features/user/user.theme";
 @import "src/app/features/role/role.theme";
+@import "src/app/features/error/error.theme";
 
 // Define a mixin for easier access
 @mixin components-theme($theme) {
@@ -100,6 +101,7 @@ $typography: mat-typography-config(
     @include reset-password-theme($theme);
     @include app-user-theme($theme);
     @include app-role-theme($theme);
+    @include app-error-theme($theme);
 }
 
 // -----------------------------------------------------------------------------------------------------
