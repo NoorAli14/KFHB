@@ -2,6 +2,7 @@ import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { fuseAnimations } from "@fuse/animations";
 import { MatDialog } from "@angular/material/dialog";
 import { RoleFormComponent } from "@feature/role/components/role-form/role-form.component";
+import { Role } from '@feature/role/role.model';
 
 @Component({
     selector: "app-role",
@@ -18,7 +19,7 @@ export class RoleComponent implements OnInit {
 
     onCreateDialog(): void {
         this.dialogRef = this._matDialog.open(RoleFormComponent, {
-            data: {},
+            data: new Role(),
             panelClass: "app-role-form",
         });
     }
