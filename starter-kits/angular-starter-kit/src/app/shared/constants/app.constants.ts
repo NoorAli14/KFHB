@@ -1,5 +1,4 @@
-import { environment } from '@environments/environment';
-import { ModalOptions } from 'ngx-bootstrap';
+import { environment } from '@env/environment';
 const VERSION = '/1.0';
 export function createUrl(actionName: string): string {
   return `${environment.API_BASE_URL}${actionName}${VERSION}`;
@@ -27,44 +26,9 @@ export enum USER_CONST {
   USER_NAME = '_userName',
   PERMISSIONS = '_permissions'
 }
-export const appRoutes = {
-  root: '',
-  logout: 'logout',
-  auth: 'auth',
-  setting: 'setting',
-  accessDenied: 'access-denied'
-};
-export const featureRoutes = {
-  dashboard: `dashboard`,
-  omniChannel: 'omni-channel',
-  user: 'user',
-  customer: 'customer',
-};
-export const omniChannelRoutes = {
-  channel: `channel`,
-  service: 'service'
-};
-export const authRoutes = {
-  login: `login`,
-  forgetPassword: `forgetpassword`,
-  resetPassword: `resetpassword/:token`
-};
 
-export const  USER_ROLE= {
-  ADMIN:'admin',
-  AGENT:'agent',
-  CUSTOMER:'customer',
-  OPERATION:'operation'
-}
 
-export const PORTS = {
-  IS_PROD: environment.production,
-  GATEWAY: '',
-  AUTH: ':3008',
-  CDT_AUTHORITY: ':3003',
-  ASC_USER: ':3013',
-  CUSTOMER: ':3001',
-};
+
 
 export const MESSAGES = {
   UNKNOWN: 'System cannot process the request!',
@@ -83,79 +47,4 @@ export const MESSAGES = {
   THUMBNAIL_NOT_FOUND: 'Thumbnail does not exist.'
 };
 
-export const MODAL_DEFAULTS: ModalOptions = {
-  backdrop: true,
-  keyboard: true,
-  class: 'modal-dialog-centered  modal-lg',
-  ignoreBackdropClick: true
-};
 
-export interface RouteInfo {
-  path: string;
-  title: string;
-  type: string;
-  icontype: string;
-  collapse?: string;
-  isCollapsed?: boolean;
-  isCollapsing?: any;
-  children?: ChildrenItems[];
-}
-
-export interface ChildrenItems {
-  path: string;
-  title: string;
-  type?: string;
-  collapse?: string;
-  children?: ChildrenItems2[];
-  isCollapsed?: boolean;
-  icontype: string;
-}
-export interface ChildrenItems2 {
-  path?: string;
-  title?: string;
-  type?: string;
-}
-// Menu Items
-export let ROUTES: RouteInfo[] = [
-  {
-    path: '/dashboard',
-    title: 'Dashboard',
-    type: 'link',
-    icontype: 'fas fa-tachometer-alt'
-  },
-  {
-    
-    path: '/customer',
-    title: 'Customers',
-    type: 'link',
-    icontype: 'fas fa-users'
-  },
-  {
-    path: '/user',
-    title: 'Users',
-    type: 'link',
-    icontype: 'fas fa-users-cog'
-  },
-
-  {
-    path: '/omni-channel',
-    title: 'Omni Channel',
-    type: 'sub',
-    icontype: 'fas fa-cogs',
-    isCollapsed: true,
-    children: [
-      {
-        path: '/channel', 
-        title: 'Channels',
-        type: 'link',
-        icontype: 'ni-laptop'
-      },
-      {
-        path: '/service',
-        title: 'Services',
-        type: 'link',
-        icontype: ' ni-support-16'
-      }
-    ]
-  }
-];

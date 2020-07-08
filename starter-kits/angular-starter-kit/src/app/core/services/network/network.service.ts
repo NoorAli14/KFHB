@@ -11,12 +11,11 @@ import { HttpHelper } from '@shared/helpers/http.helper';
 import { createUrl } from '@shared/constants/app.constants';
 
 @Injectable({
-  providedIn: CoreModule
+  providedIn: 'root'
 })
 export class NetworkService {
   constructor(
     private http: HttpClient,
-    private httpHelper: HttpHelper
   ) {
   }
 

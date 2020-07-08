@@ -11,9 +11,7 @@ import { Observable,  empty } from 'rxjs';
 import { StorageService } from '../storage/storage.service';
 import {  mergeMap } from 'rxjs/operators';
 import { USER_CONST } from '@shared/constants/app.constants';
-import { UserService } from '../user.service';
-import { environment } from '@environments/environment';
-import { REFRESH_URL } from 'app/auth/auth.constant';
+import { environment } from '@env/environment';
 import { EventBusService } from '../event-bus/event-bus.service';
 import { EmitEvent } from '@shared/models/emit-event.model';
 import { Events } from '@shared/enums/events.enum';
@@ -23,21 +21,22 @@ export class AuthInterceptorService implements HttpInterceptor {
   isRefreshTokenInProgress = false;
   constructor(private storage: StorageService,
     private http: HttpClient,
-    private eventService: EventBusService,
-    private userService: UserService) { }
+    private eventService: EventBusService) { }
 
   intercept(
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
 
-    const decodedToken = this.userService.getDecodeToken();
+    const decodedToken = 'this.userService.getDecodeToken();'
     var current = (new Date().getTime() / 1000);
     const hasRefreshToken = request.url.includes("refreshToken");
     let httpOptions = this.getHttpOption(hasRefreshToken);
 
     //Refresh token
-    if (!hasRefreshToken && decodedToken && decodedToken.exp < current) {
+    if (!hasRefreshToken && decodedToken
+      //  && decodedToken.exp < current
+       ) {
       // this.notification.refreshing();
       this.isRefreshTokenInProgress = true;
       return this.refreshToken()
@@ -51,8 +50,8 @@ export class AuthInterceptorService implements HttpInterceptor {
               return empty()
             }
             // this.notification.refreshed();
-            this.userService.setAccessToken(response.headers.get('x-access-token'));
-            this.userService.setRefreshToken(response.headers.get('x-refresh-token'));
+            // this.userService.setAccessToken(response.headers.get('x-access-token'));
+            // this.userService.setRefreshToken(response.headers.get('x-refresh-token'));
             console.log('----------------------------Token refreshed------------------------');
 
             const options = this.getHttpOption(false);
@@ -66,7 +65,7 @@ export class AuthInterceptorService implements HttpInterceptor {
     }
   }
   refreshToken() {
-    const URL = `${environment.API_BASE_URL}${REFRESH_URL}`
+    const URL = `${environment.API_BASE_URL}`
     return this.http.post(URL, null, { observe: 'response' });
   }
   getHttpOption(hasRefreshToken) {
@@ -75,7 +74,7 @@ export class AuthInterceptorService implements HttpInterceptor {
     const httpOptions = {
       headers: new HttpHeaders({
         'content-type': 'application/json',
-        'x-channel-id': environment.WEB_CHANNEL_ID,
+        'x-channel-id': '',
         'x-trans-id': '1010111111101011111110101111111010111111145241',
         Accept: 'application/json, text/plain, */*'
       })
@@ -84,8 +83,8 @@ export class AuthInterceptorService implements HttpInterceptor {
     if (!hasRefreshToken) {
       httpOptions.headers = httpOptions.headers.set('x-access-token', ` ${token}`);
     } else {
-      const refreshToken = this.userService.getRefreshToken();
-      httpOptions.headers = httpOptions.headers.set('x-refresh-token', ` ${refreshToken}`);
+      // const refreshToken = this.userService.getRefreshToken();
+      // httpOptions.headers = httpOptions.headers.set('x-refresh-token', ` ${refreshToken}`);
     }
     return httpOptions;
   }

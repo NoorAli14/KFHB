@@ -16,11 +16,14 @@ import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { SharedModule } from '@shared/shared.module';
+
 @NgModule({
     declarations: [UserComponent, UserFormComponent],
     entryComponents: [UserFormComponent],
     imports: [
         CommonModule,
+        SharedModule,
         MatButtonModule,
         MatMenuModule,
         MatFormFieldModule,

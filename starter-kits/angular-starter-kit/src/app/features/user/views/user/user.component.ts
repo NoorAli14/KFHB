@@ -2,11 +2,11 @@ import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { fuseAnimations } from "@fuse/animations";
 import { MatDialog } from "@angular/material/dialog";
 import { UserFormComponent } from "../../components/user-form/user-form.component";
-import { Subject, Observable } from 'rxjs';
-import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
-import { takeUntil } from 'rxjs/operators';
-import { DataSource } from '@angular/cdk/collections';
-import { FileManagerService } from '../../file-manager.service';
+import { Subject, Observable } from "rxjs";
+import { takeUntil } from "rxjs/operators";
+import { DataSource } from "@angular/cdk/collections";
+import { UserService } from "../../services/user.service";
+import { User } from "@feature/user/user.model";
 
 @Component({
     selector: "app-user",
@@ -17,81 +17,74 @@ import { FileManagerService } from '../../file-manager.service';
 })
 export class UserComponent implements OnInit {
     dialogRef: any;
-
-    createDialogue(): void {
-        this.dialogRef = this._matDialog.open(UserFormComponent, {
-            panelClass: "app-user-form",
-        });
-        this.dialogRef.afterClosed().subscribe((response) => {});
-    }
-    files: any;
+    users: Array<User>;
     dataSource: FilesDataSource | null;
-    displayedColumns = ['icon', 'name', 'type', 'owner', 'size', 'modified', 'actions'];
+    displayedColumns = [
+        "userId",
+        "employeeId",
+        "name",
+        "country",
+        "gender",
+        "email",
+        "isActive",
+        "actions",
+    ];
     selected: any;
-
     // Private
     private _unsubscribeAll: Subject<any>;
     constructor(
         public _matDialog: MatDialog,
-        private _fileManagerService: FileManagerService,
-        private _fuseSidebarService: FuseSidebarService
-    )
-    {
+        private _userService: UserService,
+    ) {
         // Set the private defaults
         this._unsubscribeAll = new Subject();
     }
 
-    ngOnInit(): void
-    {
-        this.dataSource = new FilesDataSource(this._fileManagerService);
-        this._fileManagerService.onFilesChanged
+    ngOnInit(): void {
+        this.dataSource = new FilesDataSource(this._userService);
+        this._userService.onFilesChanged
             .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe(files => {
-                this.files = files;
-            });
-
-        this._fileManagerService.onFileSelected
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe(selected => {
-                this.selected = selected;
+            .subscribe((users) => {
+                this.users = users;
             });
     }
 
-
-    ngOnDestroy(): void
-    {
+    createDialogue(): void {
+        const user = new User();
+        user.userId = "1";
+        this.dialogRef = this._matDialog.open(UserFormComponent, {
+            data: user,
+            panelClass: "app-user-form",
+        });
+        this.dialogRef.afterClosed().subscribe((response) => {
+            this._userService
+                .createUser(response.data)
+                .subscribe((response:User) => {
+                    this._userService.getUsers();
+                });
+        });
+    }
+    ngOnDestroy(): void {
         // Unsubscribe from all subscriptions
         this._unsubscribeAll.next();
         this._unsubscribeAll.complete();
     }
 
-    onSelect(selected): void
-    {
-        this._fileManagerService.onFileSelected.next(selected);
+    onSelect(selected): void {
+        this._userService.onFileSelected.next(selected);
     }
 
-    toggleSidebar(name): void
-    {
-        this._fuseSidebarService.getSidebar(name).toggleOpen();
-    }
+    
 }
 
-export class FilesDataSource extends DataSource<any>
-{
-
-    constructor(
-        private _fileManagerService: FileManagerService
-    )
-    {
+export class FilesDataSource extends DataSource<any> {
+    constructor(private _fileManagerService: UserService) {
         super();
     }
 
-    connect(): Observable<any[]>
-    {
+    connect(): Observable<any[]> {
         return this._fileManagerService.onFilesChanged;
     }
 
-    disconnect(): void
-    {
-    }
+    disconnect(): void {}
 }

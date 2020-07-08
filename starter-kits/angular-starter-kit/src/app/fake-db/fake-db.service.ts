@@ -1,14 +1,13 @@
 import { InMemoryDbService } from 'angular-in-memory-web-api';
 
-import { FileManagerFakeDb } from 'app/fake-db/file-manager';
+import { UsersFakeDb } from 'app/fake-db/users';
 
 export class FakeDbService implements InMemoryDbService
 {
     createDb(): any
     {
         return {
-            // File Manager
-            'file-manager': FileManagerFakeDb.files,
+            'users': UsersFakeDb.users,
         };
     }
 }

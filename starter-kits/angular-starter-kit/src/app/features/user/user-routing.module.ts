@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { UserComponent } from './views/user/user.component';
-import { FileManagerService } from './file-manager.service';
+import { UserService } from './services/user.service';
 
 
 const routes: Routes = [
@@ -10,7 +10,7 @@ const routes: Routes = [
       path: "",
       component: UserComponent,
       resolve  : {
-        files: FileManagerService
+        files: UserService
     }
   },
 ];
