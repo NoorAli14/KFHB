@@ -20,13 +20,16 @@ export class UserComponent implements OnInit {
     users: Array<User>;
     dataSource: FilesDataSource | null;
     displayedColumns = [
-        "userId",
-        "employeeId",
-        "name",
-        "country",
+        "id",
+        "username",
+        "firstName",
+        "middleName",
+        "lastName",
+        "contactNo",
+        "nationalityId",
         "gender",
         "email",
-        "isActive",
+        "status",
         "actions",
     ];
     selected: any;
@@ -51,10 +54,10 @@ export class UserComponent implements OnInit {
 
     onCreateDialog(): void {
         const user = new User();
-        user.userId = "1";
         this.dialogRef = this._matDialog.open(UserFormComponent, {
             data: user,
             panelClass: "app-user-form",
+            disableClose:true
         });
         this.dialogRef.afterClosed().subscribe((response) => {
             this._userService
@@ -65,7 +68,6 @@ export class UserComponent implements OnInit {
         });
     }
     onEditDialog(user:User){
-        debugger
         this.dialogRef = this._matDialog.open(UserFormComponent, {
             data: user,
             panelClass: "app-user-form",

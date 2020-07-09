@@ -17,7 +17,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { SharedModule } from '@shared/shared.module';
-
+import {MatDatepickerModule} from '@angular/material/datepicker';
 @NgModule({
     declarations: [UserComponent, UserFormComponent],
     entryComponents: [UserFormComponent],
@@ -30,6 +30,7 @@ import { SharedModule } from '@shared/shared.module';
         MatIconModule,
         MatInputModule,
         MatRippleModule,
+        MatDatepickerModule,
         MatSelectModule,
         MatTooltipModule,
         FuseSharedModule,

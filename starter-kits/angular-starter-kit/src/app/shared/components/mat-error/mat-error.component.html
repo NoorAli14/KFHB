@@ -13,4 +13,8 @@
         >Field required Length:
         {{ control.errors.minlength.requiredLength }}</ng-container
     >
+    <ng-container *ngIf="control.errors.passwordNotMatch"
+        >Password not matched
+        </ng-container
+    >
 </ng-container>
