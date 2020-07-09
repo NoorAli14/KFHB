@@ -12,6 +12,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatTableModule } from "@angular/material/table";
+import { MatCheckboxModule } from "@angular/material/checkbox";
 
 @NgModule({
     declarations: [],
@@ -32,25 +33,27 @@ import { MatTableModule } from "@angular/material/table";
         MatDialogModule,
         MatTableModule,
         MatIconModule,
+        MatCheckboxModule,
         MatRippleModule,
     ],
     exports: [
-      MatButtonModule,
-      MatMenuModule,
-      MatFormFieldModule,
-      MatIconModule,
-      MatInputModule,
-      MatRippleModule,
-      MatDatepickerModule,
-      MatSelectModule,
-      MatTooltipModule,
-      MatButtonModule,
-      MatFormFieldModule,
-      MatToolbarModule,
-      MatDialogModule,
-      MatTableModule,
-      MatIconModule,
-      MatRippleModule,
-  ],
+        MatButtonModule,
+        MatMenuModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatRippleModule,
+        MatDatepickerModule,
+        MatSelectModule,
+        MatTooltipModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatToolbarModule,
+        MatDialogModule,
+        MatTableModule,
+        MatIconModule,
+        MatRippleModule,
+        MatCheckboxModule,
+    ],
 })
 export class MaterialFormsModule {}

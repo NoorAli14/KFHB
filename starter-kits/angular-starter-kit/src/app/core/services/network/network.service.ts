@@ -7,7 +7,6 @@ import {
 } from '@angular/common/http';
 import { tap, catchError, retry } from 'rxjs/operators';
 import { throwError as observableThrowError, Observable } from 'rxjs';
-import { HttpHelper } from '@shared/helpers/http.helper';
 import { createUrl } from '@shared/constants/app.constants';
 
 @Injectable({
