@@ -43,7 +43,7 @@ export class ConfigurationService {
   }
 
   // Parse iApp Environment Variables
-  get APP(): iAPP {
+  public get APP(): iAPP {
     return {
       ENVIRONMENT: this.get('NODE_ENV', DEFAULT_ENV.APP.ENVIRONMENT),
       NAME: this.get('ENV_RBX_APP_NAME', DEFAULT_ENV.APP.NAME),
@@ -58,7 +58,7 @@ export class ConfigurationService {
   }
 
   // Parse iDatabase Environment Variables
-  protected get DATABASE(): iDATABASE {
+  public get DATABASE(): iDATABASE {
     return {
       USERNAME: this.get('ENV_RBX_DB_USERNAME', DEFAULT_ENV.DATABASE.USERNAME),
       DB_PASS: this.get('ENV_RBX_DB_PASS', DEFAULT_ENV.DATABASE.DB_PASS),

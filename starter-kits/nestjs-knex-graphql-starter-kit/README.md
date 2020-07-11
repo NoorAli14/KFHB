@@ -73,14 +73,18 @@
 │   │   │   ├── migrations
 │   │   │   │   ├── 20200625222904_create_users_table.ts
 │   │   │   ├── seeds
-│   │   ├── middeware
+│   │   ├── middlewares
+│   │   │   ├── index.ts
+│   │   │   ├── kernel.middleware.ts
+│   │   ├── providers
+│   │   │   ├── index.ts
+│   │   │   ├── swagger.middleware.ts
 │   │   ├── repository
 │   │   │   ├── base.repository.ts
 │   │   │   ├── index.ts
-│   │   │   ├── repositry.module.ts
+│   │   │   ├── repository.module.ts
 │   │   │   ├── user.repository.ts
-│   │   ├── swagger.ts
-│   │   ├── bootstrap.ts
+│   │   ├── server.ts
 │   ├── main.ts
 ├── test
 │   ├── app.e2e.spec.ts
