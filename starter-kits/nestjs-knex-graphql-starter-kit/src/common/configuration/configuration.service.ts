@@ -1,19 +1,13 @@
 import { Injectable, NotImplementedException } from '@nestjs/common';
-import * as Knex from 'knex';
 import { get } from 'lodash';
 import * as dotenv from 'dotenv';
-import { isTruthy } from '@common/utilties';
+import { isTruthy } from '@common/utilities';
 import {
   iAPP,
   iDATABASE,
   iSWAGGER,
   iConfig,
 } from '@common/interfaces/configuration.interface';
-import {
-  DATABASE_MIGRATION_TABLE_NAME,
-  DATABASE_MIGRATION_DIRECTORY,
-  DATABASE_SEED_DIRECTORY,
-} from '@common/constants';
 export const DEFAULT_ENV: iConfig = {
   APP: {
     NAME: 'Rubix | Boilerplate',
@@ -21,7 +15,7 @@ export const DEFAULT_ENV: iConfig = {
     VERSION: '1.0.0',
     ENVIRONMENT: 'development',
     PORT: 3000,
-    HOST: '0.0.0.0',
+    HOST: 'http://127.0.0.1',
     API_URL_PREFIX: '/api/v1/',
   },
   DATABASE: {
@@ -64,7 +58,7 @@ export class ConfigurationService {
   }
 
   // Parse iDatabase Environment Variables
-  private get DATABASE(): iDATABASE {
+  protected get DATABASE(): iDATABASE {
     return {
       USERNAME: this.get('ENV_RBX_DB_USERNAME', DEFAULT_ENV.DATABASE.USERNAME),
       DB_PASS: this.get('ENV_RBX_DB_PASS', DEFAULT_ENV.DATABASE.DB_PASS),
@@ -91,107 +85,6 @@ export class ConfigurationService {
       ROUTE: this.get('ENV_RBX_SWAGGER_ROUTE', DEFAULT_ENV.SWAGGER.ROUTE),
     };
   }
-  databaseConfig(): Knex.Config {
-    return {
-      connection: this.connectionConfig,
-      client: this.DATABASE.DIALECT,
-      migrations: this.migratorConfig,
-      seeds: this.seedsConfig,
-      pool: this.poolConfig,
-      useNullAsDefault: true,
-      debug: this.DATABASE.IS_DEBUG,
-    };
-  }
-  get migratorConfig(): Knex.MigratorConfig {
-    return {
-      tableName: DATABASE_MIGRATION_TABLE_NAME,
-      directory: DATABASE_MIGRATION_DIRECTORY,
-    };
-  }
-  private get poolConfig(): Knex.PoolConfig {
-    return {
-      min: 2,
-      max: 10,
-    };
-  }
-  private get seedsConfig(): Knex.SeedsConfig {
-    return {
-      directory: DATABASE_SEED_DIRECTORY,
-    };
-  }
-  get connectionConfig(): Knex.StaticConnectionConfig {
-    switch (this.DATABASE.DIALECT) {
-      case 'mssql':
-        return this.MSSQL;
-      case 'pg':
-        return this.PG;
-      case 'mysql':
-        return this.MYSQL;
-      case 'oracledb':
-        return this.ORACLE;
-      default:
-        throw new NotImplementedException(
-          `Database type '${this.DATABASE.DIALECT}' not supported`,
-        );
-    }
-  }
-  private get MSSQL(): Knex.MsSqlConnectionConfig {
-    return {
-      user: this.DATABASE.USERNAME,
-      password: this.DATABASE.DB_PASS,
-      server: this.DATABASE.HOST,
-      port: this.DATABASE.PORT,
-      database: this.DATABASE.DB_NAME,
-      connectionTimeout: this.DATABASE.TIMEOUT,
-      options: {
-        encrypt: true,
-        useUTC: this.DATABASE.TIMEZONE === 'UTC',
-        trustedConnection: true,
-        enableArithAbort: false,
-      },
-    };
-  }
-
-  private get PG(): Knex.PgConnectionConfig {
-    return {
-      user: this.DATABASE.USERNAME,
-      database: this.DATABASE.DB_NAME,
-      host: this.DATABASE.HOST,
-      connectionTimeoutMillis: this.DATABASE.TIMEOUT,
-      password: this.DATABASE.DB_PASS,
-    };
-  }
-
-  private get ORACLE(): Knex.OracleDbConnectionConfig {
-    return {
-      user: this.DATABASE.USERNAME,
-      host: this.DATABASE.HOST,
-      password: this.DATABASE.DB_PASS,
-      requestTimeout: this.DATABASE.TIMEOUT,
-      connectString:
-        '(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(Host=' +
-        this.DATABASE.HOST +
-        ')(Port=' +
-        this.DATABASE.PORT +
-        '))(CONNECT_DATA=(SID=' +
-        this.DATABASE.DB_NAME +
-        ')))',
-      debug: this.DATABASE.IS_DEBUG,
-    };
-  }
-
-  private get MYSQL(): Knex.MySqlConnectionConfig {
-    return {
-      host: this.DATABASE.HOST,
-      port: this.DATABASE.PORT,
-      user: this.DATABASE.USERNAME,
-      password: this.DATABASE.DB_PASS,
-      database: this.DATABASE.DB_NAME,
-      timezone: this.DATABASE.TIMEZONE,
-      connectTimeout: this.DATABASE.TIMEOUT,
-      insecureAuth: false,
-    };
-  }
   get(name: string, _default: any = undefined): string {
     return get(this.env, name, _default);
   }
@@ -211,9 +104,9 @@ export class ConfigurationService {
     return this.environmentHosting === 'development';
   }
   get isProduction(): boolean {
-    return this.environmentHosting === 'development';
+    return this.environmentHosting === 'production';
   }
   get isTest(): boolean {
-    return this.environmentHosting === 'development';
+    return this.environmentHosting === 'test';
   }
 }

@@ -15,10 +15,11 @@
     "start:prod": "node dist/main",
     "db:migrate": "knex  --knexfile database.ts  migrate:latest",
     "db:rollback": "knex --knexfile database.ts migrate:rollback",
-    "migration:make": "knex migrate:make -x ts",
+    "migration:make": "knex migrate:make -x ts --knexfile database.ts",
     "seed:make": "knex seed:make -x ts",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "update:packages": "npm ncu -u",
+    "generate:docs": "npx compodoc -p tsconfig.json -s",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
@@ -44,6 +45,7 @@
     "tedious": "^8.3.0"
   },
   "devDependencies": {
+    "@compodoc/compodoc": "^1.1.11",
     "@nestjs/cli": "^7.0.0",
     "@nestjs/schematics": "^7.0.0",
     "@nestjs/testing": "^7.0.0",
