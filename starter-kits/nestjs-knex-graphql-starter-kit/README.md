@@ -28,6 +28,78 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+## App Structure
+
+```bash
+├── dist
+├── public
+├── src
+│   ├── app
+│   │   ├── v1
+│   │   │   ├── users
+│   │   │   │   ├── user.class.ts
+│   │   │   │   ├── user.dto.ts
+│   │   │   │   ├── users.controller.ts
+│   │   │   │   ├── users.controller.specs.ts
+│   │   │   │   ├── users.module.ts
+│   │   │   │   ├── users.service.ts
+│   │   │   ├── v1.module.ts
+│   │   ├── app.controller.ts
+│   │   ├── app.contrller.spec.ts
+│   │   ├── app.modules.ts
+│   │   ├── app.service.ts
+│   │   ├── index.ts
+│   ├── common
+│   │   ├── configuration
+│   │   │   ├── configuratin.service.ts
+│   │   │   ├── configuration.service.spec.ts
+│   │   │   ├── dbconfiguration.service.ts
+│   │   ├── decorators
+│   │   ├── filters
+│   │   │   ├── http-exception.filter.ts
+│   │   ├── interceptors
+│   │   │   ├── logging.interceptor.ts
+│   │   ├── interfaces
+│   │   │   ├── configuration.interface.ts
+│   │   │   ├── index.ts
+│   │   ├── mappers
+│   │   ├── pipes
+│   │   ├── common.module.ts
+│   │   ├── constant.ts
+│   │   ├── utilities.ts
+│   ├── core
+│   │   ├── database
+│   │   │   ├── factories
+│   │   │   ├── migrations
+│   │   │   │   ├── 20200625222904_create_users_table.ts
+│   │   │   ├── seeds
+│   │   ├── middeware
+│   │   ├── repository
+│   │   │   ├── base.repository.ts
+│   │   │   ├── index.ts
+│   │   │   ├── repositry.module.ts
+│   │   │   ├── user.repository.ts
+│   │   ├── swagger.ts
+│   │   ├── bootstrap.ts
+│   ├── main.ts
+├── test
+│   ├── app.e2e.spec.ts
+│   ├── jest.e2e.ts
+├── .env
+├── .env.example
+├── .gitignore
+├── .ncurc.json
+├── .prettierrc
+├── database.ts
+├── nest-cli.json
+├── nodemon.json
+├── package.json
+├── README.md
+├── tsconfig.json
+├── tsconfig.build.json
+└── eslintrc.js
+```
+
 ## Installation
 
 ```bash
