@@ -1,6 +1,6 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
 </p>
+<h1 align="center">NestJS | Knex-GraphQL Starter Kit</h1>
+<br />
 
 [travis-image]: https://api.travis-ci.org/nestjs/nest.svg?branch=master
 [travis-url]: https://travis-ci.org/nestjs/nest
@@ -24,11 +24,16 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+## ❯ Table of Contents
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- [Getting Started](#-getting-started)
+- [App Structure](#-app-structure)
+- [Migrations & Seeding]
+- [License](#-license)
 
-# App Structure
+![divider](./divider.png)
+
+## ❯ App Structure
 
 ```bash
 ├── dist
@@ -104,7 +109,7 @@
 └── eslintrc.js
 ```
 
-# Migrations & Seeding
+## ❯ Migrations & Seeding
 
 Migrations are a way to make database changes or updates, like creating or dropping tables, as well as updating a table with new columns with constraints via generated scripts. We can build these scripts via the command line using `knex` command line tool.
 
