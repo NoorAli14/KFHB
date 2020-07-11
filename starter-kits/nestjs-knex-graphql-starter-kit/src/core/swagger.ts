@@ -2,7 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
 import { CommonModule } from '@common/common.module';
 import { ConfigurationService } from '@common/configuration/configuration.service';
-function createdocument(
+function createDocument(
   app: INestApplication,
   config: ConfigurationService,
 ): OpenAPIObject {
@@ -26,7 +26,7 @@ export function setupSwagger(app: INestApplication): void {
     .select(CommonModule)
     .get(ConfigurationService);
 
-  SwaggerModule.setup(config.SWAGGER.ROUTE, app, createdocument(app, config), {
+  SwaggerModule.setup(config.SWAGGER.ROUTE, app, createDocument(app, config), {
     swaggerUrl: `${config.APPLICATION_HOST}/api/docs-json`,
     explorer: true,
     swaggerOptions: {
