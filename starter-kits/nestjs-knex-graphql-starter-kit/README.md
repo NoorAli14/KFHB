@@ -28,7 +28,7 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## App Structure
+# App Structure
 
 ```bash
 ├── dist
@@ -102,6 +102,58 @@
 ├── tsconfig.json
 ├── tsconfig.build.json
 └── eslintrc.js
+```
+
+# Migrations & Seeding
+
+Migrations are a way to make database changes or updates, like creating or dropping tables, as well as updating a table with new columns with constraints via generated scripts. We can build these scripts via the command line using `knex` command line tool.
+
+### Creating/Dropping Tables
+
+Let's create a `Users` table using the `knex` command line tool. In the root of our project run the following commands:
+
+```bash
+$ npm run migrate:make create_users_table
+```
+
+The above commands will generate migration scripts in `./src/core/database/migrations` with the given name plus a timestamp. (i.e. 20200625222904_create_users_table.ts). This is on purpose so that knex can run the older migration files first, and then the newer ones that build on top of them.
+
+The content of these files will stub out empty `up` and `down` functions to create or drop tables or columns.
+
+We now want to build out the `users` table using some of the built in knex methods.
+
+**Example `20200625222904_create_users_table.ts`**
+
+```javascript
+import * as Knex from 'knex';
+import { TABLE } from '@common/constants';
+export async function up(knex: Knex): Promise<any> {
+  return knex.schema.createTable(TABLE.USER, table => {
+    table.increments();
+    table.string('first_name');
+    table.string('last_name');
+    table.string('email').notNullable();
+    table.string('password').notNullable();
+    table.timestamp('created_on').defaultTo(knex.fn.now());
+    table.timestamp('updated_on').defaultTo(knex.fn.now());
+  });
+}
+
+export async function down(knex: Knex): Promise<any> {
+  return knex.schema.dropTable(TABLE.USER);
+}
+```
+
+Now we can run the below command performing a migration and updating our local database:
+
+```bash
+$ npm run db:migrate
+```
+
+To rollback the last migration run the below following command.
+
+```bash
+$ npm run db:rollback
 ```
 
 ## Installation
