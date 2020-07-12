@@ -5,7 +5,15 @@
             fxLayout="row"
             fxLayoutAlign="space-between center"
         >
-            <span class="title dialog-title">Create Role</span>
+         <div class="logo mb-24 mb-md-0"
+                 fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon mr-12" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+                    security
+                </mat-icon>
+                <span class="logo-text" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                    Roles
+                </span>
+            </div>
             <button
                 mat-icon-button
                 (click)="matDialogRef.close()"
@@ -57,6 +65,20 @@
                     <mat-error>
                         <app-mat-error
                             [control]="roleForm.get('status')"
+                        ></app-mat-error>
+                    </mat-error>
+                </mat-form-field>
+                 
+            </div>
+            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                 <mat-form-field appearance="outline" fxFlex="100" class="pr-4">
+                    <mat-label>Description</mat-label>
+                    <textarea matInput placeholder="Description" formControlName="description"></textarea>
+                    <mat-icon matSuffix class="secondary-text"
+                        >account_circle</mat-icon>
+                    <mat-error>
+                        <app-mat-error
+                            [control]="roleForm.get('description')"
                         ></app-mat-error>
                     </mat-error>
                 </mat-form-field>
