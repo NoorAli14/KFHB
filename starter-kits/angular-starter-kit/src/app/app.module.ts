@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
@@ -19,7 +18,7 @@ import { LayoutModule } from 'app/layout/layout.module';
 import { AppRoutingModule } from './app-routing.module';
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { FakeDbService } from './fake-db/fake-db.service';
-
+import {CoreModule} from '@core/core.module'
 @NgModule({
     declarations: [
         AppComponent
@@ -27,11 +26,10 @@ import { FakeDbService } from './fake-db/fake-db.service';
     imports     : [
         BrowserModule,
         BrowserAnimationsModule,
-        HttpClientModule,
         AppRoutingModule,
         TranslateModule.forRoot(),
         InMemoryWebApiModule.forRoot(FakeDbService, {
-            delay             : 1000,
+            delay             : 500,
             passThruUnknownUrl: true
         }),
         // Material moment date module
@@ -47,7 +45,7 @@ import { FakeDbService } from './fake-db/fake-db.service';
         FuseSharedModule,
         FuseSidebarModule,
         FuseThemeOptionsModule,
-
+        CoreModule,
         // App modules
         LayoutModule,
     ],

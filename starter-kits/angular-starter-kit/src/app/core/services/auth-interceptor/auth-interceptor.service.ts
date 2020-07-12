@@ -20,7 +20,7 @@ import { Events } from '@shared/enums/events.enum';
 export class AuthInterceptorService implements HttpInterceptor {
   isRefreshTokenInProgress = false;
   constructor(private storage: StorageService,
-    private http: HttpClient,
+    // private http: HttpClient,
     private eventService: EventBusService) { }
 
   intercept(
@@ -28,46 +28,47 @@ export class AuthInterceptorService implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
 
-    const decodedToken = 'this.userService.getDecodeToken();'
-    var current = (new Date().getTime() / 1000);
-    const hasRefreshToken = request.url.includes("refreshToken");
-    let httpOptions = this.getHttpOption(hasRefreshToken);
-
-    //Refresh token
-    if (!hasRefreshToken && decodedToken
-      //  && decodedToken.exp < current
-       ) {
-      // this.notification.refreshing();
-      this.isRefreshTokenInProgress = true;
-      return this.refreshToken()
-        .pipe(
-          mergeMap((response) => {
-            const exception = response['body']['exception'] ? response['body']['exception'][0] : null;
-            if (exception && (exception.name === 'REFRESH_TOKEN_INVALID' || exception.name === 'REFRESH_TOKEN_EXPIRED')) {
-              console.log('----------------------------Token expired------------------------');
-              // this.notification.expiredToken();
-              this.eventService.emit(new EmitEvent(Events.SESSION_EXPIRED, true))
-              return empty()
-            }
-            // this.notification.refreshed();
-            // this.userService.setAccessToken(response.headers.get('x-access-token'));
-            // this.userService.setRefreshToken(response.headers.get('x-refresh-token'));
-            console.log('----------------------------Token refreshed------------------------');
-
-            const options = this.getHttpOption(false);
-            const clonedRequest = request.clone(options);
-            return next.handle(clonedRequest);
-          })
-        )
-    } else {
-      const clonedRequest = request.clone(httpOptions)
+    // const decodedToken = 'this.userService.getDecodeToken();'
+    // var current = (new Date().getTime() / 1000);
+    // const hasRefreshToken = request.url.includes("refreshToken");
+    let httpOptions = this.getHttpOption(true);
+    const clonedRequest = request.clone(httpOptions)
       return next.handle(clonedRequest);
-    }
+    //Refresh token
+    // if (!hasRefreshToken && decodedToken
+    //   //  && decodedToken.exp < current
+    //    ) {
+    //   // this.notification.refreshing();
+    //   this.isRefreshTokenInProgress = true;
+    //   return this.refreshToken()
+    //     .pipe(
+    //       mergeMap((response) => {
+    //         const exception = response['body']['exception'] ? response['body']['exception'][0] : null;
+    //         if (exception && (exception.name === 'REFRESH_TOKEN_INVALID' || exception.name === 'REFRESH_TOKEN_EXPIRED')) {
+    //           console.log('----------------------------Token expired------------------------');
+    //           // this.notification.expiredToken();
+    //           this.eventService.emit(new EmitEvent(Events.SESSION_EXPIRED, true))
+    //           return empty()
+    //         }
+    //         // this.notification.refreshed();
+    //         // this.userService.setAccessToken(response.headers.get('x-access-token'));
+    //         // this.userService.setRefreshToken(response.headers.get('x-refresh-token'));
+    //         console.log('----------------------------Token refreshed------------------------');
+
+    //         const options = this.getHttpOption(false);
+    //         const clonedRequest = request.clone(options);
+    //         return next.handle(clonedRequest);
+    //       })
+    //     )
+    // } else {
+    //   const clonedRequest = request.clone(httpOptions)
+    //   return next.handle(clonedRequest);
+    // }
   }
-  refreshToken() {
-    const URL = `${environment.API_BASE_URL}`
-    return this.http.post(URL, null, { observe: 'response' });
-  }
+  // refreshToken() {
+  //   const URL = `${environment.API_BASE_URL}`
+  //   return this.http.post(URL, null, { observe: 'response' });
+  // }
   getHttpOption(hasRefreshToken) {
     const token = this.storage.getItem(USER_CONST.ACCESS_TOKEN);
     

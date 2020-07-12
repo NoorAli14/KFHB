@@ -27,7 +27,7 @@ export class NetworkService {
         endPoint += `${key}=${params[key]}&`
       });
     }
-    return this.http.post<any>(endPoint, {}).pipe(
+    return this.http.get<any>(endPoint, {}).pipe(
       catchError(this.errorHandler),
       retry(1));
   }

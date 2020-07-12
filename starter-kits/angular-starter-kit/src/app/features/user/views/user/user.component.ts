@@ -34,22 +34,14 @@ export class UserComponent implements OnInit {
     ];
     selected: any;
     // Private
-    private _unsubscribeAll: Subject<any>;
     constructor(
         public _matDialog: MatDialog,
         private _userService: UserService,
     ) {
-        // Set the private defaults
-        this._unsubscribeAll = new Subject();
     }
 
     ngOnInit(): void {
         this.dataSource = new FilesDataSource(this._userService);
-        this._userService.onFilesChanged
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((users) => {
-                this.users = users;
-            });
     }
 
     onCreateDialog(): void {
@@ -77,22 +69,16 @@ export class UserComponent implements OnInit {
         });
     }
     ngOnDestroy(): void {
-        this._unsubscribeAll.next();
-        this._unsubscribeAll.complete();
-    }
-
-    onSelect(selected): void {
-        this._userService.onFileSelected.next(selected);
     }
 }
 
-export class FilesDataSource extends DataSource<any> {
-    constructor(private _fileManagerService: UserService) {
+export class FilesDataSource extends DataSource<User> {
+    constructor(private _service: UserService) {
         super();
     }
 
     connect(): Observable<any[]> {
-        return this._fileManagerService.onFilesChanged;
+        return this._service.getUsers();
     }
 
     disconnect(): void {}
