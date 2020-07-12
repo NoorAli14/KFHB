@@ -1,18 +1,17 @@
-import { Module, OnModuleDestroy, Inject } from '@nestjs/common';
+import { Module, OnModuleDestroy } from '@nestjs/common';
 import { KnexModule, InjectKnex, Knex } from 'nestjs-knex';
-import { ConfigurationService } from '@common/configuration/configuration.service';
 import { CommonModule } from '@common/common.module';
+import { DBConfigurationService } from '@common/configuration/dbconfiguration.service';
 import { UserRepository } from '@core/repository/';
-
 @Module({
   imports: [
     CommonModule,
     KnexModule.forRootAsync({
       imports: [CommonModule],
-      useFactory: async (_configService: ConfigurationService) => ({
+      useFactory: async (_configService: DBConfigurationService) => ({
         config: _configService.databaseConfig(),
       }),
-      inject: [ConfigurationService],
+      inject: [DBConfigurationService],
     }),
   ],
   providers: [UserRepository],

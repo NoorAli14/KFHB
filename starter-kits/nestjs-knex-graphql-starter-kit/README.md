@@ -1,6 +1,6 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
 </p>
+<h1 align="center">NestJS | Knex-GraphQL Starter Kit</h1>
+<br />
 
 [travis-image]: https://api.travis-ci.org/nestjs/nest.svg?branch=master
 [travis-url]: https://travis-ci.org/nestjs/nest
@@ -24,9 +24,142 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+## ❯ Table of Contents
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- [Getting Started](#-getting-started)
+- [App Structure](#-app-structure)
+- [Migrations & Seeding]
+- [License](#-license)
+
+![divider](./divider.png)
+
+## ❯ App Structure
+
+```bash
+├── dist
+├── public
+├── src
+│   ├── app
+│   │   ├── v1
+│   │   │   ├── users
+│   │   │   │   ├── user.class.ts
+│   │   │   │   ├── user.dto.ts
+│   │   │   │   ├── users.controller.ts
+│   │   │   │   ├── users.controller.specs.ts
+│   │   │   │   ├── users.module.ts
+│   │   │   │   ├── users.service.ts
+│   │   │   ├── v1.module.ts
+│   │   ├── app.controller.ts
+│   │   ├── app.contrller.spec.ts
+│   │   ├── app.modules.ts
+│   │   ├── app.service.ts
+│   │   ├── index.ts
+│   ├── common
+│   │   ├── configuration
+│   │   │   ├── configuratin.service.ts
+│   │   │   ├── configuration.service.spec.ts
+│   │   │   ├── dbconfiguration.service.ts
+│   │   ├── decorators
+│   │   ├── filters
+│   │   │   ├── http-exception.filter.ts
+│   │   ├── interceptors
+│   │   │   ├── logging.interceptor.ts
+│   │   ├── interfaces
+│   │   │   ├── configuration.interface.ts
+│   │   │   ├── index.ts
+│   │   ├── mappers
+│   │   ├── pipes
+│   │   ├── common.module.ts
+│   │   ├── constant.ts
+│   │   ├── utilities.ts
+│   ├── core
+│   │   ├── database
+│   │   │   ├── factories
+│   │   │   ├── migrations
+│   │   │   │   ├── 20200625222904_create_users_table.ts
+│   │   │   ├── seeds
+│   │   ├── middlewares
+│   │   │   ├── index.ts
+│   │   │   ├── kernel.middleware.ts
+│   │   ├── providers
+│   │   │   ├── index.ts
+│   │   │   ├── swagger.middleware.ts
+│   │   ├── repository
+│   │   │   ├── base.repository.ts
+│   │   │   ├── index.ts
+│   │   │   ├── repository.module.ts
+│   │   │   ├── user.repository.ts
+│   │   ├── server.ts
+│   ├── main.ts
+├── test
+│   ├── app.e2e.spec.ts
+│   ├── jest.e2e.ts
+├── .env
+├── .env.example
+├── .gitignore
+├── .ncurc.json
+├── .prettierrc
+├── database.ts
+├── nest-cli.json
+├── nodemon.json
+├── package.json
+├── README.md
+├── tsconfig.json
+├── tsconfig.build.json
+└── eslintrc.js
+```
+
+## ❯ Migrations & Seeding
+
+Migrations are a way to make database changes or updates, like creating or dropping tables, as well as updating a table with new columns with constraints via generated scripts. We can build these scripts via the command line using `knex` command line tool.
+
+### Creating/Dropping Tables
+
+Let's create a `Users` table using the `knex` command line tool. In the root of our project run the following commands:
+
+```bash
+$ npm run migrate:make create_users_table
+```
+
+The above commands will generate migration scripts in `./src/core/database/migrations` with the given name plus a timestamp. (i.e. 20200625222904_create_users_table.ts). This is on purpose so that knex can run the older migration files first, and then the newer ones that build on top of them.
+
+The content of these files will stub out empty `up` and `down` functions to create or drop tables or columns.
+
+We now want to build out the `users` table using some of the built in knex methods.
+
+**Example `20200625222904_create_users_table.ts`**
+
+```javascript
+import * as Knex from 'knex';
+import { TABLE } from '@common/constants';
+export async function up(knex: Knex): Promise<any> {
+  return knex.schema.createTable(TABLE.USER, table => {
+    table.increments();
+    table.string('first_name');
+    table.string('last_name');
+    table.string('email').notNullable();
+    table.string('password').notNullable();
+    table.timestamp('created_on').defaultTo(knex.fn.now());
+    table.timestamp('updated_on').defaultTo(knex.fn.now());
+  });
+}
+
+export async function down(knex: Knex): Promise<any> {
+  return knex.schema.dropTable(TABLE.USER);
+}
+```
+
+Now we can run the below command performing a migration and updating our local database:
+
+```bash
+$ npm run db:migrate
+```
+
+To rollback the last migration run the below following command.
+
+```bash
+$ npm run db:rollback
+```
 
 ## Installation
 
@@ -59,17 +192,3 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).

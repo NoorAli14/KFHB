@@ -1,8 +1,9 @@
 require('ts-node/register');
 require('tsconfig-paths/register');
-import { ConfigurationService } from '@common/configuration/configuration.service';
-const config: ConfigurationService = new ConfigurationService();
+import { DBConfigurationService } from '@common/configuration/dbconfiguration.service';
+const dbConfig: DBConfigurationService = new DBConfigurationService();
 module.exports = {
-  development: { ...config.databaseConfig() },
-  production: { ...config.databaseConfig() },
+  development: { ...dbConfig.databaseConfig() },
+  production: { ...dbConfig.databaseConfig() },
+  test: { ...dbConfig.databaseConfig() },
 };

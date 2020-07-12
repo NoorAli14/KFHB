@@ -1,6 +1,23 @@
-import { Body, Controller, Get, NotFoundException, Post } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Get,
+  NotFoundException,
+  Post,
+  Param,
+} from '@nestjs/common';
+import {
+  ApiResponse,
+  ApiTags,
+  ApiCreatedResponse,
+  ApiUnprocessableEntityResponse,
+  ApiOkResponse,
+} from '@nestjs/swagger';
 import { UserService } from './users.service';
+import { CreateUserDto } from './user.dto';
+import { User } from './user.class';
+
+@ApiTags('User')
 @Controller('users')
 export class UsersController {
   constructor(private userService: UserService) {}
@@ -9,10 +26,19 @@ export class UsersController {
   async list() {
     return this.userService.list();
   }
-  // public async details(@CurrentUser() currentUser: ICurrentUser) {
-  //   const user = this.userRepository.findById(currentUser.id);
-  //   if (!user) throw new NotFoundException();
-
-  //   return user;
-  // }
+  @Post()
+  @ApiCreatedResponse({ description: 'User has been successfully created.' })
+  @ApiUnprocessableEntityResponse()
+  async create(@Body() userDto: CreateUserDto): Promise<User> {
+    const user = await this.userService.create(userDto);
+    return user;
+  }
+  @Get(':id')
+  @ApiOkResponse({
+    description: 'The found record',
+    type: User,
+  })
+  findOne(@Param('id') id: string): Promise<User> {
+    return this.userService.findById(id);
+  }
 }
