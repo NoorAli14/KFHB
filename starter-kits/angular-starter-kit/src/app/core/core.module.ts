@@ -16,7 +16,10 @@ import { ErrorInterceptorService } from '@core/services/error-interceptor/error-
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptorService,
       multi: true
-    }, {
+    },
+
+     {
+
       provide: HTTP_INTERCEPTORS,
       useClass: ErrorInterceptorService,
       multi: true

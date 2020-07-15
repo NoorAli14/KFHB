@@ -8,7 +8,15 @@ const routes: Routes = [
     loadChildren: () => import('./user/user.module').then(m => m.UserModule)
   },
   {
-    path: '**', redirectTo:''
+    path: 'role',
+    loadChildren: () => import('./role/role.module').then(m => m.RoleModule)
+  },
+  {
+    path: 'error',
+    loadChildren: () => import('./error/error.module').then(m => m.ErrorModule)
+  },
+  {
+    path: '**', redirectTo:'error'
   }
 ];
 
