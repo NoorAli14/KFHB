@@ -17,12 +17,14 @@ import { Events } from "@shared/enums/events.enum";
 
 @Injectable()
 export class AuthInterceptorService implements HttpInterceptor {
+
     isRefreshTokenInProgress = false;
     constructor(
         private storage: StorageService,
         private http: HttpClient,
         private eventService: EventBusService
     ) {}
+
 
     intercept(
         request: HttpRequest<any>,
@@ -66,6 +68,7 @@ export class AuthInterceptorService implements HttpInterceptor {
                         "----------------------------Token refreshed------------------------"
                     );
 
+
                     const options = this.getHttpOption(false);
                     const clonedRequest = request.clone(options);
                     return next.handle(clonedRequest);
@@ -91,6 +94,7 @@ export class AuthInterceptorService implements HttpInterceptor {
                 // Accept: 'application/json, text/plain, */*'
             }),
         };
+
 
         if (!hasRefreshToken) {
             // httpOptions.headers = httpOptions.headers.set('x-access-token', ` ${token}`);

@@ -2,6 +2,7 @@ import { NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { MatMomentDateModule } from "@angular/material-moment-adapter";
+
 import { TranslateModule } from "@ngx-translate/core";
 import "hammerjs";
 
@@ -12,6 +13,15 @@ import {
     FuseSidebarModule,
     FuseThemeOptionsModule,
 } from "@fuse/components";
+
+import { fuseConfig } from "app/fuse-config";
+import { AppComponent } from "app/app.component";
+import { LayoutModule } from "app/layout/layout.module";
+import { AppRoutingModule } from "./app-routing.module";
+
+import { CoreModule } from "@core/core.module";
+import { environment } from "@env/environment";
+
 
 import { fuseConfig } from "app/fuse-config";
 import { AppComponent } from "app/app.component";
