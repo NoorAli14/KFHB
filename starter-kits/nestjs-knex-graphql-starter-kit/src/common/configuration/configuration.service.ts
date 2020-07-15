@@ -6,6 +6,7 @@ import {
   iAPP,
   iDATABASE,
   iSWAGGER,
+  iGRAPHQL,
   iConfig,
 } from '@common/interfaces/configuration.interface';
 export const DEFAULT_ENV: iConfig = {
@@ -32,12 +33,17 @@ export const DEFAULT_ENV: iConfig = {
   SWAGGER: {
     ROUTE: '/api/docs',
   },
+  GRAPHQL: {
+    ROUTE: '/graphql',
+    PLAYGROUND: true,
+    DEBUG: true,
+  },
   logLevel: 'info',
 };
 @Injectable()
 export class ConfigurationService {
   env: NodeJS.ProcessEnv = process.env;
-  private environmentHosting: string = process.env.NODE_ENV || 'development';
+  private environment: string = process.env.NODE_ENV || 'development';
   constructor() {
     dotenv.config();
   }
@@ -85,6 +91,18 @@ export class ConfigurationService {
       ROUTE: this.get('ENV_RBX_SWAGGER_ROUTE', DEFAULT_ENV.SWAGGER.ROUTE),
     };
   }
+
+  public get GRAPHQL(): iGRAPHQL {
+    return {
+      ROUTE: this.get('ENV_RBX_GRAPHQL_ROUTE', DEFAULT_ENV.GRAPHQL.ROUTE),
+      DEBUG: isTruthy(
+        this.get('ENV_RBX_GRAPHQL_DEBUG', DEFAULT_ENV.GRAPHQL.DEBUG),
+      ),
+      PLAYGROUND: isTruthy(
+        this.get('ENV_RBX_GRAPHQL_PLAYGROUND', DEFAULT_ENV.GRAPHQL.PLAYGROUND),
+      ),
+    };
+  }
   get(name: string, _default: any = undefined): string {
     return get(this.env, name, _default);
   }
@@ -101,12 +119,12 @@ export class ConfigurationService {
       : this.APP.HOST;
   }
   get IS_DEVELOPMENT(): boolean {
-    return this.environmentHosting === 'development';
+    return this.environment === 'development';
   }
-  get isProduction(): boolean {
-    return this.environmentHosting === 'production';
+  get IS_PRODUCTION(): boolean {
+    return this.environment === 'production';
   }
-  get isTest(): boolean {
-    return this.environmentHosting === 'test';
+  get IS_TEST(): boolean {
+    return this.environment === 'test';
   }
 }
