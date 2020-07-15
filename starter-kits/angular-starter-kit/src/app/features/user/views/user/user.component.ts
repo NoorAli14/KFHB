@@ -9,14 +9,9 @@ import { fuseAnimations } from "@fuse/animations";
 import { MatDialog } from "@angular/material/dialog";
 import { UserFormComponent } from "../../components/user-form/user-form.component";
 import {
-    map,
-    debounceTime,
-    distinctUntilChanged,
-    switchMap,
     tap,
 } from "rxjs/operators";
 
-import { DataSource, CollectionViewer } from "@angular/cdk/collections";
 import { UserService } from "../../services/user.service";
 import { User } from "@feature/user/user.model";
 import { MatPaginator } from "@angular/material/paginator";
@@ -25,6 +20,10 @@ import { FormControl } from "@angular/forms";
 import { MatSort } from "@angular/material/sort";
 import { merge } from "rxjs";
 import { MESSAGES } from "@shared/constants/app.constants";
+import {
+    ConfirmDialogComponent,
+    ConfirmDialogModel,
+} from "@shared/components/confirm-dialog/confirm-dialog.component";
 
 @Component({
     selector: "app-user",
@@ -57,11 +56,10 @@ export class UserComponent implements OnInit, AfterViewInit {
     constructor(
         public _matDialog: MatDialog,
         private _userService: UserService
-    ) {
-    }
-    
+    ) {}
+
     ngOnInit(): void {
-        this.username= new FormControl('')
+        this.username = new FormControl("");
         this.initSearch();
         this.loadAllUsers();
     }
@@ -110,6 +108,20 @@ export class UserComponent implements OnInit, AfterViewInit {
         });
         this.dialogRef.afterClosed().subscribe((response) => {
             console.log(response);
+        });
+    }
+    confirmDialog(): void {
+        const message = MESSAGES.REMOVE_CONFIRMATION;
+        const dialogData = new ConfirmDialogModel("Confirm Action", message);
+        const dialogRef = this._matDialog.open(ConfirmDialogComponent, {
+            data: dialogData,
+            disableClose:true,
+            panelClass: "app-confirm-dialog",
+            hasBackdrop: true,
+        });
+
+        dialogRef.afterClosed().subscribe((dialogResult) => {
+
         });
     }
 }

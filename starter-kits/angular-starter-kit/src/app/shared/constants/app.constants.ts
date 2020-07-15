@@ -14,5 +14,6 @@ export enum USER_CONST {
 }
 export const MESSAGES = {
     UNKNOWN: "We are unable to process the request.",
+    REMOVE_CONFIRMATION: "Are you sure you want to delete?",
     CREATED: (name) => `${name} created successfully.`,
 };
