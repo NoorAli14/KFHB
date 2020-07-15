@@ -1,1 +1,66 @@
-<p>phone-verification works!</p>
+<div class="auth-container" fxLayout="column">
+    <div
+        class="auth-form-wrapper"
+        fxLayout="column"
+        fxLayoutAlign="center center"
+    >
+        <div
+            class="auth-form"
+            [@animate]="{
+                value: '*',
+                params: { duration: '300ms', y: '100px' }
+            }"
+        >
+            <div class="logo">
+                <img src="assets/images/logos/fuse.svg" />
+            </div>
+
+            <div class="title">ACCOUNT RECOVERY</div>
+            <div class="sub-title">
+                A 6 digit verification code has been sent to your registered mobile
+                number. Enter that code to continue.
+            </div>
+
+            <form
+                name="recoverPasswordForm"
+                [formGroup]="recoverPasswordForm"
+                novalidate
+            >
+                <mat-form-field appearance="outline">
+                    <mat-label>Code</mat-label>
+                    <input matInput formControlName="code" />
+                    <mat-icon matSuffix class="secondary-text">phone</mat-icon>
+                    <mat-error
+                        *ngIf="
+                            recoverPasswordForm.get('code').hasError('required')
+                        "
+                    >
+                        Code is required
+                    </mat-error>
+                </mat-form-field>
+
+                <div fxLayout="row" fxLayoutAlign="center center">
+                    <button
+                        mat-raised-button
+                        class="submit-button"
+                        color="accent"
+                        aria-label="SEND RESET LINK"
+                        [disabled]="recoverPasswordForm.invalid"
+                    >
+                        Submit
+                    </button>
+                </div>
+            </form>
+
+            <div class="login" fxLayout="row" fxLayoutAlign="center center">
+                <a
+                    class="link"
+                    mat-button
+                    color="warn"
+                    [routerLink]="'/auth/login'"
+                    >Go back to login</a
+                >
+            </div>
+        </div>
+    </div>
+</div>
