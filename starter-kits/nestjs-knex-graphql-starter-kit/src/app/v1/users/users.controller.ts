@@ -7,6 +7,7 @@ import {
   Delete,
   Put,
   Param,
+  BadRequestException,
 } from '@nestjs/common';
 import {
   ApiResponse,
@@ -58,8 +59,12 @@ export class UsersController {
     description: 'The found record',
     type: User,
   })
-  findOne(@Param('id') id: string): Promise<User> {
-    return this.userService.findById(id);
+  async findOne(@Param('id') id: string): Promise<User> {
+    try {
+      return await this.userService.findById(id);
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
   }
 
   @Delete(':id')
