@@ -29,7 +29,7 @@
 - [Getting Started](#-getting-started)
 - [How to Run](#-how-to-run)
 - [App Structure](#-app-structure)
-- [Migrations & Seeding]
+- [Migrations & Seeding](#-migration-&-seeding)
 - [Roadmap](#-roadmap)
 - [License](#-license)
 
@@ -69,6 +69,7 @@ You must install the following on your local machine:
 │   │   │   │   ├── users.controller.ts
 │   │   │   │   ├── users.controller.specs.ts
 │   │   │   │   ├── users.module.ts
+│   │   │   │   ├── users.resolver.ts
 │   │   │   │   ├── users.service.ts
 │   │   │   ├── v1.module.ts
 │   │   ├── app.controller.ts
@@ -78,7 +79,7 @@ You must install the following on your local machine:
 │   │   ├── index.ts
 │   ├── common
 │   │   ├── configuration
-│   │   │   ├── configuratin.service.ts
+│   │   │   ├── configuration.service.ts
 │   │   │   ├── configuration.service.spec.ts
 │   │   │   ├── dbconfiguration.service.ts
 │   │   ├── decorators
@@ -122,6 +123,7 @@ You must install the following on your local machine:
 ├── .ncurc.json
 ├── .prettierrc
 ├── database.ts
+├── schema.gql
 ├── nest-cli.json
 ├── nodemon.json
 ├── package.json
