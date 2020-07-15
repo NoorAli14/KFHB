@@ -1,12 +1,29 @@
-import { Component, OnInit, ViewEncapsulation } from "@angular/core";
+import {
+    Component,
+    AfterViewInit,
+    OnInit,
+    ViewEncapsulation,
+    ViewChild,
+} from "@angular/core";
 import { fuseAnimations } from "@fuse/animations";
 import { MatDialog } from "@angular/material/dialog";
 import { UserFormComponent } from "../../components/user-form/user-form.component";
-import { Subject, Observable } from 'rxjs';
-import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
-import { takeUntil } from 'rxjs/operators';
-import { DataSource } from '@angular/cdk/collections';
-import { FileManagerService } from '../../file-manager.service';
+import {
+    tap,
+} from "rxjs/operators";
+
+import { UserService } from "../../services/user.service";
+import { User } from "@feature/user/user.model";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatTableDataSource } from "@angular/material/table";
+import { FormControl } from "@angular/forms";
+import { MatSort } from "@angular/material/sort";
+import { merge } from "rxjs";
+import { MESSAGES } from "@shared/constants/app.constants";
+import {
+    ConfirmDialogComponent,
+    ConfirmDialogModel,
+} from "@shared/components/confirm-dialog/confirm-dialog.component";
 
 @Component({
     selector: "app-user",
@@ -15,83 +32,96 @@ import { FileManagerService } from '../../file-manager.service';
     animations: fuseAnimations,
     encapsulation: ViewEncapsulation.None,
 })
-export class UserComponent implements OnInit {
+export class UserComponent implements OnInit, AfterViewInit {
     dialogRef: any;
+    dataSource = new MatTableDataSource<User>();
+    @ViewChild(MatPaginator) paginator: MatPaginator;
+    @ViewChild(MatSort, { static: true }) sort: MatSort;
+    username: FormControl;
+    message: string = "";
+    type: string = "";
 
-    createDialogue(): void {
-        this.dialogRef = this._matDialog.open(UserFormComponent, {
-            panelClass: "app-user-form",
-        });
-        this.dialogRef.afterClosed().subscribe((response) => {});
-    }
-    files: any;
-    dataSource: FilesDataSource | null;
-    displayedColumns = ['icon', 'name', 'type', 'owner', 'size', 'modified', 'actions'];
-    selected: any;
-
-    // Private
-    private _unsubscribeAll: Subject<any>;
+    displayedColumns = [
+        "username",
+        "firstName",
+        "middleName",
+        "lastName",
+        "contactNo",
+        "nationalityId",
+        "gender",
+        "email",
+        "status",
+        "actions",
+    ];
     constructor(
         public _matDialog: MatDialog,
-        private _fileManagerService: FileManagerService,
-        private _fuseSidebarService: FuseSidebarService
-    )
-    {
-        // Set the private defaults
-        this._unsubscribeAll = new Subject();
+        private _userService: UserService
+    ) {}
+
+    ngOnInit(): void {
+        this.username = new FormControl("");
+        this.initSearch();
+        this.loadAllUsers();
     }
 
-    ngOnInit(): void
-    {
-        this.dataSource = new FilesDataSource(this._fileManagerService);
-        this._fileManagerService.onFilesChanged
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe(files => {
-                this.files = files;
-            });
-
-        this._fileManagerService.onFileSelected
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe(selected => {
-                this.selected = selected;
-            });
+    ngAfterViewInit() {
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        merge(this.sort.sortChange, this.paginator.page)
+            .pipe(tap(() => this.loadAllUsers()))
+            .subscribe();
     }
-
-
-    ngOnDestroy(): void
-    {
-        // Unsubscribe from all subscriptions
-        this._unsubscribeAll.next();
-        this._unsubscribeAll.complete();
+    loadAllUsers() {
+        this._userService.getUsers().subscribe(
+            (users) => {
+                this.dataSource.data = users as User[];
+                this.message = "";
+            },
+            () => {
+                this.type = "error";
+                this.message = MESSAGES.UNKNOWN;
+            }
+        );
     }
-
-    onSelect(selected): void
-    {
-        this._fileManagerService.onFileSelected.next(selected);
+    initSearch() {
+        this.username.valueChanges.subscribe((text: string) => {
+            this.paginator.pageIndex = 0;
+            this.loadAllUsers();
+        });
     }
-
-    toggleSidebar(name): void
-    {
-        this._fuseSidebarService.getSidebar(name).toggleOpen();
+    onCreateDialog(): void {
+        const user = new User();
+        this.dialogRef = this._matDialog.open(UserFormComponent, {
+            data: user,
+            panelClass: "app-user-form",
+            disableClose: true,
+            hasBackdrop: true,
+        });
+        this.dialogRef.afterClosed().subscribe((response) => {
+            this.dataSource.data = [...this.dataSource.data, response];
+        });
     }
-}
-
-export class FilesDataSource extends DataSource<any>
-{
-
-    constructor(
-        private _fileManagerService: FileManagerService
-    )
-    {
-        super();
+    onEditDialog(user: User) {
+        this.dialogRef = this._matDialog.open(UserFormComponent, {
+            data: user,
+            panelClass: "app-user-form",
+        });
+        this.dialogRef.afterClosed().subscribe((response) => {
+            console.log(response);
+        });
     }
+    confirmDialog(): void {
+        const message = MESSAGES.REMOVE_CONFIRMATION;
+        const dialogData = new ConfirmDialogModel("Confirm Action", message);
+        const dialogRef = this._matDialog.open(ConfirmDialogComponent, {
+            data: dialogData,
+            disableClose:true,
+            panelClass: "app-confirm-dialog",
+            hasBackdrop: true,
+        });
 
-    connect(): Observable<any[]>
-    {
-        return this._fileManagerService.onFilesChanged;
-    }
+        dialogRef.afterClosed().subscribe((dialogResult) => {
 
-    disconnect(): void
-    {
+        });
     }
 }
