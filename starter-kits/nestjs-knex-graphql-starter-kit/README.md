@@ -30,6 +30,7 @@
 - [How to Run](#-how-to-run)
 - [App Structure](#-app-structure)
 - [Migrations & Seeding]
+- [Roadmap](#-roadmap)
 - [License](#-license)
 
 ![divider](./divider.png)
@@ -213,3 +214,28 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
+
+## ❯ Roadmap
+
+### API Gateway
+
+- [ ] Add unit tests
+- [ ] Add Rate Limiter
+- [ ] Add CORS Policies
+- [x] Add refresh token support
+- [ ] Add request/input data validation
+- [ ] Improve logging
+- [ ] Improve error handling
+- [ ] Add DataLoader support
+
+### Microservices
+
+- [x] Multiple Database client support
+- [x] Add graphql
+- [x] Add Swagger OpenAPI specification
+- [ ] Add authorization
+- [ ] Add caching
+- [x] Add health checks
+- [ ] Add unit tests
+- [ ] Improve logging
+- [ ] Improve error handling
