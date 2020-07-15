@@ -1,0 +1,37 @@
+import { NgModule } from "@angular/core";
+import { Routes, RouterModule } from "@angular/router";
+import { LoginComponent } from "./views/login/login.component";
+import { ResetPasswordComponent } from './views/reset-password/reset-password.component';
+import { ForgotPasswordComponent } from './views/forgot-password/forgot-password.component';
+import { PhoneVerificationComponent } from './views/phone-verification/phone-verification.component';
+
+const routes: Routes = [
+    {
+        path: "",
+        pathMatch: "full",
+        redirectTo: "login",
+    },
+    {
+        path: "login",
+        component: LoginComponent,
+    },
+   
+    {
+        path: "reset-password",
+        component: ResetPasswordComponent,
+    },
+    {
+        path: "forgot-password",
+        component: ForgotPasswordComponent,
+    },
+    {
+        path: "verification",
+        component: PhoneVerificationComponent,
+    }
+];
+
+@NgModule({
+    imports: [RouterModule.forChild(routes)],
+    exports: [RouterModule],
+})
+export class AuthRoutingModule {}
