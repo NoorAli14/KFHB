@@ -1,11 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { INestApplication, ValidationPipe, Logger } from '@nestjs/common';
-import { ApplicationModule } from '@app/';
+import { ApplicationModule } from '@app/index';
 import { CommonModule } from '@common/common.module';
 import { LoggingInterceptor } from '@common/interceptors/logging.interceptor';
 import { HttpExceptionFilter } from '@common/filters/http-exception.filter';
 import { ConfigurationService } from '@common/configuration/configuration.service';
-import { KernelMiddleware } from '@core/middlewares/';
+import { KernelMiddleware } from '@core/middlewares/index';
 class Server {
   private _app: INestApplication;
   private _config: ConfigurationService;
