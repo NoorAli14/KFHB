@@ -13,11 +13,14 @@ export class UserService {
   }
 
   async update(id: string, userObj: Object) {
-    const user = await this.userDB.findBy({ id: id });
+    const [user] = await this.userDB.update({ id: id }, userObj);
     return user;
   }
   async create(newUser: Object): Promise<any> {
     const [user] = await this.userDB.create(newUser);
     return user;
+  }
+  async delete(id: string): Promise<any> {
+    return await this.userDB.delete({ id: id });
   }
 }
