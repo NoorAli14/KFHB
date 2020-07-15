@@ -1,16 +1,19 @@
 export const locale = {
-    lang: 'en',
+    lang: "en",
     data: {
-        'NAV': {
-            'FEATURES': 'Features',
-            'USER'        : {
-                'TITLE': 'User',
-                'BADGE': '25'
+        FEATURES: {
+            TITLE: "Features",
+            ENTITLEMENT: {
+                TITLE: "Entitlement",
+                USER: {
+                    TITLE: "User",
+                    BADGE: "25",
+                },
+                ROLE: {
+                    TITLE: "Role",
+                    BADGE: "25",
+                },
             },
-            'ROLE'        : {
-                'TITLE': 'Role',
-                'BADGE': '25'
-            }
-        }
-    }
+        },
+    },
 };

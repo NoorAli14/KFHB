@@ -1,11 +1,13 @@
 @import "src/@fuse/scss/fuse";
 
-login {
+mat-checkbox {
+    margin: 0;
+}
 
-    #login {
-        width: 100%;
-        background: url('/assets/images/backgrounds/dark-material-bg.jpg') no-repeat;
-        background-size: cover;
+.remember-forgot-password {
+    font-size: 13px;
+    margin-top: 8px;
+
 
         #login-form-wrapper {
             flex: 1 0 auto;
@@ -98,27 +100,48 @@ login {
                         z-index: 9999;
                             color: black;
 
-                        &:before,
-                        &:after {
-                            content: '';
-                            display: block;
-                            width: 30px;
-                            position: absolute;
-                            top: 10px;
-                            border-top: 1px solid;
-                        }
 
-                        &:before {
-                            right: 100%;
-                        }
+    .text {
+        margin-right: 8px;
+    }
+}
 
-                        &:after {
-                            left: 100%;
-                        }
-                    }
-                }
+.separator {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 24px auto;
+    position: relative;
+    overflow: hidden;
+    width: 100px;
 
-                button {
+    .text {
+        display: inline-flex;
+        position: relative;
+        padding: 0 8px;
+        z-index: 9999;
+
+        &:before,
+        &:after {
+            content: '';
+            display: block;
+            width: 30px;
+            position: absolute;
+            top: 10px;
+            border-top: 1px solid;
+        }
+
+        &:before {
+            right: 100%;
+        }
+
+        &:after {
+            left: 100%;
+        }
+    }
+}
+
+button {
+
 
                     &.google,
                     &.github,
@@ -130,9 +153,11 @@ login {
                         font-size: 13px;
                     }
 
-                    @include media-breakpoint('xs') {
-                        width: 80%;
-                    }
+
+    @include media-breakpoint('xs') {
+        width: 80%;
+    }
+
 
                     &.google {
                         background-color: #D73D32;
@@ -150,5 +175,6 @@ login {
                 }
             }
         }
+
     }
 }

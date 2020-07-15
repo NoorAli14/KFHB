@@ -49,3 +49,14 @@
         max-width: 360px;
     }
 }
+
+.mat-table {
+    background: transparent;
+    box-shadow: none;
+
+    .mat-row {
+        position: relative;
+        cursor: pointer;
+        min-height: 50px;
+    }
+}

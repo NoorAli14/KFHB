@@ -7,10 +7,6 @@ const routes: Routes = [
     loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
   },
   {
-    path: 'error',
-    loadChildren: () => import('./error/error.module').then(m => m.ErrorModule)
-  },
-  {
     path: '',
     loadChildren: () => import('./features/features.module').then(m => m.FeaturesModule)
   },

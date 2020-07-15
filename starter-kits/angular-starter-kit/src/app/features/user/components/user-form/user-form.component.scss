@@ -7,9 +7,11 @@
     }
 
     @include media-breakpoint('gt-xs') {
-        width: 60%;
+        width: 70%;
     }
-
+    .mat-form-field-appearance-outline .mat-form-field-prefix, .mat-form-field-appearance-outline .mat-form-field-suffix {
+        top: 0em;
+    }
     .mat-dialog-container {
         padding: 0;
     }
