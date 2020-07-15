@@ -41,7 +41,7 @@
                         Remember Me
                     </mat-checkbox>
 
-                    <a class="forgot-password" [routerLink]="'/auth/forgot-password'">
+                    <a class="forgot-password" mat-button color="warn" [routerLink]="'/auth/forgot-password'">
                         Forgot Password?
                     </a>
                 </div>
@@ -52,7 +52,25 @@
                 </button>
 
             </form>
+            <div class="separator">
+                <span class="text">OR LOGIN WITH</span>
+            </div>
 
+           <div fxLayout="row" fxLayoutAlign="space-between">
+            <button mat-raised-button class="google">
+                Google
+            </button>
+
+            <button mat-raised-button class="facebook">
+                Facebook
+            </button>
+            <button mat-raised-button class="github">
+                Github
+            </button>
+            <button mat-raised-button class="twitter">
+                Twitter
+            </button>
+           </div>
             <!-- <div class="register" fxLayout="column" fxLayoutAlign="center center">
                 <span class="text">Don't have an account?</span>
                 <a class="link" [routerLink]="'/auth/register'">Create an account</a>
