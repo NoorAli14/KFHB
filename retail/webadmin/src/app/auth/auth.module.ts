@@ -13,6 +13,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { PhoneVerificationComponent } from './views/phone-verification/phone-verification.component';
+import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
     declarations: [LoginComponent,  ForgotPasswordComponent, ResetPasswordComponent, PhoneVerificationComponent],
@@ -20,6 +21,7 @@ import { PhoneVerificationComponent } from './views/phone-verification/phone-ver
         CommonModule,
         MaterialFormsModule,
         FuseSharedModule,
+        SharedModule,
         AuthRoutingModule
     ],
 })
