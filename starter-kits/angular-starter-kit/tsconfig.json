@@ -33,6 +33,9 @@
               ],
               "@env/*": [
                 "environments/*"
+              ],
+              "@config/*": [
+                "app/config/*"
               ]
         }
     },

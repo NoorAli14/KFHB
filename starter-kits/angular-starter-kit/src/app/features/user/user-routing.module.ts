@@ -8,10 +8,8 @@ const routes: Routes = [
  
   {
       path: "",
-      component: UserComponent,
-      resolve  : {
-        files: UserService
-    }
+      component: UserComponent
+      
   },
 ];
 

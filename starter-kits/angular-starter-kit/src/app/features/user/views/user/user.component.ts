@@ -1,12 +1,29 @@
-import { Component, OnInit, ViewEncapsulation } from "@angular/core";
+import {
+    Component,
+    AfterViewInit,
+    OnInit,
+    ViewEncapsulation,
+    ViewChild,
+} from "@angular/core";
 import { fuseAnimations } from "@fuse/animations";
 import { MatDialog } from "@angular/material/dialog";
 import { UserFormComponent } from "../../components/user-form/user-form.component";
-import { Subject, Observable } from "rxjs";
-import { takeUntil } from "rxjs/operators";
-import { DataSource } from "@angular/cdk/collections";
+import {
+    tap,
+} from "rxjs/operators";
+
 import { UserService } from "../../services/user.service";
 import { User } from "@feature/user/user.model";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatTableDataSource } from "@angular/material/table";
+import { FormControl } from "@angular/forms";
+import { MatSort } from "@angular/material/sort";
+import { merge } from "rxjs";
+import { MESSAGES } from "@shared/constants/app.constants";
+import {
+    ConfirmDialogComponent,
+    ConfirmDialogModel,
+} from "@shared/components/confirm-dialog/confirm-dialog.component";
 
 @Component({
     selector: "app-user",
@@ -15,83 +32,96 @@ import { User } from "@feature/user/user.model";
     animations: fuseAnimations,
     encapsulation: ViewEncapsulation.None,
 })
-export class UserComponent implements OnInit {
+export class UserComponent implements OnInit, AfterViewInit {
     dialogRef: any;
-    users: Array<User>;
-    dataSource: FilesDataSource | null;
+    dataSource = new MatTableDataSource<User>();
+    @ViewChild(MatPaginator) paginator: MatPaginator;
+    @ViewChild(MatSort, { static: true }) sort: MatSort;
+    username: FormControl;
+    message: string = "";
+    type: string = "";
+
     displayedColumns = [
-        "userId",
-        "employeeId",
-        "name",
-        "country",
+        "username",
+        "firstName",
+        "middleName",
+        "lastName",
+        "contactNo",
+        "nationalityId",
         "gender",
         "email",
-        "isActive",
+        "status",
         "actions",
     ];
-    selected: any;
-    // Private
-    private _unsubscribeAll: Subject<any>;
     constructor(
         public _matDialog: MatDialog,
-        private _userService: UserService,
-    ) {
-        // Set the private defaults
-        this._unsubscribeAll = new Subject();
-    }
+        private _userService: UserService
+    ) {}
 
     ngOnInit(): void {
-        this.dataSource = new FilesDataSource(this._userService);
-        this._userService.onFilesChanged
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((users) => {
-                this.users = users;
-            });
+        this.username = new FormControl("");
+        this.initSearch();
+        this.loadAllUsers();
     }
 
+    ngAfterViewInit() {
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        merge(this.sort.sortChange, this.paginator.page)
+            .pipe(tap(() => this.loadAllUsers()))
+            .subscribe();
+    }
+    loadAllUsers() {
+        this._userService.getUsers().subscribe(
+            (users) => {
+                this.dataSource.data = users as User[];
+                this.message = "";
+            },
+            () => {
+                this.type = "error";
+                this.message = MESSAGES.UNKNOWN;
+            }
+        );
+    }
+    initSearch() {
+        this.username.valueChanges.subscribe((text: string) => {
+            this.paginator.pageIndex = 0;
+            this.loadAllUsers();
+        });
+    }
     onCreateDialog(): void {
         const user = new User();
-        user.userId = "1";
+        this.dialogRef = this._matDialog.open(UserFormComponent, {
+            data: user,
+            panelClass: "app-user-form",
+            disableClose: true,
+            hasBackdrop: true,
+        });
+        this.dialogRef.afterClosed().subscribe((response) => {
+            this.dataSource.data = [...this.dataSource.data, response];
+        });
+    }
+    onEditDialog(user: User) {
         this.dialogRef = this._matDialog.open(UserFormComponent, {
             data: user,
             panelClass: "app-user-form",
         });
         this.dialogRef.afterClosed().subscribe((response) => {
-            this._userService
-                .createUser(response.data)
-                .subscribe((response:User) => {
-                    this._userService.getUsers();
-                });
+            console.log(response);
         });
     }
-    onEditDialog(user:User){
-        debugger
-        this.dialogRef = this._matDialog.open(UserFormComponent, {
-            data: user,
-            panelClass: "app-user-form",
+    confirmDialog(): void {
+        const message = MESSAGES.REMOVE_CONFIRMATION;
+        const dialogData = new ConfirmDialogModel("Confirm Action", message);
+        const dialogRef = this._matDialog.open(ConfirmDialogComponent, {
+            data: dialogData,
+            disableClose:true,
+            panelClass: "app-confirm-dialog",
+            hasBackdrop: true,
         });
-        this.dialogRef.afterClosed().subscribe((response) => {
-            
+
+        dialogRef.afterClosed().subscribe((dialogResult) => {
+
         });
     }
-    ngOnDestroy(): void {
-        this._unsubscribeAll.next();
-        this._unsubscribeAll.complete();
-    }
-
-    onSelect(selected): void {
-        this._userService.onFileSelected.next(selected);
-    }
-}
-
-export class FilesDataSource extends DataSource<any> {
-    constructor(private _fileManagerService: UserService) {
-        super();
-    }
-
-    connect(): Observable<any[]> {
-        return this._fileManagerService.onFilesChanged;
-    }
-
-    disconnect(): void {}
 }

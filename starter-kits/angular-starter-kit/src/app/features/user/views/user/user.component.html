@@ -1,4 +1,4 @@
-<div id="users" class="page-layout carded fullwidth inner-scroll">
+<div  class="page-container page-layout carded fullwidth inner-scroll">
 
     <!-- TOP BACKGROUND -->
     <div class="top-bg accent"></div>
@@ -26,7 +26,7 @@
             <div class="search-wrapper mx-32 mx-md-0">
                 <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
                     <mat-icon>search</mat-icon>
-                    <input  placeholder="Search for a user">
+                    <input [formControl]="username"  placeholder="Search for a user">
                 </div>
             </div>
             <!-- / SEARCH -->
@@ -44,36 +44,51 @@
 
         <!-- CONTENT CARD -->
         <div class="content-card" fusePerfectScrollbar>
-            <mat-table #table [dataSource]="dataSource" [@animateStagger]="{value:'50'}">
-
-                <!-- Type Column -->
-                <ng-container matColumnDef="userId">
-                    <mat-header-cell *matHeaderCellDef >Id</mat-header-cell>
-                    <mat-cell *matCellDef="let row"> {{row.userId}}</mat-cell>
-                </ng-container>
+            <!-- <div class="spinner-container" *ngIf="dataSource.loading$ | async">
+                <mat-spinner></mat-spinner>
+            </div> -->
+            <div
+            *ngIf="message.length > 0"
+            fxLayout="row"
+            fxLayoutAlign="center"
+            class="p-24  message-box {{ type }} "
+        >
+            {{ message }}
+        </div>
+            <mat-table #table matSort matSortActive="id" matSortDirection="asc" matSortDisableClear  [dataSource]="dataSource" [@animateStagger]="{value:'50'}">
             
                 <!-- Name Column -->
-                <ng-container matColumnDef="employeeId">
-                    <mat-header-cell *matHeaderCellDef>Employee Id</mat-header-cell>
-                    <mat-cell *matCellDef="let row"> {{row.employeeId}}</mat-cell>
+                <ng-container matColumnDef="username"    >
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>User  Name</mat-header-cell>
+                    <mat-cell *matCellDef="let row"> {{row.username}}</mat-cell>
                 </ng-container>
             
                 <!-- Type Column -->
-                <ng-container matColumnDef="name">
-                    <mat-header-cell *matHeaderCellDef fxHide fxShow.gt-md>Name</mat-header-cell>
-                    <mat-cell *matCellDef="let row" fxHide fxShow.gt-md> {{row.name}}</mat-cell>
+                <ng-container matColumnDef="firstName">
+                    <mat-header-cell *matHeaderCellDef fxHide fxShow.gt-md>First Name</mat-header-cell>
+                    <mat-cell *matCellDef="let row" fxHide fxShow.gt-md> {{row.firstName}}</mat-cell>
                 </ng-container>
             
                 <!-- Owner Column -->
-                <ng-container matColumnDef="country">
-                    <mat-header-cell *matHeaderCellDef fxHide.xs>Country</mat-header-cell>
-                    <mat-cell *matCellDef="let row" fxHide.xs> {{row.country}}</mat-cell>
+                <ng-container matColumnDef="middleName">
+                    <mat-header-cell *matHeaderCellDef fxHide.xs>Middle Name</mat-header-cell>
+                    <mat-cell *matCellDef="let row" fxHide.xs> {{row.middleName}}</mat-cell>
                 </ng-container>
             
                 <!-- Size Column -->
-                <ng-container matColumnDef="gender">
-                    <mat-header-cell *matHeaderCellDef fxHide.xs>Gender</mat-header-cell>
-                    <mat-cell *matCellDef="let row" fxHide.xs>{{row.gender}}</mat-cell>
+                <ng-container matColumnDef="lastName">
+                    <mat-header-cell *matHeaderCellDef fxHide.xs>Last Name</mat-header-cell>
+                    <mat-cell *matCellDef="let row" fxHide.xs>{{row.lastName}}</mat-cell>
+                </ng-container>
+                <!-- Size Column -->
+                <ng-container matColumnDef="contactNo">
+                    <mat-header-cell *matHeaderCellDef fxHide.xs>Contact No</mat-header-cell>
+                    <mat-cell *matCellDef="let row" fxHide.xs>{{row.contactNo}}</mat-cell>
+                </ng-container>
+                <!-- Size Column -->
+                <ng-container matColumnDef="nationalityId">
+                    <mat-header-cell *matHeaderCellDef fxHide.xs>Nationality</mat-header-cell>
+                    <mat-cell *matCellDef="let row" fxHide.xs>{{row.nationalityId}}</mat-cell>
                 </ng-container>
             
                 <!-- Modified Column -->
@@ -81,10 +96,15 @@
                     <mat-header-cell *matHeaderCellDef fxHide fxShow.gt-md>Email</mat-header-cell>
                     <mat-cell *matCellDef="let row" fxHide fxShow.gt-md>{{row.email}}</mat-cell>
                 </ng-container>
+                <!-- Modified Column -->
+                <ng-container matColumnDef="gender">
+                    <mat-header-cell *matHeaderCellDef fxHide fxShow.gt-md>Gender</mat-header-cell>
+                    <mat-cell *matCellDef="let row" fxHide fxShow.gt-md>{{row.gender}}</mat-cell>
+                </ng-container>
 
-                <ng-container matColumnDef="isActive">
+                <ng-container matColumnDef="status">
                     <mat-header-cell *matHeaderCellDef fxHide fxShow.gt-md>Status</mat-header-cell>
-                    <mat-cell *matCellDef="let row" fxHide fxShow.gt-md>{{row.isActive}}</mat-cell>
+                    <mat-cell *matCellDef="let row" fxHide fxShow.gt-md>{{row.status}}</mat-cell>
                 </ng-container>
             
             	<ng-container matColumnDef="actions">
@@ -93,7 +113,7 @@
 							<button (click)="onEditDialog(row)" mat-icon-button color="primary" >
 								<mat-icon>mode_edit</mat-icon>
 							</button>&nbsp;
-							<button mat-icon-button color="warn"  type="button">
+							<button (click)="confirmDialog()" mat-icon-button color="warn"  type="button">
 								<mat-icon>delete</mat-icon>
 							</button>&nbsp;
 					</mat-cell>
@@ -107,6 +127,7 @@
                 >
                 </mat-row>
             </mat-table>
+            <mat-paginator  [pageSize]="3" [pageSizeOptions]="[3, 5, 10]"></mat-paginator>
         </div>
         <!-- / CONTENT CARD -->
     </div>

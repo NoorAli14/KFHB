@@ -2,8 +2,7 @@ import { NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { MatMomentDateModule } from "@angular/material-moment-adapter";
-import { MatButtonModule } from "@angular/material/button";
-import { MatIconModule } from "@angular/material/icon";
+
 import { TranslateModule } from "@ngx-translate/core";
 import "hammerjs";
 
@@ -19,13 +18,18 @@ import { fuseConfig } from "app/fuse-config";
 import { AppComponent } from "app/app.component";
 import { LayoutModule } from "app/layout/layout.module";
 import { AppRoutingModule } from "./app-routing.module";
-import {
-    InMemoryWebApiModule,
-} from "angular-in-memory-web-api";
-import { FakeDbService } from "./fake-db/fake-db.service";
+
 import { CoreModule } from "@core/core.module";
 import { environment } from "@env/environment";
 
+
+import { fuseConfig } from "app/fuse-config";
+import { AppComponent } from "app/app.component";
+import { LayoutModule } from "app/layout/layout.module";
+import { AppRoutingModule } from "./app-routing.module";
+import { CoreModule } from "@core/core.module";
+import { NgxUiLoaderModule, NgxUiLoaderHttpModule } from "ngx-ui-loader";
+import { ngxUiLoaderConfig } from "@config/index";
 @NgModule({
     declarations: [AppComponent],
     imports: [
@@ -33,19 +37,11 @@ import { environment } from "@env/environment";
         BrowserAnimationsModule,
         AppRoutingModule,
         TranslateModule.forRoot(),
-        environment.isMockEnabled
-            ? InMemoryWebApiModule.forRoot(FakeDbService, {
-                  passThruUnknownUrl: true,
-                  dataEncapsulation: false,
-                  delay:500
-              })
-            : [],
+
         // Material moment date module
         MatMomentDateModule,
-
-        // Material
-        MatButtonModule,
-        MatIconModule,
+        NgxUiLoaderHttpModule,
+        NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
 
         // Fuse modules
         FuseModule.forRoot(fuseConfig),
