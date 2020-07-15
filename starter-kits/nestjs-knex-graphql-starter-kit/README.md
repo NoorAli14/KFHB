@@ -27,11 +27,29 @@
 ## ❯ Table of Contents
 
 - [Getting Started](#-getting-started)
+- [How to Run](#-how-to-run)
 - [App Structure](#-app-structure)
 - [Migrations & Seeding]
 - [License](#-license)
 
 ![divider](./divider.png)
+
+## ❯ How to Run
+
+### Pre-requisites
+
+You must install the following on your local machine:
+
+1. Node.js (v12.x recommended)
+2. Docker
+3. Docker Compose
+4. Database Client (MSSQL | MySQL | Postgres | Oracle)
+
+### Running
+
+1. On the Terminal, go into the project's root folder (`cd /project/root/folder`) and execute `npm start`. The start script will install all npm dependencies for all projects, lint the code, transpile the code, build the artifacts (Docker images) and run all of them via `docker-compose`.
+
+2. Once the start script is done, the GraphQL Playground will be running on [http://localhost:3000](http://localhost:3000)
 
 ## ❯ App Structure
 
