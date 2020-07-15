@@ -20,4 +20,9 @@ export abstract class BaseRepository {
   async findBy(condition: Object): Promise<any> {
     return this._connection(this._tableName).where(condition);
   }
+  async findOne(condition: Object): Promise<any> {
+    return this._connection(this._tableName)
+      .where(condition)
+      .first();
+  }
 }

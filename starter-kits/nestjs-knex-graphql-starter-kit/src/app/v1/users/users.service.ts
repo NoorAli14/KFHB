@@ -1,35 +1,23 @@
-import { ConflictException, Injectable } from '@nestjs/common';
-
-import { UserRepository } from './users.repository';
+import { Injectable } from '@nestjs/common';
+import { UserRepository } from '@core/repository/';
 
 @Injectable()
 export class UserService {
-  constructor(private userRepository: UserRepository) {}
+  constructor(private userDB: UserRepository) {}
 
-  public async list() {
-    return [
-      {
-        name: 'Faizan',
-      },
-      { name: 'Tarq' },
-    ];
+  async list(): Promise<any> {
+    return this.userDB.list();
   }
-  public async findById(id) {
-    return 'User Controller';
+  async findById(id: string): Promise<any> {
+    return this.userDB.findOne({ id: id });
   }
 
-  // public async update(model: IUser, currentUser: ICurrentUser): Promise<User> {
-  //   delete model.id;
-
-  //   const user = await this.userRepository.findById(currentUser.id);
-
-  //   if (user.email !== model.email) {
-  //     const isEmailAvailable = await this.userRepository.isEmailAvailable(
-  //       model.email,
-  //     );
-  //     if (!isEmailAvailable) throw new ConflictException('email-unavailable');
-  //   }
-
-  //   return this.userRepository.update({ ...user, ...model });
-  // }
+  async update(id: string, userObj: Object) {
+    const user = await this.userDB.findBy({ id: id });
+    return user;
+  }
+  async create(newUser: Object): Promise<any> {
+    const [user] = await this.userDB.create(newUser);
+    return user;
+  }
 }

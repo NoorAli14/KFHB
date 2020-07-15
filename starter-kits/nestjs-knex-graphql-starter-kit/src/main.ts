@@ -1,2 +1,2 @@
-import { bootstrap } from '@core/bootstrap';
-bootstrap();
+import Server from '@core/server';
+Server.setup();
