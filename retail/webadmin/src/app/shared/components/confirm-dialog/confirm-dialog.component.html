@@ -1,0 +1,25 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar class="mat-accent m-0">
+        <mat-toolbar-row
+            fxFlex
+            fxLayout="row"
+            fxLayoutAlign="space-between center"
+        >
+            <span class="title dialog-title">{{title}}</span>
+           
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
+        <div  fxLayout="row" fxLayoutAlign="start center">
+            {{message}}
+        </div>
+        <div mat-dialog-actions fxLayout="row" fxLayoutAlign="end center">
+            <button mat-button color="warn" (click)="onDismiss()">No</button>
+            &nbsp; &nbsp;
+            <button mat-raised-button color="primary" (click)="onConfirm()">
+                Yes
+            </button>
+        </div>
+    </div>
+</div>
