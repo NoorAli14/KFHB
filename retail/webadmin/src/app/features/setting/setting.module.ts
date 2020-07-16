@@ -6,13 +6,16 @@ import { ProfileComponent } from "./views/profile/profile.component";
 import { MaterialFormsModule } from "@shared/modules/material-forms/material-forms.module";
 import { FuseSharedModule } from '@fuse/shared.module';
 import { AboutComponent } from './components/about/about.component';
+import { UpdateProfileComponent } from './components/update-profile/update-profile.component';
+import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
-    declarations: [ProfileComponent, AboutComponent],
+    declarations: [ProfileComponent, AboutComponent, UpdateProfileComponent],
     imports: [
         CommonModule,
         SettingRoutingModule,
         MaterialFormsModule,
+        SharedModule,
         FuseSharedModule,
     ],
 })

@@ -1,32 +1,66 @@
 <div id="profile" class="page-layout simple tabbed">
-
     <!-- HEADER -->
-    <div class="header p-24" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row"
-         fxLayoutAlign.gt-sm="space-between end">
-
-        <div class="user-info" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row"
-             fxLayoutAlign.gt-sm="start center">
-            <img class="profile-image avatar huge" src="assets/images/avatars/Velazquez.jpg"
-                 [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
-            <div class="name" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
-                Rashid Aslam
+    <div
+        class="header p-24"
+        fxLayout="column"
+        fxLayoutAlign="center center"
+        fxLayout.gt-sm="row"
+        fxLayoutAlign.gt-sm="space-between end"
+    >
+        <div
+            class="user-info"
+            fxLayout="column"
+            fxLayoutAlign="center center"
+            fxLayout.gt-sm="row"
+            fxLayoutAlign.gt-sm="start center"
+        >
+            <img
+                class="profile-image avatar huge"
+                src="assets/images/avatars/Velazquez.jpg"
+                [@animate]="{
+                    value: '*',
+                    params: { delay: '50ms', scale: '0.2' }
+                }"
+            />
+            <div fxLayout="column" fxLayoutAlign="start start">
+                <div
+                    class="name"
+                    [@animate]="{
+                        value: '*',
+                        params: { delay: '100ms', x: '-25px' }
+                    }"
+                >
+                    Rashid Aslam
+                </div>
+                <div fxLayout="row" fxLayoutAlign="start start">
+                    <mat-icon class="s-16 status online"></mat-icon>
+                    <span class="status-1">Active</span>
+                </div>
             </div>
         </div>
 
-        <div class="actions" fxLayout="row" fxLayoutAlign="end center" [@animate]="{value:'*',params:{delay:'200ms'}}">
-            <button mat-raised-button color="accent" aria-label="Follow">Follow</button>
-            <button mat-raised-button color="primary" aria-label="Send Message">Send Message</button>
+        <div
+            class="actions"
+            fxLayout="row"
+            fxLayoutAlign="end center"
+            [@animate]="{ value: '*', params: { delay: '200ms' } }"
+        >
+            <button
+                (click)="onUpdate()"
+                mat-raised-button
+                color="accent"
+                aria-label="Follow"
+            >
+                <mat-icon class="nav-link-icon">edit</mat-icon>
+                <span>Update Profile</span>
+            </button>
         </div>
-
     </div>
     <!-- / HEADER -->
 
     <!-- CONTENT -->
     <div class="content">
-
-        
-
+        <app-about></app-about>
     </div>
     <!-- / CONTENT -->
-
 </div>
