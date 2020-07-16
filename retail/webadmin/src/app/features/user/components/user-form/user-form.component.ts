@@ -21,54 +21,55 @@ export class UserFormComponent implements OnInit {
         @Inject(MAT_DIALOG_DATA) public data: User,
         private _userService: UserService
     ) {}
-
+    requiredIfUpdating(predicate) {
+        return (formControl) => {
+            if (!formControl.parent) {
+                return null;
+            }
+            if (predicate()) {
+                return Validators.required(formControl);
+            }
+            return null;
+        };
+    }
     ngOnInit(): void {
         this.userForm = new FormGroup({
             id: new FormControl(this.data.id),
             username: new FormControl(this.data.username, [
-                Validators.required,
+                this.requiredIfUpdating(() => !this.userForm.get("id").value),
             ]),
             firstName: new FormControl(this.data.firstName, [
-                Validators.required,
+                this.requiredIfUpdating(() => this.userForm.get("id").value),
             ]),
             middleName: new FormControl(this.data.middleName, [
-                Validators.required,
+                this.requiredIfUpdating(() => this.userForm.get("id").value),
             ]),
             lastName: new FormControl(this.data.lastName, [
-                Validators.required,
+                this.requiredIfUpdating(() => this.userForm.get("id").value),
             ]),
             contactNo: new FormControl(this.data.contactNo, [
                 Validators.required,
             ]),
-            gender: new FormControl(this.data.gender, [Validators.required]),
+            gender: new FormControl(this.data.gender, [
+                this.requiredIfUpdating(() => this.userForm.get("id").value),
+            ]),
             email: new FormControl(this.data.email, [
                 Validators.required,
                 Validators.email,
             ]),
             dateOfBirth: new FormControl(this.data.dateOfBirth, [
-                Validators.required,
+                this.requiredIfUpdating(() => this.userForm.get("id").value),
             ]),
             nationalityId: new FormControl(this.data.nationalityId, [
-                Validators.required,
+                this.requiredIfUpdating(() => this.userForm.get("id").value),
             ]),
             roleId: new FormControl(this.data.status, [Validators.required]),
-            status: new FormControl(this.data.status, [Validators.required]),
-            password: new FormControl("", [Validators.required]),
-            confirmPassword: new FormControl("", [
-                Validators.required,
-                this.passwordMatcher.bind(this),
+            status: new FormControl(this.data.status, [
+                this.requiredIfUpdating(() => this.userForm.get("id").value),
             ]),
         });
     }
-    passwordMatcher(control: FormControl): { [s: string]: boolean } {
-        if (
-            this.userForm &&
-            control.value !== this.userForm.controls.password.value
-        ) {
-            return { passwordNotMatch: true };
-        }
-        return null;
-    }
+
     onSubmit() {
         this.userForm.value.id = Math.random().toString();
         this._userService.createUser(this.userForm.value).subscribe(
