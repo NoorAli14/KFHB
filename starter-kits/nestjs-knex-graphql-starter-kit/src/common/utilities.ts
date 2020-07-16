@@ -4,9 +4,9 @@ export function fullPath(fileOrDir) {
   return path.join(__dirname, fileOrDir);
 }
 
-export function isTruthy(bool: string): boolean {
+export function isTruthy(bool: string | Boolean): boolean {
   try {
-    return bool.toLowerCase() === 'true';
+    return bool == 'true' || bool == true;
   } catch (e) {
     return false;
   }

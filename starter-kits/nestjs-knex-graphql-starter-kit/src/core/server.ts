@@ -80,7 +80,7 @@ class Server {
   private onStartUp(): void {
     Logger.log(``);
     Logger.log(
-      `Application start listing on ${this.Config.APP.HOST}${this.Config.APP.API_URL_PREFIX}`,
+      `Application start listing on ${this.Config.APPLICATION_HOST}/${this.Config.APP.API_URL_PREFIX}`,
     );
     Logger.log(``);
     Logger.log('-------------------------------------------------------');
@@ -95,9 +95,10 @@ class Server {
     // }
     if (this.Config.IS_SWAGGER_ENABLED) {
       Logger.log(
-        `Swagger      : ${this.Config.APP.HOST}${this.Config.SWAGGER.ROUTE}`,
+        `Swagger      : ${this.Config.APPLICATION_HOST}${this.Config.SWAGGER.ROUTE}`,
       );
     }
+    Logger.log(`Health Check : ${this.Config.APPLICATION_HOST}/health`);
     // if (Environment.isTruthy(process.env.MONITOR_ENABLED)) {
     //     this.log.debug(`Monitor      : ${app.get('host')}:${app.get('port')}${ApiMonitor.getRoute()}`);
     // }

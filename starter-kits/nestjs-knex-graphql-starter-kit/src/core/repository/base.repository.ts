@@ -12,11 +12,18 @@ export abstract class BaseRepository {
     return this._connection(this._tableName);
   }
   async create(newObj): Promise<any> {
-    return this._connection(this._tableName)
-      .insert(newObj)
-      .returning('*');
+    return this._connection(this._tableName).insert(newObj, '*');
   }
-
+  async update(condition, newObj): Promise<any> {
+    return this._connection(this._tableName)
+      .where(condition)
+      .update(newObj, '*');
+  }
+  async delete(condition): Promise<any> {
+    return this._connection(this._tableName)
+      .where(condition)
+      .del();
+  }
   async findBy(condition: Object): Promise<any> {
     return this._connection(this._tableName).where(condition);
   }

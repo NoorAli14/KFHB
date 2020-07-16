@@ -1,6 +1,11 @@
 export interface iSWAGGER {
   ROUTE?: string;
 }
+export interface iGRAPHQL {
+  ROUTE?: string;
+  PLAYGROUND?: boolean;
+  DEBUG?: boolean;
+}
 export interface iAPP {
   NAME: string;
   DESCRIPTION?: string;
@@ -32,6 +37,7 @@ export interface iConfig {
   /** Database connection details. */
   DATABASE?: iDATABASE;
   SWAGGER?: iSWAGGER;
+  GRAPHQL?: iGRAPHQL;
 
   /**
    * The log level to use.
