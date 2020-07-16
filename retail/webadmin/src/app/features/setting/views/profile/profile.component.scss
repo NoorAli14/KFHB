@@ -1,0 +1,42 @@
+@import "src/@fuse/scss/fuse";
+
+#profile {
+
+    .header {
+        height: 180px;
+        min-height: 180px;
+        max-height: 180px;
+        background: url('/assets/images/backgrounds/dark-material-bg.jpg') no-repeat 0 45%;
+        background-size: cover;
+
+        .profile-image {
+            margin-right: 24px;
+
+            @include media-breakpoint('sm') {
+                margin: 0 0 16px 0;
+            }
+        }
+
+        .name {
+            font-size: 34px;
+            color: #FFFFFF;
+
+            @include media-breakpoint('sm') {
+                margin-bottom: 32px;
+            }
+        }
+
+        .actions {
+
+            button {
+                text-transform: none;
+                padding: 0 16px;
+                margin: 0 0 0 8px;
+            }
+        }
+    }
+
+    .content {
+        flex: 1;
+    }
+}
