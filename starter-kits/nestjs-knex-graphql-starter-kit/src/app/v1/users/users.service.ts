@@ -12,11 +12,11 @@ export class UserService {
     return this.userDB.findOne({ id: id });
   }
 
-  async update(id: string, userObj: Object) {
+  async update(id: string, userObj: Record<string, any>): Promise<any> {
     const [user] = await this.userDB.update({ id: id }, userObj);
     return user;
   }
-  async create(newUser: Object): Promise<any> {
+  async create(newUser: Record<string, any>): Promise<any> {
     const [user] = await this.userDB.create(newUser);
     return user;
   }

@@ -19,7 +19,7 @@ import { UserRepository } from '@core/repository/';
 })
 export class RepositoryModule implements OnModuleDestroy {
   @InjectKnex() private readonly connection: Knex;
-  async onModuleDestroy() {
+  async onModuleDestroy(): Promise<any> {
     await this.connection.destroy();
   }
 }

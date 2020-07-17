@@ -23,11 +23,11 @@ export class User {
 }
 
 // Graphql Model
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class UserGQL {
-  @Field(type => ID)
+  @Field()
   id: string;
 
   @Field({ nullable: true })

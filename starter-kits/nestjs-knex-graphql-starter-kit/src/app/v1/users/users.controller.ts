@@ -27,7 +27,7 @@ export class UsersController {
   constructor(private userService: UserService) {}
   @Get()
   @ApiResponse({ status: 200 })
-  async list() {
+  async list(): Promise<User[]> {
     return this.userService.list();
   }
   @Post()
@@ -61,7 +61,9 @@ export class UsersController {
   })
   async findOne(@Param('id') id: string): Promise<User> {
     try {
-      return await this.userService.findById(id);
+      const user = await this.userService.findById(id);
+      if (!user) throw new NotFoundException(`User not fuond`);
+      return user;
     } catch (err) {
       throw new BadRequestException(err);
     }
@@ -71,7 +73,7 @@ export class UsersController {
   @ApiNoContentResponse({
     description: 'User successfully delete',
   })
-  delete(@Param('id') id: string): Promise<Boolean> {
+  delete(@Param('id') id: string): Promise<boolean> {
     return this.userService.delete(id);
   }
 }

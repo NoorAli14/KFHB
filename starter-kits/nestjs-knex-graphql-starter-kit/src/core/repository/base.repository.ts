@@ -2,32 +2,35 @@ import { InjectKnex, Knex } from 'nestjs-knex';
 export abstract class BaseRepository {
   @InjectKnex() private readonly _connection: Knex;
   private _tableName: string;
-  constructor(tableName) {
+  constructor(tableName: string) {
     this._tableName = tableName;
   }
   get connection(): Knex {
     return this._connection;
   }
-  async list() {
+  async list(): Promise<any> {
     return this._connection(this._tableName);
   }
-  async create(newObj): Promise<any> {
+  async create(newObj: Record<string, any>): Promise<any> {
     return this._connection(this._tableName).insert(newObj, '*');
   }
-  async update(condition, newObj): Promise<any> {
+  async update(
+    condition: Record<string, any>,
+    newObj: Record<string, any>,
+  ): Promise<any> {
     return this._connection(this._tableName)
       .where(condition)
       .update(newObj, '*');
   }
-  async delete(condition): Promise<any> {
+  async delete(condition: Record<string, any>): Promise<any> {
     return this._connection(this._tableName)
       .where(condition)
       .del();
   }
-  async findBy(condition: Object): Promise<any> {
+  async findBy(condition: Record<string, any>): Promise<any> {
     return this._connection(this._tableName).where(condition);
   }
-  async findOne(condition: Object): Promise<any> {
+  async findOne(condition: Record<string, any>): Promise<any> {
     return this._connection(this._tableName)
       .where(condition)
       .first();

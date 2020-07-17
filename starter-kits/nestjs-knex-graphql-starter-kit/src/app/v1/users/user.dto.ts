@@ -8,6 +8,7 @@ import {
 } from 'class-validator';
 
 export class CreateUserDto {
+  @IsInt()
   readonly id: number;
   @ApiProperty()
   @IsString()
