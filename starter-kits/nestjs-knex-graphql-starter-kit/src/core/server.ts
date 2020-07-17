@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core';
+import { Transport } from '@nestjs/microservices';
 import { INestApplication, ValidationPipe, Logger } from '@nestjs/common';
 import { ApplicationModule } from '@app/index';
 import { CommonModule } from '@common/common.module';
@@ -13,12 +14,13 @@ class Server {
   constructor(app: INestApplication) {
     this._app = app;
     this.mountConfig();
+    this.mountGlobals();
     this.mountMiddlewares();
   }
-  get app() {
+  get app(): INestApplication {
     return this._app;
   }
-  get Config() {
+  get Config(): any {
     return this._config;
   }
 
@@ -34,17 +36,41 @@ class Server {
   }
 
   /**
-   * Starts the express server
+   * Mounts all the defined globals
    */
-  public async init(): Promise<INestApplication> {
-    const PORT: number = this.Config.APP.PORT;
-
+  private mountGlobals(): void {
     // Registering Hooks, logger, validators, pipes and Exception / Error Handlers
     this.app.enableShutdownHooks();
     this.app.useGlobalInterceptors(new LoggingInterceptor());
     this.app.useGlobalFilters(new HttpExceptionFilter());
     this.app.useGlobalPipes(new ValidationPipe());
+    this.app.setGlobalPrefix(this.Config.APP.API_URL_PREFIX);
+  }
 
+  /** Microservices use the TCP transport layer by default and other options are:
+   * Options: NATS, REDIS, gPRC, RabbitMQ, Kafka and MQTT
+   */
+  private get transporter(): any {
+    return {
+      transport: Transport.TCP,
+    };
+  }
+
+  /**
+   * Binds the app server with microservice transporter
+   */
+  private async connectMicroservice(): Promise<any> {
+    this.app.connectMicroservice(this.transporter);
+    await this.app.startAllMicroservicesAsync();
+  }
+
+  /**
+   * Starts the express server
+   */
+  public async init(): Promise<INestApplication> {
+    const PORT: number = this.Config.APP.PORT;
+    // bind to microservices
+    await this.connectMicroservice();
     // Start the server on the specified port
     this.app.listen(PORT, () => {
       this.onStartUp();
