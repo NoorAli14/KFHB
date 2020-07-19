@@ -13,7 +13,7 @@ import {
 } from "rxjs/operators";
 
 import { UserService } from "../../services/user.service";
-import { User } from "@feature/user/user.model";
+import { User } from "@feature/entitlement/user/user.model";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
 import { FormControl } from "@angular/forms";
