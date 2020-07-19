@@ -27,11 +27,33 @@
 ## ❯ Table of Contents
 
 - [Getting Started](#-getting-started)
+- [How to Run](#-how-to-run)
 - [App Structure](#-app-structure)
-- [Migrations & Seeding]
+- [Migrations & Seeding](#-migration-&-seeding)
+- [Roadmap](#-roadmap)
 - [License](#-license)
 
 ![divider](./divider.png)
+
+## ❯ How to Run
+
+### Pre-requisites
+
+You must install the following on your local machine:
+
+1. Node.js (v12.x recommended)
+2. Docker
+3. Docker Compose
+4. Database Client (MSSQL | MySQL | Postgres | Oracle)
+
+### Running
+
+1. On the Terminal, go into the project's root folder (`cd /project/root/folder`) and execute `npm start`. The start script will install all npm dependencies for all projects, lint the code, transpile the code, build the artifacts (Docker images) and run all of them via `docker-compose`.
+
+2. Once the start script is done,
+
+- The GraphQL Playground will be running on [http://localhost:3000/graphql](http://localhost:3000/graphql)
+- The Swagger OpenAPI Specification will be running on [http://localhost:3000/api/docs](http://localhost:3000/api/docs)
 
 ## ❯ App Structure
 
@@ -47,6 +69,7 @@
 │   │   │   │   ├── users.controller.ts
 │   │   │   │   ├── users.controller.specs.ts
 │   │   │   │   ├── users.module.ts
+│   │   │   │   ├── users.resolver.ts
 │   │   │   │   ├── users.service.ts
 │   │   │   ├── v1.module.ts
 │   │   ├── app.controller.ts
@@ -56,7 +79,7 @@
 │   │   ├── index.ts
 │   ├── common
 │   │   ├── configuration
-│   │   │   ├── configuratin.service.ts
+│   │   │   ├── configuration.service.ts
 │   │   │   ├── configuration.service.spec.ts
 │   │   │   ├── dbconfiguration.service.ts
 │   │   ├── decorators
@@ -100,6 +123,7 @@
 ├── .ncurc.json
 ├── .prettierrc
 ├── database.ts
+├── schema.gql
 ├── nest-cli.json
 ├── nodemon.json
 ├── package.json
@@ -192,3 +216,28 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
+
+## ❯ Roadmap
+
+### API Gateway
+
+- [ ] Add unit tests
+- [ ] Add Rate Limiter
+- [ ] Add CORS Policies
+- [x] Add refresh token support
+- [ ] Add request/input data validation
+- [ ] Improve logging
+- [ ] Improve error handling
+- [ ] Add DataLoader support
+
+### Microservices
+
+- [x] Multiple Database client support
+- [x] Add graphql
+- [x] Add Swagger OpenAPI specification
+- [ ] Add authorization
+- [ ] Add caching
+- [x] Add health checks
+- [ ] Add unit tests
+- [ ] Improve logging
+- [ ] Improve error handling
