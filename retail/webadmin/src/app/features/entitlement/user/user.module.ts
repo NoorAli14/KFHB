@@ -6,9 +6,8 @@ import { UserComponent } from "./views/user/user.component";
 import { FuseSharedModule } from "@fuse/shared.module";
 import { UserFormComponent } from "./components/user-form/user-form.component";
 import { SharedModule } from '@shared/shared.module';
-import { MaterialFormsModule } from '@shared/modules/material-forms/material-forms.module';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatSortModule } from '@angular/material/sort';
+import { MaterialModule } from '@shared/modules/material/material.module';
+
 @NgModule({
     declarations: [UserComponent, UserFormComponent],
     entryComponents: [UserFormComponent],
@@ -16,10 +15,8 @@ import { MatSortModule } from '@angular/material/sort';
         CommonModule,
         SharedModule,
         FuseSharedModule,
-        MaterialFormsModule,
-        MatSortModule,
         UserRoutingModule,
-        MatPaginatorModule
+        MaterialModule
     ],
 })
 export class UserModule {}

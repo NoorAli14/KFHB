@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject, ViewEncapsulation } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Role } from '@feature/role/role.model';
+import { Role } from '@feature/entitlement/role/role.model';
 
 @Component({
   selector: 'app-role-form',
