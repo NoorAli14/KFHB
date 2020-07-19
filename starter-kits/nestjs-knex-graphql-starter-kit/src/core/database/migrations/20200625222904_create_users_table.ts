@@ -1,5 +1,5 @@
 import * as Knex from 'knex';
-import { TABLE } from '@common/constants';
+import { TABLE, DATABASE_UUID_METHOD } from '@common/constants';
 export async function up(knex: Knex): Promise<any> {
   return knex.schema.createTable(TABLE.USER, table => {
     table.increments();
