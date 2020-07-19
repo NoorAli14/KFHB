@@ -21,7 +21,7 @@ export const navigation: FuseNavigation[] = [
                         translate: 'FEATURES.ENTITLEMENT.USER.TITLE',
                         type     : 'item',
                         icon     : 'person',
-                        url      : '/user',
+                        url      : '/ent/user',
                     },
                     {
                         id       : 'role',
@@ -29,7 +29,7 @@ export const navigation: FuseNavigation[] = [
                         translate: 'FEATURES.ENTITLEMENT.ROLE.TITLE',
                         type     : 'item',
                         icon     : 'security',
-                        url      : '/role',
+                        url      : '/ent/role',
                     }
                 ]
             }]

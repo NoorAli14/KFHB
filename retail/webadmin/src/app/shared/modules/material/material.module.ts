@@ -1,3 +1,4 @@
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { MatButtonModule } from "@angular/material/button";
@@ -21,28 +22,21 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
         MatButtonModule,
         MatMenuModule,
         MatFormFieldModule,
-        MatIconModule,
         MatInputModule,
-        MatRippleModule,
         MatDatepickerModule,
         MatSelectModule,
         MatTooltipModule,
-        MatButtonModule,
-        MatFormFieldModule,
         MatToolbarModule,
         MatDialogModule,
         MatTableModule,
         MatIconModule,
         MatCheckboxModule,
         MatRippleModule,
+        MatPaginatorModule
     ],
     exports: [
-        MatButtonModule,
         MatMenuModule,
-        MatFormFieldModule,
-        MatIconModule,
         MatInputModule,
-        MatRippleModule,
         MatDatepickerModule,
         MatSelectModule,
         MatTooltipModule,
@@ -54,6 +48,7 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
         MatIconModule,
         MatRippleModule,
         MatCheckboxModule,
+        MatPaginatorModule,
     ],
 })
-export class MaterialFormsModule {}
+export class MaterialModule {}
