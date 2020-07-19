@@ -8,14 +8,17 @@ import { ManagePermissionFormComponent } from './components/manage-permission-fo
 import { SharedModule } from '@shared/shared.module';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { MaterialModule } from '@shared/modules/material/material.module';
-
+import { FuseSidebarModule } from '@fuse/components/sidebar/sidebar.module';
+import { ConfigSidebarComponent } from './components/config-sidebar/config-sidebar.component';
+import { RoleModuleComponent } from './views/role-module/role-module.component';
 
 @NgModule({
-  declarations: [ConfigComponent, RoleModuleFormComponent, ManagePermissionFormComponent],
+  declarations: [ConfigComponent, RoleModuleFormComponent, ManagePermissionFormComponent, ConfigSidebarComponent, RoleModuleComponent],
   imports: [
     CommonModule,
     ConfigRoutingModule,
     SharedModule,
+    FuseSidebarModule,
     FuseSharedModule,
     MaterialModule,
   ]

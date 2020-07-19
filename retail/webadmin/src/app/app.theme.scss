@@ -83,6 +83,7 @@ $typography: mat-typography-config(
 
 @import "src/app/auth/auth.theme";
 @import "src/@fuse/scss/feature-common";
+@import "src/app/features/entitlement/config/config.theme";
 
 
 // Define a mixin for easier access
@@ -95,6 +96,7 @@ $typography: mat-typography-config(
     @include  app-feature-theme($theme);
     @include  app-auth-theme($theme);
     @include  app-auth-form-theme($theme);
+    @include  app-config-theme($theme);
 
 }
 
