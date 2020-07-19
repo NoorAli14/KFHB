@@ -30,6 +30,22 @@ export const navigation: FuseNavigation[] = [
                         type     : 'item',
                         icon     : 'security',
                         url      : '/ent/role',
+                    },
+                    {
+                        id       : 'module',
+                        title    : 'Module',
+                        translate: 'FEATURES.ENTITLEMENT.MODULE.TITLE',
+                        type     : 'item',
+                        icon     : 'security',
+                        url      : '/ent/modules',
+                    },
+                    {
+                        id       : 'permission',
+                        title    : 'Permission',
+                        translate: 'FEATURES.ENTITLEMENT.PERMISSION.TITLE',
+                        type     : 'item',
+                        icon     : 'security',
+                        url      : '/ent/permission',
                     }
                 ]
             }]
