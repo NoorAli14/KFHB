@@ -1,6 +1,16 @@
 import * as path from 'path';
 
 /**
+ * graphqlKeys string[]
+ * @param info
+ */
+export const graphqlKeys = (info: any): string[] => {
+  return info.fieldNodes[0].selectionSet.selections.map(
+    item => item.name.value,
+  );
+};
+
+/**
  * Full path string
  * @param fileOrDir
  */

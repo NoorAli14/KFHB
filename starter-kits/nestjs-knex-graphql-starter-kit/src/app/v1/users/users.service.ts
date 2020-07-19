@@ -5,19 +5,23 @@ import { UserRepository } from '@core/repository/';
 export class UserService {
   constructor(private userDB: UserRepository) {}
 
-  async list(): Promise<any> {
-    return this.userDB.list();
+ async list(keys: string[]): Promise<any> {
+    return this.userDB.list(keys);
   }
-  async findById(id: string): Promise<any> {
-    return this.userDB.findOne({ id: id });
+  async findById(id: string, keys?: string[]): Promise<any> {
+    return this.userDB.findOne({ id: id }, keys);
   }
 
-  async update(id: string, userObj: Record<string, any>): Promise<any> {
-    const [user] = await this.userDB.update({ id: id }, userObj);
+  async update(
+    id: string,
+    userObj: Record<string, any>,
+    keys?: string[],
+  ): Promise<any> {
+    const [user] = await this.userDB.update({ id: id }, userObj, keys);
     return user;
   }
-  async create(newUser: Record<string, any>): Promise<any> {
-    const [user] = await this.userDB.create(newUser);
+  async create(newUser: Record<string, any>, keys?: string[]): Promise<any> {
+    const [user] = await this.userDB.create(newUser, keys);
     return user;
   }
   async delete(id: string): Promise<any> {
