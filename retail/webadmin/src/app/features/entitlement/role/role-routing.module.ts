@@ -1,16 +1,16 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { RoleComponent } from './views/role/role.component';
+import { NgModule } from "@angular/core";
+import { Routes, RouterModule } from "@angular/router";
+import { RoleComponent } from "./views/role/role.component";
 
 const routes: Routes = [
-  {
-      path: "",
-      component: RoleComponent,
-  },
+    {
+        path: "",
+        component: RoleComponent,
+    },
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+    imports: [RouterModule.forChild(routes)],
+    exports: [RouterModule],
 })
-export class RoleRoutingModule { }
+export class RoleRoutingModule {}

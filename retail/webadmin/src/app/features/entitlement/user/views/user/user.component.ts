@@ -8,12 +8,10 @@ import {
 import { fuseAnimations } from "@fuse/animations";
 import { MatDialog } from "@angular/material/dialog";
 import { UserFormComponent } from "../../components/user-form/user-form.component";
-import {
-    tap,
-} from "rxjs/operators";
+import { tap } from "rxjs/operators";
 
 import { UserService } from "../../services/user.service";
-import { User } from "@feature/entitlement/user/user.model";
+import { User } from "@feature/entitlement/models/user.model";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
 import { FormControl } from "@angular/forms";
@@ -115,13 +113,11 @@ export class UserComponent implements OnInit, AfterViewInit {
         const dialogData = new ConfirmDialogModel("Confirm Action", message);
         const dialogRef = this._matDialog.open(ConfirmDialogComponent, {
             data: dialogData,
-            disableClose:true,
+            disableClose: true,
             panelClass: "app-confirm-dialog",
             hasBackdrop: true,
         });
 
-        dialogRef.afterClosed().subscribe((dialogResult) => {
-
-        });
+        dialogRef.afterClosed().subscribe((dialogResult) => {});
     }
 }

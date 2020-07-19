@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { PermissionComponent } from './views/permission/permission.component';
+import { ConfigComponent } from './views/config/config.component';
 
 
 const routes: Routes = [
   {
       path: "",
-      component: PermissionComponent,
+      component: ConfigComponent,
   },
 ];
 
@@ -14,4 +14,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class PermissionRoutingModule { }
+export class ConfigRoutingModule { }

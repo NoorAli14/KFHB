@@ -40,12 +40,12 @@ export const navigation: FuseNavigation[] = [
                         url      : '/ent/modules',
                     },
                     {
-                        id       : 'permission',
-                        title    : 'Permission',
-                        translate: 'FEATURES.ENTITLEMENT.PERMISSION.TITLE',
+                        id       : 'config',
+                        title    : 'Config',
+                        translate: 'FEATURES.ENTITLEMENT.CONFIG.TITLE',
                         type     : 'item',
                         icon     : 'security',
-                        url      : '/ent/permission',
+                        url      : '/ent/config',
                     }
                 ]
             }]

@@ -6,11 +6,12 @@ import {
     RouterStateSnapshot,
 } from "@angular/router";
 import { Observable, BehaviorSubject } from "rxjs";
-import { Role } from "../role.model";
+import { Role } from "../../models/role.model";
 import { NetworkService } from "@core/services/network/network.service";
+import { ROLE } from '@feature/entitlement/entitlement.constant';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: "root",
 })
 export class RoleService implements Resolve<any> {
     onRoleChanged: BehaviorSubject<any>;
@@ -19,16 +20,14 @@ export class RoleService implements Resolve<any> {
         private _httpClient: HttpClient,
         private _networkService: NetworkService
     ) {
-        // Set the defaults
         this.onRoleChanged = new BehaviorSubject({});
     }
-
     createRole(user: Role) {
-        return this._networkService.onCreate('api/roles',user)
+        return this._networkService.post(ROLE, user);
     }
     gerRoles(): Promise<any> {
         return new Promise((resolve, reject) => {
-            this._httpClient.get("api/roles").subscribe((response: any) => {
+            this._httpClient.get(ROLE).subscribe((response: any) => {
                 this.onRoleChanged.next(response);
                 resolve(response);
             }, reject);
@@ -44,5 +43,4 @@ export class RoleService implements Resolve<any> {
             }, reject);
         });
     }
-
 }

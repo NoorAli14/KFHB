@@ -1,4 +1,3 @@
-import { MaterialModule } from '@shared/modules/material/material.module';
 
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
@@ -7,6 +6,7 @@ import { MatErrorComponent } from "./components/mat-error/mat-error.component";
 import { ConfirmDialogComponent } from "./components/confirm-dialog/confirm-dialog.component";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MaterialModule } from './modules/material/material.module';
 
 @NgModule({
     declarations: [MatErrorComponent, ConfirmDialogComponent],

@@ -2,7 +2,7 @@ import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { fuseAnimations } from "@fuse/animations";
 import { MatDialog } from "@angular/material/dialog";
 import { RoleFormComponent } from "@feature/entitlement/role/components/role-form/role-form.component";
-import { Role } from '@feature/entitlement/role/role.model';
+import { Role } from "@feature/entitlement/models/role.model";
 
 @Component({
     selector: "app-role",
