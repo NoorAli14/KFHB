@@ -4,7 +4,6 @@ import * as dotenv from 'dotenv';
 import { isTruthy } from '@common/utilities';
 import {
   iAPP,
-  iDATABASE,
   iSWAGGER,
   iGRAPHQL,
   iConfig,
@@ -20,17 +19,6 @@ export const DEFAULT_ENV: iConfig = {
     PORT: 3000,
     HOST: 'http://127.0.0.1',
     API_URL_PREFIX: '/api/v1/',
-  },
-  DATABASE: {
-    USERNAME: '',
-    DB_PASS: '',
-    DB_NAME: '',
-    HOST: '',
-    PORT: 0,
-    DIALECT: '',
-    TIMEZONE: 'UTC',
-    TIMEOUT: 30000,
-    IS_DEBUG: false,
   },
   SWAGGER: {
     ENABLE: true,
@@ -72,29 +60,6 @@ export class ConfigurationService {
       VERSION: this.get('ENV_RBX_APP_VERSION', DEFAULT_ENV.APP.VERSION),
       HOST: this.get('ENV_RBX_HOST', DEFAULT_ENV.APP.HOST),
       PORT: parseInt(this.get('ENV_RBX_PORT', DEFAULT_ENV.APP.PORT), 10),
-    };
-  }
-
-  // Parse iDatabase Environment Variables
-  public get DATABASE(): iDATABASE {
-    return {
-      USERNAME: this.get('ENV_RBX_DB_USERNAME', DEFAULT_ENV.DATABASE.USERNAME),
-      DB_PASS: this.get('ENV_RBX_DB_PASS', DEFAULT_ENV.DATABASE.DB_PASS),
-      DB_NAME: this.get('ENV_RBX_DB_NAME', DEFAULT_ENV.DATABASE.DB_NAME),
-      HOST: this.get('ENV_RBX_DB_HOST', DEFAULT_ENV.DATABASE.HOST),
-      PORT: parseInt(
-        this.get('ENV_RBX_DB_PORT', DEFAULT_ENV.DATABASE.PORT),
-        10,
-      ),
-      TIMEOUT: parseInt(
-        this.get('ENV_RBX_DB_TIMEOUT', DEFAULT_ENV.DATABASE.TIMEOUT),
-        10,
-      ),
-      DIALECT: this.get('ENV_RBX_DB_DIALECT', DEFAULT_ENV.DATABASE.DIALECT),
-      TIMEZONE: this.get('ENV_RBX_DB_TIMEZONE', DEFAULT_ENV.DATABASE.TIMEZONE),
-      IS_DEBUG: this.IS_DEVELOPMENT
-        ? true
-        : isTruthy(this.get('ENV_RBX_DB_DEBUG', DEFAULT_ENV.DATABASE.IS_DEBUG)),
     };
   }
 

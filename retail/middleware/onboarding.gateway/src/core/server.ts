@@ -118,9 +118,6 @@ class Server {
     Logger.log(`Service      : ${this.Config.APP.NAME}`);
     Logger.log(`Environment  : ${this.Config.APP.ENVIRONMENT}`);
     Logger.log(`Version      : ${this.Config.APP.VERSION}`);
-    Logger.log(
-      `Database     : ${this.Config.DATABASE.DIALECT}://${this.Config.DATABASE.USERNAME}:<password>@${this.Config.DATABASE.HOST}/${this.Config.DATABASE.DB_NAME}`,
-    );
     // this.log.debug(``);
     // if (Environment.isTruthy(process.env.API_INFO_ENABLED)) {
     //     this.log.debug(`API Info     : ${app.get('host')}:${app.get('port')}${ApiInfo.getRoute()}`);
