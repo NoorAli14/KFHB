@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { getName } from '@shared/helpers/global.helper';
 
 @Component({
   selector: 'app-table-row',
@@ -32,12 +33,12 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 export class TableRowComponent {
 
   @Input() dataSource: any[] ;
+  @Input() roles: any[] ;
+  @Input() modules: any[] ;
   @Input() displayedColumns: string[];
   @Input() title: string;
-  @Input() referenceId: string;
-  @Input() iconKeyReference: string;
   @Input() renderTemplate: string;
-
+  selectedKey:string;
   @Output() deleteUser: EventEmitter<number> = new EventEmitter<number>();
 
   expandedId: string = '';
@@ -45,8 +46,10 @@ export class TableRowComponent {
   constructor() {}
 
   toggleExpandableSymbol(id: string): void {
-    debugger
+    this.selectedKey=id;
     this.expandedId = this.expandedId === id ? '' : id;
   }
-
+  displayName(id,array) {
+    return getName(id, "name", array);
+}
 }

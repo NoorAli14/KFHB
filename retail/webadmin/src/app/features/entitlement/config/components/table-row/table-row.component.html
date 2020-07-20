@@ -7,11 +7,11 @@
             <mat-header-cell *matHeaderCellDef>{{ key.includes('Icon') ? '' : key }}</mat-header-cell>
 
             <mat-cell *matCellDef="let element; let i = dataIndex">
-                <span *ngIf="!key.includes('Icon'); else icon">{{ element[key] }}</span>
-                <span>{{ element[key]  }}</span>
+                <span *ngIf="!key.includes('Icon'); else icon">{{ displayName(element['id'],element[key]=='roleId'? roles : modules)  }}</span>
 
                 <ng-template #icon>
-                    <mat-icon *ngIf="key === 'expandIcon'" (click)="toggleExpandableSymbol(element['id'])">play_arrow</mat-icon>
+                    <mat-icon *ngIf="key === 'expandIcon' " (click)="toggleExpandableSymbol(element['id'])"> {{expandedId==element['id'] ? 'keyboard_arrow_up' : ' keyboard_arrow_down'}} </mat-icon>
+                    <mat-icon *ngIf="key === 'expandIcon' " (click)="toggleExpandableSymbol(element['id'])"></mat-icon>
 
                     <mat-icon *ngIf="key === 'deleteIcon'" (click)="deleteUser()">delete_forever</mat-icon>
                 </ng-template>
@@ -21,8 +21,7 @@
 
         <ng-container matColumnDef="expandedDetail">
             <mat-cell *matCellDef="let element" [@expandableRow]="element['id'] === expandedId ? 'expanded' : 'collapsed'">
-
-                hello world
+                <app-permission *ngIf="selectedKey" [roleModuleId]="element['id']"></app-permission>
             </mat-cell>
         </ng-container>
 

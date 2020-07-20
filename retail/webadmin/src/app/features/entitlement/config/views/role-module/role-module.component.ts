@@ -1,4 +1,3 @@
-import { PermissionComponent } from "./../permission/permission.component";
 import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { Modules } from "@feature/entitlement/models/modules.model";
@@ -14,19 +13,11 @@ import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 import { snakeToCamel, getName } from "@shared/helpers/global.helper";
 import { ManagePermissionFormComponent } from "../../components/manage-permission-form/manage-permission-form.component";
-import {
-    trigger,
-    state,
-    style,
-    transition,
-    animate,
-} from "@angular/animations";
 
 @Component({
     selector: "app-role-module-view",
     templateUrl: "./role-module.component.html",
     styleUrls: ["./role-module.component.scss"],
-    
 })
 export class RoleModuleComponent implements OnInit {
     dialogRef: any;
@@ -34,31 +25,20 @@ export class RoleModuleComponent implements OnInit {
     modules: Modules[];
     permissions: Permission[];
     roleModulesList: RoleModuleModel[];
-    dataSource = new MatTableDataSource<RoleModuleModel>();
-    @ViewChild(MatPaginator) paginator: MatPaginator;
-    @ViewChild(MatSort, { static: true }) sort: MatSort;
     message: string = "";
     type: string = "";
 
-    displayedColumns = ["expandIcon","moduleId", "roleId","deleteIcon"];
-  
+    displayedColumns = ["expandIcon", "moduleId", "roleId", "deleteIcon"];
+
     constructor(
         public _matDialog: MatDialog,
         private _service: ConfigMiddlewareService
     ) {}
-    deleteUser(index: number): void {
-       
-      }
+    deleteUser(index: number): void {}
     ngOnInit(): void {
         this.getData();
     }
-    ngAfterViewInit() {
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        // merge(this.sort.sortChange, this.paginator.page)
-        //     .pipe(tap(() => this.loadAllUsers()))
-        //     .subscribe();
-    }
+
     onCreateDialog(): void {
         this.dialogRef = this._matDialog.open(RoleModuleFormComponent, {
             data: {
@@ -68,6 +48,7 @@ export class RoleModuleComponent implements OnInit {
             panelClass: "app-role-module-form",
         });
     }
+    
     addPermission(id): void {
         this.dialogRef = this._matDialog.open(ManagePermissionFormComponent, {
             data: {
@@ -77,10 +58,6 @@ export class RoleModuleComponent implements OnInit {
             panelClass: "app-manage-permission-form",
         });
     }
-    displayName(id, array) {
-        return getName(id, "name", array);
-    }
-
     getData() {
         this._service.forkConfigData().subscribe(
             (response) => {
@@ -93,7 +70,6 @@ export class RoleModuleComponent implements OnInit {
                 this.roleModulesList = snakeToCamel(
                     this.roleModulesList
                 ) as RoleModuleModel[];
-                this.dataSource.data = this.roleModulesList;
             },
             (error) => {
                 console.log(error);

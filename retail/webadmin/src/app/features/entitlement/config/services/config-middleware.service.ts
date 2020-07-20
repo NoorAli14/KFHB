@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { NetworkService } from "@core/services/network/network.service";
-import { ROLE , MODULE, PERMISSION, ROLE_MODULE} from '@feature/entitlement/entitlement.constant';
+import { ROLE , MODULE, PERMISSION, ROLE_MODULE, ROLE_MODULE_PERMISSION, ROLE_MODULE_BY_ID} from '@feature/entitlement/entitlement.constant';
 import { forkJoin } from 'rxjs';
 
 @Injectable({
@@ -17,8 +17,14 @@ export class ConfigMiddlewareService {
     getPermissions() {
       return this._networkService.getAll(PERMISSION);
     }
+    getRoleModulePermissions(roleModuleId) {
+      return this._networkService.getAll(ROLE_MODULE_BY_ID,{roleModuleId});
+    }
     forkConfigData(){
      return forkJoin([this.getModules(),this.getRoles(),this._networkService.getAll(ROLE_MODULE),this.getPermissions()])
+    }
+    forkPermissionData(roleModuleId){
+     return forkJoin([this.getRoleModulePermissions(roleModuleId),this.getPermissions(),])
     }
     
 }

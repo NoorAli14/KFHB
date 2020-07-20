@@ -2,7 +2,6 @@ import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { ConfigComponent } from "./views/config/config.component";
 import { RoleModuleComponent } from "./views/role-module/role-module.component";
-import { PermissionComponent } from "./views/permission/permission.component";
 import { AccessControlComponent } from "./views/access-control/access-control.component";
 
 const routes: Routes = [
@@ -18,10 +17,7 @@ const routes: Routes = [
                 path: "role-module",
                 component: RoleModuleComponent,
             },
-            {
-                path: "permission",
-                component: PermissionComponent,
-            },
+         
             {
                 path: "access-control",
                 component: AccessControlComponent,
