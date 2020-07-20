@@ -70,12 +70,13 @@ export class UserComponent implements OnInit, AfterViewInit {
             .subscribe();
     }
     loadAllUsers() {
+        debugger
         this._userService.getUsers().subscribe(
             (users) => {
                 this.dataSource.data = users as User[];
                 this.message = "";
             },
-            () => {
+            (error) => {
                 this.type = "error";
                 this.message = MESSAGES.UNKNOWN;
             }
