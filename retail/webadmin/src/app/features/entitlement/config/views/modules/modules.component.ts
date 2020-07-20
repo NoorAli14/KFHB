@@ -20,16 +20,14 @@ import { ModulesFormComponent } from '../../components/modules-form/modules-form
 export class ModulesComponent implements OnInit {
 
   dialogRef: any;
-  roles: Role[];
   modules: Modules[];
-  roleModulesList: RoleModuleModel[];
-  dataSource = new MatTableDataSource<RoleModuleModel>();
+  dataSource = new MatTableDataSource<Modules>();
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   message: string = "";
   type: string = "";
 
-  displayedColumns = ["moduleId", "roleId", "actions"];
+  displayedColumns = ["name", "status","parent", "actions"];
 
   constructor(
       public _matDialog: MatDialog,
@@ -42,31 +40,35 @@ export class ModulesComponent implements OnInit {
   ngAfterViewInit() {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-      // merge(this.sort.sortChange, this.paginator.page)
-      //     .pipe(tap(() => this.loadAllUsers()))
-      //     .subscribe();
+      
   }
   onCreateDialog(): void {
       this.dialogRef = this._matDialog.open(ModulesFormComponent, {
-          data: {
-              roles: this.roles,
-              modules: this.modules,
-          },
+        data: {
+            module:new Modules(),
+            modules:this.modules
+        },
           panelClass: "app-modules-form",
       });
   }
-  displayName(id, array) {
-      return getName(id, "name", array);
+  onEditDialog(module): void {
+    this.dialogRef = this._matDialog.open(ModulesFormComponent, {
+        data: {
+            module,
+            modules:this.modules
+        },
+        panelClass: "app-modules-form",
+    });
+}
+  displayName(id) {
+      return getName(id, "name", this.modules);
   }
 
   getData() {
-      this._service.forkConfigData().subscribe(
+      this._service.getModules().subscribe(
           (response) => {
-              [this.modules, this.roles, this.roleModulesList] = response;
-              this.roleModulesList = snakeToCamel(
-                  this.roleModulesList
-              ) as RoleModuleModel[];
-              this.dataSource.data = this.roleModulesList;
+              this.modules  = response;
+              this.dataSource.data = this.modules;
           },
           (error) => {
               console.log(error);

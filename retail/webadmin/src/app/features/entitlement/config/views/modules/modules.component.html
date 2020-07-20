@@ -23,19 +23,24 @@
     </div>
     <mat-table #table matSort matSortActive="id" matSortDirection="asc" matSortDisableClear [dataSource]="dataSource" [@animateStagger]="{ value: '50' }">
         <!-- Name Column -->
-        <ng-container matColumnDef="roleId">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>Role</mat-header-cell>
+        <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
             <mat-cell *matCellDef="let row">
-                {{ displayName(row.roleId, roles) }}</mat-cell>
+                {{ row.name }}</mat-cell>
         </ng-container>
 
         <!-- Type Column -->
-        <ng-container matColumnDef="moduleId">
-            <mat-header-cell *matHeaderCellDef fxHide fxShow.gt-md>Module</mat-header-cell>
+        <ng-container matColumnDef="parent">
+            <mat-header-cell *matHeaderCellDef fxHide fxShow.gt-md>Parent</mat-header-cell>
             <mat-cell *matCellDef="let row" fxHide fxShow.gt-md>
-                {{ displayName(row.moduleId, modules) }}</mat-cell>
+                {{ displayName(row.parent) }}</mat-cell>
         </ng-container>
-
+        <!-- Type Column -->
+        <ng-container matColumnDef="status">
+            <mat-header-cell *matHeaderCellDef fxHide fxShow.gt-md>Status</mat-header-cell>
+            <mat-cell *matCellDef="let row" fxHide fxShow.gt-md>
+                {{ row.status }}</mat-cell>
+        </ng-container>
         <ng-container matColumnDef="actions">
             <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
             <mat-cell *matCellDef="let row">
