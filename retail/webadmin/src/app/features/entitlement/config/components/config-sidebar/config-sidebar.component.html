@@ -18,27 +18,26 @@
             <div class="nav material2">
 
                 <div class="nav-item" aria-label="inbox">
-                    <a class="nav-link active accent" matRipple  [routerLink]="'/ent/config/role-module'"
-                       >
+                    <a class="nav-link" [ngClass]="{'active accent' : active ==='role-module'}" (click)="setActive('role-module')" matRipple>
                         <span class="title">
                          <mat-icon class="nav-link-icon" >security</mat-icon>
                          Manage Role Module</span>
                     </a>
                 </div>
 
-                <div class="nav-item" aria-label="frequently contacted" >
-                    <a class="nav-link" matRipple [routerLink]="'/ent/config/role-module'">
+                <div class="nav-item" aria-label="frequently contacted">
+                    <a class="nav-link" matRipple [ngClass]="{'active accent' : active ==='permission'}" (click)="setActive('permission')">
                         <div class="title">
-                        <mat-icon class="nav-link-icon" >security</mat-icon>Manage Permission</div>
+                            <mat-icon class="nav-link-icon">perm_contact_calendar</mat-icon>Manage Permission</div>
 
                     </a>
                 </div>
 
-                <div class="nav-item" aria-label="starred" >
-                    <a class="nav-link" matRipple  [routerLink]="'/ent/config/role-module'">
+                <div class="nav-item" aria-label="starred">
+                    <a class="nav-link" matRipple [ngClass]="{'active accent' : active ==='access-control'}" (click)="setActive('access-control')">
                         <div class="title">
-                        <mat-icon class="nav-link-icon" >security</mat-icon>
-                        Starred Contacts</div>
+                            <mat-icon class="nav-link-icon">accessibility</mat-icon>
+                            Access Control</div>
                     </a>
                 </div>
             </div>

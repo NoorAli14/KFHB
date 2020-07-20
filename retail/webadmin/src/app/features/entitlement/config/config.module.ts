@@ -11,9 +11,11 @@ import { MaterialModule } from '@shared/modules/material/material.module';
 import { FuseSidebarModule } from '@fuse/components/sidebar/sidebar.module';
 import { ConfigSidebarComponent } from './components/config-sidebar/config-sidebar.component';
 import { RoleModuleComponent } from './views/role-module/role-module.component';
+import { PermissionComponent } from './views/permission/permission.component';
+import { AccessControlComponent } from './views/access-control/access-control.component';
 
 @NgModule({
-  declarations: [ConfigComponent, RoleModuleFormComponent, ManagePermissionFormComponent, ConfigSidebarComponent, RoleModuleComponent],
+  declarations: [ConfigComponent, RoleModuleFormComponent, ManagePermissionFormComponent, ConfigSidebarComponent, RoleModuleComponent, PermissionComponent, AccessControlComponent],
   imports: [
     CommonModule,
     ConfigRoutingModule,

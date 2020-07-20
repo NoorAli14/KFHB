@@ -36,15 +36,15 @@ export const navigation: FuseNavigation[] = [
                         title    : 'Module',
                         translate: 'FEATURES.ENTITLEMENT.MODULE.TITLE',
                         type     : 'item',
-                        icon     : 'security',
+                        icon     : 'folder',
                         url      : '/ent/modules',
                     },
                     {
                         id       : 'config',
-                        title    : 'Config',
+                        title    : 'Configuration',
                         translate: 'FEATURES.ENTITLEMENT.CONFIG.TITLE',
                         type     : 'item',
-                        icon     : 'security',
+                        icon     : 'settings_applications',
                         url      : '/ent/config',
                     }
                 ]
