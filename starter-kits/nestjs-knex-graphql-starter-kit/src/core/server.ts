@@ -1,8 +1,12 @@
 import { NestFactory } from '@nestjs/core';
+import { Transport } from '@nestjs/microservices';
 import { INestApplication, ValidationPipe, Logger } from '@nestjs/common';
 import { ApplicationModule } from '@app/index';
 import { CommonModule } from '@common/common.module';
-import { LoggingInterceptor } from '@common/interceptors/logging.interceptor';
+import {
+  LoggingInterceptor,
+  TransformInterceptor,
+} from '@common/interceptors/';
 import { HttpExceptionFilter } from '@common/filters/http-exception.filter';
 import { ConfigurationService } from '@common/configuration/configuration.service';
 import { KernelMiddleware } from '@core/middlewares/index';
@@ -13,12 +17,13 @@ class Server {
   constructor(app: INestApplication) {
     this._app = app;
     this.mountConfig();
+    this.mountGlobals();
     this.mountMiddlewares();
   }
-  get app() {
+  get app(): INestApplication {
     return this._app;
   }
-  get Config() {
+  get Config(): any {
     return this._config;
   }
 
@@ -34,17 +39,42 @@ class Server {
   }
 
   /**
+   * Mounts all the defined globals
+   */
+  private mountGlobals(): void {
+    // Registering Hooks, logger, validators, pipes and Exception / Error Handlers
+    this.app.enableShutdownHooks();
+    // this.app.useGlobalInterceptors(new TransformInterceptor());
+    this.app.useGlobalInterceptors(new LoggingInterceptor());
+    this.app.useGlobalFilters(new HttpExceptionFilter());
+    this.app.useGlobalPipes(new ValidationPipe());
+    this.app.setGlobalPrefix(this.Config.APP.API_URL_PREFIX);
+  }
+
+  /** Microservices use the TCP transport layer by default and other options are:
+   * Options: NATS, REDIS, gPRC, RabbitMQ, Kafka and MQTT
+   */
+  private get transporter(): any {
+    return {
+      transport: Transport.TCP,
+    };
+  }
+
+  /**
+   * Binds the app server with microservice transporter
+   */
+  private async connectMicroservice(): Promise<any> {
+    this.app.connectMicroservice(this.transporter);
+    await this.app.startAllMicroservicesAsync();
+  }
+
+  /**
    * Starts the express server
    */
   public async init(): Promise<INestApplication> {
     const PORT: number = this.Config.APP.PORT;
-
-    // Registering Hooks, logger, validators, pipes and Exception / Error Handlers
-    this.app.enableShutdownHooks();
-    this.app.useGlobalInterceptors(new LoggingInterceptor());
-    this.app.useGlobalFilters(new HttpExceptionFilter());
-    this.app.useGlobalPipes(new ValidationPipe());
-
+    // bind to microservices
+    //await this.connectMicroservice();
     // Start the server on the specified port
     this.app.listen(PORT, () => {
       this.onStartUp();
@@ -84,11 +114,12 @@ class Server {
     );
     Logger.log(``);
     Logger.log('-------------------------------------------------------');
+    Logger.log(`Service      : ${this.Config.APP.NAME}`);
     Logger.log(`Environment  : ${this.Config.APP.ENVIRONMENT}`);
+    Logger.log(`Version      : ${this.Config.APP.VERSION}`);
     Logger.log(
       `Database     : ${this.Config.DATABASE.DIALECT}://${this.Config.DATABASE.USERNAME}:<password>@${this.Config.DATABASE.HOST}/${this.Config.DATABASE.DB_NAME}`,
     );
-    Logger.log(`Version      : ${this.Config.APP.VERSION}`);
     // this.log.debug(``);
     // if (Environment.isTruthy(process.env.API_INFO_ENABLED)) {
     //     this.log.debug(`API Info     : ${app.get('host')}:${app.get('port')}${ApiInfo.getRoute()}`);
@@ -96,6 +127,11 @@ class Server {
     if (this.Config.IS_SWAGGER_ENABLED) {
       Logger.log(
         `Swagger      : ${this.Config.APPLICATION_HOST}${this.Config.SWAGGER.ROUTE}`,
+      );
+    }
+    if (this.Config.GRAPHQL.PLAYGROUND) {
+      Logger.log(
+        `GraphQL      : ${this.Config.APPLICATION_HOST}${this.Config.GRAPHQL.ROUTE}`,
       );
     }
     Logger.log(`Health Check : ${this.Config.APPLICATION_HOST}/health`);

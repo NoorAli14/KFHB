@@ -1,8 +1,8 @@
 import * as Knex from 'knex';
-import { TABLE } from '@common/constants';
+import { TABLE, DATABASE_UUID_METHOD } from '@common/constants';
 export async function up(knex: Knex): Promise<any> {
   return knex.schema.createTable(TABLE.USER, table => {
-    table.increments();
+    table.uuid('id').defaultTo(knex.raw(DATABASE_UUID_METHOD));
     table.string('first_name');
     table.string('last_name');
     table.string('email').notNullable();
