@@ -1,40 +1,9 @@
 div {
     margin: 12px 10px;
-    border: 1px solid #80808036;
-    p {
-        margin: 0;
-    }
-}
-
-.sub-row {
-    border: 0;
-    margin: 0;
-    p {
-        font-weight: bold;
-        background: white;
-        padding: 10px;
-    }
-    .mat-table {
-        background-color: inherit;
-    }
-}
-
-div.table {
-    margin: 10px;
 }
 
 .mat-table {
     background-color: inherit;
-    .mat-header-row {
-        background-color: #ebeceb;
-    }
-    .mat-header-cell {
-        color: black;
-        font-weight: bold;
-    }
-    .mat-cell {
-        font-size: 12px;
-    }
     .mat-icon {
         position: relative;
         top: 4px;

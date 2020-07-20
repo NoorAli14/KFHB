@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
+import { Component, OnInit,  } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { Modules } from "@feature/entitlement/models/modules.model";
 import { RoleModuleFormComponent } from "../../components/role-module-form/role-module-form.component";
@@ -8,16 +8,15 @@ import {
     Permission,
 } from "@feature/entitlement/models/config.model";
 import { Role } from "@feature/entitlement/models/role.model";
-import { MatTableDataSource } from "@angular/material/table";
-import { MatPaginator } from "@angular/material/paginator";
-import { MatSort } from "@angular/material/sort";
-import { snakeToCamel, getName } from "@shared/helpers/global.helper";
+
+import { snakeToCamel,  } from "@shared/helpers/global.helper";
 import { ManagePermissionFormComponent } from "../../components/manage-permission-form/manage-permission-form.component";
+import { fuseAnimations } from '@fuse/animations';
 
 @Component({
     selector: "app-role-module-view",
     templateUrl: "./role-module.component.html",
-    styleUrls: ["./role-module.component.scss"],
+    animations: fuseAnimations,
 })
 export class RoleModuleComponent implements OnInit {
     dialogRef: any;
@@ -28,7 +27,7 @@ export class RoleModuleComponent implements OnInit {
     message: string = "";
     type: string = "";
 
-    displayedColumns = ["expandIcon", "moduleId", "roleId", "deleteIcon"];
+    displayedColumns = ["expandIcon", "moduleId", "roleId","addIcon", "deleteIcon"];
 
     constructor(
         public _matDialog: MatDialog,
@@ -48,8 +47,7 @@ export class RoleModuleComponent implements OnInit {
             panelClass: "app-role-module-form",
         });
     }
-    
-    addPermission(id): void {
+    addNewModal(id): void {
         this.dialogRef = this._matDialog.open(ManagePermissionFormComponent, {
             data: {
                 permissions: this.permissions,
@@ -58,6 +56,7 @@ export class RoleModuleComponent implements OnInit {
             panelClass: "app-manage-permission-form",
         });
     }
+    
     getData() {
         this._service.forkConfigData().subscribe(
             (response) => {

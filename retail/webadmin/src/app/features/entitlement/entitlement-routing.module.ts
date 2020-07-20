@@ -8,19 +8,9 @@ const routes: Routes = [
             import("./user/user.module").then((m) => m.UserModule),
     },
     {
-        path: "role",
-        loadChildren: () =>
-            import("./role/role.module").then((m) => m.RoleModule),
-    },
-    {
         path: "config",
         loadChildren: () =>
             import("./config/config.module").then((m) => m.ConfigModule),
-    },
-    {
-        path: "modules",
-        loadChildren: () =>
-            import("./modules/modules.module").then((m) => m.ModulesModule),
     },
 ];
 

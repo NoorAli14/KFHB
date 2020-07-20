@@ -24,22 +24,6 @@ export const navigation: FuseNavigation[] = [
                         url      : '/ent/user',
                     },
                     {
-                        id       : 'role',
-                        title    : 'Role',
-                        translate: 'FEATURES.ENTITLEMENT.ROLE.TITLE',
-                        type     : 'item',
-                        icon     : 'security',
-                        url      : '/ent/role',
-                    },
-                    {
-                        id       : 'module',
-                        title    : 'Module',
-                        translate: 'FEATURES.ENTITLEMENT.MODULE.TITLE',
-                        type     : 'item',
-                        icon     : 'folder',
-                        url      : '/ent/modules',
-                    },
-                    {
                         id       : 'config',
                         title    : 'Configuration',
                         translate: 'FEATURES.ENTITLEMENT.CONFIG.TITLE',

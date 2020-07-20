@@ -14,9 +14,13 @@ import { RoleModuleComponent } from './views/role-module/role-module.component';
 import { AccessControlComponent } from './views/access-control/access-control.component';
 import { TableRowComponent } from './components/table-row/table-row.component';
 import { PermissionComponent } from './components/permission/permission.component';
+import { RoleComponent } from './views/role/role.component';
+import { RoleFormComponent } from './components/role-form/role-form.component';
+import { ModulesComponent } from './views/modules/modules.component';
+import { ModulesFormComponent } from './components/modules-form/modules-form.component';
 
 @NgModule({
-  declarations: [ConfigComponent,TableRowComponent, RoleModuleFormComponent, ManagePermissionFormComponent, ConfigSidebarComponent, RoleModuleComponent, PermissionComponent, AccessControlComponent],
+  declarations: [ConfigComponent ,ModulesComponent,ModulesFormComponent, RoleComponent, RoleFormComponent,TableRowComponent, RoleModuleFormComponent, ManagePermissionFormComponent, ConfigSidebarComponent, RoleModuleComponent, PermissionComponent, AccessControlComponent],
   imports: [
     CommonModule,
     ConfigRoutingModule,

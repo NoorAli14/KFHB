@@ -17,6 +17,8 @@ export class RoleFormComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        debugger
+
         this.roleForm = new FormGroup({
             id: new FormControl(this.data.id),
             name: new FormControl(this.data.name, [Validators.required]),

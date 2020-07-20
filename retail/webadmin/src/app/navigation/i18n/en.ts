@@ -18,7 +18,7 @@ export const locale = {
                     BADGE: "25",
                 },
                 CONFIG: {
-                    TITLE: "Config",
+                    TITLE: "Configuration",
                     BADGE: "25",
                 },
             },

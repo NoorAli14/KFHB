@@ -15,13 +15,13 @@
             </span>
         </div>
         <button mat-raised-button (click)="onCreateDialog()" class="mat-accent">
-            <span>ADD NEW ROLE</span>
+            <span>ADD NEW </span>
         </button>
     </div>
     <div *ngIf="message.length > 0" fxLayout="row" fxLayoutAlign="center" class="p-24  message-box {{ type }} ">
         {{ message }}
     </div>
-    <app-table-row [roles]="roles" [modules]="modules" [dataSource]="roleModulesList" [displayedColumns]="displayedColumns" [renderTemplate]="'relative'" (deleteUser)="deleteUser($event)">
+    <app-table-row [roles]="roles" [modules]="modules" [dataSource]="roleModulesList" [displayedColumns]="displayedColumns" [renderTemplate]="'relative'" (deleteUser)="deleteUser($event)" (addNewPermission)="addNewModal($event)">
     </app-table-row>
     <mat-paginator [pageSize]="3" [pageSizeOptions]="[3, 5, 10]"></mat-paginator>
 </div>

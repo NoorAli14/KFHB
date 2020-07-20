@@ -10,6 +10,7 @@ import { MatTableDataSource } from "@angular/material/table";
     templateUrl: "./permission.component.html",
     styles:[`:host {
         width: 100%;
+        padding:10px;
     }`]
 })
 export class PermissionComponent implements OnInit {

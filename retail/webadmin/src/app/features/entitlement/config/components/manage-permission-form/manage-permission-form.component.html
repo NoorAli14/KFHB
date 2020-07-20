@@ -19,7 +19,7 @@
         <form class="p-24 mr-24" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto" name="managePermissionForm" (ngSubmit)="onSubmit()" novalidate [formGroup]="managePermissionForm">
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
                 <mat-form-field appearance="outline" fxFlex="100" class="pr-4">
-                    <mat-label>Module</mat-label>
+                    <mat-label>Permission</mat-label>
                     <mat-select formControlName="permissionId" multiple>
                         <mat-option *ngFor="let permission of permissions" [value]="permission.id">
                             {{ permission.name }}

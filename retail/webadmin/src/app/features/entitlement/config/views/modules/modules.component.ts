@@ -1,22 +1,23 @@
-import { Component, OnInit, ViewChild,  } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { Modules } from '../../../models/modules.model';
+import { fuseAnimations } from '@fuse/animations';
 import { Role } from '@feature/entitlement/models/role.model';
-import { Modules } from '@feature/entitlement/models/modules.model';
 import { RoleModuleModel } from '@feature/entitlement/models/config.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { MatDialog } from '@angular/material/dialog';
 import { ConfigMiddlewareService } from '../../services/config-middleware.service';
-import { ManagePermissionFormComponent } from '../../components/manage-permission-form/manage-permission-form.component';
 import { getName, snakeToCamel } from '@shared/helpers/global.helper';
-import { fuseAnimations } from '@fuse/animations';
+import { ModulesFormComponent } from '../../components/modules-form/modules-form.component';
 
 @Component({
-  selector: 'app-access-control',
-  templateUrl: './access-control.component.html',
+  selector: 'app-modules',
+  templateUrl: './modules.component.html',
   animations: fuseAnimations,
+  encapsulation: ViewEncapsulation.None,
 })
-export class AccessControlComponent implements OnInit {
+export class ModulesComponent implements OnInit {
 
   dialogRef: any;
   roles: Role[];
@@ -46,12 +47,12 @@ export class AccessControlComponent implements OnInit {
       //     .subscribe();
   }
   onCreateDialog(): void {
-      this.dialogRef = this._matDialog.open(ManagePermissionFormComponent, {
+      this.dialogRef = this._matDialog.open(ModulesFormComponent, {
           data: {
               roles: this.roles,
               modules: this.modules,
           },
-          panelClass: "app-manage-permission-form",
+          panelClass: "app-modules-form",
       });
   }
   displayName(id, array) {
@@ -72,5 +73,4 @@ export class AccessControlComponent implements OnInit {
           }
       );
   }
-
 }

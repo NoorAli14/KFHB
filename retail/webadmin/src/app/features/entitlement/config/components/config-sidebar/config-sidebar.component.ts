@@ -7,10 +7,13 @@ import { Router } from "@angular/router";
     styleUrls: ["./config-sidebar.component.scss"],
 })
 export class ConfigSidebarComponent implements OnInit {
-    active: string='role-module';
+    active: string='role';
     constructor(private router: Router) {}
 
-    ngOnInit(): void {}
+    ngOnInit() : void {
+        const url= this.router.url.split('/').pop();
+        this.active=url;
+    }
     setActive(route) {
         this.active = route;
         this.router.navigateByUrl(`/ent/config/${route}`);
