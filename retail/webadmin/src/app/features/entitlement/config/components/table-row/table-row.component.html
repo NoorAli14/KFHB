@@ -1,0 +1,38 @@
+<div [class.sub-row]="title">
+    <p>{{ title }}</p>
+    <mat-table [dataSource]="dataSource" multiTemplateDataRows>
+
+        <!-- COLUMNS AND ROWS-->
+        <ng-container *ngFor="let key of displayedColumns" [matColumnDef]="key">
+            <mat-header-cell *matHeaderCellDef>{{ key.includes('Icon') ? '' : key }}</mat-header-cell>
+
+            <mat-cell *matCellDef="let element; let i = dataIndex">
+                <span *ngIf="!key.includes('Icon'); else icon">{{ element[key] }}</span>
+                <span>{{ element[key]  }}</span>
+
+                <ng-template #icon>
+                    <mat-icon *ngIf="key === 'expandIcon'" (click)="toggleExpandableSymbol(element['id'])">play_arrow</mat-icon>
+
+                    <mat-icon *ngIf="key === 'deleteIcon'" (click)="deleteUser()">delete_forever</mat-icon>
+                </ng-template>
+
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="expandedDetail">
+            <mat-cell *matCellDef="let element" [@expandableRow]="element['id'] === expandedId ? 'expanded' : 'collapsed'">
+
+                hello world
+            </mat-cell>
+        </ng-container>
+
+        <!-- -->
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+        <mat-row class="expandable-row" *matRowDef="let row; columns: ['expandedDetail'];">
+        </mat-row>
+
+    </mat-table>
+</div>

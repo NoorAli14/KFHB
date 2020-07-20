@@ -1,32 +1,35 @@
-import { PermissionComponent } from './../permission/permission.component';
+import { PermissionComponent } from "./../permission/permission.component";
 import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { Modules } from "@feature/entitlement/models/modules.model";
 import { RoleModuleFormComponent } from "../../components/role-module-form/role-module-form.component";
 import { ConfigMiddlewareService } from "../../services/config-middleware.service";
-import { RoleModuleModel, Permission } from "@feature/entitlement/models/config.model";
+import {
+    RoleModuleModel,
+    Permission,
+} from "@feature/entitlement/models/config.model";
 import { Role } from "@feature/entitlement/models/role.model";
 import { MatTableDataSource } from "@angular/material/table";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 import { snakeToCamel, getName } from "@shared/helpers/global.helper";
-import { ManagePermissionFormComponent } from '../../components/manage-permission-form/manage-permission-form.component';
-import { trigger, state, style, transition, animate } from '@angular/animations';
+import { ManagePermissionFormComponent } from "../../components/manage-permission-form/manage-permission-form.component";
+import {
+    trigger,
+    state,
+    style,
+    transition,
+    animate,
+} from "@angular/animations";
 
 @Component({
-  selector: 'app-role-module-view',
-  templateUrl: './role-module.component.html',
-  styleUrls    : ['./role-module.component.scss'],
-  animations: [
-    trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0', display: 'none'})),
-      state('expanded', style({height: '*'})),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-    ]),
-  ],
+    selector: "app-role-module-view",
+    templateUrl: "./role-module.component.html",
+    styleUrls: ["./role-module.component.scss"],
+    
 })
 export class RoleModuleComponent implements OnInit {
-dialogRef: any;
+    dialogRef: any;
     roles: Role[];
     modules: Modules[];
     permissions: Permission[];
@@ -37,14 +40,15 @@ dialogRef: any;
     message: string = "";
     type: string = "";
 
-    displayedColumns = ["moduleId", "roleId","permission", "actions"];
-    isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
-    expandedElement: any;
+    displayedColumns = ["expandIcon","moduleId", "roleId","deleteIcon"];
+  
     constructor(
         public _matDialog: MatDialog,
         private _service: ConfigMiddlewareService
     ) {}
-
+    deleteUser(index: number): void {
+       
+      }
     ngOnInit(): void {
         this.getData();
     }
@@ -67,7 +71,7 @@ dialogRef: any;
     addPermission(id): void {
         this.dialogRef = this._matDialog.open(ManagePermissionFormComponent, {
             data: {
-                permissions:this.permissions,
+                permissions: this.permissions,
                 roleModuleId: id,
             },
             panelClass: "app-manage-permission-form",
@@ -80,7 +84,12 @@ dialogRef: any;
     getData() {
         this._service.forkConfigData().subscribe(
             (response) => {
-                [this.modules, this.roles, this.roleModulesList,this.permissions] = response;
+                [
+                    this.modules,
+                    this.roles,
+                    this.roleModulesList,
+                    this.permissions,
+                ] = response;
                 this.roleModulesList = snakeToCamel(
                     this.roleModulesList
                 ) as RoleModuleModel[];
@@ -91,5 +100,4 @@ dialogRef: any;
             }
         );
     }
-
 }

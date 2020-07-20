@@ -13,9 +13,10 @@ import { ConfigSidebarComponent } from './components/config-sidebar/config-sideb
 import { RoleModuleComponent } from './views/role-module/role-module.component';
 import { PermissionComponent } from './views/permission/permission.component';
 import { AccessControlComponent } from './views/access-control/access-control.component';
+import { TableRowComponent } from './components/table-row/table-row.component';
 
 @NgModule({
-  declarations: [ConfigComponent, RoleModuleFormComponent, ManagePermissionFormComponent, ConfigSidebarComponent, RoleModuleComponent, PermissionComponent, AccessControlComponent],
+  declarations: [ConfigComponent,TableRowComponent, RoleModuleFormComponent, ManagePermissionFormComponent, ConfigSidebarComponent, RoleModuleComponent, PermissionComponent, AccessControlComponent],
   imports: [
     CommonModule,
     ConfigRoutingModule,
