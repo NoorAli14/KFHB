@@ -1,22 +1,8 @@
 import { Module } from '@nestjs/common';
 import { HealthModule } from './health/health.module';
-import { GraphQLGatewayModule } from '@nestjs/graphql';
-
+import { V1Module } from './v1/v1.module';
+import { CommonModule } from '@common/common.module';
 @Module({
-  imports: [
-    HealthModule,
-    GraphQLGatewayModule.forRoot({
-      server: {
-        // ... Apollo server options
-        cors: true,
-      },
-      gateway: {
-        serviceList: [
-          { name: 'users', url: 'http://localhost:3020/graphql' },
-          { name: 'customers', url: 'http://localhost:3010/graphql' },
-        ],
-      },
-    }),
-  ],
+  imports: [HealthModule, CommonModule, V1Module],
 })
 export class AppModule {}
