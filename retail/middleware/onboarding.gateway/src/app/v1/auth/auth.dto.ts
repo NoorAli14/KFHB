@@ -6,6 +6,7 @@ import {
   MaxLength,
   IsEmail,
 } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class RegisterDTO {
   @IsString()
@@ -29,8 +30,10 @@ export class RegisterDTO {
 export class LoginDTO {
   @IsString()
   @IsEmail()
+  @ApiProperty({ required: true, minLength: 6, example: 'faizan@aiondigital.com', description: 'Email of the customer' })
   readonly email: string;
 
   @IsString()
+  @ApiProperty({ required: true, minLength: 6, type: String, format: 'password' })
   readonly password: string;
 }

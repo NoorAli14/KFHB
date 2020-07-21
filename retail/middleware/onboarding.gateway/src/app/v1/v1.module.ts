@@ -7,9 +7,10 @@ import { OtpModule } from './otp/otp.module';
 import { AccountModule } from './accounts/accounts.module';
 import { EvaluationModule } from './evaluation/evaluation.module';
 import { GraphQLGatewayModule } from '@nestjs/graphql';
-
+import { CommonModule } from '@common/common.module';
 @Module({
   imports: [
+    CommonModule,
     AuthModule,
     FaceModule,
     IdentityModule,
