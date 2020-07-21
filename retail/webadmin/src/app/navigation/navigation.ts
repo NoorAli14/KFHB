@@ -32,6 +32,31 @@ export const navigation: FuseNavigation[] = [
                         url      : '/ent/config',
                     }
                 ]
+            },
+            {
+                id       : 'calender',
+                title    : 'Calender',
+                translate: 'FEATURES.CALENDER.TITLE',
+                type     : 'collapsable',
+                icon     : 'calendar_today',
+                children : [
+                    {
+                        id       : 'working_days',
+                        title    : 'Working Days',
+                        translate: 'FEATURES.CALENDER.WORKING_DAYS.TITLE',
+                        type     : 'item',
+                        icon     : 'calendar_today',
+                        url      : '/calender/working-days',
+                    },
+                    {
+                        id       : 'config',
+                        title    : 'Configuration',
+                        translate: 'FEATURES.CALENDER.HOLIDAYS.TITLE',
+                        type     : 'item',
+                        icon     : 'calendar_today',
+                        url      : '/calender/holidays',
+                    }
+                ]
             }]
         
     }

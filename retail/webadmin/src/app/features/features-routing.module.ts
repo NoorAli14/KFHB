@@ -7,6 +7,10 @@ const routes: Routes = [
     loadChildren: () => import('./entitlement/entitlement.module').then(m => m.EntitlementModule)
   },
   {
+    path: 'calender',
+    loadChildren: () => import('./calender/calender.module').then(m => m.CalenderModule)
+  },
+  {
     path: 'error',
     loadChildren: () => import('./error/error.module').then(m => m.ErrorModule)
   },
