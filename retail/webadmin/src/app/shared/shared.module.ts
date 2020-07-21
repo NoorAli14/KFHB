@@ -7,9 +7,10 @@ import { MatErrorComponent } from "./components/mat-error/mat-error.component";
 import { ConfirmDialogComponent } from "./components/confirm-dialog/confirm-dialog.component";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTableComponent } from './components/mat-table/mat-table.component';
 
 @NgModule({
-    declarations: [MatErrorComponent, ConfirmDialogComponent],
+    declarations: [MatErrorComponent, ConfirmDialogComponent, MatTableComponent],
     imports: [
         ReactiveFormsModule,
         FormsModule,
@@ -17,9 +18,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
         FlexLayoutModule,
         MatToolbarModule,
         MaterialModule
-
     ],
-    exports: [MatErrorComponent],
+    exports: [MatErrorComponent,MatTableComponent],
 
 })
 export class SharedModule {}
