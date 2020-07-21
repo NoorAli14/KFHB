@@ -5,29 +5,30 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
+import { Request, Response } from 'express';
 
-@Catch(HttpException) /* <-- Add this decorator */
+@Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
-  catch(error: any, host: ArgumentsHost) {
+  catch(error: HttpException | any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
-    const res = ctx.getResponse();
-    const req = ctx.getRequest();
+    const response = ctx.getResponse<Response>();
+    const request = ctx.getRequest<Request>();
+    const status = error.getStatus();
 
-    if (error.getStatus() === HttpStatus.UNAUTHORIZED) {
+    if (status === HttpStatus.UNAUTHORIZED) {
       if (typeof error.response !== 'string') {
         error.response['message'] =
           error.response.message ||
           'You do not have permission to access this resource';
       }
     }
-
-    res.status(error.getStatus()).json({
-      statusCode: error.getStatus(),
+    response.status(status).json({
+      statusCode: status,
       error: error.response.name || error.name,
       message: error.response.message || error.message,
       errors: error.response.errors || null,
       timestamp: new Date().toISOString(),
-      path: req ? req.url : null,
+      path: request ? request.url : null,
     });
   }
 }

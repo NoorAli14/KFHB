@@ -1,15 +1,14 @@
 import { Module } from '@nestjs/common';
 import { join } from 'path';
 import { UsersModule } from './users/users.module';
-import { Routes } from 'nest-router';
-import { GraphQLModule } from '@nestjs/graphql';
+import { GraphQLFederationModule } from '@nestjs/graphql';
 import { CommonModule } from '@common/common.module';
 import { ConfigurationService } from '@common/configuration/configuration.service';
 
 @Module({
   imports: [
     UsersModule,
-    GraphQLModule.forRootAsync({
+    GraphQLFederationModule.forRootAsync({
       imports: [CommonModule],
       useFactory: async (configService: ConfigurationService) => ({
         debug: configService.GRAPHQL.DEBUG,
@@ -20,20 +19,4 @@ import { ConfigurationService } from '@common/configuration/configuration.servic
     }),
   ],
 })
-export class V1Module {
-  static Routes(): Routes {
-    const routes: Routes = [
-      {
-        path: '/v1',
-        module: V1Module,
-        children: [
-          {
-            path: '/users',
-            module: UsersModule,
-          },
-        ],
-      },
-    ];
-    return routes;
-  }
-}
+export class V1Module {}

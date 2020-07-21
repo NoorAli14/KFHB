@@ -2,7 +2,7 @@
   "name": "nestjs-knex-graphql-starter-kit",
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "author": "Faizan Ahmad <faizan@aiondigital.com>",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -19,7 +19,7 @@
     "seed:make": "knex seed:make -x ts",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "update:packages": "npm ncu -u",
-    "generate:docs": "npm run compodoc -p tsconfig.json -s",
+    "generate:docs": "npx compodoc -p tsconfig.json -s",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
@@ -27,9 +27,11 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@apollo/federation": "^0.17.0",
     "@nestjs/common": "^7.0.0",
     "@nestjs/core": "^7.0.0",
     "@nestjs/graphql": "^7.5.1",
+    "@nestjs/microservices": "^7.3.2",
     "@nestjs/platform-express": "^7.0.0",
     "@nestjs/swagger": "^4.5.11",
     "@nestjs/terminus": "^7.0.1",
@@ -41,7 +43,6 @@
     "graphql-tools": "^6.0.12",
     "knex": "^0.21.1",
     "mssql": "^6.2.0",
-    "nest-router": "^1.0.9",
     "nestjs-knex": "^1.0.1",
     "pg": "^8.2.1",
     "reflect-metadata": "^0.1.13",
@@ -81,9 +82,7 @@
     "typescript": "^3.7.4"
   },
   "husky": {
-    "hooks": {
-      "pre-commit": "concurrently -r \"npm lint\" \"yarn tsc --noEmit\""
-    }
+    "hooks": {}
   },
   "jest": {
     "moduleFileExtensions": [

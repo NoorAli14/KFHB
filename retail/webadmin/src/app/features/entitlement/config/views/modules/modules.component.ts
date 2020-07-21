@@ -1,13 +1,12 @@
 import { Component, OnInit, ViewEncapsulation, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Modules } from '../../../models/modules.model';
 import { fuseAnimations } from '@fuse/animations';
-
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+// import { getName } from '@shared/helpers/global.helper';
+import { Modules } from '@feature/entitlement/models/modules.model';
 import { ConfigMiddlewareService } from '../../services/config-middleware.service';
-import { getName } from '@shared/helpers/global.helper';
 import { ModulesFormComponent } from '../../components/modules-form/modules-form.component';
 
 @Component({
@@ -60,7 +59,7 @@ export class ModulesComponent implements OnInit {
     });
 }
   displayName(id) {
-      return getName(id, "name", this.modules);
+    //   return getName(id, "name", this.modules);
   }
 
   getData() {

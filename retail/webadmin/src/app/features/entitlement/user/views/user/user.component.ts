@@ -11,7 +11,7 @@ import { UserService } from "../../services/user.service";
 import { MESSAGES } from "@shared/constants/app.constants";
 
 import { FormControl } from '@angular/forms';
-import { User } from '../../user.model';
+import { User } from '@feature/entitlement/models/user.model';
 
 @Component({
     selector: "app-user",
@@ -51,12 +51,13 @@ export class UserComponent implements OnInit {
     }
 
     loadAllUsers() {
+        debugger
         this._userService.getUsers().subscribe(
             (users) => {
                 this.message = "";
                 this.users=users;
             },
-            () => {
+            (error) => {
                 this.type = "error";
                 this.message = MESSAGES.UNKNOWN;
             }

@@ -13,6 +13,14 @@ export const locale = {
                     TITLE: "Role",
                     BADGE: "25",
                 },
+                MODULE: {
+                    TITLE: "Module",
+                    BADGE: "25",
+                },
+                CONFIG: {
+                    TITLE: "Configuration",
+                    BADGE: "25",
+                },
             },
         },
     },

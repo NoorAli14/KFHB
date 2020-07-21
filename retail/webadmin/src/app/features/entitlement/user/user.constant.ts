@@ -1,1 +1,1 @@
-export const USER='api/users'
+export const USER='/api/v1/users'

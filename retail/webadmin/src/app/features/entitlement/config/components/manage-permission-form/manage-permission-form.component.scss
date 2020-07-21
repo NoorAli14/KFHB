@@ -1,0 +1,17 @@
+@import "src/@fuse/scss/fuse";
+.app-manage-permission-form {
+    @include media-breakpoint('xs') {
+        width: 100%;
+    }
+    @include media-breakpoint('gt-xs') {
+        width: 30%;
+    }
+    .mat-dialog-container {
+        padding: 0;
+    }
+    .dialog-content-wrapper {
+        max-height: 85vh;
+        display: flex;
+        flex-direction: column;
+    }
+}
