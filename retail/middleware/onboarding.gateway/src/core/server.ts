@@ -1,8 +1,5 @@
-import { NestFactory } from '@nestjs/core';
 import { Transport } from '@nestjs/microservices';
 import { INestApplication, ValidationPipe, Logger } from '@nestjs/common';
-
-import { ApplicationModule } from '@app/index';
 import { CommonModule } from '@common/common.module';
 import {
   LoggingInterceptor,
@@ -27,7 +24,10 @@ class Server {
   get Config(): any {
     return this._config;
   }
-
+  // Clear the console
+  public static clearConsole(): void {
+    process.stdout.write('\x1B[2J\x1B[0f');
+  }
   private mountConfig(): void {
     this._config = this.app.select(CommonModule).get(ConfigurationService);
   }
@@ -80,29 +80,12 @@ class Server {
     this.app.listen(PORT, () => {
       this.onStartUp();
     });
-    process.on('unhandledRejection', (reason, promise) => {
-      console.error(reason);
-      console.log(promise);
-    });
-
-    process.on('uncaughtException', err => {
-      console.error(err);
-    });
 
     process.on('SIGTERM', async () => {
       await this.app.close();
       process.exit(0);
     });
     return this.app;
-  }
-
-  /**
-   * Setup the Nest Factory
-   */
-  public static async setup(): Promise<INestApplication> {
-    const app = await NestFactory.create(ApplicationModule);
-    const server = new Server(app);
-    return server.init();
   }
 
   /**
