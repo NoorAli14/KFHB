@@ -1,3 +1,4 @@
+import { MaterialModule } from './modules/material/material.module';
 
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
@@ -6,11 +7,7 @@ import { MatErrorComponent } from "./components/mat-error/mat-error.component";
 import { ConfirmDialogComponent } from "./components/confirm-dialog/confirm-dialog.component";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { MatToolbarModule } from '@angular/material/toolbar';
-<<<<<<< HEAD
 import { MatTableComponent } from './components/mat-table/mat-table.component';
-=======
-import { MaterialModule } from './modules/material/material.module';
->>>>>>> develop
 
 @NgModule({
     declarations: [MatErrorComponent, ConfirmDialogComponent, MatTableComponent],

@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { fuseAnimations } from "@fuse/animations";
 import { MatDialog } from '@angular/material/dialog';
-import { User } from '@feature/user/user.model';
 import { UpdateProfileComponent } from '@feature/setting/components/update-profile/update-profile.component';
+import { User } from '@feature/entitlement/models/user.model';
 
 @Component({
     selector: "app-profile",

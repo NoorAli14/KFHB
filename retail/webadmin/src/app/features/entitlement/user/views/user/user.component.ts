@@ -51,7 +51,6 @@ export class UserComponent implements OnInit {
     }
 
     loadAllUsers() {
-        debugger
         this._userService.getUsers().subscribe(
             (users) => {
                 this.message = "";

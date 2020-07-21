@@ -1,13 +1,10 @@
-import { cloneDeep } from '@shared/helpers/global.helper';
 import {
     Component,
     OnInit,
     Input,
     Output,
-    AfterContentChecked,
     EventEmitter,
     ViewChild,
-    AfterViewInit,
     SimpleChanges,
 } from "@angular/core";
 import { MatPaginator } from "@angular/material/paginator";
@@ -16,7 +13,7 @@ import { MatTableDataSource } from "@angular/material/table";
 import { MESSAGES } from '@shared/constants/app.constants';
 import { ConfirmDialogModel, ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-
+import { getName } from "@shared/helpers/global.helper";
 @Component({
     selector: "app-mat-table",
     templateUrl: "./mat-table.component.html",
@@ -45,7 +42,7 @@ export class MatTableComponent implements OnInit {
         
     }
     displayName(id, array) {
-        // return getName(id, "name", array);
+        return getName(id, "name", array);
     }
     onEditDialog(data) {
       this.edit.emit(data);
