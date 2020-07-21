@@ -1,8 +1,4 @@
-import {
-    Component,
-    OnInit,
-    ViewEncapsulation,
-} from "@angular/core";
+import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { fuseAnimations } from "@fuse/animations";
 import { MatDialog } from "@angular/material/dialog";
 import { UserFormComponent } from "../../components/user-form/user-form.component";
@@ -10,8 +6,9 @@ import { UserFormComponent } from "../../components/user-form/user-form.componen
 import { UserService } from "../../services/user.service";
 import { MESSAGES } from "@shared/constants/app.constants";
 
-import { FormControl } from '@angular/forms';
-import { User } from '@feature/entitlement/models/user.model';
+import { FormControl } from "@angular/forms";
+import { User } from "@feature/entitlement/models/user.model";
+import { Role } from "@feature/entitlement/models/role.model";
 
 @Component({
     selector: "app-user",
@@ -22,7 +19,8 @@ import { User } from '@feature/entitlement/models/user.model';
 })
 export class UserComponent implements OnInit {
     dialogRef: any;
-    users:User[];
+    users: User[];
+    roles: Role[];
     username: FormControl;
     message: string = "";
     type: string = "";
@@ -47,14 +45,14 @@ export class UserComponent implements OnInit {
     ngOnInit(): void {
         this.username = new FormControl("");
         this.initSearch();
-        this.loadAllUsers();
+        this.getData();
     }
 
     loadAllUsers() {
         this._userService.getUsers().subscribe(
             (users) => {
                 this.message = "";
-                this.users=users;
+                this.users = users;
             },
             (error) => {
                 this.type = "error";
@@ -62,16 +60,27 @@ export class UserComponent implements OnInit {
             }
         );
     }
+    getData() {
+        this._userService.forkUserData().subscribe(
+            (response) => {
+                [this.users, this.roles] = response;
+            },
+            (error) => {
+                console.log(error);
+            }
+        );
+    }
     initSearch() {
         this.username.valueChanges.subscribe((text: string) => {
-            // this.paginator.pageIndex = 0;
             this.loadAllUsers();
         });
     }
     onCreateDialog(): void {
-        const user = new User();
         this.dialogRef = this._matDialog.open(UserFormComponent, {
-            data: user,
+            data: {
+                roles:this.roles,
+                user: new User()
+            },
             panelClass: "app-user-form",
             disableClose: true,
             hasBackdrop: true,
@@ -82,7 +91,10 @@ export class UserComponent implements OnInit {
     }
     onEditDialog(user: User) {
         this.dialogRef = this._matDialog.open(UserFormComponent, {
-            data: user,
+            data: {
+                roles:this.roles,
+                user
+            },
             panelClass: "app-user-form",
         });
         this.dialogRef.afterClosed().subscribe((response) => {
