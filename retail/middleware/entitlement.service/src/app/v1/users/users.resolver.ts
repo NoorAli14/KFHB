@@ -1,6 +1,6 @@
 import { Resolver, Query, Mutation, Args,Info } from '@nestjs/graphql';
 import { UserService } from './users.service';
-import { UserInput } from './user.dto';
+import {UserInput, UserPropInput} from './user.dto';
 import { User } from './user.model';
 import { graphqlKeys } from '@common/utilities';
 
@@ -20,16 +20,13 @@ export class UsersResolver {
     return this.userService.findById(id, keys);
   }
 
-  @Query(() => User)
-  async findUserByProperty(
-      @Args('key', { type: () => String }) key: string,
-      @Args('val', { type: () => String }) val: any,
+  @Query(() => [User])
+  async findUserBy(
+      @Args('checks', { type: () => [UserPropInput] }) checks: UserPropInput[],
       @Info() info
-  ): Promise<User> {
+  ): Promise<User[]> {
     const keys = graphqlKeys(info);
-    const condition = {};
-    condition[key] = val;
-    return this.userService.findByProperty(condition, keys);
+    return this.userService.findByProperty(checks, keys);
   }
 
   @Mutation(() => User)

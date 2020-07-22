@@ -69,7 +69,7 @@ input PermissionInput {
 type Query {
   usersList: [User!]!
   findUserById(id: String!): User!
-  findUserByProperty(val: String!, key: String!): User!
+  findUserBy(checks: [UserPropInput!]!): [User!]!
   rolesList: [Role!]!
   findRole(id: String!): Role!
   userRolesList: [UserRole!]!
@@ -182,6 +182,11 @@ input UserInput {
   updated_by: String
   deleted_on: String
   deleted_by: String
+}
+
+input UserPropInput {
+  record_key: String!
+  record_value: String!
 }
 
 type UserRole {

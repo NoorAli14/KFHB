@@ -53,3 +53,12 @@ export class UserInput {
   @Field({ nullable: true })
   deleted_by?: string;
 }
+
+@InputType()
+export class UserPropInput {
+  @Field()
+  record_key?: string;
+
+  @Field()
+  record_value?: string;
+}
