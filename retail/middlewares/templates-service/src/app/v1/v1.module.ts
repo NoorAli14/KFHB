@@ -4,10 +4,12 @@ import { TemplateQuestionsModule } from './template-questions/template-questions
 import { GraphQLFederationModule } from '@nestjs/graphql';
 import { CommonModule } from '@common/common.module';
 import { ConfigurationService } from '@common/configuration/configuration.service';
+import { TemplateResponsesModule } from './template-responses/template-responses.module';
 
 @Module({
   imports: [
     TemplateQuestionsModule,
+    TemplateResponsesModule,
     GraphQLFederationModule.forRootAsync({
       imports: [CommonModule],
       useFactory: async (configService: ConfigurationService) => ({
