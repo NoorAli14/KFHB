@@ -16,8 +16,8 @@ ARG USER=rubix
 ARG NODE_VERSION=12.18.2
 ARG NODE_ENV=production
 
-# Define default environment variables
-ENV TZ Asia/Kuwait
+# Define timezone environment variables
+ENV TZ Asia/Bahrain
 
 #===========================================
 # Build Stage
@@ -42,13 +42,6 @@ RUN npm run build:prod
 # Remove the devDependencies
 RUN npm prune --production
 
-# Remove folders after successfully build
-#RUN rm -rf app bin config lib utilities
-
-#===========================================
-# 
-#===========================================
-
 # Using latest LTS version running on alpine
 FROM node:${WORKDIR}-alpine
 
@@ -62,11 +55,13 @@ RUN chmod -R 644 /etc/passwd && \
     chmod 000 /etc/shadow && \
     chmod -R 644 /etc/group
 
+# Define Working Directory
 WORKDIR ${WORKDIR}
 
 # Set user node for future commands
 USER $USER
 
+# Copy files from build stage to current working directory
 COPY --from=builder ${WORKDIR} ./
 
 # Setting environemnt variables
@@ -77,16 +72,6 @@ ENV ENV_RBX_HOST=${PORT} \
     ENV_RBX_API_URL_PREFIX="/api/v1/" \
     ENV_RBX_HOST="http://localhost" \
     ENV_CDT_AUTHORITY_HOSTNAME= \
-    # DATABASE Environment Variables
-    ENV_RBX_DB_USERNAME= \
-    ENV_RBX_DB_PASS= \
-    ENV_RBX_DB_NAME= \
-    ENV_RBX_DB_HOST= \
-    ENV_RBX_DB_PORT= \
-    ENV_RBX_DB_TIMEOUT= \
-    ENV_RBX_DB_DIALECT= \
-    ENV_RBX_DB_TIMEZONE= \
-    ENV_RBX_DB_DEBUG= \
     # Swagger Environment Variables
     ENV_RBX_SWAGGER_ENABLED= \
     ENV_RBX_SWAGGER_ROUTE=
