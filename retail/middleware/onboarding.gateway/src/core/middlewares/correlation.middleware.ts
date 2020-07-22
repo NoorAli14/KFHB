@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { uuid } from '@common/utilities';
 import { X_CORRELATION_KEY } from '@common/constants';
+
 export const CorrelationMiddleware = (): Function => {
   return (req: Request, res: Response, next: NextFunction): void => {
     const correlationId = req.header(X_CORRELATION_KEY) || uuid();

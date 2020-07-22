@@ -8,7 +8,10 @@ import {
 import { HttpExceptionFilter } from '@common/filters/http-exception.filter';
 import { ConfigurationService } from '@common/configuration/configuration.service';
 import { KernelMiddleware } from '@core/middlewares/index';
-class Server {
+import NativeEvent from '@core/native.event';
+
+export default class Server {
+
   private _app: INestApplication;
   private _config: ConfigurationService;
 
@@ -24,10 +27,7 @@ class Server {
   get Config(): any {
     return this._config;
   }
-  // Clear the console
-  public static clearConsole(): void {
-    process.stdout.write('\x1B[2J\x1B[0f');
-  }
+
   private mountConfig(): void {
     this._config = this.app.select(CommonModule).get(ConfigurationService);
   }
@@ -119,4 +119,3 @@ class Server {
     Logger.log('');
   }
 }
-export default Server;

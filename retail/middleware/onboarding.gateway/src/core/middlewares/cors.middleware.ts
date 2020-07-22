@@ -7,6 +7,7 @@ import {
 } from '@common/constants';
 
 export class CorsMiddleware {
+  
   public static init(
     app: INestApplication,
     origins?: string,

@@ -1,6 +1,12 @@
 import { Logger } from '@nestjs/common';
-
 class NativeEvent {
+
+
+	// Clear the console
+  public clearConsole(): void {
+    process.stdout.write('\x1B[2J\x1B[0f');
+  }
+
 	public cluster (_cluster): void {
 		// Catch cluster listening event...
 		_cluster.on('listening', (worker) =>
