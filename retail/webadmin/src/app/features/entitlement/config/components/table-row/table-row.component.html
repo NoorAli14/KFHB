@@ -22,7 +22,7 @@
 
         <ng-container matColumnDef="expandedDetail">
             <mat-cell *matCellDef="let element" [@expandableRow]="element['id'] === expandedId ? 'expanded' : 'collapsed'">
-                <app-permission *ngIf="selectedKey" [roleModuleId]="element['id']"></app-permission>
+                <app-permission *ngIf="expandedId==element['id']" [roleModuleId]="element['id']"></app-permission>
             </mat-cell>
         </ng-container>
 

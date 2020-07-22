@@ -43,7 +43,6 @@ export class TableRowComponent {
     @Input() displayedColumns: string[];
     @Input() title: string;
     @Input() renderTemplate: string;
-    selectedKey: string;
     @Output() deleteUser: EventEmitter<number> = new EventEmitter<number>();
     @Output() addNewPermission: EventEmitter<number> = new EventEmitter<number>();
 
@@ -52,7 +51,6 @@ export class TableRowComponent {
     constructor() {}
 
     toggleExpandableSymbol(id: string): void {
-        this.selectedKey = id;
         this.expandedId = this.expandedId === id ? "" : id;
     }
     displayName(id, array) {
