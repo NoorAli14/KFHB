@@ -17,30 +17,49 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type Mutation {
-  addUser(input: NewUserInput!): UserGQL!
-  updateUser(input: NewUserInput!, id: String!): UserGQL!
-  deleteUser(id: String!): Boolean!
-}
-
-input NewUserInput {
-  first_name: String
-  last_name: String
-  email: String!
-  password: String!
+type OptionGQL {
+  id: String!
+  name: String!
+  created_on: DateTime!
+  updated_on: DateTime!
 }
 
 type Query {
-  usersList: [UserGQL!]!
-  findUser(id: String!): UserGQL!
+  templatesList: [TemplateQuestionGQL!]!
+  findTemplate(id: String!): TemplateQuestionGQL!
 }
 
-type UserGQL {
+type QuestionGQL {
   id: String!
-  first_name: String
-  last_name: String
-  email: String!
-  password: String!
+  title: String!
+  type: String!
+  options: OptionGQL!
+  created_on: DateTime!
+  updated_on: DateTime!
+}
+
+type SectionGQL {
+  id: String!
+  name: String!
+  level: String!
+  created_on: DateTime!
+  updated_on: DateTime!
+}
+
+type TemplateGQL {
+  id: String!
+  name: String!
+  created_on: DateTime!
+  updated_on: DateTime!
+}
+
+type TemplateQuestionGQL {
+  id: String!
+  rules: String!
+  status: Boolean!
+  template: TemplateGQL!
+  section: SectionGQL!
+  question: QuestionGQL!
   created_on: DateTime!
   updated_on: DateTime!
 }

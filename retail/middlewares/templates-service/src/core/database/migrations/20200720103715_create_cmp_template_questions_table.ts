@@ -1,9 +1,9 @@
 import * as Knex from 'knex';
-import { TABLE } from '@common/constants';
+import { TABLE, DATABASE_UUID_METHOD } from '@common/constants';
 
 export async function up(knex: Knex): Promise<void> {
   return knex.schema.createTable(TABLE.TEMPLATE_QUESTIONS, table => {
-    table.uuid('id').primary();
+		table.uuid('id').primary().defaultTo(knex.raw(DATABASE_UUID_METHOD));
 
     table.uuid('template_id');
     table.uuid('section_id');

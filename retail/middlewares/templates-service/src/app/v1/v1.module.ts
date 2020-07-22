@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { join } from 'path';
-import { UsersModule } from './users/users.module';
+import { TemplateQuestionsModule } from './template-questions/template-questions.module';
 import { GraphQLFederationModule } from '@nestjs/graphql';
 import { CommonModule } from '@common/common.module';
 import { ConfigurationService } from '@common/configuration/configuration.service';
 
 @Module({
   imports: [
-    UsersModule,
+    TemplateQuestionsModule,
     GraphQLFederationModule.forRootAsync({
       imports: [CommonModule],
       useFactory: async (configService: ConfigurationService) => ({

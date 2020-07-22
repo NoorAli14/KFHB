@@ -4,10 +4,18 @@ import * as path from 'path';
  * graphqlKeys string[]
  * @param info
  */
-export const graphqlKeys = (info: any): string[] => {
+export const graphqlKeys = (info: Record<string, unknown>): string[] => {
   return info.fieldNodes[0].selectionSet.selections.map(
     item => item.name.value,
   );
+};
+
+export const uuidV4 = (): string => {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    const r = (Math.random() * 16) | 0,
+      v = c == 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
 };
 
 /**

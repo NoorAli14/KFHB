@@ -7,7 +7,7 @@
 # Version will be changed during CI/CD process
 LABEL maintainer="AionDigital"
 LABEL version="0.1.0 (alpha)"
-LABEL description="Container for running rubix boilerplate"
+LABEL description="Container for running rubix compliance service"
 
 # Define default arguments
 ARG PORT=4000
@@ -73,7 +73,7 @@ COPY --from=builder ${WORKDIR} ./
 # These variables will be different from application to application
 ENV ENV_RBX_HOST=${PORT} \
     NODE_ENV=${NODE_ENV} \
-    ENV_RBX_APP_NAME="Rubix boilerplate"  \
+    ENV_RBX_APP_NAME="Rubix compliance service"  \
     ENV_RBX_API_URL_PREFIX="/api/v1/" \
     ENV_RBX_HOST="http://localhost" \
     ENV_CDT_AUTHORITY_HOSTNAME= \
