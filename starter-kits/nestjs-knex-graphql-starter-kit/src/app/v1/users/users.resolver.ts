@@ -8,21 +8,21 @@ import { graphqlKeys } from '@common/utilities';
 export class UsersResolver {
   constructor(private readonly userService: UserService) {}
   @Query(() => [UserGQL])
-  async usersList(@Info() info): Promise<UserGQL[]> {
+  async usersList(@Info() info: Record<string, any>): Promise<UserGQL[]> {
         const keys = graphqlKeys(info);
 
     return this.userService.list(keys);
   }
 
   @Query(() => UserGQL)
-  async findUser(@Args('id') id: string, @Info() info): Promise<UserGQL> {
+  async findUser(@Args('id') id: string, @Info() info: Record<string, any>): Promise<UserGQL> {
         const keys = graphqlKeys(info);
 
     return this.userService.findById(id, keys);
   }
 
   @Mutation(() => UserGQL)
-  async addUser(@Args('input') input: NewUserInput, @Info() info): Promise<UserGQL> {
+  async addUser(@Args('input') input: NewUserInput, @Info() info: Record<string, any>): Promise<UserGQL> {
         const keys = graphqlKeys(info);
 
     return this.userService.create(input, keys);
@@ -31,7 +31,7 @@ export class UsersResolver {
   async updateUser(
     @Args('id') id: string,
     @Args('input') input: NewUserInput,
-    @Info() info
+    @Info() info: Record<string, any>
   ): Promise<UserGQL> {
         const keys = graphqlKeys(info);
 
