@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { UserRepository } from '@core/repository/';
 import {UserPropInput} from "@app/v1/users/user.dto";
+import {Encrypter} from "@common/encrypter";
 
 @Injectable()
 export class UserService {
-  constructor(private userDB: UserRepository) {}
+  constructor(private userDB: UserRepository,
+              private encrypter: Encrypter) {}
 
   async list(keys: string[]): Promise<any> {
     return this.userDB.list(keys,{"status":"ACTIVE"});
@@ -32,6 +34,7 @@ export class UserService {
   }
 
   async create(newUser: Record<string, any>, keys?: string[]): Promise<any> {
+    newUser.password_digest = this.encrypter.encryptPassword(newUser.password_digest);
     const [user] = await this.userDB.create(newUser, keys);
     return user;
   }
