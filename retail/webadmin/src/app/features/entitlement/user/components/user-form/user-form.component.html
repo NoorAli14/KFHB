@@ -78,12 +78,9 @@
                     </mat-form-field>
                     <mat-form-field appearance="outline" fxFlex="48" class="pr-4">
                         <mat-label>Role</mat-label>
-                        <mat-select formControlName="roleId">
-                            <mat-option [value]="'Pakistan'">
-                                Pakistan
-                            </mat-option>
-                            <mat-option [value]="'United Kingdom'">
-                                United Kingdom
+                        <mat-select formControlName="roleId" multiple>
+                            <mat-option *ngFor="let role of roles" [value]="role.id">
+                                {{role.name}}
                             </mat-option>
                         </mat-select>
                         <mat-icon matSuffix class="secondary-text">security</mat-icon>
@@ -91,8 +88,6 @@
                             <app-mat-error [control]="userForm.get('roleId')"></app-mat-error>
                         </mat-error>
                     </mat-form-field>
-
-
                     <mat-form-field *ngIf="data.dateOfBirth" appearance="outline" fxFlex="48" class="pl-4">
                         <mat-label>Date of Birth</mat-label>
                         <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" />

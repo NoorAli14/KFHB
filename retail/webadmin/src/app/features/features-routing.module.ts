@@ -7,6 +7,10 @@ const routes: Routes = [
     loadChildren: () => import('./entitlement/entitlement.module').then(m => m.EntitlementModule)
   },
   {
+    path: 'setting',
+    loadChildren: () => import('./setting/setting.module').then(m => m.SettingModule)
+  },
+  {
     path: 'error',
     loadChildren: () => import('./error/error.module').then(m => m.ErrorModule)
   },
