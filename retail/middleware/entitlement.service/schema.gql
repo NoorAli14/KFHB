@@ -1,0 +1,202 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+directive @key(fields: String!) on OBJECT | INTERFACE
+
+directive @extends on OBJECT | INTERFACE
+
+directive @external on OBJECT | FIELD_DEFINITION
+
+directive @requires(fields: String!) on FIELD_DEFINITION
+
+directive @provides(fields: String!) on FIELD_DEFINITION
+
+type Module {
+  id: ID!
+  name: String
+  parent_id: String
+  status: String
+  created_on: String
+  created_by: String
+}
+
+input ModuleInput {
+  id: ID!
+  name: String
+  parent_id: String
+  status: String
+  created_on: String
+  created_by: String
+}
+
+type Mutation {
+  addUser(input: UserInput!): User!
+  updateUser(input: UserInput!, id: String!): User!
+  deleteUser(id: String!): Boolean!
+  addRole(input: RoleInput!): Role!
+  updateRole(input: RoleInput!, id: String!): Role!
+  deleteRole(id: String!): Boolean!
+  addUserRole(input: UserRoleInput!): UserRole!
+  deleteUserRole(id: String!): Boolean!
+  addModule(input: ModuleInput!): Module!
+  updateModule(input: ModuleInput!, id: String!): Module!
+  deleteModule(id: String!): Boolean!
+  addRoleModule(input: RoleModuleInput!): RoleModule!
+  updateRoleModule(input: RoleModuleInput!, id: String!): RoleModule!
+  deleteRoleModule(id: String!): Boolean!
+  addRoleModulePermission(input: RoleModulePermissionInput!): RoleModulePermission!
+  updateRoleModulePermission(input: RoleModulePermissionInput!, id: String!): RoleModulePermission!
+  deleteRoleModulePermission(id: String!): Boolean!
+  addPermission(input: PermissionInput!): Permission!
+  updatePermission(input: PermissionInput!, id: String!): Permission!
+  deletePermission(id: String!): Boolean!
+}
+
+type Permission {
+  id: ID!
+  record_type: String
+  created_on: String
+  created_by: String
+}
+
+input PermissionInput {
+  record_type: String
+  created_on: String
+  created_by: String
+}
+
+type Query {
+  usersList: [User!]!
+  findUserById(id: String!): User!
+  findUserByProperty(val: String!, key: String!): User!
+  rolesList: [Role!]!
+  findRole(id: String!): Role!
+  userRolesList: [UserRole!]!
+  findUserRole(id: String!): UserRole!
+  modulesList: [Module!]!
+  findModule(id: String!): Module!
+  roleModulesList: [RoleModule!]!
+  findRoleModule(id: String!): RoleModule!
+  roleModulePermissionsList: [RoleModulePermission!]!
+  findRoleModulePermission(id: String!): RoleModulePermission!
+  permissionsList: [Permission!]!
+  findPermission(id: String!): Permission!
+}
+
+type Role {
+  id: ID!
+  name: String
+  description: String
+  status: String
+  created_on: String
+  created_by: String
+  updated_on: String
+  updated_by: String
+  deleted_on: String
+  deleted_by: String
+}
+
+input RoleInput {
+  name: String
+  description: String
+  status: String
+  created_on: String
+  created_by: String
+  updated_on: String
+  updated_by: String
+  deleted_on: String
+  deleted_by: String
+}
+
+type RoleModule {
+  id: ID!
+  module_id: String!
+  role_id: String!
+  status: String
+  created_on: String
+  created_by: String
+}
+
+input RoleModuleInput {
+  module_id: String!
+  role_id: String!
+  status: String
+  created_on: String
+  created_by: String
+}
+
+type RoleModulePermission {
+  id: ID!
+  role_module_id: String!
+  permission_id: String!
+  status: String
+  created_on: String
+  created_by: String
+}
+
+input RoleModulePermissionInput {
+  role_module_id: String!
+  permission_id: String!
+  status: String
+  created_on: String
+  created_by: String
+}
+
+type User {
+  id: ID!
+  username: String
+  email: String
+  contact_no: String
+  password_digest: String
+  first_name: String
+  middle_name: String
+  last_name: String
+  gender: String
+  date_of_birth: String
+  nationality_id: Float
+  status: String
+  created_on: String
+  created_by: String
+  updated_on: String
+  updated_by: String
+  deleted_on: String
+  deleted_by: String
+}
+
+input UserInput {
+  username: String
+  email: String
+  contact_no: String
+  password_digest: String
+  first_name: String
+  middle_name: String
+  last_name: String
+  gender: String
+  date_of_birth: String
+  nationality_id: Float
+  status: String
+  created_on: String
+  created_by: String
+  updated_on: String
+  updated_by: String
+  deleted_on: String
+  deleted_by: String
+}
+
+type UserRole {
+  id: ID!
+  user_id: String!
+  role_id: String!
+  status: String
+  created_on: String
+  created_by: String
+}
+
+input UserRoleInput {
+  user_id: String!
+  role_id: String!
+  status: String
+  created_on: String
+  created_by: String
+}
