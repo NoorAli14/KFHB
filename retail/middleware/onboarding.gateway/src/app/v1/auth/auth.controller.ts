@@ -18,13 +18,11 @@ export class AuthController {
   constructor(private http: HttpService) {}
   @Post('register')
   @ApiOperation({
-    description: 'Disable Company',
-    operationId: 'disable',
-    summary: 'Disable Company',
+    description: 'It enables a customer to start onboarding',
+    operationId: 'register',
+    summary: 'Add a new customer into a system',
   })
-  @ApiBody({ description: 'company', required: true })
-  @ApiResponse({ status: 400, description: 'Missing info: compId' })
-  @ApiResponse({ status: 200, description: 'disable OK' })
+  @ApiBody({ description: 'customer', required: true })
   @ApiCreatedResponse({
     description: 'Customer has been successfully registered.',
   })
@@ -37,11 +35,11 @@ export class AuthController {
           )}) {id first_name last_name email}
         }`,
     };
-
     return this.http
       .post('/graphql', params)
       .pipe(map(response => response.data?.data?.addCustomer));
   }
+
   @Post('login')
   @ApiOkResponse({
     description: 'Customer has been successfully login.',

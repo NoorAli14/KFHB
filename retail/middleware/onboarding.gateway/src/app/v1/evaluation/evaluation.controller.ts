@@ -8,7 +8,6 @@ import {
 @ApiTags('Evaluation')
 @Controller('evaluation')
 export class EvaluationController {
-  constructor() {}
   @Post('/')
   @ApiOkResponse()
   @ApiUnprocessableEntityResponse()

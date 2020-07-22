@@ -24,7 +24,7 @@ import { CommonModule } from '@common/common.module';
         cors: true,
       },
       gateway: {
-        serviceList: [
+        serviceList: [ // These all Server values comes through service registery
           { name: 'users', url: 'http://localhost:3020/graphql' },
           { name: 'customers', url: 'http://localhost:3010/graphql' },
         ],

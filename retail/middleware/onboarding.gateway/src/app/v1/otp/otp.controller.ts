@@ -9,7 +9,7 @@ import {
 @ApiTags('OTP')
 @Controller('otp')
 export class OtpController {
-  constructor() {}
+  
   @Post('/sms/send')
   @ApiOkResponse()
   async send_sms_otp(): Promise<any> {}

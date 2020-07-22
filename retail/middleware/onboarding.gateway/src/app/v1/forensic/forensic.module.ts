@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-
 import { ForensicController } from './forensic.controller';
 
 @Module({

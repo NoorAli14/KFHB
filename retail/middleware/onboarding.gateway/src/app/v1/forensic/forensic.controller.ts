@@ -8,9 +8,10 @@ import {
 @ApiTags('Forensic')
 @Controller('forensic')
 export class ForensicController {
-  constructor() {}
+
   @Post('/check')
   @ApiOkResponse()
   @ApiUnprocessableEntityResponse()
   async check(): Promise<any> {}
+  
 }

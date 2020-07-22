@@ -10,7 +10,6 @@ import { map } from 'rxjs/operators';
 @ApiTags('Document')
 @Controller('documents')
 export class IdentityController {
-  constructor() {}
 
   @Get('/')
   @ApiOkResponse()

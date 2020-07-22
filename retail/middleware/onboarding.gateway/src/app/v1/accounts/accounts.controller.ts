@@ -8,11 +8,12 @@ import {
 @ApiTags('Account')
 @Controller('accounts')
 export class AccountsController {
-  constructor() {}
+  
   @Post('/')
   @ApiOkResponse()
   @ApiUnprocessableEntityResponse()
   async create(): Promise<any> {}
+
   @Get('/view')
   @ApiOkResponse()
   @ApiUnprocessableEntityResponse()
