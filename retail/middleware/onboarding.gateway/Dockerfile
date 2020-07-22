@@ -42,6 +42,13 @@ RUN npm run build:prod
 # Remove the devDependencies
 RUN npm prune --production
 
+# Remove folders after successfully build
+#RUN rm -rf app bin config lib utilities
+
+#===========================================
+# Master Stage
+#===========================================
+
 # Using latest LTS version running on alpine
 FROM node:${WORKDIR}-alpine
 
