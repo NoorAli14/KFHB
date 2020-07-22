@@ -27,6 +27,9 @@ export class HealthController {
       async (): Promise<any> =>
         // DNS health Checker. 
         this.dns.pingCheck('google', 'https://google.com'),
+      // async (): Promise<any> =>
+      //   // Customer Service health Checker. 
+      //   this.dns.pingCheck('Customer', 'https://customer-service:4001'),
       async (): Promise<any> =>
         // RSS Memory health Checker.
         this.memory.checkRSS('memory_rss', 3000 * 1024 * 1024),
