@@ -22,9 +22,9 @@ type Mutation {
 }
 
 input NewTemplateResponseInput {
-  value: String!
+  results: String!
   remarks: String!
-  template_question_id: String!
+  template_id: String!
 }
 
 type OptionGQL {
@@ -84,9 +84,9 @@ type TemplateQuestionGQL {
 
 type TemplateResponseGQL {
   id: String!
-  value: String!
+  results: String!
   remarks: String!
-  template_question_id: String!
+  template_id: String!
   created_on: DateTime!
   updated_on: DateTime!
 }

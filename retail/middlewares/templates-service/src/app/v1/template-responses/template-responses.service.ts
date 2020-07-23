@@ -12,7 +12,6 @@ export class TemplateResponsesService {
     newTemplateResponse: NewTemplateResponseInput,
     keys?: string[],
   ): Promise<any> {
-		// console.log('object');
     const [response] = await this.templateResponsesDB.create(
       newTemplateResponse,
       keys,

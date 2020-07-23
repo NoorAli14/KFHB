@@ -42,8 +42,8 @@ import { QuestionGQL } from '../questions/question.model';
 
 @ObjectType()
 export class TemplateQuestionGQL {
-  @Field()
-  id: string;
+	@Field()
+	id: string;
 
   @Field()
   rules: string;

@@ -1,13 +1,32 @@
 import * as path from 'path';
+import { TABLE } from './constants';
 
 /**
  * graphqlKeys string[]
  * @param info
  */
 export const graphqlKeys = (info: Record<string, unknown>): string[] => {
-  return info.fieldNodes[0].selectionSet.selections.map(
-    item => item.name.value,
-  );
+  const joins = [];
+  const result = [];
+  info.fieldNodes[0].selectionSet.selections.forEach(item => {
+    if (item.selectionSet?.selections) {
+      item.selectionSet.selections.forEach(child =>
+        // Adding child properties as the key to simplify the Select statement in Knex.
+        // Mapping the table name with field name of GQL schema.
+        result.push(
+          `${TABLE[item.name.value.toUpperCase()]}.${child.name.value}`,
+        ),
+      );
+      // To facilitate the Knex later and add joins based on this array.
+      joins.push(item.name.value);
+      return;
+    }
+
+    result.push(item.name.value);
+  });
+
+  result['joins'] = joins;
+  return result;
 };
 
 export const uuidV4 = (): string => {

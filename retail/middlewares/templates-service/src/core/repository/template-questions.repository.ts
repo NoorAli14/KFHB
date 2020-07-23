@@ -10,26 +10,19 @@ export class TemplateQuestionsRepository extends BaseRepository {
   }
 
   async list(keys: string | string[]): Promise<any> {
-    const query: QueryBuilder = this._connection(this._tableName)
-      // .join(
-      //   TABLE.TEMPLATE,
-      //   `${this._tableName}.template_id`,
-      //   '=',
-      //   `${TABLE.TEMPLATE}.id`,
-      // )
-      // .join(
-      //   TABLE.SECTION,
-      //   `${this._tableName}.section_id`,
-      //   '=',
-      //   `${TABLE.SECTION}.id`,
-      // )
-      // .join(
-      //   TABLE.QUESTION,
-      //   `${this._tableName}.question_id`,
-      //   '=',
-      //   `${TABLE.QUESTION}.id`,
-      // )
-      .select(keys);
+    const query: QueryBuilder = this._connection(this._tableName);
+
+    if (keys.hasOwnProperty('joins')) {
+      keys['joins'].forEach(element => {
+        query.join(
+          TABLE[element.toUpperCase()],
+          `${this._tableName}.${element}_id`,
+          '=',
+          `${TABLE[element.toUpperCase()]}.id`,
+        );
+      });
+    }
+    query.select(keys);
 
     return query;
   }

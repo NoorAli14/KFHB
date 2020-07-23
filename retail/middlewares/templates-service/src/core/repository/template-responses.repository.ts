@@ -10,26 +10,7 @@ export class TemplateResponsesRepository extends BaseRepository {
   }
 
   async list(keys: string | string[]): Promise<any> {
-    const query: QueryBuilder = this._connection(this._tableName)
-      // .join(
-      //   TABLE.TEMPLATE,
-      //   `${this._tableName}.template_id`,
-      //   '=',
-      //   `${TABLE.TEMPLATE}.id`,
-      // )
-      // .join(
-      //   TABLE.SECTION,
-      //   `${this._tableName}.section_id`,
-      //   '=',
-      //   `${TABLE.SECTION}.id`,
-      // )
-      // .join(
-      //   TABLE.QUESTION,
-      //   `${this._tableName}.question_id`,
-      //   '=',
-      //   `${TABLE.QUESTION}.id`,
-      // )
-      .select(keys);
+    const query: QueryBuilder = this._connection(this._tableName).select(keys);
 
     return query;
   }

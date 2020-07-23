@@ -4,10 +4,10 @@ export class TemplateResponse {
   readonly id: string;
 
   @ApiProperty({
-    example: 'TRUE',
-    description: 'Value of Response',
+    example: '{"q1": "abc", "answer": "TRUE"}',
+    description: 'Response of the customer in JSON format',
   })
-  value: string;
+  results: string;
 
   @ApiProperty({
     example: 'Remarks',
@@ -16,28 +16,30 @@ export class TemplateResponse {
   Remarks: string;
 
   @ApiProperty({
-    example: 'Template Question ID',
-    description: 'Template Question ID',
+    example: 'Template ID',
+    description: 'Template ID of the Associated Template',
   })
-  template_question_id: string;
+  template_id: string;
 }
 
 // Graphql Model
 import { Field, ObjectType } from '@nestjs/graphql';
+import { IsJSON } from 'class-validator';
 
 @ObjectType()
 export class TemplateResponseGQL {
   @Field()
   id: string;
 
-  @Field()
-  value: string;
+	@Field()
+	@IsJSON()
+  results: string;
 
   @Field()
   remarks: string;
 
   @Field()
-  template_question_id: string;
+  template_id: string;
 
   @Field()
   created_on: Date;

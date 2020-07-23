@@ -15,6 +15,12 @@ export class TemplateResponsesResolver {
     @Args('input') input: NewTemplateResponseInput,
     @Info() info: Record<string, any>,
   ): Promise<TemplateResponseGQL> {
+    try {
+      JSON.parse(input.results);
+    } catch (error) {
+      throw new Error("field 'results' should contain valid JSON format data.");
+    }
+
     const keys = graphqlKeys(info);
 
     return this.templateResponseService.create(input, keys);

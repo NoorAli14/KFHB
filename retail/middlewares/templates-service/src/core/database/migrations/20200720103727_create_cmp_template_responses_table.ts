@@ -3,15 +3,18 @@ import { TABLE, DATABASE_UUID_METHOD } from '@common/constants';
 
 export async function up(knex: Knex): Promise<void> {
   return knex.schema.createTable(TABLE.TEMPLATE_RESPONSE, table => {
-		table.uuid('id').primary().defaultTo(knex.raw(DATABASE_UUID_METHOD));
+    table
+      .uuid('id')
+      .primary()
+      .defaultTo(knex.raw(DATABASE_UUID_METHOD));
 
-    table.uuid('template_question_id');
+    table.uuid('template_id');
 
     table
-      .foreign('template_question_id')
+      .foreign('template_id')
       .references('id')
-      .inTable(TABLE.TEMPLATE_QUESTIONS);
-    table.string('value').notNullable();
+      .inTable(TABLE.TEMPLATE);
+    table.string('results').notNullable();
     table.string('remarks').notNullable();
     table.timestamp('created_on').defaultTo(knex.fn.now());
     table.timestamp('updated_on').defaultTo(knex.fn.now());
