@@ -22,6 +22,18 @@ export const locale = {
                     BADGE: "25",
                 },
             },
-        },
+            CALENDER:{
+                TITLE: "Calender",
+                WORKING_DAYS: {
+                    TITLE: "Working Days",
+                    BADGE: "25",
+                },
+                HOLIDAYS: {
+                    TITLE: "Holidays",
+                    BADGE: "25",
+                }
+            }
+           
+        }
     },
 };
