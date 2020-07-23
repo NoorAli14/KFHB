@@ -12,6 +12,9 @@ const routes: Routes = [
     {
         path: "working-days",
         component: WorkingDayComponent,
+        resolve  : {
+            chat: CalendarService
+        }
     },
     {
         path: "holidays",

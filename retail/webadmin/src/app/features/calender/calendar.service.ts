@@ -37,34 +37,33 @@ export class CalendarService implements Resolve<any>
      */
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any
     {
+        
         return new Promise((resolve, reject) => {
             Promise.all([
                 
                 this.getEvents()
             ]).then(
                 ([events]: [any]) => {
+                    
                     resolve();
                 },
                 reject
-            );
+            )
         });
     }
 
-    /**
-     * Get events
-     *
-     * @returns {Promise<any>}
-     */
+   
     getEvents(): Promise<any>
     {
         return new Promise((resolve, reject) => {
 
             this._httpClient.getAll('/api/v1/calendar')
-                .subscribe((response: any) => {
-                    debugger
+                .subscribe(
+                    (response: any) => {
                     this.events = response.data;
                     this.onEventsUpdated.next(this.events);
                     resolve(this.events);
+                }, (error)=>{
                 }, reject);
         });
     }

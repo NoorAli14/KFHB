@@ -58,7 +58,7 @@ export class WorkingDayComponent implements OnInit {
       /**
        * Get events from service/server
        */
-      this.setEvents();
+       this.setEvents();
   }
 
   // -----------------------------------------------------------------------------------------------------
