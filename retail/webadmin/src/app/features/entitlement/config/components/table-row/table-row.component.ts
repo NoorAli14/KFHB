@@ -6,7 +6,7 @@ import {
     transition,
     animate,
 } from "@angular/animations";
-import { getName } from "@shared/helpers/global.helper";
+import { getName, camelToSentenceCase } from "@shared/helpers/global.helper";
 
 @Component({
     selector: "app-table-row",
@@ -56,6 +56,9 @@ export class TableRowComponent {
     displayName(id, array) {
         return getName(id, "name", array);
     }
+    camelToSentenceCase(text){
+        return camelToSentenceCase(text)
+     }
     onAddNewPermission(id) {
         this.addNewPermission.emit(id);
     }

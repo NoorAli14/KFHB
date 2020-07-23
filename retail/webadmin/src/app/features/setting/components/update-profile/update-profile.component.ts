@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewEncapsulation, Inject } from "@angular/core";
 import { FormGroup, Validators, FormControl } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { User } from "@feature/user/user.model";
-import { UserService } from "@feature/user/services/user.service";
 import { MESSAGES } from "@shared/constants/app.constants";
 import { fuseAnimations } from '@fuse/animations';
+import { User } from '@feature/entitlement/models/user.model';
+import { UserService } from '@feature/entitlement/user/services/user.service';
 
 @Component({
   selector: 'app-update-profile',

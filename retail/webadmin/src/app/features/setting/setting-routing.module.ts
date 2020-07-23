@@ -5,6 +5,10 @@ import { ProfileComponent } from './views/profile/profile.component';
 
 const routes: Routes = [
   {
+      path: "",
+      redirectTo:'profile',
+  },
+  {
       path: "profile",
       component: ProfileComponent,
   },

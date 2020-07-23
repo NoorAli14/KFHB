@@ -1,3 +1,4 @@
+import { MaterialModule } from './modules/material/material.module';
 
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
@@ -6,10 +7,10 @@ import { MatErrorComponent } from "./components/mat-error/mat-error.component";
 import { ConfirmDialogComponent } from "./components/confirm-dialog/confirm-dialog.component";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MaterialModule } from './modules/material/material.module';
+import { MatTableComponent } from './components/mat-table/mat-table.component';
 
 @NgModule({
-    declarations: [MatErrorComponent, ConfirmDialogComponent],
+    declarations: [MatErrorComponent, ConfirmDialogComponent, MatTableComponent],
     imports: [
         ReactiveFormsModule,
         FormsModule,
@@ -17,9 +18,8 @@ import { MaterialModule } from './modules/material/material.module';
         FlexLayoutModule,
         MatToolbarModule,
         MaterialModule
-
     ],
-    exports: [MatErrorComponent],
+    exports: [MatErrorComponent,MatTableComponent],
 
 })
 export class SharedModule {}

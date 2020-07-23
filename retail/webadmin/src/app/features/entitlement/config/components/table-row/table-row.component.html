@@ -4,7 +4,7 @@
 
         <!-- COLUMNS AND ROWS-->
         <ng-container *ngFor="let key of displayedColumns" [matColumnDef]="key">
-            <mat-header-cell *matHeaderCellDef>{{ key.includes('Icon') ? '' : key }}</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef>{{ key.includes('Icon') ? '' : camelToSentenceCase(key) }}</mat-header-cell>
 
             <mat-cell *matCellDef="let element; let i = dataIndex">
                 <span *ngIf="!key.includes('Icon'); else icon">{{ displayName(element['id'],element[key]=='roleId'? roles : modules)  }}</span>
