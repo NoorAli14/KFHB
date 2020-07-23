@@ -10,13 +10,13 @@ export class TemplateQuestionsResolver {
   constructor(private readonly templateQuestionsService: TemplateQuestionsService) {}
 
   @Query(() => [TemplateQuestionGQL])
-  async templatesList(@Info() info): Promise<TemplateQuestionGQL[]> {
+  async templatesQuestionsList(@Info() info): Promise<TemplateQuestionGQL[]> {
     const keys = graphqlKeys(info);
     return this.templateQuestionsService.list(keys);
   }
 
   @Query(() => TemplateQuestionGQL)
-  async findTemplate(
+  async findTemplateQuestion(
     @Args('id') id: string,
     @Info() info,
   ): Promise<TemplateQuestionGQL> {

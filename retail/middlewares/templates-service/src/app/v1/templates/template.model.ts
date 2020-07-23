@@ -12,7 +12,6 @@ export class Template {
 
 // Graphql Model
 import { Field, ObjectType } from '@nestjs/graphql';
-import { SectionGQL } from '../sections/section.model';
 
 @ObjectType()
 export class TemplateGQL {

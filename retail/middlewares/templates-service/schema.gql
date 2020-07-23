@@ -35,8 +35,16 @@ type OptionGQL {
 }
 
 type Query {
-  templatesList: [TemplateQuestionGQL!]!
-  findTemplate(id: String!): TemplateQuestionGQL!
+  templatesQuestionsList: [TemplateQuestionGQL!]!
+  findTemplateQuestion(id: String!): TemplateQuestionGQL!
+  optionsList: [OptionGQL!]!
+  findOption(id: String!): OptionGQL!
+  questionsList: [QuestionGQL!]!
+  findQuestion(id: String!): QuestionGQL!
+  sectionsList: [SectionGQL!]!
+  findSection(id: String!): SectionGQL!
+  templatesList: [TemplateGQL!]!
+  findTemplate(id: String!): TemplateGQL!
 }
 
 type QuestionGQL {
