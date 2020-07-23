@@ -12,7 +12,7 @@
                         value: '*',
                         params: { delay: '100ms', x: '-25px' }
                     }">
-                    {{data.id? 'Update' :'Create'}} User
+                    {{data.user.id? 'Update' :'Create'}} User
                 </span>
             </div>
             <button mat-icon-button (click)="onClose()" aria-label="Close dialog">
@@ -28,7 +28,7 @@
         <div fxLayout="row">
             <form class="p-24 mr-24" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0" name="userForm" (ngSubmit)="onSubmit()" novalidate [formGroup]="userForm">
                 <div fxLayout="row wrap" fxLayout.lt-lg="column" fxLayoutAlign.lt-lg="center" fxLayoutGap="10px" fxLayoutAlign="start center" fxFlex="1 1 auto">
-                    <mat-form-field *ngIf="!data.id" appearance="outline" fxFlex="48" class="pr-4">
+                    <mat-form-field *ngIf="!data.user.id" appearance="outline" fxFlex="48" class="pr-4">
                         <mat-label>User Name</mat-label>
                         <input matInput formControlName="username" />
                         <mat-icon matSuffix class="secondary-text">personal_pin</mat-icon>
@@ -36,7 +36,7 @@
                             <app-mat-error [control]="userForm.get('username')"></app-mat-error>
                         </mat-error>
                     </mat-form-field>
-                    <mat-form-field appearance="outline" fxFlex="48" class="pl-4" *ngIf="data.firstName">
+                    <mat-form-field appearance="outline" fxFlex="48" class="pl-4" *ngIf="data.user.firstName">
                         <mat-label>First Name</mat-label>
                         <input matInput formControlName="firstName" />
                         <mat-icon matSuffix class="secondary-text">account_circle</mat-icon>
@@ -44,7 +44,7 @@
                             <app-mat-error [control]="userForm.get('firstName')"></app-mat-error>
                         </mat-error>
                     </mat-form-field>
-                    <mat-form-field *ngIf="data.middleName" appearance="outline" fxFlex="48" class="pl-4">
+                    <mat-form-field *ngIf="data.user.middleName" appearance="outline" fxFlex="48" class="pl-4">
                         <mat-label>Middle Name</mat-label>
                         <input matInput formControlName="middleName" />
                         <mat-icon matSuffix class="secondary-text">account_circle</mat-icon>
@@ -52,7 +52,7 @@
                             <app-mat-error [control]="userForm.get('middleName')"></app-mat-error>
                         </mat-error>
                     </mat-form-field>
-                    <mat-form-field *ngIf="data.lastName" appearance="outline" fxFlex="48" class="pl-4">
+                    <mat-form-field *ngIf="data.user.lastName" appearance="outline" fxFlex="48" class="pl-4">
                         <mat-label>Last Name</mat-label>
                         <input matInput formControlName="lastName" />
                         <mat-icon matSuffix class="secondary-text">account_circle</mat-icon>
@@ -88,7 +88,7 @@
                             <app-mat-error [control]="userForm.get('roleId')"></app-mat-error>
                         </mat-error>
                     </mat-form-field>
-                    <mat-form-field *ngIf="data.dateOfBirth" appearance="outline" fxFlex="48" class="pl-4">
+                    <mat-form-field *ngIf="data.user.dateOfBirth" appearance="outline" fxFlex="48" class="pl-4">
                         <mat-label>Date of Birth</mat-label>
                         <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" />
                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -97,7 +97,7 @@
                             <app-mat-error [control]="userForm.get('dateOfBirth')"></app-mat-error>
                         </mat-error>
                     </mat-form-field>
-                    <mat-form-field *ngIf="data.gender" appearance="outline" fxFlex="48" class="pr-4">
+                    <mat-form-field *ngIf="data.user.gender" appearance="outline" fxFlex="48" class="pr-4">
                         <mat-label>Gender</mat-label>
                         <mat-select formControlName="gender">
                             <mat-option [value]="'Male'">
@@ -112,7 +112,7 @@
                             <app-mat-error [control]="userForm.get('gender')"></app-mat-error>
                         </mat-error>
                     </mat-form-field>
-                    <mat-form-field *ngIf="data.nationalityId" appearance="outline" fxFlex="48" class="pr-4">
+                    <mat-form-field *ngIf="data.user.nationalityId" appearance="outline" fxFlex="48" class="pr-4">
                         <mat-label>Nationality</mat-label>
                         <mat-select formControlName="nationalityId">
                             <mat-option [value]="'Pakistan'">
@@ -128,7 +128,7 @@
                         </mat-error>
                     </mat-form-field>
 
-                    <mat-form-field *ngIf="data.status" appearance="outline" fxFlex="48" class="pr-4">
+                    <mat-form-field *ngIf="data.user.status" appearance="outline" fxFlex="48" class="pr-4">
                         <mat-label>Status</mat-label>
                         <mat-select formControlName="status">
                             <mat-option [value]="'Active'">
