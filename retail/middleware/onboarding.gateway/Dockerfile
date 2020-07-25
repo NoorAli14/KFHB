@@ -16,7 +16,9 @@ ARG USER=rubix
 ARG NODE_VERSION=12.18.2
 ARG NODE_ENV=production
 
-# Define timezone environment variables
+# Define default timezone environment variables but we can change it through compose/swarm file
+# example TZ=Asia/Bahrain
+
 ENV TZ=UTC
 
 #===========================================
@@ -41,6 +43,9 @@ RUN npm run build:prod
 
 # Remove the devDependencies
 RUN npm prune --production
+
+# 7/25/2020 Faizan
+# Note: Commented out these lines because Docker is not working on my local Machine. We need to remove the `app` folder after building the project.
 
 # Remove folders after successfully build
 #RUN rm -rf app bin config lib utilities
