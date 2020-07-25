@@ -25,11 +25,15 @@ export class HealthController {
     //Health indicator executes a check of a service, whether it is in a healthy or unhealthy state
     return this.health.check([
       async (): Promise<any> =>
-        // DNS health Checker. 
+        /* Author: Faizan AH
+         * Date  : 07/25/2020
+         * Note  : We need add a ping here of our all required services. It should be dynamic later through service registry.
+         */
+        /* DNS health Checker.
+         * @params: SERVICE_NAME | example: google | customer | accounts
+         * @params: SERVICE_HOST | example: https://google.com | https://customer:4001 | https://accounts:4006
+         */
         this.dns.pingCheck('google', 'https://google.com'),
-      // async (): Promise<any> =>
-      //   // Customer Service health Checker. 
-      //   this.dns.pingCheck('Customer', 'https://customer-service:4001'),
       async (): Promise<any> =>
         // RSS Memory health Checker.
         this.memory.checkRSS('memory_rss', 3000 * 1024 * 1024),
