@@ -17,7 +17,7 @@ ARG NODE_VERSION=12.18.2
 ARG NODE_ENV=production
 
 # Define timezone environment variables
-ENV TZ Asia/Bahrain
+ENV TZ=UTC
 
 #===========================================
 # Build Stage
