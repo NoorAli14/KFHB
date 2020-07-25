@@ -6,40 +6,11 @@ import {
   iAPP,
   iSWAGGER,
   iGRAPHQL,
-  iConfig,
   iRATE_LIMITER,
   iCORS,
 } from '@common/interfaces/configuration.interface';
-export const DEFAULT_ENV: iConfig = {
-  APP: {
-    NAME: 'Onboarding Business Service',
-    DESCRIPTION: '',
-    VERSION: '1.0.0',
-    ENVIRONMENT: 'development',
-    PORT: 3000,
-    HOST: 'http://127.0.0.1',
-    API_URL_PREFIX: '/api/v1/',
-  },
-  SWAGGER: {
-    ENABLE: true,
-    ROUTE: '/api/docs',
-  },
-  GRAPHQL: {
-    ROUTE: '/graphql',
-    PLAYGROUND: true,
-    DEBUG: true,
-  },
-  RATE_LIMITER: {
-    ENABLE: true,
-    INTERVAL: 10,
-    MAX_REQUEST: 100,
-  },
-  CORS: {
-    ENABLE: false,
-    ORIGIN: null,
-  },
-  logLevel: 'info',
-};
+import {DEFAULT_ENV} from './configuration.default';
+
 @Injectable()
 export class ConfigurationService {
   env: NodeJS.ProcessEnv = process.env;
@@ -117,9 +88,11 @@ export class ConfigurationService {
       ),
     };
   }
+
   get(name: string, _default: any = undefined): string {
     return get(this.env, name, _default);
   }
+
   get IS_SWAGGER_ENABLED(): boolean {
     return this.IS_DEVELOPMENT
       ? true
@@ -127,17 +100,21 @@ export class ConfigurationService {
           this.get('ENV_RBX_SWAGGER_ENABLED', DEFAULT_ENV.SWAGGER.ENABLE),
         );
   }
+
   get APPLICATION_HOST(): string {
     return this.IS_DEVELOPMENT
       ? `http://localhost:${this.APP.PORT}`
       : this.APP.HOST;
   }
+
   get IS_DEVELOPMENT(): boolean {
     return this.environment === 'development';
   }
+
   get IS_PRODUCTION(): boolean {
     return this.environment === 'production';
   }
+  
   get IS_TEST(): boolean {
     return this.environment === 'test';
   }
