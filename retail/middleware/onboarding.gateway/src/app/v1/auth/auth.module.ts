@@ -1,18 +1,15 @@
 import { Module, HttpModule } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { CommonModule } from '@common/common.module';
-import { ConfigurationService } from '@common/configuration/configuration.service';
+import { ServiceRegistry } from '@common/service.registry';
 
 @Module({
   imports: [
     HttpModule.registerAsync({
       imports: [CommonModule],
-      useFactory: async (configService: ConfigurationService) => ({
-        baseURL: 'http://localhost:4000',
-        timeout: 5000,
-        maxRedirects: 5,
-      }),
-      inject: [ConfigurationService],
+      useFactory: async (serviceRegistry: ServiceRegistry) =>
+        serviceRegistry.get('CUSTOMER'),
+      inject: [ServiceRegistry],
     }),
   ],
   controllers: [AuthController],
