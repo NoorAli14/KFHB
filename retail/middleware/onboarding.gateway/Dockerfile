@@ -44,8 +44,9 @@ RUN npm run build:prod
 # Remove the devDependencies
 RUN npm prune --production
 
-# 7/25/2020 Faizan
-# Note: Commented out these lines because Docker is not working on my local Machine. We need to remove the `app` folder after building the project.
+# Author: Faizan AH
+# Date  : 07/25/2020
+# Note  : Commented out these lines for future investigte because Docker is not working on my local Machine. We need to remove `all folders` except `dist` after building the project.
 
 # Remove folders after successfully build
 #RUN rm -rf app bin config lib utilities
