@@ -1,5 +1,4 @@
 import { INestApplication } from '@nestjs/common';
-import { ConfigurationService } from '@common/configuration/configuration.service';
 import {
   X_CORRELATION_KEY,
   X_ACCESS_TOKEN,
@@ -7,7 +6,6 @@ import {
 } from '@common/constants';
 
 export class CorsMiddleware {
-  
   public static init(
     app: INestApplication,
     origins?: string,

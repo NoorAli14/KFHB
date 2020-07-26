@@ -8,10 +8,8 @@ import {
 import { HttpExceptionFilter } from '@common/filters/http-exception.filter';
 import { ConfigurationService } from '@common/configuration/configuration.service';
 import { KernelMiddleware } from '@core/middlewares/index';
-import NativeEvent from '@core/native.event';
 
 export default class Server {
-
   private _app: INestApplication;
   private _config: ConfigurationService;
 
