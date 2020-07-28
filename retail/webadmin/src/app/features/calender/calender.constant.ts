@@ -1,0 +1,1 @@
+export const WORKING_WEEK='/api/v1/getWorkingWeek'
