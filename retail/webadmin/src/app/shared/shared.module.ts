@@ -19,7 +19,7 @@ import { MatTableComponent } from './components/mat-table/mat-table.component';
         MatToolbarModule,
         MaterialModule
     ],
-    exports: [MatErrorComponent,MatTableComponent],
+    exports: [MatErrorComponent],
 
 })
 export class SharedModule {}

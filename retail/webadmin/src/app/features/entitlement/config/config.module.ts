@@ -28,6 +28,7 @@ import { ModulesFormComponent } from './components/modules-form/modules-form.com
     FuseSidebarModule,
     FuseSharedModule,
     MaterialModule,
+    
   ]
 })
 export class ConfigModule { }

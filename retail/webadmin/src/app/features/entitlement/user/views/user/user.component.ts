@@ -1,4 +1,5 @@
-import { Component, OnInit, ViewEncapsulation } from "@angular/core";
+import { CONFIG } from './../../../../../config/index';
+import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
 import { fuseAnimations } from "@fuse/animations";
 import { MatDialog } from "@angular/material/dialog";
 import { UserFormComponent } from "../../components/user-form/user-form.component";
@@ -9,6 +10,11 @@ import { MESSAGES } from "@shared/constants/app.constants";
 import { FormControl } from "@angular/forms";
 import { User } from "@feature/entitlement/models/user.model";
 import { Role } from "@feature/entitlement/models/role.model";
+import { MatTableDataSource } from "@angular/material/table";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatSort } from "@angular/material/sort";
+import { camelToSentenceCase } from "@shared/helpers/global.helper";
+import { ConfirmDialogModel, ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
     selector: "app-user",
@@ -25,6 +31,10 @@ export class UserComponent implements OnInit {
     message: string = "";
     type: string = "";
 
+    pageSize:number=CONFIG.PAGE_SIZE;
+    pageSizeOptions:Array<number>=CONFIG.PAGE_SIZE_OPTIONS;
+  
+    
     displayedColumns = [
         "username",
         "firstName",
@@ -37,6 +47,12 @@ export class UserComponent implements OnInit {
         "status",
         "actions",
     ];
+
+    dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
+
+    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+    @ViewChild(MatSort, { static: false }) sort: MatSort;
+
     constructor(
         public _matDialog: MatDialog,
         private _userService: UserService
@@ -64,6 +80,9 @@ export class UserComponent implements OnInit {
         this._userService.forkUserData().subscribe(
             (response) => {
                 [this.users, this.roles] = response;
+                this.dataSource = new MatTableDataSource(this.users);
+                this.dataSource.paginator = this.paginator;
+                this.dataSource.sort = this.sort;
             },
             (error) => {
                 console.log(error);
@@ -78,8 +97,8 @@ export class UserComponent implements OnInit {
     onCreateDialog(): void {
         this.dialogRef = this._matDialog.open(UserFormComponent, {
             data: {
-                roles:this.roles,
-                user: new User()
+                roles: this.roles,
+                user: new User(),
             },
             panelClass: "app-user-form",
             disableClose: true,
@@ -92,13 +111,28 @@ export class UserComponent implements OnInit {
     onEditDialog(user: User) {
         this.dialogRef = this._matDialog.open(UserFormComponent, {
             data: {
-                roles:this.roles,
-                user
+                roles: this.roles,
+                user,
             },
             panelClass: "app-user-form",
         });
         this.dialogRef.afterClosed().subscribe((response) => {
             console.log(response);
         });
+    }
+    camelToSentenceCase(text) {
+        return camelToSentenceCase(text);
+    }
+    confirmDialog(): void {
+        const message = MESSAGES.REMOVE_CONFIRMATION;
+        const dialogData = new ConfirmDialogModel("Confirm Action", message);
+        const dialogRef = this._matDialog.open(ConfirmDialogComponent, {
+            data: dialogData,
+            disableClose: true,
+            panelClass: "app-confirm-dialog",
+            hasBackdrop: true,
+        });
+
+        dialogRef.afterClosed().subscribe((dialogResult) => {});
     }
 }
