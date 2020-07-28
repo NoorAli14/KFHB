@@ -1,4 +1,4 @@
-export class WorkingWeek{
+export class WorkingDay{
     id:string;
     weekday:string;
     startTime:string;

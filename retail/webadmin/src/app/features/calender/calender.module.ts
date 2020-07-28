@@ -8,21 +8,19 @@ import { WorkingDayFormComponent } from './components/working-day-form/working-d
 import { SharedModule } from '@shared/shared.module';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { MaterialModule } from '@shared/modules/material/material.module';
-import { CalendarModule as AngularCalendarModule, DateAdapter } from 'angular-calendar';
-import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { HolidayFormComponent } from './components/holiday-form/holiday-form.component';
 
 @NgModule({
-  declarations: [WorkingDayComponent, HolidayComponent, WorkingDayFormComponent],
+  declarations: [WorkingDayComponent, HolidayComponent, WorkingDayFormComponent, HolidayFormComponent],
   imports: [
     CommonModule,
     CalenderRoutingModule,
     SharedModule,
     FuseSharedModule,
     MaterialModule,
-    AngularCalendarModule.forRoot({
-      provide   : DateAdapter,
-      useFactory: adapterFactory
-  }),
-  ]
+  ],
+  entryComponents: [
+    WorkingDayFormComponent
+],
 })
 export class CalenderModule { }

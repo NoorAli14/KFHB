@@ -1,16 +1,16 @@
+import { HolidayFormComponent } from './../../components/holiday-form/holiday-form.component';
 import { Component, OnInit, ViewEncapsulation, ViewChild } from '@angular/core';
 import {  MatDialog } from '@angular/material/dialog';
 
 import { fuseAnimations } from '@fuse/animations';
 import { camelToSentenceCase } from '@shared/helpers/global.helper';
-import { WorkingWeek } from '@feature/calender/models/working-week.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { User } from '@feature/entitlement/models/user.model';
 import { MESSAGES } from '@shared/constants/app.constants';
 import { ConfirmDialogModel, ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
 import { CalendarService } from '@feature/calender/services/calendar.service';
+import { Holiday } from '@feature/calender/models/holiday.model';
 
 
 @Component({
@@ -22,21 +22,21 @@ import { CalendarService } from '@feature/calender/services/calendar.service';
 })
 export class HolidayComponent implements OnInit {
     dialogRef: any;
-    workingWeeks: WorkingWeek[];
+    holidays: Holiday[];
     message: string = "";
     type: string = "";
 
     displayedColumns = [
-        "weekDay",
-        "startTime",
-        "endTime",
-        "fullDay",
+        "date",
+        "type",
+        "detail",
+        "isRepititive",
         "remarks",
         "status",
         "actions",
     ];
 
-    dataSource = new MatTableDataSource<WorkingWeek>();
+    dataSource = new MatTableDataSource<Holiday>();
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
 
@@ -52,9 +52,9 @@ export class HolidayComponent implements OnInit {
 
  
     getData() {
-        this._calenderService.getWorkingWeeks().subscribe(
+        this._calenderService.getHolidays().subscribe(
             (response) => {
-                this.workingWeeks = response;
+                this.holidays = response;
                 
                 this.dataSource = new MatTableDataSource(response);
                 this.dataSource.paginator = this.paginator;
@@ -67,20 +67,19 @@ export class HolidayComponent implements OnInit {
     }
   
     onCreateDialog(): void {
-        // this.dialogRef = this._matDialog.open(UserFormComponent, {
-        //     data: {
-        //         roles:this.roles,
-        //         user: new WorkingWeek()
-        //     },
-        //     panelClass: "app-user-form",
-        //     disableClose: true,
-        //     hasBackdrop: true,
-        // });
-        // this.dialogRef.afterClosed().subscribe((response) => {
-        //     this.dataSource.data = [...this.dataSource.data, response];
-        // });
+        this.dialogRef = this._matDialog.open(HolidayFormComponent, {
+            data: {
+                workingWeek: new Holiday()
+            },
+            panelClass: "app-holiday-form",
+            disableClose: true,
+            hasBackdrop: true,
+        });
+        this.dialogRef.afterClosed().subscribe((response) => {
+           
+        });
     }
-    onEditDialog(user: User) {
+    onEditDialog() {
         // this.dialogRef = this._matDialog.open(UserFormComponent, {
         //     data: {
         //         roles:this.roles,

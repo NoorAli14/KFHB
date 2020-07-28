@@ -1,4 +1,5 @@
-import { WorkingWeek } from './../../models/working-week.model';
+import { WorkingDayFormComponent } from './../../components/working-day-form/working-day-form.component';
+import {  WorkingDay } from './../../models/working-week.model';
 import { Component, OnInit, ViewEncapsulation, ViewChild } from '@angular/core';
 import { fuseAnimations } from '@fuse/animations';
 import { MESSAGES } from '@shared/constants/app.constants';
@@ -19,7 +20,7 @@ import { CalendarService } from '@feature/calender/services/calendar.service';
 })
 export class WorkingDayComponent implements OnInit {
     dialogRef: any;
-    workingWeeks: WorkingWeek[];
+    workingWeeks: WorkingDay[];
     message: string = "";
     type: string = "";
 
@@ -33,7 +34,7 @@ export class WorkingDayComponent implements OnInit {
         "actions",
     ];
 
-    dataSource = new MatTableDataSource<WorkingWeek>();
+    dataSource = new MatTableDataSource<WorkingDay>();
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
 
@@ -49,7 +50,7 @@ export class WorkingDayComponent implements OnInit {
 
  
     getData() {
-        this._calenderService.getWorkingWeeks().subscribe(
+        this._calenderService.getWorkingDays().subscribe(
             (response) => {
                 this.workingWeeks = response;
                 
@@ -64,18 +65,17 @@ export class WorkingDayComponent implements OnInit {
     }
   
     onCreateDialog(): void {
-        // this.dialogRef = this._matDialog.open(UserFormComponent, {
-        //     data: {
-        //         roles:this.roles,
-        //         user: new WorkingWeek()
-        //     },
-        //     panelClass: "app-user-form",
-        //     disableClose: true,
-        //     hasBackdrop: true,
-        // });
-        // this.dialogRef.afterClosed().subscribe((response) => {
-        //     this.dataSource.data = [...this.dataSource.data, response];
-        // });
+        this.dialogRef = this._matDialog.open(WorkingDayFormComponent, {
+            data: {
+                workingWeek: new WorkingDay()
+            },
+            panelClass: "app-working-day-form",
+            disableClose: true,
+            hasBackdrop: true,
+        });
+        this.dialogRef.afterClosed().subscribe((response) => {
+           
+        });
     }
     onEditDialog() {
         // this.dialogRef = this._matDialog.open(UserFormComponent, {
