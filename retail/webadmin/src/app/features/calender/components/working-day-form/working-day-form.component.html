@@ -140,14 +140,11 @@
 
                     <mat-form-field
                         appearance="outline"
-                        fxFlex="48"
+                        fxFlex="100"
                         class="pl-4"
                     >
                         <mat-label>Remarks</mat-label>
                         <textarea matInput formControlName="remarks"></textarea>
-                        <mat-icon matSuffix class="secondary-text"
-                            >account_circle</mat-icon
-                        >
                         <mat-error>
                             <app-mat-error
                                 [control]="workingDayForm.get('remarks')"

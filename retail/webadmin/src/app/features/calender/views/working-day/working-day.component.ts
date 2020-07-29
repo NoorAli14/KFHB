@@ -53,7 +53,6 @@ export class WorkingDayComponent implements OnInit {
         this._calenderService.getWorkingDays().subscribe(
             (response) => {
                 this.workingWeeks = response;
-                
                 this.dataSource = new MatTableDataSource(response);
                 this.dataSource.paginator = this.paginator;
                 this.dataSource.sort = this.sort;
@@ -66,9 +65,7 @@ export class WorkingDayComponent implements OnInit {
   
     onCreateDialog(): void {
         this.dialogRef = this._matDialog.open(WorkingDayFormComponent, {
-            data: {
-                workingWeek: new WorkingDay()
-            },
+            data: new WorkingDay(),
             panelClass: "app-working-day-form",
             disableClose: true,
             hasBackdrop: true,
@@ -77,17 +74,14 @@ export class WorkingDayComponent implements OnInit {
            
         });
     }
-    onEditDialog() {
-        // this.dialogRef = this._matDialog.open(UserFormComponent, {
-        //     data: {
-        //         roles:this.roles,
-        //         user
-        //     },
-        //     panelClass: "app-user-form",
-        // });
-        // this.dialogRef.afterClosed().subscribe((response) => {
-        //     console.log(response);
-        // });
+    onEditDialog(data) {
+        this.dialogRef = this._matDialog.open(WorkingDayFormComponent, {
+            data: data,
+            panelClass: "app-working-day-form",
+        });
+        this.dialogRef.afterClosed().subscribe((response) => {
+            console.log(response);
+        });
     }
     confirmDialog(): void {
         const message = MESSAGES.REMOVE_CONFIRMATION;

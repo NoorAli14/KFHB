@@ -105,7 +105,7 @@
                             </mat-option>
                         </mat-select>
                         <mat-icon matSuffix class="secondary-text"
-                            >lock_open</mat-icon
+                            >merge_type</mat-icon
                         >
                         <mat-error>
                             <app-mat-error
@@ -121,9 +121,7 @@
                     >
                         <mat-label>Detail</mat-label>
                         <textarea matInput formControlName="detail"></textarea>
-                        <mat-icon matSuffix class="secondary-text"
-                            >account_circle</mat-icon
-                        >
+                        
                         <mat-error>
                             <app-mat-error
                                 [control]="holidayForm.get('detail')"
@@ -137,9 +135,7 @@
                     >
                         <mat-label>Remarks</mat-label>
                         <textarea matInput formControlName="remarks"></textarea>
-                        <mat-icon matSuffix class="secondary-text"
-                            >account_circle</mat-icon
-                        >
+                    
                         <mat-error>
                             <app-mat-error
                                 [control]="holidayForm.get('remarks')"

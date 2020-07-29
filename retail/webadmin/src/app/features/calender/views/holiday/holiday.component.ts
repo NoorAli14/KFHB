@@ -79,17 +79,14 @@ export class HolidayComponent implements OnInit {
            
         });
     }
-    onEditDialog() {
-        // this.dialogRef = this._matDialog.open(UserFormComponent, {
-        //     data: {
-        //         roles:this.roles,
-        //         user
-        //     },
-        //     panelClass: "app-user-form",
-        // });
-        // this.dialogRef.afterClosed().subscribe((response) => {
-        //     console.log(response);
-        // });
+    onEditDialog(data) {
+        this.dialogRef = this._matDialog.open(HolidayFormComponent, {
+            data: data,
+            panelClass: "app-holiday-form",
+        });
+        this.dialogRef.afterClosed().subscribe((response) => {
+            console.log(response);
+        });
     }
     confirmDialog(): void {
         const message = MESSAGES.REMOVE_CONFIRMATION;
