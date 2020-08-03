@@ -17,7 +17,7 @@
 
             <div class="title">LOGIN TO YOUR ACCOUNT</div>
 
-            <form name="loginForm" [formGroup]="loginForm" novalidate>
+            <form name="loginForm" [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
                 <mat-form-field appearance="outline">
                     <mat-label>Email</mat-label>
                     <input matInput formControlName="email" />
@@ -67,9 +67,9 @@
                 </div>
 
                 <button
+                type="submit"
                     mat-raised-button
                     color="accent"
-                    [routerLink]="'/ent/user'"
                     class="submit-button"
                     aria-label="LOG IN"
                     [disabled]="loginForm.invalid"
