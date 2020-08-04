@@ -5,7 +5,10 @@ import { TABLE } from './constants';
  * graphqlKeys string[]
  * @param info
  */
-export const graphqlKeys = (info: Record<string, unknown>): string[] => {
+export const graphqlKeys = (
+  info: Record<string, unknown>,
+  mainTableName?: string,
+): string[] => {
   const joins = [];
   const result = [];
   info.fieldNodes[0].selectionSet.selections.forEach(item => {
@@ -14,7 +17,9 @@ export const graphqlKeys = (info: Record<string, unknown>): string[] => {
         // Adding child properties as the key to simplify the Select statement in Knex.
         // Mapping the table name with field name of GQL schema.
         result.push(
-          `${TABLE[item.name.value.toUpperCase()]}.${child.name.value}`,
+          `${TABLE[item.name.value.toUpperCase()]}.${child.name.value} AS >${
+            item.name.value
+          }>${child.name.value}`, // Table Name + Column Name for Nested Table
         ),
       );
       // To facilitate the Knex later and add joins based on this array.
@@ -22,7 +27,10 @@ export const graphqlKeys = (info: Record<string, unknown>): string[] => {
       return;
     }
 
-    result.push(item.name.value);
+    if (mainTableName)
+      result.push(`${mainTableName}.${item.name.value} AS >${item.name.value}`);
+    // Table Name + Column name for Root Table
+    else result.push(item.name.value);
   });
 
   result['joins'] = joins;

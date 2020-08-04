@@ -4,14 +4,18 @@ import { Resolver, Query, Args, Info } from '@nestjs/graphql';
 import { TemplateQuestionsService } from './template-questions.service';
 import { TemplateQuestionGQL } from './template-question.model';
 import { graphqlKeys } from '@common/utilities';
+import { TABLE } from '@common/constants';
 
 @Resolver('TemplateQuestions')
 export class TemplateQuestionsResolver {
-  constructor(private readonly templateQuestionsService: TemplateQuestionsService) {}
+  constructor(
+    private readonly templateQuestionsService: TemplateQuestionsService,
+  ) {}
 
   @Query(() => [TemplateQuestionGQL])
   async templatesQuestionsList(@Info() info): Promise<TemplateQuestionGQL[]> {
-    const keys = graphqlKeys(info);
+		// TODO!: Replace the table name parameter with Custom Decorator
+    const keys = graphqlKeys(info, TABLE.TEMPLATE_QUESTIONS);
     return this.templateQuestionsService.list(keys);
   }
 
