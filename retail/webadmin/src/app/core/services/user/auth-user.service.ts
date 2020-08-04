@@ -85,8 +85,10 @@ export class AuthUserService {
     }
 
     getPermissionsByModule(name) {
-        if (this._sidebarModules) return this._sidebarModules;
-        const modules = this.storage.getItem(APP_CONST.SIDEBAR);
+        let modules;
+        if (this._sidebarModules) modules = this._sidebarModules;
+        else modules = this.storage.getItem(APP_CONST.SIDEBAR);
+        
         const module = this.findPermission(modules, name);
         return module ? module.permissions : [];
     }
