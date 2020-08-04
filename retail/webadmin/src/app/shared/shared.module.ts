@@ -8,9 +8,11 @@ import { ConfirmDialogComponent } from "./components/confirm-dialog/confirm-dial
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTableComponent } from './components/mat-table/mat-table.component';
+import { WClockComponent } from './components/time-control/w-clock.component';
+import { WTimeDialogComponent } from './components/time-control/w-time-dialog.component';
 
 @NgModule({
-    declarations: [MatErrorComponent, ConfirmDialogComponent, MatTableComponent],
+    declarations: [MatErrorComponent, ConfirmDialogComponent, MatTableComponent,WClockComponent,WTimeDialogComponent],
     imports: [
         ReactiveFormsModule,
         FormsModule,
@@ -19,7 +21,8 @@ import { MatTableComponent } from './components/mat-table/mat-table.component';
         MatToolbarModule,
         MaterialModule
     ],
-    exports: [MatErrorComponent,MatTableComponent],
+    entryComponents:[WTimeDialogComponent],
+    exports: [MatErrorComponent,MatTableComponent,WTimeDialogComponent,],
 
 })
 export class SharedModule {}

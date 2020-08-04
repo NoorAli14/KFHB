@@ -24,7 +24,6 @@ $typography: mat-typography-config( $font-family: 'Muli, Helvetica Neue, Arial, 
 @import "src/app/auth/auth.theme";
 @import "src/@fuse/scss/feature-common";
 @import "src/app/features/entitlement/config/config.theme";
-@import "src/app/features/calender/calendar.theme";
 // Define a mixin for easier access
 @mixin components-theme($theme) {
     // Layout components
@@ -34,7 +33,6 @@ $typography: mat-typography-config( $font-family: 'Muli, Helvetica Neue, Arial, 
     @include app-auth-theme($theme);
     @include app-auth-form-theme($theme);
     @include app-config-theme($theme);
-    @include app-calendar-theme($theme);
 }
 
 // -----------------------------------------------------------------------------------------------------
