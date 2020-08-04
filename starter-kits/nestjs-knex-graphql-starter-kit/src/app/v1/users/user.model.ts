@@ -24,6 +24,8 @@ export class User {
 
 // Graphql Model
 import { Field, ObjectType } from '@nestjs/graphql';
+import { PostGQL } from '@app/v1/posts/post.model';
+import { CommentGQL } from '@app/v1/comments/comment.model';
 
 @ObjectType()
 export class UserGQL {
@@ -37,14 +39,21 @@ export class UserGQL {
   last_name?: string;
 
   @Field()
-  email: string;
+  email?: string;
 
   @Field()
-  password: string;
+  password?: string;
+
+  @Field(() => [PostGQL])
+  posts?: PostGQL[];
+
+  
+  @Field(() => [CommentGQL])
+  comments?: CommentGQL[];
 
   @Field()
-  created_on: Date;
+  created_on?: Date;
 
   @Field()
-  updated_on: Date;
+  updated_on?: Date;
 }

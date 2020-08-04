@@ -7,4 +7,10 @@ export class UserRepository extends BaseRepository {
   constructor() {
     super(TABLE.USER);
   }
+  async findByIds(ids: string[]): Promise<any> {
+    return this.connection
+      .table(this.tableName)
+      .whereIn('id', ids)
+      .select();
+  }
 }

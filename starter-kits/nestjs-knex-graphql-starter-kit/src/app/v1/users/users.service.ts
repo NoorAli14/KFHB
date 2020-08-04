@@ -5,9 +5,20 @@ import { UserRepository } from '@core/repository/';
 export class UserService {
   constructor(private userDB: UserRepository) {}
 
- async list(keys: string[]): Promise<any> {
+  async list(keys: string[]): Promise<any> {
     return this.userDB.list(keys);
   }
+  async findByIds(ids: any): Promise<any> {
+    const users = await this.userDB.findByIds(ids);
+    const userLookups = {};
+    users.forEach(user => {
+      if (!userLookups[user.id]) {
+        userLookups[user.id] = user;
+      }
+    });
+    return ids.map(id => userLookups[id]);
+  }
+
   async findById(id: string, keys?: string[]): Promise<any> {
     return this.userDB.findOne({ id: id }, keys);
   }

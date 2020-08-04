@@ -5,11 +5,18 @@ export abstract class BaseRepository {
   constructor(tableName: string) {
     this._tableName = tableName;
   }
+  get tableName(): string {
+    return this._tableName;
+  }
   get connection(): Knex {
     return this._connection;
   }
-  async list(keys: string | string[]): Promise<any> {
-    return this._connection(this._tableName).select(keys);
+  async list(columns: string[], limit?: number): Promise<any> {
+    const qb = this._connection(this._tableName).select(columns);
+    if(limit) {
+      qb.limit(limit)
+    }
+    return qb;
   }
   async create(newObj: Record<string, any>, keys: string[]): Promise<any> {
     return this._connection(this._tableName).insert(newObj, keys);
