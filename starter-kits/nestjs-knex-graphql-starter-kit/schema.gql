@@ -12,6 +12,14 @@ directive @requires(fields: String!) on FIELD_DEFINITION
 
 directive @provides(fields: String!) on FIELD_DEFINITION
 
+type CommentGQL {
+  id: String!
+  message: String
+  post: PostGQL!
+  created_on: DateTime!
+  updated_on: DateTime!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
@@ -21,6 +29,14 @@ type Mutation {
   addUser(input: NewUserInput!): UserGQL!
   updateUser(input: NewUserInput!, id: String!): UserGQL!
   deleteUser(id: String!): Boolean!
+  addPost(input: NewPostInput!): PostGQL!
+  updatePost(input: NewPostInput!, id: String!): PostGQL!
+  deletePost(id: String!): Boolean!
+}
+
+input NewPostInput {
+  description: String
+  user_id: String!
 }
 
 input NewUserInput {
@@ -30,9 +46,21 @@ input NewUserInput {
   password: String!
 }
 
+type PostGQL {
+  id: String!
+  user_id: String!
+  description: String
+  comments: [CommentGQL!]!
+  user: UserGQL!
+  created_on: DateTime!
+  updated_on: DateTime!
+}
+
 type Query {
-  usersList: [UserGQL!]!
+  usersList(limit: Float!): [UserGQL!]!
   findUser(id: String!): UserGQL!
+  postsList: [PostGQL!]!
+  findPost(id: String!): PostGQL!
 }
 
 type UserGQL {
@@ -41,6 +69,8 @@ type UserGQL {
   last_name: String
   email: String!
   password: String!
+  posts: [PostGQL!]!
+  comments: [CommentGQL!]!
   created_on: DateTime!
   updated_on: DateTime!
 }
