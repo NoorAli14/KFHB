@@ -23,11 +23,11 @@ function populateKeys(
  * @param tableName
  * @param resultArr Array to embed the data.
  */
-export const graphqlKeys = (
+export function graphqlKeys(
   info: Record<string, unknown>,
   tableName?: string,
   resultArr: string[] = [],
-): string[] => {
+): string[] {
   const joins = [];
   // TODO: FieldNodes: GraphQL supports multi Query in the Client library, This array contain all those Queries
   info.fieldNodes[0].selectionSet.selections.forEach(item => {
@@ -47,7 +47,7 @@ export const graphqlKeys = (
 
   resultArr['joins'] = joins;
   return resultArr;
-};
+}
 
 export const uuidV4 = (): string => {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
