@@ -1,4 +1,4 @@
-import { UserService } from "@core/services/user/user.service";
+import { AuthUserService } from '@core/services/user/auth-user.service';
 import { NetworkService } from "@core/services/network/network.service";
 import { Login } from "./../../../auth/model/login.model";
 import { throwError as observableThrowError, Observable, pipe } from "rxjs";
@@ -16,7 +16,7 @@ import { APP_CONST } from "@shared/constants/app.constants";
 export class AuthenticationService {
     constructor(
         private network: NetworkService,
-        private userService: UserService
+        private userService: AuthUserService
     ) {}
 
     login(model: Login): Observable<any> {
@@ -29,7 +29,6 @@ export class AuthenticationService {
     }
 
     errorHandler(error: HttpErrorResponse) {
-        debugger;
         return observableThrowError(error.message || "Server Error");
     }
 

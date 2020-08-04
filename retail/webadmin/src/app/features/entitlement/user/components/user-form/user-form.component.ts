@@ -1,3 +1,4 @@
+import { AuthUserService } from './../../../../../core/services/user/auth-user.service';
 import { Component, OnInit, ViewEncapsulation, Inject } from "@angular/core";
 import { FormGroup, Validators, FormControl } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
@@ -18,10 +19,12 @@ export class UserFormComponent implements OnInit {
     type: string = "";
     response: User;
     roles: Role[];
+    permissions: any[];
     constructor(
         public matDialogRef: MatDialogRef<UserFormComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
-        private _userService: UserService
+        private _userService: UserService,
+        private _authUserService: AuthUserService,
     ) {}
     requiredIfUpdating(predicate) {
         return (formControl) => {
@@ -35,6 +38,7 @@ export class UserFormComponent implements OnInit {
         };
     }
     ngOnInit(): void {
+        this.permissions= this._authUserService.getPermissionsByModule('User');
         this.userForm = new FormGroup({
             id: new FormControl(this.data.user.id),
             username: new FormControl(this.data.user.username, [

@@ -58,7 +58,6 @@ export class WorkingDayFormComponent implements OnInit  {
         })
     }
     onSubmit() {
-        debugger
         this.matDialogRef.close({ data: this.workingDayForm.value });
     }
     public getTime(): string {
@@ -84,7 +83,6 @@ export class WorkingDayFormComponent implements OnInit  {
                 this.hour = result.hour;
                 this.minute = result.minute;
                 this.meridien = result.meriden;
-                debugger
                 this.workingDayForm.get(control).patchValue(this.getTime())
             }
         });
