@@ -3,16 +3,12 @@ import { Injectable } from "@angular/core";
 import { APP_CONST } from "@shared/constants/app.constants";
 import { BehaviorSubject, Observable, Subject } from "rxjs";
 
-@Injectable({
-    providedIn: "root",
-})
+@Injectable({ providedIn: "root" })
 export class AuthUserService {
     private _user;
     private _isLoggedIn: boolean;
     private _sidebarModules: any;
-    private _onModulesUpdated: BehaviorSubject<any> = new BehaviorSubject(null);
-    sidebarModules = this._onModulesUpdated.asObservable();
-
+    private _modulesSubject: BehaviorSubject<any>;
     private config = [
         {
             id: "a1",
@@ -53,9 +49,13 @@ export class AuthUserService {
     ];
     constructor(private storage: StorageService) {
         const data = this.storage.getItem(APP_CONST.SIDEBAR);
+        this._modulesSubject = new BehaviorSubject(data);
         if (data) {
             this.modules = data;
         }
+    }
+    get sidebarModules(): any | Observable<any> {
+        return this._modulesSubject.asObservable();
     }
 
     get modules() {
@@ -64,13 +64,13 @@ export class AuthUserService {
     }
     set modules(modules) {
         this._sidebarModules = modules;
-        this._onModulesUpdated.next(modules);
+        this._modulesSubject.next(modules);
     }
 
     setUser(user) {
+        debugger;
         this._user = user;
         const sidebarModules = this.configureModules(user.modules);
-        this._onModulesUpdated.next(sidebarModules);
         this.modules = sidebarModules;
         this.storage.setItem(APP_CONST.CURRENT_USER, user);
         this.storage.setItem(APP_CONST.SIDEBAR, sidebarModules);
@@ -88,7 +88,7 @@ export class AuthUserService {
         let modules;
         if (this._sidebarModules) modules = this._sidebarModules;
         else modules = this.storage.getItem(APP_CONST.SIDEBAR);
-        
+
         const module = this.findPermission(modules, name);
         return module ? module.permissions : [];
     }

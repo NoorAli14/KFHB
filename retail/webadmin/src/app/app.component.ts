@@ -48,19 +48,13 @@ export class AppComponent implements OnInit, OnDestroy {
         private _fuseSplashScreenService: FuseSplashScreenService,
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
         private _translateService: TranslateService,
-        
+
         private _platform: Platform,
         private _userService: AuthUserService
     ) {
         // Get default navigation
-        this._userService.sidebarModules.subscribe((modules) => {
-            this.navigation = modules;
-            this._fuseNavigationService.removeNavigationItem('custom-function');
-            this._fuseNavigationService.register("main", this.navigation);
 
-            // Set the main navigation as our current navigation
-            this._fuseNavigationService.setCurrentNavigation("main");
-        });
+       
 
         // Register the navigation to the service
 
@@ -130,6 +124,22 @@ export class AppComponent implements OnInit, OnDestroy {
      */
     ngOnInit(): void {
         // Subscribe to config changes
+        this._userService.sidebarModules.subscribe((modules) => {
+            const navigation = {
+                id: "features",
+                title: "Features",
+                translate: "FEATURES.TITLE",
+                type: "group",
+                children:modules
+            };
+
+            this.navigation =[navigation] ;
+            this._fuseNavigationService.removeNavigationItem("custom-function");
+            this._fuseNavigationService.register("main", this.navigation);
+
+            // Set the main navigation as our current navigation
+            this._fuseNavigationService.setCurrentNavigation("main");
+        });
         this._fuseConfigService.config
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((config) => {
