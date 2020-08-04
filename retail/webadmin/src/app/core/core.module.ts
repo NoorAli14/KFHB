@@ -1,3 +1,4 @@
+import { AuthUserService } from '@core/services/user/auth-user.service';
 import { NgModule,ErrorHandler } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -12,6 +13,7 @@ import { ErrorInterceptorService } from '@core/services/error-interceptor/error-
     CommonModule,
   ],
   providers: [
+    AuthUserService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptorService,
