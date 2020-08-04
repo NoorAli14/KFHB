@@ -1,40 +1,52 @@
 import * as path from 'path';
 import { TABLE } from './constants';
 
+function populateKeys(
+  selections: any[],
+  tableName: string,
+  resultArr: string[],
+): void {
+  selections.forEach(child =>
+    // Adding child properties as the key to simplify the Select statement in Knex.
+    // Mapping the table name with field name of GQL schema.
+    resultArr.push(
+      `${TABLE[tableName.toUpperCase()]}.${child.name.value} AS >${tableName}>${
+        child.name.value
+      }`, // Table Name + Column Name for Nested Table
+    ),
+  );
+}
+
 /**
  * graphqlKeys string[]
  * @param info
+ * @param tableName
+ * @param resultArr Array to embed the data.
  */
 export const graphqlKeys = (
   info: Record<string, unknown>,
-  mainTableName?: string,
+  tableName?: string,
+  resultArr: string[] = [],
 ): string[] => {
   const joins = [];
-  const result = [];
+  // TODO: FieldNodes: GraphQL supports multi Query in the Client library, This array contain all those Queries
   info.fieldNodes[0].selectionSet.selections.forEach(item => {
     if (item.selectionSet?.selections) {
-      item.selectionSet.selections.forEach(child =>
-        // Adding child properties as the key to simplify the Select statement in Knex.
-        // Mapping the table name with field name of GQL schema.
-        result.push(
-          `${TABLE[item.name.value.toUpperCase()]}.${child.name.value} AS >${
-            item.name.value
-          }>${child.name.value}`, // Table Name + Column Name for Nested Table
-        ),
-      );
-      // To facilitate the Knex later and add joins based on this array.
+      populateKeys(item.selectionSet.selections, item.name.value, resultArr);
       joins.push(item.name.value);
       return;
     }
 
-    if (mainTableName)
-      result.push(`${mainTableName}.${item.name.value} AS >${item.name.value}`);
-    // Table Name + Column name for Root Table
-    else result.push(item.name.value);
+    if (tableName) {
+      // Table Name + Column name for Root Table
+      resultArr.push(`${tableName}.${item.name.value} AS >${item.name.value}`);
+    } else {
+      resultArr.push(item.name.value);
+    }
   });
 
-  result['joins'] = joins;
-  return result;
+  resultArr['joins'] = joins;
+  return resultArr;
 };
 
 export const uuidV4 = (): string => {
