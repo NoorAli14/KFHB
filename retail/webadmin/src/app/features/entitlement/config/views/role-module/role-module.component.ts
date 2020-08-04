@@ -1,3 +1,4 @@
+import { CONFIG } from './../../../../../config/index';
 import { Component, OnInit,  } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { Modules } from "@feature/entitlement/models/modules.model";
@@ -27,6 +28,10 @@ export class RoleModuleComponent implements OnInit {
     message: string = "";
     type: string = "";
 
+    pageSize:number=CONFIG.PAGE_SIZE;
+    pageSizeOptions:Array<number>=CONFIG.PAGE_SIZE_OPTIONS;
+    
+    
     displayedColumns = ["expandIcon", "moduleId", "roleId","addIcon", "deleteIcon"];
 
     constructor(

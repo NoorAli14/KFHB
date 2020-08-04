@@ -22,7 +22,6 @@ import { WTimeDialogComponent } from './components/time-control/w-time-dialog.co
         MaterialModule
     ],
     entryComponents:[WTimeDialogComponent],
-    exports: [MatErrorComponent,MatTableComponent,WTimeDialogComponent,],
-
+    exports: [MatErrorComponent,MatTableComponent,WTimeDialogComponent],
 })
 export class SharedModule {}

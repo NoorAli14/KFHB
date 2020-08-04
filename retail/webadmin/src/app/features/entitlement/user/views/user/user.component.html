@@ -47,8 +47,26 @@
             <div *ngIf="message.length > 0" fxLayout="row" fxLayoutAlign="center" class="p-24  message-box {{ type }} ">
                 {{ message }}
             </div>
-            <app-mat-table [data]="users" (edit)="onEditDialog($event)" [displayedColumns]="displayedColumns">
-            </app-mat-table>
+            <mat-table #table matSort matSortActive="username" matSortDirection="asc" matSortDisableClear [dataSource]="dataSource">
+                <!-- COLUMNS AND ROWS-->
+                <ng-container *ngFor="let key of displayedColumns" [matColumnDef]="key">
+                    <mat-header-cell *matHeaderCellDef>{{ key.includes('action') ? 'Action' : camelToSentenceCase(key) }}</mat-header-cell>
+            
+                    <mat-cell *matCellDef="let element; let i = dataIndex">
+                        <span *ngIf="!key.includes('action'); else action">{{element[key] }}</span>
+                        <ng-template #action>
+                            <mat-icon color="warn" type="button" (click)=" confirmDialog(element['id'])">delete</mat-icon> &nbsp;&nbsp;
+                            <mat-icon type="button" (click)="onEditDialog(element)">mode_edit</mat-icon>
+                        </ng-template>
+                    </mat-cell>
+                </ng-container>
+                <!-- -->
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;" [@animate]="{value:'*',params:{y:'100%'}}">
+                </mat-row>
+            
+            </mat-table>
+            <mat-paginator #paginator [pageIndex]="0" [pageSize]="pageSize" showFirstLastButtons [pageSizeOptions]="pageSizeOptions"></mat-paginator>
         </div>
         <!-- / CONTENT CARD -->
     </div>
