@@ -4,7 +4,7 @@ import * as path from 'path';
  * graphqlKeys string[]
  * @param info
  */
-export const graphqlKeys = (info: any): string[] => {
+export const graphqlKeys = (info: Record<string, any>): string[] => {
   return info.fieldNodes[0].selectionSet.selections.map(
     item => item.name.value,
   );

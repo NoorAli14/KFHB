@@ -13,7 +13,7 @@
                     <mat-icon *ngIf="key === 'expandIcon' " (click)="toggleExpandableSymbol(element['id'])"> {{expandedId==element['id'] ? 'keyboard_arrow_up' : ' keyboard_arrow_down'}} </mat-icon>
                     <mat-icon *ngIf="key === 'expandIcon' " (click)="toggleExpandableSymbol(element['id'])"></mat-icon>
 
-                    <mat-icon *ngIf="key === 'deleteIcon'" color="warn" type="button" (click)="deleteUser()">delete</mat-icon>
+                    <mat-icon *ngIf="key === 'deleteIcon'" (click)="confirmDialog(element['id'] )" color="warn" type="button" (click)="deleteUser()">delete</mat-icon>
                     <mat-icon *ngIf="key === 'addIcon'" type="button" (click)="onAddNewPermission(element['id'])">add_circle</mat-icon>
                 </ng-template>
 
@@ -22,7 +22,7 @@
 
         <ng-container matColumnDef="expandedDetail">
             <mat-cell *matCellDef="let element" [@expandableRow]="element['id'] === expandedId ? 'expanded' : 'collapsed'">
-                <app-permission *ngIf="selectedKey" [roleModuleId]="element['id']"></app-permission>
+                <app-permission *ngIf="expandedId==element['id']" [roleModuleId]="element['id']"></app-permission>
             </mat-cell>
         </ng-container>
 

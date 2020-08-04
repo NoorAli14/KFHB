@@ -1,3 +1,4 @@
+import { UserService } from '@core/services/user/user.service';
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { Platform } from '@angular/cdk/platform';
@@ -48,11 +49,13 @@ export class AppComponent implements OnInit, OnDestroy
         private _fuseSplashScreenService: FuseSplashScreenService,
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
         private _translateService: TranslateService,
-        private _platform: Platform
+        private _platform: Platform,
+        private _userService:UserService
     )
     {
         // Get default navigation
-        this.navigation = navigation;
+        debugger
+        this.navigation = this._userService.getSidebarModules();
 
         // Register the navigation to the service
         this._fuseNavigationService.register('main', this.navigation);

@@ -65,7 +65,6 @@ export class PhoneVerificationComponent implements OnInit {
         return null;
     }
     onSubmit() {
-        debugger
         console.log(this.recoverPasswordForm)
     }
 }

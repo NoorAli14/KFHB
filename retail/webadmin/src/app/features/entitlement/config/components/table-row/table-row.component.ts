@@ -6,7 +6,11 @@ import {
     transition,
     animate,
 } from "@angular/animations";
+import { MESSAGES } from '@shared/constants/app.constants';
+import { MatDialog } from '@angular/material/dialog';
 import { getName, camelToSentenceCase } from "@shared/helpers/global.helper";
+import { ConfirmDialogModel, ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
+
 
 @Component({
     selector: "app-table-row",
@@ -43,16 +47,15 @@ export class TableRowComponent {
     @Input() displayedColumns: string[];
     @Input() title: string;
     @Input() renderTemplate: string;
-    selectedKey: string;
     @Output() deleteUser: EventEmitter<number> = new EventEmitter<number>();
     @Output() addNewPermission: EventEmitter<number> = new EventEmitter<number>();
 
     expandedId: string = "";
 
-    constructor() {}
+    constructor(public _matDialog: MatDialog) {
+    }
 
     toggleExpandableSymbol(id: string): void {
-        this.selectedKey = id;
         this.expandedId = this.expandedId === id ? "" : id;
     }
     displayName(id, array) {
@@ -63,5 +66,19 @@ export class TableRowComponent {
      }
     onAddNewPermission(id) {
         this.addNewPermission.emit(id);
+    }
+     confirmDialog(): void {
+        const message = MESSAGES.REMOVE_CONFIRMATION;
+        const dialogData = new ConfirmDialogModel("Confirm Action", message);
+        const dialogRef = this._matDialog.open(ConfirmDialogComponent, {
+            data: dialogData,
+            disableClose:true,
+            panelClass: "app-confirm-dialog",
+            hasBackdrop: true,
+        });
+
+        dialogRef.afterClosed().subscribe((dialogResult) => {
+
+        });
     }
 }

@@ -37,7 +37,7 @@ export class NetworkService {
         const endPoint = `${createUrl(url)}`;
         return this.http
             .post<any[]>(endPoint, model, options)
-            .pipe(catchError(this.errorHandlerMessage), retry(1));
+            .pipe(catchError(this.errorHandlerMessage));
     }
 
     onUpdate(url: string, model: any): Observable<any> {
