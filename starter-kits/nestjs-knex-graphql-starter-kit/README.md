@@ -73,7 +73,7 @@ You must install the following on your local machine:
 │   │   │   │   ├── users.service.ts
 │   │   │   ├── v1.module.ts
 │   │   ├── app.controller.ts
-│   │   ├── app.contrller.spec.ts
+TY│   │   ├── app.contrller.spec.ts
 │   │   ├── app.modules.ts
 │   │   ├── app.service.ts
 │   │   ├── index.ts

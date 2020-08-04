@@ -46,7 +46,7 @@ RUN npm prune --production
 #RUN rm -rf app bin config lib utilities
 
 #===========================================
-# 
+# Master Stage
 #===========================================
 
 # Using latest LTS version running on alpine
