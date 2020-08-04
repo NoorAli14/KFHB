@@ -2,7 +2,8 @@ import { Module, OnModuleDestroy } from '@nestjs/common';
 import { KnexModule, InjectKnex, Knex } from 'nestjs-knex';
 import { CommonModule } from '@common/common.module';
 import { DBConfigurationService } from '@common/configuration/dbconfiguration.service';
-import { UserRepository } from '@core/repository/';
+import { UserRepository, PostRepository, CommentRepository } from '@core/repository/';
+
 @Module({
   imports: [
     CommonModule,
@@ -14,8 +15,8 @@ import { UserRepository } from '@core/repository/';
       inject: [DBConfigurationService],
     }),
   ],
-  providers: [UserRepository],
-  exports: [UserRepository],
+  providers: [UserRepository, PostRepository, CommentRepository],
+  exports: [UserRepository, PostRepository, CommentRepository],
 })
 export class RepositoryModule implements OnModuleDestroy {
   @InjectKnex() private readonly connection: Knex;
