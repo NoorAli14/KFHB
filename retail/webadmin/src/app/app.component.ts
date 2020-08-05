@@ -54,8 +54,6 @@ export class AppComponent implements OnInit, OnDestroy {
     ) {
         // Get default navigation
 
-       
-
         // Register the navigation to the service
 
         // Add languages
@@ -130,10 +128,12 @@ export class AppComponent implements OnInit, OnDestroy {
                 title: "Features",
                 translate: "FEATURES.TITLE",
                 type: "group",
-                children:modules
+                children: modules,
             };
 
-            this.navigation =[navigation] ;
+            this.navigation = this.checkIfRootEmpty(modules)
+                ? modules
+                : [navigation];
             this._fuseNavigationService.removeNavigationItem("custom-function");
             this._fuseNavigationService.register("main", this.navigation);
 
@@ -165,6 +165,18 @@ export class AppComponent implements OnInit, OnDestroy {
             });
     }
 
+    checkIfRootEmpty(modules: any[]) {
+        let flag = true;
+        modules.forEach((item) => {
+            if (
+                item.permissions &&
+                item.permissions.find((x) => x.name === "view")
+            ) {
+                flag = false;
+            }
+        });
+        return flag;
+    }
     /**
      * On destroy
      */
