@@ -8,9 +8,10 @@ import { ConfigMiddlewareService } from "../../services/config-middleware.servic
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
-import { getName, camelToSentenceCase } from '@shared/helpers/global.helper';
+import { getName, camelToSentenceCase, snakeToCamel, camelToSnakeCase, camelToSnakeCaseText } from '@shared/helpers/global.helper';
 import { MESSAGES } from '@shared/constants/app.constants';
 import { ConfirmDialogModel, ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
+import { debug } from 'console';
 
 @Component({
     selector: "app-role",
@@ -30,7 +31,7 @@ export class RoleComponent implements OnInit {
     
     dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
 
-    displayedColumns = ["name", "status", "description", "actions"];
+    displayedColumns = ["name", "status", "description","createdOn", "actions"];
     
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: false }) sort: MatSort;
@@ -59,18 +60,23 @@ export class RoleComponent implements OnInit {
     getData() {
         this._service.getRoles().subscribe(
             (response) => {
-                this.roles = response;
+                this.roles = response
                 this.dataSource = new MatTableDataSource(response);
                 this.dataSource.paginator = this.paginator;
                 this.dataSource.sort = this.sort;
+                this.message = "";
             },
             (error) => {
-                console.log(error);
+                this.type = "error";
+                this.message = MESSAGES.UNKNOWN;
             }
         );
     }
     camelToSentenceCase(text){
        return camelToSentenceCase(text)
+    }
+    camelToSnakeCase(text){
+      return camelToSnakeCaseText(text)
     }
     confirmDialog(): void {
         const message = MESSAGES.REMOVE_CONFIRMATION;

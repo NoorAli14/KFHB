@@ -1,5 +1,5 @@
 export const USER='/api/v1/user'
-export const ROLE='/api/v1/role'
+export const ROLE='/api/v1/portal/roles'
 export const MODULE='/api/v1/module'
 export const PERMISSION='/api/v1/permission'
 export const ROLE_MODULE='/api/v1/role_module'

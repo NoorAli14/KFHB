@@ -27,7 +27,7 @@
             <mat-header-cell *matHeaderCellDef>{{ key.includes('action') ? 'Action' : camelToSentenceCase(key) }}</mat-header-cell>
     
             <mat-cell *matCellDef="let element; let i = dataIndex">
-                <span *ngIf="!key.includes('action'); else action">{{element[key] }}</span>
+                <span *ngIf="!key.includes('action'); else action">{{element[camelToSnakeCase(key)] }}</span>
                 <ng-template #action>
                     <mat-icon color="warn" type="button" (click)=" confirmDialog(element['id'])">delete</mat-icon> &nbsp;&nbsp;
                     <mat-icon type="button" (click)="onEditDialog(element)">mode_edit</mat-icon>
