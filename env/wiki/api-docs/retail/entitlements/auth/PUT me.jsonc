@@ -1,0 +1,54 @@
+/** Faizan AH / 2020-07-26
+
+/**
+ * HTTP Method: PUT
+ * URL: */api/v1/portal/auth/me
+ **/
+
+ /**
+ * HTTP-HEADER:
+ *    x-access-token : <JWT Token> [Mandatory]
+ *    content-type: application/json [Mandatory - Enumerator]
+ **/
+
+ /**
+  * Request Body
+  **/
+  {
+      "first_name": "",     // [Optional]   | Constraints: Max length: 128
+      "middle_name": "",    // [Optional]   | Constraints: Max length: 128
+      "last_name": "",      // [Optional]   | Constraints: Max length: 128
+      "contact_no":"",      // [Mandatory]  | Constraints: Unique | Valid Phone Format(Bahrain | Kuwait) | Min Length: 7 | Max Length: 16
+      "gender":"",          // [Optional]   | Constraints: Enum: [M,F]
+  }
+ 
+  /**
+  * HTTP STATUS CODE: 201 CREATED
+  * Response Headers: 
+  *     x-correlation-id : <UUID> [Mandatory]
+  *     x-response-time : <Execution time in Milli seconds> [Mandatory]
+  *     date: : <Timestamp> [Mandatory]
+  **/
+
+
+ /**
+  * Response Body
+  */
+  {
+    "first_name": "",
+    "middle_name": "",
+    "last_name": "",
+    "username": "",
+    "email": "",
+    "gender": "",
+    "contact_no": "",
+    "nationality": "",
+    "data_of_birth": "",
+    "nationality_id", "",
+    "status": "",
+    "created_on": "",
+    "created_by": "",
+    "updated_on": "",
+    "updated_by": ""
+}
+

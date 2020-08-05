@@ -1,0 +1,82 @@
+/** Faizan AH / 2020-07-26
+
+/**
+ * HTTP Method: GET
+ * URL: */api/v1/portal/auth/me
+ **/
+
+ /**
+ * HTTP-HEADER:
+ *    x-access-token : <JWT Token> [Mandatory]
+ *    content-type: application/json [Mandatory - Enumerator]
+ **/
+ 
+  /**
+  * HTTP STATUS CODE: 200 OK
+  * Response Headers:
+  *     x-correlation-id : <UUID> [Mandatory]
+  *     x-response-time : <Execution time in Milli seconds> [Mandatory]
+  *     date: : <Timestamp> [Mandatory]
+  **/
+
+
+ /**
+  * Response Body
+  */
+  {
+    "first_name": "",
+    "middle_name": "",
+    "last_name": "",
+    "username": "",
+    "email": "",
+    "gender": "",
+    "contact_no": "",
+    "nationality": "",
+    "data_of_birth": "",
+    "nationality_id": "",
+    "roles": [{
+        "id": "",
+        "name": ""
+    }],
+    "modules": [{
+        "id": "",
+        "name": "",
+        "children": [{
+            "id": "",
+            "name": "",
+            "permissions": [{
+                "name": ""
+            }] 
+        }],
+        "permissions": [{
+            "name": ""
+        }]
+    }, {
+        "id": "",
+        "name": "",
+        "children": [{
+            "id": "",
+            "name": "",
+            "permissions": [{
+                "name": ""
+            }] 
+        }],
+        "permissions": [{
+            "name": ""
+        },{
+            "name": ""
+        }]
+    }, {
+        "id": "",
+        "name": "",
+        "permissions": [{
+            "name": ""
+        }]
+    }],
+    "status": "",
+    "created_on": "",
+    "created_by": "",
+    "updated_on": "",
+    "updated_by": ""
+}
+

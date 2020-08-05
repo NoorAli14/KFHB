@@ -1,0 +1,86 @@
+/** Faizan AH / 2020-07-26
+
+/**
+ * HTTP Method: POST
+ * URL: */api/v1/portal/auth/login
+ **/
+
+ /**
+ * HTTP-HEADER:
+ *    content-type: application/json [Mandatory - Enumerator]
+ **/
+
+ /**
+  * Request Body
+  **/
+  {
+      "email": "",        // [Mandatory]   Valid Email Format | Min Length: 3 | Max Length: 96 
+      "password":"",      // [Mandatory]   Min Length: 6 | Max Length: 16
+  }
+ 
+  /**
+  * HTTP STATUS CODE: 200 OK
+  * Response Headers:
+  *     x-access-token: <JWT Token>
+  *     x-correlation-id : <UUID> [Mandatory]
+  *     x-response-time : <Execution time in Milli seconds> [Mandatory]
+  *     date: : <Timestamp> [Mandatory]
+  **/
+
+
+ /**
+  * Response Body
+  */
+  {
+    "first_name": "",
+    "middle_name": "",
+    "last_name": "",
+    "username": "",
+    "email": "",
+    "gender": "",
+    "contact_no": "",
+    "nationality": "",
+    "data_of_birth": "",
+    "nationality_id", "",
+    "modules": [{
+        "id": "",
+        "name": "",
+        "children": [{
+            "id": "",
+            "name": "",
+            "permissions": [{
+                "name": ""
+            }] 
+        }],
+        "permissions": [{
+            "name": ""
+        }]
+    }, {
+        "id": "",
+        "name": "",
+        "children": [{
+            "id": "",
+            "name": "",
+            "permissions": [{
+                "name": ""
+            }] 
+        }],
+        "permissions": [{
+            "name": ""
+        },{
+            "name": ""
+        }]
+    }, {
+        "id": "",
+        "name": "",
+        "permissions": [{
+            "name": ""
+        }]
+    }],
+    "status": "",
+    "created_on": "",
+    "created_by": "",
+    "updated_on": "",
+    "updated_by": ""
+}
+
