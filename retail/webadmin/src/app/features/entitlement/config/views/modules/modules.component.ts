@@ -1,3 +1,4 @@
+import { AuthUserService } from './../../../../../core/services/user/auth-user.service';
 import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { fuseAnimations } from "@fuse/animations";
@@ -29,6 +30,7 @@ export class ModulesComponent implements OnInit {
     dialogRef: any;
     modules: Modules[];
     permissions: Permission[];
+    userPermissions: any[];
     message: string = "";
     type: string = "";
     displayedColumns = ["name", "status", "parent", "createdOn", "actions"];
@@ -42,11 +44,14 @@ export class ModulesComponent implements OnInit {
 
     constructor(
         public _matDialog: MatDialog,
-        private _service: ConfigMiddlewareService
+        private _service: ConfigMiddlewareService,
+        private _authUserService:AuthUserService
     ) {}
 
     ngOnInit(): void {
         this.getData();
+        debugger
+       this.userPermissions= this._authUserService.getPermissionsByModule('Config')
     }
 
     openDialog(data): void {
@@ -57,6 +62,7 @@ export class ModulesComponent implements OnInit {
                     module: data ? data : new Modules(),
                     modules: this.modules,
                     permissions: this.permissions,
+                    userPermissions:this.userPermissions
                 },
                 panelClass: "app-modules-form",
             })
