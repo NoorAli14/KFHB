@@ -15,6 +15,7 @@ import { OptionGQL } from '../options/option.model';
 import { Loader } from 'nestjs-dataloader';
 import { OptionLoader } from '../options/option.loader';
 import * as DataLoader from 'dataloader';
+import { QuestionLoader } from './question.loader';
 
 @Resolver(QuestionGQL)
 export class QuestionsResolver {
@@ -22,11 +23,11 @@ export class QuestionsResolver {
 
   @ResolveField(() => [OptionGQL])
   public async options(
-    @Parent() post: QuestionGQL,
+    @Parent() question: QuestionGQL,
     @Loader(OptionLoader.name)
     optionLoader: DataLoader<OptionGQL['id'], OptionGQL>,
-  ): Promise<any> {
-    return optionLoader.load(post.id);
+  ): Promise<(OptionGQL | Error)[]> {
+    return optionLoader.loadMany([question.id]);
   }
 
   @Query(() => [QuestionGQL])
