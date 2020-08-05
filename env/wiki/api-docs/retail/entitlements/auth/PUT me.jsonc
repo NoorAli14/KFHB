@@ -2,7 +2,7 @@
 
 /**
  * HTTP Method: PUT
- * URL: */api/v1/portal/auth/me
+ * URL: */api/v1/entitlements/auth/me
  **/
 
  /**
@@ -27,7 +27,7 @@
   * Response Headers: 
   *     x-correlation-id : <UUID> [Mandatory]
   *     x-response-time : <Execution time in Milli seconds> [Mandatory]
-  *     date: : <Timestamp> [Mandatory]
+  *     date: <Timestamp> [Mandatory]
   **/
 
 
@@ -42,8 +42,7 @@
     "email": "",
     "gender": "",
     "contact_no": "",
-    "nationality": "",
-    "data_of_birth": "",
+    "date_of_birth": "",
     "nationality_id", "",
     "status": "",
     "created_on": "",

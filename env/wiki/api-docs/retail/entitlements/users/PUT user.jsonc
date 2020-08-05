@@ -2,7 +2,7 @@
 
 /**
  * HTTP Method: PUT
- * URL: */api/v1/portal/users/:id
+ * URL: */api/v1/entitlements/users/:id
  **/
 
  /**
@@ -42,8 +42,7 @@
     "email": "",
     "gender": "",
     "contact_no": "",
-    "nationality": "",
-    "data_of_birth": "",
+    "date_of_birth": "",
     "nationality_id": "",
     "roles": [{
         "id": "",

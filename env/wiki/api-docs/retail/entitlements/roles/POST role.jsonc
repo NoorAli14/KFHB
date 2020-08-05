@@ -2,7 +2,7 @@
 
 /**
  * HTTP Method: POST
- * URL: */api/v1/portal/roles
+ * URL: */api/v1/entitlements/roles
  **/
 
  /**
@@ -39,35 +39,41 @@
     "modules": [{
         "id": "",
         "name": "",
-        "children": [{
+        "sub_modules": [{
             "id": "",
             "name": "",
             "permissions": [{
+                "id": "",
                 "name": ""
             }] 
         }],
         "permissions": [{
+            "id": "",
             "name": ""
         }]
     }, {
-        id: "",
+        "id": "",
         "name": "",
-        "children": [{
+        "sub_modules": [{
             "id": "",
             "name": "",
             "permissions": [{
+                "id": "",
                 "name": ""
             }] 
         }],
         "permissions": [{
+            "id": "",
             "name": ""
         },{
+            "id": "",
             "name": ""
         }]
     }, {
         "id": "",
         "name": "",
         "permissions": [{
+            "id": "",
             "name": ""
         }]
     }],

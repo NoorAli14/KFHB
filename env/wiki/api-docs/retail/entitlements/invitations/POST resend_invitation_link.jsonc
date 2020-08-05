@@ -2,7 +2,7 @@
 
 /**
  * HTTP Method: POST
- * URL: */api/v1/portal/invitations/:user_id/resend
+ * URL: */api/v1/entitlements/invitations/:user_id/resend
  **/
 
  /**

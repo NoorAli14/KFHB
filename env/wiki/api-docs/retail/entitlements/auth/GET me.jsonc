@@ -2,7 +2,7 @@
 
 /**
  * HTTP Method: GET
- * URL: */api/v1/portal/auth/me
+ * URL: */api/v1/entitlements/auth/me
  **/
 
  /**
@@ -14,9 +14,9 @@
   /**
   * HTTP STATUS CODE: 200 OK
   * Response Headers:
-  *     x-correlation-id : <UUID> [Mandatory]
-  *     x-response-time : <Execution time in Milli seconds> [Mandatory]
-  *     date: : <Timestamp> [Mandatory]
+  *     x-correlation-id: <UUID> [Mandatory]
+  *     x-response-time: <Execution time in Milli seconds> [Mandatory]
+  *     date: <Timestamp> [Mandatory]
   **/
 
 
@@ -31,8 +31,7 @@
     "email": "",
     "gender": "",
     "contact_no": "",
-    "nationality": "",
-    "data_of_birth": "",
+    "date_of_birth": "",
     "nationality_id": "",
     "roles": [{
         "id": "",
@@ -41,35 +40,41 @@
     "modules": [{
         "id": "",
         "name": "",
-        "children": [{
+        "sub_modules": [{
             "id": "",
             "name": "",
             "permissions": [{
+                "id": "",
                 "name": ""
             }] 
         }],
         "permissions": [{
+            "id": "",
             "name": ""
         }]
     }, {
         "id": "",
         "name": "",
-        "children": [{
+        "sub_modules": [{
             "id": "",
             "name": "",
             "permissions": [{
+                "id": "",
                 "name": ""
             }] 
         }],
         "permissions": [{
+            "id": "",
             "name": ""
         },{
+            "id": "",
             "name": ""
         }]
     }, {
         "id": "",
         "name": "",
         "permissions": [{
+            "id": "",
             "name": ""
         }]
     }],

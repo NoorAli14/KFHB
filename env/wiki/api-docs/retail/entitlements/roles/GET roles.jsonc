@@ -2,7 +2,7 @@
 
 /**
  * HTTP Method: GET
- * URL: */api/v1/portal/roles
+ * URL: */api/v1/entitlements/roles
  **/
 
  /**

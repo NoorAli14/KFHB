@@ -2,7 +2,7 @@
 
 /**
  * HTTP Method: PUT
- * URL: */api/v1/portal/invitations/:token
+ * URL: */api/v1/entitlements/invitations/:token
  **/
 
  /**
@@ -38,12 +38,11 @@
     "last_name": "",
     "username": "",
     "email": "",
-    "gender": "",
+    "gender": "", // M | F
     "contact_no": "",
-    "nationality": "",
-    "data_of_birth": "",
+    "date_of_birth": "",
     "nationality_id": "",
-    "status": "",
+    "status": "", // PENDING | ACTIVE | IN_ACTIVE | LOCKED
     "created_on": "",
     "created_by": "",
     "updated_on": "",

@@ -2,7 +2,7 @@
 
 /**
  * HTTP Method: DELETE
- * URL: */api/v1/portal/modules/:id
+ * URL: */api/v1/entitlements/modules/:id
  **/
 
  /**

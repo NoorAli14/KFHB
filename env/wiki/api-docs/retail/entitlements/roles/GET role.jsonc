@@ -2,7 +2,7 @@
 
 /**
  * HTTP Method: GET
- * URL: */api/v1/portal/roles/:id
+ * URL: */api/v1/entitlements/roles/:id
  **/
 
  /**
@@ -30,7 +30,7 @@
     "modules": [{
         "id": "",
         "name": "",
-        "children": [{
+        "sub_modules": [{
             "id": "",
             "name": "",
             "permissions": [{
@@ -41,9 +41,9 @@
             "name": ""
         }]
     }, {
-        id: "",
+        "id": "",
         "name": "",
-        "children": [{
+        "sub_modules": [{
             "id": "",
             "name": "",
             "permissions": [{

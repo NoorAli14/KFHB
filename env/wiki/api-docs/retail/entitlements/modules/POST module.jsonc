@@ -2,7 +2,7 @@
 
 /**
  * HTTP Method: POST
- * URL: */api/v1/portal/modules
+ * URL: */api/v1/entitlements/modules
  **/
 
  /**
@@ -37,6 +37,7 @@
         "name": "",
         "parent_id": "",
         "permissions": [{
+            "id": "",
             "name": ""
         }],
         "status": "",
