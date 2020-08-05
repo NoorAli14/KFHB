@@ -1,4 +1,4 @@
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import {
     FormBuilder,
@@ -10,6 +10,7 @@ import {
 import { FuseConfigService } from "@fuse/services/config.service";
 import { fuseAnimations } from "@fuse/animations";
 import { AuthenticationService } from "@core/services/auth/authentication.service";
+import { MESSAGES } from "@shared/constants/app.constants";
 
 @Component({
     selector: "app-login",
@@ -20,9 +21,13 @@ import { AuthenticationService } from "@core/services/auth/authentication.servic
 })
 export class LoginComponent implements OnInit {
     loginForm: FormGroup;
+    message: string = "";
+    type: string = "";
+    returnUrl: string;
     constructor(
         private _fuseConfigService: FuseConfigService,
         private _authService: AuthenticationService,
+        private route: ActivatedRoute,
         private router: Router
     ) {
         // Configure the layout
@@ -45,18 +50,29 @@ export class LoginComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.returnUrl = this.route.snapshot.queryParamMap.get("returnUrl");
         this.loginForm = new FormGroup({
-            email: new FormControl("r@g.com", [Validators.required, Validators.email]),
-            password: new FormControl("123", [Validators.required]),
+            email: new FormControl("r@g.com", [
+                Validators.required,
+                Validators.email,
+            ]),
+            password: new FormControl("Abcd@123", [Validators.required]),
         });
     }
     onSubmit() {
         this._authService.login(this.loginForm.value).subscribe(
             (response) => {
-                this.router.navigateByUrl("/ent/user");
+                this.type = "success";
+                this.message = MESSAGES.LOGGED_IN;
+                setTimeout(() => {
+                    this.router.navigateByUrl(
+                        this.returnUrl ? this.returnUrl : '"/ent/user"'
+                    );
+                }, 2000);
             },
             (error) => {
-                console.log(error);
+                this.type = "error";
+                this.message = MESSAGES.INVALID_CREDENTIAL;
             }
         );
     }
