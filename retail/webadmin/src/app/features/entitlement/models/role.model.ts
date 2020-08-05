@@ -1,4 +1,4 @@
-import { BaseModel } from '@shared/model/base.model';
+import { BaseModel } from '@shared/models/base.model';
 
 export class Role extends BaseModel{
     

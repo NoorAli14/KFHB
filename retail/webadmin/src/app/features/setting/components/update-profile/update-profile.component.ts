@@ -21,7 +21,7 @@ export class UpdateProfileComponent implements OnInit {
     response: User;
     constructor(
         public matDialogRef: MatDialogRef<UpdateProfileComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: User,
+        @Inject(MAT_DIALOG_DATA) public data: any,
         private _userService: UserService
     ) {}
 
