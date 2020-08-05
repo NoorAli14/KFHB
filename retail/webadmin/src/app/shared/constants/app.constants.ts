@@ -13,5 +13,7 @@ export enum APP_CONST {
 export const MESSAGES = {
     UNKNOWN: "We are unable to process the request.",
     REMOVE_CONFIRMATION: "Are you sure you want to delete?",
+    INVALID_CREDENTIAL: "Username or password is incorrect",
+    LOGGED_IN: "You have successfully logged in. Taking you to portal",
     CREATED: (name) => `${name} created successfully.`,
 };
