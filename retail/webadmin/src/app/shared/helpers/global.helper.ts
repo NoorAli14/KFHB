@@ -32,8 +32,17 @@ export const camelToSnakeCase = (data) => {
     });
     return mapped;
 };
+
+export const camelToSnakeCaseText = (text) => {
+    return text.replace(
+        /[A-Z]/g,
+        (letter) => `_${letter.toLowerCase()}`
+    );
+};
+
 export const camelToSentenceCase = (text) => {
     text=text.replace('Id','');
+    text=text.replace('_id','');
     var result = text.replace( /([A-Z])/g, " $1" );
     var finalResult = result.charAt(0).toUpperCase() + result.slice(1);
     return finalResult;

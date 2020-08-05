@@ -14,11 +14,11 @@
                 Modules 
             </span>
         </div>
-        <button mat-raised-button (click)="onCreateDialog()" class="mat-accent">
+        <button mat-raised-button (click)="openDialog(null)" class="mat-accent">
             <span>ADD NEW MODULE</span>
         </button>
     </div>
-    <div *ngIf="message.length > 0" fxLayout="row" fxLayoutAlign="center" class="p-24  message-box {{ type }} ">
+    <div *ngIf="message.length > 0" fxLayout="row" fxLayoutAlign="center" class="p-16  message-box {{ type }} ">
         {{ message }}
     </div>
     <mat-table #table matSort matSortActive="username" matSortDirection="asc" matSortDisableClear [dataSource]="dataSource">
@@ -27,10 +27,10 @@
             <mat-header-cell *matHeaderCellDef>{{ key.includes('action') ? 'Action' : camelToSentenceCase(key) }}</mat-header-cell>
     
             <mat-cell *matCellDef="let element; let i = dataIndex">
-                <span *ngIf="!key.includes('action'); else action">{{element[key] }}</span>
+                <span *ngIf="!key.includes('action'); else action">{{element[camelToSnakeCase(key)] }}</span>
                 <ng-template #action>
-                    <mat-icon color="warn" type="button" (click)=" confirmDialog(element['id'])">delete</mat-icon> &nbsp;&nbsp;
-                    <mat-icon type="button" (click)="onEditDialog(element)">mode_edit</mat-icon>
+                    <mat-icon color="warn" appPermission [permissions]="userPermissions" [type]="'delete'"  type="button" (click)=" confirmDialog(element['id'])">delete</mat-icon> &nbsp;&nbsp;
+                    <mat-icon type="button"  (click)="openDialog(element)">mode_edit</mat-icon>
                 </ng-template>
             </mat-cell>
         </ng-container>
