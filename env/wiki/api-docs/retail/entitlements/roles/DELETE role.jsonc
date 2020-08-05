@@ -1,0 +1,20 @@
+/** Faizan AH / 2020-07-29
+
+/**
+ * HTTP Method: DELETE
+ * URL: */api/v1/portal/roles/:id
+ **/
+
+ /**
+ * HTTP-HEADER:
+ *    x-access-token : <JWT Token> [Mandatory]
+ *    content-type: application/json [Mandatory - Enumerator]
+ **/
+ 
+  /**
+  * HTTP STATUS CODE: NO CONTENT
+  * Response Headers:
+  *     x-correlation-id : <UUID> [Mandatory]
+  *     x-response-time : <Execution time in Milli seconds> [Mandatory]
+  *     date: : <Timestamp> [Mandatory]
+  **/
