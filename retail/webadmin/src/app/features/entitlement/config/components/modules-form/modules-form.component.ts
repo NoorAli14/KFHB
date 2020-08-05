@@ -30,6 +30,9 @@ export class ModulesFormComponent implements OnInit {
             parent: new FormControl(this.data.module.parent, [
                 Validators.required,
             ]),
+            permissions: new FormControl(this.data.module.parent, [
+                Validators.required,
+            ]),
         });
         this.modules = this.data.modules;
         this.modules = [
@@ -39,6 +42,7 @@ export class ModulesFormComponent implements OnInit {
                 name: "Self",
                 status: "active",
                 parent: "1",
+                permissions:[]
             },
         ];
     }

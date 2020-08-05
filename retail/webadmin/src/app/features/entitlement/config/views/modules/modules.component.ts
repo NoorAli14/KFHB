@@ -1,10 +1,7 @@
 import { Component, OnInit, ViewEncapsulation, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { fuseAnimations } from '@fuse/animations';
-
-import { Modules } from '@feature/entitlement/models/modules.model';
-import { ConfigMiddlewareService } from '../../services/config-middleware.service';
-import { ModulesFormComponent } from '../../components/modules-form/modules-form.component';
+import {  Permission } from '@feature/entitlement/models/config.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -12,6 +9,9 @@ import { camelToSentenceCase } from '@shared/helpers/global.helper';
 import { MESSAGES } from '@shared/constants/app.constants';
 import { ConfirmDialogModel, ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
 import { CONFIG } from '@config/index';
+import { Modules } from '@feature/entitlement/models/modules.model';
+import { ConfigMiddlewareService } from '../../services/config-middleware.service';
+import { ModulesFormComponent } from '../../components/modules-form/modules-form.component';
 
 @Component({
   selector: 'app-modules',
@@ -23,6 +23,7 @@ export class ModulesComponent implements OnInit {
 
   dialogRef: any;
   modules: Modules[];
+  permissions: Permission[];
   message: string = "";
   type: string = "";
   displayedColumns = ["name", "status","parent", "actions"];
@@ -48,7 +49,7 @@ export class ModulesComponent implements OnInit {
       this.dialogRef = this._matDialog.open(ModulesFormComponent, {
         data: {
             module:new Modules(),
-            modules:this.modules
+            permissions:this.permissions
         },
           panelClass: "app-modules-form",
       });
@@ -64,14 +65,17 @@ export class ModulesComponent implements OnInit {
 }
  
   getData() {
-      this._service.getModules().subscribe(
+      this._service.forkModulesData().subscribe(
           (response) => {
-              this.modules  = response;
               this.dataSource = new MatTableDataSource(response);
               this.dataSource.paginator = this.paginator;
               this.dataSource.sort = this.sort;
+
+              [this.modules,this.permissions]  = response;
+              this.dataSource.data = this.modules;
           },
           (error) => {
+            debugger
               console.log(error);
           }
       );

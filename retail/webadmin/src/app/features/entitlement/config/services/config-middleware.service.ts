@@ -23,6 +23,9 @@ export class ConfigMiddlewareService {
     forkConfigData(){
      return forkJoin([this.getModules(),this.getRoles(),this._networkService.getAll(ROLE_MODULE),this.getPermissions()])
     }
+    forkModulesData(){
+     return forkJoin([this.getModules(),this.getPermissions()])
+    }
     forkPermissionData(roleModuleId){
      return forkJoin([this.getRoleModulePermissions(roleModuleId),this.getPermissions(),])
     }
