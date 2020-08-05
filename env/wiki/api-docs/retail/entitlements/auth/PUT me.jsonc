@@ -18,12 +18,12 @@
       "first_name": "",     // [Optional]   | Constraints: Max length: 128
       "middle_name": "",    // [Optional]   | Constraints: Max length: 128
       "last_name": "",      // [Optional]   | Constraints: Max length: 128
-      "contact_no":"",      // [Mandatory]  | Constraints: Unique | Valid Phone Format(Bahrain | Kuwait) | Min Length: 7 | Max Length: 16
+      "contact_no":"",      // [Optional]   | Constraints: Valid Phone Format(Bahrain | Kuwait) | Min Length: 7 | Max Length: 16
       "gender":"",          // [Optional]   | Constraints: Enum: [M,F]
   }
  
   /**
-  * HTTP STATUS CODE: 201 CREATED
+  * HTTP STATUS CODE: 200 OK
   * Response Headers: 
   *     x-correlation-id : <UUID> [Mandatory]
   *     x-response-time : <Execution time in Milli seconds> [Mandatory]
