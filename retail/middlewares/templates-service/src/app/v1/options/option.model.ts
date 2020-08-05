@@ -10,14 +10,15 @@ export class Option {
   name: string;
 
   @ApiProperty({
-		example: 'Question ID',
-		description: 'UUID of the Question.'
+    example: 'Question ID',
+    description: 'UUID of the Question.',
   })
   question_id: string;
 }
 
 // Graphql Model
 import { Field, ObjectType } from '@nestjs/graphql';
+import { QuestionGQL } from '../questions/question.model';
 
 @ObjectType()
 export class OptionGQL {
@@ -26,6 +27,11 @@ export class OptionGQL {
 
   @Field()
   name: string;
+
+  question_id?: string;
+
+  @Field(() => QuestionGQL)
+  question?: QuestionGQL;
 
   @Field()
   created_on: Date;

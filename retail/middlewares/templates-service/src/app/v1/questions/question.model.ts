@@ -29,10 +29,10 @@ export class QuestionGQL {
   title: string;
 
   @Field()
-	type: string;
-	
-	@Field()
-	options: OptionGQL;
+  type: string;
+
+  @Field(() => [OptionGQL])
+  options?: OptionGQL[];
 
   @Field()
   created_on: Date;

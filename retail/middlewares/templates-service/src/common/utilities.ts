@@ -1,52 +1,17 @@
 import * as path from 'path';
-import { TABLE } from './constants';
-
-function populateKeys(
-  selections: any[],
-  tableName: string,
-  resultArr: string[],
-): void {
-  selections.forEach(child =>
-    // Adding child properties as the key to simplify the Select statement in Knex.
-    // Mapping the table name with field name of GQL schema.
-    resultArr.push(
-      `${TABLE[tableName.toUpperCase()]}.${child.name.value} AS >${tableName}>${
-        child.name.value
-      }`, // Table Name + Column Name for Nested Table
-    ),
-  );
-}
 
 /**
  * graphqlKeys string[]
  * @param info
- * @param tableName
- * @param resultArr Array to embed the data.
  */
-export function graphqlKeys(
-  info: Record<string, unknown>,
-  tableName?: string,
-  resultArr: string[] = [],
-): string[] {
-  const joins = [];
-  // TODO: FieldNodes: GraphQL supports multi Query in the Client library, This array contain all those Queries
+export function graphqlKeys(info: Record<string, unknown>): string[] {
+  const keys = [];
   info.fieldNodes[0].selectionSet.selections.forEach(item => {
-    if (item.selectionSet?.selections) {
-      populateKeys(item.selectionSet.selections, item.name.value, resultArr);
-      joins.push(item.name.value);
-      return;
-    }
-
-    if (tableName) {
-      // Table Name + Column name for Root Table
-      resultArr.push(`${tableName}.${item.name.value} AS >${item.name.value}`);
-    } else {
-      resultArr.push(item.name.value);
+    if (!item.selectionSet) {
+      keys.push(item.name.value);
     }
   });
-
-  resultArr['joins'] = joins;
-  return resultArr;
+  return keys;
 }
 
 export const uuidV4 = (): string => {

@@ -18,4 +18,8 @@ export class TemplateResponsesService {
     );
     return response;
   }
+
+  async findByIds(ids: readonly string[]): Promise<any> {
+    return this.templateResponsesDB.findByIds(ids);
+  }
 }

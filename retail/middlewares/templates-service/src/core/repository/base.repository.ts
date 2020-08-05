@@ -8,10 +8,10 @@ export abstract class BaseRepository {
   get connection(): Knex {
     return this._connection;
   }
-  async list(keys: string | string[]): Promise<any> {
+  async list(keys?: string | string[]): Promise<any> {
     return this._connection(this._tableName).select(keys);
   }
-  async create(newObj: Record<string, any>, keys: string[]): Promise<any> {
+  async create(newObj: Record<string, any>, keys?: string[]): Promise<any> {
     return this._connection(this._tableName).insert(newObj, keys);
   }
   async update(
@@ -38,5 +38,11 @@ export abstract class BaseRepository {
       .select(keys)
       .where(condition)
       .first();
+  }
+
+  async findByIds(ids: readonly string[], keys?: string[]): Promise<any> {
+    return this._connection(this._tableName)
+      .select(keys)
+      .whereIn('id', ids);
   }
 }
