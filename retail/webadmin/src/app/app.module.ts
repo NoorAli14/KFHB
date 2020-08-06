@@ -20,6 +20,8 @@ import { LayoutModule } from "app/layout/layout.module";
 import { AppRoutingModule } from "./app-routing.module";
 import { NgxUiLoaderModule, NgxUiLoaderHttpModule } from "ngx-ui-loader";
 import { ngxUiLoaderConfig } from "@config/index";
+import { EventBusService } from '@core/services/event-bus/event-bus.service';
+import { AuthUserService } from '@core/services/user/auth-user.service';
 
 @NgModule({
     declarations: [AppComponent],
@@ -44,6 +46,7 @@ import { ngxUiLoaderConfig } from "@config/index";
         // App modules
         LayoutModule,
     ],
+    providers:[EventBusService,AuthUserService],
     bootstrap: [AppComponent],
 })
 export class AppModule {}
