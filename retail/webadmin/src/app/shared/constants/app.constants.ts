@@ -25,3 +25,14 @@ export const STATUS_LIST: Array<StatusModel> = [
     { id: "Active", name: "Active" },
     { id: "In Active", name: "In Active" },
 ];
+export const GENDER_LIST: Array<any> = [
+    { id: 'Male', name: "Male" },
+    { id: 'Female', name: "Female" },
+    { id: 'Other', name: "Other" },
+];
+
+export const NATIONALITY_LIST: Array<any> = [
+    { id: 1, name: "Pakistan" },
+    { id: 2, name: "Bahrain" },
+    { id: 3, name: "Kuwait" },
+];

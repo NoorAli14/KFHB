@@ -10,7 +10,7 @@ import {
 } from "@feature/entitlement/models/config.model";
 import { Role } from "@feature/entitlement/models/role.model";
 
-import { snakeToCamel,  } from "@shared/helpers/global.helper";
+import { snakeToCamelObject, snakeToCamelArray,  } from "@shared/helpers/global.helper";
 import { ManagePermissionFormComponent } from "../../components/manage-permission-form/manage-permission-form.component";
 import { fuseAnimations } from '@fuse/animations';
 
@@ -71,7 +71,7 @@ export class RoleModuleComponent implements OnInit {
                     this.roleModulesList,
                     this.permissions,
                 ] = response;
-                this.roleModulesList = snakeToCamel(
+                this.roleModulesList = snakeToCamelArray(
                     this.roleModulesList
                 ) as RoleModuleModel[];
             },
