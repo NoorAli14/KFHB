@@ -9,20 +9,24 @@ export class EmailService {
       console.log(emailObj);
       console.log("Keys.................................");
       console.log(keys);
-    return await this.mailerService.sendMail({
-      to: emailObj.to, // list of receivers
-      // from: 'mraza@aiondigital.com', // sender address
-      subject: 'Testing Nest MailerModule ✔', // Subject line
-    //   text: 'welcome', // plaintext body
-      // html: '<b>welcome Ahmad Raza again from mraza to mraza.</b>', // HTML body content
-      template: 'sample', // The `.pug`, `.ejs` or `.hbs` extension is appended automatically.
-      context: {  // Data to be sent to template engine.
-        title: 'This is Title',
-        body: 'This is Body.',
-      },
-      // context: emailObj.context
-    });
-    //   .then(() => {})
-    //   .catch(() => {});
+
+      // if emailObj has template = default
+      // send simple message with subject, body to list of recipeints.
+      // if other templates then replace context variables and send to recipients.
+
+      let message : any = {
+        to: emailObj.to,
+        subject: emailObj.subject
+      };
+
+      if(emailObj.template && emailObj.template == 'default'){
+        message.html = emailObj.body;
+      }else{
+        message.template = emailObj.template;
+        message.context = emailObj.context;
+      }
+
+    await this.mailerService.sendMail(message);
+    return emailObj;
   }
 }

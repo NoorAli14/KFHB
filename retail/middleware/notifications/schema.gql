@@ -14,6 +14,9 @@ directive @provides(fields: String!) on FIELD_DEFINITION
 
 type EmailGQL {
   to: String
+  template: String
+  title: String
+  body: String
 }
 
 type Mutation {
@@ -22,4 +25,7 @@ type Mutation {
 
 input SendEmailInput {
   to: String
+  template: String
+  subject: String
+  body: String
 }
