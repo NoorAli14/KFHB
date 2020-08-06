@@ -1,21 +1,22 @@
-import { Module, forwardRef } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { QuestionsResolver } from './questions.resolver';
 import { QuestionsService } from './questions.service';
 import { QuestionRepository } from '@core/repository/question.repository';
+import { OptionRepository } from '@core/repository/option.repository';
 import { QuestionLoader } from './question.loader';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { DataLoaderInterceptor } from 'nestjs-dataloader';
 import { RepositoryModule } from '@core/repository/repository.module';
-import { OptionsModule } from '@app/v1/options/options.module';
 import { OptionLoader } from '../options/option.loader';
-
+import { OptionsService } from '../options/options.service';
 @Module({
-  imports: [RepositoryModule, OptionsModule],
-  exports: [QuestionLoader],
+  imports: [RepositoryModule],
   providers: [
     QuestionsResolver,
     QuestionsService,
     QuestionRepository,
+    OptionRepository,
+    OptionsService,
     QuestionLoader,
     {
       provide: APP_INTERCEPTOR,

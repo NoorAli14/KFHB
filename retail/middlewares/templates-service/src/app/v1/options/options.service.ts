@@ -15,7 +15,15 @@ export class OptionsService {
     return this.optionDB.findByIds(ids);
   }
 
-  async findByQuestionId(ids: readonly string[]): Promise<any> {
-    return this.optionDB.findByQuestionId(ids[0]);
+  async findByQuestionId(questionIDs: any): Promise<any> {
+    const questions = await this.optionDB.findByQuestionId(questionIDs);
+    const questionLookups = {};
+    questions.forEach(question => {
+      if (!questionLookups[question.question_id]) {
+        questionLookups[question.question_id] = [];
+      }
+      questionLookups[question.question_id].push(question);
+    });
+    return questionIDs.map(questionID => questionLookups[questionID]);
   }
 }
