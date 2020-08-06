@@ -1,5 +1,6 @@
-export class User{
-    id:string;
+import { BaseModel } from '@shared/models/base.model';
+
+export class User extends BaseModel{
     username:string;
     firstName:string;
     lastName:string;
@@ -9,7 +10,6 @@ export class User{
     dateOfBirth:string;
     nationalityId:string;
     email:string;
-    status:string;
     roleId:string;
     gender:string;
 }

@@ -1,7 +1,7 @@
 <ng-container *ngIf="!item.hidden">
 
     <!-- normal collapsable -->
-    <a class="nav-link" [ngClass]="item.classes" *ngIf="!item.url && !item.function"
+    <a class="nav-link" [ngClass]="item.classes" appPermission [permissions]="item.permissions" *ngIf="!item.url && !item.function"
        (click)="toggleOpen($event)">
         <ng-container *ngTemplateOutlet="itemContent"></ng-container>
     </a>

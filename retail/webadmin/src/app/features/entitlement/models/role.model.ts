@@ -1,6 +1,7 @@
-export class Role{
-    id:string;
-    status:string;
+import { BaseModel } from '@shared/models/base.model';
+
+export class Role extends BaseModel{
+    
     name:string;
     description:string;
 }
