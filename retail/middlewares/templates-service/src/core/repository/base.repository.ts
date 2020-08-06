@@ -8,6 +8,9 @@ export abstract class BaseRepository {
   get connection(): Knex {
     return this._connection;
   }
+  get tableName(): string {
+    return this._tableName;
+  }
   async list(keys?: string | string[]): Promise<any> {
     return this._connection(this._tableName).select(keys);
   }
