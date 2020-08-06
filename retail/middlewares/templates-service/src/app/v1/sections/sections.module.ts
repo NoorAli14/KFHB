@@ -7,7 +7,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { DataLoaderInterceptor } from 'nestjs-dataloader';
 
 @Module({
-  imports: [SectionsModule],
+  imports: [],
   providers: [
     SectionsService,
     SectionRepository,

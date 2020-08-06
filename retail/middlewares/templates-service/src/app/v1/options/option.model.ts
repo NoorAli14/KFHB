@@ -18,7 +18,6 @@ export class Option {
 
 // Graphql Model
 import { Field, ObjectType } from '@nestjs/graphql';
-import { QuestionGQL } from '../questions/question.model';
 
 @ObjectType()
 export class OptionGQL {
@@ -29,9 +28,6 @@ export class OptionGQL {
   name: string;
 
   question_id?: string;
-
-  @Field(() => QuestionGQL)
-  question?: QuestionGQL;
 
   @Field()
   created_on: Date;

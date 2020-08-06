@@ -1,4 +1,4 @@
-import DataLoader = require("dataloader");
+import * as DataLoader from 'dataloader';
 import { Injectable } from "@nestjs/common";
 import { NestDataLoader } from 'nestjs-dataloader';
 import { QuestionsService } from "./questions.service";
@@ -10,7 +10,7 @@ export class QuestionLoader implements NestDataLoader<string, QuestionGQL> {
 
   generateDataLoader(): DataLoader<string, QuestionGQL> {
     return new DataLoader<string, QuestionGQL>(keys =>
-      this.questionsService.findByIds(keys)
+      this.questionsService.findByTemplateQuestionId(keys)
     );
   }
 }

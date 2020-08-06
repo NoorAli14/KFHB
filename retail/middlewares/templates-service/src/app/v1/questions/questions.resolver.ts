@@ -11,11 +11,10 @@ import {
 import { graphqlKeys } from '@common/utilities';
 import { QuestionsService } from './questions.service';
 import { QuestionGQL } from './question.model';
-import { OptionGQL } from '../options/option.model';
 import { Loader } from 'nestjs-dataloader';
-import { OptionLoader } from '../options/option.loader';
 import * as DataLoader from 'dataloader';
-import { QuestionLoader } from './question.loader';
+import { OptionLoader } from '@app/v1/options/option.loader';
+import { OptionGQL } from '@app/v1/options/option.model';
 
 @Resolver(QuestionGQL)
 export class QuestionsResolver {
@@ -26,7 +25,7 @@ export class QuestionsResolver {
     @Parent() question: QuestionGQL,
     @Loader(OptionLoader.name)
     optionLoader: DataLoader<OptionGQL['id'], OptionGQL>,
-  ): Promise<(OptionGQL | Error)[]> {
+  ): Promise<any> {
     return optionLoader.loadMany([question.id]);
   }
 

@@ -1,4 +1,4 @@
-import DataLoader = require("dataloader");
+import * as DataLoader from 'dataloader';
 import { Injectable } from "@nestjs/common";
 import { NestDataLoader } from 'nestjs-dataloader';
 import { SectionsService } from "./sections.service";
@@ -10,7 +10,7 @@ export class SectionLoader implements NestDataLoader<string, SectionGQL> {
 
   generateDataLoader(): DataLoader<string, SectionGQL> {
     return new DataLoader<string, SectionGQL>(keys =>
-      this.sectionsService.findByIds(keys)
+      this.sectionsService.findByTemplateQuestionId(keys)
     );
   }
 }

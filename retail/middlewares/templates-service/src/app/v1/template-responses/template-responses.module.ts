@@ -7,7 +7,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { DataLoaderInterceptor } from 'nestjs-dataloader';
 
 @Module({
-  imports: [TemplateResponsesModule],
+  imports: [],
   providers: [
     TemplateResponsesService,
     TemplateResponsesRepository,

@@ -30,7 +30,6 @@ input NewTemplateResponseInput {
 type OptionGQL {
   id: String!
   name: String!
-  question: QuestionGQL!
   created_on: DateTime!
   updated_on: DateTime!
 }

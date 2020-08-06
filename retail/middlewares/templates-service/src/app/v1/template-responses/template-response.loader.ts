@@ -1,4 +1,4 @@
-import DataLoader = require('dataloader');
+import * as DataLoader from 'dataloader';
 import { Injectable } from '@nestjs/common';
 import { NestDataLoader } from 'nestjs-dataloader';
 import { TemplateResponsesService } from './template-responses.service';

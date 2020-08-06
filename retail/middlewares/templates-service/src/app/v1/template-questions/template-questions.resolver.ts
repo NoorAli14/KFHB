@@ -32,7 +32,7 @@ export class TemplateQuestionsResolver {
     @Loader(TemplateLoader.name)
     templateLoader: DataLoader<TemplateGQL['id'], TemplateGQL>,
   ): Promise<any> {
-    return templateLoader.load(templateQuestion.template_id);
+    return templateLoader.load(templateQuestion.id);
   }
 
   @ResolveField(() => QuestionGQL)
@@ -41,7 +41,7 @@ export class TemplateQuestionsResolver {
     @Loader(QuestionLoader.name)
     questionLoader: DataLoader<QuestionGQL['id'], QuestionGQL>,
   ): Promise<any> {
-    return questionLoader.load(templateQuestion.question_id);
+    return questionLoader.load(templateQuestion.id);
   }
 
   @ResolveField(() => SectionGQL)
@@ -50,7 +50,7 @@ export class TemplateQuestionsResolver {
     @Loader(SectionLoader.name)
     sectionLoader: DataLoader<SectionGQL['id'], SectionGQL>,
   ): Promise<any> {
-    return sectionLoader.load(templateQuestion.section_id);
+    return sectionLoader.load(templateQuestion.id);
   }
 
   @Query(() => [TemplateQuestionGQL])

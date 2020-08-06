@@ -1,4 +1,4 @@
-import DataLoader = require("dataloader");
+import * as DataLoader from 'dataloader';
 import { Injectable } from "@nestjs/common";
 import { NestDataLoader } from 'nestjs-dataloader';
 import { OptionsService } from "./options.service";
@@ -10,7 +10,7 @@ export class OptionLoader implements NestDataLoader<string, OptionGQL> {
 
   generateDataLoader(): DataLoader<string, OptionGQL> {
     return new DataLoader<string, OptionGQL>(keys =>
-      this.optionsService.findByIds(keys)
+      this.optionsService.findByQuestionId(keys)
     );
   }
 }
