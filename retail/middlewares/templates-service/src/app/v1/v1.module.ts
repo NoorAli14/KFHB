@@ -12,12 +12,12 @@ import { TemplatesModule } from './templates/templates.module';
 
 @Module({
   imports: [
-    TemplateQuestionsModule,
-		TemplateResponsesModule,
-		TemplatesModule,
+    // TemplateQuestionsModule,
+    // TemplateResponsesModule,
+    // TemplatesModule,
     OptionsModule,
     QuestionsModule,
-    SectionsModule,
+    // SectionsModule,
     GraphQLFederationModule.forRootAsync({
       imports: [CommonModule],
       useFactory: async (configService: ConfigurationService) => ({
