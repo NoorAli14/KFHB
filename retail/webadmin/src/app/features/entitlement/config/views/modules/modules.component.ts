@@ -50,7 +50,6 @@ export class ModulesComponent implements OnInit {
 
     ngOnInit(): void {
         this.getData();
-        debugger
        this.userPermissions= this._authUserService.getPermissionsByModule('Config')
     }
 

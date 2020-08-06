@@ -8,7 +8,7 @@ import { ConfigMiddlewareService } from "../../services/config-middleware.servic
 import { ManagePermissionFormComponent } from "../../components/manage-permission-form/manage-permission-form.component";
 import {
     getName,
-    snakeToCamel,
+    snakeToCamelArray,
     camelToSentenceCase,
 } from "@shared/helpers/global.helper";
 import { fuseAnimations } from "@fuse/animations";
@@ -68,7 +68,7 @@ export class AccessControlComponent implements OnInit {
         this._service.forkConfigData().subscribe(
             (response) => {
                 [this.modules, this.roles] = response;
-                this.roleModulesList = snakeToCamel(
+                this.roleModulesList = snakeToCamelArray(
                     this.roleModulesList
                 ) as RoleModuleModel[];
 

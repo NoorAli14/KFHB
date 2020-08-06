@@ -63,7 +63,9 @@ export class AuthUserService {
     }
     set modules(modules) {
         this._sidebarModules = modules;
-        this.eventService.emit(new EmitEvent(Events.SESSION_EXPIRED, modules))
+        setTimeout(() => {
+            this.eventService.emit(new EmitEvent(Events.SESSION_EXPIRED, modules))
+        }, 1000);
     }
 
     setUser(user) {

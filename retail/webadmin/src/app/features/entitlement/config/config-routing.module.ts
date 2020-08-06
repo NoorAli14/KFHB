@@ -13,7 +13,7 @@ const routes: Routes = [
         children: [
             {
                 path: "",
-                redirectTo: "role",
+                redirectTo: "modules",
             },
             {
                 path: "role",

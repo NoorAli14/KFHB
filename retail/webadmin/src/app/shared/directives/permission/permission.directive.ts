@@ -23,6 +23,7 @@ export class PermissionDirective implements OnInit {
         this.isView = this.permissions.find((x) => x.name == "view");
         this.isEdit = this.permissions.find((x) => x.name == "edit");
         this.isCreate = this.permissions.find((x) => x.name == "create");
+        this.isDelete = this.permissions.find((x) => x.name == "delete");
         if (!this.isView) {
             this.renderer.setStyle(el, "display", "none");
         }
