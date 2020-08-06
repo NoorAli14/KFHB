@@ -17,7 +17,7 @@ import { TemplatesModule } from './templates/templates.module';
     // TemplatesModule,
     OptionsModule,
     QuestionsModule,
-    // SectionsModule,
+    SectionsModule,
     GraphQLFederationModule.forRootAsync({
       imports: [CommonModule],
       useFactory: async (configService: ConfigurationService) => ({

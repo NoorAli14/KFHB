@@ -17,16 +17,6 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type Mutation {
-  addTemplateResponse(input: NewTemplateResponseInput!): TemplateResponseGQL!
-}
-
-input NewTemplateResponseInput {
-  results: String!
-  remarks: String!
-  template_id: String!
-}
-
 type OptionGQL {
   id: String!
   name: String!
@@ -35,16 +25,12 @@ type OptionGQL {
 }
 
 type Query {
-  templatesQuestionsList: [TemplateQuestionGQL!]!
-  findTemplateQuestion(id: String!): TemplateQuestionGQL!
   optionsList: [OptionGQL!]!
   findOption(id: String!): OptionGQL!
   questionsList: [QuestionGQL!]!
   findQuestion(id: String!): QuestionGQL!
   sectionsList: [SectionGQL!]!
   findSection(id: String!): SectionGQL!
-  templatesList: [TemplateGQL!]!
-  findTemplate(id: String!): TemplateGQL!
 }
 
 type QuestionGQL {
@@ -60,33 +46,6 @@ type SectionGQL {
   id: String!
   name: String!
   level: String!
-  created_on: DateTime!
-  updated_on: DateTime!
-}
-
-type TemplateGQL {
-  id: String!
-  name: String!
-  created_on: DateTime!
-  updated_on: DateTime!
-}
-
-type TemplateQuestionGQL {
-  id: String!
-  rules: String!
-  status: Boolean!
-  template: TemplateGQL!
-  section: SectionGQL!
-  question: QuestionGQL!
-  created_on: DateTime!
-  updated_on: DateTime!
-}
-
-type TemplateResponseGQL {
-  id: String!
-  results: String!
-  remarks: String!
-  template: TemplateGQL!
   created_on: DateTime!
   updated_on: DateTime!
 }

@@ -9,7 +9,7 @@ export class OptionRepository extends BaseRepository {
   }
   async findByQuestionId(questionIDs: string[]): Promise<any> {
     return this.connection
-      .table(this.tableName)
+      .table(this._tableName)
       .whereIn('question_id', questionIDs)
       .select(this.columns);
   }

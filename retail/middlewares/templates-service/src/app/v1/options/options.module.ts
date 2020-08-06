@@ -9,7 +9,6 @@ import { RepositoryModule } from '@core/repository/repository.module';
 
 @Module({
   imports: [RepositoryModule],
-  exports: [OptionLoader],
   providers: [
     OptionsService,
     OptionRepository,

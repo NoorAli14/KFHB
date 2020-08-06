@@ -8,7 +8,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { DataLoaderInterceptor } from 'nestjs-dataloader';
 
 @Module({
-  imports: [RepositoryModule],
+  imports: [],
   providers: [
     TemplateQuestionsService,
     TemplateQuestionsRepository,

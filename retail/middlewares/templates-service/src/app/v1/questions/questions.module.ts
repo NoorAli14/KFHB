@@ -14,7 +14,8 @@ import { OptionsService } from '../options/options.service';
   providers: [
     QuestionsResolver,
     QuestionsService,
-    QuestionRepository,
+		QuestionRepository,
+		OptionLoader,
     OptionRepository,
     OptionsService,
     QuestionLoader,
