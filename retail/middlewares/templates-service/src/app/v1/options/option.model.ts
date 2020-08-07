@@ -10,8 +10,8 @@ export class Option {
   name: string;
 
   @ApiProperty({
-		example: 'Question ID',
-		description: 'UUID of the Question.'
+    example: 'Question ID',
+    description: 'UUID of the Question.',
   })
   question_id: string;
 }
@@ -26,6 +26,8 @@ export class OptionGQL {
 
   @Field()
   name: string;
+
+  question_id?: string;
 
   @Field()
   created_on: Date;

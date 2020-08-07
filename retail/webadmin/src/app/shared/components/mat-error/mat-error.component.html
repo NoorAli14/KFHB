@@ -17,4 +17,8 @@
         >Password not matched
         </ng-container
     >
+    <ng-container *ngIf="control.errors.numbers_only"
+        >Numbers are required
+        </ng-container
+    >
 </ng-container>

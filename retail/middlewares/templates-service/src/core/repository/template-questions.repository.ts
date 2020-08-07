@@ -2,7 +2,6 @@ import { QueryBuilder } from 'knex';
 import { Injectable } from '@nestjs/common';
 import { BaseRepository } from './base.repository';
 import { TABLE } from '@common/constants';
-import { knex_to_json } from '@common/knex_to_json';
 
 @Injectable()
 export class TemplateQuestionsRepository extends BaseRepository {
@@ -16,8 +15,8 @@ export class TemplateQuestionsRepository extends BaseRepository {
     if (keys.hasOwnProperty('joins')) {
       keys['joins'].forEach(element => {
         query.join(
-					TABLE[element.toUpperCase()],
-					// TODO!: Following the Convention, Can be replaced with the Decorator 'Column Name'.
+          TABLE[element.toUpperCase()],
+          // TODO!: Following the Convention, Can be replaced with the Decorator 'Column Name'.
           `${this._tableName}.${element}_id`,
           '=',
           `${TABLE[element.toUpperCase()]}.id`,
@@ -26,12 +25,7 @@ export class TemplateQuestionsRepository extends BaseRepository {
     }
     query.select(keys);
 
-    try {
-      const result = await knex_to_json(query);
-      return result;
-    } catch (error) {
-      console.log('error', error);
-    }
+    return query;
   }
 
   async findOne(condition: Record<string, any>, keys?: string[]): Promise<any> {

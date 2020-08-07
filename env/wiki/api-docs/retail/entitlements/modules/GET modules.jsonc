@@ -2,7 +2,7 @@
 
 /**
  * HTTP Method: GET
- * URL: */api/v1/portal/modules/:id
+ * URL: */api/v1/entitlements/modules/:id
  **/
 
  /**
@@ -32,22 +32,25 @@
             "name": "",
             "status": "",
             "permissions": [{
+                "id": "",
                 "name": ""
             }],
             "created_on": "",
             "created_by": "",
         },
-        "children": [{
+        "sub_modules": [{
             "id": "",
             "name": "",
             "status": "",
             "permissions": [{
+                "id": "",
                 "name": ""
             }],
             "created_on": "",
             "created_by": "",
         }],
         "permissions": [{
+            "id": "",
             "name": ""
         }],
         "status": "",

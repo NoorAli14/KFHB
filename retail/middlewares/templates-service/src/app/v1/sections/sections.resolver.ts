@@ -5,7 +5,7 @@ import { SectionGQL } from './section.model';
 import { SectionsService } from './sections.service';
 import { graphqlKeys } from '@common/utilities';
 
-@Resolver('Sections')
+@Resolver(SectionGQL)
 export class SectionsResolver {
   constructor(private readonly sectionService: SectionsService) {}
 

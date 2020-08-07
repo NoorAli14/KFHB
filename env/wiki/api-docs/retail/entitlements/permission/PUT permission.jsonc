@@ -2,7 +2,7 @@
 
 /**
  * HTTP Method: PUT
- * URL: */api/v1/portal/permissions/:id
+ * URL: */api/v1/entitlements/permissions/:id
  **/
 
  /**

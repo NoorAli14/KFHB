@@ -2,7 +2,7 @@
 
 /**
  * HTTP Method: POST
- * URL: */api/v1/portal/permissions
+ * URL: */api/v1/entitlements/permissions
  **/
 
  /**

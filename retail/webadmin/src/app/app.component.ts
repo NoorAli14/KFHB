@@ -15,13 +15,16 @@ import { FuseTranslationLoaderService } from "@fuse/services/translation-loader.
 import { navigation } from "app/navigation/navigation";
 import { locale as navigationEnglish } from "app/navigation/i18n/en";
 import { locale as navigationTurkish } from "app/navigation/i18n/tr";
+import { UnsubscribeOnDestroyAdapter } from '@shared/models/unsubscribe-adapter.model';
+import { EventBusService } from '@core/services/event-bus/event-bus.service';
+import { Events } from '@shared/enums/events.enum';
 
 @Component({
     selector: "app",
     templateUrl: "./app.component.html",
     styleUrls: ["./app.component.scss"],
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent extends UnsubscribeOnDestroyAdapter implements OnInit, OnDestroy {
     fuseConfig: any;
     navigation: any;
 
@@ -48,10 +51,11 @@ export class AppComponent implements OnInit, OnDestroy {
         private _fuseSplashScreenService: FuseSplashScreenService,
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
         private _translateService: TranslateService,
-
+        private eventService: EventBusService,
         private _platform: Platform,
         private _userService: AuthUserService
     ) {
+        super();
         // Get default navigation
 
         // Register the navigation to the service
@@ -121,8 +125,7 @@ export class AppComponent implements OnInit, OnDestroy {
      * On init
      */
     ngOnInit(): void {
-        // Subscribe to config changes
-        this._userService.sidebarModules.subscribe((modules) => {
+        this.subs.sink = this.eventService.on(Events.SESSION_EXPIRED, (modules) => {
             const navigation = {
                 id: "features",
                 title: "Features",
@@ -139,7 +142,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
             // Set the main navigation as our current navigation
             this._fuseNavigationService.setCurrentNavigation("main");
-        });
+          })
+      
         this._fuseConfigService.config
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((config) => {

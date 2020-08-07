@@ -2,7 +2,7 @@
 
 /**
  * HTTP Method: DELETE
- * URL: */api/v1/portal/roles/:id
+ * URL: */api/v1/entitlements/roles/:id
  **/
 
  /**
@@ -12,7 +12,7 @@
  **/
  
   /**
-  * HTTP STATUS CODE: NO CONTENT
+  * HTTP STATUS CODE: 204 NO CONTENT
   * Response Headers:
   *     x-correlation-id : <UUID> [Mandatory]
   *     x-response-time : <Execution time in Milli seconds> [Mandatory]

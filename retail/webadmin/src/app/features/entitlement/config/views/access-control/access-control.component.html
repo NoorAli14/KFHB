@@ -10,7 +10,7 @@
         </div>
 
     </div>
-    <div *ngIf="message.length > 0" fxLayout="row" fxLayoutAlign="center" class="p-24  message-box {{ type }} ">
+    <div *ngIf="message.length > 0" fxLayout="row" fxLayoutAlign="center" class="p-16  message-box {{ type }} ">
         {{ message }}
     </div>
     <mat-table #table matSort matSortActive="username" matSortDirection="asc" matSortDisableClear [dataSource]="dataSource">

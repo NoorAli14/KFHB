@@ -2,13 +2,15 @@ import { StorageService } from "./../storage/storage.service";
 import { Injectable } from "@angular/core";
 import { APP_CONST } from "@shared/constants/app.constants";
 import { BehaviorSubject, Observable, Subject } from "rxjs";
+import { EventBusService } from '../event-bus/event-bus.service';
+import { EmitEvent } from '@shared/models/emit-event.model';
+import { Events } from '@shared/enums/events.enum';
 
 @Injectable({ providedIn: "root" })
 export class AuthUserService {
     private _user;
     private _isLoggedIn: boolean;
     private _sidebarModules: any;
-    private _modulesSubject: BehaviorSubject<any>;
     private config = [
         {
             id: "a1",
@@ -47,15 +49,12 @@ export class AuthUserService {
             translate: "FEATURES.CALENDER.HOLIDAYS.TITLE",
         },
     ];
-    constructor(private storage: StorageService) {
+
+    constructor(private storage: StorageService,private eventService: EventBusService,) {
         const data = this.storage.getItem(APP_CONST.SIDEBAR);
-        this._modulesSubject = new BehaviorSubject(data);
         if (data) {
             this.modules = data;
         }
-    }
-    get sidebarModules(): any | Observable<any> {
-        return this._modulesSubject.asObservable();
     }
 
     get modules() {
@@ -64,11 +63,12 @@ export class AuthUserService {
     }
     set modules(modules) {
         this._sidebarModules = modules;
-        this._modulesSubject.next(modules);
+        setTimeout(() => {
+            this.eventService.emit(new EmitEvent(Events.SESSION_EXPIRED, modules))
+        }, 1000);
     }
 
     setUser(user) {
-        debugger;
         this._user = user;
         const sidebarModules = this.configureModules(user.modules);
         this.modules = sidebarModules;
