@@ -9,7 +9,7 @@ import { DataLoaderInterceptor } from 'nestjs-dataloader';
 import { TemplateLoader } from './template.loader';
 
 @Module({
-  imports: [RepositoryModule],
+  imports: [],
   providers: [
     TemplatesService,
     TemplateRepository,

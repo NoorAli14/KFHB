@@ -21,12 +21,12 @@ export class QuestionsResolver {
   constructor(private readonly questionService: QuestionsService) {}
 
   @ResolveField(() => [OptionGQL])
-  public async options(
+  async options(
     @Parent() question: QuestionGQL,
     @Loader(OptionLoader.name)
     optionLoader: DataLoader<OptionGQL['id'], OptionGQL>,
   ): Promise<any> {
-    return optionLoader.loadMany([question.id]);
+    return optionLoader.load(question.id);
   }
 
   @Query(() => [QuestionGQL])
