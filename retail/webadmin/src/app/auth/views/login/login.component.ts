@@ -66,7 +66,7 @@ export class LoginComponent implements OnInit {
                 this.message = MESSAGES.LOGGED_IN;
                 setTimeout(() => {
                     this.router.navigateByUrl(
-                        this.returnUrl ? this.returnUrl : '"/ent/user"'
+                        this.returnUrl ? this.returnUrl : '/ent/user'
                     );
                 }, 1000);
             },
