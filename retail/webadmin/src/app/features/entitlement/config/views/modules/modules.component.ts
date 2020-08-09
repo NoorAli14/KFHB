@@ -1,6 +1,18 @@
-import { AuthUserService } from './../../../../../core/services/user/auth-user.service';
-import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
-import { MatDialog } from "@angular/material/dialog";
+import { BaseComponent } from "@shared/components/base/base.component";
+import { AuthUserService } from "@core/services/user/auth-user.service";
+import {
+    Component,
+    OnInit,
+    ViewEncapsulation,
+    ViewChild,
+    Inject,
+    Injector,
+} from "@angular/core";
+import {
+    MatDialog,
+    MAT_DIALOG_DATA,
+    MatDialogRef,
+} from "@angular/material/dialog";
 import { fuseAnimations } from "@fuse/animations";
 import { Permission } from "@feature/entitlement/models/config.model";
 import { MatTableDataSource } from "@angular/material/table";
@@ -26,11 +38,10 @@ import { ModulesFormComponent } from "../../components/modules-form/modules-form
     animations: fuseAnimations,
     encapsulation: ViewEncapsulation.None,
 })
-export class ModulesComponent implements OnInit {
+export class ModulesComponent extends BaseComponent implements OnInit {
     dialogRef: any;
     modules: Modules[];
     permissions: Permission[];
-    userPermissions: any[];
     message: string = "";
     type: string = "";
     displayedColumns = ["name", "status", "parent", "createdOn", "actions"];
@@ -43,14 +54,15 @@ export class ModulesComponent implements OnInit {
     @ViewChild(MatSort, { static: false }) sort: MatSort;
 
     constructor(
-        public _matDialog: MatDialog,
         private _service: ConfigMiddlewareService,
-        private _authUserService:AuthUserService
-    ) {}
+        public _matDialog: MatDialog,
+    ) {
+        super("Config");
+    }
 
     ngOnInit(): void {
+        super.ngOnInit();
         this.getData();
-       this.userPermissions= this._authUserService.getPermissionsByModule('Config')
     }
 
     openDialog(data): void {
@@ -61,7 +73,7 @@ export class ModulesComponent implements OnInit {
                     module: data ? data : new Modules(),
                     modules: this.modules,
                     permissions: this.permissions,
-                    userPermissions:this.userPermissions
+                    userPermissions: this.userPermissions,
                 },
                 panelClass: "app-modules-form",
             })
@@ -94,8 +106,8 @@ export class ModulesComponent implements OnInit {
             item.parentModule = item.parent;
             item.parent = item.parent ? item.parent.name : "N/A";
             this.modules.push(item);
-            if (item.children) {
-                this.makeFlat(item.children);
+            if (item.sub_modules) {
+                this.makeFlat(item.sub_modules);
             }
         });
     }
@@ -157,8 +169,10 @@ export class ModulesComponent implements OnInit {
                 response.parent = response.parent
                     ? response.parent.name
                     : "N/A";
-                const index = this.dataSource.data.findIndex((x) => x.id == model.id);
-                this.modules[index]=response;
+                const index = this.dataSource.data.findIndex(
+                    (x) => x.id == model.id
+                );
+                this.modules[index] = response;
                 this.updateGrid(this.modules);
                 this.hideMessage();
                 this._matDialog.closeAll();

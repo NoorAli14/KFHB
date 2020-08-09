@@ -50,12 +50,7 @@ export const camelToSnakeCase = (data) => {
     return mapped;
 };
 
-export const camelToSnakeCaseText = (text) => {
-    return text.replace(
-        /[A-Z]/g,
-        (letter) => `_${letter.toLowerCase()}`
-    );
-};
+
 
 export const camelToSentenceCase = (text) => {
     text=text.replace('Id','');

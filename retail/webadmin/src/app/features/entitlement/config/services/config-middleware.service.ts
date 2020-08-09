@@ -10,27 +10,48 @@ import {
     ROLE_MODULE_BY_ID,
 } from "@feature/entitlement/entitlement.constant";
 import { forkJoin } from "rxjs";
+import { Role } from '@feature/entitlement/models/role.model';
 
 @Injectable({
     providedIn: "root",
 })
 export class ConfigMiddlewareService {
     constructor(private _networkService: NetworkService) {}
-    getRoles() {
-        return this._networkService.getAll(ROLE);
-    }
+  
+
+    // ************************Modules Section**********************************
     getModules() {
         return this._networkService.getAll(MODULE);
     }
-    createModule(module: Modules) {
-        return this._networkService.post(MODULE, module);
+    createModule(model: Modules) {
+        return this._networkService.post(MODULE, model);
     }
-    editModule(id: string,module: Modules) {
-        return this._networkService.onUpdate(`${MODULE}/${id}`, module);
+    editModule(id: string,model: Modules) {
+        return this._networkService.onUpdate(`${MODULE}/${id}`, model);
     }
     deleteModule(id: string) {
         return this._networkService.onDelete(`${MODULE}/${id}`);
     }
+     // ************************Roles Section**********************************
+     getRoles() {
+        return this._networkService.getAll(ROLE);
+    }
+    createRole(model: Role) {
+        return this._networkService.post(ROLE, model);
+    }
+    editRole(id: string,model: Role) {
+        return this._networkService.onUpdate(`${ROLE}/${id}`, model);
+    }
+    deleteRole(id: string) {
+        return this._networkService.onDelete(`${ROLE}/${id}`);
+    }
+    forkRolesData() {
+        return forkJoin([
+            this.getRoles(),
+            this.getModules()
+        ]);
+    }
+    // ************************Roles Section**********************************
     getPermissions() {
         return this._networkService.getAll(PERMISSION);
     }
