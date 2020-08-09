@@ -13,7 +13,7 @@ export const requireDefaults = (pattern: string): any => {
  * graphqlKeys string[]
  * @param info
  */
-export const graphqlKeys = (info: any): string[] => {
+export const graphqlKeys = (info: { [key: string]: any }): string[] => {
   const keys = [];
   info.fieldNodes[0].selectionSet.selections.forEach(item => {
     if (!item.selectionSet) {
