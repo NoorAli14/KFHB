@@ -1,3 +1,4 @@
+import { BaseComponent } from "@shared/components/base/base.component";
 import { CONFIG } from "./../../../../../config/index";
 import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
 import { fuseAnimations } from "@fuse/animations";
@@ -31,7 +32,7 @@ import { AuthUserService } from "@core/services/user/auth-user.service";
     animations: fuseAnimations,
     encapsulation: ViewEncapsulation.None,
 })
-export class UserComponent implements OnInit {
+export class UserComponent extends BaseComponent implements OnInit {
     dialogRef: any;
     users: User[];
     roles: Role[];
@@ -59,16 +60,12 @@ export class UserComponent implements OnInit {
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: false }) sort: MatSort;
 
-    constructor(
-        public _matDialog: MatDialog,
-        private _service: UserService,
-        private _authUserService: AuthUserService
-    ) {}
+    constructor(public _matDialog: MatDialog, private _service: UserService) {
+        super("User");
+    }
 
     ngOnInit(): void {
-        this.userPermissions = this._authUserService.getPermissionsByModule(
-            "User"
-        );
+        super.ngOnInit();
         this.username = new FormControl("");
         this.initSearch();
         this.getData();
@@ -113,7 +110,8 @@ export class UserComponent implements OnInit {
             .open(UserFormComponent, {
                 data: {
                     roles: this.roles,
-                    user: data && data.id ? snakeToCamelObject(data) : new User(),
+                    user:
+                        data && data.id ? snakeToCamelObject(data) : new User(),
                 },
                 panelClass: "app-user-form",
             })

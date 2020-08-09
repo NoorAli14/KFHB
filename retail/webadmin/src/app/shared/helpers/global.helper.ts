@@ -31,6 +31,13 @@ export const getName = (id, key, array) => {
     return data ? data[key] : "N/A";
 };
 
+export const camelToSnakeCaseText = (text) => {
+    return text.replace(
+        /[A-Z]/g,
+        (letter) => `_${letter.toLowerCase()}`
+    );
+};
+
 export const camelToSnakeCase = (data) => {
     let mapped = {};
     Object.keys(data).forEach((key, index) => {
@@ -43,12 +50,7 @@ export const camelToSnakeCase = (data) => {
     return mapped;
 };
 
-export const camelToSnakeCaseText = (text) => {
-    return text.replace(
-        /[A-Z]/g,
-        (letter) => `_${letter.toLowerCase()}`
-    );
-};
+
 
 export const camelToSentenceCase = (text) => {
     text=text.replace('Id','');

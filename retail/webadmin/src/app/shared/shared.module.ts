@@ -11,6 +11,7 @@ import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatTableComponent } from "./components/mat-table/mat-table.component";
 import { WClockComponent } from "./components/time-control/w-clock.component";
 import { WTimeDialogComponent } from "./components/time-control/w-time-dialog.component";
+import { BaseComponent } from './components/base/base.component';
 
 @NgModule({
     declarations: [
@@ -19,7 +20,8 @@ import { WTimeDialogComponent } from "./components/time-control/w-time-dialog.co
         MatTableComponent,
         WClockComponent,
         WTimeDialogComponent,
-        PermissionDirective
+        PermissionDirective,
+        BaseComponent
     ],
     imports: [
         ReactiveFormsModule,
@@ -34,7 +36,8 @@ import { WTimeDialogComponent } from "./components/time-control/w-time-dialog.co
         MatErrorComponent,
         MatTableComponent,
         WTimeDialogComponent,
-        PermissionDirective
+        PermissionDirective,
+        BaseComponent
     ],
 })
 export class SharedModule {}

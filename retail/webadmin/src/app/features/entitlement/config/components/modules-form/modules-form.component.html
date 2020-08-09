@@ -6,7 +6,7 @@
                     folder
                 </mat-icon>
                 <span class="logo-text" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
-                    Modules
+                    {{data.module.id? 'Update' :'Create'}}   Module
                 </span>
             </div>
             <button mat-icon-button (click)="matDialogRef.close()" aria-label="Close dialog">
