@@ -11,4 +11,11 @@ export class QuestionsService {
   async findById(id: string, keys?: string[]): Promise<any> {
     return this.questionDB.findOne({ id: id }, keys);
   }
+  async findByIds(ids: readonly string[], keys?: string[]): Promise<any> {
+    return this.questionDB.findByIds(ids, keys);
+  }
+
+  async findByTemplateQuestionId(ids: readonly string[]): Promise<any> {
+    return this.questionDB.findByTemplateQuestionId(ids);
+  }
 }

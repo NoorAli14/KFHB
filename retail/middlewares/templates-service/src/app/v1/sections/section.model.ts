@@ -18,7 +18,6 @@ export class Section {
 
 // Graphql Model
 import { Field, ObjectType } from '@nestjs/graphql';
-import { QuestionGQL } from '../questions/question.model';
 
 @ObjectType()
 export class SectionGQL {

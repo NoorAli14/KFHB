@@ -4,7 +4,7 @@ import { TemplateResponsesRepository } from '../../../core/repository/template-r
 import { TemplateResponsesResolver } from './template-responses.resolver';
 
 @Module({
-  imports: [TemplateResponsesModule],
+  imports: [],
   providers: [
     TemplateResponsesService,
     TemplateResponsesRepository,

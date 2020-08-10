@@ -6,9 +6,12 @@ export class TemplateQuestionsService {
   constructor(private templateQuestionsDB: TemplateQuestionsRepository) {}
 
   async list(keys: string[]): Promise<any> {
-		return this.templateQuestionsDB.list(keys);
+    return this.templateQuestionsDB.list(keys);
   }
   async findById(id: string, keys?: string[]): Promise<any> {
     return this.templateQuestionsDB.findOne({ id: id }, keys);
+  }
+  async findByIds(ids: readonly string[]): Promise<any> {
+    return this.templateQuestionsDB.findByIds(ids);
   }
 }

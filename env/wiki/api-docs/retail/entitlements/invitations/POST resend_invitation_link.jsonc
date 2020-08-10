@@ -1,0 +1,29 @@
+/** Faizan AH / 2020-07-26
+
+/**
+ * HTTP Method: POST
+ * URL: */api/v1/entitlements/invitations/:user_id/resend
+ **/
+
+ /**
+ * HTTP-HEADER:
+ *    x-access-token : <JWT Token> [Mandatory]
+ *    content-type: application/json [Mandatory - Enumerator]
+ **/
+ 
+  /**
+  * HTTP STATUS CODE: 200 OK
+  * Response Headers: 
+  *     x-correlation-id : <UUID> [Mandatory]
+  *     x-response-time : <Execution time in Milli seconds> [Mandatory]
+  *     date: : <Timestamp> [Mandatory]
+  **/
+
+ /**
+  * Response Body
+  */
+  {
+    "status": "SUCCESS",
+    "expired_at": ""
+  }
+

@@ -42,8 +42,8 @@ import { QuestionGQL } from '../questions/question.model';
 
 @ObjectType()
 export class TemplateQuestionGQL {
-	@Field()
-	id: string;
+  @Field()
+  id: string;
 
   @Field()
   rules: string;
@@ -51,14 +51,18 @@ export class TemplateQuestionGQL {
   @Field()
   status: boolean;
 
-	@Field()
-  template: TemplateGQL;
+  template_id?: string;
+  section_id?: string;
+  question_id?: string;
 
   @Field()
-  section: SectionGQL;
+  template?: TemplateGQL;
 
   @Field()
-  question: QuestionGQL;
+  section?: SectionGQL;
+
+  @Field()
+  question?: QuestionGQL;
 
   @Field()
   created_on: Date;

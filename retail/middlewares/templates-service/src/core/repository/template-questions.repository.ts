@@ -16,6 +16,7 @@ export class TemplateQuestionsRepository extends BaseRepository {
       keys['joins'].forEach(element => {
         query.join(
           TABLE[element.toUpperCase()],
+          // TODO!: Following the Convention, Can be replaced with the Decorator 'Column Name'.
           `${this._tableName}.${element}_id`,
           '=',
           `${TABLE[element.toUpperCase()]}.id`,

@@ -1,3 +1,4 @@
+import { CONFIG } from './../../../../../config/index';
 import { Component, OnInit,  } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { Modules } from "@feature/entitlement/models/modules.model";
@@ -9,7 +10,7 @@ import {
 } from "@feature/entitlement/models/config.model";
 import { Role } from "@feature/entitlement/models/role.model";
 
-import { snakeToCamel,  } from "@shared/helpers/global.helper";
+import { snakeToCamelObject, snakeToCamelArray,  } from "@shared/helpers/global.helper";
 import { ManagePermissionFormComponent } from "../../components/manage-permission-form/manage-permission-form.component";
 import { fuseAnimations } from '@fuse/animations';
 
@@ -27,6 +28,10 @@ export class RoleModuleComponent implements OnInit {
     message: string = "";
     type: string = "";
 
+    pageSize:number=CONFIG.PAGE_SIZE;
+    pageSizeOptions:Array<number>=CONFIG.PAGE_SIZE_OPTIONS;
+    
+    
     displayedColumns = ["expandIcon", "moduleId", "roleId","addIcon", "deleteIcon"];
 
     constructor(
@@ -66,7 +71,7 @@ export class RoleModuleComponent implements OnInit {
                     this.roleModulesList,
                     this.permissions,
                 ] = response;
-                this.roleModulesList = snakeToCamel(
+                this.roleModulesList = snakeToCamelArray(
                     this.roleModulesList
                 ) as RoleModuleModel[];
             },

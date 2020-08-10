@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
 import { Resolver, Args, Info, Query } from '@nestjs/graphql';
-import { graphqlKeys } from '@common/utilities';
 import { OptionsService } from './options.service';
 import { OptionGQL } from './option.model';
+import { graphqlKeys } from '@common/utilities';
 
-@Resolver('Options')
+@Resolver(OptionGQL)
 export class OptionsResolver {
   constructor(private readonly optionService: OptionsService) {}
 
   @Query(() => [OptionGQL])
   async optionsList(@Info() info): Promise<OptionGQL[]> {
     const keys = graphqlKeys(info);
-		const result = this.optionService.list(keys);
-		return result;
+    const result = this.optionService.list(keys);
+    return result;
   }
 
   @Query(() => OptionGQL)

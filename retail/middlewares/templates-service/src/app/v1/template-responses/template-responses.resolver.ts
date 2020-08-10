@@ -4,7 +4,7 @@ import { graphqlKeys } from '@common/utilities';
 import { TemplateResponsesService } from './template-responses.service';
 import { NewTemplateResponseInput } from './template-response.dto';
 
-@Resolver('TemplateResponses')
+@Resolver(TemplateResponseGQL)
 export class TemplateResponsesResolver {
   constructor(
     private readonly templateResponseService: TemplateResponsesService,

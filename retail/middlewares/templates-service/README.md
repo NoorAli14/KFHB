@@ -26,12 +26,20 @@
 
 ## ❯ Table of Contents
 
-- [Getting Started](#-getting-started)
-- [How to Run](#-how-to-run)
-- [App Structure](#-app-structure)
-- [Migrations & Seeding](#-migration-&-seeding)
-- [Roadmap](#-roadmap)
-- [License](#-license)
+- [❯ Table of Contents](#-table-of-contents)
+- [❯ How to Run](#-how-to-run)
+  - [Pre-requisites](#pre-requisites)
+  - [Running](#running)
+- [❯ App Structure](#-app-structure)
+- [❯ Migrations & Seeding](#-migrations--seeding)
+  - [Creating/Dropping Tables](#creatingdropping-tables)
+- [Installation](#installation)
+- [Running the app](#running-the-app)
+- [Test](#test)
+- [❯ Roadmap](#-roadmap)
+  - [API Gateway](#api-gateway)
+  - [Microservices](#microservices)
+  - [Notes](#notes)
 
 ![divider](./divider.png)
 
@@ -142,7 +150,7 @@ Migrations are a way to make database changes or updates, like creating or dropp
 Let's create a `Users` table using the `knex` command line tool. In the root of our project run the following commands:
 
 ```bash
-$ npm run migrate:make create_users_table
+npm run migrate:make create_users_table
 ```
 
 The above commands will generate migration scripts in `./src/core/database/migrations` with the given name plus a timestamp. (i.e. 20200625222904_create_users_table.ts). This is on purpose so that knex can run the older migration files first, and then the newer ones that build on top of them.
@@ -241,3 +249,9 @@ $ npm run test:cov
 - [ ] Add unit tests
 - [ ] Improve logging
 - [ ] Improve error handling
+- [ ] Loaders Module to combine all the Loaders in one place.
+
+### Notes
+
+- Nest JS loads the Loader from first Module registered in the AppModule and if there is any Loader missing in the first Module and added in the second Module this will make problems.
+  - Unify the Loaders Module and add that in the Appmodule directly (on Global level maybe) or import the Loader Module in other modules instead of loading separate Loader file.

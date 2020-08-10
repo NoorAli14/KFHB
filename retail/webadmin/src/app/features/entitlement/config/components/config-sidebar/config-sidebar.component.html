@@ -16,14 +16,6 @@
         <div class="content py-16" fusePerfectScrollbar>
 
             <div class="nav material2">
-
-                <div class="nav-item" aria-label="inbox">
-                    <a class="nav-link" [ngClass]="{'active accent' : active ==='role'}" (click)="setActive('role')" matRipple>
-                        <span class="title">
-                         <mat-icon class="nav-link-icon" >security</mat-icon>
-                          Role </span>
-                    </a>
-                </div>
                 <div class="nav-item" aria-label="inbox">
                     <a class="nav-link" [ngClass]="{'active accent' : active ==='modules'}" (click)="setActive('modules')" matRipple>
                         <span class="title">
@@ -31,6 +23,14 @@
                           Modules </span>
                     </a>
                 </div>
+                <div class="nav-item" aria-label="inbox">
+                    <a class="nav-link" [ngClass]="{'active accent' : active ==='role'}" (click)="setActive('role')" matRipple>
+                        <span class="title">
+                         <mat-icon class="nav-link-icon" >security</mat-icon>
+                          Role </span>
+                    </a>
+                </div>
+               
                 <div class="nav-item" aria-label="inbox">
                     <a class="nav-link" [ngClass]="{'active accent' : active ==='role-module'}" (click)="setActive('role-module')" matRipple>
                         <span class="title">

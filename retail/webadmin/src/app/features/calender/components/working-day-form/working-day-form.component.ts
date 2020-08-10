@@ -1,10 +1,10 @@
 import { Component, OnInit, Inject,ViewEncapsulation } from '@angular/core';
-import { CalendarEvent } from 'angular-calendar';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
-import { MatColors } from '@fuse/mat-colors';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { CalendarEventModel } from '@feature/calender/event.model';
+import { FormGroup,  FormControl, Validators } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { fuseAnimations } from '@fuse/animations';
+import { CalendarService } from '@feature/calender/services/calendar.service';
+import { WorkingDay } from '@feature/calender/models/working-week.model';
+import { WTimeDialogComponent } from '@shared/components/time-control/w-time-dialog.component';
 
 @Component({
   selector: 'app-working-day-form',
@@ -13,72 +13,80 @@ import { fuseAnimations } from '@fuse/animations';
   encapsulation: ViewEncapsulation.None,
   animations   : fuseAnimations
 })
-export class WorkingDayFormComponent  {
+export class WorkingDayFormComponent implements OnInit  {
+    workingDayForm: FormGroup;
+    message: string = "";
+    type: string = "";
 
-  action: string;
-  event: CalendarEvent;
-  eventForm: FormGroup;
-  dialogTitle: string;
-  presetColors = MatColors.presets;
+    private hour = 10;
+    private minute = 25;
+    private meridien = 'PM';
+    constructor(
+        public matDialogRef: MatDialogRef<WorkingDayFormComponent>,
+        @Inject(MAT_DIALOG_DATA) public data: WorkingDay,
+        private _service: CalendarService,
+        private dialog: MatDialog
+    ) {}
+  
+    ngOnInit(): void {
+        this.workingDayForm = new FormGroup({
+            id: new FormControl(this.data.id),
+            startTime: new FormControl(this.data.startTime, [
+                Validators.required
+            ]),
+            endTime: new FormControl(this.data.endTime, [
+                Validators.required
+            ]),
+            fullDay: new FormControl(this.data.weekday, [Validators.required]),
+            remarks: new FormControl(this.data.remarks, [Validators.required]),
+            weekDay: new FormControl(this.data.remarks, []),
+            status: new FormControl(this.data.status, [
+                Validators.required
+            ]),
+        });
+        this.workingDayForm.get('fullDay').valueChanges.subscribe((value)=>{
+            if(value){
+                this.workingDayForm.get('startTime').disable();
+                this.workingDayForm.get('endTime').disable();
+                this.workingDayForm.patchValue({startTime:null, endTime:null})
+            }else{
+                this.workingDayForm.get('startTime').enable();
+                this.workingDayForm.get('endTime').enable();
+                this.workingDayForm.get('startTime').setValidators(Validators.required)
+                this.workingDayForm.get('endTime').setValidators(Validators.required)
+            }
+        })
+    }
+    onSubmit() {
+        this.matDialogRef.close({ data: this.workingDayForm.value });
+    }
+    public getTime(): string {
+        return `${this.hour}:${this.minute} ${this.meridien}`;
+    }
+    public showPicker(control) {
 
-  /**
-   * Constructor
-   *
-   * @param {MatDialogRef<CalendarEventFormDialogComponent>} matDialogRef
-   * @param _data
-   * @param {FormBuilder} _formBuilder
-   */
-  constructor(
-      public matDialogRef: MatDialogRef<WorkingDayFormComponent>,
-      @Inject(MAT_DIALOG_DATA) private _data: any,
-      private _formBuilder: FormBuilder
-  )
-  {
-      this.event = _data.event;
-      this.action = _data.action;
+        let dialogRef = this.dialog.open(WTimeDialogComponent, {
+            data: {
+                hour: this.hour,
+                minute: this.minute,
+                meriden: this.meridien
+            }
+        });
 
-      if ( this.action === 'edit' )
-      {
-          this.dialogTitle = this.event.title;
-      }
-      else
-      {
-          this.dialogTitle = 'New Event';
-          this.event = new CalendarEventModel({
-              start: _data.date,
-              end  : _data.date
-          });
-      }
+        dialogRef.afterClosed().subscribe(result => {
 
-      this.eventForm = this.createEventForm();
-  }
+            // result will be update userTime object or -1 or undefined (closed dialog w/o clicking cancel)
+            if (result === undefined) {
+                return;
+            } else if (result !== -1) {
 
-  // -----------------------------------------------------------------------------------------------------
-  // @ Public methods
-  // -----------------------------------------------------------------------------------------------------
+                this.hour = result.hour;
+                this.minute = result.minute;
+                this.meridien = result.meriden;
+                this.workingDayForm.get(control).patchValue(this.getTime())
+            }
+        });
 
-  /**
-   * Create the event form
-   *
-   * @returns {FormGroup}
-   */
-  createEventForm(): FormGroup
-  {
-      return new FormGroup({
-          title : new FormControl(this.event.title),
-          start : new FormControl(this.event.start),
-          end   : new FormControl(this.event.end),
-          allDay: new FormControl(this.event.allDay),
-          color : this._formBuilder.group({
-              primary  : new FormControl(this.event.color.primary),
-              secondary: new FormControl(this.event.color.secondary)
-          }),
-          meta  :
-              this._formBuilder.group({
-                  location: new FormControl(this.event.meta.location),
-                  notes   : new FormControl(this.event.meta.notes)
-              })
-      });
-  }
-
+        return false;
+    }
 }

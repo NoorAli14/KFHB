@@ -30,6 +30,7 @@ input NewTemplateResponseInput {
 type OptionGQL {
   id: String!
   name: String!
+  question_id: String!
   created_on: DateTime!
   updated_on: DateTime!
 }
@@ -51,7 +52,7 @@ type QuestionGQL {
   id: String!
   title: String!
   type: String!
-  options: OptionGQL!
+  options: [OptionGQL!]!
   created_on: DateTime!
   updated_on: DateTime!
 }
@@ -86,7 +87,7 @@ type TemplateResponseGQL {
   id: String!
   results: String!
   remarks: String!
-  template_id: String!
+  template: TemplateGQL!
   created_on: DateTime!
   updated_on: DateTime!
 }

@@ -13,8 +13,8 @@ import { TemplatesModule } from './templates/templates.module';
 @Module({
   imports: [
     TemplateQuestionsModule,
-		TemplateResponsesModule,
-		TemplatesModule,
+    TemplateResponsesModule,
+    TemplatesModule,
     OptionsModule,
     QuestionsModule,
     SectionsModule,

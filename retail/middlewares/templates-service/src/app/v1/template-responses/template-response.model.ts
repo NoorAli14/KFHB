@@ -25,21 +25,24 @@ export class TemplateResponse {
 // Graphql Model
 import { Field, ObjectType } from '@nestjs/graphql';
 import { IsJSON } from 'class-validator';
+import { TemplateGQL } from '../templates/template.model';
 
 @ObjectType()
 export class TemplateResponseGQL {
   @Field()
   id: string;
 
-	@Field()
-	@IsJSON()
+  @Field()
+  @IsJSON()
   results: string;
 
   @Field()
   remarks: string;
 
-  @Field()
   template_id: string;
+
+  @Field(() => TemplateGQL)
+  template: TemplateGQL;
 
   @Field()
   created_on: Date;
