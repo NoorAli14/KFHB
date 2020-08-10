@@ -1,6 +1,4 @@
 import {
-  IsString,
-  IsInt,
   IsOptional,
   Length,
   MaxLength,
