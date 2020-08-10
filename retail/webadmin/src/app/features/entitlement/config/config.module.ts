@@ -1,3 +1,5 @@
+import { MatTreeModule } from '@angular/material/tree';
+import { CdkTreeModule } from '@angular/cdk/tree';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -18,6 +20,7 @@ import { RoleComponent } from './views/role/role.component';
 import { RoleFormComponent } from './components/role-form/role-form.component';
 import { ModulesComponent } from './views/modules/modules.component';
 import { ModulesFormComponent } from './components/modules-form/modules-form.component';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 
 @NgModule({
   declarations: [ConfigComponent ,ModulesComponent,ModulesFormComponent, RoleComponent, RoleFormComponent,TableRowComponent, RoleModuleFormComponent, ManagePermissionFormComponent, ConfigSidebarComponent, RoleModuleComponent, PermissionComponent, AccessControlComponent],
@@ -28,7 +31,12 @@ import { ModulesFormComponent } from './components/modules-form/modules-form.com
     FuseSidebarModule,
     FuseSharedModule,
     MaterialModule,
-    
-  ]
+    MatTreeModule,
+    CdkTreeModule
+  ],
+  providers: [
+    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
+  ],
+  entryComponents:[RoleFormComponent]
 })
 export class ConfigModule { }

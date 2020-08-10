@@ -1,4 +1,3 @@
-import { StatusModel } from "./../../../../../shared/models/base.model";
 import {
     Component,
     OnInit,
@@ -12,6 +11,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { Modules } from "../../../models/modules.model";
 import { fuseAnimations } from "@fuse/animations";
 import { STATUS_LIST } from "@shared/constants/app.constants";
+import { StatusModel } from '@shared/models/base.model';
 
 @Component({
     selector: "app-modules-form",
