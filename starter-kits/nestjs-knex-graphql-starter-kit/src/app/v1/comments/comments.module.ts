@@ -1,17 +1,12 @@
 import { Module } from '@nestjs/common';
-import { RepositoryModule } from '@core/repository/repository.module';
-import { CommentRepository } from '@core/repository/';
-import { CommentsService } from '@app/v1/comments/comments.service';
-import { APP_INTERCEPTOR } from '@nestjs/core';
-import { DataLoaderInterceptor } from 'nestjs-dataloader';
+import { RepositoryModule } from '@rubix/core/repository/repository.module';
+import { CommentRepository } from '@rubix/core/repository/';
+import { CommentsService } from '@rubix/app/v1/comments/comments.service';
 
 @Module({
   imports: [RepositoryModule],
   controllers: [],
   exports: [CommentRepository],
-  providers: [CommentRepository, CommentsService, {
-      provide: APP_INTERCEPTOR,
-      useClass: DataLoaderInterceptor,
-    }],
+  providers: [CommentRepository, CommentsService],
 })
 export class CommentsModule {}

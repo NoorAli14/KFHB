@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { join } from 'path';
 import { GraphQLFederationModule } from '@nestjs/graphql';
 import { DataloaderModule } from '@rubix/core/dataloaders/loader.module';
-
 import { CommonModule } from '@rubix/common/common.module';
 import { ConfigurationService } from '@rubix/common/configuration/configuration.service';
 import { UsersModule } from './users/users.module';

@@ -9,82 +9,61 @@ import {
 } from '@nestjs/graphql';
 import * as DataLoader from 'dataloader';
 import { Loader } from 'nestjs-dataloader';
+import { User } from '@rubix/app/v1/users/user.model';
+import { Comment } from '@rubix/app/v1/comments/comment.model';
+import { graphqlKeys } from '@rubix/common/utilities';
 import { PostsService } from './posts.service';
 import { NewPostInput } from './post.dto';
-import { PostGQL } from './post.model';
-import { UserGQL } from '@app/v1/users/user.model';
-import { UserLoader } from '@app/v1/users/user.loader';
-import { CommentLoader } from '@app/v1/comments/comment.loader';
-import { CommentGQL } from '@app/v1/comments/comment.model';
-import { graphqlKeys } from '@common/utilities';
-import { UserService } from '@app/v1/users/users.service';
-import { CommentsService } from '@app/v1/comments/comments.service';
+import { Post } from './post.model';
 
-@Resolver(PostGQL)
+@Resolver(Post)
 export class PostsResolver {
   constructor(
     private readonly postService: PostsService,
-    private readonly userService: UserService,
-    private readonly commentService: CommentsService,
   ) {}
 
-  // @ResolveField(() => [CommentGQL])
-  // async comments(@Parent() post, @Info() info): Promise<CommentGQL[]> {
-  //   const { id } = post;
-  //   console.log(post);
-  //   const keys = graphqlKeys(info);
-  //   return this.commentService.findByPostId(id, keys);
-  // }
-
-  @ResolveField(() => [CommentGQL])
+  @ResolveField(() => [Comment])
   public async comments(
-    @Parent() post: PostGQL,
-    @Loader(CommentLoader.name) commentLoader: DataLoader<CommentGQL['id'], CommentGQL>,
+    @Parent() post: Post,
+    @Loader('CommentLoader') commentLoader: DataLoader<Comment['id'], Comment>,
   ): Promise<any> {
     return commentLoader.load(post.id);
   }
 
-  @Query(() => [PostGQL])
-  async postsList(@Info() info): Promise<PostGQL[]> {
+  @Query(() => [Post])
+  async posts(@Info() info): Promise<Post[]> {
     const keys = graphqlKeys(info);
     return this.postService.list(keys);
   }
-  // @ResolveField(() => UserGQL)
-  // async user(@Parent() post, @Info() info) {
-  //   const { user_id } = post;
-  //   console.log(post);
-  //   const keys = graphqlKeys(info);
-  //   return this.userService.findById(user_id, keys);
-  // }
 
-  @ResolveField(() => UserGQL)
-  public async user(
-    @Parent() post: PostGQL,
-    @Loader(UserLoader.name) userLoader: DataLoader<UserGQL['id'], UserGQL>,
+  @ResolveField(() => User)
+  public async author(
+    @Parent() post: Post,
+    @Loader('UserLoader') userLoader: DataLoader<User['id'], User>,
   ): Promise<any> {
     return userLoader.load(post.user_id);
   }
 
-  @Query(() => PostGQL)
-  async findPost(@Args('id') id: string, @Info() info): Promise<PostGQL> {
+  @Query(() => Post)
+  async findPost(@Args('id') id: string, @Info() info): Promise<Post> {
     const keys = graphqlKeys(info);
     return this.postService.findById(id, keys);
   }
 
-  @Mutation(() => PostGQL)
+  @Mutation(() => Post)
   async addPost(
     @Args('input') input: NewPostInput,
     @Info() info,
-  ): Promise<PostGQL> {
+  ): Promise<Post> {
     const keys = graphqlKeys(info);
     return this.postService.create(input, keys);
   }
-  @Mutation(() => PostGQL)
+  @Mutation(() => Post)
   async updatePost(
     @Args('id') id: string,
     @Args('input') input: NewPostInput,
     @Info() info,
-  ): Promise<PostGQL> {
+  ): Promise<Post> {
     const keys = graphqlKeys(info);
     return this.postService.update(id, input, keys);
   }

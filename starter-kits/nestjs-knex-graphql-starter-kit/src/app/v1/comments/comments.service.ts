@@ -1,23 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { CommentRepository } from '@core/repository/comment.repository';
+import { CommentRepository } from '@rubix/core/repository/';
 
 @Injectable()
 export class CommentsService {
   constructor(private commentDB: CommentRepository) {}
-  async findByPostIds(postIDs: any): Promise<any> {
-    const comments =  await this.commentDB.findByPostIds(postIDs);
-    const commentLookups = {};
-    comments.forEach(comment => {
-      if (!commentLookups[comment.post_id]) {
-        commentLookups[comment.post_id] = [];
-      }
-      commentLookups[comment.post_id].push(comment);
-    });
-    return postIDs.map(postID => commentLookups[postID]);
-  }
-
   async list(keys: string[]): Promise<any> {
-    return this.commentDB.list(keys);
+    return this.commentDB.findAll(keys);
   }
   async findById(id: string, keys?: string[]): Promise<any> {
     return this.commentDB.findOne({ id: id }, keys);

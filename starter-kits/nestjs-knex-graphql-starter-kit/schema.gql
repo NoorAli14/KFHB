@@ -12,12 +12,19 @@ directive @requires(fields: String!) on FIELD_DEFINITION
 
 directive @provides(fields: String!) on FIELD_DEFINITION
 
-type CommentGQL {
+type Comment {
   id: String!
   message: String
-  post: PostGQL!
+  post: Post!
   created_on: DateTime!
   updated_on: DateTime!
+}
+
+input CreateUserInput {
+  first_name: String
+  last_name: String
+  email: String!
+  password: String!
 }
 
 """
@@ -26,11 +33,11 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 scalar DateTime
 
 type Mutation {
-  addUser(input: NewUserInput!): UserGQL!
-  updateUser(input: NewUserInput!, id: String!): UserGQL!
+  addUser(input: CreateUserInput!): User!
+  updateUser(input: CreateUserInput!, id: String!): User!
   deleteUser(id: String!): Boolean!
-  addPost(input: NewPostInput!): PostGQL!
-  updatePost(input: NewPostInput!, id: String!): PostGQL!
+  addPost(input: NewPostInput!): Post!
+  updatePost(input: NewPostInput!, id: String!): Post!
   deletePost(id: String!): Boolean!
 }
 
@@ -39,38 +46,31 @@ input NewPostInput {
   user_id: String!
 }
 
-input NewUserInput {
-  first_name: String
-  last_name: String
-  email: String!
-  password: String!
-}
-
-type PostGQL {
+type Post {
   id: String!
   user_id: String!
   description: String
-  comments: [CommentGQL!]!
-  user: UserGQL!
+  comments: [Comment!]!
+  author: User!
   created_on: DateTime!
   updated_on: DateTime!
 }
 
 type Query {
-  usersList(limit: Float!): [UserGQL!]!
-  findUser(id: String!): UserGQL!
-  postsList: [PostGQL!]!
-  findPost(id: String!): PostGQL!
+  users: [User!]!
+  findUser(id: String!): User!
+  posts: [Post!]!
+  findPost(id: String!): Post!
 }
 
-type UserGQL {
-  id: String!
+type User {
+  id: ID!
   first_name: String
   last_name: String
   email: String!
   password: String!
-  posts: [PostGQL!]!
-  comments: [CommentGQL!]!
+  posts: [Post!]!
+  comments: [Comment!]!
   created_on: DateTime!
   updated_on: DateTime!
 }

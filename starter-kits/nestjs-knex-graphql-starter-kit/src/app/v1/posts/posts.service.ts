@@ -1,44 +1,34 @@
 import { Injectable } from '@nestjs/common';
-import { PostRepository } from '@core/repository/';
+import { PostRepository } from '@rubix/core/repository/';
+import { Post } from './post.model';
 
 @Injectable()
 export class PostsService {
   constructor(private postDB: PostRepository) {}
 
-  async findByUserIds(userIds: any): Promise<any> {
-    const posts = await this.postDB.findByUserIds(userIds);
-    const postLookups = {};
-    posts.forEach(post => {
-      if (!postLookups[post.user_id]) {
-        postLookups[post.user_id] = [];
-      }
-      postLookups[post.user_id].push(post);
-    });
-    return userIds.map(userId => postLookups[userId]);
+  async list(columns: string[]): Promise<Post[]> {
+    return this.postDB.findAll(columns);
   }
-  async list(keys: string[]): Promise<any> {
-    return this.postDB.list(keys);
-  }
-  async findById(id: string, keys?: string[]): Promise<any> {
-    return this.postDB.findOne({ id: id }, keys);
+  async findById(id: string, columns?: string[]): Promise<Post> {
+    return this.postDB.findOne({ id }, columns);
   }
 
-  async findByUserId(id: string, keys?: string[]): Promise<any> {
-    return this.postDB.findBy({ user_id: id }, keys);
+  async findByUserId(id: string, columns?: string[]): Promise<Post> {
+    return this.postDB.findBy({ user_id: id }, columns);
   }
   async update(
     id: string,
-    userObj: Record<string, any>,
-    keys?: string[],
-  ): Promise<any> {
-    const [user] = await this.postDB.update({ id: id }, userObj, keys);
+    postOBJ: {[key: string]: any},
+    columns?: string[],
+  ): Promise<Post> {
+    const [user] = await this.postDB.update({ id }, postOBJ, columns);
     return user;
   }
-  async create(newUser: Record<string, any>, keys?: string[]): Promise<any> {
-    const [user] = await this.postDB.create(newUser, keys);
+  async create(postOBJ: {[key: string]: any}, columns?: string[]): Promise<Post> {
+    const [user] = await this.postDB.create(postOBJ, columns);
     return user;
   }
   async delete(id: string): Promise<any> {
-    return await this.postDB.delete({ id: id });
+    return await this.postDB.delete({ id });
   }
 }
