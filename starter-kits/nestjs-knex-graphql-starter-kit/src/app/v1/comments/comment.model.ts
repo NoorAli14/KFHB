@@ -9,6 +9,9 @@ export class Comment {
   @Field({ nullable: true })
   message?: string;
 
+  @Field()
+  post_id: string;
+
   @Field(() => Post)
   post: Post;
 
