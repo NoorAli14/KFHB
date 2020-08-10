@@ -15,6 +15,7 @@ directive @provides(fields: String!) on FIELD_DEFINITION
 type Comment {
   id: String!
   message: String
+  post_id: String!
   post: Post!
   created_on: DateTime!
   updated_on: DateTime!
@@ -34,11 +35,19 @@ scalar DateTime
 
 type Mutation {
   addUser(input: CreateUserInput!): User!
-  updateUser(input: CreateUserInput!, id: String!): User!
+  updateUser(input: UpdateUserInput!, id: String!): User!
   deleteUser(id: String!): Boolean!
   addPost(input: NewPostInput!): Post!
-  updatePost(input: NewPostInput!, id: String!): Post!
+  updatePost(input: UpdatePostInput!, id: String!): Post!
   deletePost(id: String!): Boolean!
+  addComment(input: NewCommentInput!): Comment!
+  updateComment(input: UpdateCommentInput!, id: String!): Comment!
+  deleteComment(id: String!): Boolean!
+}
+
+input NewCommentInput {
+  message: String
+  post_id: String!
 }
 
 input NewPostInput {
@@ -61,6 +70,21 @@ type Query {
   findUser(id: String!): User!
   posts: [Post!]!
   findPost(id: String!): Post!
+  comments: [Comment!]!
+  findComment(id: String!): Comment!
+}
+
+input UpdateCommentInput {
+  message: String
+}
+
+input UpdatePostInput {
+  description: String
+}
+
+input UpdateUserInput {
+  first_name: String
+  last_name: String
 }
 
 type User {
