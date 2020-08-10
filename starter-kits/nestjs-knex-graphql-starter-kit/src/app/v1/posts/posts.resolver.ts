@@ -3,27 +3,28 @@ import {
   Query,
   Mutation,
   Args,
-  Info,
   ResolveField,
   Parent,
 } from '@nestjs/graphql';
+import { ParseUUIDPipe, NotFoundException } from '@nestjs/common';
 import * as DataLoader from 'dataloader';
 import { Loader } from 'nestjs-dataloader';
+import { Fields } from '@rubix/common/decorators';
 import { User } from '@rubix/app/v1/users/user.model';
 import { Comment } from '@rubix/app/v1/comments/comment.model';
-import { graphqlKeys } from '@rubix/common/utilities';
-import { PostsService } from './posts.service';
-import { NewPostInput } from './post.dto';
 import { Post } from './post.model';
+import { PostsService } from './posts.service';
+import { NewPostInput, UpdatePostInput } from './post.dto';
 
 @Resolver(Post)
 export class PostsResolver {
+
   constructor(
     private readonly postService: PostsService,
   ) {}
 
   @ResolveField(() => [Comment])
-  public async comments(
+  comments(
     @Parent() post: Post,
     @Loader('CommentLoader') commentLoader: DataLoader<Comment['id'], Comment>,
   ): Promise<any> {
@@ -31,13 +32,12 @@ export class PostsResolver {
   }
 
   @Query(() => [Post])
-  async posts(@Info() info): Promise<Post[]> {
-    const keys = graphqlKeys(info);
-    return this.postService.list(keys);
+  posts(@Fields() columns: string[]): Promise<Post[]> {
+    return this.postService.list(columns);
   }
 
   @ResolveField(() => User)
-  public async author(
+  author(
     @Parent() post: Post,
     @Loader('UserLoader') userLoader: DataLoader<User['id'], User>,
   ): Promise<any> {
@@ -45,31 +45,37 @@ export class PostsResolver {
   }
 
   @Query(() => Post)
-  async findPost(@Args('id') id: string, @Info() info): Promise<Post> {
-    const keys = graphqlKeys(info);
-    return this.postService.findById(id, keys);
+  async findPost(@Args('id', ParseUUIDPipe) id: string, @Fields() columns: string[]): Promise<Post> {
+    const post: Post = await this.postService.findById(id, columns);
+    if(!post) {
+      throw new NotFoundException('Post not found');
+    }
+    return post;
   }
 
   @Mutation(() => Post)
-  async addPost(
+  addPost(
     @Args('input') input: NewPostInput,
-    @Info() info,
+    @Fields() columns: string[]
   ): Promise<Post> {
-    const keys = graphqlKeys(info);
-    return this.postService.create(input, keys);
+    return this.postService.create(input, columns);
   }
+
   @Mutation(() => Post)
-  async updatePost(
-    @Args('id') id: string,
-    @Args('input') input: NewPostInput,
-    @Info() info,
+  updatePost(
+    @Args('id', ParseUUIDPipe) id: string,
+    @Args('input') input: UpdatePostInput,
+    @Fields() columns: string[]
   ): Promise<Post> {
-    const keys = graphqlKeys(info);
-    return this.postService.update(id, input, keys);
+    return this.postService.update(id, input, columns);
   }
 
   @Mutation(() => Boolean)
-  async deletePost(@Args('id') id: string): Promise<boolean> {
+  async deletePost(@Args('id', ParseUUIDPipe) id: string): Promise<boolean> {
+    const post: Post = await this.postService.findById(id, ['id']);
+    if(!post) {
+      throw new NotFoundException('Post not found');
+    }
     return this.postService.delete(id);
   }
 }
