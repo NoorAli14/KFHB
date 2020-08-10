@@ -32,6 +32,7 @@ export class TemplateQuestionsResolver {
     @Loader(TemplateLoader.name)
     templateLoader: DataLoader<TemplateGQL['id'], TemplateGQL>,
   ): Promise<any> {
+    // TODO: Find a way to pass selection keys to this function so Database query can be optimized.
     return templateLoader.load(templateQuestion.id);
   }
 
@@ -55,7 +56,6 @@ export class TemplateQuestionsResolver {
 
   @Query(() => [TemplateQuestionGQL])
   async templatesQuestionsList(@Info() info): Promise<TemplateQuestionGQL[]> {
-    // TODO!: Replace the table name parameter with Custom Decorator
     const keys = graphqlKeys(info);
     return this.templateQuestionsService.list(keys);
   }

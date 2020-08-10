@@ -27,6 +27,7 @@ export class OptionGQL {
   @Field()
   name: string;
 
+  @Field()
   question_id?: string;
 
   @Field()

@@ -8,15 +8,15 @@ export class QuestionRepository extends BaseRepository {
     super(TABLE.QUESTION);
   }
 
-  async findByTemplateQuestionId(id: string, keys?: string[]): Promise<any> {
+  async findByTemplateQuestionId(ids: readonly string[], keys?: string[]): Promise<any> {
     return this._connection(this._tableName)
-      .select(keys)
+      .select(keys || `${this._tableName}.*`)
       .join(
         TABLE.TEMPLATE_QUESTIONS,
         `${this._tableName}.id`,
         '=',
         `${TABLE.TEMPLATE_QUESTIONS}.question_id`,
       )
-      .where(`${TABLE.TEMPLATE_QUESTIONS}.id`, id);
+      .whereIn(`${TABLE.TEMPLATE_QUESTIONS}.id`, ids);
   }
 }

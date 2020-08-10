@@ -5,9 +5,10 @@ import { SectionsResolver } from './sections.resolver';
 import { SectionLoader } from './section.loader';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { DataLoaderInterceptor } from 'nestjs-dataloader';
+import { RepositoryModule } from '@core/repository/repository.module';
 
 @Module({
-  imports: [],
+  imports: [RepositoryModule],
   providers: [
     SectionsService,
     SectionRepository,

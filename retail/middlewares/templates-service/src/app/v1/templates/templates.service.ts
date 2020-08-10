@@ -16,6 +16,6 @@ export class TemplatesService {
   }
 
   async findByTemplateQuestionId(ids: readonly string[]): Promise<any> {
-    return this.templateDB.findByTemplateQuestionId(ids[0]);
+    return this.templateDB.findByTemplateQuestionId(ids);
   }
 }

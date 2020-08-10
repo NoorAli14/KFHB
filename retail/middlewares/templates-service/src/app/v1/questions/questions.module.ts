@@ -13,11 +13,11 @@ import { OptionsService } from '../options/options.service';
   imports: [RepositoryModule],
   providers: [
     QuestionsResolver,
-    QuestionsService,
-		QuestionRepository,
-		OptionLoader,
-    OptionRepository,
+		QuestionsService,
     OptionsService,
+    QuestionRepository,
+    OptionRepository,
+    OptionLoader,
     QuestionLoader,
     {
       provide: APP_INTERCEPTOR,

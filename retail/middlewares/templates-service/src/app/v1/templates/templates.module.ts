@@ -3,16 +3,14 @@ import { TemplatesResolver } from './templates.resolver';
 
 import { TemplatesService } from './templates.service';
 import { RepositoryModule } from 'src/core/repository/repository.module';
-import { TemplateRepository } from 'src/core/repository/template.repository';
+import { TemplateLoader } from './template.loader';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { DataLoaderInterceptor } from 'nestjs-dataloader';
-import { TemplateLoader } from './template.loader';
 
 @Module({
-  imports: [],
+  imports: [RepositoryModule],
   providers: [
     TemplatesService,
-    TemplateRepository,
     TemplatesResolver,
     TemplateLoader,
     {

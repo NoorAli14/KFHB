@@ -1,13 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
-import {
-  Resolver,
-  Args,
-  Info,
-  Query,
-  ResolveField,
-  Parent,
-} from '@nestjs/graphql';
+import { Resolver, Args, Info, Query } from '@nestjs/graphql';
 import { OptionsService } from './options.service';
 import { OptionGQL } from './option.model';
 import { graphqlKeys } from '@common/utilities';

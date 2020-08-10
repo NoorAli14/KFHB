@@ -16,6 +16,6 @@ export class SectionsService {
   }
 
   async findByTemplateQuestionId(ids: readonly string[]): Promise<any> {
-    return this.sectionDB.findByTemplateQuestionId(ids[0]);
+    return this.sectionDB.findByTemplateQuestionId(ids);
   }
 }
