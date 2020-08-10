@@ -16,6 +16,7 @@ export const MESSAGES = {
     REMOVE_CONFIRMATION: "Are you sure you want to delete?",
     INVALID_CREDENTIAL: "Username or password is incorrect",
     LOGGED_IN: "You have successfully logged in. Taking you to portal",
+    PASSWORD_RESET_SENT: "Reset password link has been sent to your email.",
     CREATED: (name) => `${name} created successfully.`,
     DELETED: (name) => `${name} deleted successfully.`,
     UPDATED: (name) => `${name} updated successfully.`,
