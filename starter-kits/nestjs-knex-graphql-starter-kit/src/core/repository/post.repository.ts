@@ -23,4 +23,18 @@ export class PostRepository extends BaseRepository {
       });
       return userIDs.map(userId => postLookups[userId]);
   }
+
+  async findByIdsLoader(IDs: readonly string[]): Promise<any> {
+    const posts: any = await this.connection
+      .table(this.tableName)
+      .whereIn('id', IDs)
+      .select(this.columns);
+    const postLookups = {};
+    posts.forEach(post => {
+        if (!postLookups[post.id]) {
+          postLookups[post.id] = post;
+        }
+      });
+    return IDs.map(id => postLookups[id]);
+  }
 }
