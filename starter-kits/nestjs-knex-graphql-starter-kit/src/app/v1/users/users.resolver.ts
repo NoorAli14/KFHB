@@ -3,26 +3,23 @@ import {
   Query,
   Mutation,
   Args,
-  Info,
   ResolveField,
   Parent
 } from '@nestjs/graphql';
 import { ParseUUIDPipe, NotFoundException } from '@nestjs/common';
 import { Loader } from 'nestjs-dataloader';
+import { Fields } from "@rubix/common/decorators";
 import { Post } from '@rubix/app/v1/posts/post.model';
-import { graphqlKeys } from '@rubix/common/utilities';
-import { UserService } from './users.service';
-import { NewUserInput } from './user.dto';
 import { User } from './user.model';
-
+import { UserService } from './users.service';
+import { NewUserInput, UpdateUserInput } from './user.dto';
 
 @Resolver(User)
 export class UsersResolver {
   constructor(private readonly userService: UserService) {}
 
   @Query(() => [User])
-  users(@Info() info): Promise<User[]> {
-    const columns = graphqlKeys(info);
+  users(@Fields() columns): Promise<User[]> {
     return this.userService.list(columns);
   }
 
@@ -37,12 +34,11 @@ export class UsersResolver {
   @Query(() => User)
   async findUser(
     @Args('id', ParseUUIDPipe) id: string,
-    @Info() info,
+    @Fields() columns,
   ): Promise<User> {
-    const columns = graphqlKeys(info);
     const user: User = await this.userService.findById(id, columns);
     if(!user) {
-      throw new NotFoundException();
+      throw new NotFoundException('User not found');
     }
     return user;
   }
@@ -50,19 +46,17 @@ export class UsersResolver {
   @Mutation(() => User)
   addUser(
     @Args('input') input: NewUserInput,
-    @Info() info,
+    @Fields() columns,
   ): Promise<User> {
-    const columns = graphqlKeys(info);
     return this.userService.create(input, columns);
   }
-  
+
   @Mutation(() => User)
   updateUser(
     @Args('id', ParseUUIDPipe) id: string,
-    @Args('input') input: NewUserInput,
-    @Info() info,
+    @Args('input') input: UpdateUserInput,
+    @Fields() columns,
   ): Promise<User> {
-    const columns = graphqlKeys(info);
     return this.userService.update(id, input, columns);
   }
 
@@ -70,7 +64,7 @@ export class UsersResolver {
   async deleteUser(@Args('id', ParseUUIDPipe) id: string): Promise<boolean> {
     const user: User = await this.userService.findById(id, ['id']);
     if(!user) {
-      throw new NotFoundException();
+      throw new NotFoundException('User not found');
     }
     return this.userService.delete(id);
   }
