@@ -2,13 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { NestDataLoader } from 'nestjs-dataloader';
 import * as DataLoader from 'dataloader';
 import { CommentRepository } from '@rubix/core/repository/';
-import { CommentGQL } from '@rubix/app/v1/comments/comment.model';
+import { Comment } from '@rubix/app/v1/comments/comment.model';
 
 @Injectable()
-export class CommentLoader implements NestDataLoader<string, CommentGQL> {
+export class CommentLoader implements NestDataLoader<string, Comment> {
   constructor(private readonly commentDB: CommentRepository) {}
-  generateDataLoader(): DataLoader<string, CommentGQL> {
-    return new DataLoader<string, CommentGQL>(postIDs =>
+  generateDataLoader(): DataLoader<string, Comment> {
+    return new DataLoader<string, Comment>(postIDs =>
       this.commentDB.findByPostIdsLoader(postIDs),
     );
   }

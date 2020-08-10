@@ -1,12 +1,13 @@
 import { NestFactory } from '@nestjs/core';
 import { Transport } from '@nestjs/microservices';
 import { INestApplication, ValidationPipe, Logger } from '@nestjs/common';
-import { ApplicationModule } from '@app/index';
-import { CommonModule } from '@common/common.module';
-import { LoggingInterceptor } from '@common/interceptors/';
-import { HttpExceptionFilter } from '@common/filters/http-exception.filter';
-import { ConfigurationService } from '@common/configuration/configuration.service';
-import { KernelMiddleware } from '@core/middlewares/index';
+import { ApplicationModule } from '@rubix/app/index';
+import { CommonModule } from '@rubix/common/common.module';
+import { LoggingInterceptor } from '@rubix/common/interceptors/';
+import { HttpExceptionFilter } from '@rubix/common/filters/http-exception.filter';
+import { ConfigurationService } from '@rubix/common/configuration/configuration.service';
+import { KernelMiddleware } from '@rubix/core/middlewares/index';
+
 class Server {
   private _app: INestApplication;
   private _config: ConfigurationService;
@@ -44,7 +45,7 @@ class Server {
     // this.app.useGlobalInterceptors(new TransformInterceptor());
     this.app.useGlobalInterceptors(new LoggingInterceptor());
     this.app.useGlobalFilters(new HttpExceptionFilter());
-    this.app.useGlobalPipes(new ValidationPipe());
+    this.app.useGlobalPipes(new ValidationPipe({transform: true}));
     this.app.setGlobalPrefix(this.Config.APP.API_URL_PREFIX);
   }
 
