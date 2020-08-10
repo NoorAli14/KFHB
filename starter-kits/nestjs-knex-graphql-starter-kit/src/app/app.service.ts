@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigurationService } from '@rubix/common/configuration/configuration.service';
+
 @Injectable()
 export class AppService {
-
-  constructor() {
-  }
 
   getInfo(configService: ConfigurationService): Record<string,any> {
     const links = {
