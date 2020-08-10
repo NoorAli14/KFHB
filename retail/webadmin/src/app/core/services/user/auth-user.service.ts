@@ -2,9 +2,10 @@ import { StorageService } from "./../storage/storage.service";
 import { Injectable } from "@angular/core";
 import { APP_CONST } from "@shared/constants/app.constants";
 import { BehaviorSubject, Observable, Subject } from "rxjs";
-import { EventBusService } from '../event-bus/event-bus.service';
-import { EmitEvent } from '@shared/models/emit-event.model';
-import { Events } from '@shared/enums/events.enum';
+import { EventBusService } from "../event-bus/event-bus.service";
+import { EmitEvent } from "@shared/models/emit-event.model";
+import { Events } from "@shared/enums/events.enum";
+import { snakeToCamelObject } from "@shared/helpers/global.helper";
 
 @Injectable({ providedIn: "root" })
 export class AuthUserService {
@@ -50,7 +51,10 @@ export class AuthUserService {
         },
     ];
 
-    constructor(private storage: StorageService,private eventService: EventBusService,) {
+    constructor(
+        private storage: StorageService,
+        private eventService: EventBusService
+    ) {
         const data = this.storage.getItem(APP_CONST.SIDEBAR);
         if (data) {
             this.modules = data;
@@ -63,22 +67,30 @@ export class AuthUserService {
     }
     set modules(modules) {
         this._sidebarModules = modules;
+        this.storage.setItem(APP_CONST.SIDEBAR, modules);
         setTimeout(() => {
-            this.eventService.emit(new EmitEvent(Events.SESSION_EXPIRED, modules))
+            this.eventService.emit(
+                new EmitEvent(Events.MODULES_UPDATED, modules)
+            );
         }, 1000);
     }
 
-    setUser(user) {
-        this._user = user;
-        const sidebarModules = this.configureModules(user.modules);
-        this.modules = sidebarModules;
-        this.storage.setItem(APP_CONST.CURRENT_USER, user);
-        this.storage.setItem(APP_CONST.SIDEBAR, sidebarModules);
+    set User(user) {
+        this._user = snakeToCamelObject(user);
+        this.eventService.emit(
+            new EmitEvent(Events.USER_UPDATED, this._user )
+        );
+        this.storage.setItem(APP_CONST.CURRENT_USER, this._user);
     }
-    getUser() {
+    get User() {
         if (this._user) return this._user;
         const user = this.storage.getItem(APP_CONST.CURRENT_USER);
         return user ? user : null;
+    }
+    setData(response) {
+        const sidebarModules = this.configureModules(response.modules);
+        this.modules = sidebarModules;
+        this.User = response;
     }
     isLoggedIn() {
         return this._isLoggedIn;
@@ -92,7 +104,7 @@ export class AuthUserService {
         const module = this.findPermission(modules, name);
         return module ? module.permissions : [];
     }
-    findPermission(modules, name) {
+    private findPermission(modules, name) {
         let module, flag;
         modules.forEach((element) => {
             if (flag) return;

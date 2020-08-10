@@ -1,3 +1,4 @@
+import { Permission } from './../../../models/config.model';
 import { CONFIG } from './../../../../../config/index';
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { Role } from "@feature/entitlement/models/role.model";
@@ -20,6 +21,7 @@ import {
     ConfirmDialogModel,
     ConfirmDialogComponent,
 } from "@shared/components/confirm-dialog/confirm-dialog.component";
+import { RoleModuleFormComponent } from '../../components/role-module-form/role-module-form.component';
 
 @Component({
     selector: "app-access-control",
@@ -30,70 +32,61 @@ export class AccessControlComponent implements OnInit {
     dialogRef: any;
     roles: Role[];
     modules: Modules[];
+    permissions: Permission[];
     roleModulesList: RoleModuleModel[];
     message: string = "";
     type: string = "";
+
     pageSize:number=CONFIG.PAGE_SIZE;
     pageSizeOptions:Array<number>=CONFIG.PAGE_SIZE_OPTIONS;
-    displayedColumns = ["moduleId", "roleId", "actions"];
-
-    dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
-
-    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-    @ViewChild(MatSort, { static: false }) sort: MatSort;
+    
+    
+    displayedColumns = ["expandIcon", "moduleId", "roleId","addIcon", "deleteIcon"];
 
     constructor(
         public _matDialog: MatDialog,
         private _service: ConfigMiddlewareService
     ) {}
-
+    deleteUser(index: number): void {}
     ngOnInit(): void {
         this.getData();
     }
 
     onCreateDialog(): void {
-        this.dialogRef = this._matDialog.open(ManagePermissionFormComponent, {
+        this.dialogRef = this._matDialog.open(RoleModuleFormComponent, {
             data: {
                 roles: this.roles,
                 modules: this.modules,
             },
+            panelClass: "app-role-module-form",
+        });
+    }
+    addNewModal(id): void {
+        this.dialogRef = this._matDialog.open(ManagePermissionFormComponent, {
+            data: {
+                permissions: this.permissions,
+                roleModuleId: id,
+            },
             panelClass: "app-manage-permission-form",
         });
     }
-    displayName(id, array) {
-        return getName(id, "name", array);
-    }
-
+    
     getData() {
         this._service.forkConfigData().subscribe(
             (response) => {
-                [this.modules, this.roles] = response;
+                [
+                    this.modules,
+                    this.roles,
+                    this.roleModulesList,
+                    this.permissions,
+                ] = response;
                 this.roleModulesList = snakeToCamelArray(
                     this.roleModulesList
                 ) as RoleModuleModel[];
-
-                this.dataSource = new MatTableDataSource(this.roleModulesList);
-                this.dataSource.paginator = this.paginator;
-                this.dataSource.sort = this.sort;
             },
             (error) => {
                 console.log(error);
             }
         );
-    }
-    camelToSentenceCase(text) {
-        return camelToSentenceCase(text);
-    }
-    confirmDialog(): void {
-        const message = MESSAGES.REMOVE_CONFIRMATION;
-        const dialogData = new ConfirmDialogModel("Confirm Action", message);
-        const dialogRef = this._matDialog.open(ConfirmDialogComponent, {
-            data: dialogData,
-            disableClose: true,
-            panelClass: "app-confirm-dialog",
-            hasBackdrop: true,
-        });
-
-        dialogRef.afterClosed().subscribe((dialogResult) => {});
     }
 }
