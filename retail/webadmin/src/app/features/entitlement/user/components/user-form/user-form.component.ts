@@ -1,6 +1,6 @@
-import { ValidatorService } from './../../../../../core/services/validator-service/validator.service';
-import { NATIONALITY_LIST, STATUS_LIST, GENDER_LIST } from './../../../../../shared/constants/app.constants';
-import { AuthUserService } from "./../../../../../core/services/user/auth-user.service";
+import { ValidatorService } from '@core/services/validator-service/validator.service';
+import { NATIONALITY_LIST, STATUS_LIST, GENDER_LIST } from '@shared/constants/app.constants';
+import { AuthUserService } from "@core/services/user/auth-user.service";
 import {
     Component,
     OnInit,

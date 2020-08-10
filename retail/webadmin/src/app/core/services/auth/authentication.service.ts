@@ -22,7 +22,7 @@ export class AuthenticationService {
     login(model: Login): Observable<any> {
         return this.network.post(LOGIN, model).pipe(
             map((data) => {
-                this.userService.setUser(data);
+                this.userService.setData(data);
                 return data;
             })
         );

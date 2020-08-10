@@ -8,12 +8,15 @@ import { FuseSharedModule } from '@fuse/shared.module';
 import { AboutComponent } from './components/about/about.component';
 import { UpdateProfileComponent } from './components/update-profile/update-profile.component';
 import { SharedModule } from '@shared/shared.module';
+import { MatTabsModule } from '@angular/material/tabs';
+import { UpdatePasswordComponent } from './components/update-password/update-password.component';
 
 @NgModule({
-    declarations: [ProfileComponent, AboutComponent, UpdateProfileComponent],
+    declarations: [ProfileComponent, AboutComponent, UpdateProfileComponent, UpdatePasswordComponent],
     imports: [
         CommonModule,
         SettingRoutingModule,
+        MatTabsModule,
         MaterialFormsModule,
         SharedModule,
         FuseSharedModule,
