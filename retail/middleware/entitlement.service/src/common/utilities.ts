@@ -11,6 +11,17 @@ export const graphqlKeys = (info: any): string[] => {
 };
 
 /**
+ * filterKeys string[]
+ * @param keys
+ * @param filters
+ */
+export const filterKeys = (keys, filters): string[] => {
+  return keys.filter(function(key) {
+    return filters.indexOf(key) === -1;
+  });
+};
+
+/**
  * Full path string
  * @param fileOrDir
  */
@@ -50,4 +61,8 @@ export const generateRandomString = (length: number): string => {
     .toString(36)
     .replace(/[^a-zA-Z0-9]+/g, '')
     .substr(0, length);
+};
+
+export const addMinutes = (minutes: number): Date => {
+  return new Date(new Date().getTime() + minutes*60000);
 };

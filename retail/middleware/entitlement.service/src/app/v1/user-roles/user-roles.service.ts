@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import {UserRoleRepository} from "@core/repository/user-role.repository";
+import {STATUS} from "@common/constants";
 
 @Injectable()
 export class UserRolesService {
@@ -14,6 +15,7 @@ export class UserRolesService {
   }
 
   async create(newUserRole: Record<string, any>, keys?: string[]): Promise<any> {
+    newUserRole.status = STATUS.ACTIVE;
     const [userRole] = await this.userRoleDB.create(newUserRole, keys);
     return userRole;
   }

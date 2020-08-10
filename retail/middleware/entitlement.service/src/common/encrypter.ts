@@ -12,4 +12,9 @@ export class Encrypter {
     encryptPassword(password: string): string {
         return Bcrypt.hashSync(password, this.saltRounds);
     }
+
+    comparePassword(password, hash): boolean {
+        return Bcrypt.compareSync(password, hash);
+    }
+
 }

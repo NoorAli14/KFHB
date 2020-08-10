@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import {RoleModulePermissionRepository} from "@core/repository/role-module-permission.repository";
+import {STATUS} from "@common/constants";
 
 @Injectable()
 export class RoleModulePermissionsService {
@@ -23,6 +24,7 @@ export class RoleModulePermissionsService {
   }
 
   async create(roleModulePermissionObj: Record<string, any>, keys?: string[]): Promise<any> {
+    roleModulePermissionObj.status = STATUS.ACTIVE;
     const [roleModulePermission] = await this.roleModulePermissionsDB.create(roleModulePermissionObj, keys);
     return roleModulePermission;
   }

@@ -36,6 +36,12 @@ export class UserInput {
   status?: string;
 
   @Field({ nullable: true })
+  token?: string;
+
+  @Field({ nullable: true })
+  token_expiry?: Date;
+
+  @Field({ nullable: true })
   created_on?: string;
 
   @Field({ nullable: true })
@@ -52,13 +58,7 @@ export class UserInput {
 
   @Field({ nullable: true })
   deleted_by?: string;
-}
 
-@InputType()
-export class UserPropInput {
-  @Field()
-  record_key?: string;
-
-  @Field()
-  record_value?: string;
+  @Field(type => [String], { nullable: true })
+  role_ids?: string[];
 }

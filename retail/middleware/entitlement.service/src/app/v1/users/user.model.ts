@@ -1,6 +1,8 @@
 import {IsNotEmpty, IsString} from "class-validator";
 import {Field, ID, ObjectType} from "@nestjs/graphql";
 
+import {Role} from "@app/v1/roles/role.model";
+
 @ObjectType()
 export class User {
   @Field(() => ID)
@@ -18,8 +20,8 @@ export class User {
   @Field({ nullable: true })
   contact_no?: string;
 
-  @Field({ nullable: true })
-  password_digest?: string;
+  // @Field({ nullable: true })
+  // password_digest?: string;
 
   @Field({ nullable: true })
   first_name?: string;
@@ -59,4 +61,7 @@ export class User {
 
   @Field({ nullable: true })
   deleted_by?: string;
+
+  @Field(type => [Role], { nullable: true })
+  roles?: Role[];
 }

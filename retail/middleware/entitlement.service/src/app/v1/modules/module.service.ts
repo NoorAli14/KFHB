@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import {ModuleRepository} from "@core/repository/module.repository";
+import {STATUS} from "@common/constants";
 
 @Injectable()
 export class ModuleService {
   constructor(private moduleDB: ModuleRepository) {}
 
   async list(keys: string[]): Promise<any> {
-    return this.moduleDB.list(keys,{"status":"ACTIVE"});
+    return this.moduleDB.list(keys,{"status":STATUS.ACTIVE});
   }
 
   async findById(id: string, keys?: string[]): Promise<any> {
@@ -23,11 +24,12 @@ export class ModuleService {
   }
 
   async create(newModule: Record<string, any>, keys?: string[]): Promise<any> {
+    newModule.status = STATUS.ACTIVE;
     const [module] = await this.moduleDB.create(newModule, keys);
     return module;
   }
 
   async delete(id: string): Promise<any> {
-    return await this.moduleDB.delete({ id: id });
+    return await this.update(id, {"status": STATUS.INACTIVE}, []);
   }
 }

@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import {RoleModuleRepository} from "@core/repository/role-module.repository";
+import {STATUS} from "@common/constants";
 
 @Injectable()
 export class RoleModulesService {
   constructor(private roleModulesDB: RoleModuleRepository) {}
 
   async list(keys: string[]): Promise<any> {
-    return this.roleModulesDB.list(keys,{"status":"ACTIVE"});
+    return this.roleModulesDB.list(keys,{"status":STATUS.ACTIVE});
   }
 
   async findById(id: string, keys?: string[]): Promise<any> {
@@ -23,6 +24,7 @@ export class RoleModulesService {
   }
 
   async create(newRoleModule: Record<string, any>, keys?: string[]): Promise<any> {
+    newRoleModule.status = STATUS.ACTIVE;
     const [roleModule] = await this.roleModulesDB.create(newRoleModule, keys);
     return roleModule;
   }

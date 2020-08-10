@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
+
 import { UserRepository } from '@core/repository/';
-import {UserPropInput} from "@app/v1/users/user.dto";
 import {Encrypter} from "@common/encrypter";
+import {STATUS} from "@common/constants";
+import {KeyValInput} from "@common/inputs/key-val-input";
 
 @Injectable()
 export class UserService {
@@ -9,14 +11,14 @@ export class UserService {
               private encrypter: Encrypter) {}
 
   async list(keys: string[]): Promise<any> {
-    return this.userDB.list(keys,{"status":"ACTIVE"});
+    return this.userDB.list(keys,{"status" : STATUS.ACTIVE});
   }
 
   async findById(id: string, keys?: string[]): Promise<any> {
     return this.userDB.findOne({ id: id }, keys);
   }
 
-  async findByProperty(checks: UserPropInput[], keys?: string[]): Promise<any> {
+  async findByProperty(checks: KeyValInput[], keys?: string[]): Promise<any> {
     const conditions = {};
     checks.forEach(check => {
       conditions[check.record_key] = check.record_value;
@@ -35,6 +37,7 @@ export class UserService {
 
   async create(newUser: Record<string, any>, keys?: string[]): Promise<any> {
     newUser.password_digest = this.encrypter.encryptPassword(newUser.password_digest);
+    newUser.status = STATUS.ACTIVE;
     const [user] = await this.userDB.create(newUser, keys);
     return user;
   }

@@ -8,6 +8,31 @@ export const TABLE = {
   ROLE_MODULE_PERMISSION: 'ENT_ROLE_MODULE_PERMISSION',
 };
 
+export const NUMBERS = {
+  EXPIRY_IN_MINUTES: 240,
+  LENGTH: 60,
+};
+
+export const STATUS = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE'
+};
+
+export const TEMP_ROLE = {
+  ADMIN: 'ADMIN',
+};
+
+export const MESSAGES = {
+  DELETED: 'Deleted Successfully.',
+  INVALID_EMAIL: 'Invalid Email Address',
+  INVALID_PASSWORD: 'Invalid Password.',
+  INVALID_Email_OR_PASSWORD: 'Invalid Email or Password.',
+  INTERNAL_ERROR: 'Internal Error',
+  INVALID_TOKEN: 'Invalid Token.',
+  TOKEN_EXPIRED: 'Token Expired.',
+  PASSWORD_UPDATED: 'Password Updated.'
+};
+
 export const DATABASE_UUID_METHOD = 'NEWID()';
 
 export const DATABASE_MIGRATION_TABLE_NAME = 'RUBIX_ENTITLEMENT_MIGRATIONS';
