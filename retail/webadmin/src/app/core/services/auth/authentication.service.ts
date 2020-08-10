@@ -5,10 +5,7 @@ import { throwError as observableThrowError, Observable, pipe } from "rxjs";
 import { map } from "rxjs/operators";
 import { Injectable } from "@angular/core";
 import { HttpErrorResponse } from "@angular/common/http";
-import { environment } from "@env/environment";
-import { LOGIN } from "app/auth/auth.constant";
-import { StorageService } from "@core/services/storage/storage.service";
-import { APP_CONST } from "@shared/constants/app.constants";
+import { LOGIN, FORGOT_PASSWORD } from "app/auth/auth.constant";
 
 @Injectable({
     providedIn: "root",
@@ -22,10 +19,13 @@ export class AuthenticationService {
     login(model: Login): Observable<any> {
         return this.network.post(LOGIN, model).pipe(
             map((data) => {
-                this.userService.setData(data);
+                this.userService.setData=data;
                 return data;
             })
         );
+    }
+    forgotPassword(model: Login): Observable<any> {
+        return this.network.post(FORGOT_PASSWORD, model)
     }
 
     errorHandler(error: HttpErrorResponse) {

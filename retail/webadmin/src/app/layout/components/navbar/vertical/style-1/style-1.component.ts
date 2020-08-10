@@ -90,7 +90,6 @@ currentUser:any
     ngOnInit(): void
     {
         this.subs.sink = this.eventService.on(Events.USER_UPDATED, (user) => {
-            debugger
             this.currentUser=user;
           })
         this.currentUser=this._authUserService.User;
