@@ -1,7 +1,41 @@
+
 # ################################################################
 # Docker file for wrapping nodejs service components
 # Copyright 2020-21 AionDigital
 # ################################################################
+
+#=================================================================
+# Build Stage 1
+#=================================================================
+# Using latest LTS version running on alpine
+FROM node:12.18.3-alpine AS builder
+
+COPY package.json package-lock.json ./
+
+# Install all Dependencies
+RUN npm install
+
+COPY . ./
+
+# Build
+RUN npm run build
+
+#=================================================================
+# Build Stage 2
+#=================================================================
+# Using latest LTS version running on alpine
+FROM node:12.18.3-alpine AS node_modules
+
+COPY package.json package-lock.json ./
+
+# Install production Dependencies
+RUN npm install --only=production
+
+#=================================================================
+# Master Stage
+#=================================================================
+# Using latest LTS version running on alpine
+FROM node:12.18.3-alpine
 
 # Will remain same for all containers.
 # Version will be changed during CI/CD process
@@ -12,51 +46,9 @@ LABEL description="Container for running rubix boilerplate"
 # Define default arguments
 ARG PORT=4000
 ARG WORKDIR=/home/aiondigital/rubix
-ARG USER=rubix
-ARG NODE_VERSION=12.18.2
+ARG USER=node
 ARG NODE_ENV=production
-
-# Define default timezone environment variables but we can change it through compose/swarm file
-# example TZ=Asia/Bahrain
-
-ENV TZ=UTC
-
-#===========================================
-# Build Stage
-#===========================================
-
-# Using latest LTS version running on alpine
-FROM node:${WORKDIR}-alpine AS builder
-WORKDIR ${WORKDIR}
-COPY package*.json ./
-
-# Provide require authorities and run npm install
-RUN chown -R $USER:$USER ${WORKDIR} && \
-    chmod 770 -R ${WORKDIR} && \
-    npm install && npm install --only=dev
-
-# Copy local code to the container image.
-COPY . .
-
-# Build
-RUN npm run build:prod
-
-# Remove the devDependencies
-RUN npm prune --production
-
-# Author: Faizan AH
-# Date  : 07/25/2020
-# Note  : Commented out these lines for future investigte because Docker is not working on my local Machine. We need to remove `all folders` except `dist` after building the project.
-
-# Remove folders after successfully build
-#RUN rm -rf app bin config lib utilities
-
-#===========================================
-# Master Stage
-#===========================================
-
-# Using latest LTS version running on alpine
-FROM node:${WORKDIR}-alpine
+ARG TZ=Asia/Bahrain
 
 # Set container timezone
 RUN apk add --no-cache tzdata
@@ -68,26 +60,38 @@ RUN chmod -R 644 /etc/passwd && \
     chmod 000 /etc/shadow && \
     chmod -R 644 /etc/group
 
-# Define Working Directory
-WORKDIR ${WORKDIR}
+# Define working directory
+WORKDIR $WORKDIR
 
-# Set user node for future commands
-USER $USER
+# Copy dist folder from builder stage
+COPY --from=builder dist $WORKDIR/dist
 
-# Copy files from build stage to current working directory
-COPY --from=builder ${WORKDIR} ./
+# Copy node_modules folder from node_modules stage
+COPY --from=node_modules node_modules $WORKDIR/node_modules
+
+# Copy local code to the working directory.
+COPY . $WORKDIR
+
+# Provide require authorities
+RUN chown -R $USER:$USER $WORKDIR && \
+    chmod 770 -R $WORKDIR
+
+# Remove folders after successfully build
+RUN rm -rf src test
 
 # Setting environemnt variables
 # These variables will be different from application to application
 ENV ENV_RBX_HOST=${PORT} \
     NODE_ENV=${NODE_ENV} \
-    ENV_RBX_APP_NAME="Rubix boilerplate"  \
-    ENV_RBX_API_URL_PREFIX="/api/v1/" \
+    ENV_RBX_APP_NAME="Onboarding Business service"  \
+    ENV_RBX_API_URL_PREFIX="/api/v1/onboarding" \
     ENV_RBX_HOST="http://localhost" \
-    ENV_CDT_AUTHORITY_HOSTNAME= \
-    # Swagger Environment Variables
-    ENV_RBX_SWAGGER_ENABLED= \
-    ENV_RBX_SWAGGER_ROUTE=
+    TZ=${TZ} \
+    ENV_RBX_SWAGGER_ENABLED="true" \
+    ENV_RBX_SWAGGER_ROUTE="/api/v1/onboarding/docs"
+
+# Set user node for future commands
+USER $USER
 
 # Expose API port    
 EXPOSE ${PORT}

@@ -73,7 +73,7 @@ You must install the following on your local machine:
 │   │   │   │   ├── users.service.ts
 │   │   │   ├── v1.module.ts
 │   │   ├── app.controller.ts
-│   │   ├── app.contrller.spec.ts
+TY│   │   ├── app.contrller.spec.ts
 │   │   ├── app.modules.ts
 │   │   ├── app.service.ts
 │   │   ├── index.ts
@@ -139,7 +139,7 @@ Migrations are a way to make database changes or updates, like creating or dropp
 
 ### Creating/Dropping Tables
 
-Let's create a `Users` table using the `knex` command line tool. In the root of our project run the following commands:
+Let's create a `Users`, `Posts` and `Comments` tables using the `knex` command line tool. In the root of our project run the following commands:
 
 ```bash
 $ npm run migrate:make create_users_table
@@ -149,16 +149,16 @@ The above commands will generate migration scripts in `./src/core/database/migra
 
 The content of these files will stub out empty `up` and `down` functions to create or drop tables or columns.
 
-We now want to build out the `users` table using some of the built in knex methods.
+We now want to build out the `users` `posts` `commentrs` tables using some of the built in knex methods.
 
 **Example `20200625222904_create_users_table.ts`**
 
 ```javascript
 import * as Knex from 'knex';
-import { TABLE } from '@common/constants';
+import { TABLE, DATABASE_UUID_METHOD } from '@rubix/common/constants';
 export async function up(knex: Knex): Promise<any> {
   return knex.schema.createTable(TABLE.USER, table => {
-    table.increments();
+    table.uuid('id').primary().defaultTo(knex.raw(DATABASE_UUID_METHOD));
     table.string('first_name');
     table.string('last_name');
     table.string('email').notNullable();
@@ -173,6 +173,67 @@ export async function down(knex: Knex): Promise<any> {
 }
 ```
 
+```bash
+$ npm run migrate:make create_post_table
+```
+
+**Example `20200727191324_create_post_table.ts`**
+
+```javascript
+import * as Knex from 'knex';
+import { TABLE, DATABASE_UUID_METHOD } from '@rubix/common/constants';
+export async function up(knex: Knex): Promise<any> {
+  return knex.schema.createTable(TABLE.POST, table => {
+    table
+      .uuid('id')
+      .primary()
+      .defaultTo(knex.raw(DATABASE_UUID_METHOD));
+    table.text('description');
+    table
+      .uuid('user_id')
+      .references('id')
+      .inTable(TABLE.USER)
+      .onDelete('cascade');
+    table.timestamp('created_on').defaultTo(knex.fn.now());
+    table.timestamp('updated_on').defaultTo(knex.fn.now());
+  });
+}
+
+export async function down(knex: Knex): Promise<any> {
+  return knex.schema.dropTable(TABLE.POST);
+}
+```
+
+```bash
+$ npm run migrate:make create_comment_table
+```
+
+**Example `20200727191528_create_comment_table.ts`**
+
+```javascript
+import * as Knex from 'knex';
+import { TABLE, DATABASE_UUID_METHOD } from '@rubix/common/constants';
+export async function up(knex: Knex): Promise<any> {
+  return knex.schema.createTable(TABLE.COMMENT, table => {
+    table
+      .uuid('id')
+      .primary()
+      .defaultTo(knex.raw(DATABASE_UUID_METHOD));
+    table.text('message');
+    table
+      .uuid('post_id')
+      .references('id')
+      .inTable(TABLE.POST)
+      .onDelete('cascade');
+    table.timestamp('created_on').defaultTo(knex.fn.now());
+    table.timestamp('updated_on').defaultTo(knex.fn.now());
+  });
+}
+
+export async function down(knex: Knex): Promise<any> {
+  return knex.schema.dropTable(TABLE.COMMENT);
+}
+```
 Now we can run the below command performing a migration and updating our local database:
 
 ```bash
@@ -219,22 +280,13 @@ $ npm run test:cov
 
 ## ❯ Roadmap
 
-### API Gateway
-
-- [ ] Add unit tests
-- [ ] Add Rate Limiter
-- [ ] Add CORS Policies
-- [x] Add refresh token support
-- [ ] Add request/input data validation
-- [ ] Improve logging
-- [ ] Improve error handling
-- [ ] Add DataLoader support
-
-### Microservices
+### Rubix Boilerplate
 
 - [x] Multiple Database client support
 - [x] Add graphql
 - [x] Add Swagger OpenAPI specification
+- [x] Add DataLoader support
+- [x] Docker Containerization
 - [ ] Add authorization
 - [ ] Add caching
 - [x] Add health checks

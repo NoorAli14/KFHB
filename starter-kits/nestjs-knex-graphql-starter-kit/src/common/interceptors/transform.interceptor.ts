@@ -20,9 +20,7 @@ export class TransformInterceptor<T>
     const response = context.switchToHttp().getResponse();
     if (response.statusCode > 300) return next.handle();
     return next.handle().pipe(
-      map(data => {
-        keys: data;
-      }),
+      map(result => result.data),
     );
   }
 }
