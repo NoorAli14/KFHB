@@ -1,9 +1,24 @@
-import { Component, OnInit, ViewEncapsulation } from "@angular/core";
+import { BaseComponent } from "@shared/components/base/base.component";
+import { CONFIG } from "./../../../../../config/index";
+import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
 import { fuseAnimations } from "@fuse/animations";
 import { MatDialog } from "@angular/material/dialog";
 import { Role } from "@feature/entitlement/models/role.model";
 import { RoleFormComponent } from "../../components/role-form/role-form.component";
 import { ConfigMiddlewareService } from "../../services/config-middleware.service";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatSort } from "@angular/material/sort";
+import { MatTableDataSource } from "@angular/material/table";
+import {
+    camelToSentenceCase,
+    camelToSnakeCaseText,
+} from "@shared/helpers/global.helper";
+import { MESSAGES } from "@shared/constants/app.constants";
+import {
+    ConfirmDialogModel,
+    ConfirmDialogComponent,
+} from "@shared/components/confirm-dialog/confirm-dialog.component";
+import { Modules } from '@feature/entitlement/models/modules.model';
 
 @Component({
     selector: "app-role",
@@ -11,43 +26,173 @@ import { ConfigMiddlewareService } from "../../services/config-middleware.servic
     animations: fuseAnimations,
     encapsulation: ViewEncapsulation.None,
 })
-export class RoleComponent implements OnInit {
+export class RoleComponent extends BaseComponent implements OnInit {
     dialogRef: any;
     roles: Role[];
+    modules: Modules[];
     message: string = "";
     type: string = "";
 
-    displayedColumns = ["name", "status", "description", "actions"];
+    pageSize: number = CONFIG.PAGE_SIZE;
+    pageSizeOptions: Array<number> = CONFIG.PAGE_SIZE_OPTIONS;
+
+    dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
+
+    displayedColumns = [
+        "name",
+        "status",
+        "description",
+        "createdOn",
+        "actions",
+    ];
+
+    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+    @ViewChild(MatSort, { static: false }) sort: MatSort;
 
     constructor(
         public _matDialog: MatDialog,
         private _service: ConfigMiddlewareService
-    ) {}
+    ) {
+        super("Config");
+    }
 
     ngOnInit(): void {
+        super.ngOnInit();
         this.getData();
     }
-  
-    onCreateDialog(): void {
-        this.dialogRef = this._matDialog.open(RoleFormComponent, {
-            panelClass: "app-role-form",
-            data:new Role()
-        });
+
+    openDialog(data): void {
+        var _this = this;
+        this.dialogRef = this._matDialog
+            .open(RoleFormComponent, {
+                data: {
+                    role: data ? data : new Role(),
+                    userPermissions: this.userPermissions,
+                    modules:this.modules
+                },
+                panelClass: "app-role-form",
+            })
+            .componentInstance.sendResponse.subscribe((response) => {
+                if (response.id) {
+                    _this.editRole(response);
+                } else {
+                    _this.createRole(response);
+                }
+            });
     }
-    onEditDialog(role): void {
-        this.dialogRef = this._matDialog.open(RoleFormComponent, {
-            panelClass: "app-role-form",
-            data:role
-        });
-    }
+
     getData() {
-        this._service.getRoles().subscribe(
+        this._service.forkRolesData().subscribe(
             (response) => {
-                 this.roles = response;
+                [this.roles,] = response;
+                this.modules= this.mapModules(response[1])
+                this.dataSource = new MatTableDataSource(this.roles);
+                this.dataSource.paginator = this.paginator;
+                this.dataSource.sort = this.sort;
+                this.message = "";
             },
             (error) => {
-                console.log(error);
+                this.type = "error";
+                this.message = MESSAGES.UNKNOWN;
             }
         );
+    }
+    mapModules(modules){
+        const mapped=modules.map((item)=>{
+            item.text=item.name;
+            item.value=item.id
+            if (item.sub_modules) {
+                item.children=item.sub_modules;
+                this.mapModules(item.sub_modules);
+            }
+            return item;
+        })
+        return mapped;
+    }
+    camelToSentenceCase(text) {
+        return camelToSentenceCase(text);
+    }
+    camelToSnakeCase(text) {
+        return camelToSnakeCaseText(text);
+    }
+    confirmDialog(id): void {
+        const message = MESSAGES.REMOVE_CONFIRMATION;
+        const dialogData = new ConfirmDialogModel("Confirm Action", message);
+        const dialogRef = this._matDialog.open(ConfirmDialogComponent, {
+            data: dialogData,
+            disableClose: true,
+            panelClass: "app-confirm-dialog",
+            hasBackdrop: true,
+        });
+
+        dialogRef.afterClosed().subscribe((status) => {
+            if (status) {
+                this.deleteRole(id);
+            }
+        });
+    }
+
+    createRole(data: Role) {
+        this._service.createRole(data).subscribe(
+            (response) => {
+                this.type = "success";
+                this.message = MESSAGES.CREATED("Role");
+                const data = this.dataSource.data;
+
+                data.push(response);
+                this.updateGrid(data);
+                this._matDialog.closeAll();
+            },
+            (response) => {
+                this.type = "error";
+                this.message = MESSAGES.UNKNOWN;
+            }
+        );
+    }
+    hideMessage() {
+        setTimeout(() => {
+            this.message = "";
+        }, 2000);
+    }
+    editRole(model: Role) {
+        this._service.editRole(model.id, model).subscribe(
+            (response) => {
+                this.type = "success";
+                this.message = MESSAGES.UPDATED("Role");
+
+                const index = this.dataSource.data.findIndex(
+                    (x) => x.id == model.id
+                );
+                this.roles[index] = response;
+                this.updateGrid(this.roles);
+                this.hideMessage();
+                this._matDialog.closeAll();
+            },
+            (response) => {
+                this.type = "error";
+                this.message = MESSAGES.UNKNOWN;
+            }
+        );
+    }
+    deleteRole(id: string) {
+        this._service.deleteRole(id).subscribe(
+            (response) => {
+                const index = this.dataSource.data.findIndex((x) => x.id == id);
+                this.roles.splice(index, 1);
+                this.updateGrid(this.roles);
+                this.type = "success";
+                this.hideMessage();
+                this.message = MESSAGES.DELETED("Role");
+            },
+            (response) => {
+                this.type = "error";
+                this.message = MESSAGES.UNKNOWN;
+            }
+        );
+    }
+    updateGrid(data) {
+        this.dataSource.data = data;
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
     }
 }

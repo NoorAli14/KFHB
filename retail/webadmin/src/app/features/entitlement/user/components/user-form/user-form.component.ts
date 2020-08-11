@@ -1,10 +1,21 @@
-import { Component, OnInit, ViewEncapsulation, Inject } from "@angular/core";
+import { ValidatorService } from '@core/services/validator-service/validator.service';
+import { NATIONALITY_LIST, STATUS_LIST, GENDER_LIST } from '@shared/constants/app.constants';
+import { AuthUserService } from "@core/services/user/auth-user.service";
+import {
+    Component,
+    OnInit,
+    ViewEncapsulation,
+    Inject,
+    EventEmitter,
+    Output,
+} from "@angular/core";
 import { FormGroup, Validators, FormControl } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { User } from "@feature/entitlement/models/user.model";
 import { UserService } from "@feature/entitlement/user/services/user.service";
 import { MESSAGES } from "@shared/constants/app.constants";
-import { Role } from '@feature/entitlement/models/role.model';
+import { Role } from "@feature/entitlement/models/role.model";
+import { camelToSnakeCase } from "@shared/helpers/global.helper";
 
 @Component({
     selector: "app-user-form",
@@ -18,10 +29,17 @@ export class UserFormComponent implements OnInit {
     type: string = "";
     response: User;
     roles: Role[];
+    permissions: any[];
+    nationalityList: any[]=NATIONALITY_LIST;
+    genderList: any[]=GENDER_LIST;
+    statusList: any[]=STATUS_LIST;
+    @Output() sendResponse: EventEmitter<User> = new EventEmitter<any>();
+
     constructor(
         public matDialogRef: MatDialogRef<UserFormComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
-        private _userService: UserService
+        private _userService: UserService,
+        private _authUserService: AuthUserService
     ) {}
     requiredIfUpdating(predicate) {
         return (formControl) => {
@@ -35,6 +53,7 @@ export class UserFormComponent implements OnInit {
         };
     }
     ngOnInit(): void {
+        this.permissions = this._authUserService.getPermissionsByModule("User");
         this.userForm = new FormGroup({
             id: new FormControl(this.data.user.id),
             username: new FormControl(this.data.user.username, [
@@ -50,7 +69,7 @@ export class UserFormComponent implements OnInit {
                 this.requiredIfUpdating(() => this.userForm.get("id").value),
             ]),
             contactNo: new FormControl(this.data.user.contactNo, [
-                Validators.required,
+                Validators.required,ValidatorService.numbersOnly
             ]),
             gender: new FormControl(this.data.user.gender, [
                 this.requiredIfUpdating(() => this.userForm.get("id").value),
@@ -65,29 +84,23 @@ export class UserFormComponent implements OnInit {
             nationalityId: new FormControl(this.data.user.nationalityId, [
                 this.requiredIfUpdating(() => this.userForm.get("id").value),
             ]),
-            roleId: new FormControl(this.data.user.status, [Validators.required]),
+            roles: new FormControl(this.data.user.roles.map((x) => x.id), [
+                Validators.required,
+            ]),
             status: new FormControl(this.data.user.status, [
                 this.requiredIfUpdating(() => this.userForm.get("id").value),
             ]),
         });
-        this.roles= this.data.roles;
+        this.roles = this.data.roles;
     }
 
     onSubmit() {
-        this.userForm.value.id = Math.random().toString();
-        this._userService.createUser(this.userForm.value).subscribe(
-            (response: User) => {
-                this.response = response;
-                this.type = "success";
-                this.message = MESSAGES.CREATED("User");
-            },
-            () => {
-                this.type = "error";
-                this.message = MESSAGES.UNKNOWN;
-            }
-        );
-    }
-    onClose() {
-        this.matDialogRef.close(this.response);
+        let model = { ...this.userForm.value };
+        model.roles = this.userForm.value.roles.map((item) => ({
+            id: item,
+        }));
+        model = camelToSnakeCase(model);
+    
+        this.sendResponse.emit(model);
     }
 }

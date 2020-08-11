@@ -1,0 +1,20 @@
+@import "src/@fuse/scss/fuse";
+.app-holiday-form {
+    @include media-breakpoint("xs") {
+        width: 100%;
+    }
+    @include media-breakpoint("gt-xs") {
+        width: 50%;
+    }
+    .mat-dialog-container {
+        padding: 0;
+    }
+    .dialog-content-wrapper {
+        max-height: 85vh;
+        display: flex;
+        flex-direction: column;
+    }
+    .margin {
+        margin: 0px 0px 19px 10px;
+    }
+}

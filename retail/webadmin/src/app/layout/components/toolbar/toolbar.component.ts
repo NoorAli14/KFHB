@@ -1,3 +1,4 @@
+import { AuthUserService } from '@core/services/user/auth-user.service';
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -25,7 +26,7 @@ export class ToolbarComponent implements OnInit, OnDestroy
     navigation: any;
     selectedLanguage: any;
     userStatusOptions: any[];
-
+    currentUser:any;
     // Private
     private _unsubscribeAll: Subject<any>;
 
@@ -39,9 +40,11 @@ export class ToolbarComponent implements OnInit, OnDestroy
     constructor(
         private _fuseConfigService: FuseConfigService,
         private _fuseSidebarService: FuseSidebarService,
-        private _translateService: TranslateService
+        private _translateService: TranslateService,
+        private _authUserService:AuthUserService
     )
     {
+        this.currentUser=this._authUserService.User;
         // Set the defaults
         this.userStatusOptions = [
             {

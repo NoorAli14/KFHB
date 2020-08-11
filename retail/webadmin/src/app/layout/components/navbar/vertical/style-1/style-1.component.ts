@@ -1,3 +1,5 @@
+import { EventBusService } from './../../../../../core/services/event-bus/event-bus.service';
+import { AuthUserService } from '@core/services/user/auth-user.service';
 import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subject } from 'rxjs';
@@ -7,6 +9,8 @@ import { FuseConfigService } from '@fuse/services/config.service';
 import { FuseNavigationService } from '@fuse/components/navigation/navigation.service';
 import { FusePerfectScrollbarDirective } from '@fuse/directives/fuse-perfect-scrollbar/fuse-perfect-scrollbar.directive';
 import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
+import { Events } from '@shared/enums/events.enum';
+import { UnsubscribeOnDestroyAdapter } from '@shared/models/unsubscribe-adapter.model';
 
 @Component({
     selector     : 'navbar-vertical-style-1',
@@ -14,30 +18,25 @@ import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
     styleUrls    : ['./style-1.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
-export class NavbarVerticalStyle1Component implements OnInit, OnDestroy
+export class NavbarVerticalStyle1Component extends UnsubscribeOnDestroyAdapter implements OnInit, OnDestroy
 {
     fuseConfig: any;
     navigation: any;
-
+currentUser:any
     // Private
     private _fusePerfectScrollbar: FusePerfectScrollbarDirective;
     private _unsubscribeAll: Subject<any>;
-
-    /**
-     * Constructor
-     *
-     * @param {FuseConfigService} _fuseConfigService
-     * @param {FuseNavigationService} _fuseNavigationService
-     * @param {FuseSidebarService} _fuseSidebarService
-     * @param {Router} _router
-     */
+   
     constructor(
         private _fuseConfigService: FuseConfigService,
         private _fuseNavigationService: FuseNavigationService,
         private _fuseSidebarService: FuseSidebarService,
-        private _router: Router
+        private _router: Router,
+        private _authUserService:AuthUserService,
+        private eventService:EventBusService
     )
     {
+        super()
         // Set the private defaults
         this._unsubscribeAll = new Subject();
     }
@@ -90,6 +89,10 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy
      */
     ngOnInit(): void
     {
+        this.subs.sink = this.eventService.on(Events.USER_UPDATED, (user) => {
+            this.currentUser=user;
+          })
+        this.currentUser=this._authUserService.User;
         this._router.events
             .pipe(
                 filter((event) => event instanceof NavigationEnd),

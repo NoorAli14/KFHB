@@ -21,7 +21,7 @@
             *ngIf="message.length > 0"
             fxLayout="row"
             fxLayoutAlign="center"
-            class="p-24 mr-24 message-box {{ type }} "
+            class="p-16 mr-24 message-box {{ type }} "
         >
             {{ message }}
         </div>
@@ -122,11 +122,8 @@
                     >
                         <mat-label>Gender</mat-label>
                         <mat-select formControlName="gender">
-                            <mat-option [value]="'Male'">
-                                Male
-                            </mat-option>
-                            <mat-option [value]="'Female'">
-                                Female
+                            <mat-option *ngFor="let item of genderList" [value]="item.id">
+                                {{item.name}}
                             </mat-option>
                         </mat-select>
                         <mat-icon matSuffix class="secondary-text"
@@ -145,11 +142,8 @@
                     >
                         <mat-label>Nationality</mat-label>
                         <mat-select formControlName="nationalityId">
-                            <mat-option [value]="'Pakistan'">
-                                Pakistan
-                            </mat-option>
-                            <mat-option [value]="'United Kingdom'">
-                                United Kingdom
+                            <mat-option *ngFor="let item of nationalityList" [value]="item.id">
+                                {{item.name}}
                             </mat-option>
                         </mat-select>
                         <mat-icon matSuffix class="secondary-text"
@@ -195,73 +189,7 @@
                         </mat-error>
                     </mat-form-field>
 
-                    <mat-form-field
-                        appearance="outline"
-                        fxFlex="32"
-                        class="pr-4"
-                    >
-                        <mat-label>Role</mat-label>
-                        <mat-select formControlName="roleId">
-                            <mat-option [value]="'Pakistan'">
-                                Pakistan
-                            </mat-option>
-                            <mat-option [value]="'United Kingdom'">
-                                United Kingdom
-                            </mat-option>
-                        </mat-select>
-                        <mat-icon matSuffix class="secondary-text"
-                            >security</mat-icon
-                        >
-                        <mat-error>
-                            <app-mat-error
-                                [control]="userForm.get('roleId')"
-                            ></app-mat-error>
-                        </mat-error>
-                    </mat-form-field>
-
-                    <mat-form-field
-                        *ngIf="!data.id"
-                        appearance="outline"
-                        fxFlex="32"
-                        class="pr-4"
-                    >
-                        <mat-label>Password</mat-label>
-                        <input
-                            type="password"
-                            matInput
-                            formControlName="password"
-                        />
-                        <mat-icon matSuffix class="secondary-text"
-                            >vpn_key</mat-icon
-                        >
-                        <mat-error>
-                            <app-mat-error
-                                [control]="userForm.get('password')"
-                            ></app-mat-error>
-                        </mat-error>
-                    </mat-form-field>
-                    <mat-form-field
-                        *ngIf="!data.id"
-                        appearance="outline"
-                        fxFlex="32"
-                        class="pl-4"
-                    >
-                        <mat-label>Confirm Password</mat-label>
-                        <input
-                            type="password"
-                            matInput
-                            formControlName="confirmPassword"
-                        />
-                        <mat-icon matSuffix class="secondary-text"
-                            >vpn_key</mat-icon
-                        >
-                        <mat-error>
-                            <app-mat-error
-                                [control]="userForm.get('confirmPassword')"
-                            ></app-mat-error>
-                        </mat-error>
-                    </mat-form-field>
-                   
+                 
                 </div>
 
                 <div

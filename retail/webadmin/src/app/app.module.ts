@@ -1,4 +1,4 @@
-import { NgModule } from "@angular/core";
+import { NgModule, Injector } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { MatMomentDateModule } from "@angular/material-moment-adapter";
@@ -20,6 +20,10 @@ import { LayoutModule } from "app/layout/layout.module";
 import { AppRoutingModule } from "./app-routing.module";
 import { NgxUiLoaderModule, NgxUiLoaderHttpModule } from "ngx-ui-loader";
 import { ngxUiLoaderConfig } from "@config/index";
+import { EventBusService } from '@core/services/event-bus/event-bus.service';
+import { AuthUserService } from '@core/services/user/auth-user.service';
+import { AppInjector } from '@shared/app.injector';
+import { TreeviewModule } from 'ngx-treeview';
 
 @NgModule({
     declarations: [AppComponent],
@@ -41,9 +45,15 @@ import { ngxUiLoaderConfig } from "@config/index";
         FuseSidebarModule,
         FuseThemeOptionsModule,
         CoreModule,
+        TreeviewModule.forRoot(),
         // App modules
         LayoutModule,
     ],
+    providers:[EventBusService,AuthUserService],
     bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule {
+    constructor(injector: Injector) {
+        AppInjector.injector = injector;
+      }
+}
