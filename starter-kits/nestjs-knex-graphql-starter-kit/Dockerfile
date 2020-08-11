@@ -47,7 +47,6 @@ LABEL description="Container for running rubix boilerplate"
 ARG PORT=4000
 ARG WORKDIR=/home/aiondigital/rubix
 ARG USER=node
-ARG NODE_VERSION=12.18.2
 ARG NODE_ENV=production
 ARG PORT=4000
 ARG TZ=Asia/Bahrain
@@ -88,7 +87,7 @@ ENV ENV_RBX_HOST=${PORT} \
     ENV_RBX_APP_NAME="Rubix boilerplate"  \
     ENV_RBX_API_URL_PREFIX="/api/v1/" \
     ENV_RBX_HOST="http://localhost" \
-    TZ=${TZ}
+    TZ=${TZ} \
     # DATABASE Environment Variables
     ENV_RBX_DB_USERNAME= \
     ENV_RBX_DB_PASS= \
