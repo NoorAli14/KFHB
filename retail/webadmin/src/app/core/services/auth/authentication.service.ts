@@ -19,7 +19,7 @@ export class AuthenticationService {
     login(model: Login): Observable<any> {
         return this.network.post(LOGIN, model).pipe(
             map((data) => {
-                this.userService.setData=data;
+                this.userService.setData(data);
                 return data;
             })
         );
@@ -27,17 +27,19 @@ export class AuthenticationService {
     forgotPassword(model: Login): Observable<any> {
         return this.network.post(FORGOT_PASSWORD, model)
     }
+    
+    resetPassword(model: Login): Observable<any> {
+        return this.network.post(`${FORGOT_PASSWORD}/token`, model)
+    }
+
+    getTokenStatus(): Observable<any> {
+        return this.network.getAll(`${FORGOT_PASSWORD}/token`)
+    }
 
     errorHandler(error: HttpErrorResponse) {
         return observableThrowError(error.message || "Server Error");
     }
 
-    // isAuthenticated(): Promise<boolean> {
-    //     return new Promise<boolean>((resolve, reject) => {
-    //         const token = this.currentUser.getToken();
-    //         resolve(token ? true : false);
-    //     });
-    // }
 
     // refreshToken(token): Observable<any> {
     //     let httpHeaders = new HttpHeaders({ "x-refresh-token": `${token}` });

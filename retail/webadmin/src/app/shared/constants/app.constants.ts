@@ -17,6 +17,8 @@ export const MESSAGES = {
     INVALID_CREDENTIAL: "Username or password is incorrect",
     LOGGED_IN: "You have successfully logged in. Taking you to portal",
     PASSWORD_RESET_SENT: "Reset password link has been sent to your email.",
+    PASSWORD_UPDATED: "Your password has been updated.",
+    INVALID_RESET_TOKEN: "Reset password token is invalid.",
     CREATED: (name) => `${name} created successfully.`,
     DELETED: (name) => `${name} deleted successfully.`,
     UPDATED: (name) => `${name} updated successfully.`,

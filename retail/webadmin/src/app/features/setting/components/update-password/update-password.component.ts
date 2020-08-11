@@ -24,11 +24,11 @@ export class UpdatePasswordComponent implements OnInit {
             newPassword: new FormControl("", [Validators.required]),
             confirmPassword: new FormControl("", [
                 Validators.required,
-                this.passwordMatcher.bind(this),
+                this.confirmPasswordValidator.bind(this),
             ]),
         });
     }
-    passwordMatcher(control: FormControl): { [s: string]: boolean } {
+    confirmPasswordValidator(control: FormControl): { [s: string]: boolean } {
         if (
             this.updatePasswordForm &&
             control.value !== this.updatePasswordForm.controls.newPassword.value
