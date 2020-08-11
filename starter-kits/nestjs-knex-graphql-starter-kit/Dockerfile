@@ -48,7 +48,6 @@ ARG PORT=4000
 ARG WORKDIR=/home/aiondigital/rubix
 ARG USER=node
 ARG NODE_ENV=production
-ARG PORT=4000
 ARG TZ=Asia/Bahrain
 
 # Set container timezone
@@ -88,7 +87,6 @@ ENV ENV_RBX_HOST=${PORT} \
     ENV_RBX_API_URL_PREFIX="/api/v1/" \
     ENV_RBX_HOST="http://localhost" \
     TZ=${TZ} \
-    # DATABASE Environment Variables
     ENV_RBX_DB_USERNAME= \
     ENV_RBX_DB_PASS= \
     ENV_RBX_DB_NAME= \
@@ -98,7 +96,6 @@ ENV ENV_RBX_HOST=${PORT} \
     ENV_RBX_DB_DIALECT= \
     ENV_RBX_DB_TIMEZONE= \
     ENV_RBX_DB_DEBUG= \
-    # Swagger Environment Variables
     ENV_RBX_SWAGGER_ENABLED= \
     ENV_RBX_SWAGGER_ROUTE=
 
