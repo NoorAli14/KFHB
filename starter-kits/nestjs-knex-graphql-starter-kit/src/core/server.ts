@@ -42,9 +42,8 @@ class Server {
   private mountGlobals(): void {
     // Registering Hooks, logger, validators, pipes and Exception / Error Handlers
     this.app.enableShutdownHooks();
-    // this.app.useGlobalInterceptors(new TransformInterceptor());
     this.app.useGlobalInterceptors(new LoggingInterceptor());
-    // this.app.useGlobalFilters(new HttpExceptionFilter());
+    this.app.useGlobalFilters(new HttpExceptionFilter());
     this.app.useGlobalPipes(new ValidationPipe({transform: true}));
     this.app.setGlobalPrefix(this.Config.APP.API_URL_PREFIX);
   }
