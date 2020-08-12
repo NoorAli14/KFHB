@@ -15,8 +15,7 @@ import { BaseComponent } from '@shared/components/base/base.component';
 })
 export class UpdatePasswordComponent extends BaseComponent implements OnInit {
     updatePasswordForm: FormGroup;
-    message: string = "";
-    type: string = "";
+    
     constructor(private _settingService: SettingService) {
         super()
     }
@@ -47,9 +46,8 @@ export class UpdatePasswordComponent extends BaseComponent implements OnInit {
             (response) => {
                  this.errorType = "success";
                  this.responseMessage = MESSAGES.UPDATED("Password");
-                this.updatePasswordForm.reset();
             },
-            (this.onError)
+            (response=>super.onError(response))
         );
     }
 }

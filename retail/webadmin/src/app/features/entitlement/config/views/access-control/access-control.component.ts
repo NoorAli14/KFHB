@@ -28,8 +28,8 @@ export class AccessControlComponent extends BaseComponent implements OnInit {
     modules: Modules[];
     permissions: Permission[];
     roleModulesList: RoleModuleModel[];
-    message: string = "";
-    type: string = "";
+    
+    
 
     pageSize:number=CONFIG.PAGE_SIZE;
     pageSizeOptions:Array<number>=CONFIG.PAGE_SIZE_OPTIONS;
@@ -80,7 +80,7 @@ export class AccessControlComponent extends BaseComponent implements OnInit {
                     this.roleModulesList
                 ) as RoleModuleModel[];
             },
-            (this.onError)
+           (response=>super.onError(response))
         );
     }
 }

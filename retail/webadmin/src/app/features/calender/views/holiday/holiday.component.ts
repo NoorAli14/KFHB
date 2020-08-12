@@ -11,6 +11,7 @@ import { MESSAGES } from '@shared/constants/app.constants';
 import { ConfirmDialogModel, ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
 import { CalendarService } from '@feature/calender/services/calendar.service';
 import { Holiday } from '@feature/calender/models/holiday.model';
+import { BaseComponent } from '@shared/components/base/base.component';
 
 
 @Component({
@@ -20,11 +21,11 @@ import { Holiday } from '@feature/calender/models/holiday.model';
   encapsulation: ViewEncapsulation.None,
     animations   : fuseAnimations
 })
-export class HolidayComponent implements OnInit {
+export class HolidayComponent extends BaseComponent implements OnInit {
     dialogRef: any;
     holidays: Holiday[];
-    message: string = "";
-    type: string = "";
+    
+    
 
     displayedColumns = [
         "date",
@@ -44,7 +45,9 @@ export class HolidayComponent implements OnInit {
     constructor(
         public _matDialog: MatDialog,
         private _calenderService: CalendarService
-    ) {}
+    ) {
+        super()
+    }
 
     ngOnInit(): void {
         this.getData();

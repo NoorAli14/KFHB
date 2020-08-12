@@ -1,4 +1,3 @@
-import { AuthUserService } from "@core/services/user/auth-user.service";
 import { SettingService } from "./../../setting.service";
 import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { fuseAnimations } from "@fuse/animations";
@@ -18,13 +17,12 @@ import { BaseComponent } from '@shared/components/base/base.component';
 })
 export class ProfileComponent extends BaseComponent implements OnInit {
     dialogRef: any;
-    message: string = "";
-    type: string = "";
+    
+    
     currentUser: any;
     constructor(
         public _matDialog: MatDialog,
         private _settingService: SettingService,
-        public _authUserService: AuthUserService
     ) {
         super()
     }
@@ -57,7 +55,7 @@ export class ProfileComponent extends BaseComponent implements OnInit {
                  this.responseMessage = MESSAGES.UPDATED("Profile");
                 this._matDialog.closeAll();
             },
-            (this.onError)
+           (response=>super.onError(response))
         );
     }
 }

@@ -15,6 +15,7 @@ import { User } from "@feature/entitlement/models/user.model";
 import { UserService } from "@feature/entitlement/user/services/user.service";
 import { Role } from "@feature/entitlement/models/role.model";
 import { camelToSnakeCase } from "@shared/helpers/global.helper";
+import { BaseComponent } from '@shared/components/base/base.component';
 
 @Component({
     selector: "app-user-form",
@@ -22,10 +23,10 @@ import { camelToSnakeCase } from "@shared/helpers/global.helper";
     styleUrls: ["./user-form.component.scss"],
     encapsulation: ViewEncapsulation.None,
 })
-export class UserFormComponent implements OnInit {
+export class UserFormComponent extends BaseComponent implements OnInit {
     userForm: FormGroup;
-    message: string = "";
-    type: string = "";
+    
+    
     response: User;
     roles: Role[];
     permissions: any[];
@@ -37,9 +38,9 @@ export class UserFormComponent implements OnInit {
     constructor(
         public matDialogRef: MatDialogRef<UserFormComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
-        private _userService: UserService,
-        private _authUserService: AuthUserService
-    ) {}
+    ) {
+    super()
+    }
     requiredIfUpdating(predicate) {
         return (formControl) => {
             if (!formControl.parent) {

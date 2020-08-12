@@ -37,8 +37,8 @@ export class UserComponent extends BaseComponent implements OnInit {
     roles: Role[];
     userPermissions: any[];
     username: FormControl;
-    message: string = "";
-    type: string = "";
+    
+    
 
     pageSize: number = CONFIG.PAGE_SIZE;
     pageSizeOptions: Array<number> = CONFIG.PAGE_SIZE_OPTIONS;

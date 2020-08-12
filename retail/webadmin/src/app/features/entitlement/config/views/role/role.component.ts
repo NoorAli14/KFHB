@@ -89,7 +89,7 @@ export class RoleComponent extends BaseComponent implements OnInit {
                 this.dataSource.sort = this.sort;
                 this.responseMessage = "";
             },
-            (this.onError)
+           (response=>super.onError(response))
         );
     }
     mapModules(modules){
@@ -138,7 +138,7 @@ export class RoleComponent extends BaseComponent implements OnInit {
                 this.updateGrid(data);
                 this._matDialog.closeAll();
             },
-            (this.onError)
+           (response=>super.onError(response))
         );
     }
     hideMessage() {
@@ -160,7 +160,7 @@ export class RoleComponent extends BaseComponent implements OnInit {
                 this.hideMessage();
                 this._matDialog.closeAll();
             },
-            (this.onError)
+           (response=>super.onError(response))
         );
     }
     deleteRole(id: string) {
@@ -173,7 +173,7 @@ export class RoleComponent extends BaseComponent implements OnInit {
                 this.hideMessage();
                 this.responseMessage = MESSAGES.DELETED("Role");
             },
-            (this.onError)
+           (response=>super.onError(response))
         );
     }
     updateGrid(data) {

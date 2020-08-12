@@ -6,6 +6,7 @@ import { MESSAGES, GENDER_LIST, NATIONALITY_LIST } from "@shared/constants/app.c
 import { fuseAnimations } from '@fuse/animations';
 import { User } from '@feature/entitlement/models/user.model';
 import { UserService } from '@feature/entitlement/user/services/user.service';
+import { BaseComponent } from '@shared/components/base/base.component';
 
 @Component({
   selector: 'app-update-profile',
@@ -14,11 +15,11 @@ import { UserService } from '@feature/entitlement/user/services/user.service';
    encapsulation: ViewEncapsulation.None,
     animations: fuseAnimations,
 })
-export class UpdateProfileComponent implements OnInit {
+export class UpdateProfileComponent extends BaseComponent implements OnInit {
 
     userForm: FormGroup;
-    message: string = "";
-    type: string = "";
+    
+    
     response: User;
     @Output() sendResponse: EventEmitter<User> = new EventEmitter<any>();
     nationalityList: any[]=NATIONALITY_LIST;
@@ -27,7 +28,9 @@ export class UpdateProfileComponent implements OnInit {
         public matDialogRef: MatDialogRef<UpdateProfileComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
         private _settingService: SettingService
-    ) {}
+    ) {
+        super()
+    }
 
     ngOnInit(): void {
         this.userForm = new FormGroup({
