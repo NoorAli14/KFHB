@@ -13,8 +13,8 @@ import { MESSAGES } from "@shared/constants/app.constants";
 })
 export class UserFormComponent implements OnInit {
     userForm: FormGroup;
-    message: string = "";
-    type: string = "";
+    
+    
     response: User;
     constructor(
         public matDialogRef: MatDialogRef<UserFormComponent>,

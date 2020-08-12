@@ -1,3 +1,4 @@
+import { BaseComponent } from '@shared/components/base/base.component';
 import { Component, OnInit, ViewEncapsulation, Inject } from '@angular/core';
 import { fuseAnimations } from '@fuse/animations';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -14,17 +15,19 @@ import { Holiday } from '@feature/calender/models/holiday.model';
   encapsulation: ViewEncapsulation.None,
   animations   : fuseAnimations
 })
-export class HolidayFormComponent implements OnInit {
+export class HolidayFormComponent extends BaseComponent implements OnInit {
   holidayForm: FormGroup;
-  message: string = "";
-  type: string = "";
+  
+  
 
   constructor(
       public matDialogRef: MatDialogRef<HolidayFormComponent>,
       @Inject(MAT_DIALOG_DATA) public data: Holiday,
       private _service: CalendarService,
       private dialog: MatDialog
-  ) {}
+  ) {
+      super()
+  }
 
   ngOnInit(): void {
       this.holidayForm = new FormGroup({

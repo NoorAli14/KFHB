@@ -22,8 +22,8 @@ import { BaseComponent } from '@shared/components/base/base.component';
 })
 export class LoginComponent extends BaseComponent implements OnInit {
     loginForm: FormGroup;
-    message: string = "";
-    type: string = "";
+    
+    
     returnUrl: string;
     constructor(
         private _fuseConfigService: FuseConfigService,

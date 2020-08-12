@@ -1,5 +1,4 @@
 import { BaseComponent } from "@shared/components/base/base.component";
-import { AuthUserService } from "@core/services/user/auth-user.service";
 import {
     Component,
     OnInit,
@@ -10,8 +9,7 @@ import {
 } from "@angular/core";
 import {
     MatDialog,
-    MAT_DIALOG_DATA,
-    MatDialogRef,
+    
 } from "@angular/material/dialog";
 import { fuseAnimations } from "@fuse/animations";
 import { Permission } from "@feature/entitlement/models/config.model";
@@ -94,7 +92,7 @@ export class ModulesComponent extends BaseComponent implements OnInit {
                 this.makeFlat(response[0]);
                 this.updateGrid(this.modules);
             },
-            (this.onError)
+           (response=>super.onError(response))
         );
     }
     makeFlat(response: any[]) {
@@ -145,7 +143,7 @@ export class ModulesComponent extends BaseComponent implements OnInit {
                 this.updateGrid(data);
                 this._matDialog.closeAll();
             },
-            (this.onError)
+           (response=>super.onError(response))
         );
     }
     hideMessage() {
@@ -170,7 +168,7 @@ export class ModulesComponent extends BaseComponent implements OnInit {
                 this.hideMessage();
                 this._matDialog.closeAll();
             },
-            (this.onError)
+           (response=>super.onError(response))
         );
     }
     deleteModule(id: string) {
@@ -183,7 +181,7 @@ export class ModulesComponent extends BaseComponent implements OnInit {
                 this.hideMessage();
                  this.responseMessage = MESSAGES.DELETED("Module");
             },
-            (this.onError)
+           (response=>super.onError(response))
         );
     }
     updateGrid(data) {

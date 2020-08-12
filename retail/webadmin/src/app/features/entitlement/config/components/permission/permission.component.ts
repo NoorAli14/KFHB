@@ -40,7 +40,7 @@ export class PermissionComponent extends BaseComponent implements OnInit {
                 this.dataSource.data = this.roleModulesList;
                 console.log(response)
             },
-            (this.onError)
+           (response=>super.onError(response))
         );
     }
 }

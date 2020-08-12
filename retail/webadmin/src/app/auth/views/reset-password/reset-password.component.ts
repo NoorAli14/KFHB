@@ -83,7 +83,7 @@ export class ResetPasswordComponent extends BaseComponent implements OnInit, OnD
                  this.errorType = "success";
                  this.responseMessage = MESSAGES.PASSWORD_UPDATED;
             },
-            (this.onError)
+           (response=>super.onError(response))
         );
     }
     getEmailTokenStatus() {

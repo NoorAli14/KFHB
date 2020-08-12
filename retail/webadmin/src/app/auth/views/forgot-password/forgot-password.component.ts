@@ -15,8 +15,8 @@ import { BaseComponent } from '@shared/components/base/base.component';
     animations: fuseAnimations,
 })
 export class ForgotPasswordComponent extends BaseComponent implements OnInit {
-    message: string = "";
-    type: string = "";
+    
+    
     forgotPasswordForm: FormGroup;
     constructor(
         private _fuseConfigService: FuseConfigService,
@@ -55,7 +55,7 @@ export class ForgotPasswordComponent extends BaseComponent implements OnInit {
                      this.errorType = "success";
                      this.responseMessage = MESSAGES.PASSWORD_RESET_SENT;
                 },
-                (this.onError)
+               (response=>super.onError(response))
             );
     }
 }
