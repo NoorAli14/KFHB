@@ -1,5 +1,5 @@
 import { BaseComponent } from "@shared/components/base/base.component";
-import { CONFIG } from "./../../../../../config/index";
+import { CONFIG } from "@config/index";
 import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
 import { fuseAnimations } from "@fuse/animations";
 import { MatDialog } from "@angular/material/dialog";
@@ -23,7 +23,6 @@ import {
     ConfirmDialogModel,
     ConfirmDialogComponent,
 } from "@shared/components/confirm-dialog/confirm-dialog.component";
-import { AuthUserService } from "@core/services/user/auth-user.service";
 
 @Component({
     selector: "app-user",
@@ -74,12 +73,12 @@ export class UserComponent extends BaseComponent implements OnInit {
     loadAllUsers() {
         this._service.getUsers().subscribe(
             (users) => {
-                this.message = "";
+                 this.responseMessage = "";
                 this.users = users;
             },
             (error) => {
-                this.type = "error";
-                this.message = MESSAGES.UNKNOWN;
+                 this.errorType = "error";
+                 this.responseMessage = MESSAGES.UNKNOWN;
             }
         );
     }
@@ -147,29 +146,29 @@ export class UserComponent extends BaseComponent implements OnInit {
     createUser(model: User) {
         this._service.createUser(model).subscribe(
             (response) => {
-                this.type = "success";
-                this.message = MESSAGES.CREATED("User");
+                 this.errorType = "success";
+                 this.responseMessage = MESSAGES.CREATED("User");
                 const data = this.dataSource.data;
                 data.push(response);
                 this.updateGrid(data);
                 this._matDialog.closeAll();
             },
             (response) => {
-                this.type = "error";
-                this.message = MESSAGES.UNKNOWN;
+                 this.errorType = "error";
+                 this.responseMessage = MESSAGES.UNKNOWN;
             }
         );
     }
     hideMessage() {
         setTimeout(() => {
-            this.message = "";
+             this.responseMessage = "";
         }, 2000);
     }
     editUser(model: User) {
         this._service.editUser(model.id, model).subscribe(
             (response) => {
-                this.type = "success";
-                this.message = MESSAGES.UPDATED("Module");
+                 this.errorType = "success";
+                 this.responseMessage = MESSAGES.UPDATED("Module");
                 const index = this.dataSource.data.findIndex(
                     (x) => x.id == model.id
                 );
@@ -179,8 +178,8 @@ export class UserComponent extends BaseComponent implements OnInit {
                 this._matDialog.closeAll();
             },
             (response) => {
-                this.type = "error";
-                this.message = MESSAGES.UNKNOWN;
+                 this.errorType = "error";
+                 this.responseMessage = MESSAGES.UNKNOWN;
             }
         );
     }
@@ -190,13 +189,13 @@ export class UserComponent extends BaseComponent implements OnInit {
                 const index = this.dataSource.data.findIndex((x) => x.id == id);
                 this.users.splice(index, 1);
                 this.updateGrid(this.users);
-                this.type = "success";
+                 this.errorType = "success";
                 this.hideMessage();
-                this.message = MESSAGES.DELETED("User");
+                 this.responseMessage = MESSAGES.DELETED("User");
             },
             (response) => {
-                this.type = "error";
-                this.message = MESSAGES.UNKNOWN;
+                 this.errorType = "error";
+                 this.responseMessage = MESSAGES.UNKNOWN;
             }
         );
     }

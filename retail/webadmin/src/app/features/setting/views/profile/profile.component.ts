@@ -1,5 +1,4 @@
-import { EventBusService } from "./../../../../core/services/event-bus/event-bus.service";
-import { AuthUserService } from "./../../../../core/services/user/auth-user.service";
+import { AuthUserService } from "@core/services/user/auth-user.service";
 import { SettingService } from "./../../setting.service";
 import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { fuseAnimations } from "@fuse/animations";
@@ -7,9 +6,8 @@ import { MatDialog } from "@angular/material/dialog";
 import { UpdateProfileComponent } from "@feature/setting/components/update-profile/update-profile.component";
 import { User } from "@feature/entitlement/models/user.model";
 import { MESSAGES } from "@shared/constants/app.constants";
-import { UnsubscribeOnDestroyAdapter } from "@shared/models/unsubscribe-adapter.model";
-import { Events } from "@shared/enums/events.enum";
 import { camelToSnakeCase } from '@shared/helpers/global.helper';
+import { BaseComponent } from '@shared/components/base/base.component';
 
 @Component({
     selector: "app-profile",
@@ -18,7 +16,7 @@ import { camelToSnakeCase } from '@shared/helpers/global.helper';
     encapsulation: ViewEncapsulation.None,
     animations: fuseAnimations,
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent extends BaseComponent implements OnInit {
     dialogRef: any;
     message: string = "";
     type: string = "";
@@ -26,8 +24,10 @@ export class ProfileComponent implements OnInit {
     constructor(
         public _matDialog: MatDialog,
         private _settingService: SettingService,
-        private _authUserService: AuthUserService
-    ) {}
+        public _authUserService: AuthUserService
+    ) {
+        super()
+    }
 
     ngOnInit(): void {
         this.currentUser = this._authUserService.User;
@@ -53,14 +53,11 @@ export class ProfileComponent implements OnInit {
             (response: User) => {
                 this._authUserService.User=response;
                 this.currentUser=this._authUserService.User;
-                this.type = "success";
-                this.message = MESSAGES.UPDATED("Profile");
+                 this.errorType = "success";
+                 this.responseMessage = MESSAGES.UPDATED("Profile");
                 this._matDialog.closeAll();
             },
-            () => {
-                this.type = "error";
-                this.message = MESSAGES.UNKNOWN;
-            }
+            (this.onError)
         );
     }
 }

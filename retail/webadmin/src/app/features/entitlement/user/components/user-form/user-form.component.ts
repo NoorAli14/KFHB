@@ -13,7 +13,6 @@ import { FormGroup, Validators, FormControl } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { User } from "@feature/entitlement/models/user.model";
 import { UserService } from "@feature/entitlement/user/services/user.service";
-import { MESSAGES } from "@shared/constants/app.constants";
 import { Role } from "@feature/entitlement/models/role.model";
 import { camelToSnakeCase } from "@shared/helpers/global.helper";
 

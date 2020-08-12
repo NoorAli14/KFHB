@@ -30,8 +30,6 @@ export class RoleComponent extends BaseComponent implements OnInit {
     dialogRef: any;
     roles: Role[];
     modules: Modules[];
-    message: string = "";
-    type: string = "";
 
     pageSize: number = CONFIG.PAGE_SIZE;
     pageSizeOptions: Array<number> = CONFIG.PAGE_SIZE_OPTIONS;
@@ -89,12 +87,9 @@ export class RoleComponent extends BaseComponent implements OnInit {
                 this.dataSource = new MatTableDataSource(this.roles);
                 this.dataSource.paginator = this.paginator;
                 this.dataSource.sort = this.sort;
-                this.message = "";
+                this.responseMessage = "";
             },
-            (error) => {
-                this.type = "error";
-                this.message = MESSAGES.UNKNOWN;
-            }
+            (this.onError)
         );
     }
     mapModules(modules){
@@ -135,30 +130,27 @@ export class RoleComponent extends BaseComponent implements OnInit {
     createRole(data: Role) {
         this._service.createRole(data).subscribe(
             (response) => {
-                this.type = "success";
-                this.message = MESSAGES.CREATED("Role");
+                this.errorType = "success";
+                this.responseMessage = MESSAGES.CREATED("Role");
                 const data = this.dataSource.data;
 
                 data.push(response);
                 this.updateGrid(data);
                 this._matDialog.closeAll();
             },
-            (response) => {
-                this.type = "error";
-                this.message = MESSAGES.UNKNOWN;
-            }
+            (this.onError)
         );
     }
     hideMessage() {
         setTimeout(() => {
-            this.message = "";
+            this.responseMessage = "";
         }, 2000);
     }
     editRole(model: Role) {
         this._service.editRole(model.id, model).subscribe(
             (response) => {
-                this.type = "success";
-                this.message = MESSAGES.UPDATED("Role");
+                this.errorType = "success";
+                this.responseMessage = MESSAGES.UPDATED("Role");
 
                 const index = this.dataSource.data.findIndex(
                     (x) => x.id == model.id
@@ -168,10 +160,7 @@ export class RoleComponent extends BaseComponent implements OnInit {
                 this.hideMessage();
                 this._matDialog.closeAll();
             },
-            (response) => {
-                this.type = "error";
-                this.message = MESSAGES.UNKNOWN;
-            }
+            (this.onError)
         );
     }
     deleteRole(id: string) {
@@ -180,14 +169,11 @@ export class RoleComponent extends BaseComponent implements OnInit {
                 const index = this.dataSource.data.findIndex((x) => x.id == id);
                 this.roles.splice(index, 1);
                 this.updateGrid(this.roles);
-                this.type = "success";
+                this.errorType = "success";
                 this.hideMessage();
-                this.message = MESSAGES.DELETED("Role");
+                this.responseMessage = MESSAGES.DELETED("Role");
             },
-            (response) => {
-                this.type = "error";
-                this.message = MESSAGES.UNKNOWN;
-            }
+            (this.onError)
         );
     }
     updateGrid(data) {

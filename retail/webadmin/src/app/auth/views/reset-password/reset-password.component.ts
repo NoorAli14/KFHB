@@ -13,6 +13,7 @@ import { fuseAnimations } from "@fuse/animations";
 import { AuthenticationService } from "@core/services/auth/authentication.service";
 import { MESSAGES } from "@shared/constants/app.constants";
 import { camelToSnakeCase } from "@shared/helpers/global.helper";
+import { BaseComponent } from '@shared/components/base/base.component';
 
 @Component({
     selector: "reset-password",
@@ -21,10 +22,9 @@ import { camelToSnakeCase } from "@shared/helpers/global.helper";
     encapsulation: ViewEncapsulation.None,
     animations: fuseAnimations,
 })
-export class ResetPasswordComponent implements OnInit, OnDestroy {
+export class ResetPasswordComponent extends BaseComponent implements OnInit, OnDestroy {
     resetPasswordForm: FormGroup;
-    message: string = "";
-    type: string = "";
+   
     // Private
     private _unsubscribeAll: Subject<any>;
 
@@ -32,6 +32,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
         private _fuseConfigService: FuseConfigService,
         private _authService: AuthenticationService
     ) {
+        super()
         // Configure the layout
         this._fuseConfigService.config = {
             layout: {
@@ -79,21 +80,18 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
         model = camelToSnakeCase(model);
         this._authService.resetPassword(model).subscribe(
             (response) => {
-                this.type = "success";
-                this.message = MESSAGES.PASSWORD_UPDATED;
+                 this.errorType = "success";
+                 this.responseMessage = MESSAGES.PASSWORD_UPDATED;
             },
-            (error) => {
-                this.type = "error";
-                this.message = MESSAGES.UNKNOWN;
-            }
+            (this.onError)
         );
     }
     getEmailTokenStatus() {
         this._authService.getTokenStatus().subscribe(
             (response) => {},
             (error) => {
-                this.type = "error";
-                this.message = MESSAGES.INVALID_RESET_TOKEN;
+                 this.errorType = "error";
+                 this.responseMessage = MESSAGES.INVALID_RESET_TOKEN;
             }
         );
     }

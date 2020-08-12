@@ -5,6 +5,7 @@ import { FormGroup, Validators, FormControl } from "@angular/forms";
 import { FuseConfigService } from "@fuse/services/config.service";
 import { fuseAnimations } from "@fuse/animations";
 import { MESSAGES } from "@shared/constants/app.constants";
+import { BaseComponent } from '@shared/components/base/base.component';
 
 @Component({
     selector: "forgot-password",
@@ -13,7 +14,7 @@ import { MESSAGES } from "@shared/constants/app.constants";
     encapsulation: ViewEncapsulation.None,
     animations: fuseAnimations,
 })
-export class ForgotPasswordComponent implements OnInit {
+export class ForgotPasswordComponent extends BaseComponent implements OnInit {
     message: string = "";
     type: string = "";
     forgotPasswordForm: FormGroup;
@@ -21,6 +22,7 @@ export class ForgotPasswordComponent implements OnInit {
         private _fuseConfigService: FuseConfigService,
         private _authService: AuthenticationService
     ) {
+        super()
         // Configure the layout
         this._fuseConfigService.config = {
             layout: {
@@ -50,13 +52,10 @@ export class ForgotPasswordComponent implements OnInit {
             .forgotPassword(this.forgotPasswordForm.value)
             .subscribe(
                 (response) => {
-                    this.type = "success";
-                    this.message = MESSAGES.PASSWORD_RESET_SENT;
+                     this.errorType = "success";
+                     this.responseMessage = MESSAGES.PASSWORD_RESET_SENT;
                 },
-                (error) => {
-                    this.type = "error";
-                    this.message = MESSAGES.UNKNOWN
-                }
+                (this.onError)
             );
     }
 }

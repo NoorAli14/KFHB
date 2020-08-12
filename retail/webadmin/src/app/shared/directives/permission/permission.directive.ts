@@ -27,15 +27,15 @@ export class PermissionDirective implements OnInit {
         if (!this.isView) {
             this.renderer.setStyle(el, "display", "none");
         }
-        if (!this.isEdit && this.type === "edit") {
+        if (!this.isEdit &&  this.type === "edit") {
             this.renderer.setStyle(el, "display", "none");
             return;
         }
-        if (!this.isCreate && this.type === "create") {
+        if (!this.isCreate &&  this.type === "create") {
             this.renderer.setStyle(el, "display", "none");
             return;
         }
-        if (!this.isDelete && this.type === "delete") {
+        if (!this.isDelete &&  this.type === "delete") {
           this.renderer.setStyle(el, "display", "none");
       }
     }
