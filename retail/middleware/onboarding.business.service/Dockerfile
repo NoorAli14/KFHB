@@ -5,7 +5,7 @@
 # ################################################################
 
 #=================================================================
-# Build Stage 1
+# Stage 01: Building nodejs service
 #=================================================================
 # Using latest LTS version running on alpine
 FROM node:12.18.3-alpine AS builder
@@ -13,7 +13,7 @@ FROM node:12.18.3-alpine AS builder
 COPY package.json package-lock.json ./
 
 # Install all Dependencies
-RUN npm install
+RUN npm install --silent
 
 COPY . ./
 
@@ -21,7 +21,7 @@ COPY . ./
 RUN npm run build
 
 #=================================================================
-# Build Stage 2
+# Stage 02: Installing production Dependencies
 #=================================================================
 # Using latest LTS version running on alpine
 FROM node:12.18.3-alpine AS node_modules
@@ -29,7 +29,7 @@ FROM node:12.18.3-alpine AS node_modules
 COPY package.json package-lock.json ./
 
 # Install production Dependencies
-RUN npm install --only=production
+RUN npm install --only=production --silent
 
 #=================================================================
 # Master Stage
