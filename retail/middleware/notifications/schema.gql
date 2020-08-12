@@ -1,0 +1,43 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+directive @key(fields: String!) on OBJECT | INTERFACE
+
+directive @extends on OBJECT | INTERFACE
+
+directive @external on OBJECT | FIELD_DEFINITION
+
+directive @requires(fields: String!) on FIELD_DEFINITION
+
+directive @provides(fields: String!) on FIELD_DEFINITION
+
+input Context {
+  key: String
+  value: String
+}
+
+type Contexts {
+  key: String
+  value: String
+}
+
+type EmailGQL {
+  to: String
+  template: String
+  title: String
+  body: String
+  context: [Contexts!]
+}
+
+type Mutation {
+  sendEmail(input: SendEmailInput!): EmailGQL!
+}
+
+input SendEmailInput {
+  to: String
+  template: String
+  subject: String
+  body: String
+  context: [Context!]
+}
