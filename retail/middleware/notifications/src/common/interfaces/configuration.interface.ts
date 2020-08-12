@@ -31,6 +31,11 @@ export interface iDATABASE {
   TIMEOUT?: number;
   IS_DEBUG?: boolean;
 }
+export interface iSMTP {
+  SMTP_USER?: string;
+  SMTP_PASS?: string;
+}
+
 export interface iConfig {
   /** Application Details */
   APP: iAPP;
@@ -38,6 +43,7 @@ export interface iConfig {
   DATABASE?: iDATABASE;
   SWAGGER?: iSWAGGER;
   GRAPHQL?: iGRAPHQL;
+  iSMTP?: iSMTP
 
   /**
    * The log level to use.

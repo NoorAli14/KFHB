@@ -33,22 +33,15 @@ export class SendEmailInput {
   @MaxLength(1000)
   body?: string;
 
-  // @Field({ nullable: true })
-  // @IsOptional()
-  // context?: object;
-
-  //   @ValidateNested({ each: true })
-  //   @Type(() => Data)
-  //   data: Data[];
+  @Field(type => [Context], { nullable: true })
+  @IsOptional()
+  context?: Context[];
 }
-
-// class Data {
-
-//   @IsNotEmpty()
-//   @IsString()
-//   type: string;
-
-//   @IsNotEmpty()
-//   @IsNumber()
-//   id: number;
-// }
+@InputType()
+class Context {
+  @Field({ nullable: true })
+  key: string;
+  
+  @Field({ nullable: true })
+  value: string;
+}

@@ -8,6 +8,7 @@ import {
   iSWAGGER,
   iGRAPHQL,
   iConfig,
+  iSMTP
 } from '@common/interfaces/configuration.interface';
 export const DEFAULT_ENV: iConfig = {
   APP: {
@@ -85,6 +86,19 @@ export class ConfigurationService {
         : isTruthy(this.get('ENV_RBX_DB_DEBUG', DEFAULT_ENV.DATABASE.IS_DEBUG)),
     };
   }
+
+    // Parse iSMTP Environment Variables
+    public get SMTP(): iSMTP {
+      return {
+        SMTP_USER: this.get('ENV_RBX_SMTP_USER', DEFAULT_ENV.iSMTP.SMTP_USER),
+        SMTP_PASS: this.get('ENV_RBX_SMTP_PASS', DEFAULT_ENV.iSMTP.SMTP_PASS),
+
+        // PORT: parseInt(
+        //   this.get('ENV_RBX_DB_PORT', DEFAULT_ENV.DATABASE.PORT),
+        //   10,
+        // )
+      };
+    }
 
   get SWAGGER(): iSWAGGER {
     return {

@@ -15,6 +15,15 @@ export class EmailGQL {
   @Field({ nullable: true })
   body: string;
 
-  // @Field({ nullable: true })
-  // context: object;
+  @Field(type => [Contexts], { nullable: true })
+  context: Contexts[];
+}
+
+@ObjectType()
+class Contexts {
+  @Field({ nullable: true })
+  key: string;
+  
+  @Field({ nullable: true })
+  value: string;
 }

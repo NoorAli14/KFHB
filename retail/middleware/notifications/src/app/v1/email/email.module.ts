@@ -4,6 +4,11 @@ import { EmailService } from './email.service';
 
 import { MailerModule } from '@nestjs-modules/mailer';
 import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
+import { join } from 'path';
+import { ConfigurationService } from '@common/configuration/configuration.service';
+import { DEFAULT_SENDING_NAME, DEFAULT_SENDING_EMAIL } from '@common/constants';
+
+
 @Module({
   imports: [
     MailerModule.forRoot({
@@ -20,12 +25,12 @@ import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
         },
       },
       defaults: {
-        from:'"Aion Digital" <mraza@aiondigital.com>',
+        from:`"${DEFAULT_SENDING_NAME}" <${DEFAULT_SENDING_EMAIL}>`,
       },
       preview: false,
       template: {
         // dir: __dirname + '/templates',
-        dir: '/home/ahmad/Documents/Office/AION-DIGITAL/rubix/retail/middleware/notifications/src/app/v1/email/templates',
+        dir: join(`${process.cwd()}`,'./src/app/v1/email/templates'),
         adapter: new PugAdapter(),
         options: {
           strict: true,
