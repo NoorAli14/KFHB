@@ -1,7 +1,6 @@
 {
-    "name": "fuse",
-    "version": "9.0.0",
-    "license": "https://themeforest.net/licenses/terms/regular",
+    "name": "rubix",
+    "version": "0.0.1",
     "scripts": {
         "ng": "ng",
         "start": "ng serve --open",

@@ -10,6 +10,7 @@ export enum APP_CONST {
     SIDEBAR = "_sidebar",
     ACCESS_TOKEN = "_token",
     REFRESH_TOKEN = "_refresh_token",
+    APP_NAME='Rubix'
 }
 export const MESSAGES = {
     UNKNOWN: "We are unable to process the request.",

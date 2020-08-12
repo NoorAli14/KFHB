@@ -11,6 +11,7 @@ import { FusePerfectScrollbarDirective } from '@fuse/directives/fuse-perfect-scr
 import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
 import { Events } from '@shared/enums/events.enum';
 import { UnsubscribeOnDestroyAdapter } from '@shared/models/unsubscribe-adapter.model';
+import { APP_CONST } from '@shared/constants/app.constants';
 
 @Component({
     selector     : 'navbar-vertical-style-1',
@@ -26,7 +27,7 @@ currentUser:any
     // Private
     private _fusePerfectScrollbar: FusePerfectScrollbarDirective;
     private _unsubscribeAll: Subject<any>;
-   
+    appName:string;
     constructor(
         private _fuseConfigService: FuseConfigService,
         private _fuseNavigationService: FuseNavigationService,
@@ -39,6 +40,7 @@ currentUser:any
         super()
         // Set the private defaults
         this._unsubscribeAll = new Subject();
+        this.appName=APP_CONST.APP_NAME;
     }
 
     // -----------------------------------------------------------------------------------------------------
