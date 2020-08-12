@@ -25,7 +25,6 @@ export class UserService {
     deleteUser(id: string) {
         return this._networkService.onDelete(`${USER}/${id}`);
     }
-
     forkUserData(){
         return forkJoin([this.getUsers(),this.getRoles()])
     }

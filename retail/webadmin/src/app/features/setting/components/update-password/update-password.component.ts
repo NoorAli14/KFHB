@@ -4,6 +4,7 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { fuseAnimations } from "@fuse/animations";
 import { MESSAGES } from "@shared/constants/app.constants";
 import { camelToSnakeCase } from "@shared/helpers/global.helper";
+import { BaseComponent } from '@shared/components/base/base.component';
 
 @Component({
     selector: "app-update-password",
@@ -12,11 +13,13 @@ import { camelToSnakeCase } from "@shared/helpers/global.helper";
     encapsulation: ViewEncapsulation.None,
     animations: fuseAnimations,
 })
-export class UpdatePasswordComponent implements OnInit {
+export class UpdatePasswordComponent extends BaseComponent implements OnInit {
     updatePasswordForm: FormGroup;
     message: string = "";
     type: string = "";
-    constructor(private _settingService: SettingService) {}
+    constructor(private _settingService: SettingService) {
+        super()
+    }
 
     ngOnInit(): void {
         this.updatePasswordForm = new FormGroup({
@@ -42,14 +45,11 @@ export class UpdatePasswordComponent implements OnInit {
         model = camelToSnakeCase(model);
         this._settingService.updatePassword(model).subscribe(
             (response) => {
-                this.type = "success";
-                this.message = MESSAGES.UPDATED("Password");
+                 this.errorType = "success";
+                 this.responseMessage = MESSAGES.UPDATED("Password");
                 this.updatePasswordForm.reset();
             },
-            (response) => {
-                this.type = "error";
-                this.message = MESSAGES.UNKNOWN;
-            }
+            (this.onError)
         );
     }
 }

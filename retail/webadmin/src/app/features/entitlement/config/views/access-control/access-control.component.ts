@@ -13,22 +13,16 @@ import {
     camelToSentenceCase,
 } from "@shared/helpers/global.helper";
 import { fuseAnimations } from "@fuse/animations";
-import { MatTableDataSource } from "@angular/material/table";
-import { MatPaginator } from "@angular/material/paginator";
-import { MatSort } from "@angular/material/sort";
-import { MESSAGES } from "@shared/constants/app.constants";
-import {
-    ConfirmDialogModel,
-    ConfirmDialogComponent,
-} from "@shared/components/confirm-dialog/confirm-dialog.component";
+
 import { RoleModuleFormComponent } from '../../components/role-module-form/role-module-form.component';
+import { BaseComponent } from '@shared/components/base/base.component';
 
 @Component({
     selector: "app-access-control",
     templateUrl: "./access-control.component.html",
     animations: fuseAnimations,
 })
-export class AccessControlComponent implements OnInit {
+export class AccessControlComponent extends BaseComponent implements OnInit {
     dialogRef: any;
     roles: Role[];
     modules: Modules[];
@@ -46,7 +40,9 @@ export class AccessControlComponent implements OnInit {
     constructor(
         public _matDialog: MatDialog,
         private _service: ConfigMiddlewareService
-    ) {}
+    ) {
+        super()
+    }
     deleteUser(index: number): void {}
     ngOnInit(): void {
         this.getData();
@@ -84,9 +80,7 @@ export class AccessControlComponent implements OnInit {
                     this.roleModulesList
                 ) as RoleModuleModel[];
             },
-            (error) => {
-                console.log(error);
-            }
+            (this.onError)
         );
     }
 }
