@@ -1,13 +1,26 @@
 import * as path from 'path';
+import * as glob from 'glob';
+
+// requires all the files which conform to the given pattern and returns the list of defaults exports
+export const requireDefaults = (pattern: string): any => {
+  return glob
+    .sync(pattern, { cwd: __dirname, absolute: true })
+    .map(require)
+    .map(imported => imported.default);
+};
 
 /**
- * graphqlKeys string[]
+ * graphqlFields string[]
  * @param info
  */
-export const graphqlKeys = (info: Record<string, any>): string[] => {
-  return info.fieldNodes[0].selectionSet.selections.map(
-    item => item.name.value,
-  );
+export const graphqlFields = (info: { [key: string]: any }): string[] => {
+  const keys = [];
+  info.fieldNodes[0].selectionSet.selections.forEach(item => {
+    if (!item.selectionSet) {
+      keys.push(item.name.value);
+    }
+  });
+  return keys;
 };
 
 /**
