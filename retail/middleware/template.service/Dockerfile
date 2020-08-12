@@ -83,12 +83,20 @@ RUN rm -rf src test
 # These variables will be different from application to application
 ENV ENV_RBX_HOST=${PORT} \
     NODE_ENV=${NODE_ENV} \
-    ENV_RBX_APP_NAME="Onboarding Business service"  \
-    ENV_RBX_API_URL_PREFIX="/api/v1/onboarding" \
+    ENV_RBX_APP_NAME="Rubix | Template Service"  \
     ENV_RBX_HOST="http://localhost" \
     TZ=${TZ} \
-    ENV_RBX_SWAGGER_ENABLED="true" \
-    ENV_RBX_SWAGGER_ROUTE="/api/v1/onboarding/docs"
+    ENV_RBX_DB_USERNAME= \
+    ENV_RBX_DB_PASS= \
+    ENV_RBX_DB_NAME= \
+    ENV_RBX_DB_HOST= \
+    ENV_RBX_DB_PORT= \
+    ENV_RBX_DB_TIMEOUT= \
+    ENV_RBX_DB_DIALECT= \
+    ENV_RBX_DB_TIMEZONE= \
+    ENV_RBX_DB_DEBUG= \
+    ENV_RBX_SWAGGER_ENABLED= \
+    ENV_RBX_SWAGGER_ROUTE=
 
 # Set user node for future commands
 USER $USER
