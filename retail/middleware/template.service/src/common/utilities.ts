@@ -4,7 +4,7 @@ import * as path from 'path';
  * graphqlKeys string[]
  * @param info
  */
-export function graphqlKeys(info: Record<string, unknown>): string[] {
+export function graphqlFields(info: Record<string, unknown>): string[] {
   const keys = [];
   info.fieldNodes[0].selectionSet.selections.forEach(item => {
     if (!item.selectionSet) {

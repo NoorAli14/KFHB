@@ -1,8 +1,8 @@
 import * as DataLoader from 'dataloader';
 import { Injectable } from "@nestjs/common";
 import { NestDataLoader } from 'nestjs-dataloader';
-import { OptionsService } from "./options.service";
-import { OptionGQL } from "./option.model";
+import { OptionsService } from "../../app/v1/options/options.service";
+import { OptionGQL } from "../../app/v1/options/option.model";
 
 @Injectable()
 export class OptionLoader implements NestDataLoader<string, OptionGQL> {

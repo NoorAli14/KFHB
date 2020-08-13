@@ -4,21 +4,20 @@ import {
   Resolver,
   Query,
   Args,
-  Info,
   ResolveField,
   Parent,
 } from '@nestjs/graphql';
 import { TemplateQuestionsService } from './template-questions.service';
 import { TemplateQuestionGQL } from './template-question.model';
-import { graphqlKeys } from '@common/utilities';
 import { TemplateGQL } from '../templates/template.model';
 import { QuestionGQL } from '../questions/question.model';
 import { SectionGQL } from '../sections/section.model';
 import { Loader } from 'nestjs-dataloader';
-import { SectionLoader } from '../sections/section.loader';
+import { SectionLoader } from '../../../core/dataloaders/section.loader';
 import * as DataLoader from 'dataloader';
-import { TemplateLoader } from '../templates/template.loader';
-import { QuestionLoader } from '../questions/question.loader';
+import { TemplateLoader } from '../../../core/dataloaders/template.loader';
+import { QuestionLoader } from '../../../core/dataloaders/question.loader';
+import { Fields } from '@common/decorators';
 
 @Resolver(TemplateQuestionGQL)
 export class TemplateQuestionsResolver {
@@ -55,18 +54,17 @@ export class TemplateQuestionsResolver {
   }
 
   @Query(() => [TemplateQuestionGQL])
-  async templatesQuestionsList(@Info() info): Promise<TemplateQuestionGQL[]> {
-    const keys = graphqlKeys(info);
-    return this.templateQuestionsService.list(keys);
+  async templatesQuestionsList(
+    @Fields() columns: string[],
+  ): Promise<TemplateQuestionGQL[]> {
+    return this.templateQuestionsService.list(columns);
   }
 
   @Query(() => TemplateQuestionGQL)
   async findTemplateQuestion(
     @Args('id') id: string,
-    @Info() info,
+    @Fields() columns: string[],
   ): Promise<TemplateQuestionGQL> {
-    const keys = graphqlKeys(info);
-
-    return this.templateQuestionsService.findById(id, keys);
+    return this.templateQuestionsService.findById(id, columns);
   }
 }

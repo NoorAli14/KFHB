@@ -2,7 +2,24 @@ import { Module, OnModuleDestroy } from '@nestjs/common';
 import { KnexModule, InjectKnex, Knex } from 'nestjs-knex';
 import { CommonModule } from '@common/common.module';
 import { DBConfigurationService } from '@common/configuration/dbconfiguration.service';
-import { TemplateRepository } from '@core/repository/';
+import {
+  TemplateRepository,
+  OptionRepository,
+  QuestionRepository,
+  TemplateQuestionsRepository,
+  TemplateResponsesRepository,
+  SectionRepository,
+} from './';
+
+const repositories = [
+  TemplateRepository,
+  OptionRepository,
+  QuestionRepository,
+  TemplateQuestionsRepository,
+  TemplateResponsesRepository,
+  SectionRepository,
+];
+
 @Module({
   imports: [
     CommonModule,
@@ -14,8 +31,8 @@ import { TemplateRepository } from '@core/repository/';
       inject: [DBConfigurationService],
     }),
   ],
-  providers: [TemplateRepository],
-  exports: [TemplateRepository],
+  providers: repositories,
+  exports: repositories,
 })
 export class RepositoryModule implements OnModuleDestroy {
   @InjectKnex() private readonly connection: Knex;
