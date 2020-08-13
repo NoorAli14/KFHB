@@ -1,27 +1,24 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
-import { Resolver, Args, Info, Query } from '@nestjs/graphql';
+import { Resolver, Args, Query } from '@nestjs/graphql';
 import { TemplateGQL } from './template.model';
 import { TemplatesService } from './templates.service';
-import { graphqlKeys } from '@common/utilities';
+import { Fields } from '@common/decorators';
 
 @Resolver(TemplateGQL)
 export class TemplatesResolver {
   constructor(private readonly templateService: TemplatesService) {}
 
   @Query(() => [TemplateGQL])
-  async templatesList(@Info() info): Promise<TemplateGQL[]> {
-    const keys = graphqlKeys(info);
-    return this.templateService.list(keys);
+  async templatesList(@Fields() columns: string[]): Promise<TemplateGQL[]> {
+    return this.templateService.list(columns);
   }
 
   @Query(() => TemplateGQL)
   async findTemplate(
     @Args('id') id: string,
-    @Info() info,
+    @Fields() columns: string[],
   ): Promise<TemplateGQL> {
-    const keys = graphqlKeys(info);
-
-    return this.templateService.findById(id, keys);
+    return this.templateService.findById(id, columns);
   }
 }

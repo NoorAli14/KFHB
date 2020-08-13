@@ -9,9 +9,13 @@ import { OptionsModule } from './options/options.module';
 import { QuestionsModule } from './questions/questions.module';
 import { SectionsModule } from './sections/sections.module';
 import { TemplatesModule } from './templates/templates.module';
+import { DataloaderModule } from '@core/dataloaders/loader.module';
+import { RepositoryModule } from '@core/repository/repository.module';
 
 @Module({
   imports: [
+    RepositoryModule,
+    DataloaderModule,
     TemplateQuestionsModule,
     TemplateResponsesModule,
     TemplatesModule,

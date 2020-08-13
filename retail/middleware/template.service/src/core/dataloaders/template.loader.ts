@@ -1,8 +1,8 @@
 import * as DataLoader from 'dataloader';
 import { Injectable } from '@nestjs/common';
 import { NestDataLoader } from 'nestjs-dataloader';
-import { TemplatesService } from './templates.service';
-import { TemplateGQL } from './template.model';
+import { TemplatesService } from '../../app/v1/templates/templates.service';
+import { TemplateGQL } from '../../app/v1/templates/template.model';
 
 @Injectable()
 export class TemplateLoader implements NestDataLoader<string, TemplateGQL> {

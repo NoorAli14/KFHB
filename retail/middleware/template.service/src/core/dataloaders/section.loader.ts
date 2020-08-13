@@ -1,8 +1,8 @@
 import * as DataLoader from 'dataloader';
 import { Injectable } from "@nestjs/common";
 import { NestDataLoader } from 'nestjs-dataloader';
-import { SectionsService } from "./sections.service";
-import { SectionGQL } from "./section.model";
+import { SectionsService } from "../../app/v1/sections/sections.service";
+import { SectionGQL } from "../../app/v1/sections/section.model";
 
 @Injectable()
 export class SectionLoader implements NestDataLoader<string, SectionGQL> {
