@@ -21,7 +21,9 @@ import {
   ApiBadRequestResponse,
   ApiNotFoundResponse
 } from '@nestjs/swagger';
-import { Module, ModuleDto, ModuleService } from './';
+import { Module } from './module.entity';
+import { ModuleDto } from './module.dto';
+import { ModuleService } from './modules.service';
 
 @ApiTags('Module')
 @Controller('modules')

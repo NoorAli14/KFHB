@@ -36,10 +36,11 @@ export class Swagger {
     _app: INestApplication,
     _config: ConfigurationService,
   ): INestApplication {
-    SwaggerModule.setup(
+    const documentation: OpenAPIObject = Swagger.createDocument(_app, _config)
+     SwaggerModule.setup(
       _config.SWAGGER.ROUTE,
       _app,
-      Swagger.createDocument(_app, _config),
+      documentation,
       {
         swaggerUrl: `${_config.APPLICATION_HOST}/api/docs-json`,
         explorer: true,

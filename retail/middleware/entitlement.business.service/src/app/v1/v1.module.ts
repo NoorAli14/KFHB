@@ -15,8 +15,8 @@ import { InvitationModule } from './invitations/invitation.module';
     InvitationModule,
     UserModule,
     RolesModule,
-    PermissionModule,
     ModuleModule,
+    PermissionModule,
     GraphQLGatewayModule.forRoot({
       server: {
         // ... Apollo server options

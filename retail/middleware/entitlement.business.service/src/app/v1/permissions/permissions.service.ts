@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { Permission, PermissionDto } from './';
+import { Permission } from './permission.entity';
+import { PermissionDto } from './permission.dto';
 import { uuid } from '@common/utilities';
 
 @Injectable()
 export class PermissionService {
-  private readonly permissions: any = [
+  private permissions: any = [
     {
       "id": "3dfdecc1-a616-4817-a841-61d824d82a11",
       "record_type": "create",
@@ -56,14 +57,13 @@ export class PermissionService {
   }
 
   async update(id: string, input: PermissionDto): Promise<any> {
-    let p =  this.permissions.find(p => p.id === id);
-    p.record_type = input.record_type;
-    this.permissions[id] = p;
-    return p;
+    let index: number = this.permissions.findIndex(obj => obj.id == id);
+    this.permissions[index].record_type = input.record_type;
+    return this.permissions[index];
   }
 
   async delete(id: string): Promise<boolean> {
-    delete this.permissions[id];
+    this.permissions = this.permissions.filter(role => role.id != id);
     return true;
   }
 }

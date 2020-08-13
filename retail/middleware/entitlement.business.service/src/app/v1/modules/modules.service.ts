@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { Module, ModuleDto } from './';
+import { Module } from './module.entity';
+import { ModuleDto } from './module.dto';
 import { uuid } from '@common/utilities';
 
 @Injectable()
@@ -36,7 +37,7 @@ export class ModuleService {
     }
   ];
 
-  private readonly modules: any = [
+  private modules: any = [
     {
       "id": "3dfdecc1-a616-4817-a841-61d824d82a11",
       "name": "User Management",
@@ -119,6 +120,10 @@ export class ModuleService {
   }
 
   async update(id: string, input: ModuleDto): Promise<any> {
+    let index: number = this.modules.findIndex(obj => obj.id == id);
+    let p = this.modules[index];
+    if(!p)
+      return null;
     let parent = null;
     let permissions = [];
     if(input.parent_id){
@@ -128,18 +133,17 @@ export class ModuleService {
     if(input?.permissions?.length > 0){
       permissions = this.permissions.filter(p => ids.includes(p.id))
     }
-    let p = this.modules.find(p => p.id === id);
     p.parent = parent ? parent : p.parent;
     p.name = input.name;
     p.permissions = permissions;
     p.updated_on = new Date();
-    this.modules[id] = p;
+    this.modules[index] = p;
     delete p.sub_modules;
     return p;
   }
 
   async delete(id: string): Promise<boolean> {
-    delete this.modules[id];
+    this.modules = this.modules.filter(role => role.id != id);
     return true;
   }
 }

@@ -5,6 +5,21 @@ import {
   MaxLength,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import {ROLE_STATUSES} from '@common/constants';
+
+class ModuleIdDto {
+  @ApiProperty({
+    title: 'Permission ID',
+    example: '3dfdecc1-a616-4817-a841-61d824d82a13',
+    description: 'Unique Identifier',
+    required: true
+  })
+  readonly id: string;
+
+  @ApiProperty({required: false})
+  @IsOptional()
+  readonly _deleted?: boolean;
+}
 
 export class RoleDto {
  @ApiProperty({
@@ -12,7 +27,7 @@ export class RoleDto {
     description: 'Name of the role',
   })
   @Length(3, 30, {
-    message: "Name must be between 3 to 30 characters"
+    message: "Name must be between 3 to 96 characters"
   })
   name: string;
 
@@ -22,10 +37,6 @@ export class RoleDto {
   })
   description?: string;
 
-  @ApiProperty({
-    enum: ['ACTIVE', 'INACTIVE'],
-    example: 'ACTIVE',
-    description: 'Status of the role.',
-  })
-  status?: string;
+  @ApiProperty({ type: [ModuleIdDto], description: 'List of module IDs.'  })
+  modules?: ModuleIdDto[];
 }

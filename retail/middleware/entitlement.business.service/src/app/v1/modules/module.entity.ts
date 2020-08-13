@@ -5,7 +5,7 @@ import {
   Length,
 } from 'class-validator';
 import {MODULE_STATUSES} from '@common/constants';
-import {Permission} from '@app/v1/permissions/';
+import {Permission} from '@app/v1/permissions/permission.entity';
 
 export class Module {
   @ApiProperty({

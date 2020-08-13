@@ -1,6 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
+import {Module} from '@app/v1/modules/module.entity';
+import {ROLE_STATUSES} from '@common/constants';
 
 export class Role {
+  @ApiProperty({
+    title: 'Role ID',
+    example: '3dfdecc1-a616-4817-a841-61d824d82a13',
+    description: 'Unique Identifier',
+  })
   readonly id: string;
 
   @ApiProperty({
@@ -15,10 +22,13 @@ export class Role {
     description: 'Description about the role.',
   })
   description?: string;
+  
+  @ApiProperty({ type: [Module], description: 'List of all modules.'})
+  modules?: Module[];
 
   @ApiProperty({
-    enum: ['ACTIVE', 'INACTIVE'],
-    example: 'ACTIVE',
+    enum: ROLE_STATUSES,
+    example: ROLE_STATUSES[0],
     description: 'Status of the role.',
   })
   status?: string;
@@ -40,9 +50,4 @@ export class Role {
     description: 'timestamp with time zone',
   })
   deleted_on?: Date;
-  // created_by?: string;
-  // updated_on?: date;
-  // updated_by?: string
-  // deleted_on?: date;
-  // deleted_by?: string;
 }

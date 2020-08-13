@@ -21,7 +21,9 @@ import {
   ApiBadRequestResponse,
   ApiNotFoundResponse
 } from '@nestjs/swagger';
-import { Permission, PermissionService, PermissionDto } from './';
+import { Permission} from './permission.entity';
+import { PermissionService } from './permissions.service';
+import { PermissionDto } from './permission.dto';
 
 @ApiTags('Permission')
 @Controller('permissions')
