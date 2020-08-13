@@ -23,6 +23,7 @@ import {
     ConfirmDialogModel,
     ConfirmDialogComponent,
 } from "@shared/components/confirm-dialog/confirm-dialog.component";
+import { UserDetailComponent } from '../../components/user-detail/user-detail.component';
 
 @Component({
     selector: "app-user",
@@ -122,7 +123,24 @@ export class UserComponent extends BaseComponent implements OnInit {
                 }
             });
     }
-
+    onDetail(id): void {
+        this._service.getUserById(id).subscribe(
+            (response) => {
+                this.openUserDetailModal(response)
+            },
+            (response=>super.onError(response))
+        );
+        
+    }
+    openUserDetailModal(response){
+        response.modules= this._service.mapModules(response.modules)
+        response= snakeToCamelObject(response)
+        this.dialogRef = this._matDialog
+            .open(UserDetailComponent, {
+                data: response,
+                panelClass: "app-user-detail",
+            })
+    }
     camelToSentenceCase(text) {
         return camelToSentenceCase(text);
     }
@@ -153,10 +171,7 @@ export class UserComponent extends BaseComponent implements OnInit {
                 this.updateGrid(data);
                 this._matDialog.closeAll();
             },
-            (response) => {
-                 this.errorType = "error";
-                 this.responseMessage = MESSAGES.UNKNOWN;
-            }
+            (response=>super.onError(response))
         );
     }
     hideMessage() {
@@ -177,10 +192,7 @@ export class UserComponent extends BaseComponent implements OnInit {
                 this.hideMessage();
                 this._matDialog.closeAll();
             },
-            (response) => {
-                 this.errorType = "error";
-                 this.responseMessage = MESSAGES.UNKNOWN;
-            }
+            (response=>super.onError(response))
         );
     }
     deleteUser(id: string) {
@@ -193,10 +205,7 @@ export class UserComponent extends BaseComponent implements OnInit {
                 this.hideMessage();
                  this.responseMessage = MESSAGES.DELETED("User");
             },
-            (response) => {
-                 this.errorType = "error";
-                 this.responseMessage = MESSAGES.UNKNOWN;
-            }
+            (response=>super.onError(response))
         );
     }
     updateGrid(data) {

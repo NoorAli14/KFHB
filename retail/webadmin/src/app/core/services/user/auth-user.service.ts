@@ -123,11 +123,11 @@ export class AuthUserService {
     }
     private configureModules(modules: any[]) {
         return modules.map((item) => {
-            item.type = item.children ? "collapsable" : "item";
+            item.type = item.sub_modules ? "collapsable" : "item";
             const data = this.config.find((x) => x.id === item.id);
-            if (item.children) {
-                const child = this.configureModules(item.children);
-                delete item.children;
+            if (item.sub_modules) {
+                const child = this.configureModules(item.sub_modules);
+                delete item.sub_modules;
                 item = { ...item, children: child };
             }
             item = { ...item, ...data };
