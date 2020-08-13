@@ -40,6 +40,10 @@ export const DEFAULT_ENV: iConfig = {
     DEBUG: true,
   },
   logLevel: 'info',
+  SMTP: {
+    SMTP_USER: '',
+    SMTP_PASS: '',
+  }
 };
 @Injectable()
 export class ConfigurationService {
@@ -90,8 +94,8 @@ export class ConfigurationService {
     // Parse iSMTP Environment Variables
     public get SMTP(): iSMTP {
       return {
-        SMTP_USER: this.get('ENV_RBX_SMTP_USER', DEFAULT_ENV.iSMTP.SMTP_USER),
-        SMTP_PASS: this.get('ENV_RBX_SMTP_PASS', DEFAULT_ENV.iSMTP.SMTP_PASS),
+        SMTP_USER: this.get('ENV_RBX_SMTP_USER', DEFAULT_ENV.SMTP.SMTP_USER),
+        SMTP_PASS: this.get('ENV_RBX_SMTP_PASS', DEFAULT_ENV.SMTP.SMTP_PASS),
 
         // PORT: parseInt(
         //   this.get('ENV_RBX_DB_PORT', DEFAULT_ENV.DATABASE.PORT),

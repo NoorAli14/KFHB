@@ -32,8 +32,8 @@ export interface iDATABASE {
   IS_DEBUG?: boolean;
 }
 export interface iSMTP {
-  SMTP_USER?: string;
-  SMTP_PASS?: string;
+  SMTP_USER: string;
+  SMTP_PASS: string;
 }
 
 export interface iConfig {
@@ -43,7 +43,7 @@ export interface iConfig {
   DATABASE?: iDATABASE;
   SWAGGER?: iSWAGGER;
   GRAPHQL?: iGRAPHQL;
-  iSMTP?: iSMTP
+  SMTP?: iSMTP;
 
   /**
    * The log level to use.
