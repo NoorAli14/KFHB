@@ -1,15 +1,15 @@
 import * as path from 'path';
 import { v4 as uuidV4 } from 'uuid';
 
-export const toGraphql = (input: any): string => {
+export const toGraphql = (input: {[key: string]: any}): string => {
   return JSON.stringify(input).replace(
     /\"([^(\")"]+)\":/g,
     '$1:',
   );
 };
 /**
- * Full path string
- * @param fileOrDir
+ * Generate v4 uuid string
+ * @return uuid string
  */
 export const uuid = (): string => {
   return uuidV4();
