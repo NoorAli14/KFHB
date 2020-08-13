@@ -1,8 +1,8 @@
 import * as DataLoader from 'dataloader';
 import { Injectable } from "@nestjs/common";
 import { NestDataLoader } from 'nestjs-dataloader';
-import { QuestionsService } from "./questions.service";
-import { QuestionGQL } from "./question.model";
+import { QuestionsService } from "../../app/v1/questions/questions.service";
+import { QuestionGQL } from "../../app/v1/questions/question.model";
 
 @Injectable()
 export class QuestionLoader implements NestDataLoader<string, QuestionGQL> {

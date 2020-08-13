@@ -6,44 +6,47 @@ import {
   Param,
   Put,
   Delete,
+  NotFoundException,
+  ParseUUIDPipe,
+  HttpCode
 } from '@nestjs/common';
 import {
   ApiTags,
-  ApiOkResponse,
-  ApiCreatedResponse,
   ApiOperation,
   ApiBody,
   ApiBearerAuth,
+  ApiOkResponse,
+  ApiCreatedResponse,
   ApiNoContentResponse,
   ApiBadRequestResponse,
+  ApiNotFoundResponse
 } from '@nestjs/swagger';
-import { PermissionService } from './permissions.service';
-import { Role } from './permission.entity';
-import { RoleDto } from './permission.dto';
+import { Permission, PermissionService, PermissionDto } from './';
 
 @ApiTags('Permission')
 @Controller('permissions')
 @ApiBearerAuth()
 export class PermissionsController {
+
   constructor(private readonly permissionService: PermissionService) {}
 
   @Post('/')
-  @ApiBody({ description: 'Sets the permission properties.' })
+  @ApiBody({ description: 'Sets the permission properties.', type: PermissionDto})
   @ApiOperation({
     summary: 'Create a new permission',
     description:
       'A successful request returns the HTTP 201 CREATED status code and a JSON response body that shows permission information.',
   })
   @ApiCreatedResponse({
-    type: Role,
+    type: Permission,
     description: 'Permission has been successfully created.',
   })
   @ApiBadRequestResponse({
     type: Error,
     description: 'Input Validation failed.',
   })
-  async create(@Body() roleDto: Role): Promise<Role> {
-    return this.permissionService.create(roleDto);
+  async create(@Body() permissionDto: PermissionDto): Promise<Permission> {
+    return this.permissionService.create(permissionDto);
   }
 
   @Get('/')
@@ -52,8 +55,8 @@ export class PermissionsController {
       'A successful request returns the HTTP 200 OK status code and a JSON response body that shows list of permissions information.',
     summary: 'List of all the permissions',
   })
-  @ApiOkResponse({ type: [Role], description: 'List of all the permissions.' })
-  async list(): Promise<Role[]> {
+  @ApiOkResponse({ type: [Permission], description: 'List of all the permissions.' })
+  async list(): Promise<Permission[]> {
     return this.permissionService.list();
   }
 
@@ -64,30 +67,46 @@ export class PermissionsController {
       'A successful request returns the HTTP 200 OK status code and a JSON response body that shows permission information.',
   })
   @ApiOkResponse({
-    type: Role,
+    type: Permission,
     description: 'Permission has been successfully retrieved.',
   })
-  async findOne(@Param('id') id: string): Promise<Role> {
-    return this.permissionService.findOne(id);
+  @ApiNotFoundResponse({
+    type: Error,
+    description: 'Permission Not Found.',
+  })
+  async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<Permission> {
+    const permission = await this.permissionService.findOne(id);
+    if(!permission) {
+      throw new NotFoundException('Permission Not Found');
+    }
+    return permission;
   }
 
   @Put(':id')
-  @ApiBody({ description: 'Sets the permission properties.' })
+  @ApiBody({ description: 'Sets the permission properties.' , type: PermissionDto})
   @ApiOperation({
     summary: 'Update a permission by ID',
     description:
       'A successful request returns the HTTP 200 OK status code and a JSON response body that shows permission information.',
   })
   @ApiOkResponse({
-    type: Role,
+    type: Permission,
     description: 'Permission has been successfully updated.',
   })
   @ApiBadRequestResponse({
     type: Error,
     description: 'Input Validation failed.',
   })
-  async update(@Body() roleDto: Role): Promise<Role> {
-    return this.permissionService.create(roleDto);
+  @ApiNotFoundResponse({
+    type: Error,
+    description: 'Permission Not Found.',
+  })
+  async update(@Param('id', ParseUUIDPipe) id: string, @Body() permissionDto: PermissionDto): Promise<Permission> {
+    const permission = await this.permissionService.findOne(id);
+    if(!permission) {
+      throw new NotFoundException('Permission Not Found');
+    }
+    return this.permissionService.update(id, permissionDto);
   }
 
   @Delete(':id')
@@ -99,7 +118,16 @@ export class PermissionsController {
   @ApiNoContentResponse({
     description: 'Permission has been successfully deleted.',
   })
-  async delete(@Param('id') id: string): Promise<any> {
-    this.permissionService.delete(id);
+  @ApiNotFoundResponse({
+    type: Error,
+    description: 'Permission Not Found.',
+  })
+  @HttpCode(204)
+  async delete(@Param('id', ParseUUIDPipe) id: string): Promise<any> {
+    const permission = await this.permissionService.findOne(id);
+    if(!permission) {
+      throw new NotFoundException('Permission Not Found');
+    }
+    return this.permissionService.delete(id);
   }
 }

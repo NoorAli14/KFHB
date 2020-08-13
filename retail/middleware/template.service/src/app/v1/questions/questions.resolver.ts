@@ -3,18 +3,17 @@
 import {
   Resolver,
   Args,
-  Info,
   Query,
   ResolveField,
   Parent,
 } from '@nestjs/graphql';
-import { graphqlKeys } from '@common/utilities';
 import { QuestionsService } from './questions.service';
 import { QuestionGQL } from './question.model';
 import { Loader } from 'nestjs-dataloader';
 import * as DataLoader from 'dataloader';
-import { OptionLoader } from '@app/v1/options/option.loader';
+import { OptionLoader } from '@core/dataloaders/option.loader';
 import { OptionGQL } from '@app/v1/options/option.model';
+import { Fields } from '@common/decorators';
 
 @Resolver(QuestionGQL)
 export class QuestionsResolver {
@@ -30,18 +29,15 @@ export class QuestionsResolver {
   }
 
   @Query(() => [QuestionGQL])
-  async questionsList(@Info() info): Promise<QuestionGQL[]> {
-    const keys = graphqlKeys(info);
-    return this.questionService.list(keys);
+  async questionsList(@Fields() columns: string[]): Promise<QuestionGQL[]> {
+    return this.questionService.list(columns);
   }
 
   @Query(() => QuestionGQL)
   async findQuestion(
     @Args('id') id: string,
-    @Info() info,
+    @Fields() columns: string[],
   ): Promise<QuestionGQL> {
-    const keys = graphqlKeys(info);
-
-    return this.questionService.findById(id, keys);
+    return this.questionService.findById(id, columns);
   }
 }

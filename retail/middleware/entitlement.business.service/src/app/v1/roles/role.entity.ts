@@ -25,19 +25,19 @@ export class Role {
 
   @ApiProperty({
     required: false,
-    description: 'timestamp without time zone',
+    description: 'timestamp with time zone',
   })
   created_on?: Date;
 
   @ApiProperty({
     required: false,
-    description: 'timestamp without time zone',
+    description: 'timestamp with time zone',
   })
   updated_on?: Date;
 
   @ApiProperty({
     required: false,
-    description: 'timestamp without time zone',
+    description: 'timestamp with time zone',
   })
   deleted_on?: Date;
   // created_by?: string;
