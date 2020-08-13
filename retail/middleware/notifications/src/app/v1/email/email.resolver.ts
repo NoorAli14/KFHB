@@ -2,7 +2,7 @@ import { Resolver, Query, Mutation, Args,Info } from '@nestjs/graphql';
 import { EmailService } from './email.service';
 import { SendEmailInput } from './email.dto';
 import { EmailGQL } from './email.model';
-import { graphqlKeys } from '@common/utilities';
+import { graphqlFields } from '@common/utilities';
 
 @Resolver(EmailGQL)
 export class EmailResolver {
@@ -10,7 +10,7 @@ export class EmailResolver {
 
   @Mutation(() => EmailGQL)
   async sendEmail(@Args('input') input: SendEmailInput, @Info() info: Record<string, any>): Promise<EmailGQL> {
-        const keys = graphqlKeys(info);
+        const keys = graphqlFields(info);
 
     return this.emailService.sendEmail(input, keys);
   }

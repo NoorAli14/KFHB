@@ -1,6 +1,6 @@
 export const TABLE = {
   USER: 'T_USER',
-  OTP: 'T_OTP',
+  OTP: 'NTF_OTP',
 };
 export const DATABASE_UUID_METHOD = 'NEWID()';
 
