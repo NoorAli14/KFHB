@@ -21,11 +21,7 @@ import { DEFAULT_SENDING_NAME, DEFAULT_SENDING_EMAIL } from '@common/constants';
           port: 465,
           ignoreTLS: true,
           secure: false,
-          // auth: _configService.SMTP,
-          auth: {
-            user: "356fe6cfe6252c",
-            pass: "4ba4380d9fdcb9",
-          }
+          auth: _configService.SMTP,
         },
         defaults: {
           from:`"${DEFAULT_SENDING_NAME}" <${DEFAULT_SENDING_EMAIL}>`,

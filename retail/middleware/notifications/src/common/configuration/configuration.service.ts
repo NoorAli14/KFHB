@@ -40,6 +40,10 @@ export const DEFAULT_ENV: iConfig = {
     DEBUG: true,
   },
   logLevel: 'info',
+  SMTP: {
+    SMTP_USER: '',
+    SMTP_PASS: '',
+  }
 };
 @Injectable()
 export class ConfigurationService {
