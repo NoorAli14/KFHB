@@ -12,6 +12,7 @@
     "baseUrl": "./",
     "incremental": true,
     "paths": {
+      "@rubix/*": ["./src/*"],
       "@common/*": ["./src/common/*"],
       "@app/*": ["./src/app/*"],
       "@core/*": ["./src/core/*"]

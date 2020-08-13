@@ -1,31 +1,18 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsString,
-  IsOptional,
   Length,
-  MaxLength,
 } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
 
-export class RoleDto {
- @ApiProperty({
-    example: 'Manager',
-    description: 'Name of the role',
-  })
-  @Length(3, 30, {
-    message: "Name must be between 3 to 30 characters"
-  })
-  name: string;
-
+export class PermissionDto {
   @ApiProperty({
-    required: false,
-    description: 'Description about the role.',
+    title: 'Permission type',
+    example: 'create, update or delete',
+    description: 'Name of the permission',
   })
-  description?: string;
-
-  @ApiProperty({
-    enum: ['ACTIVE', 'INACTIVE'],
-    example: 'ACTIVE',
-    description: 'Status of the role.',
+  @IsString()
+  @Length(3, 28, {
+    message: "Name must be between 3 and 28 characters",
   })
-  status?: string;
+  record_type: string;
 }

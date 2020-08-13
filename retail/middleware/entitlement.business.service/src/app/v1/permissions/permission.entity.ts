@@ -1,48 +1,40 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsString, Length, IsDate, MinLength } from 'class-validator';
 
-export class Role {
+export class Permission {
+  @ApiProperty({
+    title: 'Permission ID',
+    example: '3dfdecc1-a616-4817-a841-61d824d82a13',
+    description: 'Unique Identifier',
+  })
   readonly id: string;
 
   @ApiProperty({
-    title: 'Role Name',
-    example: 'Manager',
-    description: 'Name of the role',
+    required: true,
+    title: 'Permission type',
+    example: 'create | update or delete',
+    description: 'Name of the permission',
   })
-  name: string;
+  @IsString()
+  record_type: string;
 
   @ApiProperty({
     required: false,
-    description: 'Description about the role.',
-  })
-  description?: string;
-
-  @ApiProperty({
-    enum: ['ACTIVE', 'INACTIVE'],
-    example: 'ACTIVE',
-    description: 'Status of the role.',
-  })
-  status?: string;
-
-  @ApiProperty({
-    required: false,
-    description: 'timestamp without time zone',
+    description: 'timestamp with time zone',
   })
   created_on?: Date;
 
   @ApiProperty({
     required: false,
-    description: 'timestamp without time zone',
+    description: 'timestamp with time zone',
   })
+  @IsDate()
   updated_on?: Date;
 
   @ApiProperty({
     required: false,
-    description: 'timestamp without time zone',
+    description: 'timestamp with time zone',
   })
+  @IsDate()
   deleted_on?: Date;
-  // created_by?: string;
-  // updated_on?: date;
-  // updated_by?: string
-  // deleted_on?: date;
-  // deleted_by?: string;
 }
