@@ -26,7 +26,7 @@ export class ToolbarComponent implements OnInit, OnDestroy
     navigation: any;
     selectedLanguage: any;
     userStatusOptions: any[];
-    currentUser:any;
+    // currentUser:any;
     // Private
     private _unsubscribeAll: Subject<any>;
 
@@ -44,7 +44,7 @@ export class ToolbarComponent implements OnInit, OnDestroy
         private _authUserService:AuthUserService
     )
     {
-        this.currentUser=this._authUserService.User;
+        // this.currentUser=this._authUserService.User;
         // Set the defaults
         this.userStatusOptions = [
             {
