@@ -6,6 +6,7 @@ import { EventBusService } from "../event-bus/event-bus.service";
 import { EmitEvent } from "@shared/models/emit-event.model";
 import { Events } from "@shared/enums/events.enum";
 import { snakeToCamelObject } from "@shared/helpers/global.helper";
+import { cloneDeep } from 'lodash';
 
 @Injectable({ providedIn: "root" })
 export class AuthUserService {
@@ -89,9 +90,10 @@ export class AuthUserService {
         return user ? user : null;
     }
     setData(response) {
-        const sidebarModules = this.configureModules(response.modules);
+        const clone= cloneDeep(response)
+        const sidebarModules = this.configureModules(clone.modules);
         this.modules = sidebarModules;
-        this.User = response;
+        this.User = cloneDeep(response);
     }
     isLoggedIn() {
         return this._isLoggedIn;
