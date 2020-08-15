@@ -1,26 +1,105 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsEmail, IsOptional, IsDate } from 'class-validator';
+import {USER_STATUSES, GENDER} from '@common/constants';
+import {Module} from '@app/v1/modules/module.entity';
 
-export class Role {
+export class User {
+  @ApiProperty({
+    title: 'User ID',
+    example: '3dfdecc1-a616-4817-a841-61d824d82a13',
+    description: 'Unique Identifier',
+  })
   readonly id: string;
 
   @ApiProperty({
-    title: 'Role Name',
-    example: 'Manager',
-    description: 'Name of the role',
+    title: 'First Name',
+    example: 'Faizan',
+    description: 'First Name of the user.',
+    required: false
   })
-  name: string;
+  @IsOptional()
+  first_name?: string;
 
   @ApiProperty({
-    required: false,
-    description: 'Description about the role.',
+    title: 'Middle Name',
+    description: 'Middle Name of the user.',
+    required: false
   })
-  description?: string;
+  @IsOptional()
+  middle_name?: string;
 
   @ApiProperty({
-    enum: ['ACTIVE', 'INACTIVE'],
-    example: 'ACTIVE',
-    description: 'Status of the role.',
+    title: 'Last Name',
+    example: 'Ahmad',
+    description: 'Last Name of the user.',
+    required: false
   })
+  @IsOptional()
+  last_name?: string;
+
+  @ApiProperty({
+    title: 'Username',
+    description: 'username of the user.',
+    required: false
+  })
+  @IsOptional()
+  username?: string;
+
+  @ApiProperty({
+    title: 'Email',
+    example: 'example@aiondigital.com',
+    description: 'Email of the user.',
+    required: true
+  })
+  @IsEmail()
+  email: string;
+
+  @ApiProperty({
+    title: 'Contact No',
+    description: 'Contact No of the user.',
+    required: false
+  })
+  @IsOptional()
+  contact_no?: string;
+
+
+  @ApiProperty({
+    enum: GENDER,
+    title: 'Gender',
+    example: GENDER[0],
+    description: 'Gender of the user.',
+    required: false
+  })
+  @IsOptional()
+  gender?: string;
+
+  @ApiProperty({
+    title: 'Date of Birth',
+    description: 'Date of Birth of user.',
+    required: false
+  })
+  @IsOptional()
+  @IsDate()
+  date_of_birth?: string;
+
+  @ApiProperty({
+    title: 'Nationality ID',
+    description: 'Nationality Id of the user.',
+    required: false
+  })
+  @IsOptional()
+  nationality_id?: string;
+
+  @ApiProperty({ type: [Module], description: 'List of all modules.', required: false})
+  modules?: Module[];
+
+  @ApiProperty({
+    enum: USER_STATUSES,
+    example: USER_STATUSES[0],
+    description: 'Status of the user.',
+    required: false
+  })
+  @IsOptional()
   status?: string;
 
   @ApiProperty({
@@ -29,20 +108,24 @@ export class Role {
   })
   created_on?: Date;
 
+  @ApiProperty({required: false})
+  created_by?: string;
+
   @ApiProperty({
     required: false,
     description: 'timestamp without time zone',
   })
   updated_on?: Date;
 
+  @ApiProperty({required: false})
+  updated_by?: string;
+
   @ApiProperty({
     required: false,
     description: 'timestamp without time zone',
   })
   deleted_on?: Date;
-  // created_by?: string;
-  // updated_on?: date;
-  // updated_by?: string
-  // deleted_on?: date;
-  // deleted_by?: string;
+
+  @ApiProperty({required: false})
+  deleted_by?: string;
 }
