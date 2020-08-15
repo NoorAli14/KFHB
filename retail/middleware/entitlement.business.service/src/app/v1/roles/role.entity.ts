@@ -30,6 +30,7 @@ export class Role {
     enum: ROLE_STATUSES,
     example: ROLE_STATUSES[0],
     description: 'Status of the role.',
+    required: false
   })
   status?: string;
 

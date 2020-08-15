@@ -54,7 +54,7 @@ export class RolesController {
   @Get('/')
   @ApiOperation({
     description:
-      'A successful request returns the HTTP 20O OK status code and a JSON response body that shows list of roles information.',
+      'A successful request returns the HTTP 200 OK status code and a JSON response body that shows list of roles information.',
     summary: 'List of all the roles',
   })
   @ApiOkResponse({ type: [Role], description: 'List of all the roles.' })
