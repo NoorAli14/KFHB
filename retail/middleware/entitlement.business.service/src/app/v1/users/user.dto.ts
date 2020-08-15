@@ -3,6 +3,7 @@ import {
   IsOptional,
   Length,
   MaxLength,
+  IsEmail,
   IsNotEmpty,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
@@ -58,6 +59,15 @@ export class UpdateUserDto {
   @IsString()
   @IsOptional()
   last_name?: string;
+
+  @ApiProperty({
+    title: 'Email',
+    example: 'example@aiondigital.com',
+    description: 'Email of the user.',
+    required: true,
+  })
+  @IsEmail()
+  email: string;
 
   @ApiProperty({
     enum: GENDER,

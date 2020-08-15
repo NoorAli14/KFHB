@@ -174,7 +174,7 @@ export class UserService {
     return this.users;
   }
 
-  async create(input: User): Promise<User> {
+  async create(input: any): Promise<User> {
     this.users.push(input);
     return input;
   }
@@ -183,6 +183,14 @@ export class UserService {
     return this.users.find(role => role.id === id);
   }
 
+  async findOneByToken(token: string): Promise<User> {
+    return this.users.find(role => role.id === token);
+  }
+
+  async updateByToken(token: string, user: any): Promise<User> {
+    this.users[token] = user;
+    return user;
+  }
   async update(id: string, input: any): Promise<User> {
     this.users[id] = input;
     return input;
@@ -190,6 +198,10 @@ export class UserService {
 
   async delete(id: string): Promise<boolean> {
     delete this.users[id];
+    return true;
+  }
+
+  async resendInvitationLink(user_id: string) {
     return true;
   }
 }

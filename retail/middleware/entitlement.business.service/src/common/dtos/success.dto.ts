@@ -8,4 +8,7 @@ export class SuccessDto {
 
   @ApiProperty({ required: false })
   readonly message?: string;
+
+  @ApiProperty({ required: false })
+  readonly expired_at?: Date;
 }

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { ForgotPasswordController } from './forgot_invitations.controller';
-import { ForgotPasswordService } from './forgot_invitation.service';
+import { ForgotPasswordController } from './forgot_password.controller';
+import { ForgotPasswordService } from './forgot_password.service';
 @Module({
   imports: [],
   controllers: [ForgotPasswordController],

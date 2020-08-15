@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsOptional, IsDate } from 'class-validator';
-import {USER_STATUSES, GENDER} from '@common/constants';
-import {Module} from '@app/v1/modules/module.entity';
+import { USER_STATUSES, GENDER } from '@common/constants';
+import { Module } from '@app/v1/modules/module.entity';
 
 export class User {
   @ApiProperty({
@@ -15,7 +15,7 @@ export class User {
     title: 'First Name',
     example: 'Faizan',
     description: 'First Name of the user.',
-    required: false
+    required: false,
   })
   @IsOptional()
   first_name?: string;
@@ -23,7 +23,7 @@ export class User {
   @ApiProperty({
     title: 'Middle Name',
     description: 'Middle Name of the user.',
-    required: false
+    required: false,
   })
   @IsOptional()
   middle_name?: string;
@@ -32,7 +32,7 @@ export class User {
     title: 'Last Name',
     example: 'Ahmad',
     description: 'Last Name of the user.',
-    required: false
+    required: false,
   })
   @IsOptional()
   last_name?: string;
@@ -40,7 +40,7 @@ export class User {
   @ApiProperty({
     title: 'Username',
     description: 'username of the user.',
-    required: false
+    required: false,
   })
   @IsOptional()
   username?: string;
@@ -49,7 +49,7 @@ export class User {
     title: 'Email',
     example: 'example@aiondigital.com',
     description: 'Email of the user.',
-    required: true
+    required: true,
   })
   @IsEmail()
   email: string;
@@ -57,18 +57,17 @@ export class User {
   @ApiProperty({
     title: 'Contact No',
     description: 'Contact No of the user.',
-    required: false
+    required: false,
   })
   @IsOptional()
   contact_no?: string;
-
 
   @ApiProperty({
     enum: GENDER,
     title: 'Gender',
     example: GENDER[0],
     description: 'Gender of the user.',
-    required: false
+    required: false,
   })
   @IsOptional()
   gender?: string;
@@ -76,7 +75,7 @@ export class User {
   @ApiProperty({
     title: 'Date of Birth',
     description: 'Date of Birth of user.',
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsDate()
@@ -85,19 +84,16 @@ export class User {
   @ApiProperty({
     title: 'Nationality ID',
     description: 'Nationality Id of the user.',
-    required: false
+    required: false,
   })
   @IsOptional()
   nationality_id?: string;
-
-  @ApiProperty({ type: [Module], description: 'List of all modules.', required: false})
-  modules?: Module[];
 
   @ApiProperty({
     enum: USER_STATUSES,
     example: USER_STATUSES[0],
     description: 'Status of the user.',
-    required: false
+    required: false,
   })
   @IsOptional()
   status?: string;
@@ -108,7 +104,14 @@ export class User {
   })
   created_on?: Date;
 
-  @ApiProperty({required: false})
+  @ApiProperty({
+    type: [Module],
+    description: 'List of all modules.',
+    required: false,
+  })
+  modules?: Module[];
+
+  @ApiProperty({ required: false })
   created_by?: string;
 
   @ApiProperty({
@@ -117,7 +120,7 @@ export class User {
   })
   updated_on?: Date;
 
-  @ApiProperty({required: false})
+  @ApiProperty({ required: false })
   updated_by?: string;
 
   @ApiProperty({
@@ -126,6 +129,15 @@ export class User {
   })
   deleted_on?: Date;
 
-  @ApiProperty({required: false})
+  @ApiProperty({ required: false })
   deleted_by?: string;
+}
+
+export class UserWithModule extends User {
+  @ApiProperty({
+    type: [Module],
+    description: 'List of all modules.',
+    required: false,
+  })
+  modules?: Module[];
 }

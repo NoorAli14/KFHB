@@ -55,7 +55,7 @@ export class UsersController {
   async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<User> {
     const user = await this.userService.findOne(id);
     if (!user) {
-      throw new NotFoundException('Permission Not Found');
+      throw new NotFoundException('User Not Found');
     }
     return user;
   }
