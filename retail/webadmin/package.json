@@ -1,7 +1,6 @@
 {
-    "name": "fuse",
-    "version": "9.0.0",
-    "license": "https://themeforest.net/licenses/terms/regular",
+    "name": "rubix",
+    "version": "0.0.1",
     "scripts": {
         "ng": "ng",
         "start": "ng serve --open",
@@ -9,7 +8,7 @@
         "start-hmr-sourcemaps": "ng serve --configuration hmr --source-map=true --hmr-warning=false",
         "build": "node --max_old_space_size=6144 ./node_modules/@angular/cli/bin/ng build --dev",
         "build-stats": "node --max_old_space_size=6144 ./node_modules/@angular/cli/bin/ng build --dev --stats-json",
-        "build-prod": "node --max_old_space_size=6144 ./node_modules/@angular/cli/bin/ng build --prod",
+        "build:prod": "node --max_old_space_size=6144 ./node_modules/@angular/cli/bin/ng build --prod",
         "build-prod-stats": "node --max_old_space_size=6144 ./node_modules/@angular/cli/bin/ng build --prod --stats-json",
         "test": "ng test",
         "lint": "ng lint",

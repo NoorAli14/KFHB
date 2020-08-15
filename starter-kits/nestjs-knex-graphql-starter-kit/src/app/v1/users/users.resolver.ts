@@ -1,45 +1,72 @@
-import { Resolver, Query, Mutation, Args,Info } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  ResolveField,
+  Parent
+} from '@nestjs/graphql';
+import { ParseUUIDPipe, NotFoundException } from '@nestjs/common';
+import * as DataLoader from 'dataloader';
+import { Loader } from 'nestjs-dataloader';
+import { Fields } from "@rubix/common/decorators";
+import { Post } from '@rubix/app/v1/posts/post.model';
+import { User } from './user.model';
 import { UserService } from './users.service';
-import { NewUserInput } from './user.dto';
-import { UserGQL } from './user.model';
-import { graphqlKeys } from '@common/utilities';
+import { NewUserInput, UpdateUserInput } from './user.dto';
 
-@Resolver(UserGQL)
+@Resolver(User)
 export class UsersResolver {
   constructor(private readonly userService: UserService) {}
-  @Query(() => [UserGQL])
-  async usersList(@Info() info: Record<string, any>): Promise<UserGQL[]> {
-        const keys = graphqlKeys(info);
 
-    return this.userService.list(keys);
+  @Query(() => [User])
+  users(@Fields() columns: string[]): Promise<User[]> {
+    return this.userService.list(columns);
   }
 
-  @Query(() => UserGQL)
-  async findUser(@Args('id') id: string, @Info() info: Record<string, any>): Promise<UserGQL> {
-        const keys = graphqlKeys(info);
-
-    return this.userService.findById(id, keys);
+  @ResolveField(() => [Post])
+  posts(
+    @Parent() user: User,
+    @Loader('PostLoader') postLoader: DataLoader<Post['id'], Post>,
+  ): Promise<any> {
+    return postLoader.load(user.id);
   }
 
-  @Mutation(() => UserGQL)
-  async addUser(@Args('input') input: NewUserInput, @Info() info: Record<string, any>): Promise<UserGQL> {
-        const keys = graphqlKeys(info);
-
-    return this.userService.create(input, keys);
+  @Query(() => User)
+  async findUser(
+    @Args('id', ParseUUIDPipe) id: string,
+    @Fields() columns: string[],
+  ): Promise<User> {
+    const user: User = await this.userService.findById(id, columns);
+    if(!user) {
+      throw new NotFoundException('User not found');
+    }
+    return user;
   }
-  @Mutation(() => UserGQL)
-  async updateUser(
-    @Args('id') id: string,
+
+  @Mutation(() => User)
+  addUser(
     @Args('input') input: NewUserInput,
-    @Info() info: Record<string, any>
-  ): Promise<UserGQL> {
-        const keys = graphqlKeys(info);
+    @Fields() columns: string[],
+  ): Promise<User> {
+    return this.userService.create(input, columns);
+  }
 
-    return this.userService.update(id, input, keys);
+  @Mutation(() => User)
+  updateUser(
+    @Args('id', ParseUUIDPipe) id: string,
+    @Args('input') input: UpdateUserInput,
+    @Fields() columns: string[],
+  ): Promise<User> {
+    return this.userService.update(id, input, columns);
   }
 
   @Mutation(() => Boolean)
-  async deleteUser(@Args('id') id: string): Promise<boolean> {
+  async deleteUser(@Args('id', ParseUUIDPipe) id: string): Promise<boolean> {
+    const user: User = await this.userService.findById(id, ['id']);
+    if(!user) {
+      throw new NotFoundException('User not found');
+    }
     return this.userService.delete(id);
   }
 }

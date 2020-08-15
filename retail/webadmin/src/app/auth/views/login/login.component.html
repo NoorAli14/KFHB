@@ -16,13 +16,8 @@
             </div>
 
             <div class="title">LOGIN TO YOUR ACCOUNT</div>
-            <div
-                *ngIf="message.length > 0"
-                fxLayout="row"
-                fxLayoutAlign="center"
-                class="p-16 mr-24 message-box {{ type }} "
-            >
-                {{ message }}
+            <div *ngIf="responseMessage.length > 0" fxLayout="row" fxLayoutAlign="center" class="p-16  message-box {{ errorType }} ">
+                {{ responseMessage }}
             </div>
             <br>
             <form

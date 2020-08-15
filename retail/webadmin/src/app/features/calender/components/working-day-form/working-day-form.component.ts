@@ -5,6 +5,7 @@ import { fuseAnimations } from '@fuse/animations';
 import { CalendarService } from '@feature/calender/services/calendar.service';
 import { WorkingDay } from '@feature/calender/models/working-week.model';
 import { WTimeDialogComponent } from '@shared/components/time-control/w-time-dialog.component';
+import { BaseComponent } from '@shared/components/base/base.component';
 
 @Component({
   selector: 'app-working-day-form',
@@ -13,10 +14,10 @@ import { WTimeDialogComponent } from '@shared/components/time-control/w-time-dia
   encapsulation: ViewEncapsulation.None,
   animations   : fuseAnimations
 })
-export class WorkingDayFormComponent implements OnInit  {
+export class WorkingDayFormComponent  extends BaseComponent implements OnInit  {
     workingDayForm: FormGroup;
-    message: string = "";
-    type: string = "";
+    
+    
 
     private hour = 10;
     private minute = 25;
@@ -26,7 +27,9 @@ export class WorkingDayFormComponent implements OnInit  {
         @Inject(MAT_DIALOG_DATA) public data: WorkingDay,
         private _service: CalendarService,
         private dialog: MatDialog
-    ) {}
+    ) {
+        super()
+    }
   
     ngOnInit(): void {
         this.workingDayForm = new FormGroup({

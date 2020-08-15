@@ -1,3 +1,4 @@
+import { Select } from './../../../../../shared/models/common.model';
 import {
     Component,
     OnInit,
@@ -11,7 +12,6 @@ import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { Modules } from "../../../models/modules.model";
 import { fuseAnimations } from "@fuse/animations";
 import { STATUS_LIST } from "@shared/constants/app.constants";
-import { StatusModel } from '@shared/models/base.model';
 
 @Component({
     selector: "app-modules-form",
@@ -24,7 +24,7 @@ export class ModulesFormComponent implements OnInit {
     modulesForm: FormGroup;
 
     modules: Modules[];
-    statusList: StatusModel[] = STATUS_LIST;
+    statusList: Select[] = STATUS_LIST;
     @Output() sendResponse: EventEmitter<Modules> = new EventEmitter<any>();
 
     constructor(

@@ -8,7 +8,7 @@ import {
   iSWAGGER,
   iGRAPHQL,
   iConfig,
-} from '@common/interfaces/configuration.interface';
+} from '@rubix/common/interfaces/configuration.interface';
 export const DEFAULT_ENV: iConfig = {
   APP: {
     NAME: 'Rubix | Boilerplate',

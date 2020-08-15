@@ -4,6 +4,7 @@ import { ConfigMiddlewareService } from "../../services/config-middleware.servic
 import { getName } from "@shared/helpers/global.helper";
 import { Permission } from "@feature/entitlement/models/config.model";
 import { MatTableDataSource } from "@angular/material/table";
+import { BaseComponent } from '@shared/components/base/base.component';
 
 @Component({
     selector: "app-permission",
@@ -13,14 +14,16 @@ import { MatTableDataSource } from "@angular/material/table";
         padding:10px;
     }`]
 })
-export class PermissionComponent implements OnInit {
+export class PermissionComponent extends BaseComponent implements OnInit {
     permissions: Permission[];
     roleModulesList: any[];
     title = "";
     @Input() roleModuleId: string ; 
     displayedColumns = ["permissionId", "actions"];
     dataSource = new MatTableDataSource<Permission>();
-    constructor(private _service: ConfigMiddlewareService) {}
+    constructor(private _service: ConfigMiddlewareService) {
+        super()
+    }
 
     ngOnInit(): void {
         this.getData();
@@ -37,9 +40,7 @@ export class PermissionComponent implements OnInit {
                 this.dataSource.data = this.roleModulesList;
                 console.log(response)
             },
-            (error) => {
-                console.log(error);
-            }
+           (response=>super.onError(response))
         );
     }
 }

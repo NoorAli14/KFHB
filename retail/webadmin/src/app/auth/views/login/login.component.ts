@@ -11,6 +11,7 @@ import { FuseConfigService } from "@fuse/services/config.service";
 import { fuseAnimations } from "@fuse/animations";
 import { AuthenticationService } from "@core/services/auth/authentication.service";
 import { MESSAGES } from "@shared/constants/app.constants";
+import { BaseComponent } from '@shared/components/base/base.component';
 
 @Component({
     selector: "app-login",
@@ -19,10 +20,10 @@ import { MESSAGES } from "@shared/constants/app.constants";
     encapsulation: ViewEncapsulation.None,
     animations: fuseAnimations,
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent extends BaseComponent implements OnInit {
     loginForm: FormGroup;
-    message: string = "";
-    type: string = "";
+    
+    
     returnUrl: string;
     constructor(
         private _fuseConfigService: FuseConfigService,
@@ -30,6 +31,7 @@ export class LoginComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router
     ) {
+        super()
         // Configure the layout
         this._fuseConfigService.config = {
             layout: {
@@ -62,8 +64,8 @@ export class LoginComponent implements OnInit {
     onSubmit() {
         this._authService.login(this.loginForm.value).subscribe(
             (response) => {
-                this.type = "success";
-                this.message = MESSAGES.LOGGED_IN;
+                 this.errorType = "success";
+                 this.responseMessage = MESSAGES.LOGGED_IN;
                 setTimeout(() => {
                     this.router.navigateByUrl(
                         this.returnUrl ? this.returnUrl : '/ent/user'
@@ -71,8 +73,8 @@ export class LoginComponent implements OnInit {
                 }, 1000);
             },
             (error) => {
-                this.type = "error";
-                this.message = MESSAGES.INVALID_CREDENTIAL;
+                 this.errorType = "error";
+                 this.responseMessage = MESSAGES.INVALID_CREDENTIAL;
             }
         );
     }

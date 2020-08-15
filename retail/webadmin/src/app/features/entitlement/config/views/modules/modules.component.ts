@@ -1,5 +1,4 @@
 import { BaseComponent } from "@shared/components/base/base.component";
-import { AuthUserService } from "@core/services/user/auth-user.service";
 import {
     Component,
     OnInit,
@@ -10,8 +9,7 @@ import {
 } from "@angular/core";
 import {
     MatDialog,
-    MAT_DIALOG_DATA,
-    MatDialogRef,
+    
 } from "@angular/material/dialog";
 import { fuseAnimations } from "@fuse/animations";
 import { Permission } from "@feature/entitlement/models/config.model";
@@ -42,8 +40,7 @@ export class ModulesComponent extends BaseComponent implements OnInit {
     dialogRef: any;
     modules: Modules[];
     permissions: Permission[];
-    message: string = "";
-    type: string = "";
+ 
     displayedColumns = ["name", "status", "parent", "createdOn", "actions"];
     pageSize: number = CONFIG.PAGE_SIZE;
     pageSizeOptions: Array<number> = CONFIG.PAGE_SIZE_OPTIONS;
@@ -95,10 +92,7 @@ export class ModulesComponent extends BaseComponent implements OnInit {
                 this.makeFlat(response[0]);
                 this.updateGrid(this.modules);
             },
-            (error) => {
-                this.type = "error";
-                this.message = MESSAGES.UNKNOWN;
-            }
+           (response=>super.onError(response))
         );
     }
     makeFlat(response: any[]) {
@@ -138,8 +132,8 @@ export class ModulesComponent extends BaseComponent implements OnInit {
     createModule(data: Modules) {
         this._service.createModule(data).subscribe(
             (response) => {
-                this.type = "success";
-                this.message = MESSAGES.CREATED("Module");
+                 this.errorType = "success";
+                 this.responseMessage = MESSAGES.CREATED("Module");
                 const data = this.dataSource.data;
                 response.parentModule = response.parent;
                 response.parent = response.parent
@@ -149,22 +143,19 @@ export class ModulesComponent extends BaseComponent implements OnInit {
                 this.updateGrid(data);
                 this._matDialog.closeAll();
             },
-            (response) => {
-                this.type = "error";
-                this.message = MESSAGES.UNKNOWN;
-            }
+           (response=>super.onError(response))
         );
     }
     hideMessage() {
         setTimeout(() => {
-            this.message = "";
+             this.responseMessage = "";
         }, 2000);
     }
     editModule(model: Modules) {
         this._service.editModule(model.id, model).subscribe(
             (response) => {
-                this.type = "success";
-                this.message = MESSAGES.UPDATED("Module");
+                 this.errorType = "success";
+                 this.responseMessage = MESSAGES.UPDATED("Module");
                 response.parentModule = response.parent;
                 response.parent = response.parent
                     ? response.parent.name
@@ -177,10 +168,7 @@ export class ModulesComponent extends BaseComponent implements OnInit {
                 this.hideMessage();
                 this._matDialog.closeAll();
             },
-            (response) => {
-                this.type = "error";
-                this.message = MESSAGES.UNKNOWN;
-            }
+           (response=>super.onError(response))
         );
     }
     deleteModule(id: string) {
@@ -189,14 +177,11 @@ export class ModulesComponent extends BaseComponent implements OnInit {
                 const index = this.dataSource.data.findIndex((x) => x.id == id);
                 this.modules.splice(index, 1);
                 this.updateGrid(this.modules);
-                this.type = "success";
+                 this.errorType = "success";
                 this.hideMessage();
-                this.message = MESSAGES.DELETED("Module");
+                 this.responseMessage = MESSAGES.DELETED("Module");
             },
-            (response) => {
-                this.type = "error";
-                this.message = MESSAGES.UNKNOWN;
-            }
+           (response=>super.onError(response))
         );
     }
     updateGrid(data) {

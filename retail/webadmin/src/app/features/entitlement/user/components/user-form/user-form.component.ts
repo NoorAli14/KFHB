@@ -1,6 +1,6 @@
-import { ValidatorService } from './../../../../../core/services/validator-service/validator.service';
-import { NATIONALITY_LIST, STATUS_LIST, GENDER_LIST } from './../../../../../shared/constants/app.constants';
-import { AuthUserService } from "./../../../../../core/services/user/auth-user.service";
+import { ValidatorService } from '@core/services/validator-service/validator.service';
+import { NATIONALITY_LIST, STATUS_LIST, GENDER_LIST } from '@shared/constants/app.constants';
+import { AuthUserService } from "@core/services/user/auth-user.service";
 import {
     Component,
     OnInit,
@@ -13,9 +13,9 @@ import { FormGroup, Validators, FormControl } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { User } from "@feature/entitlement/models/user.model";
 import { UserService } from "@feature/entitlement/user/services/user.service";
-import { MESSAGES } from "@shared/constants/app.constants";
 import { Role } from "@feature/entitlement/models/role.model";
 import { camelToSnakeCase } from "@shared/helpers/global.helper";
+import { BaseComponent } from '@shared/components/base/base.component';
 
 @Component({
     selector: "app-user-form",
@@ -23,10 +23,10 @@ import { camelToSnakeCase } from "@shared/helpers/global.helper";
     styleUrls: ["./user-form.component.scss"],
     encapsulation: ViewEncapsulation.None,
 })
-export class UserFormComponent implements OnInit {
+export class UserFormComponent extends BaseComponent implements OnInit {
     userForm: FormGroup;
-    message: string = "";
-    type: string = "";
+    
+    
     response: User;
     roles: Role[];
     permissions: any[];
@@ -38,9 +38,9 @@ export class UserFormComponent implements OnInit {
     constructor(
         public matDialogRef: MatDialogRef<UserFormComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
-        private _userService: UserService,
-        private _authUserService: AuthUserService
-    ) {}
+    ) {
+    super()
+    }
     requiredIfUpdating(predicate) {
         return (formControl) => {
             if (!formControl.parent) {

@@ -16,7 +16,7 @@
         >
             <img
                 class="profile-image avatar huge"
-                src="assets/images/avatars/Velazquez.jpg"
+                src="assets/images/avatars/user-male.png"
                 [@animate]="{
                     value: '*',
                     params: { delay: '50ms', scale: '0.2' }
@@ -30,11 +30,11 @@
                         params: { delay: '100ms', x: '-25px' }
                     }"
                 >
-                    Rashid Aslam
+                    {{currentUser.firstName + ' ' + currentUser.lastName}}
                 </div>
                 <div fxLayout="row" fxLayoutAlign="start start">
                     <mat-icon class="s-16 status online"></mat-icon>
-                    <span class="status-1">Active</span>
+                    <span class="status-1">{{currentUser.status}}</span>
                 </div>
             </div>
         </div>
@@ -46,7 +46,7 @@
             [@animate]="{ value: '*', params: { delay: '200ms' } }"
         >
             <button
-                (click)="onUpdate()"
+                (click)="openDialoge()"
                 mat-raised-button
                 color="accent"
                 aria-label="Follow"
@@ -57,10 +57,17 @@
         </div>
     </div>
     <!-- / HEADER -->
-
-    <!-- CONTENT -->
+   
     <div class="content">
-        <app-about></app-about>
+
+        <mat-tab-group dynamicHeight="true">
+            <mat-tab label="Profile">
+                <app-about [user]="currentUser"></app-about>
+            </mat-tab>
+            <mat-tab label="Security">
+                <app-update-password></app-update-password>
+            </mat-tab>
+        </mat-tab-group>
+
     </div>
-    <!-- / CONTENT -->
 </div>

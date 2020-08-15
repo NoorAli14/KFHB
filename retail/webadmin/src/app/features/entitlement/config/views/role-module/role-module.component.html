@@ -18,8 +18,8 @@
             <span>ADD NEW </span>
         </button>
     </div>
-    <div *ngIf="message.length > 0" fxLayout="row" fxLayoutAlign="center" class="p-16  message-box {{ type }} ">
-        {{ message }}
+    <div *ngIf="responseMessage.length > 0" fxLayout="row" fxLayoutAlign="center" class="p-16  message-box {{ errorType }} ">
+        {{ responseMessage }}
     </div>
     <app-table-row [roles]="roles" [modules]="modules" [dataSource]="roleModulesList" [displayedColumns]="displayedColumns"  (deleteUser)="deleteUser($event)" (addNewPermission)="addNewModal($event)">
     </app-table-row>
