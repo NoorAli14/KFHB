@@ -126,7 +126,6 @@ export class AppComponent extends UnsubscribeOnDestroyAdapter implements OnInit,
      */
     ngOnInit(): void {
         this.subs.sink = this.eventService.on(Events.MODULES_UPDATED, (modules) => {
-            debugger
             const navigation = {
                 id: "features",
                 title: "Features",

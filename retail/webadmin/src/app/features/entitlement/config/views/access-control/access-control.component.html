@@ -18,7 +18,7 @@
     <div *ngIf="responseMessage.length > 0" fxLayout="row" fxLayoutAlign="center" class="p-16  message-box {{ errorType }} ">
         {{ responseMessage }}
     </div>
-    <app-table-row [roles]="roles" [modules]="modules" [dataSource]="roleModulesList" [displayedColumns]="displayedColumns"  >
+    <app-table-row  [dataSource]="roles" [displayedColumns]="displayedColumns"  >
     </app-table-row>
   
     <mat-paginator #paginator [pageIndex]="0" [pageSize]="pageSize" showFirstLastButtons [pageSizeOptions]="pageSizeOptions"></mat-paginator>

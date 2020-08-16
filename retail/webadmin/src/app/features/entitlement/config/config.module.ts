@@ -17,9 +17,10 @@ import { RoleFormComponent } from './components/role-form/role-form.component';
 import { ModulesComponent } from './views/modules/modules.component';
 import { ModulesFormComponent } from './components/modules-form/modules-form.component';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
+import { PermissionComponent } from './components/permission/permission.component';
 
 @NgModule({
-  declarations: [ConfigComponent ,ModulesComponent,ModulesFormComponent, RoleComponent, RoleFormComponent,TableRowComponent,   ConfigSidebarComponent,   AccessControlComponent],
+  declarations: [ConfigComponent ,PermissionComponent, ModulesComponent,ModulesFormComponent, RoleComponent, RoleFormComponent,TableRowComponent,   ConfigSidebarComponent,   AccessControlComponent],
   imports: [
     CommonModule,
     ConfigRoutingModule,

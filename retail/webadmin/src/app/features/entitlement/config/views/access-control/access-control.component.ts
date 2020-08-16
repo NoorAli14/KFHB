@@ -1,16 +1,9 @@
-import { Permission } from './../../../models/config.model';
-import { CONFIG } from './../../../../../config/index';
+import { CONFIG } from '@config/index';
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { Role } from "@feature/entitlement/models/role.model";
-import { Modules } from "@feature/entitlement/models/modules.model";
-import { RoleModuleModel } from "@feature/entitlement/models/config.model";
 import { MatDialog } from "@angular/material/dialog";
 import { ConfigMiddlewareService } from "../../services/config-middleware.service";
-import {
-    getName,
-    snakeToCamelArray,
-    camelToSentenceCase,
-} from "@shared/helpers/global.helper";
+
 import { fuseAnimations } from "@fuse/animations";
 
 import { BaseComponent } from '@shared/components/base/base.component';
@@ -21,19 +14,12 @@ import { BaseComponent } from '@shared/components/base/base.component';
     animations: fuseAnimations,
 })
 export class AccessControlComponent extends BaseComponent implements OnInit {
-    dialogRef: any;
     roles: Role[];
-    modules: Modules[];
-    permissions: Permission[];
-    roleModulesList: RoleModuleModel[];
     
-    
-
     pageSize:number=CONFIG.PAGE_SIZE;
     pageSizeOptions:Array<number>=CONFIG.PAGE_SIZE_OPTIONS;
     
-    
-    displayedColumns = ["expandIcon", "moduleId", "roleId","addIcon", "deleteIcon"];
+    displayedColumns = ["expandIcon", "roleName","createdOn"];
 
     constructor(
         public _matDialog: MatDialog,
@@ -41,28 +27,15 @@ export class AccessControlComponent extends BaseComponent implements OnInit {
     ) {
         super()
     }
-    deleteUser(index: number): void {}
     ngOnInit(): void {
         this.getData();
     }
-
-    onCreateDialog(): void {
-      
-    }
-   
     
     getData() {
-        this._service.forkConfigData().subscribe(
+        this._service.getRoles().subscribe(
             (response) => {
-                [
-                    this.modules,
-                    this.roles,
-                    this.roleModulesList,
-                    this.permissions,
-                ] = response;
-                this.roleModulesList = snakeToCamelArray(
-                    this.roleModulesList
-                ) as RoleModuleModel[];
+                this.roles = response;
+                this.roles= this.roles.map((role) =>( {...role,role_name: role.name}));
             },
            (response=>super.onError(response))
         );

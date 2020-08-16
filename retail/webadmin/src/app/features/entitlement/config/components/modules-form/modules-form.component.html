@@ -45,7 +45,7 @@
                     <mat-label>Permissions</mat-label>
                     <mat-select formControlName="permissions" multiple>
                         <mat-option *ngFor="let item of data.permissions" [value]="item.id">
-                            {{item.name}}
+                            {{item.record_type}}
                         </mat-option>
                     </mat-select>
                     <mat-icon matSuffix class="secondary-text">lock_open</mat-icon>

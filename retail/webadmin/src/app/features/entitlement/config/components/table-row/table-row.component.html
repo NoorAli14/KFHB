@@ -7,14 +7,12 @@
             <mat-header-cell *matHeaderCellDef>{{ key.includes('Icon') ? '' : camelToSentenceCase(key) }}</mat-header-cell>
 
             <mat-cell *matCellDef="let element; let i = dataIndex">
-                <span *ngIf="!key.includes('Icon'); else icon">{{ displayName(element['id'],element[key]=='roleId'? roles : modules)  }}</span>
+                <span *ngIf="!key.includes('Icon'); else icon">{{ element[camelToSnakeCase(key)] }}</span>
 
                 <ng-template #icon>
                     <mat-icon *ngIf="key === 'expandIcon' " (click)="toggleExpandableSymbol(element['id'])"> {{expandedId==element['id'] ? 'keyboard_arrow_up' : ' keyboard_arrow_down'}} </mat-icon>
                     <mat-icon *ngIf="key === 'expandIcon' " (click)="toggleExpandableSymbol(element['id'])"></mat-icon>
 
-                    <mat-icon *ngIf="key === 'deleteIcon'" (click)="confirmDialog(element['id'] )" color="warn" type="button" (click)="deleteUser()">delete</mat-icon>
-                    <mat-icon *ngIf="key === 'addIcon'" type="button" (click)="onAddNewPermission(element['id'])">add_circle</mat-icon>
                 </ng-template>
 
             </mat-cell>
@@ -22,7 +20,7 @@
 
         <ng-container matColumnDef="expandedDetail">
             <mat-cell *matCellDef="let element" [@expandableRow]="element['id'] === expandedId ? 'expanded' : 'collapsed'">
-                <app-permission *ngIf="expandedId==element['id']" [roleModuleId]="element['id']"></app-permission>
+                <app-permission *ngIf="expandedId==element['id']" [modules]="element['modules']"></app-permission>
             </mat-cell>
         </ng-container>
 
