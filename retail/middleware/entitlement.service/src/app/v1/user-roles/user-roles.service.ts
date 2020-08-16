@@ -14,6 +14,15 @@ export class UserRolesService {
     return this.userRoleDB.findOne({ id: id }, keys);
   }
 
+  async update(
+      id: string,
+      userRoleObj: Record<string, any>,
+      keys?: string[],
+  ): Promise<any> {
+    const [userRole] = await this.userRoleDB.update({ id: id }, userRoleObj, keys);
+    return userRole;
+  }
+
   async create(newUserRole: Record<string, any>, keys?: string[]): Promise<any> {
     newUserRole.status = STATUS.ACTIVE;
     const [userRole] = await this.userRoleDB.create(newUserRole, keys);

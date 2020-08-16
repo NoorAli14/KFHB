@@ -5,20 +5,20 @@ import * as path from 'path';
  * @param info
  */
 export const graphqlKeys = (info: any): string[] => {
-  return info.fieldNodes[0].selectionSet.selections.map(
+  // getting all keys from graphQL query
+  let keys: string[] = info.fieldNodes[0].selectionSet.selections.map(
     item => item.name.value,
   );
-};
 
-/**
- * filterKeys string[]
- * @param keys
- * @param filters
- */
-export const filterKeys = (keys, filters): string[] => {
-  return keys.filter(function(key) {
+  // filtering some keys
+  const filters = ['id', 'roles', 'modules', 'permissions'];
+  keys = keys.filter(function(key) {
     return filters.indexOf(key) === -1;
   });
+
+  // we need the id in every query
+  keys.push('id');
+  return keys
 };
 
 /**

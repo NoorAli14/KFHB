@@ -1,5 +1,7 @@
 import {IsNotEmpty, IsString} from "class-validator";
 import {Field, ID, ObjectType} from "@nestjs/graphql";
+import {Module} from "@app/v1/modules/module.model";
+import {Permission} from "@app/v1/permissions/permission.model";
 
 @ObjectType()
 export class Role {
@@ -35,4 +37,10 @@ export class Role {
 
   @Field({ nullable: true })
   deleted_by?: string;
+
+  @Field(type => [Module], { nullable: true })
+  modules?: Module[];
+
+  @Field(type => [Permission], { nullable: true })
+  permissions?: Permission[];
 }

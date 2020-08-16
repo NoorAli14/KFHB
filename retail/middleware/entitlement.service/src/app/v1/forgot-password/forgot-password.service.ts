@@ -20,10 +20,10 @@ export class ForgotPasswordService {
     const keys = ['*'];
     const results = await this.userService.findByProperty(check, keys);
     if (results.length && results.length > 0) {
-      const hash = generateRandomString(NUMBERS.LENGTH);
+      const hash = generateRandomString(NUMBERS.TOKEN_LENGTH);
       const fp_output: ForgotPasswordOutput = {
         token : hash,
-        token_expiry : addMinutes(NUMBERS.EXPIRY_IN_MINUTES)
+        token_expiry : addMinutes(NUMBERS.TOKEN_EXPIRY_IN_MINUTES)
       };
       await this.userService.update(results[0].id, fp_output, keys);
       return fp_output;
@@ -44,7 +44,7 @@ export class ForgotPasswordService {
     if (results.length && results.length > 0) {
       const user = results[0];
       if(Date.parse(user.token_expiry) && (Date.parse(user.token_expiry) > Date.parse(new Date().toString()))){
-        const input: UserInput = {
+        const input = {
           password_digest : this.encrypter.encryptPassword(changePasswordInput.password),
           token_expiry : null
         };

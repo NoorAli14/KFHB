@@ -12,7 +12,10 @@ export abstract class BaseRepository {
   }
 
   async list(keys: string | string[], condition?: Record<string, any>): Promise<any> {
-    return this._connection(this._tableName).select(keys).where(condition);
+    if(condition){
+      return this._connection(this._tableName).select(keys).where(condition);
+    }
+    return this._connection(this._tableName).select(keys);
   }
 
   async create(newObj: Record<string, any>, keys: string[]): Promise<any> {
@@ -24,9 +27,14 @@ export abstract class BaseRepository {
     newObj: Record<string, any>,
     keys?: string[],
   ): Promise<any> {
+    if (keys){
+      return this._connection(this._tableName)
+          .where(condition)
+          .update(newObj, keys);
+    }
     return this._connection(this._tableName)
-      .where(condition)
-      .update(newObj, keys);
+        .where(condition)
+        .update(newObj, "*");
   }
 
   async delete(condition: Record<string, any>): Promise<any> {

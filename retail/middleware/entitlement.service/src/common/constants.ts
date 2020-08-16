@@ -9,8 +9,9 @@ export const TABLE = {
 };
 
 export const NUMBERS = {
-  EXPIRY_IN_MINUTES: 240,
-  LENGTH: 60,
+  TOKEN_EXPIRY_IN_MINUTES: 240,
+  TOKEN_LENGTH: 60,
+  MAX_COLUMN_LENGTH: 255,
 };
 
 export const STATUS = {

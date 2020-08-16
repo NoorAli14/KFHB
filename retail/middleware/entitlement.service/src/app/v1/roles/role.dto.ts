@@ -28,4 +28,10 @@ export class RoleInput {
 
   @Field({ nullable: true })
   deleted_by?: string;
+
+  @Field(type => [String], { nullable: true })
+  module_ids?: string[];
+
+  @Field(type => [String], { nullable: true })
+  permission_ids?: string[];
 }

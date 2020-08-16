@@ -14,6 +14,10 @@ export class ModuleService {
     return this.moduleDB.findOne({ id: id }, keys);
   }
 
+  async findModulesByRoleID(roleIds): Promise<any>{
+    return this.moduleDB.listModulesByRoleID(roleIds);
+  }
+
   async update(
     id: string,
     moduleObj: Record<string, any>,
@@ -30,6 +34,6 @@ export class ModuleService {
   }
 
   async delete(id: string): Promise<any> {
-    return await this.update(id, {"status": STATUS.INACTIVE}, []);
+    return await this.moduleDB.delete({ id: id });
   }
 }

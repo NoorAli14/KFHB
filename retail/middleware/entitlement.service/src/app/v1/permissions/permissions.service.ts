@@ -13,6 +13,10 @@ export class PermissionService {
     return this.permissionDB.findOne({ id: id }, keys);
   }
 
+  async findPermissionsByRoleID(roleIds): Promise<any>{
+    return this.permissionDB.listPermissionsByRoleID(roleIds);
+  }
+
   async update(
     id: string,
     permissionObj: Record<string, any>,
