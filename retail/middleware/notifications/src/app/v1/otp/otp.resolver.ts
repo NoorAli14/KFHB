@@ -7,8 +7,7 @@ import {
   Parent,
 } from '@nestjs/graphql';
 import { ParseUUIDPipe, NotFoundException } from '@nestjs/common';
-// import { Fields } from '@common/decorators';
-import { Fields } from '../../../common/decorators';
+import { Fields } from '@common/decorators';
 import { Otp } from './otp.model';
 import { OtpService } from './otp.service';
 import { GenerateOTPInput } from './otp.dto';

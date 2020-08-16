@@ -47,9 +47,17 @@ input NewPostInput {
 type Otp {
   id: String!
   user_id: String!
-  otp: String!
+  delivery_mode: String!
+  mobile_no: String!
+  email: String!
+  otp_code: String!
+  status: String!
   created_on: DateTime!
+  created_by: String!
   updated_on: DateTime!
+  updated_by: DateTime!
+  deleted_on: DateTime!
+  deleted_by: DateTime!
 }
 
 input SendEmailInput {

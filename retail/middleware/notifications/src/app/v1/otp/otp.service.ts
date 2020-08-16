@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-// import { OtpRepository } from '@rubix/core/repository/';
-import { OtpRepository } from '../../../core/repository';
+import { OtpRepository } from '@rubix/core/repository/';
 import { Otp } from './otp.model';
 
 @Injectable()
