@@ -40,9 +40,16 @@ export const DEFAULT_ENV: iConfig = {
     DEBUG: true,
   },
   logLevel: 'info',
+  
   SMTP: {
-    SMTP_USER: '',
-    SMTP_PASS: '',
+    host: '',
+    port: 465,
+    ignoreTLS: true,
+    secure: false,
+    auth: {
+      user: '',
+      pass: '',
+    }
   }
 };
 @Injectable()
@@ -94,13 +101,21 @@ export class ConfigurationService {
     // Parse iSMTP Environment Variables
     public get SMTP(): iSMTP {
       return {
-        SMTP_USER: this.get('ENV_RBX_SMTP_USER', DEFAULT_ENV.SMTP.SMTP_USER),
-        SMTP_PASS: this.get('ENV_RBX_SMTP_PASS', DEFAULT_ENV.SMTP.SMTP_PASS),
-
-        // PORT: parseInt(
-        //   this.get('ENV_RBX_DB_PORT', DEFAULT_ENV.DATABASE.PORT),
-        //   10,
-        // )
+        host: this.get('ENV_RBX_SMTP_HOST', DEFAULT_ENV.SMTP.host),
+        port: parseInt(
+          this.get('ENV_RBX_SMTP_PORT', DEFAULT_ENV.SMTP.port),
+          10
+        ),
+        ignoreTLS: isTruthy(
+          this.get('ENV_RBX_SMTP_IGNORETLS', DEFAULT_ENV.SMTP.ignoreTLS)
+        ),
+        secure: isTruthy(
+          this.get('ENV_RBX_SMTP_SECURE', DEFAULT_ENV.SMTP.secure)
+        ),
+        auth: {
+          user: this.get('ENV_RBX_SMTP_USER', DEFAULT_ENV.SMTP.auth.user),
+          pass: this.get('ENV_RBX_SMTP_PASS', DEFAULT_ENV.SMTP.auth.pass),
+        }
       };
     }
 

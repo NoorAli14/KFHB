@@ -3,14 +3,14 @@ import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class EmailGQL {
-  @Field({ nullable: true })
+  @Field()
   to: string;
   
-  @Field({ nullable: true })
+  @Field()
   template: string;
 
-  @Field({ nullable: true })
-  title: string;
+  @Field()
+  subject: string;
 
   @Field({ nullable: true })
   body: string;
