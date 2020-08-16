@@ -6,7 +6,6 @@ import { Modules } from "@feature/entitlement/models/modules.model";
 import { RoleModuleModel } from "@feature/entitlement/models/config.model";
 import { MatDialog } from "@angular/material/dialog";
 import { ConfigMiddlewareService } from "../../services/config-middleware.service";
-import { ManagePermissionFormComponent } from "../../components/manage-permission-form/manage-permission-form.component";
 import {
     getName,
     snakeToCamelArray,
@@ -14,7 +13,6 @@ import {
 } from "@shared/helpers/global.helper";
 import { fuseAnimations } from "@fuse/animations";
 
-import { RoleModuleFormComponent } from '../../components/role-module-form/role-module-form.component';
 import { BaseComponent } from '@shared/components/base/base.component';
 
 @Component({
@@ -49,23 +47,9 @@ export class AccessControlComponent extends BaseComponent implements OnInit {
     }
 
     onCreateDialog(): void {
-        this.dialogRef = this._matDialog.open(RoleModuleFormComponent, {
-            data: {
-                roles: this.roles,
-                modules: this.modules,
-            },
-            panelClass: "app-role-module-form",
-        });
+      
     }
-    addNewModal(id): void {
-        this.dialogRef = this._matDialog.open(ManagePermissionFormComponent, {
-            data: {
-                permissions: this.permissions,
-                roleModuleId: id,
-            },
-            panelClass: "app-manage-permission-form",
-        });
-    }
+   
     
     getData() {
         this._service.forkConfigData().subscribe(
