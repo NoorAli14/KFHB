@@ -18,8 +18,8 @@
             <span>ADD NEW MODULE</span>
         </button>
     </div>
-    <div *ngIf="message.length > 0" fxLayout="row" fxLayoutAlign="center" class="p-16  message-box {{ type }} ">
-        {{ message }}
+    <div *ngIf="responseMessage.length > 0" fxLayout="row" fxLayoutAlign="center" class="p-16  message-box {{ errorType }} ">
+        {{ responseMessage }}
     </div>
     <mat-table #table matSort matSortActive="username" matSortDirection="asc" matSortDisableClear [dataSource]="dataSource">
         <!-- COLUMNS AND ROWS-->

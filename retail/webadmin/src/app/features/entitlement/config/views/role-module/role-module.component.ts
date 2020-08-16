@@ -13,20 +13,21 @@ import { Role } from "@feature/entitlement/models/role.model";
 import { snakeToCamelObject, snakeToCamelArray,  } from "@shared/helpers/global.helper";
 import { ManagePermissionFormComponent } from "../../components/manage-permission-form/manage-permission-form.component";
 import { fuseAnimations } from '@fuse/animations';
+import { BaseComponent } from '@shared/components/base/base.component';
 
 @Component({
     selector: "app-role-module-view",
     templateUrl: "./role-module.component.html",
     animations: fuseAnimations,
 })
-export class RoleModuleComponent implements OnInit {
+export class RoleModuleComponent extends BaseComponent implements OnInit {
     dialogRef: any;
     roles: Role[];
     modules: Modules[];
     permissions: Permission[];
     roleModulesList: RoleModuleModel[];
-    message: string = "";
-    type: string = "";
+    
+    
 
     pageSize:number=CONFIG.PAGE_SIZE;
     pageSizeOptions:Array<number>=CONFIG.PAGE_SIZE_OPTIONS;
@@ -37,7 +38,9 @@ export class RoleModuleComponent implements OnInit {
     constructor(
         public _matDialog: MatDialog,
         private _service: ConfigMiddlewareService
-    ) {}
+    ) {
+        super()
+    }
     deleteUser(index: number): void {}
     ngOnInit(): void {
         this.getData();

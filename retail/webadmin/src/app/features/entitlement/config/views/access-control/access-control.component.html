@@ -1,37 +1,27 @@
 <!-- CONTENT CARD -->
-<div class="content-card" fusePerfectScrollbar style="margin: 12px 10px;">
-    <div fxLayout="row" fxLayoutAlign="space-between" class="p-24 ">
+<div class="content-card" fusePerfectScrollbar>
+    <div fxLayout="row" fxLayoutAlign="space-between" class="p-24">
         <div class="logo" fxLayout="row" fxLayoutAlign="start center">
-            <mat-icon class="logo-icon mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">accessibility
+            <mat-icon class="logo-icon mr-16" [@animate]="{
+                    value: '*',
+                    params: { delay: '50ms', scale: '0.2' }
+                }">accessibility
             </mat-icon>
-            <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
-             Access Control
-          </span>
+            <span class="logo-text h1" [@animate]="{
+                    value: '*',
+                    params: { delay: '100ms', x: '-25px' }
+                }">
+                Access Control
+            </span>
         </div>
-
     </div>
-    <div *ngIf="message.length > 0" fxLayout="row" fxLayoutAlign="center" class="p-16  message-box {{ type }} ">
-        {{ message }}
+    <div *ngIf="responseMessage.length > 0" fxLayout="row" fxLayoutAlign="center" class="p-16  message-box {{ errorType }} ">
+        {{ responseMessage }}
     </div>
-    <mat-table #table matSort matSortActive="username" matSortDirection="asc" matSortDisableClear [dataSource]="dataSource">
-        <!-- COLUMNS AND ROWS-->
-        <ng-container *ngFor="let key of displayedColumns" [matColumnDef]="key">
-            <mat-header-cell *matHeaderCellDef>{{ key.includes('action') ? 'Action' : camelToSentenceCase(key) }}</mat-header-cell>
-    
-            <mat-cell *matCellDef="let element; let i = dataIndex">
-                <span *ngIf="!key.includes('action'); else action">{{element[key] }}</span>
-                <ng-template #action>
-                    <mat-icon color="warn" type="button" (click)=" confirmDialog(element['id'])">delete</mat-icon> &nbsp;&nbsp;
-                    <mat-icon type="button" (click)="onEditDialog(element)">mode_edit</mat-icon>
-                </ng-template>
-            </mat-cell>
-        </ng-container>
-        <!-- -->
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;" [@animate]="{value:'*',params:{y:'100%'}}">
-        </mat-row>
-    
-    </mat-table>
+    <app-table-row [roles]="roles" [modules]="modules" [dataSource]="roleModulesList" [displayedColumns]="displayedColumns"  (deleteUser)="deleteUser($event)" (addNewPermission)="addNewModal($event)">
+    </app-table-row>
+  
     <mat-paginator #paginator [pageIndex]="0" [pageSize]="pageSize" showFirstLastButtons [pageSizeOptions]="pageSizeOptions"></mat-paginator>
+
 </div>
 <!-- / CONTENT CARD -->

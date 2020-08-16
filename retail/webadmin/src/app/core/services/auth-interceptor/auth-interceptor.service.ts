@@ -56,9 +56,9 @@ export class AuthInterceptorService implements HttpInterceptor {
                             "----------------------------Token expired------------------------"
                         );
                         // this.notification.expiredToken();
-                        this.eventService.emit(
-                            new EmitEvent(Events.SESSION_EXPIRED, true)
-                        );
+                        // this.eventService.emit(
+                        //     // new EmitEvent(Events.SESSION_EXPIRED, true)
+                        // );
                         return empty();
                     }
                     // this.notification.refreshed();

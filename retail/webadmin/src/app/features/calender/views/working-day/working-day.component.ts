@@ -10,6 +10,7 @@ import { MatSort } from '@angular/material/sort';
 import { camelToSentenceCase } from '@shared/helpers/global.helper';
 import { MatDialog } from '@angular/material/dialog';
 import { CalendarService } from '@feature/calender/services/calendar.service';
+import { BaseComponent } from '@shared/components/base/base.component';
 
 @Component({
   selector: 'app-working-day',
@@ -18,11 +19,11 @@ import { CalendarService } from '@feature/calender/services/calendar.service';
   encapsulation: ViewEncapsulation.None,
   animations   : fuseAnimations
 })
-export class WorkingDayComponent implements OnInit {
+export class WorkingDayComponent extends BaseComponent implements OnInit {
     dialogRef: any;
     workingWeeks: WorkingDay[];
-    message: string = "";
-    type: string = "";
+    
+    
 
     displayedColumns = [
         "weekDay",
@@ -42,7 +43,9 @@ export class WorkingDayComponent implements OnInit {
     constructor(
         public _matDialog: MatDialog,
         private _calenderService: CalendarService
-    ) {}
+    ) {
+        super()
+    }
 
     ngOnInit(): void {
         this.getData();
