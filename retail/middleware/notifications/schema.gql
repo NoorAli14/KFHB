@@ -23,9 +23,9 @@ type Contexts {
 }
 
 type EmailGQL {
-  to: String
-  template: String
-  title: String
+  to: String!
+  template: String!
+  subject: String!
   body: String
   context: [Contexts!]
 }
@@ -35,9 +35,9 @@ type Mutation {
 }
 
 input SendEmailInput {
-  to: String
-  template: String
-  subject: String
+  to: String!
+  template: String!
+  subject: String!
   body: String
   context: [Context!]
 }
