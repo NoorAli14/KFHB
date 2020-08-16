@@ -31,9 +31,17 @@ export interface iDATABASE {
   TIMEOUT?: number;
   IS_DEBUG?: boolean;
 }
+export interface iSMTP_AUTH {
+  user: string;
+  pass: string;
+}
+
 export interface iSMTP {
-  SMTP_USER: string;
-  SMTP_PASS: string;
+  host: string,
+  port: number,
+  ignoreTLS: boolean,
+  secure: boolean,
+  auth: iSMTP_AUTH
 }
 
 export interface iConfig {
@@ -44,7 +52,6 @@ export interface iConfig {
   SWAGGER?: iSWAGGER;
   GRAPHQL?: iGRAPHQL;
   SMTP?: iSMTP;
-
   /**
    * The log level to use.
    * @example 'verbose', 'info', 'warn', 'error'

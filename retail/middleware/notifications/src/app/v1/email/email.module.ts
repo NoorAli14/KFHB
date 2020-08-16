@@ -16,13 +16,7 @@ import { DEFAULT_SENDING_NAME, DEFAULT_SENDING_EMAIL } from '@common/constants';
 
       imports: [CommonModule],
       useFactory: async (_configService: ConfigurationService) => ({
-        transport: {
-          host: 'smtp.mailtrap.io',
-          port: 465,
-          ignoreTLS: true,
-          secure: false,
-          auth: _configService.SMTP,
-        },
+        transport: _configService.SMTP,
         defaults: {
           from:`"${DEFAULT_SENDING_NAME}" <${DEFAULT_SENDING_EMAIL}>`,
         },
