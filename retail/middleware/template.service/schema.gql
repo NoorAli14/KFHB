@@ -36,8 +36,6 @@ type OptionGQL {
 }
 
 type Query {
-  templatesQuestionsList: [TemplateQuestionGQL!]!
-  findTemplateQuestion(id: String!): TemplateQuestionGQL!
   optionsList: [OptionGQL!]!
   findOption(id: String!): OptionGQL!
   questionsList: [QuestionGQL!]!
@@ -75,17 +73,6 @@ type TemplateGQL {
   id: String!
   name: String!
   sections: [SectionGQL!]!
-  created_on: DateTime!
-  updated_on: DateTime!
-}
-
-type TemplateQuestionGQL {
-  id: String!
-  rules: String!
-  status: Boolean!
-  template: TemplateGQL!
-  section: SectionGQL!
-  question: QuestionGQL!
   created_on: DateTime!
   updated_on: DateTime!
 }

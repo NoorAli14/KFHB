@@ -6,7 +6,6 @@ import {
   TemplateRepository,
   OptionRepository,
   QuestionRepository,
-  TemplateQuestionsRepository,
   TemplateResponsesRepository,
   SectionRepository,
 } from './';
@@ -15,7 +14,6 @@ const repositories = [
   TemplateRepository,
   OptionRepository,
   QuestionRepository,
-  TemplateQuestionsRepository,
   TemplateResponsesRepository,
   SectionRepository,
 ];

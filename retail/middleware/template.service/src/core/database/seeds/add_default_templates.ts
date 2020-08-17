@@ -5,7 +5,6 @@ import { Template } from '@app/v1/templates/template.model';
 import { Section } from '@app/v1/sections/section.model';
 import { Question } from '@app/v1/questions/question.model';
 import { Option } from '@app/v1/options/option.model';
-import { TemplateQuestion } from '@app/v1/template-questions/template-question.model';
 
 export async function seed(knex: Knex): Promise<void> {
   // Deletes ALL existing entries

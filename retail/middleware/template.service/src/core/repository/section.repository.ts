@@ -7,19 +7,6 @@ export class SectionRepository extends BaseRepository {
   constructor() {
     super(TABLE.SECTION);
   }
-  async findByQuestionId(question_id: string, keys?: string[]): Promise<any> {
-    // TODO: Improve the Query
-    return this._connection(this._tableName)
-      .select(keys || `${this._tableName}.*`)
-      .join(
-        TABLE.QUESTION,
-        `${this._tableName}.id`,
-        '=',
-        `${TABLE.QUESTION}.section_id`,
-      )
-      .where(`${TABLE.QUESTION}.id`, question_id);
-  }
-
   async findByTemplateId(
     template_ids: readonly string[],
     keys?: string[],
