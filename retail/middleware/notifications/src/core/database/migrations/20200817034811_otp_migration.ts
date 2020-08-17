@@ -4,8 +4,8 @@ import { TABLE } from '@common/constants';
 export async function up(knex: Knex): Promise<any> {
   return knex.schema.createTable(TABLE.OTP, table => {
     table.increments();
-    table.string('usr_id').notNullable();
-    table.string('delvery_mode').notNullable();
+    table.string('user_id').notNullable();
+    table.string('delivery_mode').notNullable();
     table.string('mobile_no');
     table.string('email');
     table.string('otp_code').notNullable();

@@ -42,6 +42,9 @@ type Mutation {
 
 input NewPostInput {
   user_id: String!
+  delivery_mode: String!
+  mobile_no: String
+  email: String
 }
 
 type Otp {

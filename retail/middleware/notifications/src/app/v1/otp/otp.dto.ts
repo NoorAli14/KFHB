@@ -3,21 +3,27 @@ import { Field, InputType } from '@nestjs/graphql';
 
 @InputType('NewPostInput')
 export class GenerateOTPInput {
-  // @Field({ nullable: true })
-  // @IsOptional()
-  // @MaxLength(30)
-  // description?: string;
 
   @Field()
   @Length(5, 255)
   user_id: string;
+
+  @Field()
+  @MaxLength(30)
+  delivery_mode: string;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @MaxLength(30)
+  mobile_no?: string;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @MaxLength(30)
+  email?: string;
 }
 
 export class VerifyOTPInput {
-  // @Field({ nullable: true })
-  // @IsOptional()
-  // @MaxLength(30)
-  // description?: string;
 
   @Field()
   @Length(5, 255)
@@ -25,9 +31,5 @@ export class VerifyOTPInput {
 
   @Field()
   @Length(5, 255)
-  code: string;
-
-  @Field()
-  @Length(5, 255)
-  source: string;
+  otp_code: string;
 }
