@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { OtpRepository } from '@rubix/core/repository/';
 import { Otp } from './otp.model';
-
 @Injectable()
 export class OtpService {
   constructor(private otpDB: OtpRepository) {}
@@ -23,6 +22,16 @@ export class OtpService {
     otpOBJ: { [key: string]: any },
     columns?: string[],
   ): Promise<Otp> {
+
+    // otpOBJ.delivery_mode = "email";
+    // otpOBJ.email = "ahmad.raza@virtualforce.io";
+    otpOBJ.otp_code = 1123456;
+    otpOBJ.status = "Not varified";
+    otpOBJ.created_on = new Date();
+    otpOBJ.created_by = otpOBJ.user_id;
+    otpOBJ.updated_on = new Date();
+    otpOBJ.updated_by = otpOBJ.user_id;
+
     const [otp] = await this.otpDB.create(otpOBJ, columns);
     return otp;
   }
