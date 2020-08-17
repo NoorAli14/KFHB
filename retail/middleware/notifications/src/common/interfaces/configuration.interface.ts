@@ -44,6 +44,13 @@ export interface iSMTP {
   auth: iSMTP_AUTH
 }
 
+export interface iOTP {
+  pattern: string,
+  otp_length: number,
+  status: string,
+  duration: number
+}
+
 export interface iConfig {
   /** Application Details */
   APP: iAPP;
@@ -52,6 +59,7 @@ export interface iConfig {
   SWAGGER?: iSWAGGER;
   GRAPHQL?: iGRAPHQL;
   SMTP?: iSMTP;
+  OTP?: iOTP;
   /**
    * The log level to use.
    * @example 'verbose', 'info', 'warn', 'error'

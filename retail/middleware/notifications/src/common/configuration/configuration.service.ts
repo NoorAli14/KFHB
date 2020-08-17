@@ -8,8 +8,16 @@ import {
   iSWAGGER,
   iGRAPHQL,
   iConfig,
-  iSMTP
+  iSMTP,
+  iOTP,
 } from '@common/interfaces/configuration.interface';
+import {
+  DEFAULT_OTP_STATUS,
+  DEFAULT_OTP_PATTERN,
+  DEFAULT_OTP_LENGTH,
+  DEFAULT_OTP_DURATION,
+} from '@rubix/common/constants';
+
 export const DEFAULT_ENV: iConfig = {
   APP: {
     NAME: 'Rubix | Boilerplate',
@@ -40,7 +48,7 @@ export const DEFAULT_ENV: iConfig = {
     DEBUG: true,
   },
   logLevel: 'info',
-  
+
   SMTP: {
     host: '',
     port: 465,
@@ -49,8 +57,14 @@ export const DEFAULT_ENV: iConfig = {
     auth: {
       user: '',
       pass: '',
-    }
-  }
+    },
+  },
+  OTP: {
+    otp_length: DEFAULT_OTP_LENGTH,
+    pattern: DEFAULT_OTP_PATTERN,
+    status: DEFAULT_OTP_STATUS,
+    duration: DEFAULT_OTP_DURATION
+  },
 };
 @Injectable()
 export class ConfigurationService {
@@ -98,26 +112,32 @@ export class ConfigurationService {
     };
   }
 
-    // Parse iSMTP Environment Variables
-    public get SMTP(): iSMTP {
-      return {
-        host: this.get('ENV_RBX_SMTP_HOST', DEFAULT_ENV.SMTP.host),
-        port: parseInt(
-          this.get('ENV_RBX_SMTP_PORT', DEFAULT_ENV.SMTP.port),
-          10
-        ),
-        ignoreTLS: isTruthy(
-          this.get('ENV_RBX_SMTP_IGNORETLS', DEFAULT_ENV.SMTP.ignoreTLS)
-        ),
-        secure: isTruthy(
-          this.get('ENV_RBX_SMTP_SECURE', DEFAULT_ENV.SMTP.secure)
-        ),
-        auth: {
-          user: this.get('ENV_RBX_SMTP_USER', DEFAULT_ENV.SMTP.auth.user),
-          pass: this.get('ENV_RBX_SMTP_PASS', DEFAULT_ENV.SMTP.auth.pass),
-        }
-      };
+  // Parse iSMTP Environment Variables
+  public get SMTP(): iSMTP {
+    return {
+      host: this.get('ENV_RBX_SMTP_HOST', DEFAULT_ENV.SMTP.host),
+      port: parseInt(this.get('ENV_RBX_SMTP_PORT', DEFAULT_ENV.SMTP.port), 10),
+      ignoreTLS: isTruthy(
+        this.get('ENV_RBX_SMTP_IGNORETLS', DEFAULT_ENV.SMTP.ignoreTLS),
+      ),
+      secure: isTruthy(
+        this.get('ENV_RBX_SMTP_SECURE', DEFAULT_ENV.SMTP.secure),
+      ),
+      auth: {
+        user: this.get('ENV_RBX_SMTP_USER', DEFAULT_ENV.SMTP.auth.user),
+        pass: this.get('ENV_RBX_SMTP_PASS', DEFAULT_ENV.SMTP.auth.pass),
+      },
+    };
+  }
+
+  public get OTP(): iOTP {
+    return { 
+      pattern: this.get('ENV_RBX_OTP_PATTERN', DEFAULT_ENV.OTP.pattern),
+      otp_length: parseInt(this.get('ENV_RBX_OTP_LENGTH', DEFAULT_ENV.OTP.otp_length), 10),
+      status: this.get('ENV_RBX_OTP_STATUS', DEFAULT_ENV.OTP.status),
+      duration: parseInt(this.get('ENV_RBX_OTP_DURATION', DEFAULT_ENV.OTP.duration), 10)
     }
+  }
 
   get SWAGGER(): iSWAGGER {
     return {
