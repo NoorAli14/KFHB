@@ -1,22 +1,16 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
-import {
-  Resolver,
-  Query,
-  Args,
-  ResolveField,
-  Parent,
-} from '@nestjs/graphql';
+import { Resolver, Query, Args, ResolveField, Parent } from '@nestjs/graphql';
 import { TemplateQuestionsService } from './template-questions.service';
 import { TemplateQuestionGQL } from './template-question.model';
 import { TemplateGQL } from '../templates/template.model';
 import { QuestionGQL } from '../questions/question.model';
 import { SectionGQL } from '../sections/section.model';
 import { Loader } from 'nestjs-dataloader';
-import { SectionLoader } from '../../../core/dataloaders/section.loader';
+import { SectionLoaderForQuestion } from '../../../core/dataloaders/section.loader';
 import * as DataLoader from 'dataloader';
-import { TemplateLoader } from '../../../core/dataloaders/template.loader';
-import { QuestionLoader } from '../../../core/dataloaders/question.loader';
+import { TemplateLoaderForSection } from '../../../core/dataloaders/template.loader';
+import { QuestionLoaderForOption } from '../../../core/dataloaders/question.loader';
 import { Fields } from '@common/decorators';
 
 @Resolver(TemplateQuestionGQL)
@@ -28,7 +22,7 @@ export class TemplateQuestionsResolver {
   @ResolveField(() => TemplateGQL)
   public async template(
     @Parent() templateQuestion: TemplateQuestionGQL,
-    @Loader(TemplateLoader.name)
+    @Loader(TemplateLoaderForSection.name)
     templateLoader: DataLoader<TemplateGQL['id'], TemplateGQL>,
   ): Promise<any> {
     // TODO: Find a way to pass selection keys to this function so Database query can be optimized.
@@ -38,7 +32,7 @@ export class TemplateQuestionsResolver {
   @ResolveField(() => QuestionGQL)
   public async question(
     @Parent() templateQuestion: TemplateQuestionGQL,
-    @Loader(QuestionLoader.name)
+    @Loader(QuestionLoaderForOption.name)
     questionLoader: DataLoader<QuestionGQL['id'], QuestionGQL>,
   ): Promise<any> {
     return questionLoader.load(templateQuestion.id);
@@ -47,7 +41,7 @@ export class TemplateQuestionsResolver {
   @ResolveField(() => SectionGQL)
   public async section(
     @Parent() templateQuestion: TemplateQuestionGQL,
-    @Loader(SectionLoader.name)
+    @Loader(SectionLoaderForQuestion.name)
     sectionLoader: DataLoader<SectionGQL['id'], SectionGQL>,
   ): Promise<any> {
     return sectionLoader.load(templateQuestion.id);

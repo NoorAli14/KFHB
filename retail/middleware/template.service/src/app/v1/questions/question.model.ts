@@ -14,11 +14,30 @@ export class Question {
     description: 'Question Type',
   })
   type: string;
+
+  @ApiProperty({
+    example: 'Rules for the question',
+    description: 'Rules for the question',
+  })
+  rules: string;
+
+  @ApiProperty({
+    example: 'Status',
+    description: 'Status of the Template',
+  })
+  status: boolean;
+
+  @ApiProperty({
+    example: 'Section ID',
+    description: 'Section ID',
+  })
+  section_id: string;
 }
 
 // Graphql Model
 import { Field, ObjectType } from '@nestjs/graphql';
 import { OptionGQL } from '../options/option.model';
+import { SectionGQL } from '../sections/section.model';
 
 @ObjectType()
 export class QuestionGQL {
@@ -31,8 +50,19 @@ export class QuestionGQL {
   @Field()
   type: string;
 
+  @Field()
+  rules: string;
+
+  @Field()
+  status: boolean;
+
   @Field(() => [OptionGQL])
   options?: OptionGQL[];
+
+  section_id?: string;
+
+  @Field(() => SectionGQL)
+  section?: SectionGQL;
 
   @Field()
   created_on: Date;

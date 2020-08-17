@@ -8,15 +8,21 @@ export class QuestionRepository extends BaseRepository {
     super(TABLE.QUESTION);
   }
 
-  async findByTemplateQuestionId(ids: readonly string[], keys?: string[]): Promise<any> {
+  // async findByTemplateQuestionId(ids: readonly string[], keys?: string[]): Promise<any> {
+  //   return this._connection(this._tableName)
+  //     .select(keys || `${this._tableName}.*`)
+  //     .join(
+  //       TABLE.TEMPLATE_QUESTIONS,
+  //       `${this._tableName}.id`,
+  //       '=',
+  //       `${TABLE.TEMPLATE_QUESTIONS}.question_id`,
+  //     )
+  //     .whereIn(`${TABLE.TEMPLATE_QUESTIONS}.id`, ids);
+  // }
+
+  async findBySectionId(ids: readonly string[], keys?: string[]): Promise<any> {
     return this._connection(this._tableName)
       .select(keys || `${this._tableName}.*`)
-      .join(
-        TABLE.TEMPLATE_QUESTIONS,
-        `${this._tableName}.id`,
-        '=',
-        `${TABLE.TEMPLATE_QUESTIONS}.question_id`,
-      )
-      .whereIn(`${TABLE.TEMPLATE_QUESTIONS}.id`, ids);
+      .whereIn(`section_id`, ids);
   }
 }
