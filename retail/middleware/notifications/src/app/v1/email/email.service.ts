@@ -17,7 +17,11 @@ export class EmailService {
         // Parse Context Object.
         let contextObj = JSON.parse(JSON.stringify(emailObj.context));
         var context = {};
-        contextObj.forEach((e: { key: string | number; value: any; }) => { context[e.key] = e.value });
+        if(contextObj instanceof Array){
+          contextObj.forEach((e: { key: string | number; value: any; }) => { context[e.key] = e.value });
+        }else{
+          context = contextObj;
+        }
 
         message.template = emailObj.template;
         message.context = context;

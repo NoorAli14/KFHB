@@ -15,4 +15,7 @@ export const DEFAULT_OTP_STATUS = "Not Varified";
 export const DEFAULT_OTP_PATTERN = '0';
 export const DEFAULT_OTP_LENGTH = 6;
 export const DEFAULT_OTP_DURATION = 1;
+export const DEFAULT_OTP_EMAIL_TEMPLATE = "otp";
+export const DEFAULT_OTP_EMAIL_SUBJECT="One time OTP";
+
 

@@ -23,6 +23,7 @@ export class GenerateOTPInput {
   email?: string;
 }
 
+@InputType('VerifyOTPInput')
 export class VerifyOTPInput {
 
   @Field()

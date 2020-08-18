@@ -36,5 +36,6 @@ import { DEFAULT_SENDING_NAME, DEFAULT_SENDING_EMAIL } from '@common/constants';
   ],
   controllers: [],
   providers: [EmailService, EmailResolver],
+  exports: [EmailService]
 })
 export class EmailModule {}

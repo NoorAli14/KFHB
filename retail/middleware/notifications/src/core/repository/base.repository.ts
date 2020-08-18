@@ -1,7 +1,7 @@
 import { InjectKnex, Knex } from 'nestjs-knex';
 export abstract class BaseRepository {
   @InjectKnex() private readonly _connection: Knex;
-  private _tableName: string;
+  public _tableName: string;
   constructor(tableName: string) {
     this._tableName = tableName;
   }
