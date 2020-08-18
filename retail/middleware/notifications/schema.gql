@@ -39,6 +39,7 @@ type Mutation {
   sendEmail(input: SendEmailInput!): EmailGQL!
   generateOtp(input: NewPostInput!): Otp!
   verifyOtp(input: VerifyOTPInput!): Otp!
+  sendSMS(input: SendSMSInput!): SMSGQL!
 }
 
 input NewPostInput {
@@ -70,6 +71,16 @@ input SendEmailInput {
   subject: String!
   body: String
   context: [Context!]
+}
+
+input SendSMSInput {
+  to: String!
+  body: String!
+}
+
+type SMSGQL {
+  to: String!
+  body: String!
 }
 
 input VerifyOTPInput {
