@@ -5,10 +5,6 @@ import { QuestionRepository } from '@core/repository/question.repository';
 
 @Module({
   imports: [],
-  providers: [
-    QuestionsResolver,
-    QuestionsService,
-    QuestionRepository,
-  ],
+  providers: [QuestionsResolver, QuestionsService, QuestionRepository],
 })
 export class QuestionsModule {}

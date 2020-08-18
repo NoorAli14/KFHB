@@ -5,8 +5,9 @@ export class CreateTemplateDto {
   @IsUUID()
   @IsOptional()
   readonly id: string;
+
   @ApiProperty()
-	@IsString()
+  @IsString()
   @MaxLength(255)
   readonly name: string;
 }

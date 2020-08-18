@@ -30,14 +30,12 @@ input NewTemplateResponseInput {
 type OptionGQL {
   id: String!
   name: String!
-  question_id: String!
+  question: QuestionGQL!
   created_on: DateTime!
   updated_on: DateTime!
 }
 
 type Query {
-  templatesQuestionsList: [TemplateQuestionGQL!]!
-  findTemplateQuestion(id: String!): TemplateQuestionGQL!
   optionsList: [OptionGQL!]!
   findOption(id: String!): OptionGQL!
   questionsList: [QuestionGQL!]!
@@ -45,6 +43,7 @@ type Query {
   sectionsList: [SectionGQL!]!
   findSection(id: String!): SectionGQL!
   templatesList: [TemplateGQL!]!
+  findTemplateByName(name: String!): TemplateGQL!
   findTemplate(id: String!): TemplateGQL!
 }
 
@@ -52,7 +51,10 @@ type QuestionGQL {
   id: String!
   title: String!
   type: String!
+  rules: String!
+  status: Boolean!
   options: [OptionGQL!]!
+  section: SectionGQL!
   created_on: DateTime!
   updated_on: DateTime!
 }
@@ -61,6 +63,8 @@ type SectionGQL {
   id: String!
   name: String!
   level: String!
+  questions: [QuestionGQL!]!
+  template: TemplateGQL!
   created_on: DateTime!
   updated_on: DateTime!
 }
@@ -68,17 +72,7 @@ type SectionGQL {
 type TemplateGQL {
   id: String!
   name: String!
-  created_on: DateTime!
-  updated_on: DateTime!
-}
-
-type TemplateQuestionGQL {
-  id: String!
-  rules: String!
-  status: Boolean!
-  template: TemplateGQL!
-  section: SectionGQL!
-  question: QuestionGQL!
+  sections: [SectionGQL!]!
   created_on: DateTime!
   updated_on: DateTime!
 }

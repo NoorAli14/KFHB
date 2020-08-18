@@ -8,18 +8,9 @@ export class TemplateRepository extends BaseRepository {
     super(TABLE.TEMPLATE);
   }
 
-  async findByTemplateQuestionId(
-    ids: readonly string[],
-    keys?: string[],
-  ): Promise<any> {
+  async findBySectionId(section_ids: readonly string[], keys?: string[]): Promise<any> {
     return this._connection(this._tableName)
-      .select(keys || `${this._tableName}.*`)
-      .join(
-        TABLE.TEMPLATE_QUESTIONS,
-        `${this._tableName}.id`,
-        '=',
-        `${TABLE.TEMPLATE_QUESTIONS}.template_id`,
-      )
-      .whereIn(`${TABLE.TEMPLATE_QUESTIONS}.id`, ids);
+      .select(keys)
+      .whereIn('section_id', section_ids);
   }
 }

@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { join } from 'path';
-import { TemplateQuestionsModule } from './template-questions/template-questions.module';
 import { GraphQLFederationModule } from '@nestjs/graphql';
 import { CommonModule } from '@common/common.module';
 import { ConfigurationService } from '@common/configuration/configuration.service';
@@ -16,7 +15,6 @@ import { RepositoryModule } from '@core/repository/repository.module';
   imports: [
     RepositoryModule,
     DataloaderModule,
-    TemplateQuestionsModule,
     TemplateResponsesModule,
     TemplatesModule,
     OptionsModule,
