@@ -7,37 +7,34 @@ import { Fields } from '@common/decorators';
 import { QuestionGQL } from '../questions/question.model';
 import { Loader } from 'nestjs-dataloader';
 import { QuestionLoaderForOption } from '@core/dataloaders';
-import DataLoader from 'dataloader';
+import DataLoader from '../../../lib/dataloader';
 
 @Resolver(OptionGQL)
 export class OptionsResolver {
   constructor(private readonly optionService: OptionsService) {}
 
-  addRelationColumns(columns: string[]) {
-    columns.push('question_id');
-  }
-
   @ResolveField(() => QuestionGQL)
   public async question(
+    @Fields(QuestionGQL) columns,
     @Parent() option: OptionGQL,
     @Loader(QuestionLoaderForOption.name)
     questionLoader: DataLoader<QuestionGQL['id'], QuestionGQL>,
   ): Promise<any> {
-    return questionLoader.load(option.question_id);
+    return questionLoader.loadWithKeys(option.question_id, columns);
   }
 
   @Query(() => [OptionGQL])
-  async optionsList(@Fields() columns: string[]): Promise<OptionGQL[]> {
-    this.addRelationColumns(columns);
+  async optionsList(
+    @Fields(OptionGQL) columns: string[],
+  ): Promise<OptionGQL[]> {
     return this.optionService.list(columns);
   }
 
   @Query(() => OptionGQL)
   async findOption(
     @Args('id') id: string,
-    @Fields() columns: string[],
+    @Fields(OptionGQL) columns: string[],
   ): Promise<OptionGQL> {
-    this.addRelationColumns(columns);
     return this.optionService.findById(id, columns);
   }
 }

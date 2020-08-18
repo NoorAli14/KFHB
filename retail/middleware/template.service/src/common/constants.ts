@@ -5,6 +5,15 @@ export enum TABLE {
   OPTION = 'CMP_OPTION',
   TEMPLATE_RESPONSE = 'CMP_TEMPLATE_RESPONSES',
 }
+
+export const FOREIGN_KEYS = {
+  TemplateGQL: [],
+  SectionGQL: ['template_id'],
+  QuestionGQL: ['section_id'],
+  OptionGQL: ['question_id'],
+  TemplateResponseGQL: [],
+};
+
 export const DATABASE_UUID_METHOD = 'NEWID()';
 
 export const DATABASE_MIGRATION_TABLE_NAME = 'RUBIX_TEMPLATE_MIGRATION';

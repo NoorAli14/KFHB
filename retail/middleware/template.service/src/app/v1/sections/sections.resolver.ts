@@ -10,7 +10,7 @@ import {
   TemplateLoaderForSection,
   QuestionLoaderForSection,
 } from '@core/dataloaders';
-import DataLoader from 'dataloader';
+import DataLoader from '../../../lib/dataloader';
 import { QuestionGQL } from '../questions/question.model';
 
 @Resolver(SectionGQL)
@@ -23,35 +23,39 @@ export class SectionsResolver {
 
   @ResolveField(() => TemplateGQL)
   public async template(
+    @Fields(TemplateGQL) columns,
     @Parent() section: SectionGQL,
     @Loader(TemplateLoaderForSection.name)
     templateLoader: DataLoader<TemplateGQL['id'], TemplateGQL>,
   ): Promise<any> {
     // TODO: Find a way to pass selection keys to this function so Database query can be optimized.
-    return templateLoader.load(section.template_id);
+    return templateLoader.loadWithKeys(section.template_id, columns);
   }
 
   @ResolveField(() => [QuestionGQL])
   async questions(
+    @Fields(QuestionGQL) columns,
     @Parent() section: SectionGQL,
     @Loader(QuestionLoaderForSection.name)
     questionLoader: DataLoader<QuestionGQL['id'], QuestionGQL>,
   ): Promise<any> {
-    return questionLoader.load(section.id);
+    return questionLoader.loadWithKeys(section.id, columns);
   }
 
   @Query(() => [SectionGQL])
-  async sectionsList(@Fields() columns: string[]): Promise<SectionGQL[]> {
-    this.addRelationColumns(columns);
+  async sectionsList(
+    @Fields(SectionGQL) columns: string[],
+  ): Promise<SectionGQL[]> {
+    // this.addRelationColumns(columns);
     return this.sectionService.list(columns);
   }
 
   @Query(() => SectionGQL)
   async findSection(
     @Args('id') id: string,
-    @Fields() columns: string[],
+    @Fields(SectionGQL) columns: string[],
   ): Promise<SectionGQL> {
-    this.addRelationColumns(columns);
+    // this.addRelationColumns(columns);
     return this.sectionService.findById(id, columns);
   }
 }

@@ -1,4 +1,4 @@
-import * as DataLoader from 'dataloader';
+import DataLoader from '../../lib/dataloader';
 import { Injectable } from '@nestjs/common';
 import { NestDataLoader } from 'nestjs-dataloader';
 import { QuestionsService } from '../../app/v1/questions/questions.service';
@@ -10,8 +10,8 @@ export class QuestionLoaderForSection
   constructor(private readonly questionsService: QuestionsService) {}
 
   generateDataLoader(): DataLoader<string, QuestionGQL> {
-    return new DataLoader<string, QuestionGQL>(keys =>
-      this.questionsService.findBySectionId(keys),
+    return new DataLoader<string, QuestionGQL>((keys, columns) =>
+      this.questionsService.findBySectionId(keys, columns),
     );
   }
 }
@@ -22,8 +22,8 @@ export class QuestionLoaderForOption
   constructor(private readonly questionsService: QuestionsService) {}
 
   generateDataLoader(): DataLoader<string, QuestionGQL> {
-    return new DataLoader<string, QuestionGQL>(keys =>
-      this.questionsService.findByIdsSorted(keys),
+    return new DataLoader<string, QuestionGQL>((keys, columns) =>
+      this.questionsService.findByIdsSorted(keys, columns),
     );
   }
 }
