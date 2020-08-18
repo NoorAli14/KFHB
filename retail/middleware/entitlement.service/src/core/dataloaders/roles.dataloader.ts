@@ -1,6 +1,7 @@
-import * as DataLoader from 'dataloader';
-import {Injectable, Scope} from '@nestjs/common';
-import { NestDataLoader } from 'nestjs-dataloader';
+import * as DataLoader from "dataloader";
+import {Injectable, Scope} from "@nestjs/common";
+import { NestDataLoader } from "nestjs-dataloader";
+
 import {RoleService} from "@app/v1/roles/roles.service";
 import {Role} from "@app/v1/roles/role.model";
 

@@ -11,7 +11,7 @@ import {
 } from '@common/interfaces/configuration.interface';
 export const DEFAULT_ENV: iConfig = {
   APP: {
-    NAME: 'Rubix | Boilerplate',
+    NAME: 'Rubix | Entitlement Service',
     DESCRIPTION: '',
     VERSION: '1.0.0',
     ENVIRONMENT: 'development',

@@ -19,7 +19,13 @@ export abstract class BaseRepository {
   }
 
   async create(newObj: Record<string, any>, keys: string[]): Promise<any> {
-    return this._connection(this._tableName).insert(newObj, keys);
+    const result = await this._connection(this._tableName).insert(newObj, keys);
+    if(result.length && typeof result[0] === 'string'){
+      const re = {};
+      re[keys[0]] = result[0];
+      return [re]
+    }
+    return result
   }
 
   async update(
@@ -28,9 +34,15 @@ export abstract class BaseRepository {
     keys?: string[],
   ): Promise<any> {
     if (keys){
-      return this._connection(this._tableName)
+      const result = await this._connection(this._tableName)
           .where(condition)
           .update(newObj, keys);
+      if(result.length && typeof result[0] === 'string'){
+        const re = {};
+        re[keys[0]] = result[0];
+        return [re]
+      }
+      return result
     }
     return this._connection(this._tableName)
         .where(condition)

@@ -1,15 +1,11 @@
-import {IsNotEmpty, IsString} from "class-validator";
-import {Field, ID, ObjectType} from "@nestjs/graphql";
+import { Field, ID, ObjectType } from "@nestjs/graphql";
 
 @ObjectType()
 export class UserRole {
   @Field(() => ID)
-  @IsNotEmpty()
-  @IsString()
-  id: string;
+  id?: string;
 
   @Field()
-  @IsString()
   user_id?: string;
 
   @Field()

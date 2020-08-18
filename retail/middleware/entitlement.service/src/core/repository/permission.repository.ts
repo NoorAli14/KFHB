@@ -8,11 +8,11 @@ export class PermissionRepository extends BaseRepository {
     super(TABLE.PERMISSION);
   }
 
-  async listPermissionsByRoleID(roleIds): Promise<any>{
+  async listPermissionsByModuleID(moduleIds): Promise<any>{
     return this._connection(TABLE.PERMISSION)
-        .select(`${TABLE.PERMISSION}.*`)
-        .innerJoin(TABLE.ROLE_MODULE_PERMISSION, `${TABLE.PERMISSION}.id`, `${TABLE.ROLE_MODULE_PERMISSION}.permission_id`)
-        .innerJoin(TABLE.ROLE_MODULE, `${TABLE.ROLE_MODULE}.id`, `${TABLE.ROLE_MODULE_PERMISSION}.role_module_id`)
-        .whereIn(`${TABLE.ROLE_MODULE}.role_id`, roleIds)
+        .select(`${TABLE.PERMISSION}.*`, `${TABLE.ROLE_MODULE}.module_id`)
+        .leftJoin(TABLE.ROLE_MODULE_PERMISSION, `${TABLE.PERMISSION}.id`, `${TABLE.ROLE_MODULE_PERMISSION}.permission_id`)
+        .leftJoin(TABLE.ROLE_MODULE, `${TABLE.ROLE_MODULE}.id`, `${TABLE.ROLE_MODULE_PERMISSION}.role_module_id`)
+        .whereIn(`${TABLE.ROLE_MODULE}.module_id`, moduleIds)
   }
 }

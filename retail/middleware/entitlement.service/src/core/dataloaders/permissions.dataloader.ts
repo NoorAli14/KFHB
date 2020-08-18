@@ -11,6 +11,6 @@ export class PermissionsDataLoader implements NestDataLoader<string, Permission>
     constructor(private readonly permissionService: PermissionService) { }
 
     generateDataLoader(): DataLoader<string, Permission> {
-        return new DataLoader<string, Permission>(keys => this.permissionService.findPermissionsByRoleID(keys));
+        return new DataLoader<string, Permission>(keys => this.permissionService.findPermissionsByModuleID(keys));
     }
 }

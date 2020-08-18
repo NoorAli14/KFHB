@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import {RoleRepository} from "@core/repository/role.repository";
-import {STATUS} from "@common/constants";
+import {MESSAGES, STATUS} from "@common/constants";
 import {KeyValInput} from "@common/inputs/key-val-input";
 
 @Injectable()
@@ -12,7 +12,14 @@ export class RoleService {
   }
 
   async findById(id: string, keys?: string[]): Promise<any> {
-    return this.roleDB.findOne({ id: id }, keys);
+    const result = await this.roleDB.findOne({ id: id }, keys);
+    if(!result){
+      throw new HttpException({
+        status: HttpStatus.NOT_FOUND,
+        error: MESSAGES.NOT_FOUND,
+      }, HttpStatus.NOT_FOUND);
+    }
+    return result;
   }
 
   async findByProperty(checks: KeyValInput[], keys?: string[]): Promise<any> {
@@ -20,11 +27,31 @@ export class RoleService {
     checks.forEach(check => {
       conditions[check.record_key] = check.record_value;
     });
-    return this.roleDB.findBy(conditions, keys);
+    const result = await this.roleDB.findBy(conditions, keys);
+    if(!result){
+      throw new HttpException({
+        status: HttpStatus.NOT_FOUND,
+        error: MESSAGES.NOT_FOUND,
+      }, HttpStatus.NOT_FOUND);
+    }
+    return result;
   }
 
   async findRolesByUserID(userIds): Promise<any>{
-    return this.roleDB.listRolesByUserID(userIds);
+    const roles = await this.roleDB.listRolesByUserID(userIds);
+    const rolesLookups = {};
+    roles.forEach(role => {
+      if (!rolesLookups[role.user_id]) {
+        rolesLookups[role.user_id] = role || {};
+      }
+    });
+    return userIds.map(id => {
+      if(rolesLookups[id]){
+        return rolesLookups[id];
+      } else {
+        return {}
+      }
+    });
   }
 
   async update(
@@ -32,17 +59,34 @@ export class RoleService {
     roleObj: Record<string, any>,
     keys?: string[],
   ): Promise<any> {
-    const [role] = await this.roleDB.update({ id: id }, roleObj, keys);
-    return role;
+    const result = await this.roleDB.update({ id: id }, roleObj, keys);
+    if(result && result.length) {
+      return result[0]
+    } else {
+      throw new HttpException({
+        status: HttpStatus.BAD_REQUEST,
+        error: MESSAGES.BAD_REQUEST,
+      }, HttpStatus.BAD_REQUEST);
+    }
   }
 
   async create(newRole: Record<string, any>, keys?: string[]): Promise<any> {
-    newRole.status = STATUS.ACTIVE;
-    const [role] = await this.roleDB.create(newRole, keys);
-    return role;
+    if(!newRole.status){
+      newRole.status = STATUS.PENDING;
+    }
+    const result = await this.roleDB.create(newRole, keys);
+    if(result && result.length) {
+      return result[0]
+    } else {
+      throw new HttpException({
+        status: HttpStatus.BAD_REQUEST,
+        error: MESSAGES.BAD_REQUEST,
+      }, HttpStatus.BAD_REQUEST);
+    }
   }
 
   async delete(id: string): Promise<any> {
-    return await this.roleDB.delete({ id: id });
+    const result = await this.update(id, {status: STATUS.INACTIVE});
+    return !!result;
   }
 }

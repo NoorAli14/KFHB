@@ -1,15 +1,12 @@
-import {IsNotEmpty, IsString} from "class-validator";
 import {Field, ID, ObjectType} from "@nestjs/graphql";
+import {Permission} from "@app/v1/permissions/permission.model";
 
 @ObjectType()
 export class Module {
-  @Field(() => ID)
-  @IsNotEmpty()
-  @IsString()
-  id: string;
+  @Field(() => ID, { nullable: true })
+  id?: string;
 
   @Field({ nullable: true })
-  @IsString()
   name?: string;
 
   @Field({ nullable: true })
@@ -23,4 +20,10 @@ export class Module {
 
   @Field({ nullable: true })
   created_by?: string;
+
+  @Field(type => [Permission], { nullable: true })
+  permissions?: Permission[];
+
+  @Field(type => [Module], { nullable: true })
+  sub_modules?: Module[];
 }

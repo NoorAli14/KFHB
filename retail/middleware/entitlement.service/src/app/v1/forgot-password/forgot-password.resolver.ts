@@ -1,6 +1,4 @@
-import {Resolver, Query, Args, Mutation} from '@nestjs/graphql';
-import {HttpExceptionFilter} from "@common/filters/http-exception.filter";
-import {UseFilters} from "@nestjs/common";
+import { Resolver, Query, Args, Mutation } from "@nestjs/graphql";
 
 import { User } from "@app/v1/users/user.model";
 import {ChangePasswordInput, ForgotPasswordInput, ForgotPasswordOutput} from "@app/v1/forgot-password/forgot-password.dto";
@@ -11,13 +9,11 @@ export class ForgotPasswordResolver {
   constructor(private readonly forgetPasswordService: ForgotPasswordService) {}
 
   @Query(() => ForgotPasswordOutput)
-  @UseFilters(new HttpExceptionFilter())
   async forgotPassword(@Args('input') input: ForgotPasswordInput): Promise<any> {
     return this.forgetPasswordService.verifyAndGetToken(input);
   }
 
   @Mutation(() => String)
-  @UseFilters(new HttpExceptionFilter())
   async changePassword(@Args('input') input: ChangePasswordInput): Promise<any> {
     return this.forgetPasswordService.changePassword(input);
   }

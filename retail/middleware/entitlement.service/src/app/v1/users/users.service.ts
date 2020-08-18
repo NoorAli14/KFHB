@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import {HttpException, HttpStatus, Injectable} from "@nestjs/common";
 
-import { UserRepository } from '@core/repository/';
-import {Encrypter} from "@common/encrypter";
-import {STATUS} from "@common/constants";
-import {KeyValInput} from "@common/inputs/key-val-input";
+import { UserRepository } from "@core/repository/";
+import { Encrypter } from "@common/encrypter";
+import { MESSAGES, STATUS } from "@common/constants";
+import { KeyValInput } from "@common/inputs/key-val-input";
 
 @Injectable()
 export class UserService {
@@ -15,7 +15,14 @@ export class UserService {
   }
 
   async findById(id: string, keys?: string[]): Promise<any> {
-    return this.userDB.findOne({ id: id }, keys);
+    const result = await this.userDB.findOne({ id: id }, keys);
+    if(!result){
+      throw new HttpException({
+        status: HttpStatus.NOT_FOUND,
+        error: MESSAGES.NOT_FOUND,
+      }, HttpStatus.NOT_FOUND);
+    }
+    return result;
   }
 
   async findByProperty(checks: KeyValInput[], keys?: string[]): Promise<any> {
@@ -23,7 +30,14 @@ export class UserService {
     checks.forEach(check => {
       conditions[check.record_key] = check.record_value;
     });
-    return this.userDB.findBy(conditions, keys);
+    const result = await this.userDB.findBy(conditions, keys);
+    if(!result){
+      throw new HttpException({
+        status: HttpStatus.NOT_FOUND,
+        error: MESSAGES.NOT_FOUND,
+      }, HttpStatus.NOT_FOUND);
+    }
+    return result;
   }
 
   async update(
@@ -31,18 +45,38 @@ export class UserService {
     userObj: Record<string, any>,
     keys?: string[],
   ): Promise<any> {
-    const [user] = await this.userDB.update({ id: id }, userObj, keys);
-    return user;
+    const result = await this.userDB.update({ id: id }, userObj, keys);
+    if(result && result.length) {
+      return result[0]
+    } else {
+      throw new HttpException({
+        status: HttpStatus.BAD_REQUEST,
+        error: MESSAGES.BAD_REQUEST,
+      }, HttpStatus.BAD_REQUEST);
+    }
   }
 
   async create(newUser: Record<string, any>, keys?: string[]): Promise<any> {
-    newUser.password_digest = this.encrypter.encryptPassword(newUser.password_digest);
-    newUser.status = STATUS.ACTIVE;
-    const [user] = await this.userDB.create(newUser, keys);
-    return user;
+    if(newUser.password) {
+      newUser.password_digest = this.encrypter.encryptPassword(newUser.password);
+      delete newUser.password;
+    }
+    if(!newUser.status){
+      newUser.status = STATUS.PENDING;
+    }
+    const result = await this.userDB.create(newUser, keys);
+    if(result && result.length) {
+      return result[0]
+    } else {
+      throw new HttpException({
+        status: HttpStatus.BAD_REQUEST,
+        error: MESSAGES.BAD_REQUEST,
+      }, HttpStatus.BAD_REQUEST);
+    }
   }
 
   async delete(id: string): Promise<any> {
-    return await this.userDB.delete({ id: id });
+    const result = await this.update(id, {status: STATUS.INACTIVE});
+    return !!result;
   }
 }

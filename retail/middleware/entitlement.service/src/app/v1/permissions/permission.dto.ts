@@ -1,13 +1,11 @@
 import {Field, InputType} from "@nestjs/graphql";
+import {IsString, MaxLength} from "class-validator";
+import {NUMBERS} from "@common/constants";
 
 @InputType()
 export class PermissionInput {
-  @Field({ nullable: true })
-  record_type?: string;
-
-  @Field({ nullable: true })
-  created_on?: string;
-
-  @Field({ nullable: true })
-  created_by?: string;
+  @Field()
+  @IsString()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  record_type: string;
 }

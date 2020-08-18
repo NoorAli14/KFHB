@@ -1,37 +1,24 @@
 import {Field, InputType} from "@nestjs/graphql";
+import {IsOptional, IsString, MaxLength} from "class-validator";
+
+import {NUMBERS} from "@common/constants";
 
 @InputType()
 export class RoleInput {
-  @Field({ nullable: true })
-  name?: string;
+  @Field()
+  @IsString()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  name: string;
 
   @Field({ nullable: true })
+  @IsString()
+  @IsOptional()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   description?: string;
 
   @Field({ nullable: true })
+  @IsString()
+  @IsOptional()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   status?: string;
-
-  @Field({ nullable: true })
-  created_on?: string;
-
-  @Field({ nullable: true })
-  created_by?: string;
-
-  @Field({ nullable: true })
-  updated_on?: string;
-
-  @Field({ nullable: true })
-  updated_by?: string;
-
-  @Field({ nullable: true })
-  deleted_on?: string;
-
-  @Field({ nullable: true })
-  deleted_by?: string;
-
-  @Field(type => [String], { nullable: true })
-  module_ids?: string[];
-
-  @Field(type => [String], { nullable: true })
-  permission_ids?: string[];
 }

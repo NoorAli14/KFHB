@@ -1,19 +1,14 @@
-import {IsNotEmpty, IsString} from "class-validator";
 import {Field, ID, ObjectType} from "@nestjs/graphql";
 
 @ObjectType()
 export class RoleModule {
-  @Field(() => ID)
-  @IsNotEmpty()
-  @IsString()
-  id: string;
+  @Field(() => ID, { nullable: true })
+  id?: string;
 
-  @Field()
-  @IsString()
+  @Field({ nullable: true })
   module_id?: string;
 
-  @Field()
-  @IsString()
+  @Field({ nullable: true })
   role_id?: string;
 
   @Field({ nullable: true })

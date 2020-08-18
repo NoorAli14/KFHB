@@ -3,6 +3,8 @@ import { graphqlKeys } from '@common/utilities';
 import {RoleModulePermission} from "@app/v1/role-module-permissions/role-module-permission.model";
 import {RoleModulePermissionsService} from "@app/v1/role-module-permissions/role-module-permissions.service";
 import {RoleModulePermissionInput} from "@app/v1/role-module-permissions/role-module-permission.dto";
+import {RoleModule} from "@app/v1/role-modules/role-module.model";
+import {KeyValInput} from "@common/inputs/key-val-input";
 
 @Resolver(RoleModulePermission)
 export class RoleModulePermissionsResolver {
@@ -10,19 +12,28 @@ export class RoleModulePermissionsResolver {
 
   @Query(() => [RoleModulePermission])
   async roleModulePermissionsList(@Info() info): Promise<RoleModulePermission[]> {
-        const keys = graphqlKeys(info);
+    const keys = graphqlKeys(info);
     return this.roleModulePermissionService.list(keys);
   }
 
   @Query(() => RoleModulePermission)
   async findRoleModulePermission(@Args('id') id: string, @Info() info): Promise<RoleModulePermission> {
-        const keys = graphqlKeys(info);
+    const keys = graphqlKeys(info);
     return this.roleModulePermissionService.findById(id, keys);
+  }
+
+  @Query(() => [RoleModulePermission])
+  async findRoleModulePermissionBy(
+    @Args('checks', { type: () => [KeyValInput] }) checks: KeyValInput[],
+    @Info() info
+  ): Promise<RoleModulePermission[]> {
+    const keys = graphqlKeys(info);
+    return this.roleModulePermissionService.findByProperty(checks, keys);
   }
 
   @Mutation(() => RoleModulePermission)
   async addRoleModulePermission(@Args('input') input: RoleModulePermissionInput, @Info() info): Promise<RoleModulePermission> {
-        const keys = graphqlKeys(info);
+    const keys = graphqlKeys(info);
     return this.roleModulePermissionService.create(input, keys);
   }
 

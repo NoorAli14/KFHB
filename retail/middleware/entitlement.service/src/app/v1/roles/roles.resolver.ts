@@ -1,18 +1,14 @@
-import {Resolver, Query, Mutation, Args, Info, ResolveField, Parent} from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Info, ResolveField, Parent } from '@nestjs/graphql';
 import { Loader } from 'nestjs-graphql-dataloader';
 
 import { graphqlKeys } from '@common/utilities';
-import {RoleService} from "@app/v1/roles/roles.service";
-import {Role} from "@app/v1/roles/role.model";
-import {RoleInput} from "@app/v1/roles/role.dto";
-import {KeyValInput} from "@common/inputs/key-val-input";
-import {User} from "@app/v1/users/user.model";
-import {RolesDataLoader} from "@app/v1/roles/roles.dataloader";
+import { RoleService } from "@app/v1/roles/roles.service";
+import { Role } from "@app/v1/roles/role.model";
+import { RoleInput } from "@app/v1/roles/role.dto";
+import { KeyValInput } from "@common/inputs/key-val-input";
 import * as DataLoader from "dataloader";
-import {Module} from "@app/v1/modules/module.model";
-import {ModulesDataLoader} from "@app/v1/modules/modules.dataloader";
-import {Permission} from "@app/v1/permissions/permission.model";
-import {PermissionsDataLoader} from "@app/v1/permissions/permissions.dataloader";
+import { Module } from "@app/v1/modules/module.model";
+import {ModulesDataLoader} from "@core/dataloaders";
 
 @Resolver(Role)
 export class RolesResolver {
@@ -20,13 +16,13 @@ export class RolesResolver {
 
   @Query(() => [Role])
   async rolesList(@Info() info): Promise<Role[]> {
-        const keys = graphqlKeys(info);
+    const keys = graphqlKeys(info);
     return this.roleService.list(keys);
   }
 
   @Query(() => Role)
   async findRole(@Args('id') id: string, @Info() info): Promise<Role> {
-        const keys = graphqlKeys(info);
+    const keys = graphqlKeys(info);
     return this.roleService.findById(id, keys);
   }
 
@@ -41,7 +37,7 @@ export class RolesResolver {
 
   @Mutation(() => Role)
   async addRole(@Args('input') input: RoleInput, @Info() info): Promise<Role> {
-        const keys = graphqlKeys(info);
+    const keys = graphqlKeys(info);
     return this.roleService.create(input, keys);
   }
 
@@ -51,7 +47,7 @@ export class RolesResolver {
     @Args('input') input: RoleInput,
     @Info() info
   ): Promise<Role> {
-        const keys = graphqlKeys(info);
+    const keys = graphqlKeys(info);
     return this.roleService.update(id, input, keys);
   }
 
@@ -63,16 +59,12 @@ export class RolesResolver {
   @ResolveField('modules', returns => [Module])
   async getModules(@Parent() role: Role,
                  @Loader(ModulesDataLoader.name) modulesLoader: DataLoader<Module['id'], Module>) {
-    const keysAndID: Array<string> = [];
-    keysAndID.push(role.id);
-    return modulesLoader.loadMany(keysAndID);
-  }
-
-  @ResolveField('permissions', returns => [Permission])
-  async getPermissions(@Parent() role: Role,
-                       @Loader(PermissionsDataLoader.name) permissionsLoader: DataLoader<Permission['id'], Permission>) {
-    const keysAndID: Array<string> = [];
-    keysAndID.push(role.id);
-    return permissionsLoader.loadMany(keysAndID);
+    const Ids: Array<string> = [];
+    if(role.id) {
+      Ids.push(role.id);
+      return modulesLoader.loadMany(Ids);
+    } else {
+      return [{}]
+    }
   }
 }

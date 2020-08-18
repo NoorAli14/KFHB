@@ -6,6 +6,7 @@ export const TABLE = {
   ROLE_MODULE: 'ENT_ROLE_MODULE',
   PERMISSION: 'ENT_PERMISSION',
   ROLE_MODULE_PERMISSION: 'ENT_ROLE_MODULE_PERMISSION',
+  WORKING_WEEK: 'ENT_WORKINGWEEK',
 };
 
 export const NUMBERS = {
@@ -16,7 +17,8 @@ export const NUMBERS = {
 
 export const STATUS = {
   ACTIVE: 'ACTIVE',
-  INACTIVE: 'INACTIVE'
+  INACTIVE: 'INACTIVE',
+  PENDING: 'PENDING'
 };
 
 export const TEMP_ROLE = {
@@ -31,11 +33,12 @@ export const MESSAGES = {
   INTERNAL_ERROR: 'Internal Error',
   INVALID_TOKEN: 'Invalid Token.',
   TOKEN_EXPIRED: 'Token Expired.',
-  PASSWORD_UPDATED: 'Password Updated.'
+  PASSWORD_UPDATED: 'Password Updated.',
+  NOT_FOUND: 'No Record Found',
+  BAD_REQUEST: 'Bad Request'
 };
 
 export const DATABASE_UUID_METHOD = 'NEWID()';
-
 export const DATABASE_MIGRATION_TABLE_NAME = 'RUBIX_ENTITLEMENT_MIGRATIONS';
 export const DATABASE_MIGRATION_DIRECTORY = 'src/core/database/migrations';
 export const DATABASE_SEED_DIRECTORY = 'src/core/database/seeds';

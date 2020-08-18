@@ -1,8 +1,11 @@
-import { Resolver, Query, Mutation, Args,Info } from '@nestjs/graphql';
-import { graphqlKeys } from '@common/utilities';
+import { Resolver, Query, Mutation, Args,Info } from "@nestjs/graphql";
+
+import { graphqlKeys } from "@common/utilities";
 import {RoleModulesService} from "@app/v1/role-modules/role-modules.service";
 import {RoleModule} from "@app/v1/role-modules/role-module.model";
 import {RoleModuleInput} from "@app/v1/role-modules/role-module.dto";
+import {UserRole} from "@app/v1/user-roles/user-roles.model";
+import {KeyValInput} from "@common/inputs/key-val-input";
 
 @Resolver(RoleModule)
 export class RoleModulesResolver {
@@ -10,19 +13,29 @@ export class RoleModulesResolver {
 
   @Query(() => [RoleModule])
   async roleModulesList(@Info() info): Promise<RoleModule[]> {
-        const keys = graphqlKeys(info);
+    const keys = graphqlKeys(info);
     return this.roleModuleService.list(keys);
   }
 
   @Query(() => RoleModule)
   async findRoleModule(@Args('id') id: string, @Info() info): Promise<RoleModule> {
-        const keys = graphqlKeys(info);
+    const keys = graphqlKeys(info);
     return this.roleModuleService.findById(id, keys);
   }
 
+  @Query(() => [RoleModule])
+  async findRoleModuleBy(
+    @Args('checks', { type: () => [KeyValInput] }) checks: KeyValInput[],
+    @Info() info
+  ): Promise<RoleModule[]> {
+    const keys = graphqlKeys(info);
+    return this.roleModuleService.findByProperty(checks, keys);
+  }
+
+
   @Mutation(() => RoleModule)
   async addRoleModule(@Args('input') input: RoleModuleInput, @Info() info): Promise<RoleModule> {
-        const keys = graphqlKeys(info);
+    const keys = graphqlKeys(info);
     return this.roleModuleService.create(input, keys);
   }
 
@@ -32,7 +45,7 @@ export class RoleModulesResolver {
     @Args('input') input: RoleModuleInput,
     @Info() info
   ): Promise<RoleModule> {
-        const keys = graphqlKeys(info);
+    const keys = graphqlKeys(info);
     return this.roleModuleService.update(id, input, keys);
   }
 

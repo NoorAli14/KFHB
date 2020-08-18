@@ -3,20 +3,25 @@ import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import {KeyValInput} from "@common/inputs/key-val-input";
 import {UserService} from "@app/v1/users/users.service";
 import {Encrypter} from "@common/encrypter";
-import {MESSAGES, NUMBERS} from "@common/constants";
+import {MESSAGES, NUMBERS, STATUS} from "@common/constants";
 import {ChangePasswordInput, ForgotPasswordInput, ForgotPasswordOutput} from "@app/v1/forgot-password/forgot-password.dto";
 import {addMinutes, generateRandomString} from "@common/utilities";
-import {UserInput} from "@app/v1/users/user.dto";
 
 @Injectable()
 export class ForgotPasswordService {
   constructor(private userService: UserService, private encrypter: Encrypter) {}
 
   async verifyAndGetToken(forgetPasswordInput: ForgotPasswordInput): Promise<any> {
-    const check: KeyValInput[] = [{
-      record_key: 'email',
-      record_value: forgetPasswordInput.email
-    }];
+    const check: KeyValInput[] = [
+      {
+        record_key: 'email',
+        record_value: forgetPasswordInput.email
+      },
+      {
+        record_key: 'status',
+        record_value: STATUS.ACTIVE
+      }
+    ];
     const keys = ['*'];
     const results = await this.userService.findByProperty(check, keys);
     if (results.length && results.length > 0) {

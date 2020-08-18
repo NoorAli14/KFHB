@@ -2,24 +2,24 @@ import {Field, InputType, ObjectType} from "@nestjs/graphql";
 
 @InputType()
 export class ForgotPasswordInput {
-  @Field({ nullable: true })
+  @Field()
   email: string;
 }
 
 @InputType()
 export class ChangePasswordInput {
-  @Field({ nullable: true })
+  @Field()
   token: string;
 
-  @Field({ nullable: true })
+  @Field()
   password: string;
 }
 
 @ObjectType()
 export class ForgotPasswordOutput {
-  @Field({ nullable: true })
+  @Field()
   token?: string;
 
-  @Field({ nullable: true })
+  @Field()
   token_expiry?: Date;
 }
