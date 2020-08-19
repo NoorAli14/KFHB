@@ -4,9 +4,10 @@ import { OtpRepository } from '@rubix/core/repository/';
 import { OtpResolver } from './otp.resolver';
 import { OtpService } from './otp.service';
 import { EmailModule } from '../email/email.module';
+import { SMSModule } from '../sms/sms.module';
 
 @Module({
-  imports: [RepositoryModule, EmailModule],
+  imports: [RepositoryModule, EmailModule, SMSModule],
   providers: [
     OtpService,
     OtpRepository,

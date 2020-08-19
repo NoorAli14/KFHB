@@ -5,6 +5,8 @@ import { OtpRepository } from '@rubix/core/repository/';
 import { Otp } from './otp.model';
 import { ConfigurationService } from '@rubix/common/configuration/configuration.service';
 import { EmailService } from '../email/email.service';
+import { SMSService } from '../sms/sms.service';
+
 import {
   DEFAULT_OTP_EMAIL_TEMPLATE,
   DEFAULT_OTP_EMAIL_SUBJECT,
@@ -16,6 +18,8 @@ export class OtpService {
     private readonly otpDB: OtpRepository,
     private readonly _config: ConfigurationService,
     private readonly emailService: EmailService,
+    private readonly smsService: SMSService,
+    
   ) {}
 
   async verify(
@@ -68,7 +72,7 @@ export class OtpService {
 
     const [otp] = await this.otpDB.create(otpOBJ, columns);
     // Send OTP Via email function call.
-    if (otp && otpOBJ.delivery_mode == 'email') {
+    if (otp && (otpOBJ.delivery_mode == 'email' || otpOBJ.delivery_mode == 'both')) {
       const emailObj = {
         to: otpOBJ.email,
         subject: DEFAULT_OTP_EMAIL_SUBJECT,
@@ -78,6 +82,15 @@ export class OtpService {
         },
       };
       await this.emailService.sendEmail(emailObj, ['email']);
+    }
+
+    // Send OTP via SMS function call.
+    if (otp && (otpOBJ.delivery_mode == 'mobile_no' || otpOBJ.delivery_mode == 'both')) {
+      const smsObj = {
+        to: otpOBJ.mobile_no,
+        body: otpOBJ.otp_code + " is your one time OTP code.",
+      };
+      await this.smsService.sendSMS(smsObj, ['mobile_no']);
     }
     return otp;
   }
