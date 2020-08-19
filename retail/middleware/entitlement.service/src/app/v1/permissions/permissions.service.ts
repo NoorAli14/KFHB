@@ -28,13 +28,20 @@ export class PermissionService {
     permissions.forEach(permission => {
       if (!permissionLookUps[permission.module_id]) {
         permissionLookUps[permission.module_id] = permission || {};
+      }else{
+        const prev = permissionLookUps[permission.module_id];
+        if(Array.isArray(prev)) {
+          permissionLookUps[permission.module_id] = [...prev, permission]
+        } else {
+          permissionLookUps[permission.module_id] = [prev, permission]
+        }
       }
     });
     return moduleIds.map(id => {
       if(permissionLookUps[id]){
         return permissionLookUps[id];
       } else {
-        return {}
+        return null
       }
     });
   }

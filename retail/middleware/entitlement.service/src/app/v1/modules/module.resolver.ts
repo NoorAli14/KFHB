@@ -62,10 +62,15 @@ export class ModuleResolver {
     const Ids: Array<string> = [];
     if(module.id) {
       Ids.push(module.id);
-      return permissionsLoader.loadMany(Ids);
-    } else {
-      return [{}]
+      const results = await permissionsLoader.loadMany(Ids);
+      if(results[0]){
+        if(Array.isArray(results[0])){
+          return results[0]
+        }
+        return results
+      }
     }
+    return []
   }
 
   @ResolveField('sub_modules', returns => [Module])
@@ -74,9 +79,14 @@ export class ModuleResolver {
     const Ids: Array<string> = [];
     if(module.id) {
       Ids.push(module.id);
-      return subModulesLoader.loadMany(Ids);
-    } else {
-      return [{}]
+      const results = await subModulesLoader.loadMany(Ids);
+      if(results[0]){
+        if(Array.isArray(results[0])){
+          return results[0]
+        }
+        return results
+      }
     }
+    return []
   }
 }

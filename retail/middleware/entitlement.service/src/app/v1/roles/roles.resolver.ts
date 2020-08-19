@@ -62,9 +62,14 @@ export class RolesResolver {
     const Ids: Array<string> = [];
     if(role.id) {
       Ids.push(role.id);
-      return modulesLoader.loadMany(Ids);
-    } else {
-      return [{}]
+      const results = await modulesLoader.loadMany(Ids);
+      if(results[0]){
+        if(Array.isArray(results[0])){
+          return results[0]
+        }
+        return results
+      }
     }
+    return []
   }
 }

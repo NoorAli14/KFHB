@@ -70,9 +70,14 @@ export class UsersResolver {
     const Ids: Array<string> = [];
     if(user.id) {
       Ids.push(user.id);
-      return rolesLoader.loadMany(Ids);
-    } else {
-      return [{}]
+      const results = await rolesLoader.loadMany(Ids);
+      if(results[0]){
+        if(Array.isArray(results[0])){
+          return results[0]
+        }
+        return results
+      }
     }
+    return []
   }
 }

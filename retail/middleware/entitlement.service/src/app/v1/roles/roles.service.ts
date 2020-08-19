@@ -43,13 +43,20 @@ export class RoleService {
     roles.forEach(role => {
       if (!rolesLookups[role.user_id]) {
         rolesLookups[role.user_id] = role || {};
+      }else{
+        const prev = rolesLookups[role.user_id];
+        if(Array.isArray(prev)) {
+          rolesLookups[role.user_id] = [...prev, role]
+        } else {
+          rolesLookups[role.user_id] = [prev, role]
+        }
       }
     });
     return userIds.map(id => {
       if(rolesLookups[id]){
         return rolesLookups[id];
       } else {
-        return {}
+        return null
       }
     });
   }

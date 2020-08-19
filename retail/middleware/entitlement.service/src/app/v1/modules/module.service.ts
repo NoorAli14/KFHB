@@ -28,13 +28,20 @@ export class ModuleService {
     modules.forEach(module => {
       if (!moduleLookUps[module.role_id]) {
         moduleLookUps[module.role_id] = module || {};
+      }else{
+        const prev = moduleLookUps[module.role_id];
+        if(Array.isArray(prev)) {
+          moduleLookUps[module.role_id] = [...prev, module]
+        } else {
+          moduleLookUps[module.role_id] = [prev, module]
+        }
       }
     });
     return roleIds.map(id => {
       if(moduleLookUps[id]){
         return moduleLookUps[id];
       } else {
-        return {}
+        return null
       }
     });
   }
@@ -45,13 +52,20 @@ export class ModuleService {
     modules.forEach(module => {
       if (!moduleLookUps[module.parent_id]) {
         moduleLookUps[module.parent_id] = module || {};
+      }else {
+        const prev = moduleLookUps[module.parent_id];
+        if (Array.isArray(prev)) {
+          moduleLookUps[module.parent_id] = [...prev, module]
+        } else {
+          moduleLookUps[module.parent_id] = [prev, module]
+        }
       }
     });
     return parentIds.map(id => {
       if(moduleLookUps[id]){
         return moduleLookUps[id];
       } else {
-        return {}
+        return null
       }
     });
   }
