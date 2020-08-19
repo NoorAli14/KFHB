@@ -8,7 +8,7 @@ export class PermissionService {
   constructor(private permissionDB: PermissionRepository) {}
 
   async list(keys: string[]): Promise<any> {
-    return this.permissionDB.list(keys,{"status" : STATUS.ACTIVE});
+    return this.permissionDB.list(keys);
   }
 
   async findById(id: string, keys?: string[]): Promise<any> {
@@ -71,9 +71,6 @@ export class PermissionService {
   }
 
   async create(permissionObj: Record<string, any>, keys?: string[]): Promise<any> {
-    if(!permissionObj.status){
-      permissionObj.status = STATUS.PENDING;
-    }
     const result = await this.permissionDB.create(permissionObj, keys);
     if(result && result.length) {
       return result[0]
@@ -86,7 +83,6 @@ export class PermissionService {
   }
 
   async delete(id: string): Promise<any> {
-    const result = await this.update(id, {status: STATUS.INACTIVE});
-    return !!result;
+    return await this.permissionDB.delete({ id: id });
   }
 }
