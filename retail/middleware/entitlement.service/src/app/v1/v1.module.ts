@@ -15,6 +15,7 @@ import { RoleModulePermissionsModule } from "@app/v1/role-module-permissions/rol
 import { PermissionsModule } from "@app/v1/permissions/permissions.module";
 import {LoginModule} from "@app/v1/login/login.module";
 import {ForgotPasswordModule} from "@app/v1/forgot-password/forgot-password.module";
+import {WorkingWeekModule} from "@app/v1/working-week/working-week.module";
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import {ForgotPasswordModule} from "@app/v1/forgot-password/forgot-password.modu
     RoleModulePermissionsModule,
     LoginModule,
     ForgotPasswordModule,
+    WorkingWeekModule,
     GraphQLFederationModule.forRootAsync({
       imports: [CommonModule],
       useFactory: async (configService: ConfigurationService) => ({
