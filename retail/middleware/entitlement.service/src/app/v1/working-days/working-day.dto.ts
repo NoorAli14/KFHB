@@ -4,7 +4,7 @@ import {IsNumber, IsOptional, IsString, MaxLength} from "class-validator";
 import { NUMBERS } from "@common/constants";
 
 @InputType()
-export class WorkingWeekInput {
+export class WorkingDayInput {
   @Field({ nullable: true })
   @IsString()
   @IsOptional()

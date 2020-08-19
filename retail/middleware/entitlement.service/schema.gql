@@ -96,9 +96,9 @@ type Mutation {
   updateRoleModulePermission(input: RoleModulePermissionInput!, id: String!): RoleModulePermission!
   deleteRoleModulePermission(id: String!): Boolean!
   changePassword(input: ChangePasswordInput!): String!
-  addWorkingWeek(input: WorkingWeekInput!): WorkingWeek!
-  updateWorkingWeek(input: WorkingWeekInput!, id: String!): WorkingWeek!
-  deleteWorkingWeek(id: String!): Boolean!
+  addWorkingDay(input: WorkingDayInput!): WorkingDay!
+  updateWorkingDay(input: WorkingDayInput!, id: String!): WorkingDay!
+  deleteWorkingDay(id: String!): Boolean!
 }
 
 type Permission {
@@ -136,9 +136,9 @@ type Query {
   findRoleModulePermissionBy(checks: [KeyValInput!]!): [RoleModulePermission!]!
   login(input: LoginInput!): User!
   forgotPassword(input: ForgotPasswordInput!): ForgotPasswordOutput!
-  workingWeeksList: [WorkingWeek!]!
-  findWorkingWeekById(id: String!): WorkingWeek!
-  findWorkingWeekBy(checks: [KeyValInput!]!): [WorkingWeek!]!
+  workingDaysList: [WorkingDay!]!
+  findWorkingDayById(id: String!): WorkingDay!
+  findWorkingDayBy(checks: [KeyValInput!]!): [WorkingDay!]!
 }
 
 type Role {
@@ -242,7 +242,7 @@ input UserRoleInput {
   status: String
 }
 
-type WorkingWeek {
+type WorkingDay {
   id: ID
   week_day: String
   start_time: String
@@ -258,7 +258,7 @@ type WorkingWeek {
   deleted_by: String
 }
 
-input WorkingWeekInput {
+input WorkingDayInput {
   week_day: String
   start_time: String
   end_time: String

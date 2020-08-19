@@ -6,4 +6,4 @@ export * from './module.repository';
 export * from './role-module.repository';
 export * from './permission.repository';
 export * from './role-module-permission.repository';
-export * from './working-week.repository';
+export * from './working-days.repository';

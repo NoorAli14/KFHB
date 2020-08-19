@@ -2,18 +2,18 @@ import {HttpException, HttpStatus, Injectable} from "@nestjs/common";
 
 import { MESSAGES, STATUS } from "@common/constants";
 import { KeyValInput } from "@common/inputs/key-val-input";
-import {WorkingWeekRepository} from "@core/repository/working-week.repository";
+import { WorkingDaysRepository } from "@core/repository";
 
 @Injectable()
-export class WorkingWeekService {
-  constructor(private workingWeekRepository: WorkingWeekRepository) {}
+export class WorkingDaysService {
+  constructor(private workingDaysRepository: WorkingDaysRepository) {}
 
   async list(keys: string[]): Promise<any> {
-    return this.workingWeekRepository.list(keys,{"status" : STATUS.ACTIVE});
+    return this.workingDaysRepository.list(keys,{"status" : STATUS.ACTIVE});
   }
 
   async findById(id: string, keys?: string[]): Promise<any> {
-    const result = await this.workingWeekRepository.findOne({ id: id }, keys);
+    const result = await this.workingDaysRepository.findOne({ id: id }, keys);
     if(!result){
       throw new HttpException({
         status: HttpStatus.NOT_FOUND,
@@ -28,7 +28,7 @@ export class WorkingWeekService {
     checks.forEach(check => {
       conditions[check.record_key] = check.record_value;
     });
-    const result = await this.workingWeekRepository.findBy(conditions, keys);
+    const result = await this.workingDaysRepository.findBy(conditions, keys);
     if(!result){
       throw new HttpException({
         status: HttpStatus.NOT_FOUND,
@@ -43,7 +43,7 @@ export class WorkingWeekService {
     userObj: Record<string, any>,
     keys?: string[],
   ): Promise<any> {
-    const result = await this.workingWeekRepository.update({ id: id }, userObj, keys);
+    const result = await this.workingDaysRepository.update({ id: id }, userObj, keys);
     if(result && result.length) {
       return result[0]
     } else {
@@ -58,7 +58,7 @@ export class WorkingWeekService {
     if(!newObj.status){
       newObj.status = STATUS.PENDING;
     }
-    const result = await this.workingWeekRepository.create(newObj, keys);
+    const result = await this.workingDaysRepository.create(newObj, keys);
     if(result && result.length) {
       return result[0]
     } else {
