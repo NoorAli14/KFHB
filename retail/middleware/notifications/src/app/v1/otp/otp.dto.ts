@@ -1,5 +1,6 @@
-import { IsOptional, Length, MaxLength } from 'class-validator';
+import { IsOptional, Length, MaxLength, IsEmail, IsMobilePhone, IsEnum } from 'class-validator';
 import { Field, InputType } from '@nestjs/graphql';
+import { DEFAULT_OTP_DELIVERY_MODES } from '@rubix/common/constants';
 
 @InputType('NewPostInput')
 export class GenerateOTPInput {
@@ -9,17 +10,17 @@ export class GenerateOTPInput {
   user_id: string;
 
   @Field()
-  @MaxLength(30)
+  @IsEnum(DEFAULT_OTP_DELIVERY_MODES)
   delivery_mode: string;
 
   @Field({ nullable: true })
   @IsOptional()
-  @MaxLength(30)
+  @IsMobilePhone()
   mobile_no?: string;
 
   @Field({ nullable: true })
   @IsOptional()
-  @MaxLength(30)
+  @IsEmail()
   email?: string;
 }
 

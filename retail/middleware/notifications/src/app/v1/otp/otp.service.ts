@@ -6,7 +6,7 @@ import { Otp } from './otp.model';
 import { ConfigurationService } from '@rubix/common/configuration/configuration.service';
 import { EmailService } from '../email/email.service';
 import { SMSService } from '../sms/sms.service';
-
+ import { OTP_SMS_CONTENT } from '../sms/default_messages'
 import {
   DEFAULT_OTP_EMAIL_TEMPLATE,
   DEFAULT_OTP_EMAIL_SUBJECT,
@@ -85,10 +85,10 @@ export class OtpService {
     }
 
     // Send OTP via SMS function call.
-    if (otp && (otpOBJ.delivery_mode == 'mobile_no' || otpOBJ.delivery_mode == 'both')) {
+    if (otp && (otpOBJ.delivery_mode == 'mobile' || otpOBJ.delivery_mode == 'both')) {
       const smsObj = {
         to: otpOBJ.mobile_no,
-        body: otpOBJ.otp_code + " is your one time OTP code.",
+        body: OTP_SMS_CONTENT.replace('<otp_code>',otpOBJ.otp_code).replace('<user_id>', otpOBJ.user_id),
       };
       await this.smsService.sendSMS(smsObj, ['mobile_no']);
     }
