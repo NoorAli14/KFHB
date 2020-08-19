@@ -46,6 +46,32 @@ export class ModuleService {
     });
   }
 
+  async findModulesByUserID(userIds): Promise<any>{
+    const modules = await this.moduleDB.listModulesByUserID(userIds);
+    console.log("///////////////////////////");
+    console.log(modules);
+    const moduleLookUps = {};
+    modules.forEach(module => {
+      if (!moduleLookUps[module.user_id]) {
+        moduleLookUps[module.user_id] = module || {};
+      }else{
+        const prev = moduleLookUps[module.user_id];
+        if(Array.isArray(prev)) {
+          moduleLookUps[module.user_id] = [...prev, module]
+        } else {
+          moduleLookUps[module.user_id] = [prev, module]
+        }
+      }
+    });
+    return userIds.map(id => {
+      if(moduleLookUps[id]){
+        return moduleLookUps[id];
+      } else {
+        return null
+      }
+    });
+  }
+
   async findModulesByParentModuleID(parentIds): Promise<any>{
     const modules = await this.moduleDB.listModulesByParentModuleID(parentIds);
     const moduleLookUps = {};

@@ -7,16 +7,20 @@ import { UserRepository } from "src/core/repository/user.repository";
 import { Encrypter } from "@common/encrypter";
 import { RoleService } from "@app/v1/roles/roles.service";
 import { RolesModule } from "@app/v1/roles/roles.module";
-import { RolesDataLoader } from "@core/dataloaders";
+import {ModulesDataLoaderByUser, RolesDataLoader} from "@core/dataloaders";
+import {ModuleService} from "@app/v1/modules/module.service";
+import {ModuleModule} from "@app/v1/modules/module.module";
 
 @Module({
-  imports: [RepositoryModule, RolesModule],
+  imports: [RepositoryModule, RolesModule, ModuleModule],
   providers: [
       UserService,
       UserRepository,
       UsersResolver,
       Encrypter,
       RolesDataLoader,
-      RoleService],
+      RoleService,
+      ModulesDataLoaderByUser,
+      ModuleService],
 })
 export class UsersModule {}

@@ -21,4 +21,13 @@ export class ModuleRepository extends BaseRepository {
         .select(`${TABLE.MODULE}.*`)
         .whereIn(`${TABLE.MODULE}.parent_id`, parentIds)
   }
+
+  async listModulesByUserID(userIds): Promise<any>{
+    return this._connection(TABLE.MODULE)
+    .select(`${TABLE.MODULE}.*`)
+    .leftJoin(TABLE.ROLE, `${TABLE.USER_ROLE}.role_id`, `${TABLE.ROLE}.id`)
+    .leftJoin(TABLE.ROLE_MODULE, `${TABLE.ROLE}.id`, `${TABLE.ROLE_MODULE}.role_id`)
+    // .leftJoin(TABLE.MODULE, `${TABLE.ROLE_MODULE}.module_id`, `${TABLE.MODULE}.id`)
+    .whereIn(`${TABLE.USER_ROLE}.user_id`, userIds)
+  }
 }

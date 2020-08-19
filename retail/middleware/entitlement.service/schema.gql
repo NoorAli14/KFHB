@@ -224,6 +224,7 @@ type User {
   deleted_on: String
   deleted_by: String
   roles: [Role!]!
+  modules: [Module!]!
 }
 
 type UserRole {
