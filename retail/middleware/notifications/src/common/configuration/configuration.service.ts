@@ -10,12 +10,15 @@ import {
   iConfig,
   iSMTP,
   iOTP,
+  iSMS,
 } from '@common/interfaces/configuration.interface';
 import {
   DEFAULT_OTP_STATUS,
   DEFAULT_OTP_PATTERN,
   DEFAULT_OTP_LENGTH,
   DEFAULT_OTP_DURATION,
+  DEFAULT_SMS_SENDER,
+  DEFAULT_SMS_API_URL
 } from '@rubix/common/constants';
 
 export const DEFAULT_ENV: iConfig = {
@@ -65,6 +68,10 @@ export const DEFAULT_ENV: iConfig = {
     status: DEFAULT_OTP_STATUS,
     duration: DEFAULT_OTP_DURATION
   },
+  SMS: {
+    api_url: DEFAULT_SMS_API_URL,
+    from: DEFAULT_SMS_SENDER
+  }
 };
 @Injectable()
 export class ConfigurationService {
@@ -136,6 +143,13 @@ export class ConfigurationService {
       otp_length: parseInt(this.get('ENV_RBX_OTP_LENGTH', DEFAULT_ENV.OTP.otp_length), 10),
       status: this.get('ENV_RBX_OTP_STATUS', DEFAULT_ENV.OTP.status),
       duration: parseInt(this.get('ENV_RBX_OTP_DURATION', DEFAULT_ENV.OTP.duration), 10)
+    }
+  }
+
+  public get SMS(): iSMS {
+    return { 
+      from: this.get('ENV_RBX_SMS_API_URL', DEFAULT_ENV.SMS.from),
+      api_url: this.get('ENV_RBX_SMS_SENDER', DEFAULT_ENV.SMS.api_url),
     }
   }
 

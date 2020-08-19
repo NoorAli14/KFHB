@@ -1,15 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { DEFAULT_TEMPLATE_NAME } from '@common/constants';
 import { SMSGQL } from './sms.model';
+import { ConfigurationService } from '@common/configuration/configuration.service';
+
 
 import axios from 'axios';
 @Injectable()
 export class SMSService {
-  constructor() {}
+  constructor(private readonly _config: ConfigurationService) {}
   async sendSMS(emailObj: Record<string, any>, keys?: string[]): Promise<any> {
-  
-    return axios.post('http://localhost:3000/sendsms', {
-      from: "03217675129",
+
+    return axios.post(this._config.SMS.from, {
+      from: this._config.SMS.from,
       body: emailObj.body,
       to: emailObj.to
     })

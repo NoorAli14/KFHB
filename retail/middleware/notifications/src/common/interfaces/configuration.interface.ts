@@ -51,6 +51,11 @@ export interface iOTP {
   duration: number
 }
 
+export interface iSMS {
+  from: string,
+  api_url: string
+}
+
 export interface iConfig {
   /** Application Details */
   APP: iAPP;
@@ -60,6 +65,7 @@ export interface iConfig {
   GRAPHQL?: iGRAPHQL;
   SMTP?: iSMTP;
   OTP?: iOTP;
+  SMS?: iSMS;
   /**
    * The log level to use.
    * @example 'verbose', 'info', 'warn', 'error'
