@@ -1,18 +1,17 @@
-import {
-  IsOptional,
-  Length,
-} from 'class-validator';
+import { IsNotEmpty, Length, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import {IdsDto} from '@common/dtos'
+import { IdsDto } from '@common/dtos';
 
 export class RoleDto {
- @ApiProperty({
+  @ApiProperty({
     example: 'Manager',
     description: 'Name of the role',
   })
   @Length(3, 30, {
-    message: "Name must be between 3 to 96 characters"
+    message: 'Name must be between 3 to 96 characters',
   })
+  @IsString()
+  @IsNotEmpty()
   name: string;
 
   @ApiProperty({
@@ -21,6 +20,6 @@ export class RoleDto {
   })
   description?: string;
 
-  @ApiProperty({ type: [IdsDto], description: 'List of module IDs.'  })
+  @ApiProperty({ type: [IdsDto], description: 'List of module IDs.' })
   modules?: IdsDto[];
 }
