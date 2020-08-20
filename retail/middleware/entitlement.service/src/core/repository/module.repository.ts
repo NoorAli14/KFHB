@@ -24,10 +24,9 @@ export class ModuleRepository extends BaseRepository {
 
   async listModulesByUserID(userIds): Promise<any>{
     return this._connection(TABLE.MODULE)
-    .select(`${TABLE.MODULE}.*`)
-    .leftJoin(TABLE.ROLE, `${TABLE.USER_ROLE}.role_id`, `${TABLE.ROLE}.id`)
-    .leftJoin(TABLE.ROLE_MODULE, `${TABLE.ROLE}.id`, `${TABLE.ROLE_MODULE}.role_id`)
-    // .leftJoin(TABLE.MODULE, `${TABLE.ROLE_MODULE}.module_id`, `${TABLE.MODULE}.id`)
+    .select(`${TABLE.MODULE}.*`, `${TABLE.USER_ROLE}.user_id`)
+    .innerJoin(TABLE.ROLE_MODULE, `${TABLE.ROLE_MODULE}.module_id`, `${TABLE.MODULE}.id`)
+    .innerJoin(TABLE.USER_ROLE, `${TABLE.ROLE_MODULE}.role_id`, `${TABLE.USER_ROLE}.role_id`)
     .whereIn(`${TABLE.USER_ROLE}.user_id`, userIds)
   }
 }

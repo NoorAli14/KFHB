@@ -28,7 +28,7 @@ input CreateUserInput {
   date_of_birth: String
   nationality_id: Float
   status: String
-  role_ids: [String!]
+  roles: [IdsInput!]
   email: String!
 }
 
@@ -44,6 +44,11 @@ input ForgotPasswordInput {
 type ForgotPasswordOutput {
   token: String!
   token_expiry: DateTime!
+}
+
+input IdsInput {
+  id: String!
+  _deleted: Boolean
 }
 
 input KeyValInput {
@@ -202,7 +207,7 @@ input UpdateUserInput {
   date_of_birth: String
   nationality_id: Float
   status: String
-  role_ids: [String!]
+  roles: [IdsInput!]
 }
 
 type User {

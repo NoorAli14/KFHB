@@ -10,18 +10,18 @@ export class UserRepository extends BaseRepository {
   }
 
   async create(user: Record<string, any>, keys: string[]): Promise<any> {
-    if(user.role_ids && user.role_ids.length) {
-      const roleIds: [] = user.role_ids;
-      delete user.role_ids;
+    if(user.roles && user.roles.length) {
+      const roles: [] = user.roles;
+      delete user.roles;
       const trxProvider = this._connection.transactionProvider();
       const trx = await trxProvider();
       const response = await trx(TABLE.USER).insert(user, keys);
       if(response){
         const user_roles = [];
-        roleIds.forEach(roleId => {
+        roles.forEach(role => {
           const user_role = {
             user_id : response[0].id || response[0],
-            role_id : roleId,
+            role_id : role['id'],
             status : STATUS.ACTIVE,
             created_by : TEMP_ROLE.ADMIN,
           };

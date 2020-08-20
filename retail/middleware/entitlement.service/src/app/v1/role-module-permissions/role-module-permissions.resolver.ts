@@ -3,8 +3,7 @@ import { graphqlKeys } from '@common/utilities';
 import {RoleModulePermission} from "@app/v1/role-module-permissions/role-module-permission.model";
 import {RoleModulePermissionsService} from "@app/v1/role-module-permissions/role-module-permissions.service";
 import {RoleModulePermissionInput} from "@app/v1/role-module-permissions/role-module-permission.dto";
-import {RoleModule} from "@app/v1/role-modules/role-module.model";
-import {KeyValInput} from "@common/inputs/key-val-input";
+import { KeyValInput } from "@common/inputs/key-val.input";
 
 @Resolver(RoleModulePermission)
 export class RoleModulePermissionsResolver {

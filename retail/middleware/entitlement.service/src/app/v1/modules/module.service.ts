@@ -1,7 +1,7 @@
 import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import {ModuleRepository} from "@core/repository/module.repository";
 import {MESSAGES, STATUS} from "@common/constants";
-import {KeyValInput} from "@common/inputs/key-val-input";
+import { KeyValInput } from "@common/inputs/key-val.input";
 
 @Injectable()
 export class ModuleService {
@@ -48,8 +48,6 @@ export class ModuleService {
 
   async findModulesByUserID(userIds): Promise<any>{
     const modules = await this.moduleDB.listModulesByUserID(userIds);
-    console.log("///////////////////////////");
-    console.log(modules);
     const moduleLookUps = {};
     modules.forEach(module => {
       if (!moduleLookUps[module.user_id]) {

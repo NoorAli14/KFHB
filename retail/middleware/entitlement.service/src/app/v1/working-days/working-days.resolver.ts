@@ -6,7 +6,7 @@ import {
   Info,
 } from "@nestjs/graphql";
 import { graphqlKeys } from "@common/utilities";
-import { KeyValInput } from "@common/inputs/key-val-input";
+import { KeyValInput } from "@common/inputs/key-val.input";
 import { WorkingDay } from "@app/v1/working-days/working-day.model";
 import { WorkingDaysService } from "@app/v1/working-days/working-days.service";
 import { WorkingDayInput } from "@app/v1/working-days/working-day.dto";

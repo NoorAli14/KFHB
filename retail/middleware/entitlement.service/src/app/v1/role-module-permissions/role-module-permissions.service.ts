@@ -1,7 +1,7 @@
 import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import {RoleModulePermissionRepository} from "@core/repository/role-module-permission.repository";
 import {MESSAGES, STATUS} from "@common/constants";
-import {KeyValInput} from "@common/inputs/key-val-input";
+import { KeyValInput } from "@common/inputs/key-val.input";
 
 @Injectable()
 export class RoleModulePermissionsService {

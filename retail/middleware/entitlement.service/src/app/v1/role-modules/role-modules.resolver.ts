@@ -4,8 +4,7 @@ import { graphqlKeys } from "@common/utilities";
 import {RoleModulesService} from "@app/v1/role-modules/role-modules.service";
 import {RoleModule} from "@app/v1/role-modules/role-module.model";
 import {RoleModuleInput} from "@app/v1/role-modules/role-module.dto";
-import {UserRole} from "@app/v1/user-roles/user-roles.model";
-import {KeyValInput} from "@common/inputs/key-val-input";
+import { KeyValInput } from "@common/inputs/key-val.input";
 
 @Resolver(RoleModule)
 export class RoleModulesResolver {

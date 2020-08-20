@@ -59,6 +59,6 @@ export class User {
   @Field(type => [Role], { nullable: true })
   roles?: Role[];
 
-  // @Field(type => [Module], { nullable: true })
-  // modules?: Module[];
+  @Field(type => [Module], { nullable: true })
+  modules?: Module[];
 }

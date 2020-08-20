@@ -5,7 +5,7 @@ import { graphqlKeys } from '@common/utilities';
 import {ModuleService} from "@app/v1/modules/module.service";
 import {Module} from "@app/v1/modules/module.model";
 import {ModuleInput} from "@app/v1/modules/module.dto";
-import {KeyValInput} from "@common/inputs/key-val-input";
+import { KeyValInput } from "@common/inputs/key-val.input";
 import {Permission} from "@app/v1/permissions/permission.model";
 import * as DataLoader from "dataloader";
 import {PermissionsDataLoader, SubModulesDataLoader} from "@core/dataloaders";

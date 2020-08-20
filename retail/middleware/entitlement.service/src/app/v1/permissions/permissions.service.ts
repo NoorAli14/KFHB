@@ -1,7 +1,7 @@
 import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import {PermissionRepository} from "@core/repository/permission.repository";
-import {KeyValInput} from "@common/inputs/key-val-input";
-import {MESSAGES, STATUS} from "@common/constants";
+import { KeyValInput } from "@common/inputs/key-val.input";
+import {MESSAGES} from "@common/constants";
 
 @Injectable()
 export class PermissionService {

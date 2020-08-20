@@ -1,6 +1,6 @@
 import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 
-import {KeyValInput} from "@common/inputs/key-val-input";
+import { KeyValInput } from "@common/inputs/key-val.input";
 import {UserService} from "@app/v1/users/users.service";
 import {LoginInput} from "@app/v1/login/login.dto";
 import {Encrypter} from "@common/encrypter";

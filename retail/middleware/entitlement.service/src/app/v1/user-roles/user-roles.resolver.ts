@@ -5,7 +5,7 @@ import { UserRole } from "@app/v1/user-roles/user-roles.model";
 import { UserRolesService } from "@app/v1/user-roles/user-roles.service";
 import { UserRoleInput } from "@app/v1/user-roles/user-roles.dto";
 import { User } from "@app/v1/users/user.model";
-import {KeyValInput} from "@common/inputs/key-val-input";
+import { KeyValInput } from "@common/inputs/key-val.input";
 
 @Resolver(UserRole)
 export class UserRolesResolver {

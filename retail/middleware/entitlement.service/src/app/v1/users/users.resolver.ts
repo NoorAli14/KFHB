@@ -15,7 +15,7 @@ import { UserService } from "@app/v1/users/users.service";
 import { CreateUserInput, UpdateUserInput } from "@app/v1/users/user.dto";
 import { graphqlKeys } from '@common/utilities';
 import { Role } from "@app/v1/roles/role.model";
-import { KeyValInput } from "@common/inputs/key-val-input";
+import {KeyValInput} from "@common/inputs/key-val.input";
 import {ModulesDataLoaderByUser, RolesDataLoader} from "@core/dataloaders";
 import {Module} from "@app/v1/modules/module.model";
 

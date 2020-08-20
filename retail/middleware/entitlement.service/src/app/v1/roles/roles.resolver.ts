@@ -5,7 +5,7 @@ import { graphqlKeys } from '@common/utilities';
 import { RoleService } from "@app/v1/roles/roles.service";
 import { Role } from "@app/v1/roles/role.model";
 import { RoleInput } from "@app/v1/roles/role.dto";
-import { KeyValInput } from "@common/inputs/key-val-input";
+import { KeyValInput } from "@common/inputs/key-val.input";
 import * as DataLoader from "dataloader";
 import { Module } from "@app/v1/modules/module.model";
 import {ModulesDataLoader} from "@core/dataloaders";

@@ -1,7 +1,7 @@
 import {HttpException, HttpStatus, Injectable} from "@nestjs/common";
 
 import { MESSAGES, STATUS } from "@common/constants";
-import { KeyValInput } from "@common/inputs/key-val-input";
+import { KeyValInput } from "@common/inputs/key-val.input";
 import { WorkingDaysRepository } from "@core/repository";
 
 @Injectable()

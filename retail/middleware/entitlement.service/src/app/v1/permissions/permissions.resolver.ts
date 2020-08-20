@@ -3,7 +3,7 @@ import { graphqlKeys } from '@common/utilities';
 import {PermissionService} from "@app/v1/permissions/permissions.service";
 import {Permission} from "@app/v1/permissions/permission.model";
 import {PermissionInput} from "@app/v1/permissions/permission.dto";
-import {KeyValInput} from "@common/inputs/key-val-input";
+import { KeyValInput } from "@common/inputs/key-val.input";
 
 @Resolver(Permission)
 export class PermissionsResolver {
