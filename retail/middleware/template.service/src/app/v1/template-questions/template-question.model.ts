@@ -1,25 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class Question {
+export class TemplateQuestion {
   readonly id: string;
-
-  @ApiProperty({
-    example: 'Question 1',
-    description: 'Name of the Question',
-  })
-  title: string;
-
-  @ApiProperty({
-    example: 'Question 1 in Arabic',
-    description: 'Name of the Question',
-  })
-  title_ar: string;
-
-	@ApiProperty({
-    example: 'Question Type',
-    description: 'Question Type',
-  })
-  type: string;
 
   @ApiProperty({
     example: 'Rules for the question',
@@ -34,30 +16,34 @@ export class Question {
   status: boolean;
 
   @ApiProperty({
+    example: 'Template ID',
+    description: 'Template ID',
+  })
+  template_id: string;
+
+  @ApiProperty({
     example: 'Section ID',
     description: 'Section ID',
   })
   section_id: string;
+
+  @ApiProperty({
+    example: 'Question ID',
+    description: 'Question ID',
+  })
+  question_id: string;
 }
 
 // Graphql Model
 import { Field, ObjectType } from '@nestjs/graphql';
-import { OptionGQL } from '../options/option.model';
+import { TemplateGQL } from '../templates/template.model';
 import { SectionGQL } from '../sections/section.model';
+import { QuestionGQL } from '../questions/question.model';
 
 @ObjectType()
-export class QuestionGQL {
+export class TemplateQuestionGQL {
   @Field()
   id: string;
-
-  @Field()
-  title: string;
-
-  @Field()
-  title_ar: string;
-
-  @Field()
-  type: string;
 
   @Field()
   rules: string;
@@ -65,13 +51,18 @@ export class QuestionGQL {
   @Field()
   status: boolean;
 
-  @Field(() => [OptionGQL])
-  options?: OptionGQL[];
-
+  template_id?: string;
   section_id?: string;
+  question_id?: string;
 
-  @Field(() => SectionGQL)
+  @Field()
+  template?: TemplateGQL;
+
+  @Field()
   section?: SectionGQL;
+
+  @Field()
+  question?: QuestionGQL;
 
   @Field()
   created_on: Date;

@@ -7,7 +7,8 @@ export async function up(knex: Knex): Promise<void> {
       .uuid('id')
       .primary()
       .defaultTo(knex.raw(DATABASE_UUID_METHOD));
-    table.string('title').notNullable();
+		table.string('title').notNullable();
+		table.string('title_ar').notNullable();
     table.string('type').notNullable();
 
     table.string('rules').notNullable();

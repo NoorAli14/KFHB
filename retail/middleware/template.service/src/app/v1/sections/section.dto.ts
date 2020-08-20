@@ -14,6 +14,11 @@ export class CreateSectionDto {
   @ApiProperty()
   @IsString()
   @MaxLength(255)
+  name_ar: string;
+
+  @ApiProperty()
+  @IsString()
+  @MaxLength(255)
   level: string;
 
   @ApiProperty()
@@ -29,6 +34,10 @@ export class NewSectionInput {
   @Field()
   @MaxLength(255)
   name: string;
+
+  @Field()
+  @MaxLength(255)
+  name_ar: string;
 
   @Field()
   @MaxLength(255)

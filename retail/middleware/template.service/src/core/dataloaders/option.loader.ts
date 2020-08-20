@@ -1,4 +1,4 @@
-import * as DataLoader from 'dataloader';
+import DataLoader from '../../lib/dataloader';
 import { Injectable } from '@nestjs/common';
 import { NestDataLoader } from 'nestjs-dataloader';
 import { OptionsService } from '../../app/v1/options/options.service';
@@ -10,8 +10,8 @@ export class OptionLoaderForQuestion
   constructor(private readonly optionsService: OptionsService) {}
 
   generateDataLoader(): DataLoader<string, OptionGQL> {
-    return new DataLoader<string, OptionGQL>(keys =>
-      this.optionsService.findByQuestionId(keys),
+    return new DataLoader<string, OptionGQL>((keys, columns) =>
+      this.optionsService.findByQuestionId(keys, columns),
     );
   }
 }

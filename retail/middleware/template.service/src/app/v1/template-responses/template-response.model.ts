@@ -17,9 +17,15 @@ export class TemplateResponse {
 
   @ApiProperty({
     example: 'Template ID',
-    description: 'Template ID of the Associated Template',
+    description: 'ID of the Associated Template',
   })
   template_id: string;
+
+  @ApiProperty({
+    example: 'User ID',
+    description: 'ID of the Associated User',
+  })
+  user_id: string;
 }
 
 // Graphql Model
@@ -38,6 +44,9 @@ export class TemplateResponseGQL {
 
   @Field()
   remarks: string;
+
+  @Field()
+  user_id: string;
 
   template_id: string;
 

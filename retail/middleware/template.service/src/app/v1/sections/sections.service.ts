@@ -20,8 +20,11 @@ export class SectionsService {
     return await this.sectionDB.findByIds(ids, keys, true);
   }
 
-  async findByTemplateId(template_ids: readonly string[]): Promise<any> {
-    const sections = await this.sectionDB.findByTemplateId(template_ids);
+  async findByTemplateId(
+    template_ids: readonly string[],
+    keys?: string[],
+  ): Promise<any> {
+    const sections = await this.sectionDB.findByTemplateId(template_ids, keys);
     // Grouping the Records using the Master table ID,
     // Then Converting the Groupby Dictionary into Array to make it compatible with Dataloader
     return template_ids.map(

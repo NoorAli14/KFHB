@@ -10,6 +10,12 @@ export class Option {
   name: string;
 
   @ApiProperty({
+    example: 'Option 1 in Arabic',
+    description: 'Name of the Option',
+  })
+  name_ar: string;
+
+  @ApiProperty({
     example: 'Question ID',
     description: 'UUID of the Question.',
   })
@@ -27,6 +33,9 @@ export class OptionGQL {
 
   @Field()
   name: string;
+
+  @Field()
+  name_ar: string;
 
   question_id?: string;
 

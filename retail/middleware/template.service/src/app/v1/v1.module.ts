@@ -10,11 +10,13 @@ import { SectionsModule } from './sections/sections.module';
 import { TemplatesModule } from './templates/templates.module';
 import { DataloaderModule } from '@core/dataloaders/loader.module';
 import { RepositoryModule } from '@core/repository/repository.module';
+import { TemplateQuestionsModule } from './template-questions/template-questions.module';
 
 @Module({
   imports: [
     RepositoryModule,
     DataloaderModule,
+    TemplateQuestionsModule,
     TemplateResponsesModule,
     TemplatesModule,
     OptionsModule,
