@@ -7,25 +7,10 @@ import {
   IsBoolean,
 } from 'class-validator';
 
-export class CreateQuestionDto {
+export class CreateTemplateQuestionDto {
   @IsUUID()
   @IsOptional()
   readonly id: string;
-
-  @ApiProperty()
-  @IsString()
-  @MaxLength(255)
-  title: string;
-
-  @ApiProperty()
-  @IsString()
-  @MaxLength(255)
-  title_ar: string;
-
-  @ApiProperty()
-  @IsString()
-  @MaxLength(255)
-  type: string;
 
   @ApiProperty()
   @IsString()
@@ -38,26 +23,22 @@ export class CreateQuestionDto {
 
   @ApiProperty()
   @IsUUID()
+  template_id: string;
+
+  @ApiProperty()
+  @IsUUID()
   section_id: string;
+
+  @ApiProperty()
+  @IsUUID()
+  question_id: string;
 }
 
 // Graphql Example DTO
 import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
-export class NewQuestionInput {
-  @Field()
-  @MaxLength(255)
-  title: string;
-
-  @Field()
-  @MaxLength(255)
-  title_ar: string;
-
-  @Field()
-  @MaxLength(255)
-  type: string;
-
+export class NewTemplateQuestionInput {
   @Field()
   @MaxLength(255)
   rules: string;
@@ -66,5 +47,11 @@ export class NewQuestionInput {
   status: boolean;
 
   @Field()
+  template_id: string;
+
+  @Field()
   section_id: string;
+
+  @Field()
+  question_id: string;
 }

@@ -15,3 +15,15 @@ export class TemplateLoaderForSection
     );
   }
 }
+
+@Injectable()
+export class TemplateLoaderForTemplateQuestion
+  implements NestDataLoader<string, TemplateGQL> {
+  constructor(private readonly templatesService: TemplatesService) {}
+
+  generateDataLoader(): DataLoader<string, TemplateGQL> {
+    return new DataLoader<string, TemplateGQL>((keys, columns) =>
+      this.templatesService.findByIdsSorted(keys, columns),
+    );
+  }
+}
