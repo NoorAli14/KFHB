@@ -25,6 +25,16 @@ export const TEMP_ROLE = {
   ADMIN: 'ADMIN',
 };
 
+export const WEEK_DAYS = {
+  MONDAY: 'MONDAY',
+  TUESDAY: 'TUESDAY',
+  WEDNESDAY: 'WEDNESDAY',
+  THURSDAY: 'THURSDAY',
+  FRIDAY: 'FRIDAY',
+  SATURDAY: 'SATURDAY',
+  SUNDAY: 'SUNDAY',
+};
+
 export const MESSAGES = {
   DELETED: 'Deleted Successfully.',
   INVALID_EMAIL: 'Invalid Email Address',
@@ -35,7 +45,8 @@ export const MESSAGES = {
   TOKEN_EXPIRED: 'Token Expired.',
   PASSWORD_UPDATED: 'Password Updated.',
   NOT_FOUND: 'No Record Found',
-  BAD_REQUEST: 'Bad Request'
+  BAD_REQUEST: 'Bad Request',
+  INVALID_WEEKDAY: `Weekday should be one of ${Object.keys(WEEK_DAYS)}`
 };
 
 export const DATABASE_UUID_METHOD = 'NEWID()';

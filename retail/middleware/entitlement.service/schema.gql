@@ -264,7 +264,7 @@ type WorkingDay {
 }
 
 input WorkingDayInput {
-  week_day: String
+  week_day: String!
   start_time: String
   end_time: String
   full_day: Float

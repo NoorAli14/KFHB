@@ -1,6 +1,6 @@
 import {HttpException, HttpStatus, Injectable} from "@nestjs/common";
 
-import { MESSAGES, STATUS } from "@common/constants";
+import {MESSAGES, STATUS, TABLE, WEEK_DAYS} from "@common/constants";
 import { KeyValInput } from "@common/inputs/key-val.input";
 import { WorkingDaysRepository } from "@core/repository";
 
@@ -40,10 +40,16 @@ export class WorkingDaysService {
 
   async update(
     id: string,
-    userObj: Record<string, any>,
+    newObj: Record<string, any>,
     keys?: string[],
   ): Promise<any> {
-    const result = await this.workingDaysRepository.update({ id: id }, userObj, keys);
+    if(newObj.week_day && !WEEK_DAYS[newObj.week_day]){
+      throw new HttpException({
+        status: HttpStatus.BAD_REQUEST,
+        error: MESSAGES.INVALID_WEEKDAY,
+      }, HttpStatus.BAD_REQUEST);
+    }
+    const result = await this.workingDaysRepository.update({ id: id }, newObj, keys);
     if(result && result.length) {
       return result[0]
     } else {
@@ -57,6 +63,12 @@ export class WorkingDaysService {
   async create(newObj: Record<string, any>, keys?: string[]): Promise<any> {
     if(!newObj.status){
       newObj.status = STATUS.PENDING;
+    }
+    if(!WEEK_DAYS[newObj.week_day]){
+      throw new HttpException({
+        status: HttpStatus.BAD_REQUEST,
+        error: MESSAGES.INVALID_WEEKDAY,
+      }, HttpStatus.BAD_REQUEST);
     }
     const result = await this.workingDaysRepository.create(newObj, keys);
     if(result && result.length) {
