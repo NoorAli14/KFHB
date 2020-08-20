@@ -1,4 +1,17 @@
-import { Controller, Post, Get, Body, Put } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Body,
+  Put,
+  UseGuards,
+  HttpCode,
+  HttpStatus,
+  Request,
+  Delete,
+  Res,
+  Req,
+} from '@nestjs/common';
 import {
   ApiTags,
   ApiOkResponse,
@@ -12,18 +25,26 @@ import { UserService } from '@app/v1/users/users.service';
 import { UpdateUserDto } from '@app/v1/users/user.dto';
 import { LoginUserDto } from './auth.dto';
 import { User } from '@app/v1/users/user.entity';
-
+import { LocalAuthGuard } from './localAuth.guard';
+import { AuthService } from './auth.service';
+import { CurrentUser } from '@common/decorators';
+import { AuthGuard } from '@common/guards/';
 @ApiTags('Auth')
 @Controller('auth')
 @ApiBearerAuth()
 export class AuthController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly authService: AuthService,
+  ) {}
 
-  @Post('/')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(LocalAuthGuard)
+  @Post('/login')
   @ApiOperation({
     summary: 'User Login',
     description:
-      'A successful request returns the HTTP 200 OK status code and a JSON response body that shows role information.',
+      'A successful request returns the HTTP 200 OK status code and a JSON response body that shows user information.',
   })
   @ApiCreatedResponse({
     type: User,
@@ -33,19 +54,22 @@ export class AuthController {
     type: Error,
     description: 'Input Validation failed.',
   })
-  async login(@Body() userDto: LoginUserDto): Promise<User> {
-    return this.userService.create(userDto);
+  async login(@Res() response, @CurrentUser() user: User) {
+    const cookie: string = this.authService.getCookieWithJwtToken(user.id);
+    response.setHeader('Set-Cookie', cookie);
+    return response.send(user);
   }
 
   @Get('me')
+  @UseGuards(AuthGuard)
   @ApiOperation({
     description:
       'A successful request returns the HTTP 200 OK status code and a JSON response body that shows loggedIn user information.',
     summary: 'Fetch loggedIn User Profile by Token.',
   })
   @ApiOkResponse({ type: User, description: 'Current User Information.' })
-  async list(): Promise<User> {
-    return this.userService.findOne('123');
+  async me(@CurrentUser() user: User): Promise<User> {
+    return user;
   }
 
   @Put('me')
@@ -65,5 +89,17 @@ export class AuthController {
   })
   async update(@Body() userDto: UpdateUserDto): Promise<User> {
     return this.userService.create(userDto);
+  }
+
+  @Delete('logout')
+  @ApiOperation({
+    description:
+      'A successful request returns the HTTP 204 NO CONTENT status code.',
+    summary: 'User Logout',
+  })
+  @UseGuards(AuthGuard)
+  async logOut(@Res() response) {
+    response.setHeader('Set-Cookie', this.authService.getCookieForLogOut());
+    return response.sendStatus(HttpStatus.NO_CONTENT);
   }
 }
