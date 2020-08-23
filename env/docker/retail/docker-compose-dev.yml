@@ -136,7 +136,40 @@ services:
       - rubix-middleware-network
     ports:
       - 5020:5020
-
+  #=================================================================
+  # Notification Service
+  #=================================================================
+  notification-service:
+    build:
+      context: ../../../retail/middleware/notifications
+      dockerfile: Dockerfile
+    image: "notification-service:v1"
+    container_name: "unotification_service"
+    environment:
+      - ENV_RBX_PORT=5030
+      - ENV_RBX_DB_USERNAME=$ENV_RBX_DB_USERNAME
+      - ENV_RBX_DB_PASS=$ENV_RBX_DB_PASS
+      - ENV_RBX_DB_NAME=$ENV_RBX_DB_NAME
+      - ENV_RBX_DB_HOST=$ENV_RBX_DB_HOST
+      - ENV_RBX_DB_PORT=$ENV_RBX_DB_PORT
+      - ENV_RBX_DB_TIMEOUT=$ENV_RBX_DB_TIMEOUT
+      - ENV_RBX_DB_DIALECT=$ENV_RBX_DB_DIALECT
+      - ENV_RBX_DB_DEBUG=$ENV_RBX_DB_DEBUG
+      - ENV_RBX_GRAPHQL_DEBUG=$ENV_RBX_GRAPHQL_DEBUG
+      - ENV_RBX_GRAPHQL_PLAYGROUND=$ENV_RBX_GRAPHQL_PLAYGROUND
+      - ENV_RBX_SMTP_HOST=$ENV_RBX_SMTP_HOST
+      - ENV_RBX_SMTP_PORT=$ENV_RBX_SMTP_PORT
+      - ENV_RBX_SMTP_IGNORETLS=$ENV_RBX_SMTP_IGNORETLS
+      - ENV_RBX_SMTP_SECURE=$ENV_RBX_SMTP_SECURE
+      - ENV_RBX_SMTP_USER=$ENV_RBX_SMTP_USER
+      - ENV_RBX_SMTP_PASS=$ENV_RBX_SMTP_PASS
+      - ENV_RBX_SMTP_SENDING_NAME=$ENV_RBX_SMTP_SENDING_NAME
+      - ENV_RBX_SMTP_SENDING_EMAIL=$ENV_RBX_SMTP_SENDING_EMAIL
+    restart: always
+    networks:
+      - rubix-middleware-network
+    ports:
+      - 5030:5030
 networks:
   rubix-middleware-network:
     driver: bridge
