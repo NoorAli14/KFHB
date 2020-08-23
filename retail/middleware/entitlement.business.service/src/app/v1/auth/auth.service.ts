@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigurationService } from '@common/configuration/configuration.service';
-
+import { X_ACCESS_TOKEN } from '@common/constants';
 @Injectable()
 export class AuthService {
   constructor(
@@ -24,10 +24,10 @@ export class AuthService {
   getCookieWithJwtToken(userId: string): string {
     const payload = { id: userId };
     const token = this.jwtService.sign(payload);
-    return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.JWT.EXPIRY}`;
+    return `${X_ACCESS_TOKEN}=${token}; HttpOnly; Path=/; Max-Age=${this.configService.JWT.EXPIRY}`;
   }
 
   getCookieForLogOut() {
-    return `Authentication=; HttpOnly; Path=/; Max-Age=0`;
+    return `${X_ACCESS_TOKEN}=; HttpOnly; Path=/; Max-Age=0`;
   }
 }
