@@ -47,8 +47,6 @@ type Query {
   templatesList: [TemplateGQL!]!
   findTemplateByName(name: String!): TemplateGQL!
   findTemplate(id: String!): TemplateGQL!
-  templatesQuestionsList: [TemplateQuestionGQL!]!
-  findTemplateQuestion(id: String!): TemplateQuestionGQL!
 }
 
 type QuestionGQL {
@@ -80,17 +78,6 @@ type TemplateGQL {
   name: String!
   name_ar: String!
   sections: [SectionGQL!]!
-  created_on: DateTime!
-  updated_on: DateTime!
-}
-
-type TemplateQuestionGQL {
-  id: String!
-  rules: String!
-  status: Boolean!
-  template: TemplateGQL!
-  section: SectionGQL!
-  question: QuestionGQL!
   created_on: DateTime!
   updated_on: DateTime!
 }
