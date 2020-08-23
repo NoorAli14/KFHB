@@ -8,10 +8,19 @@ import { ModuleModule } from './modules/modules.module';
 import { UserModule } from './users/users.module';
 import { InvitationModule } from './invitations/invitation.module';
 import { ForgotPasswordModule } from './forgot_passwords/forgot_password.module';
-
+import { GqlClientModule } from '@common/libs/gqlclient/gqlclient.module';
+let serviceList: any = [];
+if (process.env.NODE_ENV === 'production') {
+  serviceList = [
+    { name: 'users', url: 'http://user_management_service:5020/graphql' },
+  ];
+} else {
+  serviceList = [{ name: 'users', url: 'http://localhost:5020/graphql' }];
+}
 @RubixModule({
   imports: [
     CommonModule,
+    GqlClientModule,
     AuthModule,
     InvitationModule,
     UserModule,
@@ -25,11 +34,8 @@ import { ForgotPasswordModule } from './forgot_passwords/forgot_password.module'
         cors: true,
       },
       gateway: {
-        serviceList: [
-          // These all Server values comes through service registery
-          // { name: 'users', url: 'http://localhost:3020/graphql' },
-          // { name: 'customers', url: 'http://localhost:3010/graphql' },
-        ],
+        // Note: All these values comes through service registry. For Demo purposes we hardcode service list
+        serviceList: serviceList,
       },
     }),
   ],

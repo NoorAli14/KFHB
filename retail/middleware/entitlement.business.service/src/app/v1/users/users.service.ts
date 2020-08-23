@@ -21,13 +21,23 @@ export class UserService {
       name
     }
     modules {
-      id
-      name
-      parent_id
-      sub_modules {
         id
         name
         parent_id
+        sub_modules {
+          id
+          name
+          parent_id
+          permissions {
+            id
+            record_type
+            created_on
+            created_by
+          }
+          status
+          created_on
+          created_by
+        }
         permissions {
           id
           record_type
@@ -38,16 +48,6 @@ export class UserService {
         created_on
         created_by
       }
-      permissions {
-        id
-        record_type
-        created_on
-        created_by
-      }
-      status
-      created_on
-      created_by
-    }
     status
     created_on
     created_by

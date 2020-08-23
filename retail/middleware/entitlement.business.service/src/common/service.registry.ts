@@ -10,7 +10,7 @@ export class ServiceRegistry {
   // Default values just for testing, These values comes through service registry
   get(service: string): iSERVICE {
     return {
-      baseURL: 'http://localhost:4000',
+      baseURL: 'http://localhost:5000',
       timeout: 5000,
       maxRedirects: 5,
     };
