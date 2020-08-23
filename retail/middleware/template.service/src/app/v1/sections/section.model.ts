@@ -10,6 +10,12 @@ export class Section {
   name: string;
 
   @ApiProperty({
+    example: 'Question 1',
+    description: 'Name of the Question',
+  })
+  name_ar: string;
+
+  @ApiProperty({
     example: 'Question Type',
     description: 'Question Type',
   })
@@ -34,6 +40,9 @@ export class SectionGQL {
 
   @Field()
   name: string;
+
+  @Field()
+  name_ar: string;
 
   @Field()
   level: string;

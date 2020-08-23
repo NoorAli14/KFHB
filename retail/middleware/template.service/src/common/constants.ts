@@ -3,6 +3,7 @@ export enum TABLE {
   QUESTION = 'CMP_QUESTION',
   SECTION = 'CMP_SECTION',
   OPTION = 'CMP_OPTION',
+  TEMPLATE_QUESTIONS = 'CMP_TEMPLATE_QUESTIONS',
   TEMPLATE_RESPONSE = 'CMP_TEMPLATE_RESPONSES',
 }
 
@@ -11,6 +12,7 @@ export const FOREIGN_KEYS = {
   SectionGQL: ['template_id'],
   QuestionGQL: ['section_id'],
   OptionGQL: ['question_id'],
+  TemplateQuestionGQL: ['template_id', 'section_id', 'question_id'],
   TemplateResponseGQL: [],
 };
 

@@ -27,3 +27,15 @@ export class SectionLoaderForTemplate
     );
   }
 }
+
+@Injectable()
+export class SectionLoaderForTemplateQuestion
+  implements NestDataLoader<string, SectionGQL> {
+  constructor(private readonly sectionsService: SectionsService) {}
+
+  generateDataLoader(): DataLoader<string, SectionGQL> {
+    return new DataLoader<string, SectionGQL>(async (keys, columns) =>
+      this.sectionsService.findByIdsSorted(keys, columns),
+    );
+  }
+}

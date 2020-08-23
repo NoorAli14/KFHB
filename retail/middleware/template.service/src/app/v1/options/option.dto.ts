@@ -11,6 +11,11 @@ export class CreateOptionDto {
   @MaxLength(255)
   name: string;
 
+  @ApiProperty()
+  @IsString()
+  @MaxLength(255)
+  name_ar: string;
+
   @IsUUID()
   quesion_id: string;
 }
@@ -23,6 +28,10 @@ export class NewOptionInput {
   @Field()
   @MaxLength(255)
   name: string;
+
+  @Field()
+  @MaxLength(255)
+  name_ar: string;
 
   @Field()
   @IsUUID()

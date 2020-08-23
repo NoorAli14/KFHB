@@ -6,9 +6,12 @@ import {
   OptionLoaderForQuestion,
   QuestionLoaderForOption,
   QuestionLoaderForSection,
+  QuestionLoaderForTemplateQuestion,
   SectionLoaderForQuestion,
   SectionLoaderForTemplate,
+  SectionLoaderForTemplateQuestion,
   TemplateLoaderForSection,
+  TemplateLoaderForTemplateQuestion,
 } from './';
 import { OptionsService } from '@app/v1/options/options.service';
 import { QuestionsService } from '@app/v1/questions/questions.service';
@@ -20,9 +23,12 @@ const loaders = [
   OptionLoaderForQuestion,
   QuestionLoaderForOption,
   QuestionLoaderForSection,
+  QuestionLoaderForTemplateQuestion,
   SectionLoaderForQuestion,
   SectionLoaderForTemplate,
+  SectionLoaderForTemplateQuestion,
   TemplateLoaderForSection,
+  TemplateLoaderForTemplateQuestion,
 ];
 
 @Module({

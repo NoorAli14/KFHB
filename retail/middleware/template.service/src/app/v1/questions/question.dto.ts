@@ -20,6 +20,11 @@ export class CreateQuestionDto {
   @ApiProperty()
   @IsString()
   @MaxLength(255)
+  title_ar: string;
+
+  @ApiProperty()
+  @IsString()
+  @MaxLength(255)
   type: string;
 
   @ApiProperty()
@@ -44,6 +49,10 @@ export class NewQuestionInput {
   @Field()
   @MaxLength(255)
   title: string;
+
+  @Field()
+  @MaxLength(255)
+  title_ar: string;
 
   @Field()
   @MaxLength(255)

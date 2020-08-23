@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, Length, IsDate, MinLength } from 'class-validator';
+import { IsString, IsNotEmpty } from 'class-validator';
 
 export class Permission {
   @ApiProperty({
@@ -16,6 +16,7 @@ export class Permission {
     description: 'Name of the permission',
   })
   @IsString()
+  @IsNotEmpty()
   record_type: string;
 
   @ApiProperty({
@@ -23,18 +24,4 @@ export class Permission {
     description: 'timestamp with time zone',
   })
   created_on?: Date;
-
-  @ApiProperty({
-    required: false,
-    description: 'timestamp with time zone',
-  })
-  @IsDate()
-  updated_on?: Date;
-
-  @ApiProperty({
-    required: false,
-    description: 'timestamp with time zone',
-  })
-  @IsDate()
-  deleted_on?: Date;
 }
