@@ -10,6 +10,7 @@ export async function up(knex: Knex): Promise<any> {
     table.uuid('tenant_id').notNullable();
     table.uuid('reference_id').notNullable();
     table.string('target_user_id').notNullable();
+    table.string('check_id');
 
     table.string('status');
 
@@ -26,6 +27,7 @@ export async function up(knex: Knex): Promise<any> {
     table.index('tenant_id', 'IDT_SESSION_TENANT_ID_INDEX');
     table.index('reference_id', 'IDT_SESSION_REFERENCE_ID_INDEX');
     table.index('target_user_id', 'IDT_SESSION_TARGET_USER_ID_INDEX');
+    table.index('check_id', 'IDT_SESSION_TARGET_CHECK_ID_INDEX');
   });
 }
 
