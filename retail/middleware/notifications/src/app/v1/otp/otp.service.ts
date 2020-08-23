@@ -50,9 +50,12 @@ export class OtpService {
       const [otp] = await this.otpDB.update(
         { id: data.id },
         { status: 'varified', updated_on: new Date() },
-        columns,
+        ['id', 'status'],
       );
       return { status: 200, code: 'OTP_VERIFIED' };
+    }
+    else{
+      return { status: 400, code: 'INVALID_OTP' };
     }
   }
 
