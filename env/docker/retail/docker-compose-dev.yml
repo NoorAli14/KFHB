@@ -54,6 +54,9 @@ services:
       - ENV_RBX_APP_NAME=Rubix | Entitlement Business Service
       - ENV_RBX_SWAGGER_ENABLED=true
       - ENV_RBX_API_URL_PREFIX=api/v1/entitlements/
+      - ENV_RBX_JWT_EXPIRY_IN_MINUTES=$ENV_RBX_JWT_EXPIRY_IN_MINUTES
+      - ENV_RBX_JWT_SECRET=$ENV_RBX_JWT_SECRET
+      - ENV_RBX_JWT_ALGORITHM=$ENV_RBX_JWT_ALGORITHM
     restart: always
     networks:
       - rubix-middleware-network
@@ -106,6 +109,33 @@ services:
       - rubix-middleware-network
     ports:
       - 5010:5010
+
+  #=================================================================
+  # User Management Service
+  #=================================================================
+  user-management-service:
+    build:
+      context: ../../../retail/middleware/entitlement.service
+      dockerfile: Dockerfile
+    image: "user-management-service:v1"
+    container_name: "user_management_service"
+    environment:
+      - ENV_RBX_PORT=5020
+      - ENV_RBX_DB_USERNAME=$ENV_RBX_DB_USERNAME
+      - ENV_RBX_DB_PASS=$ENV_RBX_DB_PASS
+      - ENV_RBX_DB_NAME=$ENV_RBX_DB_NAME
+      - ENV_RBX_DB_HOST=$ENV_RBX_DB_HOST
+      - ENV_RBX_DB_PORT=$ENV_RBX_DB_PORT
+      - ENV_RBX_DB_TIMEOUT=$ENV_RBX_DB_TIMEOUT
+      - ENV_RBX_DB_DIALECT=$ENV_RBX_DB_DIALECT
+      - ENV_RBX_DB_DEBUG=$ENV_RBX_DB_DEBUG
+      - ENV_RBX_GRAPHQL_DEBUG=$ENV_RBX_GRAPHQL_DEBUG
+      - ENV_RBX_GRAPHQL_PLAYGROUND=$ENV_RBX_GRAPHQL_PLAYGROUND
+    restart: always
+    networks:
+      - rubix-middleware-network
+    ports:
+      - 5020:5020
 
 networks:
   rubix-middleware-network:
