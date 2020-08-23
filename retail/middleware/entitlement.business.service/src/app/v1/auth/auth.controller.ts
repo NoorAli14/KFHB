@@ -7,10 +7,8 @@ import {
   UseGuards,
   HttpCode,
   HttpStatus,
-  Request,
   Delete,
   Res,
-  Req,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -34,7 +32,6 @@ import { X_ACCESS_TOKEN } from '@common/constants';
 
 @ApiTags('Auth')
 @Controller('auth')
-@ApiBearerAuth()
 export class AuthController {
   constructor(
     private readonly userService: UserService,
@@ -75,6 +72,7 @@ export class AuthController {
     summary: 'Fetch loggedIn User Profile by Token.',
   })
   @ApiOkResponse({ type: User, description: 'Current User Information.' })
+  @ApiBearerAuth()
   async me(@CurrentUser() user: User): Promise<User> {
     return user;
   }
@@ -94,6 +92,7 @@ export class AuthController {
     type: Error,
     description: 'Input Validation failed.',
   })
+  @ApiBearerAuth()
   async update(@Body() userDto: UpdateUserDto): Promise<User> {
     return this.userService.create(userDto);
   }
@@ -105,6 +104,7 @@ export class AuthController {
     summary: 'User Logout',
   })
   @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   async logOut(@Res() response) {
     response.setHeader('Set-Cookie', this.authService.getCookieForLogOut());
     return response.sendStatus(HttpStatus.NO_CONTENT);

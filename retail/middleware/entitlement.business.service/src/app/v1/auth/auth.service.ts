@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigurationService } from '@common/configuration/configuration.service';
 import { X_ACCESS_TOKEN } from '@common/constants';
