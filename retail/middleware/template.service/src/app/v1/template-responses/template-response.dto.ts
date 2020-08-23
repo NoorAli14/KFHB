@@ -1,10 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsString,
-  MaxLength,
-  IsUUID,
-  IsOptional,
-} from 'class-validator';
+import { IsString, MaxLength, IsUUID, IsOptional } from 'class-validator';
 
 export class CreateTemplateResponseDto {
   @IsUUID()
@@ -24,6 +19,10 @@ export class CreateTemplateResponseDto {
   @ApiProperty()
   @IsUUID()
   template_id: string;
+
+  @ApiProperty()
+  @IsUUID()
+  user_id: string;
 }
 
 // Graphql Example DTO
@@ -40,4 +39,7 @@ export class NewTemplateResponseInput {
 
   @Field()
   template_id: string;
+
+  @Field()
+  user_id: string;
 }

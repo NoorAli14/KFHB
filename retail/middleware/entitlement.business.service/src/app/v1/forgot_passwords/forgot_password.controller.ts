@@ -1,4 +1,12 @@
-import { Controller, Post, Get, Body, Param } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Body,
+  Param,
+  HttpCode,
+  HttpStatus,
+} from '@nestjs/common';
 import {
   ApiTags,
   ApiOkResponse,
@@ -30,6 +38,7 @@ export class ForgotPasswordController {
     type: Error,
     description: 'Input Validation failed.',
   })
+  @HttpCode(HttpStatus.OK)
   async sendResetPasswordLink(
     @Body() userDto: { email: string },
   ): Promise<SuccessDto> {
@@ -64,6 +73,7 @@ export class ForgotPasswordController {
     type: Error,
     description: 'Input Validation failed.',
   })
+  @HttpCode(HttpStatus.OK)
   async changePassword(
     @Param('token') token: string,
     @Body() input: { password: string },

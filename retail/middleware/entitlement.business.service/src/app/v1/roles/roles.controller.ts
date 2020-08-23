@@ -9,7 +9,8 @@ import {
   NotFoundException,
   ParseUUIDPipe,
   HttpStatus,
-  HttpCode
+  HttpCode,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -20,15 +21,17 @@ import {
   ApiBearerAuth,
   ApiNoContentResponse,
   ApiBadRequestResponse,
-  ApiNotFoundResponse
+  ApiNotFoundResponse,
 } from '@nestjs/swagger';
 import { RoleService } from './roles.service';
 import { Role } from './role.entity';
 import { RoleDto } from './role.dto';
+import { AuthGuard } from '@common/guards/';
 
 @ApiTags('Role')
 @Controller('roles')
 @ApiBearerAuth()
+@UseGuards(AuthGuard)
 export class RolesController {
   constructor(private readonly roleService: RoleService) {}
 
@@ -77,8 +80,8 @@ export class RolesController {
     description: 'Role Not Found.',
   })
   async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<Role> {
-    const role = await this.roleService.findOne(id);
-    if(!role) {
+    const role: Role = await this.roleService.findOne(id);
+    if (!role) {
       throw new NotFoundException('Role Not Found');
     }
     return role;
@@ -103,11 +106,10 @@ export class RolesController {
     type: Error,
     description: 'Role Not Found.',
   })
-  async update(@Param('id', ParseUUIDPipe) id: string, @Body() roleDto: RoleDto): Promise<Role> {
-    const role = await this.roleService.findOne(id);
-    if(!role) {
-      throw new NotFoundException('Role Not Found');
-    }
+  async update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() roleDto: RoleDto,
+  ): Promise<Role> {
     return this.roleService.update(id, roleDto);
   }
 
@@ -124,10 +126,6 @@ export class RolesController {
   })
   @HttpCode(HttpStatus.NO_CONTENT)
   async delete(@Param('id', ParseUUIDPipe) id: string): Promise<any> {
-    const role = await this.roleService.findOne(id);
-    if(!role) {
-      throw new NotFoundException('Role Not Found');
-    }
     return this.roleService.delete(id);
   }
 }

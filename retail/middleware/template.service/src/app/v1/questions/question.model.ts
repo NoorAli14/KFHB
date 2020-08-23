@@ -10,6 +10,12 @@ export class Question {
   title: string;
 
   @ApiProperty({
+    example: 'Question 1 in Arabic',
+    description: 'Name of the Question',
+  })
+  title_ar: string;
+
+	@ApiProperty({
     example: 'Question Type',
     description: 'Question Type',
   })
@@ -46,6 +52,9 @@ export class QuestionGQL {
 
   @Field()
   title: string;
+
+  @Field()
+  title_ar: string;
 
   @Field()
   type: string;

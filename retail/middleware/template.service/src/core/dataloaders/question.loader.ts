@@ -27,3 +27,15 @@ export class QuestionLoaderForOption
     );
   }
 }
+
+@Injectable()
+export class QuestionLoaderForTemplateQuestion
+  implements NestDataLoader<string, QuestionGQL> {
+  constructor(private readonly questionsService: QuestionsService) {}
+
+  generateDataLoader(): DataLoader<string, QuestionGQL> {
+    return new DataLoader<string, QuestionGQL>((keys, columns) =>
+      this.questionsService.findByIdsSorted(keys, columns),
+    );
+  }
+}
