@@ -17,7 +17,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         (request: Request) => {
           return (
             (request?.cookies?.[X_ACCESS_TOKEN] as string) ||
-            (request?.headers[X_ACCESS_TOKEN] as string)
+            (request?.headers?.[X_ACCESS_TOKEN] as string) ||
+            (request?.query?.[X_ACCESS_TOKEN] as string)
           );
         },
       ]),

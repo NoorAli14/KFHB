@@ -23,12 +23,15 @@ import {
 } from '@nestjs/swagger';
 import { UserService } from '@app/v1/users/users.service';
 import { UpdateUserDto } from '@app/v1/users/user.dto';
+
 import { LoginUserDto } from './auth.dto';
 import { User } from '@app/v1/users/user.entity';
 import { LocalAuthGuard } from './localAuth.guard';
 import { AuthService } from './auth.service';
 import { CurrentUser } from '@common/decorators';
 import { AuthGuard } from '@common/guards/';
+import { X_ACCESS_TOKEN } from '@common/constants';
+
 @ApiTags('Auth')
 @Controller('auth')
 @ApiBearerAuth()
@@ -55,8 +58,12 @@ export class AuthController {
     description: 'Input Validation failed.',
   })
   async login(@Res() response, @CurrentUser() user: User) {
-    const cookie: string = this.authService.getCookieWithJwtToken(user.id);
-    response.setHeader('Set-Cookie', cookie);
+    const token: string = this.authService.getToken(user.id);
+    response.setHeader(X_ACCESS_TOKEN, token);
+    response.setHeader(
+      'Set-Cookie',
+      this.authService.getCookieWithJwtToken(token),
+    );
     return response.send(user);
   }
 

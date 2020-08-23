@@ -1,8 +1,13 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { SuccessDto } from '@common/dtos/';
 import { User } from './user.entity';
 import { toGraphql } from '@common/utilities';
 import { GqlClientService } from '@common/libs/gqlclient/gqlclient.service';
+import { throwError } from 'rxjs';
 @Injectable()
 export class UserService {
   private readonly output: string = ` {
@@ -19,6 +24,9 @@ export class UserService {
     roles {
       id
       name
+      description
+      created_on
+      created_by
     }
     modules {
         id
@@ -89,6 +97,12 @@ export class UserService {
   }
 
   async create(input: any): Promise<User> {
+    const user: User = await this.findByEmail(input.email);
+    if (user) {
+      throw new UnprocessableEntityException(
+        `User Already Exist with email ${input.email}`,
+      );
+    }
     const params = `mutation {
       user: addUser(input: ${toGraphql(input)}) ${this.output}
     }`;
@@ -119,12 +133,10 @@ export class UserService {
   }
 
   async findBy(condition: any, output?: string): Promise<User[]> {
-    console.log(`Condition is: ${JSON.stringify(condition, null, 2)}`);
     const _output: string = output ? output : this.output;
     const params = `query {
       user: findUserBy(checks: ${toGraphql(condition)}) ${_output}
     }`;
-    console.log(`Params is: ${params}`);
     const result = await this.gqlClient.send(params);
     return result?.user;
   }
