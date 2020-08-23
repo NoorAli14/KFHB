@@ -35,7 +35,6 @@ export class KernelMiddleware {
     /*
      * Middleware: protect against cross-origin HTTP requests.
      */
-    console.log(`CORS: ${JSON.stringify(config.CORS, null, 2)}`);
     if (config.CORS.ENABLE) {
       app = CorsMiddleware.init(app, config.CORS.ORIGIN);
     }
