@@ -7,16 +7,16 @@ import axios from 'axios';
 @Injectable()
 export class SMSService {
   constructor(private readonly _config: ConfigurationService) {}
-  async sendSMS(emailObj: Record<string, any>, keys?: string[]): Promise<any> {
+  async sendSMS(smsObj: Record<string, any>, keys?: string[]): Promise<any> {
 
     return axios.post(this._config.SMS.from, {
       from: this._config.SMS.from,
-      body: emailObj.body,
-      to: emailObj.to
+      body: smsObj.body,
+      to: smsObj.to
     })
     .then(function (response) {
       console.log(response);
-      return emailObj;
+      return smsObj;
     })
     .catch(function (error) {
       console.log(error);
