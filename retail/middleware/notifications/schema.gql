@@ -38,7 +38,7 @@ type EmailGQL {
 type Mutation {
   sendEmail(input: SendEmailInput!): EmailGQL!
   generateOtp(input: NewPostInput!): Otp!
-  verifyOtp(input: VerifyOTPInput!): Otp!
+  verifyOtp(input: VerifyOTPInput!): OTPResponse!
   sendSMS(input: SendSMSInput!): SMSGQL!
 }
 
@@ -63,6 +63,11 @@ type Otp {
   updated_by: DateTime!
   deleted_on: DateTime!
   deleted_by: DateTime!
+}
+
+type OTPResponse {
+  status: Float!
+  code: String!
 }
 
 input SendEmailInput {

@@ -8,7 +8,7 @@ import {
 } from '@nestjs/graphql';
 import { ParseUUIDPipe, NotFoundException } from '@nestjs/common';
 import { Fields } from '@common/decorators';
-import { Otp } from './otp.model';
+import { Otp, OTPResponse } from './otp.model';
 import { OtpService } from './otp.service';
 import { GenerateOTPInput, VerifyOTPInput } from './otp.dto';
 
@@ -27,11 +27,11 @@ export class OtpResolver {
     return this.otpService.create(input, columns);
   }
 
-  @Mutation(() => Otp)
+  @Mutation(() => OTPResponse)
   verifyOtp(
     @Args('input') input: VerifyOTPInput,
     @Fields() columns: string[]
-  ): Promise<any> {
+  ): Promise<OTPResponse> {
     return this.otpService.verify(input, columns);
   }
 }

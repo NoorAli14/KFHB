@@ -41,3 +41,13 @@ export class Otp {
   @Field()
   deleted_by?: Date;
 }
+
+@ObjectType()
+export class OTPResponse {
+  
+  @Field()
+  status: number;
+
+  @Field()
+  code: string;
+}
