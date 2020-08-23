@@ -1,0 +1,39 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+directive @key(fields: String!) on OBJECT | INTERFACE
+
+directive @extends on OBJECT | INTERFACE
+
+directive @external on OBJECT | FIELD_DEFINITION
+
+directive @requires(fields: String!) on FIELD_DEFINITION
+
+directive @provides(fields: String!) on FIELD_DEFINITION
+
+input CreateSessionInput {
+  reference_id: String
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Mutation {
+  addSession(input: CreateSessionInput!): Session!
+}
+
+type Session {
+  id: ID!
+  user_id: String!
+  tenant_id: String!
+  reference_id: String!
+  target_user_id: String
+  status: String
+  created_by: String!
+  created_on: DateTime!
+  updated_by: String!
+  updated_on: DateTime!
+}
