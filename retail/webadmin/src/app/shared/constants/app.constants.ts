@@ -41,3 +41,17 @@ export const NATIONALITY_LIST: Array<Select> = [
     { id: 2, name: "Bahrain" },
     { id: 3, name: "Kuwait" },
 ];
+
+const URI_PREFIX='/api/v1/entitlements/';
+
+export const URI={
+    USER_INVITATION:`${URI_PREFIX}invitations`,
+    USER :`${URI_PREFIX}users`,
+    ROLE :`${URI_PREFIX}roles`,
+    PERMISSION :`${URI_PREFIX}permissions`,
+    MODULE :`${URI_PREFIX}modules`,
+    LOGIN :`${URI_PREFIX}auth/login`,
+    LOGOUT :`${URI_PREFIX}auth/logout`,
+    FORGOT_PASSWORD :`${URI_PREFIX}auth/logout`,
+    RESET_PASSWORD :`${URI_PREFIX}`,
+}

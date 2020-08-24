@@ -36,7 +36,7 @@ export class NetworkService {
     post(url: string, model: any, options?): Observable<any> {
         const endPoint = `${createUrl(url)}`;
         return this.http
-            .post<any[]>(endPoint, model, options)
+            .post<any[]>(endPoint, model, {withCredentials:true})
             .pipe(catchError(this.errorHandlerMessage));
     }
 

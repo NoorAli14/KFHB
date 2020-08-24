@@ -17,7 +17,7 @@ import { BaseComponent } from '@shared/components/base/base.component';
 export class PermissionComponent extends BaseComponent implements OnInit {
     title = "";
     @Input() modules: Array<any> 
-    displayedColumns = ["module","parent","canView","canCreate","canDelete","canEdit"];
+    displayedColumns = ["module","canView","canCreate","canDelete","canEdit"];
     dataSource = new MatTableDataSource<Permission>();
     modulesMapped:any[]=[]
     constructor(private _service: ConfigMiddlewareService) {

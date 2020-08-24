@@ -62,6 +62,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
         });
     }
     onSubmit() {
+        debugger
         this._authService.login(this.loginForm.value).subscribe(
             (response) => {
                  this.errorType = "success";

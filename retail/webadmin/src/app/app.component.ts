@@ -126,6 +126,7 @@ export class AppComponent extends UnsubscribeOnDestroyAdapter implements OnInit,
      */
     ngOnInit(): void {
         this.subs.sink = this.eventService.on(Events.MODULES_UPDATED, (modules) => {
+            
             const navigation = {
                 id: "features",
                 title: "Features",
@@ -133,7 +134,6 @@ export class AppComponent extends UnsubscribeOnDestroyAdapter implements OnInit,
                 type: "group",
                 children: modules,
             };
-
             this.navigation = this.checkIfRootEmpty(modules)
                 ? modules
                 : [navigation];
@@ -174,7 +174,7 @@ export class AppComponent extends UnsubscribeOnDestroyAdapter implements OnInit,
         modules.forEach((item) => {
             if (
                 item.permissions &&
-                item.permissions.find((x) => x.name === "view")
+                item.permissions.find((x) => x.record_type === "view")
             ) {
                 flag = false;
             }
