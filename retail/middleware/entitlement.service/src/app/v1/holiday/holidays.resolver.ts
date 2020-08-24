@@ -2,7 +2,7 @@ import { Resolver, Query, Mutation, Args, Info } from '@nestjs/graphql';
 import { graphqlKeys } from '@common/utilities';
 import { KeyValInput } from '@common/inputs/key-val.input';
 import { Holiday } from '@app/v1/holiday/holiday.model';
-import { HolidaysService } from '@app/v1/holiday/Holidays.service';
+import { HolidaysService } from '@app/v1/holiday/holidays.service';
 import { HolidayInput } from '@app/v1/holiday/holiday.dto';
 
 @Resolver(Holiday)
