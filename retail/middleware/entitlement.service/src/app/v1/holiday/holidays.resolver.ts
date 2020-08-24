@@ -1,15 +1,9 @@
-import {
-  Resolver,
-  Query,
-  Mutation,
-  Args,
-  Info
-} from "@nestjs/graphql";
-import { graphqlKeys } from "@common/utilities";
-import { KeyValInput } from "@common/inputs/key-val.input";
-import {Holiday} from "@app/v1/holiday/Holiday.model";
-import {HolidaysService} from "@app/v1/holiday/Holidays.service";
-import {HolidayInput} from "@app/v1/holiday/holiday.dto";
+import { Resolver, Query, Mutation, Args, Info } from '@nestjs/graphql';
+import { graphqlKeys } from '@common/utilities';
+import { KeyValInput } from '@common/inputs/key-val.input';
+import { Holiday } from '@app/v1/holiday/holiday.model';
+import { HolidaysService } from '@app/v1/holiday/Holidays.service';
+import { HolidayInput } from '@app/v1/holiday/holiday.dto';
 
 @Resolver(Holiday)
 export class HolidaysResolver {
@@ -22,22 +16,28 @@ export class HolidaysResolver {
   }
 
   @Query(() => Holiday)
-  async findHolidayById(@Args('id') id: string, @Info() info): Promise<Holiday> {
+  async findHolidayById(
+    @Args('id') id: string,
+    @Info() info,
+  ): Promise<Holiday> {
     const keys = graphqlKeys(info);
     return this.holidaysService.findById(id, keys);
   }
 
   @Query(() => [Holiday])
   async findHolidayBy(
-      @Args('checks', { type: () => [KeyValInput] }) checks: KeyValInput[],
-      @Info() info
+    @Args('checks', { type: () => [KeyValInput] }) checks: KeyValInput[],
+    @Info() info,
   ): Promise<Holiday[]> {
     const keys = graphqlKeys(info);
     return this.holidaysService.findByProperty(checks, keys);
   }
 
   @Mutation(() => Holiday)
-  async addHoliday(@Args('input') input: HolidayInput, @Info() info): Promise<Holiday> {
+  async addHoliday(
+    @Args('input') input: HolidayInput,
+    @Info() info,
+  ): Promise<Holiday> {
     const keys = graphqlKeys(info);
     return this.holidaysService.create(input, keys);
   }
@@ -46,7 +46,7 @@ export class HolidaysResolver {
   async updateHoliday(
     @Args('id') id: string,
     @Args('input') input: HolidayInput,
-    @Info() info
+    @Info() info,
   ): Promise<Holiday> {
     const keys = graphqlKeys(info);
     return this.holidaysService.update(id, input, keys);
