@@ -1,4 +1,11 @@
-import { IsString, IsOptional, IsEmail, IsNotEmpty } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  IsEmail,
+  IsNotEmpty,
+  ValidateNested,
+} from 'class-validator';
+import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 import { IdsDto } from '@common/dtos';
 import { GENDER } from '@common/constants';
@@ -78,5 +85,7 @@ export class UpdateUserDto {
     description: 'List of role IDs.',
     required: false,
   })
-  roles?: IdsDto[];
+  @ValidateNested({ each: true })
+  @Type(() => IdsDto)
+  roles: IdsDto[];
 }
