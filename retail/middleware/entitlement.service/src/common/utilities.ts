@@ -60,7 +60,7 @@ export const normalizePort = (param: number | string): number | string => {
 export const generateRandomString = (length=36): string => {
   return Crypto
   .randomBytes(length)
-  .toString('base64')
+  .toString('hex')
   .slice(0, length)
 };
 
