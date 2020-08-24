@@ -43,11 +43,11 @@ input ForgotPasswordInput {
 
 type Holiday {
   id: ID
-  week_day: String
-  start_time: String!
-  end_time: String!
+  calendar_day: String
+  holiday_type: String
+  holiday_details: String
   remarks: String
-  full_day: Float
+  is_repetitive: Float
   status: String
   created_on: String
   created_by: String
@@ -58,10 +58,10 @@ type Holiday {
 }
 
 input HolidayInput {
-  week_day: String!
-  start_time: String
-  end_time: String
-  full_day: Float
+  calendar_day: String!
+  holiday_type: String
+  holiday_details: String
+  is_repetitive: Float
   remarks: String
   status: String
 }
@@ -74,6 +74,33 @@ input IdsInput {
 input KeyValInput {
   record_key: String!
   record_value: String!
+}
+
+type Leave {
+  id: ID
+  user_id: String
+  calendar_day: String
+  holiday_type: String
+  holiday_details: String
+  remarks: String
+  is_repetitive: Float
+  status: String
+  created_on: String
+  created_by: String
+  updated_on: String
+  updated_by: String
+  deleted_on: String
+  deleted_by: String
+}
+
+input LeaveInput {
+  user_id: String!
+  calendar_day: String!
+  holiday_type: String
+  holiday_details: String
+  is_repetitive: Float
+  remarks: String
+  status: String
 }
 
 input LoginInput {
@@ -99,7 +126,7 @@ input ModuleInput {
 }
 
 type Mutation {
-  addUser(input: CreateUserInput!): UserWithInvitationToken!
+  addUser(input: CreateUserInput!): User!
   updateUser(input: UpdateUserInput!, id: String!): User!
   deleteUser(id: String!): Boolean!
   addRole(input: RoleInput!): Role!
@@ -127,6 +154,9 @@ type Mutation {
   addHoliday(input: HolidayInput!): Holiday!
   updateHoliday(input: HolidayInput!, id: String!): Holiday!
   deleteHoliday(id: String!): Boolean!
+  addLeave(input: LeaveInput!): Leave!
+  updateLeave(input: LeaveInput!, id: String!): Leave!
+  deleteLeave(id: String!): Boolean!
 }
 
 type Permission {
@@ -143,7 +173,7 @@ input PermissionInput {
 type Query {
   usersList: [User!]!
   findUserById(id: String!): User!
-  resetInvitationToken(id: String!): UserWithInvitationToken!
+  resetInvitationToken(id: String!): User!
   findUserBy(checks: [KeyValInput!]!): [User!]!
   rolesList: [Role!]!
   findRole(id: String!): Role!
@@ -164,13 +194,16 @@ type Query {
   findRoleModulePermission(id: String!): RoleModulePermission!
   findRoleModulePermissionBy(checks: [KeyValInput!]!): [RoleModulePermission!]!
   login(input: LoginInput!): User!
-  forgotPassword(input: ForgotPasswordInput!): UserWithForgetPasswordToken!
+  forgotPassword(input: ForgotPasswordInput!): User!
   workingDaysList: [WorkingDay!]!
   findWorkingDayById(id: String!): WorkingDay!
   findWorkingDayBy(checks: [KeyValInput!]!): [WorkingDay!]!
   holidaysList: [Holiday!]!
   findHolidayById(id: String!): Holiday!
   findHolidayBy(checks: [KeyValInput!]!): [Holiday!]!
+  leavesList: [Leave!]!
+  findLeaveById(id: String!): Leave!
+  findLeaveBy(checks: [KeyValInput!]!): [Leave!]!
 }
 
 type Role {
@@ -258,6 +291,11 @@ type User {
   deleted_by: String
   roles: [Role!]!
   modules: [Module!]!
+  invitation_token: String
+  invitation_token_expiry: DateTime
+  password_reset_token: String
+  password_reset_token_expiry: DateTime
+  leaves: [Leave!]!
 }
 
 type UserRole {
@@ -273,54 +311,6 @@ input UserRoleInput {
   user_id: String!
   role_id: String!
   status: String
-}
-
-type UserWithForgetPasswordToken {
-  id: ID
-  username: String
-  email: String
-  contact_no: String
-  first_name: String
-  middle_name: String
-  last_name: String
-  gender: String
-  date_of_birth: String
-  nationality_id: Float
-  status: String
-  created_on: String
-  created_by: String
-  updated_on: String
-  updated_by: String
-  deleted_on: String
-  deleted_by: String
-  roles: [Role!]!
-  modules: [Module!]!
-  password_reset_token: String
-  password_reset_token_expiry: DateTime
-}
-
-type UserWithInvitationToken {
-  id: ID
-  username: String
-  email: String
-  contact_no: String
-  first_name: String
-  middle_name: String
-  last_name: String
-  gender: String
-  date_of_birth: String
-  nationality_id: Float
-  status: String
-  created_on: String
-  created_by: String
-  updated_on: String
-  updated_by: String
-  deleted_on: String
-  deleted_by: String
-  roles: [Role!]!
-  modules: [Module!]!
-  invitation_token: String
-  invitation_token_expiry: DateTime
 }
 
 type WorkingDay {

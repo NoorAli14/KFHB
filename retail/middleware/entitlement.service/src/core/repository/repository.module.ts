@@ -2,7 +2,7 @@ import { Module, OnModuleDestroy } from '@nestjs/common';
 import { KnexModule, InjectKnex, Knex } from 'nestjs-knex';
 import { CommonModule } from '@common/common.module';
 import { DBConfigurationService } from '@common/configuration/dbconfiguration.service';
-import { UserRepository } from '@core/repository/';
+import {HolidayRepository, LeaveRepository, UserRepository, WorkingDaysRepository} from '@core/repository/';
 import {RoleRepository} from "@core/repository/role.repository";
 import {UserRoleRepository} from "@core/repository/user-role.repository";
 import {ModuleRepository} from "@core/repository/module.repository";
@@ -20,8 +20,26 @@ import {PermissionRepository} from "@core/repository/permission.repository";
       inject: [DBConfigurationService],
     }),
   ],
-  providers: [UserRepository, RoleRepository, UserRoleRepository, ModuleRepository, RoleModuleRepository, PermissionRepository, RoleModulePermissionRepository],
-  exports: [UserRepository, RoleRepository, UserRoleRepository,ModuleRepository, RoleModuleRepository, PermissionRepository, RoleModulePermissionRepository],
+  providers: [UserRepository,
+    RoleRepository,
+    UserRoleRepository,
+    ModuleRepository,
+    RoleModuleRepository,
+    PermissionRepository,
+    RoleModulePermissionRepository,
+    WorkingDaysRepository,
+    HolidayRepository,
+    LeaveRepository],
+  exports: [UserRepository,
+    RoleRepository,
+    UserRoleRepository,
+    ModuleRepository,
+    RoleModuleRepository,
+    PermissionRepository,
+    RoleModulePermissionRepository,
+    WorkingDaysRepository,
+    HolidayRepository,
+    LeaveRepository],
 })
 export class RepositoryModule implements OnModuleDestroy {
   @InjectKnex() private readonly connection: Knex;

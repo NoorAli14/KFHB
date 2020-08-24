@@ -16,6 +16,8 @@ import { PermissionsModule } from "@app/v1/permissions/permissions.module";
 import {LoginModule} from "@app/v1/login/login.module";
 import {ForgotPasswordModule} from "@app/v1/forgot-password/forgot-password.module";
 import {WorkingDaysModule} from "@app/v1/working-days/working-days.module";
+import {HolidaysModule} from "@app/v1/holiday/Holidays.module";
+import {LeavesModule} from "@app/v1/leave/leaves.module";
 
 @Module({
   imports: [
@@ -29,6 +31,8 @@ import {WorkingDaysModule} from "@app/v1/working-days/working-days.module";
     LoginModule,
     ForgotPasswordModule,
     WorkingDaysModule,
+    HolidaysModule,
+    LeavesModule,
     GraphQLFederationModule.forRootAsync({
       imports: [CommonModule],
       useFactory: async (configService: ConfigurationService) => ({

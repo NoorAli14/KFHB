@@ -7,3 +7,5 @@ export * from './role-module.repository';
 export * from './permission.repository';
 export * from './role-module-permission.repository';
 export * from './working-days.repository';
+export * from './holiday.repository';
+export * from './leave.repository';
