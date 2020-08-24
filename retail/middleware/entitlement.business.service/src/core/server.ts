@@ -5,6 +5,7 @@ import {
   LoggingInterceptor,
   TransformInterceptor,
 } from '@common/interceptors/';
+import * as cookieParser from 'cookie-parser';
 import { HttpExceptionFilter } from '@common/filters/http-exception.filter';
 import { ConfigurationService } from '@common/configuration/configuration.service';
 import { KernelMiddleware } from '@core/middlewares/index';
@@ -48,6 +49,7 @@ export default class Server {
     this.app.useGlobalFilters(new HttpExceptionFilter());
     this.app.useGlobalPipes(new ValidationPipe());
     this.app.setGlobalPrefix(this.Config.APP.API_URL_PREFIX);
+    this.app.use(cookieParser());
   }
 
   /** Microservices use the TCP transport layer by default and other options are:

@@ -6,6 +6,7 @@ import {
   Put,
   NotFoundException,
   ParseUUIDPipe,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -16,6 +17,7 @@ import {
   ApiBadRequestResponse,
   ApiNotFoundResponse,
 } from '@nestjs/swagger';
+import { AuthGuard } from '@common/guards/';
 import { UserService } from './users.service';
 import { User } from './user.entity';
 import { ChangePasswordDto, UpdateUserDto } from './user.dto';
@@ -24,6 +26,7 @@ import { SuccessDto } from '@common/dtos/';
 @ApiTags('User')
 @Controller('users')
 @ApiBearerAuth()
+@UseGuards(AuthGuard)
 export class UsersController {
   constructor(private readonly userService: UserService) {}
 
@@ -83,10 +86,6 @@ export class UsersController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() userDto: UpdateUserDto,
   ): Promise<User> {
-    const user = await this.userService.findOne(id);
-    if (!user) {
-      throw new NotFoundException('User Not Found');
-    }
     return this.userService.update(id, userDto);
   }
 

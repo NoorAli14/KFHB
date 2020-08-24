@@ -8,6 +8,12 @@ export class Template {
     description: 'Name of the Template',
   })
   name: string;
+
+  @ApiProperty({
+    example: 'Template 1 in Arabic',
+    description: 'Name of the Template',
+  })
+  name_ar: string;
 }
 
 // Graphql Model
@@ -21,6 +27,9 @@ export class TemplateGQL {
 
   @Field()
   name: string;
+
+  @Field()
+  name_ar: string;
 
   @Field(() => [SectionGQL])
   sections?: SectionGQL[];

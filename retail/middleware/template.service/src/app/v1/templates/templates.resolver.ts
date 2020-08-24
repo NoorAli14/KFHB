@@ -7,7 +7,7 @@ import { Fields } from '@common/decorators';
 import { SectionGQL } from '../sections/section.model';
 import { Loader } from 'nestjs-dataloader';
 import { SectionLoaderForTemplate } from '@core/dataloaders';
-import DataLoader from 'dataloader';
+import DataLoader from '../../../lib/dataloader';
 
 @Resolver(TemplateGQL)
 export class TemplatesResolver {
@@ -15,22 +15,25 @@ export class TemplatesResolver {
 
   @ResolveField(() => [SectionGQL])
   async sections(
+    @Fields(SectionGQL) columns,
     @Parent() template: TemplateGQL,
     @Loader(SectionLoaderForTemplate.name)
     sectionLoader: DataLoader<SectionGQL['id'], SectionGQL>,
   ): Promise<any> {
-    return sectionLoader.load(template.id);
+    return sectionLoader.loadWithKeys(template.id, columns);
   }
 
   @Query(() => [TemplateGQL])
-  async templatesList(@Fields() columns: string[]): Promise<TemplateGQL[]> {
+  async templatesList(
+    @Fields(TemplateGQL) columns: string[],
+  ): Promise<TemplateGQL[]> {
     return this.templateService.list(columns);
   }
 
   @Query(() => TemplateGQL)
   async findTemplateByName(
     @Args('name') name: string,
-    @Fields() columns: string[],
+    @Fields(TemplateGQL) columns: string[],
   ): Promise<TemplateGQL> {
     return this.templateService.findByName(name, columns);
   }
@@ -38,7 +41,7 @@ export class TemplatesResolver {
   @Query(() => TemplateGQL)
   async findTemplate(
     @Args('id') id: string,
-    @Fields() columns: string[],
+    @Fields(TemplateGQL) columns: string[],
   ): Promise<TemplateGQL> {
     return this.templateService.findById(id, columns);
   }

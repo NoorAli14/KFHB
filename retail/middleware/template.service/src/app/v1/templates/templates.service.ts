@@ -18,7 +18,7 @@ export class TemplatesService {
   }
 
   async findByIdsSorted(ids: readonly string[], keys?: string[]): Promise<any> {
-    return await this.templateDB.findByIds(ids, keys, true);
+    return this.templateDB.findByIds(ids, keys, true);
   }
 
   async findByName(name: string, keys?: string[]): Promise<any> {

@@ -6,6 +6,7 @@ import {
   Param,
   Put,
   NotFoundException,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -14,7 +15,6 @@ import {
   ApiOperation,
   ApiBody,
   ApiBearerAuth,
-  ApiNoContentResponse,
   ApiBadRequestResponse,
   ApiNotFoundResponse,
 } from '@nestjs/swagger';
@@ -23,14 +23,16 @@ import { UpdateUserDto } from '@app/v1/users/user.dto';
 import { User } from '@app/v1/users/user.entity';
 import { UpdateInvitationDto } from './invitation.dto';
 import { SuccessDto } from '@common/dtos/';
+import { AuthGuard } from '@common/guards/';
 
 @ApiTags('Invitation')
 @Controller('invitations')
-@ApiBearerAuth()
 export class InvitationsController {
   constructor(private readonly userService: UserService) {}
 
   @Post('/')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   @ApiBody({ description: 'Sets the user properties.', type: UpdateUserDto })
   @ApiOperation({
     summary: 'Send a invitation to a user',

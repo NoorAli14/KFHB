@@ -13,7 +13,7 @@ export class TemplateResponsesResolver {
   @Mutation(() => TemplateResponseGQL)
   async addTemplateResponse(
     @Args('input') input: NewTemplateResponseInput,
-    @Fields() columns: string[],
+    @Fields(TemplateResponseGQL) columns: string[],
   ): Promise<TemplateResponseGQL> {
     try {
       JSON.parse(input.results);

@@ -1,14 +1,12 @@
-</p>
-<h1 align="center">NestJS | Knex-GraphQL Starter Kit</h1>
-<br />
+# Template Service
 
 [travis-image]: https://api.travis-ci.org/nestjs/nest.svg?branch=master
 [travis-url]: https://travis-ci.org/nestjs/nest
 [linux-image]: https://img.shields.io/travis/nestjs/nest/master.svg?label=linux
 [linux-url]: https://travis-ci.org/nestjs/nest
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="blank">Node.js</a> framework for building efficient and scalable server-side applications, heavily inspired by <a href="https://angular.io" target="blank">Angular</a>.</p>
-    <p align="center">
+<p align="center">A progressive <a href="http://nodejs.org" target="blank">Node.js</a> framework for building efficient and scalable server-side applications, heavily inspired by <a href="https://angular.io" target="blank">Angular</a>.</p>
+<p align="center">
 <a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
 <a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
 <a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/dm/@nestjs/core.svg" alt="NPM Downloads" /></a>
@@ -26,20 +24,21 @@
 
 ## ❯ Table of Contents
 
-- [❯ Table of Contents](#-table-of-contents)
-- [❯ How to Run](#-how-to-run)
-  - [Pre-requisites](#pre-requisites)
-  - [Running](#running)
-- [❯ App Structure](#-app-structure)
-- [❯ Migrations & Seeding](#-migrations--seeding)
-  - [Creating/Dropping Tables](#creatingdropping-tables)
-- [Installation](#installation)
-- [Running the app](#running-the-app)
-- [Test](#test)
-- [❯ Roadmap](#-roadmap)
-  - [API Gateway](#api-gateway)
-  - [Microservices](#microservices)
-  - [Notes](#notes)
+- [Template Service](#template-service)
+  - [❯ Table of Contents](#-table-of-contents)
+  - [❯ How to Run](#-how-to-run)
+    - [Pre-requisites](#pre-requisites)
+    - [Running](#running)
+  - [❯ App Structure](#-app-structure)
+  - [❯ Migrations & Seeding](#-migrations--seeding)
+    - [Creating/Dropping Tables](#creatingdropping-tables)
+  - [Installation](#installation)
+  - [Running the app](#running-the-app)
+  - [Test](#test)
+  - [❯ Roadmap](#-roadmap)
+    - [API Gateway](#api-gateway)
+    - [Microservices](#microservices)
+    - [Notes](#notes)
 
 ![divider](./divider.png)
 
@@ -184,45 +183,45 @@ export async function down(knex: Knex): Promise<any> {
 Now we can run the below command performing a migration and updating our local database:
 
 ```bash
-$ npm run db:migrate
+npm run db:migrate
 ```
 
 To rollback the last migration run the below following command.
 
 ```bash
-$ npm run db:rollback
+npm run db:rollback
 ```
 
 ## Installation
 
 ```bash
-$ npm install
+npm install
 ```
 
 ## Running the app
 
 ```bash
 # development
-$ npm run start
+npm run start
 
 # watch mode
-$ npm run start:dev
+npm run start:dev
 
 # production mode
-$ npm run start:prod
+npm run start:prod
 ```
 
 ## Test
 
 ```bash
 # unit tests
-$ npm run test
+npm run test
 
 # e2e tests
-$ npm run test:e2e
+npm run test:e2e
 
 # test coverage
-$ npm run test:cov
+npm run test:cov
 ```
 
 ## ❯ Roadmap
@@ -243,15 +242,18 @@ $ npm run test:cov
 - [x] Multiple Database client support
 - [x] Add graphql
 - [x] Add Swagger OpenAPI specification
+- [x] Add health checks
 - [ ] Add authorization
 - [ ] Add caching
-- [x] Add health checks
 - [ ] Add unit tests
 - [ ] Improve logging
 - [ ] Improve error handling
-- [ ] Loaders Module to combine all the Loaders in one place.
+- [x] Add Loaders Module to combine all the Loaders in one place.
+- [x] Automatically add foreign keys to allow dataloader queries to be group.
+- [x] Add Dataloader query results to be grouped by the Master Table Foreign-Key Value.
+- [x] Add Customized Dataloader to allow selection columns in ResolveField() function.
 
 ### Notes
 
 - Nest JS loads the Loader from first Module registered in the AppModule and if there is any Loader missing in the first Module and added in the second Module this will make problems.
-  - Unify the Loaders Module and add that in the Appmodule directly (on Global level maybe) or import the Loader Module in other modules instead of loading separate Loader file.
+  - Solution: Unify the Loaders Module and add that in the Appmodule directly (on Global level).

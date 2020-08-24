@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { OptionRepository } from '@core/repository/option.repository';
-import { groupBy, values } from 'lodash';
+import { groupBy } from 'lodash';
 
 @Injectable()
 export class OptionsService {
@@ -16,8 +16,11 @@ export class OptionsService {
     return this.optionDB.findByIds(ids);
   }
 
-  async findByQuestionId(questionIDs: readonly string[]): Promise<any> {
-    const options = await this.optionDB.findByQuestionId(questionIDs);
+  async findByQuestionId(
+    questionIDs: readonly string[],
+    keys?: string[],
+  ): Promise<any> {
+    const options = await this.optionDB.findByQuestionId(questionIDs, keys);
     // Grouping the Records using the Master table ID,
     // Then Converting the Groupby Dictionary into Array to make it compatible with Dataloader
     return questionIDs.map(

@@ -9,7 +9,7 @@ import {
   iRATE_LIMITER,
   iCORS,
 } from '@common/interfaces/configuration.interface';
-import {DEFAULT_ENV} from './configuration.default';
+import { DEFAULT_ENV } from './configuration.default';
 
 @Injectable()
 export class ConfigurationService {
@@ -43,6 +43,15 @@ export class ConfigurationService {
     };
   }
 
+  get JWT() {
+    return {
+      EXPIRY: `${parseInt(this.get('ENV_RBX_JWT_EXPIRY_IN_MINUTES', 0), 10) *
+        60}s`,
+      SECRET: this.get('ENV_RBX_JWT_SECRET', null),
+      ALGORITHM: this.get('ENV_RBX_JWT_ALGORITHM', 'HS256'),
+      IGNORE_EXPIRY: false,
+    };
+  }
   get CORS(): iCORS {
     return {
       ENABLE: isTruthy(
@@ -114,7 +123,7 @@ export class ConfigurationService {
   get IS_PRODUCTION(): boolean {
     return this.environment === 'production';
   }
-  
+
   get IS_TEST(): boolean {
     return this.environment === 'test';
   }
