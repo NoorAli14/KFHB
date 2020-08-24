@@ -1,6 +1,6 @@
 import {HttpException, HttpStatus, Injectable} from "@nestjs/common";
 
-import {MESSAGES, STATUS, TABLE, WEEK_DAYS} from "@common/constants";
+import {MESSAGES, STATUS, WEEK_DAYS} from "@common/constants";
 import { KeyValInput } from "@common/inputs/key-val.input";
 import { WorkingDaysRepository } from "@core/repository";
 
@@ -49,6 +49,19 @@ export class WorkingDaysService {
         error: MESSAGES.INVALID_WEEKDAY,
       }, HttpStatus.BAD_REQUEST);
     }
+    if(newObj.full_day) {
+      newObj.start_time = newObj.end_time = null
+    } else if (newObj.start_time && newObj.end_time){
+      newObj.start_time = new Date(newObj.start_time);
+      newObj.end_time = new Date(newObj.end_time);
+      newObj.full_day = null;
+      if(!newObj.start_time || !newObj.start_time){
+        throw new HttpException({
+          status: HttpStatus.BAD_REQUEST,
+          error: MESSAGES.BAD_TIME_FORMAT,
+        }, HttpStatus.BAD_REQUEST);
+      }
+    }
     const result = await this.workingDaysRepository.update({ id: id }, newObj, keys);
     if(result && result.length) {
       return result[0]
@@ -69,6 +82,19 @@ export class WorkingDaysService {
         status: HttpStatus.BAD_REQUEST,
         error: MESSAGES.INVALID_WEEKDAY,
       }, HttpStatus.BAD_REQUEST);
+    }
+    if(newObj.full_day) {
+      newObj.start_time = newObj.end_time = null
+    } else {
+      newObj.start_time = new Date(newObj.start_time);
+      newObj.end_time = new Date(newObj.end_time);
+      newObj.full_day = null;
+      if(!newObj.start_time || !newObj.start_time){
+        throw new HttpException({
+          status: HttpStatus.BAD_REQUEST,
+          error: MESSAGES.BAD_TIME_FORMAT,
+        }, HttpStatus.BAD_REQUEST);
+      }
     }
     const result = await this.workingDaysRepository.create(newObj, keys);
     if(result && result.length) {
