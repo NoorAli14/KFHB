@@ -19,6 +19,8 @@ export interface iAPP {
   API_INFO_ENABLED?: boolean;
   SWAGGER_ENABLED?: boolean;
   MONITOR_ENABLED?: boolean;
+  INVITATION_TOKEN_EXPIRY?: number;
+  PASSWORD_RESET_TOKEN_EXPIRY?: number;
 }
 export interface iDATABASE {
   USERNAME: string;

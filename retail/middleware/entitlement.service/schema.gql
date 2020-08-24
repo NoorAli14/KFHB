@@ -13,7 +13,7 @@ directive @requires(fields: String!) on FIELD_DEFINITION
 directive @provides(fields: String!) on FIELD_DEFINITION
 
 input ChangePasswordInput {
-  token: String!
+  password_reset_token: String!
   password: String!
 }
 
@@ -41,9 +41,29 @@ input ForgotPasswordInput {
   email: String!
 }
 
-type ForgotPasswordOutput {
-  token: String!
-  token_expiry: DateTime!
+type Holiday {
+  id: ID
+  week_day: String
+  start_time: String!
+  end_time: String!
+  remarks: String
+  full_day: Float
+  status: String
+  created_on: String
+  created_by: String
+  updated_on: String
+  updated_by: String
+  deleted_on: String
+  deleted_by: String
+}
+
+input HolidayInput {
+  week_day: String!
+  start_time: String
+  end_time: String
+  full_day: Float
+  remarks: String
+  status: String
 }
 
 input IdsInput {
@@ -79,7 +99,7 @@ input ModuleInput {
 }
 
 type Mutation {
-  addUser(input: CreateUserInput!): User!
+  addUser(input: CreateUserInput!): UserWithInvitationToken!
   updateUser(input: UpdateUserInput!, id: String!): User!
   deleteUser(id: String!): Boolean!
   addRole(input: RoleInput!): Role!
@@ -100,10 +120,13 @@ type Mutation {
   addRoleModulePermission(input: RoleModulePermissionInput!): RoleModulePermission!
   updateRoleModulePermission(input: RoleModulePermissionInput!, id: String!): RoleModulePermission!
   deleteRoleModulePermission(id: String!): Boolean!
-  changePassword(input: ChangePasswordInput!): String!
+  changePassword(input: ChangePasswordInput!): User!
   addWorkingDay(input: WorkingDayInput!): WorkingDay!
   updateWorkingDay(input: WorkingDayInput!, id: String!): WorkingDay!
   deleteWorkingDay(id: String!): Boolean!
+  addHoliday(input: HolidayInput!): Holiday!
+  updateHoliday(input: HolidayInput!, id: String!): Holiday!
+  deleteHoliday(id: String!): Boolean!
 }
 
 type Permission {
@@ -120,6 +143,7 @@ input PermissionInput {
 type Query {
   usersList: [User!]!
   findUserById(id: String!): User!
+  resetInvitationToken(id: String!): UserWithInvitationToken!
   findUserBy(checks: [KeyValInput!]!): [User!]!
   rolesList: [Role!]!
   findRole(id: String!): Role!
@@ -140,10 +164,13 @@ type Query {
   findRoleModulePermission(id: String!): RoleModulePermission!
   findRoleModulePermissionBy(checks: [KeyValInput!]!): [RoleModulePermission!]!
   login(input: LoginInput!): User!
-  forgotPassword(input: ForgotPasswordInput!): ForgotPasswordOutput!
+  forgotPassword(input: ForgotPasswordInput!): UserWithForgetPasswordToken!
   workingDaysList: [WorkingDay!]!
   findWorkingDayById(id: String!): WorkingDay!
   findWorkingDayBy(checks: [KeyValInput!]!): [WorkingDay!]!
+  holidaysList: [Holiday!]!
+  findHolidayById(id: String!): Holiday!
+  findHolidayBy(checks: [KeyValInput!]!): [Holiday!]!
 }
 
 type Role {
@@ -164,6 +191,7 @@ input RoleInput {
   name: String!
   description: String
   status: String
+  modules: [IdsInput!]
 }
 
 type RoleModule {
@@ -247,11 +275,59 @@ input UserRoleInput {
   status: String
 }
 
+type UserWithForgetPasswordToken {
+  id: ID
+  username: String
+  email: String
+  contact_no: String
+  first_name: String
+  middle_name: String
+  last_name: String
+  gender: String
+  date_of_birth: String
+  nationality_id: Float
+  status: String
+  created_on: String
+  created_by: String
+  updated_on: String
+  updated_by: String
+  deleted_on: String
+  deleted_by: String
+  roles: [Role!]!
+  modules: [Module!]!
+  password_reset_token: String
+  password_reset_token_expiry: DateTime
+}
+
+type UserWithInvitationToken {
+  id: ID
+  username: String
+  email: String
+  contact_no: String
+  first_name: String
+  middle_name: String
+  last_name: String
+  gender: String
+  date_of_birth: String
+  nationality_id: Float
+  status: String
+  created_on: String
+  created_by: String
+  updated_on: String
+  updated_by: String
+  deleted_on: String
+  deleted_by: String
+  roles: [Role!]!
+  modules: [Module!]!
+  invitation_token: String
+  invitation_token_expiry: DateTime
+}
+
 type WorkingDay {
   id: ID
   week_day: String
-  start_time: String
-  end_time: String
+  start_time: String!
+  end_time: String!
   remarks: String
   full_day: Float
   status: String

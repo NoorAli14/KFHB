@@ -7,11 +7,12 @@ export const TABLE = {
   PERMISSION: 'ENT_PERMISSION',
   ROLE_MODULE_PERMISSION: 'ENT_ROLE_MODULE_PERMISSION',
   WORKING_WEEK: 'ENT_WORKINGWEEK',
+  HOLIDAY: 'ENT_HOLIDAY',
 };
 
 export const NUMBERS = {
   TOKEN_EXPIRY_IN_MINUTES: 240,
-  TOKEN_LENGTH: 60,
+  TOKEN_LENGTH: 64,
   MAX_COLUMN_LENGTH: 255,
 };
 
@@ -38,6 +39,7 @@ export const WEEK_DAYS = {
 export const MESSAGES = {
   DELETED: 'Deleted Successfully.',
   INVALID_EMAIL: 'Invalid Email Address',
+  INVALID_ID: 'Invalid ID',
   INVALID_PASSWORD: 'Invalid Password.',
   INVALID_Email_OR_PASSWORD: 'Invalid Email or Password.',
   INTERNAL_ERROR: 'Internal Error',
@@ -46,6 +48,7 @@ export const MESSAGES = {
   PASSWORD_UPDATED: 'Password Updated.',
   NOT_FOUND: 'No Record Found',
   BAD_REQUEST: 'Bad Request',
+  BAD_TIME_FORMAT: 'Bad Time Format',
   INVALID_WEEKDAY: `Weekday should be one of ${Object.keys(WEEK_DAYS)}`
 };
 

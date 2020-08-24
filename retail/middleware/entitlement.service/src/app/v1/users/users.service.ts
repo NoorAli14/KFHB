@@ -2,13 +2,16 @@ import {HttpException, HttpStatus, Injectable} from "@nestjs/common";
 
 import { UserRepository } from "@core/repository/";
 import { Encrypter } from "@common/encrypter";
-import { MESSAGES, STATUS } from "@common/constants";
+import {MESSAGES, NUMBERS, STATUS} from "@common/constants";
 import { KeyValInput } from "@common/inputs/key-val.input";
+import {addMinutes, generateRandomString} from "@common/utilities";
+import {ConfigurationService} from "@common/configuration/configuration.service";
 
 @Injectable()
 export class UserService {
   constructor(private userDB: UserRepository,
-              private encrypter: Encrypter) {}
+              private encrypter: Encrypter,
+              private configService: ConfigurationService) {}
 
   async list(keys: string[]): Promise<any> {
     return this.userDB.list(keys,{"status" : STATUS.ACTIVE});
@@ -23,6 +26,21 @@ export class UserService {
       }, HttpStatus.NOT_FOUND);
     }
     return result;
+  }
+
+  async resetInvitationToken(id: string, keys?: string[]): Promise<any> {
+    const result = await this.findById(id, ['id']);
+    if (result && result.id) {
+      const user = {
+        invitation_token : generateRandomString(NUMBERS.TOKEN_LENGTH),
+        invitation_token_expiry : addMinutes(this.configService.APP.INVITATION_TOKEN_EXPIRY)
+      };
+      return this.update(id, user, keys);
+    }
+    throw new HttpException({
+      status: HttpStatus.NOT_FOUND,
+      error: MESSAGES.INVALID_ID,
+    }, HttpStatus.NOT_FOUND);
   }
 
   async findByProperty(checks: KeyValInput[], keys?: string[]): Promise<any> {
@@ -64,6 +82,8 @@ export class UserService {
     if(!newUser.status){
       newUser.status = STATUS.PENDING;
     }
+    newUser.invitation_token = generateRandomString(NUMBERS.TOKEN_LENGTH);
+    newUser.invitation_token_expiry = addMinutes(this.configService.APP.INVITATION_TOKEN_EXPIRY);
     const result = await this.userDB.create(newUser, keys);
     if(result && result.length) {
       return result[0]

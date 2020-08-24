@@ -1,23 +1,31 @@
 import * as path from 'path';
+import * as Crypto from 'crypto';
 
 /**
  * graphqlKeys string[]
  * @param info
+ * @param keysMust
  */
-export const graphqlKeys = (info: any): string[] => {
+export const graphqlKeys = (info: any, keysMust?: string[]): string[] => {
   // getting all keys from graphQL query
   let keys: string[] = info.fieldNodes[0].selectionSet.selections.map(
     item => item.name.value,
   );
 
   // filtering some keys
-  const filters = ['id', 'roles', 'modules', 'permissions', 'sub_modules'];
+  const filters =
+    keysMust.length ?
+    ['id', 'roles', 'modules', 'permissions', 'sub_modules', ...keysMust] :
+    ['id', 'roles', 'modules', 'permissions', 'sub_modules'];
   keys = keys.filter(function(key) {
     return filters.indexOf(key) === -1;
   });
 
   // we need the id in every query
   keys.push('id');
+  if(keysMust.length){
+    keys = [...keys, ...keysMust];
+  }
   return keys
 };
 
@@ -56,11 +64,11 @@ export const normalizePort = (param: number | string): number | string => {
  * generate random string
  * @param length
  */
-export const generateRandomString = (length: number): string => {
-  return Math.random()
-    .toString(36)
-    .replace(/[^a-zA-Z0-9]+/g, '')
-    .substr(0, length);
+export const generateRandomString = (length=36): string => {
+  return Crypto
+  .randomBytes(length)
+  .toString('base64')
+  .slice(0, length)
 };
 
 export const addMinutes = (minutes: number): Date => {
