@@ -15,7 +15,7 @@ let serviceList: any = [];
 if (process.env.NODE_ENV === 'production') {
   serviceList = [
     { name: 'users', url: 'http://user_management_service:5020/graphql' },
-    { name: 'notifications', url: 'http://template_service:5030/graphql' },
+    { name: 'notifications', url: 'http://notification_service:5030/graphql' },
   ];
 } else {
   serviceList = [

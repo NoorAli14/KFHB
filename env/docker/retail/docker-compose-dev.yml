@@ -146,7 +146,7 @@ services:
       context: ../../../retail/middleware/notifications
       dockerfile: Dockerfile
     image: "notification-service:v1"
-    container_name: "unotification_service"
+    container_name: "notification_service"
     environment:
       - ENV_RBX_PORT=5030
       - ENV_RBX_DB_USERNAME=$ENV_RBX_DB_USERNAME
