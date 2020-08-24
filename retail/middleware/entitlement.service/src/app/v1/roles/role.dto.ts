@@ -2,6 +2,7 @@ import {Field, InputType} from "@nestjs/graphql";
 import {IsOptional, IsString, MaxLength} from "class-validator";
 
 import {NUMBERS} from "@common/constants";
+import {IdsInput} from "@common/inputs/ids.input";
 
 @InputType()
 export class RoleInput {
@@ -21,4 +22,7 @@ export class RoleInput {
   @IsOptional()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   status?: string;
+
+  @Field(type => [IdsInput], { nullable: true })
+  modules?: IdsInput[];
 }

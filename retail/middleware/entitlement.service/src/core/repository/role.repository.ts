@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import { BaseRepository } from './base.repository';
-import { TABLE } from '@common/constants';
+import {MESSAGES, STATUS, TABLE, TEMP_ROLE} from '@common/constants';
 
 @Injectable()
 export class RoleRepository extends BaseRepository {
@@ -9,10 +9,54 @@ export class RoleRepository extends BaseRepository {
   }
 
   async listRolesByUserID(userIds): Promise<any>{
+    const condition = {};
+    condition[`${TABLE.ROLE}.status`] = STATUS.ACTIVE;
     return this._connection(TABLE.ROLE)
         .select(`${TABLE.ROLE}.*`, `${TABLE.USER_ROLE}.user_id`)
         .leftJoin(TABLE.USER_ROLE, `${TABLE.ROLE}.id`, `${TABLE.USER_ROLE}.role_id`)
         .whereIn(`${TABLE.USER_ROLE}.user_id`, userIds)
+        .where(condition)
+  }
+
+  async create(role: Record<string, any>, keys: string[]): Promise<any> {
+    if(role.modules && role.modules.length) {
+      const modules: [] = role.modules;
+      delete role.modules;
+      const trxProvider = this._connection.transactionProvider();
+      const trx = await trxProvider();
+      const response = await trx(TABLE.ROLE).insert(role, keys);
+      if(response){
+        const role_modules = [];
+        modules.forEach(module => {
+          //validate role ID
+          const role_module = {
+            role_id : response[0].id || response[0],
+            module_id : module['id'],
+            status : STATUS.ACTIVE,
+            created_by : TEMP_ROLE.ADMIN,
+          };
+          role_modules.push(role_module);
+        });
+        const result = await trx(TABLE.ROLE_MODULE).insert(role_modules, ['id']);
+        if(!result){
+          await trx.rollback();
+          throw new HttpException({
+            status: HttpStatus.BAD_REQUEST,
+            error: MESSAGES.BAD_REQUEST,
+          }, HttpStatus.BAD_REQUEST);
+        }
+      } else {
+        await trx.rollback();
+        throw new HttpException({
+          status: HttpStatus.BAD_REQUEST,
+          error: MESSAGES.BAD_REQUEST,
+        }, HttpStatus.BAD_REQUEST);
+      }
+      await trx.commit();
+      return response
+    } else {
+      return super.create(role, keys)
+    }
   }
 
   // async create(role: Record<string, any>, keys: string[]): Promise<any> {

@@ -126,6 +126,7 @@ input ModuleInput {
 }
 
 type Mutation {
+  resetInvitationToken(id: String!): User!
   addUser(input: CreateUserInput!): User!
   updateUser(input: UpdateUserInput!, id: String!): User!
   deleteUser(id: String!): Boolean!
@@ -173,7 +174,6 @@ input PermissionInput {
 type Query {
   usersList: [User!]!
   findUserById(id: String!): User!
-  resetInvitationToken(id: String!): User!
   findUserBy(checks: [KeyValInput!]!): [User!]!
   rolesList: [Role!]!
   findRole(id: String!): Role!
