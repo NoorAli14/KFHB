@@ -24,12 +24,14 @@ export class ForgotPasswordService {
     }
     const params = `query {
       forgotPassword(input: {email: "${user.email}"}) {
-        token
-        token_expiry
+        password_reset_token
+        password_reset_token
       }
     }`;
     const result: any = await this.gqlClient.send(params);
-    console.log(`Reset Password Token is: ${result.forgotPassword.token}`);
+    console.log(
+      `Reset Password Token is: ${result.forgotPassword.password_reset_token}`,
+    );
     // Send Forgot Password Email
     return {
       status: 'SUCCESS',
