@@ -10,6 +10,7 @@ import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
 import { navigation } from 'app/navigation/navigation';
 import { AuthenticationService } from '@core/services/auth/authentication.service';
 import { Router } from '@angular/router';
+import { AuthUserService } from '@core/services/user/auth-user.service';
 
 @Component({
     selector     : 'toolbar',
@@ -27,7 +28,7 @@ export class ToolbarComponent implements OnInit, OnDestroy
     navigation: any;
     selectedLanguage: any;
     userStatusOptions: any[];
-    // currentUser:any;
+    user:any;
     // Private
     private _unsubscribeAll: Subject<any>;
 
@@ -43,10 +44,11 @@ export class ToolbarComponent implements OnInit, OnDestroy
         private _fuseSidebarService: FuseSidebarService,
         private _translateService: TranslateService,
         private _authService: AuthenticationService, 
+        private _authUserService: AuthUserService, 
         private router: Router
     )
     {
-        // this.currentUser=this._authUserService.User;
+         this.user=this._authUserService.User;
         // Set the defaults
         this.userStatusOptions = [
             {

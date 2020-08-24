@@ -25,13 +25,30 @@
         <!-- COLUMNS AND ROWS-->
         <ng-container *ngFor="let key of displayedColumns" [matColumnDef]="key">
             <mat-header-cell *matHeaderCellDef>{{ key.includes('action') ? 'Action' : camelToSentenceCase(key) }}</mat-header-cell>
-    
             <mat-cell *matCellDef="let element; let i = dataIndex">
-                <span *ngIf="!key.includes('action'); else action">{{element[camelToSnakeCase(key)] }}</span>
+                <span *ngIf="!key.includes('action'); else action">
+                    <span *ngIf="element[camelToSnakeCase(key)]; else defaultText">
+                        <ng-container  *ngIf="camelToSnakeCase(key).indexOf('created')<0; else date "  >
+                            {{element[camelToSnakeCase(key)]}}
+                        </ng-container>
+                    
+                    </span>
+                </span>
+                
+                <ng-template #defaultText>
+                    <app-default-text></app-default-text>
+                </ng-template>
+                
                 <ng-template #action>
                     <mat-icon color="warn"  appPermission [permissions]="userPermissions" [type]="'delete'" type="button" (click)=" confirmDialog(element['id'])">delete</mat-icon> &nbsp;&nbsp;
                     <mat-icon type="button" (click)="openDialog(element)">mode_edit</mat-icon>
+
                 </ng-template>
+                <ng-template #date>
+                    {{element[camelToSnakeCase(key)] | date:'mediumDate'}}
+                </ng-template>
+                
+                
             </mat-cell>
         </ng-container>
         <!-- -->

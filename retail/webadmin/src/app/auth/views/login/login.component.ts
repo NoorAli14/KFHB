@@ -62,7 +62,6 @@ export class LoginComponent extends BaseComponent implements OnInit {
         });
     }
     onSubmit() {
-        debugger
         this._authService.login(this.loginForm.value).subscribe(
             (response) => {
                  this.errorType = "success";
@@ -75,7 +74,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
             },
             (error) => {
                  this.errorType = "error";
-                 this.responseMessage = MESSAGES.INVALID_CREDENTIAL;
+                 this.responseMessage = MESSAGES.UNKNOWN;
             }
         );
     }

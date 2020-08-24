@@ -3,7 +3,7 @@ import { AuthUserService } from '@core/services/user/auth-user.service';
 import { NetworkService } from "@core/services/network/network.service";
 import { Login } from "./../../../auth/model/login.model";
 import { throwError as observableThrowError, Observable, pipe } from "rxjs";
-import { map } from "rxjs/operators";
+import { map, catchError } from "rxjs/operators";
 import { Injectable } from "@angular/core";
 import { HttpErrorResponse } from "@angular/common/http";
 
@@ -17,12 +17,14 @@ export class AuthenticationService {
     ) {}
 
     login(model: Login): Observable<any> {
-        return this.network.post(URI.LOGIN, model).pipe(
-            map((data) => {
-                this.userService.setData(data);
-                return data;
-            })
-        );
+        return this.network.post(URI.LOGIN, model)
+        // .pipe(
+        //     map((data) => {
+        //         this.userService.setData(data);
+        //         return data;
+        //     }),
+        //     catchError(this.errorHandler)
+        // )
     }
     forgotPassword(model: Login): Observable<any> {
         return this.network.post(URI.FORGOT_PASSWORD, model)
@@ -39,7 +41,7 @@ export class AuthenticationService {
         return this.network.getAll(`${URI.FORGOT_PASSWORD}/token`)
     }
 
-    errorHandler(error: HttpErrorResponse) {
+    errorHandler(error) {
         return observableThrowError(error.message || "Server Error");
     }
 

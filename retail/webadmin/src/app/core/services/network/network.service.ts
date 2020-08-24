@@ -36,8 +36,7 @@ export class NetworkService {
     post(url: string, model: any, options?): Observable<any> {
         const endPoint = `${createUrl(url)}`;
         return this.http
-            .post<any[]>(endPoint, model, {withCredentials:true})
-            .pipe(catchError(this.errorHandlerMessage));
+            .post<any[]>(endPoint, model)
     }
 
     onUpdate(url: string, model: any): Observable<any> {
@@ -55,10 +54,10 @@ export class NetworkService {
     }
 
     errorHandler(error: HttpErrorResponse) {
-        return observableThrowError(error.error || "Server Error");
+        return observableThrowError(error);
     }
 
     errorHandlerMessage(error: HttpErrorResponse) {
-        return observableThrowError(error.error || "Server Error");
+        return observableThrowError(error);
     }
 }

@@ -4,15 +4,28 @@
 
         <!-- COLUMNS AND ROWS-->
         <ng-container *ngFor="let key of displayedColumns" [matColumnDef]="key">
-            <mat-header-cell *matHeaderCellDef>{{ key.includes('Icon') ? '' : camelToSentenceCase(key) }}</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef>{{ key.includes('Icon') ? 'Permissions' : camelToSentenceCase(key) }}</mat-header-cell>
 
             <mat-cell *matCellDef="let element; let i = dataIndex">
-                <span *ngIf="!key.includes('Icon'); else icon">{{ element[camelToSnakeCase(key)] }}</span>
-
-                <ng-template #icon>
+                <span *ngIf="!key.includes('Icon'); else permissions">
+                    <span *ngIf="element[camelToSnakeCase(key)]; else defaultText">
+                        <ng-container  *ngIf="camelToSnakeCase(key).indexOf('created')<0; else date "  >
+                            {{element[camelToSnakeCase(key)]}}
+                        </ng-container>
+                    
+                    </span>
+                </span>
+                
+                <ng-template #defaultText>
+                    <app-default-text></app-default-text>
+                </ng-template>
+                
+                <ng-template #permissions>
                     <mat-icon *ngIf="key === 'expandIcon' " (click)="toggleExpandableSymbol(element['id'])"> {{expandedId==element['id'] ? 'keyboard_arrow_up' : ' keyboard_arrow_down'}} </mat-icon>
                     <mat-icon *ngIf="key === 'expandIcon' " (click)="toggleExpandableSymbol(element['id'])"></mat-icon>
-
+                </ng-template>
+                <ng-template #date>
+                    {{element[camelToSnakeCase(key)] | date:'mediumDate'}}
                 </ng-template>
 
             </mat-cell>

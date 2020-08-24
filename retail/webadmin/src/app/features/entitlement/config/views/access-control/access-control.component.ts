@@ -19,7 +19,7 @@ export class AccessControlComponent extends BaseComponent implements OnInit {
     pageSize:number=CONFIG.PAGE_SIZE;
     pageSizeOptions:Array<number>=CONFIG.PAGE_SIZE_OPTIONS;
     
-    displayedColumns = ["expandIcon", "roleName","createdOn"];
+    displayedColumns = [ "roleName","createdOn","expandIcon"];
 
     constructor(
         public _matDialog: MatDialog,
