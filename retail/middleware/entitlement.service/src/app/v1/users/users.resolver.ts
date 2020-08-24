@@ -37,7 +37,7 @@ export class UsersResolver {
     return this.userService.findById(id, keys);
   }
 
-  @Query(() => User)
+  @Mutation(() => User)
   async resetInvitationToken(@Args('id') id: string, @Info() info): Promise<User> {
     const keys = graphqlKeys(info);
     return this.userService.resetInvitationToken(id, keys);
