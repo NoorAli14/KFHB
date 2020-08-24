@@ -7,6 +7,9 @@ import {
   Put,
   NotFoundException,
   UseGuards,
+  BadRequestException,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -22,13 +25,17 @@ import { UserService } from '@app/v1/users/users.service';
 import { UpdateUserDto } from '@app/v1/users/user.dto';
 import { User } from '@app/v1/users/user.entity';
 import { UpdateInvitationDto } from './invitation.dto';
+import { InvitationsService } from './invitations.service';
 import { SuccessDto } from '@common/dtos/';
 import { AuthGuard } from '@common/guards/';
 
 @ApiTags('Invitation')
 @Controller('invitations')
 export class InvitationsController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly invitationService: InvitationsService,
+  ) {}
 
   @Post('/')
   @UseGuards(AuthGuard)
@@ -48,7 +55,8 @@ export class InvitationsController {
     description: 'Input Validation failed.',
   })
   async create(@Body() userDto: UpdateUserDto): Promise<User> {
-    return this.userService.create(userDto);
+    console.log(JSON.stringify(userDto, null, 2));
+    return this.invitationService.invite(userDto);
   }
 
   @Get(':token')
@@ -65,12 +73,20 @@ export class InvitationsController {
     type: Error,
     description: 'User Not Found.',
   })
+  @ApiBadRequestResponse({
+    type: Error,
+    description: 'Input Validation failed.',
+  })
   async findOne(@Param('token') token: string): Promise<User> {
-    const user = await this.userService.findOneByToken(token);
-    if (!user) {
+    const invitation = await this.userService.findByInvitationToken(token);
+    if (!invitation) {
       throw new NotFoundException('User Not Found');
+    } else if (invitation.status != 'PENDING') {
+      throw new BadRequestException('User has been already onboard.');
+    } else if (new Date() > new Date(invitation.invitation_token_expiry)) {
+      throw new BadRequestException('Token is expired');
     }
-    return user;
+    return this.userService.findOne(invitation.id);
   }
 
   @Put(':token')
@@ -97,16 +113,58 @@ export class InvitationsController {
   })
   async update(
     @Param('token') token: string,
-    @Body() userDto: UpdateInvitationDto,
+    @Body() input: UpdateInvitationDto,
   ): Promise<User> {
-    const user = await this.userService.findOneByToken(token);
+    const invitation = await this.userService.findByInvitationToken(token);
+    if (!invitation) {
+      throw new NotFoundException('User Not Found');
+    } else if (invitation.status != 'PENDING') {
+      throw new BadRequestException('User has been already onboard.');
+    } else if (new Date() > new Date(invitation.invitation_token_expiry)) {
+      throw new BadRequestException('Token is expired');
+    }
+    return this.invitationService.acceptInvitation(invitation.id, input);
+  }
+
+  @Get(':token/status')
+  @ApiOperation({
+    summary: 'Check Invitation Token Status',
+    description: 'A successful request returns the HTTP 200 OK status code.',
+  })
+  @ApiOkResponse({
+    type: SuccessDto,
+    description: 'Invitation Token Status',
+  })
+  @ApiNotFoundResponse({
+    type: Error,
+    description: 'User Not Found.',
+  })
+  @ApiBadRequestResponse({
+    type: Error,
+    description: 'User has been already onboard.',
+  })
+  async invitationTokenStatus(
+    @Param('token') token: string,
+  ): Promise<SuccessDto> {
+    const user = await this.userService.findByInvitationToken(token);
     if (!user) {
       throw new NotFoundException('User Not Found');
+    } else if (user.status != 'PENDING') {
+      throw new BadRequestException('User has been already onboard.');
     }
-    return this.userService.updateByToken(token, userDto);
+
+    return {
+      status:
+        new Date(user.invitation_token_expiry) > new Date()
+          ? 'SUCCESS'
+          : 'EXPIRED',
+      expired_at: user.invitation_token_expiry,
+    };
   }
 
   @Post(':user_id/resend')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   @ApiOperation({
     summary: 'Resend Invitation by User ID',
     description: 'A successful request returns the HTTP 200 OK status code.',
@@ -119,11 +177,20 @@ export class InvitationsController {
     type: Error,
     description: 'User Not Found.',
   })
-  async resendInvitationLink(@Param('user_id') user_id: string): Promise<any> {
-    const user = await this.userService.findOne(user_id);
+  @ApiBadRequestResponse({
+    type: Error,
+    description: 'User has been already onboard.',
+  })
+  @HttpCode(HttpStatus.OK)
+  async resendInvitationLink(
+    @Param('user_id') user_id: string,
+  ): Promise<SuccessDto> {
+    const user = await this.userService.findOne(user_id, `{id email status}`);
     if (!user) {
       throw new NotFoundException('User Not Found');
+    } else if (user.status != 'PENDING') {
+      throw new BadRequestException('User has been already onboard.');
     }
-    return this.userService.resendInvitationLink(user_id);
+    return this.invitationService.resendInvitationLink(user.id);
   }
 }

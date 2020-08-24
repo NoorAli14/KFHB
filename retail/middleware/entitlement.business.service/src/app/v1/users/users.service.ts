@@ -6,6 +6,8 @@ import {
 import { User } from './user.entity';
 import { toGraphql } from '@common/utilities';
 import { GqlClientService } from '@common/libs/gqlclient/gqlclient.service';
+import { NotificationsService } from '@app/v1/notifications/notifications.service';
+
 @Injectable()
 export class UserService {
   private readonly output: string = ` {
@@ -119,11 +121,6 @@ export class UserService {
     return result?.user;
   }
 
-  async findOneByToken(token: string): Promise<User> {
-    // return this.users.find(role => role.id === token);
-    return new User();
-  }
-
   async login(email: string, password: string): Promise<any> {
     const params = `query {
         user: login(input: ${toGraphql({ email, password })}) ${this.output}
@@ -154,25 +151,32 @@ export class UserService {
     return user;
   }
 
-  async findByPasswordResetToken(token: string) {
+  async findByInvitationToken(token: string): Promise<any> {
     const [user] = await this.findBy(
       [
         {
-          record_key: 'token',
+          record_key: 'invitation_token',
           record_value: token,
         },
       ],
-      `{id token token_expiry}`,
+      `{id status invitation_token invitation_token_expiry}`,
     );
     return user;
   }
 
-  async updateByToken(token: string, user: any): Promise<User> {
-    // this.users[token] = user;
-    return new User();
-
-    // return user;
+  async findByPasswordResetToken(token: string) {
+    const [user] = await this.findBy(
+      [
+        {
+          record_key: 'password_reset_token',
+          record_value: token,
+        },
+      ],
+      `{id password_reset_token password_reset_token_expiry}`,
+    );
+    return user;
   }
+
   async update(id: string, input: any): Promise<User> {
     const user: User = await this.findOne(id, `{id}`);
     if (!user) {
@@ -195,9 +199,5 @@ export class UserService {
     }`;
     const result = await this.gqlClient.send(params);
     return result?.user;
-  }
-
-  async resendInvitationLink(user_id: string) {
-    return true;
   }
 }

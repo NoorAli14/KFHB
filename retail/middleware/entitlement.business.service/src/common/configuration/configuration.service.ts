@@ -31,6 +31,14 @@ export class ConfigurationService {
       VERSION: this.get('ENV_RBX_APP_VERSION', DEFAULT_ENV.APP.VERSION),
       HOST: this.get('ENV_RBX_HOST', DEFAULT_ENV.APP.HOST),
       PORT: parseInt(this.get('ENV_RBX_PORT', DEFAULT_ENV.APP.PORT), 10),
+      WEB_ONBOARDING_LINK: this.get(
+        'ENV_RBX_WEB_ONBOARDING_LINK',
+        DEFAULT_ENV.APP.WEB_ONBOARDING_LINK,
+      ),
+      WEB_RESET_PASSWORD_LINK: this.get(
+        'ENV_RBX_WEB_RESET_PASSWORD_LINK',
+        DEFAULT_ENV.APP.WEB_RESET_PASSWORD_LINK,
+      ),
     };
   }
 

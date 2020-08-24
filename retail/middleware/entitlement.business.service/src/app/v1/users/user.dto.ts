@@ -1,11 +1,4 @@
-import {
-  IsString,
-  IsOptional,
-  Length,
-  MaxLength,
-  IsEmail,
-  IsNotEmpty,
-} from 'class-validator';
+import { IsString, IsOptional, IsEmail, IsNotEmpty } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { IdsDto } from '@common/dtos';
 import { GENDER } from '@common/constants';

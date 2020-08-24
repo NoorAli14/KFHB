@@ -1,6 +1,7 @@
 import {
   Injectable,
   HttpService,
+  HttpException,
   RequestTimeoutException,
 } from '@nestjs/common';
 import { map, timeout, catchError } from 'rxjs/operators';
@@ -22,7 +23,16 @@ export class GqlClientService {
       .post('/graphql', params, { headers: headersRequest })
       .pipe(
         map(response => {
-          if (response.data?.errors) {
+          if (response.data?.errors?.extensions) {
+            const err: any = response.data?.errors.extensions;
+            if (err.exception?.response) {
+              return throwError(
+                new HttpException(
+                  err.exception?.error,
+                  err.exception?.response.status,
+                ),
+              );
+            }
             console.log(
               `GQL Response Error: ${JSON.stringify(
                 response.data?.errors,
@@ -30,6 +40,7 @@ export class GqlClientService {
                 2,
               )}`,
             );
+            return throwError(err.exception);
           }
           return response.data?.data;
         }),
@@ -39,7 +50,6 @@ export class GqlClientService {
           if (err instanceof TimeoutError) {
             return throwError(new RequestTimeoutException());
           }
-          return throwError(err);
         }),
       )
       .toPromise();
