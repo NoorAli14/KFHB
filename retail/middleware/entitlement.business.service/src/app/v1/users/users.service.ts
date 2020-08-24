@@ -3,11 +3,9 @@ import {
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { SuccessDto } from '@common/dtos/';
 import { User } from './user.entity';
 import { toGraphql } from '@common/utilities';
 import { GqlClientService } from '@common/libs/gqlclient/gqlclient.service';
-import { throwError } from 'rxjs';
 @Injectable()
 export class UserService {
   private readonly output: string = ` {
@@ -25,6 +23,7 @@ export class UserService {
       id
       name
       description
+      status
       created_on
       created_by
     }
@@ -81,6 +80,7 @@ export class UserService {
         roles {
           id
           name
+          description
           status
           created_on
           created_by
