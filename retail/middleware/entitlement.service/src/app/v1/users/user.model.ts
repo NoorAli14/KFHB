@@ -61,20 +61,13 @@ export class User {
 
   @Field(type => [Module], { nullable: true })
   modules?: Module[];
-}
 
-
-@ObjectType()
-export class UserWithInvitationToken extends User{
   @Field({ nullable: true })
   invitation_token?: string;
 
   @Field({ nullable: true })
   invitation_token_expiry?: Date;
-}
 
-@ObjectType()
-export class UserWithForgetPasswordToken extends User{
   @Field({ nullable: true })
   password_reset_token?: string;
 

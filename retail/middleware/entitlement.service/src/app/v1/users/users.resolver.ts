@@ -10,7 +10,7 @@ import {
 import * as DataLoader from "dataloader"
 import { Loader } from "nestjs-graphql-dataloader";
 
-import {User, UserWithInvitationToken} from "@app/v1/users/user.model";
+import {User} from "@app/v1/users/user.model";
 import { UserService } from "@app/v1/users/users.service";
 import { CreateUserInput, UpdateUserInput } from "@app/v1/users/user.dto";
 import { graphqlKeys } from '@common/utilities';
@@ -35,9 +35,9 @@ export class UsersResolver {
     return this.userService.findById(id, keys);
   }
 
-  @Query(() => UserWithInvitationToken)
-  async resetInvitationToken(@Args('id') id: string, @Info() info): Promise<UserWithInvitationToken> {
-    const keys = graphqlKeys(info, ['invitation_token', 'invitation_token_expiry']);
+  @Query(() => User)
+  async resetInvitationToken(@Args('id') id: string, @Info() info): Promise<User> {
+    const keys = graphqlKeys(info);
     return this.userService.resetInvitationToken(id, keys);
   }
 
@@ -50,9 +50,9 @@ export class UsersResolver {
     return this.userService.findByProperty(checks, keys);
   }
 
-  @Mutation(() => UserWithInvitationToken)
-  async addUser(@Args('input') input: CreateUserInput, @Info() info): Promise<UserWithInvitationToken> {
-    const keys = graphqlKeys(info, ['invitation_token', 'invitation_token_expiry']);
+  @Mutation(() => User)
+  async addUser(@Args('input') input: CreateUserInput, @Info() info): Promise<User> {
+    const keys = graphqlKeys(info);
     return this.userService.create(input, keys);
   }
 
