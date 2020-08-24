@@ -18,6 +18,8 @@ import { Role } from "@app/v1/roles/role.model";
 import {KeyValInput} from "@common/inputs/key-val.input";
 import {ModulesDataLoaderByUser, RolesDataLoader} from "@core/dataloaders";
 import {Module} from "@app/v1/modules/module.model";
+import {Leave} from "@app/v1/leave/leave.model";
+import {LeavesDataLoader} from "@core/dataloaders/leaves.dataloader";
 
 @Resolver(User)
 export class UsersResolver {
@@ -95,6 +97,23 @@ export class UsersResolver {
     if(user.id) {
       Ids.push(user.id);
       const results = await modulesLoader.loadMany(Ids);
+      if(results[0]){
+        if(Array.isArray(results[0])){
+          return results[0]
+        }
+        return results
+      }
+    }
+    return []
+  }
+
+  @ResolveField('leaves', returns => [Leave])
+  async getLeaves(@Parent() user: User,
+                   @Loader(LeavesDataLoader.name) leavesLoader: DataLoader<Leave['id'], Leave>) {
+    const Ids: Array<string> = [];
+    if(user.id) {
+      Ids.push(user.id);
+      const results = await leavesLoader.loadMany(Ids);
       if(results[0]){
         if(Array.isArray(results[0])){
           return results[0]

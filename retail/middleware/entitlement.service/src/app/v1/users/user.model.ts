@@ -2,6 +2,7 @@ import { Field, ID, ObjectType } from "@nestjs/graphql";
 
 import { Role } from "@app/v1/roles/role.model";
 import {Module} from "@app/v1/modules/module.model";
+import {Leave} from "@app/v1/leave/leave.model";
 
 @ObjectType()
 export class User {
@@ -73,4 +74,7 @@ export class User {
 
   @Field({ nullable: true })
   password_reset_token_expiry?: Date;
+
+  @Field(type => [Leave], { nullable: true })
+  leaves?: Leave[];
 }

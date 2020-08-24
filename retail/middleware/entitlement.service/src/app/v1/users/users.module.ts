@@ -10,6 +10,8 @@ import { RolesModule } from "@app/v1/roles/roles.module";
 import {ModulesDataLoaderByUser, RolesDataLoader} from "@core/dataloaders";
 import {ModuleService} from "@app/v1/modules/module.service";
 import {ModuleModule} from "@app/v1/modules/module.module";
+import {LeavesService} from "@app/v1/leave/leaves.service";
+import {LeavesDataLoader} from "@core/dataloaders/leaves.dataloader";
 
 @Module({
   imports: [RepositoryModule, RolesModule, ModuleModule],
@@ -21,6 +23,8 @@ import {ModuleModule} from "@app/v1/modules/module.module";
       RolesDataLoader,
       RoleService,
       ModulesDataLoaderByUser,
-      ModuleService],
+      ModuleService,
+      LeavesService,
+      LeavesDataLoader],
 })
 export class UsersModule {}

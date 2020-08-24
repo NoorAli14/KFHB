@@ -12,7 +12,7 @@ export const graphqlKeys = (info: any): string[] => {
   );
 
   // filtering some keys
-  const filters = ['id', 'roles', 'modules', 'permissions', 'sub_modules'];
+  const filters = ['id', 'roles', 'modules', 'permissions', 'sub_modules', 'leaves'];
   keys = keys.filter(function(key) {
     return filters.indexOf(key) === -1;
   });
