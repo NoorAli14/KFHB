@@ -20,9 +20,8 @@ import {
   ApiBadRequestResponse,
 } from '@nestjs/swagger';
 import { UserService } from '@app/v1/users/users.service';
-import { UpdateUserDto } from '@app/v1/users/user.dto';
+import { CurrentUserUpdateDto } from '@app/v1/users/user.dto';
 
-import { LoginUserDto } from './auth.dto';
 import { User } from '@app/v1/users/user.entity';
 import { LocalAuthGuard } from './localAuth.guard';
 import { AuthService } from './auth.service';
@@ -78,7 +77,11 @@ export class AuthController {
   }
 
   @Put('me')
-  @ApiBody({ description: 'Sets the user properties.', type: UpdateUserDto })
+  @UseGuards(AuthGuard)
+  @ApiBody({
+    description: 'Sets the user properties.',
+    type: CurrentUserUpdateDto,
+  })
   @ApiOperation({
     summary: 'Update loggedIn User Profile by Token.',
     description:
@@ -93,8 +96,11 @@ export class AuthController {
     description: 'Input Validation failed.',
   })
   @ApiBearerAuth()
-  async update(@Body() userDto: UpdateUserDto): Promise<User> {
-    return this.userService.create(userDto);
+  async update(
+    @CurrentUser() user: User,
+    @Body() input: CurrentUserUpdateDto,
+  ): Promise<User> {
+    return this.userService.update(user.id, input);
   }
 
   @Delete('logout')

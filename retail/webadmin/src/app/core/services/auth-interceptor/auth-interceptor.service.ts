@@ -85,14 +85,15 @@ export class AuthInterceptorService implements HttpInterceptor {
     }
     getHttpOption(hasRefreshToken) {
         const token = this.storage.getItem(APP_CONST.ACCESS_TOKEN);
-
         const httpOptions = {
             headers: new HttpHeaders({
                 // 'content-type': 'application/json',
                 // 'x-channel-id': 'environment.WEB_CHANNEL_ID',
                 // 'x-trans-id': '1010111111101011111110101111111010111111145241',
-                // Accept: 'application/json, text/plain, */*'
+                Accept: 'application/json, text/plain, */*',
+                'x-access-token': token ? token :''
             }),
+            withCredentials: true,
         };
 
 

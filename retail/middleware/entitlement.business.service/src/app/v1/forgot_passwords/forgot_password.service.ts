@@ -7,12 +7,14 @@ import { UserService } from '@app/v1/users/users.service';
 import { SuccessDto } from '@common/dtos/';
 import { User } from '@app/v1/users/user.entity';
 import { GqlClientService } from '@common/libs/gqlclient/gqlclient.service';
+import { NotificationsService } from '@app/v1/notifications/notifications.service';
 
 @Injectable()
 export class ForgotPasswordService {
   constructor(
     private readonly gqlClient: GqlClientService,
     private readonly userService: UserService,
+    private readonly notificationService: NotificationsService,
   ) {}
 
   async sendResetPasswordLink(input: {
@@ -21,21 +23,24 @@ export class ForgotPasswordService {
     const user: User = await this.userService.findByEmail(input.email);
     if (!user) {
       throw new NotFoundException('User Not Found');
+    } else if (user.status !== 'ACTIVE') {
+      throw new BadRequestException(`Invalid Request`);
     }
     const params = `query {
       forgotPassword(input: {email: "${user.email}"}) {
         password_reset_token
-        password_reset_token
+        password_reset_token_expiry
       }
     }`;
+
     const result: any = await this.gqlClient.send(params);
-    console.log(
-      `Reset Password Token is: ${result.forgotPassword.password_reset_token}`,
+    await this.notificationService.sendResetPasswordLink(
+      user.email,
+      result?.forgotPassword?.password_reset_token,
     );
-    // Send Forgot Password Email
     return {
       status: 'SUCCESS',
-      expired_at: result?.forgotPassword?.token_expiry,
+      expired_at: result?.forgotPassword?.password_reset_token_expiry,
       message: 'Reset password link has been successfully sent.',
     };
   }
@@ -44,9 +49,15 @@ export class ForgotPasswordService {
     token: string,
     input: { [key: string]: string },
   ): Promise<SuccessDto> {
+    const user: any = await this.userService.findByPasswordResetToken(token);
+    if (!user) {
+      throw new BadRequestException('Invalid Password Reset Token');
+    } else if (user.status !== 'ACTIVE') {
+      throw new BadRequestException(`Invalid Request`);
+    }
     const params = `mutation {
       changePassword(input: { 
-        token: "${token}", 
+        password_reset_token: "${token}", 
         password: "${input.password}"})
     }`;
     const result: any = await this.gqlClient.send(params);
@@ -63,10 +74,15 @@ export class ForgotPasswordService {
     const user: any = await this.userService.findByPasswordResetToken(token);
     if (!user) {
       throw new BadRequestException('Invalid Password Reset Token');
+    } else if (user.status !== 'ACTIVE') {
+      throw new BadRequestException(`Invalid Request`);
     }
     return {
-      status: new Date() > new Date(user.token_expiry) ? 'SUCCESS' : 'EXPIRED',
-      expired_at: user.token_expiry,
+      status:
+        new Date(user.password_reset_token_expiry) > new Date()
+          ? 'SUCCESS'
+          : 'EXPIRED',
+      expired_at: user.password_reset_token_expiry,
     };
   }
 }

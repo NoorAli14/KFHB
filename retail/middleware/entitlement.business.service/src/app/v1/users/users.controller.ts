@@ -90,7 +90,6 @@ export class UsersController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() input: UpdateUserDto,
   ): Promise<User> {
-    console.log(JSON.stringify(input, null, 2));
     return this.userService.update(id, input);
   }
 

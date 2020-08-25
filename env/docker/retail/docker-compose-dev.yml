@@ -34,7 +34,8 @@ services:
     image: "webportal:v1"
     container_name: "webportal_service"
     environment:
-      - ENV_CDT_API_BASE_URL=$ENV_CDT_API_BASE_URL
+      - ENV_RBX_API_BASE_URL=$ENV_RBX_API_BASE_URL
+      - ENV_RBX_APP_SECRET=$ENV_RBX_APP_SECRET
     restart: always
     networks:
       - rubix-middleware-network

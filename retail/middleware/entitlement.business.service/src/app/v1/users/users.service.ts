@@ -146,7 +146,7 @@ export class UserService {
           record_value: email,
         },
       ],
-      `{id email}`,
+      `{id email status}`,
     );
     return user;
   }
@@ -172,7 +172,7 @@ export class UserService {
           record_value: token,
         },
       ],
-      `{id password_reset_token password_reset_token_expiry}`,
+      `{id password_reset_token password_reset_token_expiry status}`,
     );
     return user;
   }
@@ -185,8 +185,7 @@ export class UserService {
     const params = `mutation {
       user: updateUser(id: "${id}", input: ${toGraphql(input)}) ${this.output}
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.user;
+    return (await this.gqlClient.send(params))?.user;
   }
 
   async delete(id: string): Promise<boolean> {

@@ -93,3 +93,33 @@ export class NewUserDto {
 export class UpdateUserDto extends PartialType(
   OmitType(NewUserDto, ['email'] as const),
 ) {}
+
+export class CurrentUserUpdateDto extends PartialType(
+  OmitType(NewUserDto, ['email', 'roles'] as const),
+) {
+  @ApiProperty({
+    title: 'Contact No',
+    description: 'Contact No of the user.',
+    required: false,
+  })
+  @IsString()
+  @IsNotEmpty()
+  contact_no?: string;
+
+  @ApiProperty({
+    title: 'Date of Birth',
+    description: 'Date of Birth of user.',
+    required: false,
+  })
+  @IsString()
+  date_of_birth?: string;
+
+  @ApiProperty({
+    title: 'Nationality ID',
+    description: 'Nationality Id of the user.',
+    required: false,
+  })
+  @IsString()
+  // @MaxLength(36)
+  nationality_id: string;
+}
