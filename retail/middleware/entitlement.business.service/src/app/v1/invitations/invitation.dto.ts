@@ -4,8 +4,8 @@ import {
   Length,
   MaxLength,
   MinLength,
-  IsDate,
   IsIn,
+  IsNotEmpty,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { GENDER } from '@common/constants';
@@ -59,6 +59,7 @@ export class UpdateInvitationDto {
     required: true,
   })
   @IsString()
+  @IsNotEmpty()
   contact_no: string;
 
   @ApiProperty({
@@ -66,7 +67,7 @@ export class UpdateInvitationDto {
     description: 'Date of Birth of user.',
     required: true,
   })
-  @IsDate()
+  @IsString()
   date_of_birth: string;
 
   @ApiProperty({
@@ -75,7 +76,7 @@ export class UpdateInvitationDto {
     required: true,
   })
   @IsString()
-  @MaxLength(36)
+  // @MaxLength(36)
   nationality_id: string;
 
   @ApiProperty({
@@ -87,7 +88,8 @@ export class UpdateInvitationDto {
   })
   @IsIn(GENDER)
   @IsString()
-  gender?: string;
+  @IsNotEmpty()
+  gender: string;
 
   @ApiProperty({
     title: 'Password',
@@ -96,5 +98,6 @@ export class UpdateInvitationDto {
   })
   @IsString()
   @MinLength(6)
+  @IsNotEmpty()
   password: string;
 }

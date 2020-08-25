@@ -3,6 +3,7 @@ import {
   HttpService,
   HttpException,
   RequestTimeoutException,
+  BadRequestException,
 } from '@nestjs/common';
 import { map, timeout, catchError } from 'rxjs/operators';
 import { TimeoutError, throwError } from 'rxjs';
@@ -50,6 +51,7 @@ export class GqlClientService {
           if (err instanceof TimeoutError) {
             return throwError(new RequestTimeoutException());
           }
+          return throwError(new BadRequestException(err));
         }),
       )
       .toPromise();

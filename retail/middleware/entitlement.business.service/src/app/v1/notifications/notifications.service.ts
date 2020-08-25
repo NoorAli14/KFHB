@@ -37,7 +37,7 @@ export class NotificationsService {
       to: to,
       subject: 'Congratulations! You have been invited on Rubix',
       template: 'default',
-      body: `<p>Hi ${to}, </br></br> Please click on the <a href="${this.configService.APP.WEB_ONBOARDING_LINK}/${token}">link</a> to complete your onboarding process. </br></br> Best Regards,</br> <strong>Aion Rubix</strong></p>`,
+      body: `Hi ${to}, </br></br> Please click on the <a href="${this.configService.APP.WEB_ONBOARDING_LINK}/${token}">link</a> to complete your onboarding process. </br></br> Best Regards,</br> <strong>Aion Rubix</strong>`,
       context: [],
     };
     const params: string = `mutation {
@@ -47,9 +47,7 @@ export class NotificationsService {
           to
         }
       }`;
-    console.log(params);
-    const result = await this.gqlClient.send(params);
-    return result?.notification;
+    return (await this.gqlClient.send(params)).notification;
   }
 
   async sendResetPasswordLink(to: string, token: string) {
@@ -57,7 +55,7 @@ export class NotificationsService {
       to: to,
       subject: 'Password Reset Instructions',
       template: 'default',
-      body: `<p>Hi ${to}, </br></br> Please click on the <a href="${this.configService.APP.WEB_RESET_PASSWORD_LINK}/${token}">link</a> to reset your password. </br></br> Best Regards,</br> <strong>Aion Rubix</strong></p>`,
+      body: `Hi ${to}, </br></br> Please click on the <a href="${this.configService.APP.WEB_RESET_PASSWORD_LINK}/${token}">link</a> to reset your password. </br></br> Best Regards,</br> <strong>Aion Rubix</strong>`,
       context: [],
     };
     const params: string = `mutation {
@@ -67,8 +65,6 @@ export class NotificationsService {
           to
         }
       }`;
-    console.log(params);
-    const result = await this.gqlClient.send(params);
-    return result?.notification;
+    return (await this.gqlClient.send(params)).notification;
   }
 }

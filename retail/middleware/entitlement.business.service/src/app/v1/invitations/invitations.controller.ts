@@ -119,9 +119,10 @@ export class InvitationsController {
       throw new NotFoundException('User Not Found');
     } else if (invitation.status != 'PENDING') {
       throw new BadRequestException('User has been already onboard.');
-    } else if (new Date() > new Date(invitation.invitation_token_expiry)) {
-      throw new BadRequestException('Token is expired');
     }
+    // } else if (new Date() > new Date(invitation.invitation_token_expiry)) {
+    // throw new BadRequestException('Token is expired');
+    // }
     return this.invitationService.acceptInvitation(invitation.id, input);
   }
 

@@ -32,12 +32,11 @@ export class InvitationsService {
     return user;
   }
 
-  async acceptInvitation(id: string, input: any): Promise<any> {
-    input.status = 'ACTIVE';
-    input.invitation_token = null;
-    input.invitation_token_expiry = null;
-    const user = await this.userService.update(id, input);
-    return user;
+  async acceptInvitation(id: string, input: any): Promise<User> {
+    // input.status = 'ACTIVE';
+    // input.invitation_token = null;
+    // input.invitation_token_expiry = null;
+    return await this.userService.update(id, input);
   }
 
   async resendInvitationLink(userId: string): Promise<any> {
