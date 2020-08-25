@@ -65,6 +65,30 @@ export class UpdateUserInput {
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   status?: string;
 
+  @Field({ nullable: true })
+  @IsString()
+  @IsOptional()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  invitation_token?: string;
+
+  @Field({ nullable: true })
+  @IsString()
+  @IsOptional()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  invitation_token_expiry?: string;
+
+  @Field({ nullable: true })
+  @IsString()
+  @IsOptional()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  password_reset_token?: string;
+
+  @Field({ nullable: true })
+  @IsString()
+  @IsOptional()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  password_reset_token_expiry?: string;
+
   @Field(type => [IdsInput], { nullable: true })
   roles?: IdsInput[];
 }

@@ -63,6 +63,10 @@ export class UserService {
     userObj: Record<string, any>,
     keys?: string[],
   ): Promise<any> {
+    if(userObj.password) {
+      userObj.password_digest = this.encrypter.encryptPassword(userObj.password);
+      delete userObj.password;
+    }
     const result = await this.userDB.update({ id: id }, userObj, keys);
     if(result && result.length) {
       return result[0]

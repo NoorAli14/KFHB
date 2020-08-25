@@ -26,8 +26,12 @@ input CreateUserInput {
   last_name: String
   gender: String
   date_of_birth: String
-  nationality_id: Float
+  nationality_id: String
   status: String
+  invitation_token: String
+  invitation_token_expiry: String
+  password_reset_token: String
+  password_reset_token_expiry: String
   roles: [IdsInput!]
   email: String!
 }
@@ -123,6 +127,12 @@ input ModuleInput {
   name: String!
   parent_id: String
   status: String
+}
+
+input ModulesInput {
+  id: String!
+  _deleted: Boolean
+  permissions: [IdsInput!]
 }
 
 type Mutation {
@@ -224,7 +234,7 @@ input RoleInput {
   name: String!
   description: String
   status: String
-  modules: [IdsInput!]
+  modules: [ModulesInput!]
 }
 
 type RoleModule {
@@ -266,8 +276,12 @@ input UpdateUserInput {
   last_name: String
   gender: String
   date_of_birth: String
-  nationality_id: Float
+  nationality_id: String
   status: String
+  invitation_token: String
+  invitation_token_expiry: String
+  password_reset_token: String
+  password_reset_token_expiry: String
   roles: [IdsInput!]
 }
 
@@ -281,7 +295,7 @@ type User {
   last_name: String
   gender: String
   date_of_birth: String
-  nationality_id: Float
+  nationality_id: String
   status: String
   created_on: String
   created_by: String
