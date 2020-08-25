@@ -63,6 +63,12 @@ export class UserService {
     userObj: Record<string, any>,
     keys?: string[],
   ): Promise<any> {
+    if(userObj.status && !STATUS[userObj.status]){
+      throw new HttpException({
+        status: HttpStatus.BAD_REQUEST,
+        error: MESSAGES.INVALID_STATUS,
+      }, HttpStatus.BAD_REQUEST);
+    }
     if(userObj.password) {
       userObj.password_digest = this.encrypter.encryptPassword(userObj.password);
       delete userObj.password;
@@ -85,6 +91,11 @@ export class UserService {
     }
     if(!newUser.status){
       newUser.status = STATUS.PENDING;
+    } else if(!STATUS[newUser.status]){
+      throw new HttpException({
+        status: HttpStatus.BAD_REQUEST,
+        error: MESSAGES.INVALID_STATUS,
+      }, HttpStatus.BAD_REQUEST);
     }
     newUser.invitation_token = generateRandomString(NUMBERS.TOKEN_LENGTH);
     newUser.invitation_token_expiry = addMinutes(this.configService.APP.INVITATION_TOKEN_EXPIRY);

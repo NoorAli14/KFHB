@@ -114,6 +114,12 @@ export class ModuleService {
     moduleObj: Record<string, any>,
     keys?: string[],
   ): Promise<any> {
+    if(moduleObj.status && !STATUS[moduleObj.status]){
+      throw new HttpException({
+        status: HttpStatus.BAD_REQUEST,
+        error: MESSAGES.INVALID_STATUS,
+      }, HttpStatus.BAD_REQUEST);
+    }
     const result = await this.moduleDB.update({ id: id }, moduleObj, keys);
     if(result && result.length) {
       return result[0]
@@ -128,6 +134,11 @@ export class ModuleService {
   async create(newModule: Record<string, any>, keys?: string[]): Promise<any> {
     if(!newModule.status){
       newModule.status = STATUS.ACTIVE;
+    } else if(!STATUS[newModule.status]){
+      throw new HttpException({
+        status: HttpStatus.BAD_REQUEST,
+        error: MESSAGES.INVALID_STATUS,
+      }, HttpStatus.BAD_REQUEST);
     }
     const result = await this.moduleDB.create(newModule, keys);
     if(result && result.length) {
