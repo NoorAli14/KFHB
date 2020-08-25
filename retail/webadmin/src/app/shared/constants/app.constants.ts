@@ -20,6 +20,8 @@ export const MESSAGES = {
     PASSWORD_RESET_SENT: "Reset password link has been sent to your email.",
     PASSWORD_UPDATED: "Your password has been updated.",
     INVALID_RESET_TOKEN: "Reset password token is invalid.",
+    INVITATION_SENT: "User created successfully. An invitation link has been sent to provided user email.",
+    THANKS: "Update your profile to login to your account.",
     CREATED: (name) => `${name} created successfully.`,
     DELETED: (name) => `${name} deleted successfully.`,
     UPDATED: (name) => `${name} updated successfully.`,

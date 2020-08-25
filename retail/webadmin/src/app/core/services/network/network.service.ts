@@ -36,7 +36,7 @@ export class NetworkService {
     post(url: string, model: any, options?): Observable<any> {
         const endPoint = `${createUrl(url)}`;
         return this.http
-            .post<any[]>(endPoint, model)
+            .post<any[]>(endPoint, model,options)
     }
 
     onUpdate(url: string, model: any): Observable<any> {
