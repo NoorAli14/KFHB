@@ -18,7 +18,8 @@ import {
   DEFAULT_OTP_LENGTH,
   DEFAULT_OTP_DURATION,
   DEFAULT_SMS_SENDER,
-  DEFAULT_SMS_API_URL
+  DEFAULT_SMS_API_URL,
+  DEFAULT_RUBIX_OTP_BY_API
 } from '@rubix/common/constants';
 
 export const DEFAULT_ENV: iConfig = {
@@ -66,7 +67,9 @@ export const DEFAULT_ENV: iConfig = {
     otp_length: DEFAULT_OTP_LENGTH,
     pattern: DEFAULT_OTP_PATTERN,
     status: DEFAULT_OTP_STATUS,
-    duration: DEFAULT_OTP_DURATION
+    duration: DEFAULT_OTP_DURATION,
+    OTP_BY_API: DEFAULT_RUBIX_OTP_BY_API,
+    API_URL: ''
   },
   SMS: {
     api_url: DEFAULT_SMS_API_URL,
@@ -142,7 +145,11 @@ export class ConfigurationService {
       pattern: this.get('ENV_RBX_OTP_PATTERN', DEFAULT_ENV.OTP.pattern),
       otp_length: parseInt(this.get('ENV_RBX_OTP_LENGTH', DEFAULT_ENV.OTP.otp_length), 10),
       status: this.get('ENV_RBX_OTP_STATUS', DEFAULT_ENV.OTP.status),
-      duration: parseInt(this.get('ENV_RBX_OTP_DURATION', DEFAULT_ENV.OTP.duration), 10)
+      duration: parseInt(this.get('ENV_RBX_OTP_DURATION', DEFAULT_ENV.OTP.duration), 10),
+      OTP_BY_API: isTruthy(
+        this.get('ENV_RBX_OTP_BY_API', DEFAULT_ENV.OTP.OTP_BY_API),
+      ),
+      API_URL: this.get('ENV_RBX_OTP_GENERATOR_API', DEFAULT_ENV.OTP.API_URL),
     }
   }
 

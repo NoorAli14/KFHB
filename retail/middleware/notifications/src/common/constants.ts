@@ -20,4 +20,5 @@ export const DEFAULT_OTP_EMAIL_TEMPLATE = "otp";
 export const DEFAULT_OTP_EMAIL_SUBJECT="One time OTP";
 export const DEFAULT_SMS_SENDER= "+015846598126";
 export const DEFAULT_SMS_API_URL= "http://localhost:3000/sendsms";
+export const DEFAULT_RUBIX_OTP_BY_API = false; 
 

@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import * as randomize from 'randomatic';
+import axios from 'axios';
+
 
 import { OtpRepository } from '@rubix/core/repository/';
 import { Otp, OTPResponse } from './otp.model';
@@ -63,10 +65,30 @@ export class OtpService {
     otpOBJ: { [key: string]: any },
     columns?: string[],
   ): Promise<Otp> {
-    otpOBJ.otp_code = await randomize(
-      this._config.OTP.pattern,
-      this._config.OTP.otp_length,
-    );
+    if(this._config.OTP.OTP_BY_API){
+
+      axios.post(this._config.OTP.API_URL, {
+        pattern: this._config.OTP.pattern,
+        otp_length: this._config.OTP.otp_length,
+      }).then(function (response: { [key: string]: any }) {
+        console.log(response)
+        otpOBJ.otp_code = response.data.OTP;
+      })
+      .catch(function (error) {
+        console.log(error);
+        return { 
+          "error": error,
+          "code": 401
+        }
+      });
+
+    }else{
+      otpOBJ.otp_code = await randomize(
+        this._config.OTP.pattern,
+        this._config.OTP.otp_length,
+      );
+    }
+
     otpOBJ.status = this._config.OTP.status;
     otpOBJ.created_on = new Date();
     otpOBJ.tenent_id = otpOBJ.user_id;

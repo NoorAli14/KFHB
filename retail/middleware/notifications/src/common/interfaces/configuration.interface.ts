@@ -48,7 +48,9 @@ export interface iOTP {
   pattern: string,
   otp_length: number,
   status: string,
-  duration: number
+  duration: number,
+  OTP_BY_API: boolean,
+  API_URL: string,
 }
 
 export interface iSMS {
