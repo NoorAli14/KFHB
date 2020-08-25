@@ -26,8 +26,7 @@ export class RoleRepository extends BaseRepository {
       const trx = await trxProvider();
       const response = await trx(TABLE.ROLE).insert(role, keys);
       if(response){
-        const role_modules = [];
-        modules.forEach(module => {
+        for (const module of modules) {
           //validate role ID
           const role_module = {
             role_id : response[0].id || response[0],
@@ -35,15 +34,33 @@ export class RoleRepository extends BaseRepository {
             status : STATUS.ACTIVE,
             created_by : TEMP_ROLE.ADMIN,
           };
-          role_modules.push(role_module);
-        });
-        const result = await trx(TABLE.ROLE_MODULE).insert(role_modules, ['id']);
-        if(!result){
-          await trx.rollback();
-          throw new HttpException({
-            status: HttpStatus.BAD_REQUEST,
-            error: MESSAGES.BAD_REQUEST,
-          }, HttpStatus.BAD_REQUEST);
+          const result = await trx(TABLE.ROLE_MODULE).insert(role_module, ['id']);
+          if(!result){
+            await trx.rollback();
+            throw new HttpException({
+              status: HttpStatus.BAD_REQUEST,
+              error: MESSAGES.BAD_REQUEST,
+            }, HttpStatus.BAD_REQUEST);
+          }
+          const permissions: [] = module['permissions'];
+          const role_module_permissions = [];
+          permissions.forEach(permission => {
+            const role_module_permission = {
+              role_module_id : result[0],
+              permission_id : permission['id'],
+              status : STATUS.ACTIVE,
+              created_by : TEMP_ROLE.ADMIN,
+            };
+            role_module_permissions.push(role_module_permission);
+          });
+          const result_rmp = await trx(TABLE.ROLE_MODULE_PERMISSION).insert(role_module_permissions, ['id']);
+          if(!result_rmp){
+            await trx.rollback();
+            throw new HttpException({
+              status: HttpStatus.BAD_REQUEST,
+              error: MESSAGES.BAD_REQUEST,
+            }, HttpStatus.BAD_REQUEST);
+          }
         }
       } else {
         await trx.rollback();

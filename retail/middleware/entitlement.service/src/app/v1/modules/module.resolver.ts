@@ -59,15 +59,24 @@ export class ModuleResolver {
   @ResolveField('permissions', returns => [Permission])
   async getPermissions(@Parent() module: Module,
                        @Loader(PermissionsDataLoader.name) permissionsLoader: DataLoader<Permission['id'], Permission>) {
-    const Ids: Array<string> = [];
+    const Ids = [];
     if(module.id) {
-      Ids.push(module.id);
-      const results = await permissionsLoader.loadMany(Ids);
+      if(module['role_id']){
+        const obj = {
+          module_id : module.id,
+          role_id: module['role_id']
+        };
+        Ids.push(obj);
+      } else {
+        Ids.push(module.id);
+      }
+      let results = await permissionsLoader.loadMany(Ids);
       if(results[0]){
         if(Array.isArray(results[0])){
-          return results[0]
+          results = results[0];
         }
-        return results
+        results = results.filter(result => result['role_id'] === module['role_id']);
+        return results;
       }
     }
     return []
@@ -76,13 +85,19 @@ export class ModuleResolver {
   @ResolveField('sub_modules', returns => [Module])
   async getSubModules(@Parent() module: Module,
                        @Loader(SubModulesDataLoader.name) subModulesLoader: DataLoader<Module['id'], Module>) {
-    const Ids: Array<string> = [];
+    const Ids = [];
     if(module.id) {
       Ids.push(module.id);
-      const results = await subModulesLoader.loadMany(Ids);
+      let results = await subModulesLoader.loadMany(Ids);
       if(results[0]){
         if(Array.isArray(results[0])){
-          return results[0]
+          results = results[0]
+        }
+        if(module['role_id']){
+          results = results.map(result => {
+            result['role_id'] = module['role_id'];
+            return result
+          });
         }
         return results
       }

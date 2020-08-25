@@ -22,8 +22,8 @@ export class PermissionService {
     return result;
   }
 
-  async findPermissionsByModuleID(moduleIds): Promise<any>{
-    const permissions = await this.permissionDB.listPermissionsByModuleID(moduleIds);
+  async findPermissionsByModuleID(ids): Promise<any>{
+    const permissions = await this.permissionDB.listPermissionsByModuleID(ids);
     const permissionLookUps = {};
     permissions.forEach(permission => {
       if (!permissionLookUps[permission.module_id]) {
@@ -37,9 +37,10 @@ export class PermissionService {
         }
       }
     });
-    return moduleIds.map(id => {
-      if(permissionLookUps[id]){
-        return permissionLookUps[id];
+    const moduleIds = ids.map(obj => obj.module_id);
+    return moduleIds.map(moduleId => {
+      if(permissionLookUps[moduleId]){
+        return permissionLookUps[moduleId];
       } else {
         return null
       }
