@@ -4,6 +4,7 @@ import { LoginComponent } from "./views/login/login.component";
 import { ResetPasswordComponent } from "./views/reset-password/reset-password.component";
 import { ForgotPasswordComponent } from "./views/forgot-password/forgot-password.component";
 import { PhoneVerificationComponent } from "./views/phone-verification/phone-verification.component";
+import { InvitationComponent } from './views/invitation/invitation.component';
 
 const routes: Routes = [
     {
@@ -21,7 +22,7 @@ const routes: Routes = [
     },
 
     {
-        path: "reset-password",
+        path: "reset-password/:token",
         component: ResetPasswordComponent,
     },
     {
@@ -31,6 +32,10 @@ const routes: Routes = [
     {
         path: "verification",
         component: PhoneVerificationComponent,
+    },
+    {
+        path: "invitation/:token",
+        component: InvitationComponent,
     }
 ];
 

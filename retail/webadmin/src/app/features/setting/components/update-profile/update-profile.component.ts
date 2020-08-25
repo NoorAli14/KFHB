@@ -44,7 +44,7 @@ export class UpdateProfileComponent extends BaseComponent implements OnInit {
             email: new FormControl(this.data.email, [
                 Validators.email,
             ]),
-            dateOfBirth: new FormControl(new Date(this.data.dateOfBirth),),
+            dateOfBirth: new FormControl(this.data.dateOfBirth ? new Date(this.data.dateOfBirth) : null,),
             nationalityId: new FormControl(Number(this.data.nationalityId), ),
         });
     }

@@ -4,17 +4,28 @@
 
         <!-- COLUMNS AND ROWS-->
         <ng-container *ngFor="let key of displayedColumns" [matColumnDef]="key">
-            <mat-header-cell *matHeaderCellDef>{{ key.includes('Icon') ? '' : camelToSentenceCase(key) }}</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef>{{ key.includes('Icon') ? 'Permissions' : camelToSentenceCase(key) }}</mat-header-cell>
 
             <mat-cell *matCellDef="let element; let i = dataIndex">
-                <span *ngIf="!key.includes('Icon'); else icon">{{ displayName(element['id'],element[key]=='roleId'? roles : modules)  }}</span>
-
-                <ng-template #icon>
+                <span *ngIf="!key.includes('Icon'); else permissions">
+                    <span *ngIf="element[camelToSnakeCase(key)]; else defaultText">
+                        <ng-container  *ngIf="camelToSnakeCase(key).indexOf('created')<0; else date "  >
+                            {{element[camelToSnakeCase(key)]}}
+                        </ng-container>
+                    
+                    </span>
+                </span>
+                
+                <ng-template #defaultText>
+                    <app-default-text></app-default-text>
+                </ng-template>
+                
+                <ng-template #permissions>
                     <mat-icon *ngIf="key === 'expandIcon' " (click)="toggleExpandableSymbol(element['id'])"> {{expandedId==element['id'] ? 'keyboard_arrow_up' : ' keyboard_arrow_down'}} </mat-icon>
                     <mat-icon *ngIf="key === 'expandIcon' " (click)="toggleExpandableSymbol(element['id'])"></mat-icon>
-
-                    <mat-icon *ngIf="key === 'deleteIcon'" (click)="confirmDialog(element['id'] )" color="warn" type="button" (click)="deleteUser()">delete</mat-icon>
-                    <mat-icon *ngIf="key === 'addIcon'" type="button" (click)="onAddNewPermission(element['id'])">add_circle</mat-icon>
+                </ng-template>
+                <ng-template #date>
+                    {{element[camelToSnakeCase(key)] | date:'mediumDate'}}
                 </ng-template>
 
             </mat-cell>
@@ -22,7 +33,7 @@
 
         <ng-container matColumnDef="expandedDetail">
             <mat-cell *matCellDef="let element" [@expandableRow]="element['id'] === expandedId ? 'expanded' : 'collapsed'">
-                <app-permission *ngIf="expandedId==element['id']" [roleModuleId]="element['id']"></app-permission>
+                <app-permission *ngIf="expandedId==element['id']" [modules]="element['modules']"></app-permission>
             </mat-cell>
         </ng-container>
 

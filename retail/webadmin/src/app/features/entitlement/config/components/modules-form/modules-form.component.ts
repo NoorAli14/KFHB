@@ -35,10 +35,8 @@ export class ModulesFormComponent implements OnInit {
     ngOnInit(): void {
         this.modulesForm = new FormGroup({
             id: new FormControl(this.data.module.id),
-            name: new FormControl(this.data.module.name, [Validators.required]),
-            status: new FormControl(this.data.module.status, [
-                Validators.required,
-            ]),
+            name: new FormControl(this.data.module.name, [Validators.required,Validators.minLength(3), Validators.maxLength(96)]),
+            status: new FormControl(this.data.module.status),
             parent_id: new FormControl(
                 this.data.module.parentModule
                     ? this.data.module.parentModule.id
@@ -64,6 +62,7 @@ export class ModulesFormComponent implements OnInit {
     }
     onSubmit() {
         const model = { ...this.modulesForm.value };
+        model.parent_id= model.parent_id=='randid' ? null : model.parent_id
         model.permissions = this.modulesForm.value.permissions.map((item) => ({
             id: item,
         }));

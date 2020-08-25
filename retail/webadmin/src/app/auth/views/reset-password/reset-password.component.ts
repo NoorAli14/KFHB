@@ -14,6 +14,7 @@ import { AuthenticationService } from "@core/services/auth/authentication.servic
 import { MESSAGES } from "@shared/constants/app.constants";
 import { camelToSnakeCase } from "@shared/helpers/global.helper";
 import { BaseComponent } from '@shared/components/base/base.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: "reset-password",
@@ -24,15 +25,16 @@ import { BaseComponent } from '@shared/components/base/base.component';
 })
 export class ResetPasswordComponent extends BaseComponent implements OnInit, OnDestroy {
     resetPasswordForm: FormGroup;
-   
+   token:string;
     // Private
     private _unsubscribeAll: Subject<any>;
 
     constructor(
         private _fuseConfigService: FuseConfigService,
-        private _authService: AuthenticationService
+        private _authService: AuthenticationService, private activatedRoute: ActivatedRoute
     ) {
         super()
+        this.token= this.activatedRoute.snapshot.paramMap.get("token");
         // Configure the layout
         this._fuseConfigService.config = {
             layout: {
@@ -78,7 +80,7 @@ export class ResetPasswordComponent extends BaseComponent implements OnInit, OnD
     onSubmit() {
         let model = this.resetPasswordForm.value;
         model = camelToSnakeCase(model);
-        this._authService.resetPassword(model).subscribe(
+        this._authService.resetPassword(model,this.token).subscribe(
             (response) => {
                  this.errorType = "success";
                  this.responseMessage = MESSAGES.PASSWORD_UPDATED;
@@ -87,8 +89,10 @@ export class ResetPasswordComponent extends BaseComponent implements OnInit, OnD
         );
     }
     getEmailTokenStatus() {
-        this._authService.getTokenStatus().subscribe(
-            (response) => {},
+        this._authService.getTokenStatus(this.token).subscribe(
+            (response) => {
+
+            },
             (error) => {
                  this.errorType = "error";
                  this.responseMessage = MESSAGES.INVALID_RESET_TOKEN;

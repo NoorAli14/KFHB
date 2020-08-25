@@ -92,6 +92,7 @@ export class RoleFormComponent extends BaseComponent implements OnInit {
         private _database: ChecklistDatabase,
         @Inject(MAT_DIALOG_DATA) public data: any
     ) {
+        
         super("Config");
         this.treeFlattener = new MatTreeFlattener(
             this.transformer,

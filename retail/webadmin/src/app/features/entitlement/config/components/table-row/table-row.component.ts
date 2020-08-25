@@ -6,10 +6,8 @@ import {
     transition,
     animate,
 } from "@angular/animations";
-import { MESSAGES } from '@shared/constants/app.constants';
 import { MatDialog } from '@angular/material/dialog';
-import { getName, camelToSentenceCase } from "@shared/helpers/global.helper";
-import { ConfirmDialogModel, ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
+import { getName, camelToSentenceCase, camelToSnakeCaseText } from "@shared/helpers/global.helper";
 
 
 @Component({
@@ -42,13 +40,9 @@ import { ConfirmDialogModel, ConfirmDialogComponent } from '@shared/components/c
 })
 export class TableRowComponent {
     @Input() dataSource: any[];
-    @Input() roles: any[];
-    @Input() modules: any[];
     @Input() displayedColumns: string[];
     @Input() title: string;
     @Input() renderTemplate: string;
-    @Output() deleteUser: EventEmitter<number> = new EventEmitter<number>();
-    @Output() addNewPermission: EventEmitter<number> = new EventEmitter<number>();
 
     expandedId: string = "";
 
@@ -61,24 +55,10 @@ export class TableRowComponent {
     displayName(id, array) {
         return getName(id, "name", array);
     }
+    camelToSnakeCase(text) {
+        return camelToSnakeCaseText(text);
+    }
     camelToSentenceCase(text){
         return camelToSentenceCase(text)
      }
-    onAddNewPermission(id) {
-        this.addNewPermission.emit(id);
-    }
-     confirmDialog(): void {
-        const message = MESSAGES.REMOVE_CONFIRMATION;
-        const dialogData = new ConfirmDialogModel("Confirm Action", message);
-        const dialogRef = this._matDialog.open(ConfirmDialogComponent, {
-            data: dialogData,
-            disableClose:true,
-            panelClass: "app-confirm-dialog",
-            hasBackdrop: true,
-        });
-
-        dialogRef.afterClosed().subscribe((dialogResult) => {
-
-        });
-    }
 }
