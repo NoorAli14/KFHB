@@ -1,10 +1,11 @@
 import * as Knex from 'knex';
-import { TABLE } from '@common/constants';
+import { TABLE, DATABASE_UUID_METHOD } from '@common/constants';
 
 export async function up(knex: Knex): Promise<any> {
   return knex.schema.createTable(TABLE.OTP, table => {
-    table.increments();
-    table.string('user_id').notNullable();
+    table.uuid('id').primary().defaultTo(knex.raw(DATABASE_UUID_METHOD));
+    table.uuid('user_id').notNullable();
+    table.uuid('tenent_id').notNullable();
     table.string('delivery_mode').notNullable();
     table.string('mobile_no');
     table.string('email');
@@ -14,11 +15,12 @@ export async function up(knex: Knex): Promise<any> {
     table.string('created_by').notNullable();
     table.timestamp('updated_on').defaultTo(knex.fn.now());
     table.string('updated_by').notNullable();
-    table.timestamp('deleted_on');
-    table.string('deleted_by')
+
+    // table.foreign('user_id').references(`${TABLE.USER}.id`).onDelete('CASCADE');
+    // table.foreign('tenent_id').references(`${TABLE.USER}.id`).onDelete('CASCADE');
   });
 }
 
 export async function down(knex: Knex): Promise<any> {
-  return knex.schema.dropTable(TABLE.OTP);
+  return knex.schema.dropTableIfExists(TABLE.OTP);
 }
