@@ -18,7 +18,7 @@ import { DEFAULT_SENDING_NAME, DEFAULT_SENDING_EMAIL } from '@common/constants';
       useFactory: async (_configService: ConfigurationService) => ({
         transport: _configService.SMTP,
         defaults: {
-          from:`"${DEFAULT_SENDING_NAME}" <${DEFAULT_SENDING_EMAIL}>`,
+          from:`"${_configService.EMAILSENDER.NAME}" <${_configService.EMAILSENDER.EMAIL}>`,
         },
         preview: false,
         template: {

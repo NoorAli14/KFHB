@@ -8,8 +8,10 @@ import {
   iSWAGGER,
   iGRAPHQL,
   iConfig,
-  iSMTP
+  iSMTP,
+  iEMAILSENDER
 } from '@common/interfaces/configuration.interface';
+import { DEFAULT_SENDING_NAME, DEFAULT_SENDING_EMAIL } from '@common/constants';
 export const DEFAULT_ENV: iConfig = {
   APP: {
     NAME: 'Rubix | Boilerplate',
@@ -50,6 +52,11 @@ export const DEFAULT_ENV: iConfig = {
       user: '',
       pass: '',
     }
+  },
+
+  EMAILSENDER: {
+    NAME: DEFAULT_SENDING_NAME,
+    EMAIL: DEFAULT_SENDING_EMAIL
   }
 };
 @Injectable()
@@ -116,6 +123,13 @@ export class ConfigurationService {
           user: this.get('ENV_RBX_SMTP_USER', DEFAULT_ENV.SMTP.auth.user),
           pass: this.get('ENV_RBX_SMTP_PASS', DEFAULT_ENV.SMTP.auth.pass),
         }
+      };
+    }
+
+    public get EMAILSENDER(): iEMAILSENDER {
+      return {
+        NAME: this.get('ENV_RBX_SMTP_SENDING_NAME', DEFAULT_ENV.EMAILSENDER.NAME),
+        EMAIL: this.get('ENV_RBX_SMTP_SENDING_EMAIL', DEFAULT_ENV.EMAILSENDER.EMAIL),
       };
     }
 
