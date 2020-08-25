@@ -78,7 +78,7 @@ export class HolidaysService {
 
   async create(newObj: Record<string, any>, keys?: string[]): Promise<any> {
     if (!newObj.status) {
-      newObj.status = STATUS.PENDING;
+      newObj.status = STATUS.ACTIVE;
     }
     if (!WEEK_DAYS[newObj.calendar_day]) {
       throw new HttpException(
