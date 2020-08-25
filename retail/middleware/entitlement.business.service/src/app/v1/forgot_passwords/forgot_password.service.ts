@@ -32,6 +32,7 @@ export class ForgotPasswordService {
         password_reset_token_expiry
       }
     }`;
+
     const result: any = await this.gqlClient.send(params);
     await this.notificationService.sendResetPasswordLink(
       user.email,
@@ -56,7 +57,7 @@ export class ForgotPasswordService {
     }
     const params = `mutation {
       changePassword(input: { 
-        token: "${token}", 
+        password_reset_token: "${token}", 
         password: "${input.password}"})
     }`;
     const result: any = await this.gqlClient.send(params);
