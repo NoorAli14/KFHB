@@ -8,44 +8,46 @@ import { GqlClientService } from '@common/libs/gqlclient/gqlclient.service';
 export class RoleService {
   constructor(private readonly gqlClient: GqlClientService) {}
 
-  async list(): Promise<Role[]> {
-    const params = `query {
-      roles: rolesList {
+  private output: string = `{
+    id
+    name
+    modules {
+      id
+      name
+      parent_id
+      sub_modules {
         id
         name
-        modules {
+        parent_id
+        permissions {
           id
-          name
-          parent_id
-          sub_modules {
-            id
-            name
-            parent_id
-            permissions {
-              id
-              record_type
-              created_on
-              created_by
-            }
-            status
-            created_on
-            created_by
-          }
-          permissions {
-            id
-            record_type
-            created_on
-            created_by
-          }
+          record_type
           created_on
           created_by
         }
         status
         created_on
         created_by
-        updated_on
-        updated_by
       }
+      permissions {
+        id
+        record_type
+        created_on
+        created_by
+      }
+      status
+      created_on
+      created_by
+    }
+    status
+    created_on
+    created_by
+    updated_on
+    updated_by
+  }`;
+  async list(): Promise<Role[]> {
+    const params = `query {
+      roles: rolesList ${this.output}
     }`;
     const result = await this.gqlClient.send(params);
     return result?.roles;
@@ -53,43 +55,7 @@ export class RoleService {
 
   async create(input: RoleDto): Promise<Role> {
     const params = `mutation {
-      role: addRole(input: ${toGraphql(input)}) {
-        id
-        name
-        modules {
-          id
-          name
-          parent_id
-          sub_modules {
-            id
-            name
-            parent_id
-            permissions {
-              id
-              record_type
-              created_on
-              created_by
-            }
-            status
-            created_on
-            created_by
-          }
-          permissions {
-            id
-            record_type
-            created_on
-            created_by
-          }
-          status
-          created_on
-          created_by
-        }
-        status
-        created_on
-        created_by
-        updated_on
-        updated_by
-      } 
+      role: addRole(input: ${toGraphql(input)}) ${this.output}
     }`;
     const result = await this.gqlClient.send(params);
     return result?.role;
@@ -97,43 +63,7 @@ export class RoleService {
 
   async findOne(id: string): Promise<Role> {
     const params = `query {
-      role: findRole(id: "${id}") {
-        id
-        name
-        modules {
-          id
-          name
-          parent_id
-          sub_modules {
-            id
-            name
-            parent_id
-            permissions {
-              id
-              record_type
-              created_on
-              created_by
-            }
-            status
-            created_on
-            created_by
-          }
-          permissions {
-            id
-            record_type
-            created_on
-            created_by
-          }
-          status
-          created_on
-          created_by
-        }
-        status
-        created_on
-        created_by
-        updated_on
-        updated_by
-      }
+      role: findRole(id: "${id}") 
     }`;
     const result = await this.gqlClient.send(params);
     return result?.role;
@@ -155,43 +85,7 @@ export class RoleService {
       throw new NotFoundException('Role Not Found');
     }
     const params = `mutation {
-      role: updateRole(id: "${id}", input: ${toGraphql(input)}) {
-        id
-        name
-        modules {
-          id
-          name
-          parent_id
-          sub_modules {
-            id
-            name
-            parent_id
-            permissions {
-              id
-              record_type
-              created_on
-              created_by
-            }
-            status
-            created_on
-            created_by
-          }
-          permissions {
-            id
-            record_type
-            created_on
-            created_by
-          }
-          status
-          created_on
-          created_by
-        }
-        status
-        created_on
-        created_by
-        updated_on
-        updated_by
-      } 
+      role: updateRole(id: "${id}", input: ${toGraphql(input)}) ${this.output}
     }`;
     const result = await this.gqlClient.send(params);
     return result?.role;

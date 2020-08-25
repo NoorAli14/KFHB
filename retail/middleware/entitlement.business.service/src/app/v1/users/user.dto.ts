@@ -6,7 +6,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PartialType, OmitType } from '@nestjs/swagger';
 import { IdsDto } from '@common/dtos';
 import { GENDER } from '@common/constants';
 
@@ -30,7 +30,7 @@ export class ChangePasswordDto {
   readonly new_password: string;
 }
 
-export class UpdateUserDto {
+export class NewUserDto {
   @ApiProperty({
     title: 'First Name',
     example: 'Faizan',
@@ -89,3 +89,7 @@ export class UpdateUserDto {
   @Type(() => IdsDto)
   roles: IdsDto[];
 }
+
+export class UpdateUserDto extends PartialType(
+  OmitType(NewUserDto, ['email'] as const),
+) {}
