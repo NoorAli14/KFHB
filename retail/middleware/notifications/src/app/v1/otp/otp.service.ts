@@ -69,9 +69,8 @@ export class OtpService {
     );
     otpOBJ.status = this._config.OTP.status;
     otpOBJ.created_on = new Date();
+    otpOBJ.tenent_id = otpOBJ.user_id;
     otpOBJ.created_by = otpOBJ.user_id;
-    otpOBJ.updated_on = new Date();
-    otpOBJ.updated_by = otpOBJ.user_id;
 
     const [otp] = await this.otpDB.create(otpOBJ, columns);
     // Send OTP Via email function call.
