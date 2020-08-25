@@ -23,7 +23,7 @@ export class LoginService {
     ];
     const keys = ['*'];
     const results = await this.userService.findByProperty(check, keys);
-    if (results.length && results.length > 0) {
+    if (results?.length > 0) {
       const user = results[0];
       if (this.encrypter.comparePassword(loginInput.password, user.password_digest)){
         return user;

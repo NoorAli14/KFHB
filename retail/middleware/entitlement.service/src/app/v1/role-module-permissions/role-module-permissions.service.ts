@@ -49,7 +49,7 @@ export class RoleModulePermissionsService {
       }, HttpStatus.BAD_REQUEST);
     }
     const result = await this.roleModulePermissionsDB.update({ id: id }, roleModulePermissionObj, keys);
-    if(result && result.length) {
+    if(result?.length > 0) {
       return result[0]
     } else {
       throw new HttpException({
@@ -69,7 +69,7 @@ export class RoleModulePermissionsService {
       }, HttpStatus.BAD_REQUEST);
     }
     const result = await this.roleModulePermissionsDB.create(roleModulePermissionObj, keys);
-    if(result && result.length) {
+    if(result?.length > 0) {
       return result[0]
     } else {
       throw new HttpException({

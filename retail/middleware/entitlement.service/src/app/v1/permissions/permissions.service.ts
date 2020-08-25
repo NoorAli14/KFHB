@@ -68,7 +68,7 @@ export class PermissionService {
     keys?: string[],
   ): Promise<any> {
     const result = await this.permissionDB.update({ id: id }, permissionObj, keys);
-    if(result && result.length) {
+    if(result?.length > 0) {
       return result[0]
     } else {
       throw new HttpException({
@@ -80,7 +80,7 @@ export class PermissionService {
 
   async create(permissionObj: Record<string, any>, keys?: string[]): Promise<any> {
     const result = await this.permissionDB.create(permissionObj, keys);
-    if(result && result.length) {
+    if(result?.length > 0) {
       return result[0]
     } else {
       throw new HttpException({

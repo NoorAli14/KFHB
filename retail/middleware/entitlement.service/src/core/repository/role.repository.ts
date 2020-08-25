@@ -19,7 +19,7 @@ export class RoleRepository extends BaseRepository {
   }
 
   async create(role: Record<string, any>, keys: string[]): Promise<any> {
-    if(role.modules && role.modules.length) {
+    if(role.modules?.length) {
       const modules: [] = role.modules;
       delete role.modules;
       const trxProvider = this._connection.transactionProvider();

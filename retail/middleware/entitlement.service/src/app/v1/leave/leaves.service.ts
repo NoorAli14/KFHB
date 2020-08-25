@@ -80,7 +80,7 @@ export class LeavesService {
       }, HttpStatus.BAD_REQUEST);
     }
     const result = await this.leaveRepository.update({ id: id }, newObj, keys);
-    if(result && result.length) {
+    if(result?.length > 0) {
       return result[0]
     } else {
       throw new HttpException({
@@ -106,7 +106,7 @@ export class LeavesService {
       }, HttpStatus.BAD_REQUEST);
     }
     const result = await this.leaveRepository.create(newObj, keys);
-    if(result && result.length) {
+    if(result?.length > 0) {
       return result[0]
     } else {
       throw new HttpException({

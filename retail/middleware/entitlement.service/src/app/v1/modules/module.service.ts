@@ -121,7 +121,7 @@ export class ModuleService {
       }, HttpStatus.BAD_REQUEST);
     }
     const result = await this.moduleDB.update({ id: id }, moduleObj, keys);
-    if(result && result.length) {
+    if(result?.length > 0) {
       return result[0]
     } else {
       throw new HttpException({
@@ -141,7 +141,7 @@ export class ModuleService {
       }, HttpStatus.BAD_REQUEST);
     }
     const result = await this.moduleDB.create(newModule, keys);
-    if(result && result.length) {
+    if(result?.length > 0) {
       return result[0]
     } else {
       throw new HttpException({

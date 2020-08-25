@@ -49,7 +49,7 @@ export class RoleModulesService {
       }, HttpStatus.BAD_REQUEST);
     }
     const result = await this.roleModulesDB.update({ id: id }, roleModuleObj, keys);
-    if(result && result.length) {
+    if(result?.length > 0) {
       return result[0]
     } else {
       throw new HttpException({
@@ -69,7 +69,7 @@ export class RoleModulesService {
       }, HttpStatus.BAD_REQUEST);
     }
     const result = await this.roleModulesDB.create(newRoleModule, keys);
-    if(result && result.length) {
+    if(result?.length > 0) {
       return result[0]
     } else {
       throw new HttpException({

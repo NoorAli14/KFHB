@@ -50,7 +50,7 @@ export class UserRolesService {
       }, HttpStatus.BAD_REQUEST);
     }
     const result = await this.userRoleDB.update({ id: id }, userRoleObj, keys);
-    if(result && result.length) {
+    if(result?.length > 0) {
       return result[0]
     } else {
       throw new HttpException({
@@ -70,7 +70,7 @@ export class UserRolesService {
       }, HttpStatus.BAD_REQUEST);
     }
     const result = await this.userRoleDB.create(newUserRole, keys);
-    if(result && result.length) {
+    if(result?.length > 0) {
       return result[0]
     } else {
       throw new HttpException({

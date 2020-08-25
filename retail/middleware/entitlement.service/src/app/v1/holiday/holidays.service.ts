@@ -69,7 +69,7 @@ export class HolidaysService {
       newObj,
       keys,
     );
-    if (result && result.length) {
+    if (result?.length > 0) {
       return result[0];
     } else {
       throw new HttpException(
@@ -101,7 +101,7 @@ export class HolidaysService {
       );
     }
     const result = await this.holidayRepository.create(newObj, keys);
-    if (result && result.length) {
+    if (result?.length > 0) {
       return result[0];
     } else {
       throw new HttpException(

@@ -30,7 +30,7 @@ export class UserService {
 
   async resetInvitationToken(id: string, keys?: string[]): Promise<any> {
     const result = await this.findById(id, ['id']);
-    if (result && result.id) {
+    if (result?.id) {
       const user = {
         invitation_token : generateRandomString(NUMBERS.TOKEN_LENGTH),
         invitation_token_expiry : addMinutes(this.configService.APP.INVITATION_TOKEN_EXPIRY)
@@ -74,7 +74,7 @@ export class UserService {
       delete userObj.password;
     }
     const result = await this.userDB.update({ id: id }, userObj, keys);
-    if(result && result.length) {
+    if(result?.length > 0) {
       return result[0]
     } else {
       throw new HttpException({
@@ -100,7 +100,7 @@ export class UserService {
     newUser.invitation_token = generateRandomString(NUMBERS.TOKEN_LENGTH);
     newUser.invitation_token_expiry = addMinutes(this.configService.APP.INVITATION_TOKEN_EXPIRY);
     const result = await this.userDB.create(newUser, keys);
-    if(result && result.length) {
+    if(result?.length > 0) {
       return result[0]
     } else {
       throw new HttpException({

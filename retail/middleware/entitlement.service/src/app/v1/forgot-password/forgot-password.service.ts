@@ -26,7 +26,7 @@ export class ForgotPasswordService {
       }
     ];
     const results = await this.userService.findByProperty(check, ['id']);
-    if (results.length && results.length > 0) {
+    if (results?.length > 0) {
       const hash = generateRandomString(NUMBERS.TOKEN_LENGTH);
       const fp_output = {
         password_reset_token : hash,
@@ -46,7 +46,7 @@ export class ForgotPasswordService {
       record_value: changePasswordInput.password_reset_token
     }];
     const results = await this.userService.findByProperty(check, ['id', 'password_reset_token_expiry']);
-    if (results.length && results.length > 0) {
+    if (results?.length > 0) {
       const user = results[0];
       if(Date.parse(user.password_reset_token_expiry) && (Date.parse(user.password_reset_token_expiry) > Date.parse(new Date().toString()))){
         const input = {

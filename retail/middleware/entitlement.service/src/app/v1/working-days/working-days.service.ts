@@ -69,7 +69,7 @@ export class WorkingDaysService {
       }
     }
     const result = await this.workingDaysRepository.update({ id: id }, newObj, keys);
-    if(result && result.length) {
+    if(result?.length > 0) {
       return result[0]
     } else {
       throw new HttpException({
@@ -108,7 +108,7 @@ export class WorkingDaysService {
       }
     }
     const result = await this.workingDaysRepository.create(newObj, keys);
-    if(result && result.length) {
+    if(result?.length > 0) {
       return result[0]
     } else {
       throw new HttpException({

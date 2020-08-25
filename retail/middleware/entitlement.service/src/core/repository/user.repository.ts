@@ -11,7 +11,7 @@ export class UserRepository extends BaseRepository {
   }
 
   async update_pending(user: Record<string, any>, keys: string[]): Promise<any> {
-    if(user.roles && user.roles.length) {
+    if(user.roles?.length) {
       const roles: IdsInput[] = user.roles;
       delete user.roles;
       const rolesToDelete = roles.filter(role => role._deleted);
@@ -30,7 +30,7 @@ export class UserRepository extends BaseRepository {
           };
           user_roles.push(user_role);
         });
-        const result = await trx(TABLE.USER_ROLE).insert(user_roles, "*");
+        const result = await trx(TABLE.USER_ROLE).insert(user_roles, "id");
         if(!result){
           await trx.rollback();
           throw new HttpException({
@@ -53,7 +53,7 @@ export class UserRepository extends BaseRepository {
   }
 
   async create(user: Record<string, any>, keys: string[]): Promise<any> {
-    if(user.roles && user.roles.length) {
+    if(user.roles?.length) {
       const roles: [] = user.roles;
       delete user.roles;
       const trxProvider = this._connection.transactionProvider();
