@@ -3,10 +3,10 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { User } from "@feature/entitlement/models/user.model";
 import { NATIONALITY_LIST, GENDER_LIST, MESSAGES } from "@shared/constants/app.constants";
 import { AuthenticationService } from "@core/services/auth/authentication.service";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { FuseConfigService } from "@fuse/services/config.service";
 import { BaseComponent } from "@shared/components/base/base.component";
-import { snakeToCamelObject } from '@shared/helpers/global.helper';
+import { snakeToCamelObject, camelToSnakeCase } from '@shared/helpers/global.helper';
 
 @Component({
     selector: "app-invitation",
@@ -19,15 +19,17 @@ export class InvitationComponent extends BaseComponent implements OnInit {
     response: User;
     nationalityList: any[] = NATIONALITY_LIST;
     genderList: any[] = GENDER_LIST;
+    token:string;
     constructor(
         private _authService: AuthenticationService,
         private _fuseConfigService: FuseConfigService,
-        private activatedRoute: ActivatedRoute
+        private activatedRoute: ActivatedRoute,
+        private router: Router
     ) {
         super();
-        const token = this.activatedRoute.snapshot.paramMap.get("token");
+        this.token= this.activatedRoute.snapshot.paramMap.get("token");
 
-        this.getData(token);
+        this.getData( this.token);
         // Configure the layout
         this._fuseConfigService.config = {
             layout: {
@@ -78,12 +80,16 @@ export class InvitationComponent extends BaseComponent implements OnInit {
       return null;
   }
     onSubmit() {
-        const model = { ...this.userForm.value };
+        let model = { ...this.userForm.value };
         model.dateOfBirth = new Date(model.dateOfBirth).toLocaleDateString();
-        this._authService.updateInvitation(model).subscribe(
+        model= camelToSnakeCase(model);
+        this._authService.updateInvitation(model, this.token).subscribe(
           (response) => {
             this.errorType = "success";
             this.responseMessage = MESSAGES.UPDATED('Your Profile');
+            setTimeout(() => {
+                this.router.navigateByUrl('/auth/login');
+            }, 1000);
           },
           (response=>super.onError(response))
       );

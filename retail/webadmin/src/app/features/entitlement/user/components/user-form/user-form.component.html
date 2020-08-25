@@ -137,7 +137,7 @@
                     <button type="button" mat-raised-button (click)="matDialogRef.close()" color="secondary" aria-label="Follow">
                         Cancel
                     </button> &nbsp;&nbsp;&nbsp;
-                    <button appPermission [permissions]="permissions" [type]="data.user.id? 'edit': 'create'"  type="submit" [disabled]="userForm.invalid" mat-raised-button color="accent" aria-label="Send Message">
+                    <button    type="submit" [disabled]="userForm.invalid" mat-raised-button color="accent" aria-label="Send Message">
                         Submit
                     </button>
                 </div>

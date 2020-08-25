@@ -36,17 +36,17 @@ export class AuthenticationService {
     getUserByToken(token){
         return this.network.getAll(`${URI.USER_INVITATION}/${token}`)
     }
-    resetPassword(model: Login): Observable<any> {
-        return this.network.post(`${URI.FORGOT_PASSWORD}/token`, model)
+    resetPassword(model: Login,token): Observable<any> {
+        return this.network.onUpdate(`${URI.FORGOT_PASSWORD}/${token}`, model)
     }
     logout(): Observable<any> {
         return this.network.onDelete(`${URI.LOGOUT}`)
     }
-    updateInvitation(model): Observable<any> {
-        return this.network.post(`${URI.USER_INVITATION}`,model)
+    updateInvitation(model,token): Observable<any> {
+        return this.network.onUpdate(`${URI.USER_INVITATION}/${token}`,model)
     }
-    getTokenStatus(): Observable<any> {
-        return this.network.getAll(`${URI.FORGOT_PASSWORD}/token`)
+    getTokenStatus(token): Observable<any> {
+        return this.network.getAll(`${URI.FORGOT_PASSWORD}/${token}`)
     }
 
     errorHandler(error) {
