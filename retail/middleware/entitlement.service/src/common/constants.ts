@@ -15,6 +15,7 @@ export const NUMBERS = {
   TOKEN_EXPIRY_IN_MINUTES: 240,
   TOKEN_LENGTH: 64,
   MAX_COLUMN_LENGTH: 255,
+  NATIONALITY_ID_LENGTH: 96,
 };
 
 export const STATUS = {
@@ -50,7 +51,8 @@ export const MESSAGES = {
   NOT_FOUND: 'No Record Found',
   BAD_REQUEST: 'Bad Request',
   BAD_TIME_FORMAT: 'Bad Time Format',
-  INVALID_WEEKDAY: `Weekday should be one of ${Object.keys(WEEK_DAYS)}`
+  INVALID_WEEKDAY: `Weekday should be one of ${Object.keys(WEEK_DAYS)}`,
+  INVALID_STATUS: `Status should be one of ${Object.keys(STATUS)}`
 };
 
 export const DATABASE_UUID_METHOD = 'NEWID()';

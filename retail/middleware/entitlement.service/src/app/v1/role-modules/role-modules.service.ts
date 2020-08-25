@@ -42,6 +42,12 @@ export class RoleModulesService {
     roleModuleObj: Record<string, any>,
     keys?: string[],
   ): Promise<any> {
+    if(roleModuleObj.status && !STATUS[roleModuleObj.status]){
+      throw new HttpException({
+        status: HttpStatus.BAD_REQUEST,
+        error: MESSAGES.INVALID_STATUS,
+      }, HttpStatus.BAD_REQUEST);
+    }
     const result = await this.roleModulesDB.update({ id: id }, roleModuleObj, keys);
     if(result && result.length) {
       return result[0]
@@ -56,6 +62,11 @@ export class RoleModulesService {
   async create(newRoleModule: Record<string, any>, keys?: string[]): Promise<any> {
     if(!newRoleModule.status){
       newRoleModule.status = STATUS.ACTIVE;
+    } else if(!STATUS[newRoleModule.status]){
+      throw new HttpException({
+        status: HttpStatus.BAD_REQUEST,
+        error: MESSAGES.INVALID_STATUS,
+      }, HttpStatus.BAD_REQUEST);
     }
     const result = await this.roleModulesDB.create(newRoleModule, keys);
     if(result && result.length) {

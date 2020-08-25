@@ -66,6 +66,12 @@ export class RoleService {
     roleObj: Record<string, any>,
     keys?: string[],
   ): Promise<any> {
+    if(roleObj.status && !STATUS[roleObj.status]){
+      throw new HttpException({
+        status: HttpStatus.BAD_REQUEST,
+        error: MESSAGES.INVALID_STATUS,
+      }, HttpStatus.BAD_REQUEST);
+    }
     const result = await this.roleDB.update({ id: id }, roleObj, keys);
     if(result && result.length) {
       return result[0]
@@ -80,6 +86,11 @@ export class RoleService {
   async create(newRole: Record<string, any>, keys?: string[]): Promise<any> {
     if(!newRole.status){
       newRole.status = STATUS.ACTIVE;
+    } else if(!STATUS[newRole.status]){
+      throw new HttpException({
+        status: HttpStatus.BAD_REQUEST,
+        error: MESSAGES.INVALID_STATUS,
+      }, HttpStatus.BAD_REQUEST);
     }
     const result = await this.roleDB.create(newRole, keys);
     if(result && result.length) {

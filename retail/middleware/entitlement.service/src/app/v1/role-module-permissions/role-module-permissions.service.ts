@@ -42,6 +42,12 @@ export class RoleModulePermissionsService {
     roleModulePermissionObj: Record<string, any>,
     keys?: string[],
   ): Promise<any> {
+    if(roleModulePermissionObj.status && !STATUS[roleModulePermissionObj.status]){
+      throw new HttpException({
+        status: HttpStatus.BAD_REQUEST,
+        error: MESSAGES.INVALID_STATUS,
+      }, HttpStatus.BAD_REQUEST);
+    }
     const result = await this.roleModulePermissionsDB.update({ id: id }, roleModulePermissionObj, keys);
     if(result && result.length) {
       return result[0]
@@ -56,6 +62,11 @@ export class RoleModulePermissionsService {
   async create(roleModulePermissionObj: Record<string, any>, keys?: string[]): Promise<any> {
     if(!roleModulePermissionObj.status){
       roleModulePermissionObj.status = STATUS.ACTIVE;
+    } else if(!STATUS[roleModulePermissionObj.status]){
+      throw new HttpException({
+        status: HttpStatus.BAD_REQUEST,
+        error: MESSAGES.INVALID_STATUS,
+      }, HttpStatus.BAD_REQUEST);
     }
     const result = await this.roleModulePermissionsDB.create(roleModulePermissionObj, keys);
     if(result && result.length) {

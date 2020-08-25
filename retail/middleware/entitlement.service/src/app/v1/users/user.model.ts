@@ -34,7 +34,7 @@ export class User {
   date_of_birth?: string;
 
   @Field({ nullable: true })
-  nationality_id?: number;
+  nationality_id?: string;
 
   @Field({ nullable: true })
   status?: string;
