@@ -54,9 +54,10 @@ export class UpdateUserInput {
   date_of_birth?: string;
 
   @Field({ nullable: true })
-  @IsNumber()
+  @IsString()
   @IsOptional()
-  nationality_id?: number;
+  @MaxLength(NUMBERS.NATIONALITY_ID_LENGTH)
+  nationality_id?: string;
 
   @Field({ nullable: true })
   @IsString()
