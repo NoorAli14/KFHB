@@ -4,9 +4,13 @@ import {
   Body,
   Param,
   Put,
+  Delete,
   NotFoundException,
   ParseUUIDPipe,
   UseGuards,
+  HttpCode,
+  HttpStatus,
+  HttpService,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -16,6 +20,7 @@ import {
   ApiBearerAuth,
   ApiBadRequestResponse,
   ApiNotFoundResponse,
+  ApiNoContentResponse,
 } from '@nestjs/swagger';
 import { AuthGuard } from '@common/guards/';
 import { UserService } from './users.service';
@@ -106,5 +111,23 @@ export class UsersController {
     @Body() changePasswordDto: ChangePasswordDto,
   ): Promise<any> {
     // this.userService.create(userDto);
+  }
+
+  @Delete(':id')
+  @ApiOperation({
+    summary: 'Delete a User by ID',
+    description:
+      'A successful request returns the HTTP 204 No Content status code with empty response body.',
+  })
+  @ApiNoContentResponse({
+    description: 'User has been successfully deleted.',
+  })
+  @ApiNotFoundResponse({
+    type: Error,
+    description: 'User Not Found.',
+  })
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async delete(@Param('id', ParseUUIDPipe) id: string): Promise<any> {
+    return this.userService.delete(id);
   }
 }

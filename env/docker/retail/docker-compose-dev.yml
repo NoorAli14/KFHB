@@ -59,6 +59,8 @@ services:
       - ENV_RBX_JWT_EXPIRY_IN_MINUTES=$ENV_RBX_JWT_EXPIRY_IN_MINUTES
       - ENV_RBX_JWT_SECRET=$ENV_RBX_JWT_SECRET
       - ENV_RBX_JWT_ALGORITHM=$ENV_RBX_JWT_ALGORITHM
+      - ENV_RBX_WEB_ONBOARDING_LINK=$ENV_RBX_WEB_ONBOARDING_LINK
+      - ENV_RBX_WEB_RESET_PASSWORD_LINK=$ENV_RBX_WEB_RESET_PASSWORD_LINK
     restart: always
     networks:
       - rubix-middleware-network
@@ -146,7 +148,7 @@ services:
       context: ../../../retail/middleware/notifications
       dockerfile: Dockerfile
     image: "notification-service:v1"
-    container_name: "unotification_service"
+    container_name: "notification_service"
     environment:
       - ENV_RBX_PORT=5030
       - ENV_RBX_DB_USERNAME=$ENV_RBX_DB_USERNAME
