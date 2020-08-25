@@ -79,7 +79,7 @@ export class RoleService {
 
   async create(newRole: Record<string, any>, keys?: string[]): Promise<any> {
     if(!newRole.status){
-      newRole.status = STATUS.PENDING;
+      newRole.status = STATUS.ACTIVE;
     }
     const result = await this.roleDB.create(newRole, keys);
     if(result && result.length) {

@@ -56,7 +56,7 @@ export class UserRolesService {
 
   async create(newUserRole: Record<string, any>, keys?: string[]): Promise<any> {
     if(!newUserRole.status){
-      newUserRole.status = STATUS.PENDING;
+      newUserRole.status = STATUS.ACTIVE;
     }
     const result = await this.userRoleDB.create(newUserRole, keys);
     if(result && result.length) {

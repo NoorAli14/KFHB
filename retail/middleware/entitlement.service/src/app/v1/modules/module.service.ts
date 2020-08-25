@@ -127,7 +127,7 @@ export class ModuleService {
 
   async create(newModule: Record<string, any>, keys?: string[]): Promise<any> {
     if(!newModule.status){
-      newModule.status = STATUS.PENDING;
+      newModule.status = STATUS.ACTIVE;
     }
     const result = await this.moduleDB.create(newModule, keys);
     if(result && result.length) {
