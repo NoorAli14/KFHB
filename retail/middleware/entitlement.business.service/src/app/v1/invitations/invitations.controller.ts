@@ -22,7 +22,7 @@ import {
   ApiNotFoundResponse,
 } from '@nestjs/swagger';
 import { UserService } from '@app/v1/users/users.service';
-import { UpdateUserDto } from '@app/v1/users/user.dto';
+import { NewUserDto } from '@app/v1/users/user.dto';
 import { User } from '@app/v1/users/user.entity';
 import { UpdateInvitationDto } from './invitation.dto';
 import { InvitationsService } from './invitations.service';
@@ -40,7 +40,7 @@ export class InvitationsController {
   @Post('/')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  @ApiBody({ description: 'Sets the user properties.', type: UpdateUserDto })
+  @ApiBody({ description: 'Sets the user properties.', type: NewUserDto })
   @ApiOperation({
     summary: 'Send a invitation to a user',
     description:
@@ -54,9 +54,8 @@ export class InvitationsController {
     type: Error,
     description: 'Input Validation failed.',
   })
-  async create(@Body() userDto: UpdateUserDto): Promise<User> {
-    console.log(JSON.stringify(userDto, null, 2));
-    return this.invitationService.invite(userDto);
+  async create(@Body() input: NewUserDto): Promise<User> {
+    return this.invitationService.invite(input);
   }
 
   @Get(':token')

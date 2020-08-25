@@ -10,7 +10,6 @@ import {
   UseGuards,
   HttpCode,
   HttpStatus,
-  HttpService,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -89,9 +88,10 @@ export class UsersController {
   })
   async update(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() userDto: UpdateUserDto,
+    @Body() input: UpdateUserDto,
   ): Promise<User> {
-    return this.userService.update(id, userDto);
+    console.log(JSON.stringify(input, null, 2));
+    return this.userService.update(id, input);
   }
 
   @Put('/password')
