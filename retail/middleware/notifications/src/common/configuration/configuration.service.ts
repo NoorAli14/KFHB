@@ -11,6 +11,7 @@ import {
   iSMTP,
   iOTP,
   iSMS,
+  iEMAILSENDER,
 } from '@common/interfaces/configuration.interface';
 import {
   DEFAULT_OTP_STATUS,
@@ -19,7 +20,9 @@ import {
   DEFAULT_OTP_DURATION,
   DEFAULT_SMS_SENDER,
   DEFAULT_SMS_API_URL,
-  DEFAULT_RUBIX_OTP_BY_API
+  DEFAULT_RUBIX_OTP_BY_API,
+  DEFAULT_SENDING_NAME,
+  DEFAULT_SENDING_EMAIL,
 } from '@rubix/common/constants';
 
 export const DEFAULT_ENV: iConfig = {
@@ -69,11 +72,15 @@ export const DEFAULT_ENV: iConfig = {
     status: DEFAULT_OTP_STATUS,
     duration: DEFAULT_OTP_DURATION,
     OTP_BY_API: DEFAULT_RUBIX_OTP_BY_API,
-    API_URL: ''
+    API_URL: '',
   },
   SMS: {
     api_url: DEFAULT_SMS_API_URL,
-    from: DEFAULT_SMS_SENDER
+    from: DEFAULT_SMS_SENDER,
+  },
+  EMAILSENDER: {
+    NAME: DEFAULT_SENDING_NAME,
+    EMAIL: DEFAULT_SENDING_EMAIL
   }
 };
 @Injectable()
@@ -141,23 +148,39 @@ export class ConfigurationService {
   }
 
   public get OTP(): iOTP {
-    return { 
+    return {
       pattern: this.get('ENV_RBX_OTP_PATTERN', DEFAULT_ENV.OTP.pattern),
-      otp_length: parseInt(this.get('ENV_RBX_OTP_LENGTH', DEFAULT_ENV.OTP.otp_length), 10),
+      otp_length: parseInt(
+        this.get('ENV_RBX_OTP_LENGTH', DEFAULT_ENV.OTP.otp_length),
+        10,
+      ),
       status: this.get('ENV_RBX_OTP_STATUS', DEFAULT_ENV.OTP.status),
-      duration: parseInt(this.get('ENV_RBX_OTP_DURATION', DEFAULT_ENV.OTP.duration), 10),
+      duration: parseInt(
+        this.get('ENV_RBX_OTP_DURATION', DEFAULT_ENV.OTP.duration),
+        10,
+      ),
       OTP_BY_API: isTruthy(
         this.get('ENV_RBX_OTP_BY_API', DEFAULT_ENV.OTP.OTP_BY_API),
       ),
       API_URL: this.get('ENV_RBX_OTP_GENERATOR_API', DEFAULT_ENV.OTP.API_URL),
-    }
+    };
   }
 
   public get SMS(): iSMS {
-    return { 
+    return {
       from: this.get('ENV_RBX_SMS_API_URL', DEFAULT_ENV.SMS.from),
       api_url: this.get('ENV_RBX_SMS_SENDER', DEFAULT_ENV.SMS.api_url),
-    }
+    };
+  }
+
+  public get EMAILSENDER(): iEMAILSENDER {
+    return {
+      NAME: this.get('ENV_RBX_SMTP_SENDING_NAME', DEFAULT_ENV.EMAILSENDER.NAME),
+      EMAIL: this.get(
+        'ENV_RBX_SMTP_SENDING_EMAIL',
+        DEFAULT_ENV.EMAILSENDER.EMAIL,
+      ),
+    };
   }
 
   get SWAGGER(): iSWAGGER {
