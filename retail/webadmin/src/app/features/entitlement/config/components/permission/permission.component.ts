@@ -51,6 +51,7 @@ export class PermissionComponent extends BaseComponent implements OnInit {
     makeFlat(modules: any[], parent_id) {
         modules.forEach((item) => {
             item.parent = item.parent_id? item.parent_id :'N/A';
+            item.module= item.name;
             this.modulesMapped.push(item);
             if (item.sub_modules && item.sub_modules.length > 0) {
                 this.makeFlat(item.sub_modules, item.module);

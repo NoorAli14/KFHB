@@ -69,7 +69,7 @@ export class UserFormComponent extends BaseComponent implements OnInit {
                 this.requiredIfUpdating(() => this.userForm.get("id").value),
             ]),
             contactNo: new FormControl(this.data.user.contactNo, [
-                Validators.required,ValidatorService.numbersOnly
+                ValidatorService.numbersOnly
             ]),
             gender: new FormControl(this.data.user.gender, [
                 this.requiredIfUpdating(() => this.userForm.get("id").value),

@@ -1,4 +1,4 @@
-<div [class.sub-row]="title">
+<div [class.sub-row]="title" *ngIf="modulesMapped.length>0">
     <p>{{ title }}</p>
     <mat-table #table matSort matSortActive="id" matSortDirection="asc" matSortDisableClear [dataSource]="dataSource" [@animateStagger]="{ value: '50' }">
 
@@ -20,4 +20,13 @@
         <mat-row *matRowDef="let row; columns: displayedColumns;" [@animate]="{value:'*',params:{y:'100%'}}">
         </mat-row>
     </mat-table>
+</div>
+
+<div
+*ngIf="modulesMapped.length <1"
+fxLayout="row"
+fxLayoutAlign="center"
+class="p-16  message-box info "
+>
+ No permission assigned to this module
 </div>

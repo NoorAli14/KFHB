@@ -7,6 +7,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { FuseConfigService } from "@fuse/services/config.service";
 import { BaseComponent } from "@shared/components/base/base.component";
 import { snakeToCamelObject, camelToSnakeCase } from '@shared/helpers/global.helper';
+import { ValidatorService } from '@core/services/validator-service/validator.service';
 
 @Component({
     selector: "app-invitation",
@@ -49,19 +50,17 @@ export class InvitationComponent extends BaseComponent implements OnInit {
         };
     }
     ngOnInit(): void {
-      this.errorType = "info";
-      this.responseMessage = MESSAGES.THANKS
         this.userForm = new FormGroup({
             id: new FormControl(),
-            firstName: new FormControl(),
+            firstName: new FormControl('',[Validators.required]),
             middleName: new FormControl(),
-            lastName: new FormControl(),
-            contactNo: new FormControl(),
-            gender: new FormControl(),
-            status: new FormControl(),
+            lastName: new FormControl('',[Validators.required]),
+            contactNo: new FormControl('',[Validators.required,ValidatorService.numbersOnly]),
+            gender: new FormControl('',[Validators.required]),
+            status: new FormControl('',[Validators.required]),
             email: new FormControl('',[Validators.email]),
-            dateOfBirth: new FormControl(),
-            nationalityId: new FormControl(),
+            dateOfBirth: new FormControl('',[Validators.required]),
+            nationalityId: new FormControl('',[Validators.required]),
             password: new FormControl('',Validators.required),
             confirmPassword: new FormControl("", [
               Validators.required,

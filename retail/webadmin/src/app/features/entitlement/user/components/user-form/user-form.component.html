@@ -65,7 +65,7 @@
                             <app-mat-error [control]="userForm.get('email')"></app-mat-error>
                         </mat-error>
                     </mat-form-field>
-                    <mat-form-field appearance="outline" fxFlex="48" class="pl-4">
+                    <mat-form-field *ngIf="data.user.id" appearance="outline" fxFlex="48" class="pl-4">
                         <mat-label>Contact No</mat-label>
                         <input matInput formControlName="contactNo" />
                         <mat-icon matSuffix class="secondary-text">phone</mat-icon>
