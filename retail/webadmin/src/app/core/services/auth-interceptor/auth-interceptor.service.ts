@@ -10,7 +10,7 @@ import {
 import { Observable, empty } from "rxjs";
 import { StorageService } from "../storage/storage.service";
 import { mergeMap } from "rxjs/operators";
-import { USER_CONST } from "@shared/constants/app.constants";
+import { APP_CONST } from "@shared/constants/app.constants";
 import { EventBusService } from "../event-bus/event-bus.service";
 import { EmitEvent } from "@shared/models/emit-event.model";
 import { Events } from "@shared/enums/events.enum";
@@ -56,9 +56,9 @@ export class AuthInterceptorService implements HttpInterceptor {
                             "----------------------------Token expired------------------------"
                         );
                         // this.notification.expiredToken();
-                        this.eventService.emit(
-                            new EmitEvent(Events.SESSION_EXPIRED, true)
-                        );
+                        // this.eventService.emit(
+                        //     // new EmitEvent(Events.SESSION_EXPIRED, true)
+                        // );
                         return empty();
                     }
                     // this.notification.refreshed();
@@ -84,7 +84,7 @@ export class AuthInterceptorService implements HttpInterceptor {
         return this.http.post(URL, null, { observe: "response" });
     }
     getHttpOption(hasRefreshToken) {
-        const token = this.storage.getItem(USER_CONST.ACCESS_TOKEN);
+        const token = this.storage.getItem(APP_CONST.ACCESS_TOKEN);
 
         const httpOptions = {
             headers: new HttpHeaders({

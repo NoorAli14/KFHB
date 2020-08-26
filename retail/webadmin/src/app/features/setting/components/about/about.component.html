@@ -1,0 +1,64 @@
+<div id="about" class="p-24" fxLayout="row wrap">
+    <div class="about-content" fxLayout="column" fxFlex="100">
+        <div class="profile-box info-box general" fxLayout="column">
+
+            <header class="accent">
+                <div class="title">General Information</div>
+            </header>
+
+            <div class="content">
+                <div fxLayout="column" fxFlex="48">
+                    <div class="info-line">
+                        <div class="title">User Name</div>
+                        <div class="info">{{user.username?user.username : 'N/A'}}</div>
+                    </div>
+                    <div class="info-line">
+                        <div class="title">First Name</div>
+                        <div class="info">{{user.firstName?user.firstName : 'N/A'}}</div>
+                    </div>
+
+                    <div class="info-line">
+                        <div class="title">Middle Name</div>
+                        <div class="info">{{user.middleName?user.middleName : 'N/A'}}</div>
+                    </div>
+                    <div class="info-line">
+                        <div class="title">Last Name</div>
+                        <div class="info">{{user.lastName?user.lastName : 'N/A'}}</div>
+                    </div>
+                    <div class="info-line">
+                        <div class="title">Email</div>
+                        <div class="info">{{user.email?user.email : 'N/A'}}</div>
+                    </div>
+
+                   
+                </div>
+                <div fxLayout="column" fxFlex="48">
+                    <div class="info-line">
+                        <div class="title">Gender</div>
+                        <div class="info">{{user.gender?user.gender : 'N/A'}}</div>
+                    </div>
+
+                    <div class="info-line">
+                        <div class="title">Nationality</div>
+                        <div class="info">{{user.nationalityId?getNationality(user.nationalityId) : 'N/A'}}</div>
+                    </div>
+
+                    <div class="info-line">
+                        <div class="title">Date of Birth</div>
+                        <div class="info">{{user.dateOfBirth?user.dateOfBirth : 'N/A'}}</div>
+                    </div>
+                    <div class="info-line">
+                        <div class="title">Contact</div>
+                        <div class="info">{{user.contactNo?user.contactNo : 'N/A'}}</div>
+                    </div>
+
+                    <div class="info-line">
+                        <div class="title">Created On</div>
+                        <div class="info">{{user.createdOn?user.createdOn : 'N/A'}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

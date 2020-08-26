@@ -1,62 +1,81 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router, ActivatedRoute } from "@angular/router";
+import { Component, OnInit, ViewEncapsulation } from "@angular/core";
+import {
+    FormBuilder,
+    FormGroup,
+    Validators,
+    FormControl,
+} from "@angular/forms";
 
-import { FuseConfigService } from '@fuse/services/config.service';
-import { fuseAnimations } from '@fuse/animations';
+import { FuseConfigService } from "@fuse/services/config.service";
+import { fuseAnimations } from "@fuse/animations";
+import { AuthenticationService } from "@core/services/auth/authentication.service";
+import { MESSAGES } from "@shared/constants/app.constants";
+import { BaseComponent } from '@shared/components/base/base.component';
 
 @Component({
-    selector     : 'app-login',
-    templateUrl  : './login.component.html',
-    styleUrls    : ['./login.component.scss'],
+    selector: "app-login",
+    templateUrl: "./login.component.html",
+    styleUrls: ["./login.component.scss"],
     encapsulation: ViewEncapsulation.None,
-    animations   : fuseAnimations
+    animations: fuseAnimations,
 })
-export class LoginComponent implements OnInit
-{
+export class LoginComponent extends BaseComponent implements OnInit {
     loginForm: FormGroup;
-
-    /**
-     * Constructor
-     *
-     * @param {FuseConfigService} _fuseConfigService
-     * @param {FormBuilder} _formBuilder
-     */
+    
+    
+    returnUrl: string;
     constructor(
         private _fuseConfigService: FuseConfigService,
-        private _formBuilder: FormBuilder
-    )
-    {
+        private _authService: AuthenticationService,
+        private route: ActivatedRoute,
+        private router: Router
+    ) {
+        super()
         // Configure the layout
         this._fuseConfigService.config = {
             layout: {
-                navbar   : {
-                    hidden: true
+                navbar: {
+                    hidden: true,
                 },
-                toolbar  : {
-                    hidden: true
+                toolbar: {
+                    hidden: true,
                 },
-                footer   : {
-                    hidden: true
+                footer: {
+                    hidden: true,
                 },
                 sidepanel: {
-                    hidden: true
-                }
-            }
+                    hidden: true,
+                },
+            },
         };
     }
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Lifecycle hooks
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * On init
-     */
-    ngOnInit(): void
-    {
-        this.loginForm = this._formBuilder.group({
-            email   : ['', [Validators.required, Validators.email]],
-            password: ['', Validators.required]
+    ngOnInit(): void {
+        this.returnUrl = this.route.snapshot.queryParamMap.get("returnUrl");
+        this.loginForm = new FormGroup({
+            email: new FormControl("r@g.com", [
+                Validators.required,
+                Validators.email,
+            ]),
+            password: new FormControl("Abcd@123", [Validators.required]),
         });
+    }
+    onSubmit() {
+        this._authService.login(this.loginForm.value).subscribe(
+            (response) => {
+                 this.errorType = "success";
+                 this.responseMessage = MESSAGES.LOGGED_IN;
+                setTimeout(() => {
+                    this.router.navigateByUrl(
+                        this.returnUrl ? this.returnUrl : '/ent/user'
+                    );
+                }, 1000);
+            },
+            (error) => {
+                 this.errorType = "error";
+                 this.responseMessage = MESSAGES.INVALID_CREDENTIAL;
+            }
+        );
     }
 }

@@ -1,0 +1,32 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar class="mat-accent m-0">
+        <mat-toolbar-row fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+            <div class="logo mb-24 mb-md-0" fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon mr-12" [@animate]="{
+                        value: '*',
+                        params: { delay: '50ms', scale: '0.2' }
+                    }">
+                    person
+                </mat-icon>
+                <span class="logo-text" [@animate]="{
+                        value: '*',
+                        params: { delay: '100ms', x: '-25px' }
+                    }">
+                    {{data.firstName +' ' + data.lastName}}
+                </span>
+            </div>
+            <button mat-icon-button (click)="matDialogRef.close()" aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
+        <div fxLayout="row wrap" fxLayout.lt-lg="column" fxLayoutAlign.lt-lg="center" fxLayoutGap="20px" fxLayoutAlign="start center" fxFlex="1 1 auto">
+           <ng-container *ngFor="let module of data.modules">
+            <app-detail-item [module]="module" ></app-detail-item>
+           </ng-container>
+           
+        </div>
+    </div>
+</div>

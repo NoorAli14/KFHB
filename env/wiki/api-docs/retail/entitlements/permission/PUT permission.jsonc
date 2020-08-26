@@ -1,0 +1,39 @@
+/** Faizan AH / 2020-07-29
+
+/**
+ * HTTP Method: PUT
+ * URL: */api/v1/entitlements/permissions/:id
+ **/
+
+ /**
+ * HTTP-HEADER:
+ *    x-access-token : <JWT Token> [Mandatory]
+ *    content-type: application/json [Mandatory - Enumerator]
+ **/
+
+ /**
+  * Request Body
+  **/
+  {
+      "name": "",             // [Mandatory]  Min Length: 3 | Max Length: 96 
+  }
+ 
+  /**
+  * HTTP STATUS CODE: 200 OK
+  * Response Headers:
+  *     x-correlation-id : <UUID> [Mandatory]
+  *     x-response-time : <Execution time in Milli seconds> [Mandatory]
+  *     date: : <Timestamp> [Mandatory]
+  **/
+
+
+ /**
+  * Response Body
+  */
+  {
+    "id": "",
+    "name": "",
+    "created_on": "",
+    "created_by": ""
+}
+

@@ -1,5 +1,11 @@
+export interface iCORS {
+  ORIGIN?: string;
+  ENABLE?: boolean;
+}
+
 export interface iSWAGGER {
   ROUTE?: string;
+  ENABLE?: boolean;
 }
 export interface iGRAPHQL {
   ROUTE?: string;
@@ -13,7 +19,7 @@ export interface iAPP {
   VERSION?: string;
   /** The port number of the http server to listen on. */
   PORT: number;
-  HOST?: string;
+  HOST: string;
   API_URL_PREFIX: string;
   API_INFO_ROUTE?: string;
   API_INFO_ENABLED?: boolean;
@@ -31,6 +37,12 @@ export interface iDATABASE {
   TIMEOUT?: number;
   IS_DEBUG?: boolean;
 }
+
+export interface iRATE_LIMITER {
+  ENABLE: boolean;
+  INTERVAL: number;
+  MAX_REQUEST: number;
+}
 export interface iConfig {
   /** Application Details */
   APP: iAPP;
@@ -38,6 +50,8 @@ export interface iConfig {
   DATABASE?: iDATABASE;
   SWAGGER?: iSWAGGER;
   GRAPHQL?: iGRAPHQL;
+  RATE_LIMITER?: iRATE_LIMITER;
+  CORS?: iCORS;
 
   /**
    * The log level to use.

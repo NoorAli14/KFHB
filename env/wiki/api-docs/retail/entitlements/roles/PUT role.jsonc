@@ -1,0 +1,85 @@
+/** Faizan AH / 2020-07-29
+
+/**
+ * HTTP Method: PUT
+ * URL: */api/v1/entitlements/roles/:id
+ **/
+
+ /**
+ * HTTP-HEADER:
+ *    x-access-token : <JWT Token> [Mandatory]
+ *    content-type: application/json [Mandatory - Enumerator]
+ **/
+
+ /**
+  * Request Body
+  **/
+  {
+      "name": "",             // [Mandatory]  Min Length: 3 | Max Length: 96 
+      "description": "",      // [Optional]   Max Length: 255
+      "modules": [{"id": "", _deleted: true}, {"id": ""}] // [Optional]   Array of Module IDs
+  }
+ 
+  /**
+  * HTTP STATUS CODE: 200 OK
+  * Response Headers:
+  *     x-correlation-id : <UUID> [Mandatory]
+  *     x-response-time : <Execution time in Milli seconds> [Mandatory]
+  *     date: : <Timestamp> [Mandatory]
+  **/
+
+
+ /**
+  * Response Body
+  */
+  {
+    "id": "",
+    "name": "",
+    "description": "",
+    "modules": [{
+        "id": "",
+        "name": "",
+        "sub_modules": [{
+            "id": "",
+            "name": "",
+            "permissions": [{
+                "id": "",
+                "name": ""
+            }] 
+        }],
+        "permissions": [{
+            "id": "",
+            "name": ""
+        }]
+    }, {
+        "id": "",
+        "name": "",
+        "sub_modules": [{
+            "id": "",
+            "name": "",
+            "permissions": [{
+                "id": "",
+                "name": ""
+            }] 
+        }],
+        "permissions": [{
+            "id": "",
+            "name": ""
+        },{
+            "name": ""
+        }]
+    }, {
+        "id": "",
+        "name": "",
+        "permissions": [{
+            "id": "",
+            "name": ""
+        }]
+    }],
+    "status": "",
+    "created_on": "",
+    "created_by": "",
+    "updated_on": "",
+    "updated_by": ""
+}
+

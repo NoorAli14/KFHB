@@ -2,35 +2,99 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+directive @key(fields: String!) on OBJECT | INTERFACE
+
+directive @extends on OBJECT | INTERFACE
+
+directive @external on OBJECT | FIELD_DEFINITION
+
+directive @requires(fields: String!) on FIELD_DEFINITION
+
+directive @provides(fields: String!) on FIELD_DEFINITION
+
+type Comment {
+  id: String!
+  message: String
+  post_id: String!
+  post: Post!
+  created_on: DateTime!
+  updated_on: DateTime!
+}
+
+input CreateUserInput {
+  first_name: String
+  last_name: String
+  email: String!
+  password: String!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
 
 type Mutation {
-  addUser(input: NewUserInput!): UserGQL!
-  updateUser(input: NewUserInput!, id: String!): UserGQL!
+  addUser(input: CreateUserInput!): User!
+  updateUser(input: UpdateUserInput!, id: String!): User!
   deleteUser(id: String!): Boolean!
+  addPost(input: NewPostInput!): Post!
+  updatePost(input: UpdatePostInput!, id: String!): Post!
+  deletePost(id: String!): Boolean!
+  addComment(input: NewCommentInput!): Comment!
+  updateComment(input: UpdateCommentInput!, id: String!): Comment!
+  deleteComment(id: String!): Boolean!
 }
 
-input NewUserInput {
-  first_name: String
-  last_name: String
-  email: String!
-  password: String!
+input NewCommentInput {
+  message: String
+  post_id: String!
+}
+
+input NewPostInput {
+  description: String
+  user_id: String!
+}
+
+type Post {
+  id: String!
+  user_id: String!
+  description: String
+  comments: [Comment!]!
+  author: User!
+  created_on: DateTime!
+  updated_on: DateTime!
 }
 
 type Query {
-  usersList: [UserGQL!]!
-  findUser(id: String!): UserGQL!
+  users: [User!]!
+  findUser(id: String!): User!
+  posts: [Post!]!
+  findPost(id: String!): Post!
+  comments: [Comment!]!
+  findComment(id: String!): Comment!
 }
 
-type UserGQL {
+input UpdateCommentInput {
+  message: String
+}
+
+input UpdatePostInput {
+  description: String
+}
+
+input UpdateUserInput {
+  first_name: String
+  last_name: String
+}
+
+type User {
   id: ID!
   first_name: String
   last_name: String
   email: String!
   password: String!
+  posts: [Post!]!
+  comments: [Comment!]!
   created_on: DateTime!
   updated_on: DateTime!
 }

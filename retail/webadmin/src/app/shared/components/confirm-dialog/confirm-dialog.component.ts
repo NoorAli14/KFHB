@@ -16,18 +16,10 @@ export class ConfirmDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: ConfirmDialogModel) {
     // Update view with given values
     this.title = data.title;
-    this.message = data.message;
+     this.message = data.message;
   }
 
   ngOnInit() {
-  }
-
-  onConfirm(): void {
-    this.dialogRef.close(true);
-  }
-
-  onDismiss(): void {
-    this.dialogRef.close(false);
   }
 }
 export class ConfirmDialogModel {

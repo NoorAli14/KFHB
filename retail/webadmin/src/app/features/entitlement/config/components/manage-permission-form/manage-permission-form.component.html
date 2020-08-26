@@ -1,0 +1,45 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar class="mat-accent m-0">
+        <mat-toolbar-row fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+            <div class="logo mb-24 mb-md-0" fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon mr-12" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+                    perm_contact_calendar
+                </mat-icon>
+                <span class="logo-text" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                    Manage Permission
+                </span>
+            </div>
+            <button mat-icon-button (click)="matDialogRef.close()" aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
+        <form class="p-24 mr-24" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto" name="managePermissionForm" (ngSubmit)="onSubmit()" novalidate [formGroup]="managePermissionForm">
+            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                <mat-form-field appearance="outline" fxFlex="100" class="pr-4">
+                    <mat-label>Permission</mat-label>
+                    <mat-select formControlName="permissionId" multiple>
+                        <mat-option *ngFor="let permission of permissions" [value]="permission.id">
+                            {{ permission.name }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-icon matSuffix class="secondary-text">security</mat-icon>
+                    <mat-error>
+                        <app-mat-error [control]="managePermissionForm.get('permissionId')"></app-mat-error>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="actions" fxLayout="row" fxLayoutAlign="end center">
+                <button type="button" mat-raised-button (click)="matDialogRef.close()" color="secondary" aria-label="Follow">
+                    Cancel
+                </button> &nbsp;&nbsp;&nbsp;
+                <button type="submit" [disabled]="managePermissionForm.invalid" mat-raised-button color="accent" aria-label="Send Message">
+                    Submit
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

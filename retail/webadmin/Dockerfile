@@ -44,7 +44,10 @@ RUN rm -rf /usr/share/nginx/html/*
 COPY ./nginx.conf ./etc/nginx/conf.d/default.conf
 COPY --from=nodeBuild /app/dist /usr/share/nginx/html
 
+#  RUN chmod 777 -R /usr/share/nginx/html
+
 EXPOSE 4200
+
 
 ## startup.sh script is launched at container run
 ADD ./startup.sh ./startup.sh

@@ -16,24 +16,24 @@
             </div>
 
             <div class="title">LOGIN TO YOUR ACCOUNT</div>
-
-            <form name="loginForm" [formGroup]="loginForm" novalidate>
+            <div *ngIf="responseMessage.length > 0" fxLayout="row" fxLayoutAlign="center" class="p-16  message-box {{ errorType }} ">
+                {{ responseMessage }}
+            </div>
+            <br>
+            <form
+                name="loginForm"
+                [formGroup]="loginForm"
+                (ngSubmit)="onSubmit()"
+                novalidate
+            >
                 <mat-form-field appearance="outline">
                     <mat-label>Email</mat-label>
                     <input matInput formControlName="email" />
                     <mat-icon matSuffix class="secondary-text">mail</mat-icon>
-                    <mat-error
-                        *ngIf="loginForm.get('email').hasError('required')"
-                    >
-                        Email is required
-                    </mat-error>
-                    <mat-error
-                        *ngIf="
-                            !loginForm.get('email').hasError('required') &&
-                            loginForm.get('email').hasError('email')
-                        "
-                    >
-                        Please enter a valid email address
+                    <mat-error>
+                        <app-mat-error
+                            [control]="loginForm.get('email')"
+                        ></app-mat-error>
                     </mat-error>
                 </mat-form-field>
 
@@ -48,7 +48,9 @@
                         >vpn_key</mat-icon
                     >
                     <mat-error>
-                        Password is required
+                        <app-mat-error
+                            [control]="loginForm.get('password')"
+                        ></app-mat-error>
                     </mat-error>
                 </mat-form-field>
 
@@ -73,9 +75,9 @@
                 </div>
 
                 <button
+                    type="submit"
                     mat-raised-button
                     color="accent"
-                    [routerLink]="'/user'"
                     class="submit-button"
                     aria-label="LOG IN"
                     [disabled]="loginForm.invalid"
@@ -88,17 +90,33 @@
             </div>
 
             <div fxLayout="row" fxLayoutAlign="space-between">
-                <button mat-raised-button class="google" style="background-color:#d73d32;color:white">
+                <button
+                    mat-raised-button
+                    class="google"
+                    style="background-color: #d73d32; color: white;"
+                >
                     Google
                 </button>
 
-                <button mat-raised-button class="facebook" style="background-color:rgb(63, 92, 154);color:white">
+                <button
+                    mat-raised-button
+                    class="facebook"
+                    style="background-color: rgb(63, 92, 154); color: white;"
+                >
                     Facebook
                 </button>
-                <button mat-raised-button class="github" style="background-color:black;color:white">
+                <button
+                    mat-raised-button
+                    class="github"
+                    style="background-color: black; color: white;"
+                >
                     Github
                 </button>
-                <button mat-raised-button class="twitter" style="background-color:#2196f3;color:white">
+                <button
+                    mat-raised-button
+                    class="twitter"
+                    style="background-color: #2196f3; color: white;"
+                >
                     Twitter
                 </button>
             </div>

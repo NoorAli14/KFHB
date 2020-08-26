@@ -1,4 +1,4 @@
-import { Injectable, NotImplementedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { get } from 'lodash';
 import * as dotenv from 'dotenv';
 import { isTruthy } from '@common/utilities';
@@ -8,7 +8,7 @@ import {
   iSWAGGER,
   iGRAPHQL,
   iConfig,
-} from '@common/interfaces/configuration.interface';
+} from '@rubix/common/interfaces/configuration.interface';
 export const DEFAULT_ENV: iConfig = {
   APP: {
     NAME: 'Rubix | Boilerplate',

@@ -1,6 +1,5 @@
 
 import {
-    NgxUiLoaderModule,
     NgxUiLoaderConfig,
     SPINNER,
     POSITION,
@@ -16,3 +15,8 @@ export const ngxUiLoaderConfig: NgxUiLoaderConfig = {
     pbDirection: PB_DIRECTION.leftToRight, // progress bar direction
     pbThickness: 5 // progress bar thickness
   };
+  
+  export const CONFIG={
+    PAGE_SIZE:5,
+    PAGE_SIZE_OPTIONS:[5,10,15]
+  }

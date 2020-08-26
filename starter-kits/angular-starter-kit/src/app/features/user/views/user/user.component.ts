@@ -38,8 +38,8 @@ export class UserComponent implements OnInit, AfterViewInit {
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
     username: FormControl;
-    message: string = "";
-    type: string = "";
+    
+    
 
     displayedColumns = [
         "username",

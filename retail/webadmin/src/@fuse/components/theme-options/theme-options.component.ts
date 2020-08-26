@@ -62,6 +62,7 @@ export class FuseThemeOptionsComponent implements OnInit, OnDestroy
      */
     ngOnInit(): void
     {
+
         // Build the config form
         // noinspection TypeScriptValidateTypes
         this.form = this._formBuilder.group({
@@ -130,25 +131,25 @@ export class FuseThemeOptionsComponent implements OnInit, OnDestroy
             });
 
         // Add customize nav item that opens the bar programmatically
-        const customFunctionNavItem = {
-            id      : 'custom-function',
-            title   : 'Custom Function',
-            type    : 'group',
-            icon    : 'settings',
-            children: [
-                {
-                    id      : 'customize',
-                    title   : 'Customize',
-                    type    : 'item',
-                    icon    : 'settings',
-                    function: () => {
-                        this.toggleSidebarOpen('themeOptionsPanel');
-                    }
-                }
-            ]
-        };
+        // const customFunctionNavItem = {
+        //     id      : 'custom-function',
+        //     title   : 'Custom Function',
+        //     type    : 'group',
+        //     icon    : 'settings',
+        //     children: [
+        //         {
+        //             id      : 'customize',
+        //             title   : 'Customize',
+        //             type    : 'item',
+        //             icon    : 'settings',
+        //             function: () => {
+        //                 this.toggleSidebarOpen('themeOptionsPanel');
+        //             }
+        //         }
+        //     ]
+        // };
 
-        this._fuseNavigationService.addNavigationItem(customFunctionNavItem, 'end');
+        // this._fuseNavigationService.addNavigationItem(customFunctionNavItem, 'end');
     }
 
     /**

@@ -1,0 +1,23 @@
+div {
+    margin: 12px 10px;
+}
+
+.mat-table {
+    background-color: inherit;
+    .mat-icon {
+        position: relative;
+        top: 4px;
+        cursor: pointer;
+        &.active {
+            transform: rotate(90deg);
+            margin-left: -8px;
+        }
+    }
+}
+
+.expandable-row {
+    border-bottom: 1px solid rgba(0, 0, 0, .1);
+    background-color: #fafafa;
+    min-height: 0;
+    overflow: hidden;
+}

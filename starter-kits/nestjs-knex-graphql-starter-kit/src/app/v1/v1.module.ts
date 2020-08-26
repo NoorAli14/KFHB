@@ -1,15 +1,20 @@
 import { Module } from '@nestjs/common';
 import { join } from 'path';
+import { GraphQLFederationModule } from '@nestjs/graphql';
+import { DataloaderModule } from '@rubix/core/dataloaders/loader.module';
+import { CommonModule } from '@rubix/common/common.module';
+import { ConfigurationService } from '@rubix/common/configuration/configuration.service';
 import { UsersModule } from './users/users.module';
-import { Routes } from 'nest-router';
-import { GraphQLModule } from '@nestjs/graphql';
-import { CommonModule } from '@common/common.module';
-import { ConfigurationService } from '@common/configuration/configuration.service';
+import { PostModule } from './posts/posts.module';
+import { CommentsModule } from './comments/comments.module';
 
 @Module({
   imports: [
+    DataloaderModule,
     UsersModule,
-    GraphQLModule.forRootAsync({
+    PostModule,
+    CommentsModule,
+    GraphQLFederationModule.forRootAsync({
       imports: [CommonModule],
       useFactory: async (configService: ConfigurationService) => ({
         debug: configService.GRAPHQL.DEBUG,
@@ -20,20 +25,4 @@ import { ConfigurationService } from '@common/configuration/configuration.servic
     }),
   ],
 })
-export class V1Module {
-  static Routes(): Routes {
-    const routes: Routes = [
-      {
-        path: '/v1',
-        module: V1Module,
-        children: [
-          {
-            path: '/users',
-            module: UsersModule,
-          },
-        ],
-      },
-    ];
-    return routes;
-  }
-}
+export class V1Module {}

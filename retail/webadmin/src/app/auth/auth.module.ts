@@ -12,20 +12,17 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { PhoneVerificationComponent } from './views/phone-verification/phone-verification.component';
+import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
-    declarations: [LoginComponent,  ForgotPasswordComponent, ResetPasswordComponent],
+    declarations: [LoginComponent,  ForgotPasswordComponent, ResetPasswordComponent, PhoneVerificationComponent],
     imports: [
         CommonModule,
         MaterialFormsModule,
         FuseSharedModule,
-        AuthRoutingModule,
-        MatButtonModule,
-        MatCheckboxModule,
-        MatFormFieldModule,
-        MatIconModule,
-        MatInputModule,
-
+        SharedModule,
+        AuthRoutingModule
     ],
 })
 export class AuthModule {}
