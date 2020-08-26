@@ -4,20 +4,20 @@ import { CommonModule } from '@common/common.module';
 import { DBConfigurationService } from '@common/configuration/dbconfiguration.service';
 import {
   TemplateRepository,
-  OptionRepository,
+  SectionRepository,
   QuestionRepository,
+  OptionRepository,
   TemplateQuestionsRepository,
   TemplateResponsesRepository,
-  SectionRepository,
 } from './';
 
 const repositories = [
   TemplateRepository,
-  OptionRepository,
+  SectionRepository,
   QuestionRepository,
+  OptionRepository,
   TemplateQuestionsRepository,
   TemplateResponsesRepository,
-  SectionRepository,
 ];
 
 @Module({

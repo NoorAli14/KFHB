@@ -6,6 +6,11 @@ import {
   Param,
   Put,
   Delete,
+  NotFoundException,
+  ParseUUIDPipe,
+  HttpStatus,
+  HttpCode,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -16,19 +21,22 @@ import {
   ApiBearerAuth,
   ApiNoContentResponse,
   ApiBadRequestResponse,
+  ApiNotFoundResponse,
 } from '@nestjs/swagger';
 import { RoleService } from './roles.service';
 import { Role } from './role.entity';
 import { RoleDto } from './role.dto';
+import { AuthGuard } from '@common/guards/';
 
 @ApiTags('Role')
 @Controller('roles')
 @ApiBearerAuth()
+@UseGuards(AuthGuard)
 export class RolesController {
   constructor(private readonly roleService: RoleService) {}
 
   @Post('/')
-  @ApiBody({ description: 'Sets the role properties.' })
+  @ApiBody({ description: 'Sets the role properties.', type: RoleDto })
   @ApiOperation({
     summary: 'Create a new role',
     description:
@@ -42,14 +50,14 @@ export class RolesController {
     type: Error,
     description: 'Input Validation failed.',
   })
-  async create(@Body() roleDto: Role): Promise<Role> {
+  async create(@Body() roleDto: RoleDto): Promise<Role> {
     return this.roleService.create(roleDto);
   }
 
   @Get('/')
   @ApiOperation({
     description:
-      'A successful request returns the HTTP 20O OK status code and a JSON response body that shows list of roles information.',
+      'A successful request returns the HTTP 200 OK status code and a JSON response body that shows list of roles information.',
     summary: 'List of all the roles',
   })
   @ApiOkResponse({ type: [Role], description: 'List of all the roles.' })
@@ -67,12 +75,20 @@ export class RolesController {
     type: Role,
     description: 'Role has been successfully retrieved.',
   })
-  async findOne(@Param('id') id: string): Promise<Role> {
-    return this.roleService.findOne(id);
+  @ApiNotFoundResponse({
+    type: Error,
+    description: 'Role Not Found.',
+  })
+  async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<Role> {
+    const role: Role = await this.roleService.findOne(id);
+    if (!role) {
+      throw new NotFoundException('Role Not Found');
+    }
+    return role;
   }
 
   @Put(':id')
-  @ApiBody({ description: 'Sets the role properties.' })
+  @ApiBody({ description: 'Sets the role properties.', type: RoleDto })
   @ApiOperation({
     summary: 'Update a role by ID',
     description:
@@ -86,8 +102,15 @@ export class RolesController {
     type: Error,
     description: 'Input Validation failed.',
   })
-  async update(@Body() roleDto: Role): Promise<Role> {
-    return this.roleService.create(roleDto);
+  @ApiNotFoundResponse({
+    type: Error,
+    description: 'Role Not Found.',
+  })
+  async update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() roleDto: RoleDto,
+  ): Promise<Role> {
+    return this.roleService.update(id, roleDto);
   }
 
   @Delete(':id')
@@ -97,7 +120,12 @@ export class RolesController {
       'A successful request returns the HTTP 204 No Content status code with empty response body.',
   })
   @ApiNoContentResponse({ description: 'Role has been successfully deleted.' })
-  async delete(@Param('id') id: string): Promise<any> {
-    this.roleService.delete(id);
+  @ApiNotFoundResponse({
+    type: Error,
+    description: 'Role Not Found.',
+  })
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async delete(@Param('id', ParseUUIDPipe) id: string): Promise<any> {
+    return this.roleService.delete(id);
   }
 }

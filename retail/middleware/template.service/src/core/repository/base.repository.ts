@@ -43,9 +43,20 @@ export abstract class BaseRepository {
       .first();
   }
 
-  async findByIds(ids: readonly string[], keys?: string[]): Promise<any> {
-    return this._connection(this._tableName)
+  async findByIds(
+    ids: readonly string[],
+    keys?: string[],
+    sort_according_to_ids = false,
+  ): Promise<any> {
+    const result: any[] = await this._connection(this._tableName)
       .select(keys)
       .whereIn('id', ids);
+
+    if (sort_according_to_ids) {
+      return result.sort(function(a, b) {
+        return ids.indexOf(a.id) - ids.indexOf(b.id);
+      });
+    }
+    return result;
   }
 }

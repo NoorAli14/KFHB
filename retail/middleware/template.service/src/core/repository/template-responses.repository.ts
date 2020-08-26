@@ -10,9 +10,7 @@ export class TemplateResponsesRepository extends BaseRepository {
   }
 
   async list(keys: string | string[]): Promise<any> {
-    const query: QueryBuilder = this._connection(this._tableName).select(keys);
-
-    return query;
+    return this._connection(this._tableName).select(keys);
   }
 
   async findOne(condition: Record<string, any>, keys?: string[]): Promise<any> {

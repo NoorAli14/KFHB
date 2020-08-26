@@ -1,22 +1,7 @@
-import {
-  IsOptional,
-  Length,
-} from 'class-validator';
+import {IsOptional, Length} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import {IdsDto} from '@common/dtos'
 
-class permissionDto {
-  @ApiProperty({
-    title: 'Permission ID',
-    example: '3dfdecc1-a616-4817-a841-61d824d82a13',
-    description: 'Unique Identifier',
-    required: true
-  })
-  readonly id: string;
-
-  @ApiProperty({required: false})
-  @IsOptional()
-  readonly _delete?: boolean;
-}
 export class ModuleDto {
  @ApiProperty({
     example: 'User Management',
@@ -35,6 +20,6 @@ export class ModuleDto {
   @IsOptional()
   parent_id?: string;
 
-  @ApiProperty({ type: [permissionDto], description: 'List of permission IDs.'  })
-  permissions?: permissionDto[];
+  @ApiProperty({ type: [IdsDto], description: 'List of permission IDs.'  })
+  permissions?: IdsDto[];
 }

@@ -1,41 +1,41 @@
 import {
   Controller,
-  Post,
   Get,
   Body,
   Param,
   Put,
-  Delete,
+  NotFoundException,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import {
   ApiTags,
   ApiOkResponse,
-  ApiCreatedResponse,
   ApiOperation,
   ApiBody,
   ApiBearerAuth,
-  ApiNoContentResponse,
   ApiBadRequestResponse,
+  ApiNotFoundResponse,
 } from '@nestjs/swagger';
 import { UserService } from './users.service';
-import { Role } from './user.entity';
-import { RoleDto } from './user.dto';
+import { User } from './user.entity';
+import { ChangePasswordDto, UpdateUserDto } from './user.dto';
+import { SuccessDto } from '@common/dtos/';
 
 @ApiTags('User')
 @Controller('users')
 @ApiBearerAuth()
 export class UsersController {
-  constructor(private readonly roleService: UserService) {}
+  constructor(private readonly userService: UserService) {}
 
   @Get('/')
   @ApiOperation({
     description:
       'A successful request returns the HTTP 200 OK status code and a JSON response body that shows list of users information.',
-    summary: 'List of all the modules',
+    summary: 'List of all users.',
   })
-  @ApiOkResponse({ type: [Role], description: 'List of all the users.' })
-  async list(): Promise<Role[]> {
-    return this.roleService.list();
+  @ApiOkResponse({ type: [User], description: 'List of all users.' })
+  async list(): Promise<User[]> {
+    return this.userService.list();
   }
 
   @Get(':id')
@@ -45,42 +45,67 @@ export class UsersController {
       'A successful request returns the HTTP 200 OK status code and a JSON response body that shows user information.',
   })
   @ApiOkResponse({
-    type: Role,
+    type: User,
     description: 'User has been successfully retrieved.',
   })
-  async findOne(@Param('id') id: string): Promise<Role> {
-    return this.roleService.findOne(id);
+  @ApiNotFoundResponse({
+    type: Error,
+    description: 'User Not Found.',
+  })
+  async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<User> {
+    const user = await this.userService.findOne(id);
+    if (!user) {
+      throw new NotFoundException('User Not Found');
+    }
+    return user;
   }
 
   @Put(':id')
-  @ApiBody({ description: 'Sets the user properties.' })
+  @ApiBody({ description: 'Sets the user properties.', type: UpdateUserDto })
   @ApiOperation({
     summary: 'Update a user by ID',
     description:
       'A successful request returns the HTTP 200 OK status code and a JSON response body that shows user information.',
   })
   @ApiOkResponse({
-    type: Role,
+    type: User,
     description: 'User has been successfully updated.',
   })
   @ApiBadRequestResponse({
     type: Error,
     description: 'Input Validation failed.',
   })
-  async update(@Body() roleDto: Role): Promise<Role> {
-    return this.roleService.create(roleDto);
+  @ApiNotFoundResponse({
+    type: Error,
+    description: 'User Not Found.',
+  })
+  async update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() userDto: UpdateUserDto,
+  ): Promise<User> {
+    const user = await this.userService.findOne(id);
+    if (!user) {
+      throw new NotFoundException('User Not Found');
+    }
+    return this.userService.update(id, userDto);
   }
 
   @Put('/password')
+  @ApiBody({
+    description: 'Sets the user properties.',
+    type: ChangePasswordDto,
+  })
   @ApiOperation({
     summary: 'Update user password',
-    description:
-      'A successful request returns the HTTP 200 OK status code and a JSON response body that shows user information.',
+    description: 'A successful request returns the HTTP 200 OK status code.',
   })
-  @ApiNoContentResponse({
+  @ApiOkResponse({
+    type: SuccessDto,
     description: 'User has been successfully updated their password.',
   })
-  async update_password(@Body() roleDto: Role): Promise<any> {
-    this.roleService.create(roleDto);
+  async update_password(
+    @Body() changePasswordDto: ChangePasswordDto,
+  ): Promise<any> {
+    // this.userService.create(userDto);
   }
 }

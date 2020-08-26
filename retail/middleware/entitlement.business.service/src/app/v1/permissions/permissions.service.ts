@@ -1,69 +1,85 @@
-import { Injectable } from '@nestjs/common';
-import { Permission, PermissionDto } from './';
-import { uuid } from '@common/utilities';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { Permission } from './permission.entity';
+import { PermissionDto } from './permission.dto';
+import { toGraphql } from '@common/utilities';
+import { GqlClientService } from '@common/libs/gqlclient/gqlclient.service';
 
 @Injectable()
 export class PermissionService {
-  private readonly permissions: any = [
-    {
-      "id": "3dfdecc1-a616-4817-a841-61d824d82a11",
-      "record_type": "create",
-      "created_on": "2020-08-13T10:58:15.893Z",
-      "updated_on": "2020-08-13T10:58:15.893Z",
-      "deleted_on": "2020-08-13T10:58:15.893Z"
-    },
-    {
-      "id": "3dfdecc1-a616-4817-a841-61d824d82a12",
-      "record_type": "update",
-      "created_on": "2020-08-13T10:58:15.893Z",
-      "updated_on": "2020-08-13T10:58:15.893Z",
-      "deleted_on": "2020-08-13T10:58:15.893Z"
-    },
-    {
-      "id": "3dfdecc1-a616-4817-a841-61d824d82a13",
-      "record_type": "delete",
-      "created_on": "2020-08-13T10:58:15.893Z",
-      "updated_on": "2020-08-13T10:58:15.893Z",
-      "deleted_on": "2020-08-13T10:58:15.893Z"
-    },
-    {
-      "id": "3dfdecc1-a616-4817-a841-61d824d82a14",
-      "record_type": "list",
-      "created_on": "2020-08-13T10:58:15.893Z",
-      "updated_on": "2020-08-13T10:58:15.893Z",
-      "deleted_on": "2020-08-13T10:58:15.893Z"
-    }
-  ];
+  constructor(private readonly gqlClient: GqlClientService) {}
 
   async list(): Promise<Permission[]> {
-    return this.permissions;
+    const params = `query {
+      permissions: permissionsList {
+        id
+        record_type
+        created_on
+        created_by
+      }
+    }`;
+    const result = await this.gqlClient.send(params);
+    return result?.permissions;
   }
 
-  async create(input: {[key: string]: any}): Promise<any> {
-    let p =     {
-      "id": uuid(),
-      "record_type": input.record_type,
-      "created_on": "2020-08-13T10:58:15.893Z",
-      "updated_on": "2020-08-13T10:58:15.893Z",
-      "deleted_on": "2020-08-13T10:58:15.893Z"
-    };
-    this.permissions.push(p);
-    return p;
+  async create(input: PermissionDto): Promise<Permission> {
+    const params = `mutation{
+      permission: addPermission(input: ${toGraphql(
+        input,
+      )}) {id record_type created_on created_by}
+    }`;
+    const result = await this.gqlClient.send(params);
+    return result?.permission;
   }
 
   async findOne(id: string): Promise<Permission> {
-    return this.permissions.find(p => p.id === id);
+    const params = `query {
+      permission: findPermission(id: "${id}") {
+        id
+        record_type
+        created_on
+        created_by
+      }
+    }`;
+    const result = await this.gqlClient.send(params);
+    return result?.permission;
   }
 
-  async update(id: string, input: PermissionDto): Promise<any> {
-    let p =  this.permissions.find(p => p.id === id);
-    p.record_type = input.record_type;
-    this.permissions[id] = p;
-    return p;
+  async findById(id: string): Promise<Permission> {
+    const params = `query {
+      permission: findPermission(id: "${id}") {
+        id
+      }
+    }`;
+    const result = await this.gqlClient.send(params);
+    return result?.permission;
+  }
+
+  async update(id: string, input: PermissionDto): Promise<Permission> {
+    const permission: Permission = await this.findById(id);
+    if (!permission) {
+      throw new NotFoundException('Permission Not Found');
+    }
+    const params = `mutation {
+      permission: updatePermission(id: "${id}", input: ${toGraphql(input)}) {
+        id
+        record_type
+        created_by
+        created_on
+      } 
+    }`;
+    const result = await this.gqlClient.send(params);
+    return result?.permission;
   }
 
   async delete(id: string): Promise<boolean> {
-    delete this.permissions[id];
-    return true;
+    const permission: Permission = await this.findById(id);
+    if (!permission) {
+      throw new NotFoundException('Permission Not Found');
+    }
+    const params = `mutation {
+      permission: deletePermission(id: "${id}") 
+    }`;
+    const result = await this.gqlClient.send(params);
+    return result?.permission;
   }
 }

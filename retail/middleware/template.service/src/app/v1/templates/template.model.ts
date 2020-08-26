@@ -8,10 +8,17 @@ export class Template {
     description: 'Name of the Template',
   })
   name: string;
+
+  @ApiProperty({
+    example: 'Template 1 in Arabic',
+    description: 'Name of the Template',
+  })
+  name_ar: string;
 }
 
 // Graphql Model
 import { Field, ObjectType } from '@nestjs/graphql';
+import { SectionGQL } from '../sections/section.model';
 
 @ObjectType()
 export class TemplateGQL {
@@ -20,6 +27,12 @@ export class TemplateGQL {
 
   @Field()
   name: string;
+
+  @Field()
+  name_ar: string;
+
+  @Field(() => [SectionGQL])
+  sections?: SectionGQL[];
 
   @Field()
   created_on: Date;

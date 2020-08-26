@@ -5,10 +5,16 @@ export class CreateTemplateDto {
   @IsUUID()
   @IsOptional()
   readonly id: string;
+
   @ApiProperty()
-	@IsString()
+  @IsString()
   @MaxLength(255)
   readonly name: string;
+
+  @ApiProperty()
+  @IsString()
+  @MaxLength(255)
+  readonly name_ar: string;
 }
 
 // Graphql Example DTO
@@ -19,4 +25,8 @@ export class NewTemplateInput {
   @Field({ nullable: false })
   @MaxLength(255)
   name: string;
+
+  @Field({ nullable: false })
+  @MaxLength(255)
+  name_ar: string;
 }

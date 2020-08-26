@@ -11,14 +11,14 @@ services:
     image: "gateway-service:v1"
     container_name: gateway_service
     environment:
-      - ENV_RBX_NGINX_SERVER_NAME=localhost
-      - ENV_RBX_PORTAL_HOST=192.168.18.64
-      - ENV_RBX_PORTAL_PORT=3000
-      - ENV_RBX_ENTITLEMENT_HOST=entitlement_business_service
-      - ENV_RBX_ENTITLEMENT_PORT=5000
-      - ENV_RBX_ONBOARDING_HOST=onboarding_business_service
-      - ENV_RBX_ONBOARDING_PORT=4000
-      - ENV_RBX_NGINX_MAX_BODY=100M
+      - ENV_RBX_NGINX_SERVER_NAME=$ENV_RBX_NGINX_SERVER_NAME
+      - ENV_RBX_PORTAL_HOST=$ENV_RBX_PORTAL_HOST
+      - ENV_RBX_PORTAL_PORT=$ENV_RBX_PORTAL_PORT
+      - ENV_RBX_ENTITLEMENT_HOST=$ENV_RBX_ENTITLEMENT_HOST
+      - ENV_RBX_ENTITLEMENT_PORT=$ENV_RBX_ENTITLEMENT_PORT
+      - ENV_RBX_ONBOARDING_HOST=$ENV_RBX_ONBOARDING_HOST
+      - ENV_RBX_ONBOARDING_PORT=$ENV_RBX_ONBOARDING_PORT
+      - ENV_RBX_NGINX_MAX_BODY=$ENV_RBX_NGINX_MAX_BODY
     networks:
       - rubix-middleware-network
     ports:
@@ -27,19 +27,19 @@ services:
   #=================================================================
   # Admin Web Portal Service
   #=================================================================
-  # webportal-service:
-  #   build:
-  #     context: ../../../retail/webadmin/
-  #     dockerfile: Dockerfile
-  #   image: "webportal:v1"
-  #   container_name: "webportal_service"
-  #   environment:
-  #     - ENV_CDT_API_BASE_URL=http://192.168.18.64:4000
-  #   restart: always
-  #   networks:
-  #     - rubix-middleware-network
-  #   ports:
-  #     - 3000:3000
+  webportal-service:
+    build:
+      context: ../../../retail/webadmin/
+      dockerfile: Dockerfile
+    image: "webportal:v1"
+    container_name: "webportal_service"
+    environment:
+      - ENV_CDT_API_BASE_URL=$ENV_CDT_API_BASE_URL
+    restart: always
+    networks:
+      - rubix-middleware-network
+    ports:
+      - 3000:4200
   #=================================================================
   # Entitlement Business Service
   #=================================================================
