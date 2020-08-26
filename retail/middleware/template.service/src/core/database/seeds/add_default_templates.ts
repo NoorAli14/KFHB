@@ -183,65 +183,6 @@ export async function seed(knex: Knex): Promise<void> {
     },
   ];
 
-  const template_questions: TemplateQuestion[] = [
-    {
-      id: uuidV4(),
-      rules: '{required: true}',
-      status: true,
-      template_id: templates[0].id,
-      section_id: sections[0].id,
-      question_id: questions[0].id,
-    },
-    {
-      id: uuidV4(),
-      rules: '{required: true}',
-      status: true,
-      template_id: templates[0].id,
-      section_id: sections[1].id,
-      question_id: questions[1].id,
-    },
-    {
-      id: uuidV4(),
-      rules: '{required: true}',
-      status: true,
-      template_id: templates[0].id,
-      section_id: sections[2].id,
-      question_id: questions[2].id,
-    },
-    {
-      id: uuidV4(),
-      rules: '{required: true}',
-      status: true,
-      template_id: templates[1].id,
-      section_id: sections[3].id,
-      question_id: questions[3].id,
-    },
-    {
-      id: uuidV4(),
-      rules: '{required: true}',
-      status: true,
-      template_id: templates[0].id,
-      section_id: sections[4].id,
-      question_id: questions[4].id,
-    },
-    {
-      id: uuidV4(),
-      rules: '{required: true}',
-      status: true,
-      template_id: templates[0].id,
-      section_id: sections[5].id,
-      question_id: questions[5].id,
-    },
-    {
-      id: uuidV4(),
-      rules: '{required: true}',
-      status: true,
-      template_id: templates[0].id,
-      section_id: sections[6].id,
-      question_id: questions[6].id,
-    },
-  ];
-
   // Inserts seed entries
   await knex(TABLE.TEMPLATE).insert(templates);
 
@@ -251,5 +192,64 @@ export async function seed(knex: Knex): Promise<void> {
 
   await knex(TABLE.OPTION).insert(options);
 
-  await knex(TABLE.TEMPLATE_QUESTIONS).insert(template_questions);
+	/*********** DEPRECATED CODE: Not Using this Database Table *************/
+  // const template_questions: TemplateQuestion[] = [
+  //   {
+  //     id: uuidV4(),
+  //     rules: '{required: true}',
+  //     status: true,
+  //     template_id: templates[0].id,
+  //     section_id: sections[0].id,
+  //     question_id: questions[0].id,
+  //   },
+  //   {
+  //     id: uuidV4(),
+  //     rules: '{required: true}',
+  //     status: true,
+  //     template_id: templates[0].id,
+  //     section_id: sections[1].id,
+  //     question_id: questions[1].id,
+  //   },
+  //   {
+  //     id: uuidV4(),
+  //     rules: '{required: true}',
+  //     status: true,
+  //     template_id: templates[0].id,
+  //     section_id: sections[2].id,
+  //     question_id: questions[2].id,
+  //   },
+  //   {
+  //     id: uuidV4(),
+  //     rules: '{required: true}',
+  //     status: true,
+  //     template_id: templates[1].id,
+  //     section_id: sections[3].id,
+  //     question_id: questions[3].id,
+  //   },
+  //   {
+  //     id: uuidV4(),
+  //     rules: '{required: true}',
+  //     status: true,
+  //     template_id: templates[0].id,
+  //     section_id: sections[4].id,
+  //     question_id: questions[4].id,
+  //   },
+  //   {
+  //     id: uuidV4(),
+  //     rules: '{required: true}',
+  //     status: true,
+  //     template_id: templates[0].id,
+  //     section_id: sections[5].id,
+  //     question_id: questions[5].id,
+  //   },
+  //   {
+  //     id: uuidV4(),
+  //     rules: '{required: true}',
+  //     status: true,
+  //     template_id: templates[0].id,
+  //     section_id: sections[6].id,
+  //     question_id: questions[6].id,
+  //   },
+  // ];
+  // await knex(TABLE.TEMPLATE_QUESTIONS).insert(template_questions);
 }

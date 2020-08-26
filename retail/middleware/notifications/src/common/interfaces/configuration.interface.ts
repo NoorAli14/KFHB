@@ -44,6 +44,11 @@ export interface iSMTP {
   auth: iSMTP_AUTH
 }
 
+export interface iEMAILSENDER {
+  NAME: string,
+  EMAIL: string
+}
+
 export interface iConfig {
   /** Application Details */
   APP: iAPP;
@@ -52,6 +57,7 @@ export interface iConfig {
   SWAGGER?: iSWAGGER;
   GRAPHQL?: iGRAPHQL;
   SMTP?: iSMTP;
+  EMAILSENDER?: iEMAILSENDER;
   /**
    * The log level to use.
    * @example 'verbose', 'info', 'warn', 'error'
