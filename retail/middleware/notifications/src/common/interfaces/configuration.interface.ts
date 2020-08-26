@@ -57,6 +57,10 @@ export interface iSMS {
   from: string,
   api_url: string
 }
+export interface iEMAILSENDER {
+  NAME: string,
+  EMAIL: string
+}
 
 export interface iConfig {
   /** Application Details */
@@ -68,6 +72,7 @@ export interface iConfig {
   SMTP?: iSMTP;
   OTP?: iOTP;
   SMS?: iSMS;
+  EMAILSENDER?: iEMAILSENDER;
   /**
    * The log level to use.
    * @example 'verbose', 'info', 'warn', 'error'
