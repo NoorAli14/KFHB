@@ -40,6 +40,7 @@ type Mutation {
   generateOtp(input: NewPostInput!): Otp!
   verifyOtp(input: VerifyOTPInput!): OTPResponse!
   sendSMS(input: SendSMSInput!): SMSGQL!
+  sendPushNotification(input: NotifyInput!): Notify!
 }
 
 input NewPostInput {
@@ -47,6 +48,26 @@ input NewPostInput {
   delivery_mode: String!
   mobile_no: String
   email: String
+}
+
+type Notify {
+  id: String!
+  platform: String!
+  device_id: String!
+  text: String!
+  status: String!
+  created_on: DateTime!
+  created_by: String!
+  updated_on: DateTime!
+  updated_by: String!
+  deleted_on: DateTime!
+  deleted_by: String!
+}
+
+input NotifyInput {
+  platform: String!
+  device_id: String!
+  text: String!
 }
 
 type Otp {

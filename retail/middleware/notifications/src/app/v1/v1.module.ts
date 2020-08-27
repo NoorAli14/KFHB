@@ -6,6 +6,7 @@ import { SMSModule } from './sms/sms.module';
 import { GraphQLFederationModule } from '@nestjs/graphql';
 import { CommonModule } from '@common/common.module';
 import { ConfigurationService } from '@common/configuration/configuration.service';
+import { NotifyModule } from './notify/notify.module';
 
 
 @Module({
@@ -13,6 +14,7 @@ import { ConfigurationService } from '@common/configuration/configuration.servic
     EmailModule,
     OtpModule,
     SMSModule,
+    NotifyModule,
     GraphQLFederationModule.forRootAsync({
       imports: [CommonModule],
       useFactory: async (configService: ConfigurationService) => ({
