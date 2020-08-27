@@ -15,6 +15,7 @@ export const DEFAULT_TEMPLATE_NAME = "default";
 export const DEFAULT_OTP_STATUS = "Not Verified";
 export const DEFAULT_OTP_DELIVERY_MODES = ['email','mobile','both'];
 export const DEFAULT_NOTIFY_PLATEFORMS = ['android','ios'];
+export const DEFAULT_NOTIFY_STATUS= 'sent';
 export const DEFAULT_OTP_PATTERN = '0';
 export const DEFAULT_OTP_LENGTH = 6;
 export const DEFAULT_OTP_DURATION = 1;
