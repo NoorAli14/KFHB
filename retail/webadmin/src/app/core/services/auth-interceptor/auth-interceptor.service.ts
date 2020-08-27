@@ -6,10 +6,12 @@ import {
     HttpEvent,
     HttpHeaders,
     HttpClient,
+    HttpResponse,
+    HttpErrorResponse,
 } from "@angular/common/http";
-import { Observable, empty } from "rxjs";
+import { Observable, empty, of } from "rxjs";
 import { StorageService } from "../storage/storage.service";
-import { mergeMap } from "rxjs/operators";
+import { mergeMap, tap, catchError } from "rxjs/operators";
 import { APP_CONST } from "@shared/constants/app.constants";
 import { EventBusService } from "../event-bus/event-bus.service";
 import { EmitEvent } from "@shared/models/emit-event.model";
@@ -75,8 +77,23 @@ export class AuthInterceptorService implements HttpInterceptor {
                 })
             );
         } else {
-            const clonedRequest = request.clone(httpOptions);
-            return next.handle(clonedRequest);
+            debugger
+            const clonedRequest = request.clone({...httpOptions, withCredentials: true});
+            return next.handle(clonedRequest)
+            // .pipe(
+            //     tap(evt => {
+            //         debugger
+            //         if (evt instanceof HttpResponse) {
+                      
+            //         }
+            //     }),
+            //     catchError((err: any) => {
+            //         debugger
+            //         if(err instanceof HttpErrorResponse) {
+                      
+            //         }
+            //         return of(err);
+            //     }));
         }
     }
     refreshToken() {
@@ -85,14 +102,15 @@ export class AuthInterceptorService implements HttpInterceptor {
     }
     getHttpOption(hasRefreshToken) {
         const token = this.storage.getItem(APP_CONST.ACCESS_TOKEN);
+        let headers= new HttpHeaders({
+            'content-type': 'application/json',
+            // 'x-channel-id': 'environment.WEB_CHANNEL_ID',
+            // 'x-trans-id': '1010111111101011111110101111111010111111145241',
+            Accept: 'application/json, text/plain, */*',
+            'x-access-token': token ? token :''
+        })
         const httpOptions = {
-            headers: new HttpHeaders({
-                // 'content-type': 'application/json',
-                // 'x-channel-id': 'environment.WEB_CHANNEL_ID',
-                // 'x-trans-id': '1010111111101011111110101111111010111111145241',
-                Accept: 'application/json, text/plain, */*',
-                'x-access-token': token ? token :''
-            }),
+            headers,
             withCredentials: true,
         };
 

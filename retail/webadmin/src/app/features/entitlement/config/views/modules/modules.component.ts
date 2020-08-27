@@ -60,6 +60,7 @@ export class ModulesComponent extends BaseComponent implements OnInit {
     }
 
     openDialog(data): void {
+        debugger
         var _this = this;
         this.dialogRef = this._matDialog
             .open(ModulesFormComponent, {
@@ -86,6 +87,7 @@ export class ModulesComponent extends BaseComponent implements OnInit {
                 this.dataSource = new MatTableDataSource(response);
                 [, this.permissions] = response;
                 this.modules = [];
+                debugger
                 this.makeFlat(response[0]);
                 this.updateGrid(this.modules);
             },

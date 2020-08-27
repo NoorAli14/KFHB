@@ -1,3 +1,4 @@
+import { PermissionFormComponent } from './components/permission-form/permission-form.component';
 import { MatTreeModule } from '@angular/material/tree';
 import { CdkTreeModule } from '@angular/cdk/tree';
 import { NgModule } from '@angular/core';
@@ -20,7 +21,7 @@ import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { PermissionComponent } from './components/permission/permission.component';
 
 @NgModule({
-  declarations: [ConfigComponent ,PermissionComponent, ModulesComponent,ModulesFormComponent, RoleComponent, RoleFormComponent,TableRowComponent,   ConfigSidebarComponent,   AccessControlComponent],
+  declarations: [ConfigComponent ,PermissionComponent,PermissionFormComponent,  ModulesComponent,ModulesFormComponent, RoleComponent, RoleFormComponent,TableRowComponent,   ConfigSidebarComponent,   AccessControlComponent],
   imports: [
     CommonModule,
     ConfigRoutingModule,

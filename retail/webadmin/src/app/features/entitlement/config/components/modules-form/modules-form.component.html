@@ -1,79 +1,162 @@
 <div class="dialog-content-wrapper">
     <mat-toolbar class="mat-accent m-0">
-        <mat-toolbar-row fxFlex fxLayout="row" fxLayoutAlign="space-between center">
-            <div class="logo mb-24 mb-md-0" fxLayout="row" fxLayoutAlign="start center">
-                <mat-icon class="logo-icon mr-12" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+        <mat-toolbar-row
+            fxFlex
+            fxLayout="row"
+            fxLayoutAlign="space-between center"
+        >
+            <div
+                class="logo mb-24 mb-md-0"
+                fxLayout="row"
+                fxLayoutAlign="start center"
+            >
+                <mat-icon
+                    class="logo-icon mr-12"
+                    [@animate]="{
+                        value: '*',
+                        params: { delay: '50ms', scale: '0.2' }
+                    }"
+                >
                     folder
                 </mat-icon>
-                <span class="logo-text" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
-                    {{data.module.id? 'Update' :'Create'}}   Module
+                <span
+                    class="logo-text"
+                    [@animate]="{
+                        value: '*',
+                        params: { delay: '100ms', x: '-25px' }
+                    }"
+                >
+                    {{ data.module.id ? "Update" : "Create" }} Module
                 </span>
             </div>
-            <button mat-icon-button (click)="matDialogRef.close()" aria-label="Close dialog">
+            <button
+                mat-icon-button
+                (click)="matDialogRef.close()"
+                aria-label="Close dialog"
+            >
                 <mat-icon>close</mat-icon>
             </button>
         </mat-toolbar-row>
     </mat-toolbar>
 
     <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
-        
-                <form class="p-24 mr-24" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0" name="modulesForm" (ngSubmit)="onSubmit()" novalidate [formGroup]="modulesForm">
-                    <div fxLayout="row wrap" fxLayout.lt-lg="column" fxLayoutAlign.lt-lg="center" fxLayoutGap="10px" fxLayoutAlign="start center" fxFlex="1 1 auto">
+        <form
+            class="p-24 mr-24"
+            fxLayout="column"
+            fxLayoutAlign="start"
+            fxFlex="1 0"
+            name="modulesForm"
+            (ngSubmit)="onSubmit()"
+            novalidate
+            [formGroup]="modulesForm"
+        >
+            <div
+                fxLayout="row wrap"
+                fxLayout.lt-lg="column"
+                fxLayoutAlign.lt-lg="center"
+                fxLayoutGap="10px"
+                fxLayoutAlign="start center"
+                fxFlex="1 1 auto"
+            >
                 <mat-form-field appearance="outline" fxFlex="48" class="pr-4">
                     <mat-label>Name</mat-label>
                     <input matInput formControlName="name" />
-                    <mat-icon matSuffix class="secondary-text">account_circle</mat-icon>
+                    <mat-icon matSuffix class="secondary-text"
+                        >account_circle</mat-icon
+                    >
                     <mat-error>
-                        <app-mat-error [control]="modulesForm.get('name')"></app-mat-error>
+                        <app-mat-error
+                            [control]="modulesForm.get('name')"
+                        ></app-mat-error>
                     </mat-error>
                 </mat-form-field>
 
-               
                 <mat-form-field appearance="outline" fxFlex="48" class="pr-4">
                     <mat-label>Parent</mat-label>
                     <mat-select formControlName="parent_id">
-                        <mat-option *ngFor="let item of modules" [value]="item.id">
-                            {{item.name}}
+                        <mat-option
+                            *ngFor="let item of modules"
+                            [value]="item.id"
+                        >
+                            {{ item.name }}
                         </mat-option>
                     </mat-select>
-                    <mat-icon matSuffix class="secondary-text">lock_open</mat-icon>
+                    <mat-icon matSuffix class="secondary-text"
+                        >lock_open</mat-icon
+                    >
                     <mat-error>
-                        <app-mat-error [control]="modulesForm.get('parent_id')"></app-mat-error>
+                        <app-mat-error
+                            [control]="modulesForm.get('parent_id')"
+                        ></app-mat-error>
                     </mat-error>
                 </mat-form-field>
                 <mat-form-field appearance="outline" fxFlex="48" class="pr-4">
                     <mat-label>Permissions</mat-label>
                     <mat-select formControlName="permissions" multiple>
-                        <mat-option *ngFor="let item of data.permissions" [value]="item.id">
-                            {{item.record_type}}
+                        <mat-option
+                            *ngFor="let item of data.permissions"
+                            [value]="item.id"
+                        >
+                            {{ item.record_type }}
                         </mat-option>
                     </mat-select>
-                    <mat-icon matSuffix class="secondary-text">lock_open</mat-icon>
+                    <mat-icon matSuffix class="secondary-text"
+                        >lock_open</mat-icon
+                    >
                     <mat-error>
-                        <app-mat-error [control]="modulesForm.get('status')"></app-mat-error>
+                        <app-mat-error
+                            [control]="modulesForm.get('status')"
+                        ></app-mat-error>
                     </mat-error>
                 </mat-form-field>
-               <ng-container *ngIf="data.module.id">
-                <mat-form-field appearance="outline" fxFlex="48" class="pr-4" >
-                    <mat-label>Status</mat-label>
-                    <mat-select formControlName="status">
-                        <mat-option *ngFor="let item of statusList" [value]="item.id">
-                            {{item.name}}
-                        </mat-option>
-                    </mat-select>
-                    <mat-icon matSuffix class="secondary-text">lock_open</mat-icon>
-                    <mat-error>
-                        <app-mat-error [control]="modulesForm.get('status')"></app-mat-error>
-                    </mat-error>
-                </mat-form-field>
-               </ng-container>
+                <ng-container *ngIf="data.module.id">
+                    <mat-form-field
+                        appearance="outline"
+                        fxFlex="48"
+                        class="pr-4"
+                    >
+                        <mat-label>Status</mat-label>
+                        <mat-select formControlName="status">
+                            <mat-option
+                                *ngFor="let item of statusList"
+                                [value]="item.id"
+                            >
+                                {{ item.name }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-icon matSuffix class="secondary-text"
+                            >lock_open</mat-icon
+                        >
+                        <mat-error>
+                            <app-mat-error
+                                [control]="modulesForm.get('status')"
+                            ></app-mat-error>
+                        </mat-error>
+                    </mat-form-field>
+                </ng-container>
             </div>
 
             <div class="actions" fxLayout="row" fxLayoutAlign="end center">
-                <button type="button" mat-raised-button (click)="matDialogRef.close()" color="secondary" aria-label="Follow">
+                <button
+                    type="button"
+                    mat-raised-button
+                    (click)="matDialogRef.close()"
+                    color="secondary"
+                    aria-label="Follow"
+                >
                     Cancel
-                </button> &nbsp;&nbsp;&nbsp;
-                <button appPermission [permissions]="data.userPermissions" [type]="data.module.id? 'edit': 'create'"  type="submit" [disabled]="modulesForm.invalid" mat-raised-button color="accent" aria-label="Send Message">
+                </button>
+                &nbsp;&nbsp;&nbsp;
+                <button
+                    appPermission
+                    [permissions]="data.userPermissions"
+                    [type]="data.module.id ? 'edit' : 'create'"
+                    type="submit"
+                    [disabled]="modulesForm.invalid"
+                    mat-raised-button
+                    color="accent"
+                    aria-label="Send Message"
+                >
                     Submit
                 </button>
             </div>

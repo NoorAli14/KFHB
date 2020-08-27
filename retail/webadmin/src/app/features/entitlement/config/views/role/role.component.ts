@@ -66,7 +66,8 @@ export class RoleComponent extends BaseComponent implements OnInit {
                 data: {
                     role: data ? data : new Role(),
                     userPermissions: this.userPermissions,
-                    modules:this.modules
+                    modules:this.modules,
+                    roles:this.roles
                 },
                 panelClass: "app-role-form",
             })
@@ -96,7 +97,7 @@ export class RoleComponent extends BaseComponent implements OnInit {
         const mapped=modules.map((item)=>{
             item.text=item.name;
             item.value=item.id
-            if (item.sub_modules) {
+            if (item.sub_modules && item.sub_modules.length>0) {
                 item.children=item.sub_modules;
                 this.mapModules(item.sub_modules);
             }

@@ -60,29 +60,30 @@ export class LoginComponent extends BaseComponent implements OnInit {
                 Validators.email,
             ]),
             password: new FormControl("Abcd@123", [Validators.required]),
-            rememberMe: new FormControl(""),
+            // rememberMe: new FormControl(""),
         });
 
-        const email = this.cookie.get("email");
-        const password = this.cookie.get("password");
-        if (email) {
-            this.loginForm.patchValue({ email });
-            this.loginForm.patchValue({ password });
-        }
+        // const email = this.cookie.get("email");
+        // const password = this.cookie.get("password");
+        // if (email) {
+        //     this.loginForm.patchValue({ email });
+        //     this.loginForm.patchValue({ password });
+        // }
     }
     onSubmit() {
         const model = this.loginForm.value;
+        debugger
         this._authService.login(model).subscribe(
             (response) => {
                 this.errorType = "success";
                 this.responseMessage = MESSAGES.LOGGED_IN;
-                if (model.rememberMe) {
-                    this.cookie.set("email", model.email);
-                    this.cookie.set("password", model.password);
-                } else {
-                    this.cookie.delete("email", model.email);
-                    this.cookie.delete("password", model.password);
-                }
+                // if (model.rememberMe) {
+                //     this.cookie.set("email", model.email);
+                //     this.cookie.set("password", model.password);
+                // } else {
+                //     this.cookie.delete("email", model.email);
+                //     this.cookie.delete("password", model.password);
+                // }
                 setTimeout(() => {
                     this.router.navigateByUrl(
                         this.returnUrl ? this.returnUrl : "/ent/user"

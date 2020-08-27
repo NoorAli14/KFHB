@@ -33,13 +33,14 @@ export class ModulesFormComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
+        debugger
         this.modulesForm = new FormGroup({
             id: new FormControl(this.data.module.id),
             name: new FormControl(this.data.module.name, [Validators.required,Validators.minLength(3), Validators.maxLength(96)]),
             status: new FormControl(this.data.module.status),
             parent_id: new FormControl(
-                this.data.module.parentModule
-                    ? this.data.module.parentModule.id
+                this.data.module.parent_id
+                    ? this.data.module.parent_id
                     : "randid",
                 [Validators.required]
             ),
