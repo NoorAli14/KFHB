@@ -6,7 +6,11 @@ export async function up(knex: Knex): Promise<any> {
       .uuid('id')
       .primary()
       .defaultTo(knex.raw(DATABASE_UUID_METHOD));
-    table.uuid('user_id').notNullable();
+    table
+      .uuid('customer_id')
+      .references('id')
+      .inTable(TABLE.CUSTOMER)
+      .onDelete('cascade');
     table.uuid('tenant_id').notNullable();
     table.uuid('reference_id').notNullable();
     table.string('target_user_id').notNullable();
@@ -23,7 +27,6 @@ export async function up(knex: Knex): Promise<any> {
     table.timestamp('deleted_on');
     table.string('deleted_by');
 
-    table.index('user_id', 'IDT_SESSION_USER_ID_INDEX');
     table.index('tenant_id', 'IDT_SESSION_TENANT_ID_INDEX');
     table.index('reference_id', 'IDT_SESSION_REFERENCE_ID_INDEX');
     table.index('target_user_id', 'IDT_SESSION_TARGET_USER_ID_INDEX');

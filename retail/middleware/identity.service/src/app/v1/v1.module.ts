@@ -5,10 +5,12 @@ import { DataloaderModule } from '@rubix/core/dataloaders/loader.module';
 import { CommonModule } from '@rubix/common/common.module';
 import { ConfigurationService } from '@rubix/common/configuration/configuration.service';
 import { SessionModule } from './sessions/session.module';
+import { CustomerModule } from './customers/customer.module';
 
 @Module({
   imports: [
     DataloaderModule,
+    CustomerModule,
     SessionModule,
     GraphQLFederationModule.forRootAsync({
       imports: [CommonModule],
