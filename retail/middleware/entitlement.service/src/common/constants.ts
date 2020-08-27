@@ -20,6 +20,18 @@ export const NUMBERS = {
   NATIONALITY_ID_LENGTH: 96,
 };
 
+export const STATUS = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  PENDING: 'PENDING'
+};
+
+export const TEMP_ROLE = {
+  ADMIN: 'ADMIN',
+  SYSTEM: 'SYSTEM',
+  SUPER_ADMIN: 'SUPER ADMIN',
+};
+
 export const MODULES = [
   {
     "name": "Entitlement",
@@ -83,17 +95,6 @@ export const MODULES = [
     ]
   }
 ];
-
-export const STATUS = {
-  ACTIVE: 'ACTIVE',
-  INACTIVE: 'INACTIVE',
-  PENDING: 'PENDING'
-};
-
-export const TEMP_ROLE = {
-  ADMIN: 'ADMIN',
-  SYSTEM: 'SYSTEM',
-};
 
 export const WEEK_DAYS = {
   MONDAY: 'MONDAY',

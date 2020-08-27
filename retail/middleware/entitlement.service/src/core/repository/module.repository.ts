@@ -14,7 +14,7 @@ export class ModuleRepository extends BaseRepository {
   async listModulesByRoleID(roleIds): Promise<any>{
     const condition = {};
     condition[`${TABLE.MODULE}.status`] = STATUS.ACTIVE;
-    // condition[`${TABLE.MODULE}.parent_id`] = null;
+    condition[`${TABLE.MODULE}.parent_id`] = null;
     const modules: any = await this._connection(TABLE.MODULE)
         .distinct([...this.__attributes, `${TABLE.MODULE_PERMISSION_ROLE}.role_id`])
         .innerJoin(TABLE.MODULE_PERMISSION, `${TABLE.MODULE}.id`, `${TABLE.MODULE_PERMISSION}.module_id`)
@@ -48,8 +48,8 @@ export class ModuleRepository extends BaseRepository {
     const condition = {};
     condition[`${TABLE.MODULE}.status`] = STATUS.ACTIVE;
     condition[`${TABLE.ROLE}.status`] = STATUS.ACTIVE;
-    // condition[`${TABLE.MODULE}.parent_id`] = null;
-    const modules: any = await this._connection(TABLE.MODULE)
+    condition[`${TABLE.MODULE}.parent_id`] = null;
+    return this._connection(TABLE.MODULE)
     .distinct([...this.__attributes, `${TABLE.USER_ROLE}.user_id`, `${TABLE.MODULE_PERMISSION_ROLE}.role_id`, `${TABLE.MODULE_PERMISSION}.module_id`])
     .innerJoin(TABLE.MODULE_PERMISSION, `${TABLE.MODULE}.id`, `${TABLE.MODULE_PERMISSION}.module_id`)
     .innerJoin(TABLE.MODULE_PERMISSION_ROLE, `${TABLE.MODULE_PERMISSION_ROLE}.module_permission_id`, `${TABLE.MODULE_PERMISSION}.id`)
@@ -57,7 +57,5 @@ export class ModuleRepository extends BaseRepository {
     .innerJoin(TABLE.USER_ROLE, `${TABLE.ROLE}.id`, `${TABLE.USER_ROLE}.role_id`)
     .whereIn(`${TABLE.USER_ROLE}.user_id`, userIds)
     .where(condition);
-
-    return loaderSerializer(modules, userIds, 'user_id');
   }
 }
