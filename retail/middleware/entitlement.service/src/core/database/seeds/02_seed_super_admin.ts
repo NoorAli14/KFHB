@@ -6,7 +6,6 @@ export async function seed(knex: Knex): Promise<any> {
   await knex(TABLE.USER).del();
 
   const role_id = await create_role(knex);
-
   const user = await knex(TABLE.USER).insert({email: 'admin@rubix.com',
     status: STATUS.ACTIVE,
     is_owner: true,
