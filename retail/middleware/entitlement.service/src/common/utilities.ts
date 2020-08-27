@@ -52,15 +52,17 @@ export const toPlainAttributes = (model, tableName) : any => {
   return keys.map(key => `${tableName}.${key}`)
 };
 
-export const loaderSerializer = (data: any, serializer:string[], key: string): any => {
+export const loaderSerializer = (data: any, serializer:string[], key: string, serializerKey?: string): any => {
   const loaderLookups = {};
   data.forEach(loader => {
     if (!loaderLookups[loader[key]])
       loaderLookups[loader[key]] = [];
     loaderLookups[loader[key]].push(loader)
   });
+  if(!serializerKey)
+    serializerKey = key;
   if (typeof serializer[0] != 'string')
-    return serializer.map(obj => loaderLookups[obj[key]] || []);
+    return serializer.map(obj => loaderLookups[obj[serializerKey]] || []);
   return serializer.map(id => loaderLookups[id] || []);
 };
 
