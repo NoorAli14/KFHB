@@ -49,8 +49,8 @@ export class AuthenticationService {
         return this.network.getAll(`${URI.FORGOT_PASSWORD}/${token}`)
     }
 
-    errorHandler(error) {
-        return observableThrowError(error.message || "Server Error");
+    errorHandler(response) {
+        return observableThrowError(response.error || "Server Error");
     }
 
 

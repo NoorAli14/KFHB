@@ -72,7 +72,6 @@ export class LoginComponent extends BaseComponent implements OnInit {
     }
     onSubmit() {
         const model = this.loginForm.value;
-        debugger
         this._authService.login(model).subscribe(
             (response) => {
                 this.errorType = "success";
@@ -90,9 +89,13 @@ export class LoginComponent extends BaseComponent implements OnInit {
                     );
                 }, 1000);
             },
-            (error) => {
+            (response) => {
                 this.errorType = "error";
-                this.responseMessage = MESSAGES.UNKNOWN;
+                if(response.statusCode===401){
+                    this.responseMessage = MESSAGES.INVALID_CREDENTIAL;
+                }else{
+                    this.responseMessage = MESSAGES.UNKNOWN;
+                }
             }
         );
     }

@@ -77,8 +77,7 @@ export class AuthInterceptorService implements HttpInterceptor {
                 })
             );
         } else {
-            debugger
-            const clonedRequest = request.clone({...httpOptions, withCredentials: true});
+            const clonedRequest = request.clone({...httpOptions});
             return next.handle(clonedRequest)
             // .pipe(
             //     tap(evt => {

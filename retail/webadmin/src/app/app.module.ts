@@ -36,7 +36,7 @@ import { GlobalErrorService } from "@core/services/global-error/global-error.ser
         BrowserAnimationsModule,
         AppRoutingModule,
         TranslateModule.forRoot(),
-
+        HttpClientModule,
         // Material moment date module
         MatMomentDateModule,
         NgxUiLoaderHttpModule,
@@ -59,12 +59,12 @@ import { GlobalErrorService } from "@core/services/global-error/global-error.ser
             useClass: AuthInterceptorService,
             multi: true,
         },
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: ErrorInterceptorService,
-            multi: true,
-        },
-        { provide: ErrorHandler, useClass: GlobalErrorService },
+        // {
+        //     provide: HTTP_INTERCEPTORS,
+        //     useClass: ErrorInterceptorService,
+        //     multi: true,
+        // },
+        // { provide: ErrorHandler, useClass: GlobalErrorService },
     ],
     bootstrap: [AppComponent],
 })
