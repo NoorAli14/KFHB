@@ -14,33 +14,19 @@ export class UserService {
               private configService: ConfigurationService) {}
 
   async list(keys: string[]): Promise<any> {
-    return this.userDB.list(keys,{"status" : STATUS.ACTIVE});
+    return this.userDB.list(keys,{"deleted_on" : null});
   }
 
   async findById(id: string, keys?: string[]): Promise<any> {
-    const result = await this.userDB.findOne({ id: id }, keys);
-    if(!result){
-      throw new HttpException({
-        status: HttpStatus.NOT_FOUND,
-        error: MESSAGES.NOT_FOUND,
-      }, HttpStatus.NOT_FOUND);
-    }
-    return result;
+    return this.userDB.findOne({ id: id }, keys);
   }
 
   async resetInvitationToken(id: string, keys?: string[]): Promise<any> {
-    const result = await this.findById(id, ['id']);
-    if (result?.id) {
-      const user = {
-        invitation_token : generateRandomString(NUMBERS.TOKEN_LENGTH),
-        invitation_token_expiry : addMinutes(this.configService.APP.INVITATION_TOKEN_EXPIRY)
-      };
-      return this.update(id, user, keys);
-    }
-    throw new HttpException({
-      status: HttpStatus.NOT_FOUND,
-      error: MESSAGES.INVALID_ID,
-    }, HttpStatus.NOT_FOUND);
+    const input: any = {
+      invitation_token : generateRandomString(NUMBERS.TOKEN_LENGTH),
+      invitation_token_expiry : addMinutes(this.configService.APP.INVITATION_TOKEN_EXPIRY)
+    };
+    return this.update(id, input, keys);
   }
 
   async findByProperty(checks: KeyValInput[], keys?: string[]): Promise<any> {
@@ -48,14 +34,7 @@ export class UserService {
     checks.forEach(check => {
       conditions[check.record_key] = check.record_value;
     });
-    const result = await this.userDB.findBy(conditions, keys);
-    if(!result){
-      throw new HttpException({
-        status: HttpStatus.NOT_FOUND,
-        error: MESSAGES.NOT_FOUND,
-      }, HttpStatus.NOT_FOUND);
-    }
-    return result;
+    return this.userDB.findBy(conditions, keys);
   }
 
   async update(
@@ -73,15 +52,14 @@ export class UserService {
       userObj.password_digest = this.encrypter.encryptPassword(userObj.password);
       delete userObj.password;
     }
-    const result = await this.userDB.update({ id: id }, userObj, keys);
-    if(result?.length > 0) {
-      return result[0]
-    } else {
+    const [result] = await this.userDB.update({ id: id }, userObj, keys);
+    if(!result) {
       throw new HttpException({
         status: HttpStatus.BAD_REQUEST,
         error: MESSAGES.BAD_REQUEST,
       }, HttpStatus.BAD_REQUEST);
     }
+    return result;
   }
 
   async create(newUser: Record<string, any>, keys?: string[]): Promise<any> {

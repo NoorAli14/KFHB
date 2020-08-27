@@ -4,7 +4,12 @@ import { DataLoaderInterceptor } from 'nestjs-dataloader';
 import {
   ModulesDataLoader,
   PermissionsDataLoader,
-  SubModulesDataLoader, RolesDataLoader, ModulesDataLoaderByUser, LeavesDataLoader
+  SubModulesDataLoader,
+  RolesDataLoader,
+  ModulesDataLoaderByUser,
+  LeavesDataLoader,
+  PermissionLoader,
+  UserModulesDataLoader, SubModulesLoader
 } from './';
 import {RepositoryModule} from "@core/repository/repository.module";
 
@@ -13,7 +18,10 @@ const loaders: any = [RolesDataLoader,
   SubModulesDataLoader,
   PermissionsDataLoader,
   ModulesDataLoaderByUser,
-  LeavesDataLoader];
+  LeavesDataLoader,
+  PermissionLoader,
+  UserModulesDataLoader,
+  SubModulesLoader,];
 
 @Module({
   imports: [RepositoryModule],

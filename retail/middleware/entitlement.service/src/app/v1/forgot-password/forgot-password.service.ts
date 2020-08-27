@@ -25,19 +25,18 @@ export class ForgotPasswordService {
         record_value: STATUS.ACTIVE
       }
     ];
-    const results = await this.userService.findByProperty(check, ['id']);
-    if (results?.length > 0) {
-      const hash = generateRandomString(NUMBERS.TOKEN_LENGTH);
-      const fp_output = {
-        password_reset_token : hash,
-        password_reset_token_expiry : addMinutes(this.configService.APP.INVITATION_TOKEN_EXPIRY)
-      };
-      return this.userService.update(results[0].id, fp_output, keys);
-    }
-    throw new HttpException({
+    const [user] = await this.userService.findByProperty(check, ['id']);
+    if(!user) throw new HttpException({
       status: HttpStatus.NOT_FOUND,
       error: MESSAGES.INVALID_EMAIL,
     }, HttpStatus.NOT_FOUND);
+
+    const hash = generateRandomString(NUMBERS.TOKEN_LENGTH);
+    const fp_output = {
+      password_reset_token : hash,
+      password_reset_token_expiry : addMinutes(this.configService.APP.INVITATION_TOKEN_EXPIRY)
+    };
+    return this.userService.update(user.id, fp_output, keys);
   }
 
   async changePassword(changePasswordInput: ChangePasswordInput, keys?: string[]): Promise<any> {
@@ -45,25 +44,25 @@ export class ForgotPasswordService {
       record_key: 'password_reset_token',
       record_value: changePasswordInput.password_reset_token
     }];
-    const results = await this.userService.findByProperty(check, ['id', 'password_reset_token_expiry']);
-    if (results?.length > 0) {
-      const user = results[0];
-      if(Date.parse(user.password_reset_token_expiry) && (Date.parse(user.password_reset_token_expiry) > Date.parse(new Date().toString()))){
-        const input = {
-          password_digest : this.encrypter.encryptPassword(changePasswordInput.password),
-          password_reset_token_expiry : null
-        };
-        return this.userService.update(user.id, input, keys);
-      }else{
-        throw new HttpException({
-          status: HttpStatus.UNAUTHORIZED,
-          error: MESSAGES.TOKEN_EXPIRED,
-        }, HttpStatus.UNAUTHORIZED);
-      }
-    }
-    throw new HttpException({
+    const [user] = await this.userService.findByProperty(check, ['id', 'password_reset_token_expiry']);
+    if(!user) throw new HttpException({
       status: HttpStatus.UNAUTHORIZED,
       error: MESSAGES.INVALID_TOKEN,
     }, HttpStatus.UNAUTHORIZED);
+
+    // todo  - user momentjs and write util methods
+    if(Date.parse(user.password_reset_token_expiry) && (Date.parse(user.password_reset_token_expiry) > Date.parse(new Date().toString()))){
+      const input = {
+        password_digest : this.encrypter.encryptPassword(changePasswordInput.password),
+        password_reset_token_expiry : null,
+        password_reset_token: null
+      };
+      return this.userService.update(user.id, input, keys);
+    }else{
+      throw new HttpException({
+        status: HttpStatus.UNAUTHORIZED,
+        error: MESSAGES.TOKEN_EXPIRED,
+      }, HttpStatus.UNAUTHORIZED);
+    }
   }
 }

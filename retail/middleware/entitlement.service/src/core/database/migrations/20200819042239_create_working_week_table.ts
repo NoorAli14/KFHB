@@ -17,8 +17,8 @@ export async function up(knex: Knex): Promise<any> {
     table.timestamp('deleted_on');
 
     //index
-    table.index(['week_day'], 'working-week_week-day_index');
-    table.index(['status'], 'role_status_index');
+    table.index(['week_day'], 'working_week_week_day_index');
+    table.index(['status'], 'working_week_status_index');
   });
 }
 

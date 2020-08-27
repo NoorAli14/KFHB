@@ -23,6 +23,48 @@ export const graphqlKeys = (info: any): string[] => {
 };
 
 /**
+ * graphqlFields string[]
+ * @param info
+ */
+export const graphqlFields = (info: { [key: string]: any }): string[] => {
+  let keys = [];
+  info.fieldNodes[0].selectionSet.selections.forEach(item => {
+    if (!item.selectionSet) {
+      keys.push(item.name.value);
+    }
+  });
+
+  // filtering some keys
+  const filters = ['id', 'roles', 'modules', 'permissions', 'sub_modules', 'leaves'];
+  keys = keys.filter(function(key) {
+    return filters.indexOf(key) === -1;
+  });
+
+  // we need the id in every query
+  keys.push('id');
+  return keys
+};
+
+export const toPlainAttributes = (model, tableName) : any => {
+  let keys = Object.keys(model);
+  const filters = ['roles', 'modules', 'permissions', 'sub_modules', 'leaves'];
+  keys = keys.filter(key => filters.indexOf(key) === -1);
+  return keys.map(key => `${tableName}.${key}`)
+};
+
+export const loaderSerializer = (data: any, serializer:string[], key: string): any => {
+  const loaderLookups = {};
+  data.forEach(loader => {
+    if (!loaderLookups[loader[key]])
+      loaderLookups[loader[key]] = [];
+    loaderLookups[loader[key]].push(loader)
+  });
+  if (typeof serializer[0] != 'string')
+    return serializer.map(obj => loaderLookups[obj[key]] || []);
+  return serializer.map(id => loaderLookups[id] || []);
+};
+
+/**
  * Full path string
  * @param fileOrDir
  */

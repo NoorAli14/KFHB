@@ -9,6 +9,8 @@ export const TABLE = {
   WORKING_WEEK: 'ENT_WORKINGWEEK',
   HOLIDAY: 'ENT_HOLIDAY',
   LEAVE: 'ENT_LEAVE',
+  MODULE_PERMISSION: 'ENT_MODULE_PERMISSION',
+  MODULE_PERMISSION_ROLE: 'ENT_MODULE_PERMISSION_ROLE',
 };
 
 export const NUMBERS = {
@@ -18,6 +20,70 @@ export const NUMBERS = {
   NATIONALITY_ID_LENGTH: 96,
 };
 
+export const MODULES = [
+  {
+    "name": "Entitlement",
+    "sub_modules": [
+      {
+        "name": "User",
+        "permissions": [
+          {
+            "name": "view"
+          },
+          {
+            "name": "edit"
+          },
+          {
+            "name": "delete"
+          },
+          {
+            "name": "create"
+          }
+        ]
+      },
+      {
+        "name": "Config",
+        "permissions": [
+          {
+            "name": "view"
+          }
+        ]
+      }
+    ],
+    "permissions": [
+      {
+        "name": "view"
+      }
+    ]
+  },
+  {
+    "name": "Calender",
+    "sub_modules": [
+      {
+        "name": "Working Week",
+        "permissions": [
+          {
+            "name": "view"
+          }
+        ]
+      },
+      {
+        "name": "Holidays",
+        "permissions": [
+          {
+            "name": "view"
+          }
+        ]
+      }
+    ],
+    "permissions": [
+      {
+        "name": "view"
+      }
+    ]
+  }
+];
+
 export const STATUS = {
   ACTIVE: 'ACTIVE',
   INACTIVE: 'INACTIVE',
@@ -26,6 +92,7 @@ export const STATUS = {
 
 export const TEMP_ROLE = {
   ADMIN: 'ADMIN',
+  SYSTEM: 'SYSTEM',
 };
 
 export const WEEK_DAYS = {

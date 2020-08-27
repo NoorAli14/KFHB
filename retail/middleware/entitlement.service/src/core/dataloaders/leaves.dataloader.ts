@@ -1,16 +1,16 @@
 import * as DataLoader from 'dataloader';
-import {Injectable, Scope} from '@nestjs/common';
+import {Injectable} from '@nestjs/common';
 import { NestDataLoader } from 'nestjs-dataloader';
 
 import {Leave} from "@app/v1/leave/leave.model";
-import {LeavesService} from "@app/v1/leave/leaves.service";
+import {LeaveRepository} from '@core/repository';
 
 
-@Injectable({ scope: Scope.REQUEST })
+@Injectable()
 export class LeavesDataLoader implements NestDataLoader<string, Leave> {
-    constructor(private readonly leavesService: LeavesService) { }
+    constructor(private readonly leaveDB: LeaveRepository) { }
 
     generateDataLoader(): DataLoader<string, Leave> {
-        return new DataLoader<string, Leave>(keys => this.leavesService.findLeavesByUserID(keys));
+        return new DataLoader<string, Leave>(keys => this.leaveDB.listLeavesByUserID(keys));
     }
 }

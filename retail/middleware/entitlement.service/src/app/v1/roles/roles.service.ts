@@ -1,4 +1,5 @@
 import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
+
 import {RoleRepository} from "@core/repository/role.repository";
 import {MESSAGES, STATUS} from "@common/constants";
 import { KeyValInput } from "@common/inputs/key-val.input";
@@ -8,7 +9,7 @@ export class RoleService {
   constructor(private roleDB: RoleRepository) {}
 
   async list(keys: string[]): Promise<any> {
-    return this.roleDB.list(keys,{"status" : STATUS.ACTIVE});
+    return this.roleDB.list(keys,{"deleted_on" : null});
   }
 
   async findById(id: string, keys?: string[]): Promise<any> {
@@ -35,30 +36,6 @@ export class RoleService {
       }, HttpStatus.NOT_FOUND);
     }
     return result;
-  }
-
-  async findRolesByUserID(userIds): Promise<any>{
-    const roles = await this.roleDB.listRolesByUserID(userIds);
-    const rolesLookups = {};
-    roles.forEach(role => {
-      if (!rolesLookups[role.user_id]) {
-        rolesLookups[role.user_id] = role || {};
-      }else{
-        const prev = rolesLookups[role.user_id];
-        if(Array.isArray(prev)) {
-          rolesLookups[role.user_id] = [...prev, role]
-        } else {
-          rolesLookups[role.user_id] = [prev, role]
-        }
-      }
-    });
-    return userIds.map(id => {
-      if(rolesLookups[id]){
-        return rolesLookups[id];
-      } else {
-        return null
-      }
-    });
   }
 
   async update(

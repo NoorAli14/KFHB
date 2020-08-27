@@ -140,35 +140,20 @@ type ModuleInRole {
   permissions: [Permission!]
 }
 
-input ModulesInput {
-  id: String!
-  _deleted: Boolean
-  permissions: [IdsInput!]
-}
-
 type Mutation {
-  resetInvitationToken(id: String!): User!
-  addUser(input: CreateUserInput!): User!
-  updateUser(input: UpdateUserInput!, id: String!): User!
-  deleteUser(id: String!): Boolean!
   addRole(input: RoleInput!): Role!
   updateRole(input: RoleInput!, id: String!): Role!
   deleteRole(id: String!): Boolean!
   addModule(input: ModuleInput!): Module!
   updateModule(input: ModuleInput!, id: String!): Module!
   deleteModule(id: String!): Boolean!
+  resetInvitationToken(id: String!): User!
+  addUser(input: CreateUserInput!): User!
+  updateUser(input: UpdateUserInput!, id: String!): User!
+  deleteUser(id: String!): Boolean!
   addPermission(input: PermissionInput!): Permission!
   updatePermission(input: PermissionInput!, id: String!): Permission!
   deletePermission(id: String!): Boolean!
-  updateUserRole(input: UserRoleInput!, id: String!): UserRole!
-  addUserRole(input: UserRoleInput!): UserRole!
-  deleteUserRole(id: String!): Boolean!
-  addRoleModule(input: RoleModuleInput!): RoleModule!
-  updateRoleModule(input: RoleModuleInput!, id: String!): RoleModule!
-  deleteRoleModule(id: String!): Boolean!
-  addRoleModulePermission(input: RoleModulePermissionInput!): RoleModulePermission!
-  updateRoleModulePermission(input: RoleModulePermissionInput!, id: String!): RoleModulePermission!
-  deleteRoleModulePermission(id: String!): Boolean!
   changePassword(input: ChangePasswordInput!): User!
   addWorkingDay(input: WorkingDayInput!): WorkingDay!
   updateWorkingDay(input: WorkingDayInput!, id: String!): WorkingDay!
@@ -193,27 +178,18 @@ input PermissionInput {
 }
 
 type Query {
-  usersList: [User!]!
-  findUserById(id: String!): User!
-  findUserBy(checks: [KeyValInput!]!): [User!]!
   rolesList: [Role!]!
   findRole(id: String!): Role!
   findRoleBy(checks: [KeyValInput!]!): [Role!]!
   modulesList: [Module!]!
   findModule(id: String!): Module!
   findModuleBy(checks: [KeyValInput!]!): [Module!]!
+  usersList: [User!]!
+  findUserById(id: String!): User!
+  findUserBy(checks: [KeyValInput!]!): [User!]!
   permissionsList: [Permission!]!
   findPermission(id: String!): Permission!
   findPermissionBy(checks: [KeyValInput!]!): [Permission!]!
-  userRolesList: [UserRole!]!
-  findUserRole(id: String!): UserRole!
-  findUserRoleBy(checks: [KeyValInput!]!): [UserRole!]!
-  roleModulesList: [RoleModule!]!
-  findRoleModule(id: String!): RoleModule!
-  findRoleModuleBy(checks: [KeyValInput!]!): [RoleModule!]!
-  roleModulePermissionsList: [RoleModulePermission!]!
-  findRoleModulePermission(id: String!): RoleModulePermission!
-  findRoleModulePermissionBy(checks: [KeyValInput!]!): [RoleModulePermission!]!
   login(input: LoginInput!): User!
   forgotPassword(input: ForgotPasswordInput!): User!
   workingDaysList: [WorkingDay!]!
@@ -245,37 +221,7 @@ input RoleInput {
   name: String!
   description: String
   status: String
-  modules: [ModulesInput!]
-}
-
-type RoleModule {
-  id: ID
-  module_id: String
-  role_id: String
-  status: String
-  created_on: String
-  created_by: String
-}
-
-input RoleModuleInput {
-  module_id: String!
-  role_id: String!
-  status: String
-}
-
-type RoleModulePermission {
-  id: ID
-  role_module_id: String
-  permission_id: String
-  status: String
-  created_on: String
-  created_by: String
-}
-
-input RoleModulePermissionInput {
-  role_module_id: String!
-  permission_id: String!
-  status: String
+  permissions: [IdsInput!]
 }
 
 input UpdateUserInput {
@@ -321,21 +267,6 @@ type User {
   password_reset_token: String
   password_reset_token_expiry: DateTime
   leaves: [Leave!]!
-}
-
-type UserRole {
-  id: ID!
-  user_id: String!
-  role_id: String!
-  status: String
-  created_on: String
-  created_by: String
-}
-
-input UserRoleInput {
-  user_id: String!
-  role_id: String!
-  status: String
 }
 
 type WorkingDay {

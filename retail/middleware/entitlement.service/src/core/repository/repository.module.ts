@@ -4,11 +4,17 @@ import { CommonModule } from '@common/common.module';
 import { DBConfigurationService } from '@common/configuration/dbconfiguration.service';
 import {HolidayRepository, LeaveRepository, UserRepository, WorkingDaysRepository} from '@core/repository/';
 import {RoleRepository} from "@core/repository/role.repository";
-import {UserRoleRepository} from "@core/repository/user-role.repository";
 import {ModuleRepository} from "@core/repository/module.repository";
-import {RoleModuleRepository} from "@core/repository/role-module.repository";
-import {RoleModulePermissionRepository} from "@core/repository/role-module-permission.repository";
 import {PermissionRepository} from "@core/repository/permission.repository";
+
+const repos: any = [UserRepository,
+  RoleRepository,
+  ModuleRepository,
+  PermissionRepository,
+  WorkingDaysRepository,
+  HolidayRepository,
+  LeaveRepository];
+
 @Module({
   imports: [
     CommonModule,
@@ -20,26 +26,8 @@ import {PermissionRepository} from "@core/repository/permission.repository";
       inject: [DBConfigurationService],
     }),
   ],
-  providers: [UserRepository,
-    RoleRepository,
-    UserRoleRepository,
-    ModuleRepository,
-    RoleModuleRepository,
-    PermissionRepository,
-    RoleModulePermissionRepository,
-    WorkingDaysRepository,
-    HolidayRepository,
-    LeaveRepository],
-  exports: [UserRepository,
-    RoleRepository,
-    UserRoleRepository,
-    ModuleRepository,
-    RoleModuleRepository,
-    PermissionRepository,
-    RoleModulePermissionRepository,
-    WorkingDaysRepository,
-    HolidayRepository,
-    LeaveRepository],
+  providers: [...repos],
+  exports: [...repos],
 })
 export class RepositoryModule implements OnModuleDestroy {
   @InjectKnex() private readonly connection: Knex;

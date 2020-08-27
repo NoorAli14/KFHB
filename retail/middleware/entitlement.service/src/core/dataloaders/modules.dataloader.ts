@@ -1,16 +1,16 @@
 import * as DataLoader from 'dataloader';
-import {Injectable, Scope} from '@nestjs/common';
+import {Injectable} from '@nestjs/common';
 import { NestDataLoader } from 'nestjs-dataloader';
 
 import {Module} from "@app/v1/modules/module.model";
-import {ModuleService} from "@app/v1/modules/module.service";
+import {ModuleRepository} from '@core/repository';
 
 
-@Injectable({ scope: Scope.REQUEST })
+@Injectable()
 export class ModulesDataLoader implements NestDataLoader<string, Module> {
-    constructor(private readonly moduleService: ModuleService) { }
+    constructor(private readonly moduleDB: ModuleRepository) { }
 
     generateDataLoader(): DataLoader<string, Module> {
-        return new DataLoader<string, Module>(keys => this.moduleService.findModulesByRoleID(keys));
+        return new DataLoader<string, Module>(keys => this.moduleDB.listModulesByRoleID(keys));
     }
 }

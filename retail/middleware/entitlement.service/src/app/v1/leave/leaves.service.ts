@@ -38,30 +38,6 @@ export class LeavesService {
     return result;
   }
 
-  async findLeavesByUserID(userIds): Promise<any>{
-    const leaves = await this.leaveRepository.listLeavesByUserID(userIds);
-    const leavesLookups = {};
-    leaves.forEach(leave => {
-      if (!leavesLookups[leave.user_id]) {
-        leavesLookups[leave.user_id] = leave || {};
-      }else{
-        const prev = leavesLookups[leave.user_id];
-        if(Array.isArray(prev)) {
-          leavesLookups[leave.user_id] = [...prev, leave]
-        } else {
-          leavesLookups[leave.user_id] = [prev, leave]
-        }
-      }
-    });
-    return userIds.map(id => {
-      if(leavesLookups[id]){
-        return leavesLookups[id];
-      } else {
-        return null
-      }
-    });
-  }
-
   async update(
     id: string,
     newObj: Record<string, any>,

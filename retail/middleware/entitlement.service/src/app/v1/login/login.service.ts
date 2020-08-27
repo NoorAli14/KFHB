@@ -10,7 +10,7 @@ import {MESSAGES, STATUS} from "@common/constants";
 export class LoginService {
   constructor(private userService: UserService, private encrypter: Encrypter) {}
 
-  async verifyUser(loginInput: LoginInput): Promise<any> {
+  async verifyUser(loginInput: LoginInput, keys: string[]): Promise<any> {
     const check: KeyValInput[] = [
       {
         record_key: 'email',
@@ -21,18 +21,11 @@ export class LoginService {
         record_value: STATUS.ACTIVE
       }
     ];
-    const keys = ['*'];
-    const results = await this.userService.findByProperty(check, keys);
-    if (results?.length > 0) {
-      const user = results[0];
-      if (this.encrypter.comparePassword(loginInput.password, user.password_digest)){
-        return user;
-      } else {
-        throw new HttpException({
-          status: HttpStatus.UNAUTHORIZED,
-          error: MESSAGES.INVALID_Email_OR_PASSWORD,
-        }, HttpStatus.UNAUTHORIZED);
-      }
+    keys.push('password_digest');
+    const [user] = await this.userService.findByProperty(check, keys);
+    if (user && this.encrypter.comparePassword(loginInput.password, user.password_digest)){
+      delete user.password_digest;
+      return user;
     }
     throw new HttpException({
       status: HttpStatus.UNAUTHORIZED,

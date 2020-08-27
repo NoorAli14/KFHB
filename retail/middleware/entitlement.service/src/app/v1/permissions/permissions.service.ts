@@ -26,25 +26,13 @@ export class PermissionService {
     const permissions = await this.permissionDB.listPermissionsByModuleID(ids);
     const permissionLookUps = {};
     permissions.forEach(permission => {
-      if (!permissionLookUps[permission.module_id]) {
-        permissionLookUps[permission.module_id] = permission || {};
-      }else{
-        const prev = permissionLookUps[permission.module_id];
-        if(Array.isArray(prev)) {
-          permissionLookUps[permission.module_id] = [...prev, permission]
-        } else {
-          permissionLookUps[permission.module_id] = [prev, permission]
-        }
-      }
+      if (!permissionLookUps[permission.module_id])
+        permissionLookUps[permission.module_id] = [];
+      permissionLookUps[permission.module_id].push(permission);
     });
-    const moduleIds = ids.map(obj => obj.module_id);
-    return moduleIds.map(moduleId => {
-      if(permissionLookUps[moduleId]){
-        return permissionLookUps[moduleId];
-      } else {
-        return null
-      }
-    });
+    if (typeof ids[0] != 'string')
+      return ids.map(obj => permissionLookUps[obj.module_id] || []);
+    return ids.map(id => permissionLookUps[id] || []);
   }
 
   async findByProperty(checks: KeyValInput[], keys?: string[]): Promise<any> {
