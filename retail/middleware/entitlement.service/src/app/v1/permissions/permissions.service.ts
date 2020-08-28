@@ -16,19 +16,6 @@ export class PermissionService {
     return this.permissionDB.findOne({ id: id }, keys);
   }
 
-  async findPermissionsByModuleID(ids): Promise<any>{
-    const permissions = await this.permissionDB.listPermissionsByModuleID(ids);
-    const permissionLookUps = {};
-    permissions.forEach(permission => {
-      if (!permissionLookUps[permission.module_id])
-        permissionLookUps[permission.module_id] = [];
-      permissionLookUps[permission.module_id].push(permission);
-    });
-    if (typeof ids[0] != 'string')
-      return ids.map(obj => permissionLookUps[obj.module_id] || []);
-    return ids.map(id => permissionLookUps[id] || []);
-  }
-
   async findByProperty(checks: KeyValInput[], keys?: string[]): Promise<any> {
     const conditions = {};
     checks.forEach(check => {
