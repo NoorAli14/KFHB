@@ -183,4 +183,3 @@ services:
 networks:
   core_service_network:
     driver: bridge
-    name: core_service_network
