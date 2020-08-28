@@ -10,6 +10,7 @@ import {
   ParseUUIDPipe,
   HttpCode,
   UseGuards,
+  HttpStatus,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -25,7 +26,7 @@ import {
 import { Module } from './module.entity';
 import { ModuleDto } from './module.dto';
 import { ModuleService } from './modules.service';
-import { AuthGuard } from '@common/guards/';
+import { AuthGuard } from '@common/index';
 
 @ApiTags('Module')
 @Controller('modules')
@@ -125,7 +126,7 @@ export class ModulesController {
     type: Error,
     description: 'Module Not Found.',
   })
-  @HttpCode(204)
+  @HttpCode(HttpStatus.NO_CONTENT)
   async delete(@Param('id', ParseUUIDPipe) id: string): Promise<any> {
     return this.moduleService.delete(id);
   }

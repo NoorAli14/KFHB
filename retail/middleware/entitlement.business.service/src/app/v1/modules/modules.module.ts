@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ModulesController } from './modules.controller';
 import { ModuleService } from './modules.service';
-import { GqlClientModule } from '@common/libs/gqlclient/gqlclient.module';
-import { GqlClientService } from '@common/libs/gqlclient/gqlclient.service';
+import { GqlClientModule, GqlClientService } from '@common/index';
 
 @Module({
   imports: [GqlClientModule],

@@ -5,8 +5,7 @@ import {
 } from '@nestjs/common';
 import { Module } from './module.entity';
 import { ModuleDto } from './module.dto';
-import { toGraphql } from '@common/utilities';
-import { GqlClientService } from '@common/libs/gqlclient/gqlclient.service';
+import { GqlClientService, toGraphql } from '@common/index';
 
 @Injectable()
 export class ModuleService {
@@ -42,19 +41,17 @@ export class ModuleService {
 
   async list(): Promise<Module[]> {
     const params = `query {
-      modules: modulesList ${this.output}
+      result: modulesList ${this.output}
     }`;
-    const modules = await this.gqlClient.send(params);
-    return modules?.modules;
+    return this.gqlClient.send(params);
   }
 
   async findBy(condition: any, output?: string): Promise<Module[]> {
     const _output: string = output ? output : this.output;
     const params = `query {
-      module: findModuleBy(checks: ${toGraphql(condition)}) ${_output}
+      result: findModuleBy(checks: ${toGraphql(condition)}) ${_output}
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.module;
+    return this.gqlClient.send(params);
   }
 
   async create(input: ModuleDto): Promise<Module> {
@@ -71,28 +68,25 @@ export class ModuleService {
       throw new BadRequestException(`Module '${input.name}' Already Exist`);
     }
     const params = `mutation{
-      module: addModule(input: ${toGraphql(input)}) ${this.output}
+      result: addModule(input: ${toGraphql(input)}) ${this.output}
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.module;
+    return this.gqlClient.send(params);
   }
 
   async findOne(id: string): Promise<Module> {
     const params = `query {
-      module: findModule(id: "${id}") ${this.output}
+      result: findModule(id: "${id}") ${this.output}
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.module;
+    return this.gqlClient.send(params);
   }
 
   async findById(id: string): Promise<Module> {
     const params = `query {
-      module: findModule(id: "${id}") {
+      result: findModule(id: "${id}") {
         id
       }
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.module;
+    return this.gqlClient.send(params);
   }
 
   async update(id: string, input: ModuleDto): Promise<any> {
@@ -101,12 +95,11 @@ export class ModuleService {
       throw new NotFoundException('Module Not Found');
     }
     const params = `mutation {
-      module: updateModule(id: "${id}", input: ${toGraphql(input)}) ${
+      result: updateModule(id: "${id}", input: ${toGraphql(input)}) ${
       this.output
     }
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.module;
+    return this.gqlClient.send(params);
   }
 
   async delete(id: string): Promise<any> {
@@ -115,9 +108,8 @@ export class ModuleService {
       throw new NotFoundException('Module Not Found');
     }
     const params = `mutation {
-      module: deleteModule(id: "${id}") 
+      result: deleteModule(id: "${id}") 
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.module;
+    return this.gqlClient.send(params);
   }
 }
