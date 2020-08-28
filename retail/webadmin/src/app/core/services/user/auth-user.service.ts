@@ -21,16 +21,16 @@ export class AuthUserService {
             translate: "FEATURES.ENTITLEMENT.TITLE",
         },
         {
-            id: "User",
+            id: "User Management",
             icon: "person",
             url: "/ent/user",
             translate: "FEATURES.ENTITLEMENT.USER.TITLE",
         },
         {
-            id: "Config",
+            id: "Role Management",
             icon: "settings_applications",
-            url: "/ent/config",
-            translate: "FEATURES.ENTITLEMENT.CONFIG.TITLE",
+            url: "/ent/role",
+            translate: "FEATURES.ENTITLEMENT.ROLE.TITLE",
         },
         {
             id: "Calender",
