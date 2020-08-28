@@ -5,8 +5,7 @@ import {
 } from '@nestjs/common';
 import { Permission } from './permission.entity';
 import { PermissionDto } from './permission.dto';
-import { toGraphql } from '@common/utilities';
-import { GqlClientService } from '@common/libs/gqlclient/gqlclient.service';
+import { toGraphql, GqlClientService } from '@common/index';
 
 @Injectable()
 export class PermissionService {
@@ -19,19 +18,17 @@ export class PermissionService {
   }`;
   async list(): Promise<Permission[]> {
     const params = `query {
-      permissions: permissionsList ${this._output}
+      result: permissionsList ${this._output}
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.permissions;
+    return this.gqlClient.send(params);
   }
 
   async findBy(condition: any, output?: string): Promise<Permission[]> {
     const _output: string = output ? output : this._output;
     const params = `query {
-      permission: findPermissionBy(checks: ${toGraphql(condition)}) ${_output}
+      result: findPermissionBy(checks: ${toGraphql(condition)}) ${_output}
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.permission;
+    return this.gqlClient.send(params);
   }
 
   async create(input: PermissionDto): Promise<Permission> {
@@ -48,28 +45,25 @@ export class PermissionService {
       throw new BadRequestException(`Permission Already Exist`);
     }
     const params = `mutation{
-      permission: addPermission(input: ${toGraphql(input)}) ${this._output}
+      result: addPermission(input: ${toGraphql(input)}) ${this._output}
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.permission;
+    return this.gqlClient.send(params);
   }
 
   async findOne(id: string): Promise<Permission> {
     const params = `query {
-      permission: findPermission(id: "${id}") ${this._output}
+      result: findPermission(id: "${id}") ${this._output}
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.permission;
+    return this.gqlClient.send(params);
   }
 
   async findById(id: string): Promise<Permission> {
     const params = `query {
-      permission: findPermission(id: "${id}") {
+      result: findPermission(id: "${id}") {
         id
       }
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.permission;
+    return this.gqlClient.send(params);
   }
 
   async update(id: string, input: PermissionDto): Promise<Permission> {
@@ -78,12 +72,11 @@ export class PermissionService {
       throw new NotFoundException('Permission Not Found');
     }
     const params = `mutation {
-      permission: updatePermission(id: "${id}", input: ${toGraphql(input)}) ${
+      result: updatePermission(id: "${id}", input: ${toGraphql(input)}) ${
       this._output
     }
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.permission;
+    return this.gqlClient.send(params);
   }
 
   async delete(id: string): Promise<boolean> {
@@ -92,9 +85,8 @@ export class PermissionService {
       throw new NotFoundException('Permission Not Found');
     }
     const params = `mutation {
-      permission: deletePermission(id: "${id}") 
+      result: deletePermission(id: "${id}") 
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.permission;
+    return this.gqlClient.send(params);
   }
 }
