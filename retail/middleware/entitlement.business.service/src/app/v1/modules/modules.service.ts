@@ -18,9 +18,21 @@ export class ModuleService {
       id
       name
       parent_id
+      permissions {
+        id
+        record_type
+        created_by
+        created_on
+      }
       status
       created_on
       created_by
+    }
+    permissions {
+      id
+      record_type
+      created_by
+      created_on
     }
     status
     created_on
