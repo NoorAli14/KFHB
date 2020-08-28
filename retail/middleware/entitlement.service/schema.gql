@@ -141,16 +141,16 @@ type ModuleInRole {
 }
 
 type Mutation {
+  resetInvitationToken(id: String!): User!
+  addUser(input: CreateUserInput!): User!
+  updateUser(input: UpdateUserInput!, id: String!): User!
+  deleteUser(id: String!): Boolean!
   addRole(input: RoleInput!): Role!
   updateRole(input: RoleInput!, id: String!): Role!
   deleteRole(id: String!): Boolean!
   addModule(input: ModuleInput!): Module!
   updateModule(input: ModuleInput!, id: String!): Module!
   deleteModule(id: String!): Boolean!
-  resetInvitationToken(id: String!): User!
-  addUser(input: CreateUserInput!): User!
-  updateUser(input: UpdateUserInput!, id: String!): User!
-  deleteUser(id: String!): Boolean!
   addPermission(input: PermissionInput!): Permission!
   updatePermission(input: PermissionInput!, id: String!): Permission!
   deletePermission(id: String!): Boolean!
@@ -178,17 +178,17 @@ input PermissionInput {
 }
 
 type Query {
-  rolesList: [Role!]!
-  findRole(id: String!): Role!
-  findRoleBy(checks: [KeyValInput!]!): [Role!]!
-  modulesList: [Module!]!
-  findModule(id: String!): Module!
-  findModuleBy(checks: [KeyValInput!]!): [Module!]!
   usersList: [User!]!
   findUserById(id: String!): User!
   findUserBy(checks: [KeyValInput!]!): [User!]!
+  rolesList: [Role!]!
+  findRoleById(id: String!): Role!
+  findRoleBy(checks: [KeyValInput!]!): [Role!]!
+  modulesList: [Module!]!
+  findModuleById(id: String!): Module!
+  findModuleBy(checks: [KeyValInput!]!): [Module!]!
   permissionsList: [Permission!]!
-  findPermission(id: String!): Permission!
+  findPermissionById(id: String!): Permission!
   findPermissionBy(checks: [KeyValInput!]!): [Permission!]!
   login(input: LoginInput!): User!
   forgotPassword(input: ForgotPasswordInput!): User!

@@ -5,7 +5,12 @@ import { TABLE } from '@common/constants';
 @Injectable()
 export class PermissionRepository extends BaseRepository {
 
-  private readonly __attributes : string[] = [`${TABLE.PERMISSION}.id`,`${TABLE.PERMISSION}.record_type`,`${TABLE.PERMISSION}.created_on`,`${TABLE.PERMISSION}.created_by`,];
+  private readonly __attributes : string[] = [
+    `${TABLE.PERMISSION}.id`,
+    `${TABLE.PERMISSION}.record_type`,
+    `${TABLE.PERMISSION}.created_on`,
+    `${TABLE.PERMISSION}.created_by`,
+  ];
 
   constructor() {
     super(TABLE.PERMISSION);

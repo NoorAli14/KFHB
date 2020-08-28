@@ -4,6 +4,19 @@ import {STATUS, TABLE,} from '@common/constants';
 
 @Injectable()
 export class RoleRepository extends BaseRepository {
+  private readonly __attributes: string[] = [
+    `${TABLE.MODULE}.id`,
+    `${TABLE.MODULE}.name`,
+    `${TABLE.MODULE}.status`,
+    `${TABLE.MODULE}.description`,
+    `${TABLE.MODULE}.updated_on`,
+    `${TABLE.MODULE}.updated_by`,
+    `${TABLE.MODULE}.deleted_on`,
+    `${TABLE.MODULE}.deleted_by`,
+    `${TABLE.MODULE}.created_by`,
+    `${TABLE.MODULE}.created_on`
+  ];
+
   constructor() {
     super(TABLE.ROLE);
   }
@@ -11,19 +24,11 @@ export class RoleRepository extends BaseRepository {
   async listRolesByUserID(userIds): Promise<any>{
     const condition = {};
     condition[`${TABLE.ROLE}.status`] = STATUS.ACTIVE;
-    const roles: any = await this._connection(TABLE.ROLE)
-        .select(`${TABLE.ROLE}.*`, `${TABLE.USER_ROLE}.user_id`)
+    return this._connection(TABLE.ROLE)
+        .select([...this.__attributes, `${TABLE.USER_ROLE}.user_id`])
         .leftJoin(TABLE.USER_ROLE, `${TABLE.ROLE}.id`, `${TABLE.USER_ROLE}.role_id`)
         .whereIn(`${TABLE.USER_ROLE}.user_id`, userIds)
         .where(condition);
-
-    const rolesLookups = {};
-    roles.forEach(role => {
-      if (!rolesLookups[role.user_id])
-        rolesLookups[role.user_id] = [];
-      rolesLookups[role.user_id].push(role)
-    });
-    return userIds.map(id => rolesLookups[id] || []);
   }
 
   async create(role: Record<string, any>, keys: string[]): Promise<any> {
