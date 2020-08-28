@@ -1,10 +1,5 @@
-import {
-  Injectable,
-  NotFoundException,
-  UnprocessableEntityException,
-} from '@nestjs/common';
-import { toGraphql } from '@common/utilities';
-import { GqlClientService } from '@common/libs/gqlclient/gqlclient.service';
+import { Injectable } from '@nestjs/common';
+import { GqlClientService } from '@common/index';
 import { NotificationsService } from '@app/v1/notifications/notifications.service';
 import { UserService } from '@app/v1/users/users.service';
 import { UpdateUserDto } from '@app/v1/users/user.dto';
@@ -36,19 +31,19 @@ export class InvitationsService {
     input.status = 'ACTIVE';
     input.invitation_token = null;
     input.invitation_token_expiry = null;
-    return await this.userService.update(id, input);
+    return this.userService.update(id, input);
   }
 
   async resendInvitationLink(userId: string): Promise<any> {
     const params: string = `query {
-      invitation: resetInvitationToken(id: "${userId}"){
+      result: resetInvitationToken(id: "${userId}"){
         id
         email
         invitation_token
         invitation_token_expiry
       }
     }`;
-    const invitation = (await this.gqlClient.send(params)).invitation;
+    const invitation = await this.gqlClient.send(params);
     await this.notificationService.sendInvitationLink(
       invitation.email,
       invitation.invitation_token,

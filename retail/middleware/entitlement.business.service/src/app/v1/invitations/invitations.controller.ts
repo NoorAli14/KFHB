@@ -21,13 +21,12 @@ import {
   ApiBadRequestResponse,
   ApiNotFoundResponse,
 } from '@nestjs/swagger';
+import { AuthGuard, SuccessDto } from '@common/index';
 import { UserService } from '@app/v1/users/users.service';
 import { NewUserDto } from '@app/v1/users/user.dto';
 import { User } from '@app/v1/users/user.entity';
 import { UpdateInvitationDto } from './invitation.dto';
 import { InvitationsService } from './invitations.service';
-import { SuccessDto } from '@common/dtos/';
-import { AuthGuard } from '@common/guards/';
 
 @ApiTags('Invitation')
 @Controller('invitations')
