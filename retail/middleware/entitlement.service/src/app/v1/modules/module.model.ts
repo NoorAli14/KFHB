@@ -23,10 +23,7 @@ export class Module {
 
   @Field(type => [Module], { nullable: true })
   sub_modules?: Module[];
-}
 
-@ObjectType()
-export class ModuleInRole extends Module {
   @Field(type => [Permission], { nullable: true })
   permissions?: Permission[];
 }
