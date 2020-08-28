@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { toGraphql } from '@common/utilities';
-import { GqlClientService } from '@common/libs/gqlclient/gqlclient.service';
-import { ConfigurationService } from '@common/configuration/configuration.service';
+import {
+  GqlClientService,
+  ConfigurationService,
+  toGraphql,
+} from '@common/index';
 
 @Injectable()
 export class NotificationsService {
@@ -12,7 +14,7 @@ export class NotificationsService {
 
   async sendGenericEmail() {
     const params: string = `mutation {
-        notification: sendEmail(
+        result: sendEmail(
           input: {
             to: "faizan@aiondigital.com"
             template: "default"
@@ -28,8 +30,7 @@ export class NotificationsService {
           to
         }
       }`;
-    const result = await this.gqlClient.send(params);
-    return result?.notification;
+    return this.gqlClient.send(params);
   }
 
   async sendInvitationLink(to: string, token: string) {
@@ -41,13 +42,13 @@ export class NotificationsService {
       context: [],
     };
     const params: string = `mutation {
-        notification: sendEmail(
+        result: sendEmail(
           input: ${toGraphql(input)}
         ) {
           to
         }
       }`;
-    return (await this.gqlClient.send(params)).notification;
+    return this.gqlClient.send(params);
   }
 
   async sendResetPasswordLink(to: string, token: string) {
@@ -59,12 +60,12 @@ export class NotificationsService {
       context: [],
     };
     const params: string = `mutation {
-        notification: sendEmail(
+        result: sendEmail(
           input: ${toGraphql(input)}
         ) {
           to
         }
       }`;
-    return (await this.gqlClient.send(params)).notification;
+    return this.gqlClient.send(params);
   }
 }
