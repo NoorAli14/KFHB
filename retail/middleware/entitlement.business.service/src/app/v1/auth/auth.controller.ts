@@ -1,3 +1,4 @@
+import { Request } from 'express';
 import {
   Controller,
   Post,
@@ -8,26 +9,32 @@ import {
   HttpCode,
   HttpStatus,
   Delete,
-  Res,
+  Req,
+  Headers,
+  UnauthorizedException,
+  BadRequestException,
 } from '@nestjs/common';
 import {
   ApiTags,
   ApiOkResponse,
-  ApiCreatedResponse,
   ApiOperation,
   ApiBody,
   ApiBearerAuth,
   ApiBadRequestResponse,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
+import {
+  X_ACCESS_TOKEN,
+  X_REFRESH_TOKEN,
+  AuthGuard,
+  CurrentUser,
+  SuccessDto,
+} from '@common/index';
 import { UserService } from '@app/v1/users/users.service';
 import { CurrentUserUpdateDto } from '@app/v1/users/user.dto';
-
 import { User } from '@app/v1/users/user.entity';
 import { LocalAuthGuard } from './localAuth.guard';
 import { AuthService } from './auth.service';
-import { CurrentUser } from '@common/decorators';
-import { AuthGuard } from '@common/guards/';
-import { X_ACCESS_TOKEN } from '@common/constants';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -37,6 +44,39 @@ export class AuthController {
     private readonly authService: AuthService,
   ) {}
 
+  @Post('refresh-token')
+  @ApiOperation({
+    description: 'A successful request returns the HTTP 200 OK status.',
+    summary: 'Generate new access token.',
+  })
+  @ApiOkResponse({
+    type: SuccessDto,
+    description: 'Generate new user access token.',
+  })
+  @ApiBadRequestResponse({
+    type: Error,
+    description: `x-refresh-token can't be blank`,
+  })
+  @ApiUnauthorizedResponse({
+    type: Error,
+  })
+  @HttpCode(HttpStatus.OK)
+  async refreshToken(
+    @Headers(X_REFRESH_TOKEN) refresh_token: string,
+    @Req() request: Request,
+  ): Promise<SuccessDto> {
+    if (!refresh_token)
+      throw new BadRequestException(`${X_REFRESH_TOKEN} can't be blank`);
+    const payload: any = await this.authService.validateRefreshToken(refresh_token);
+    if(!payload) 
+      throw new UnauthorizedException();
+    request.res = this.authService.setHeaders(request.res, refresh_token,payload.aud)
+    return {
+      status: 'SUCCESS',
+      message: `${X_ACCESS_TOKEN} has been successfully generated.`,
+    };
+  }
+
   @HttpCode(HttpStatus.OK)
   @UseGuards(LocalAuthGuard)
   @Post('/login')
@@ -45,22 +85,24 @@ export class AuthController {
     description:
       'A successful request returns the HTTP 200 OK status code and a JSON response body that shows user information.',
   })
-  @ApiCreatedResponse({
+  @ApiOkResponse({
     type: User,
     description: 'User has been successfully loggedIn.',
+  })
+  @ApiUnauthorizedResponse({
+    type: Error,
+    description: 'Wrong credentials',
   })
   @ApiBadRequestResponse({
     type: Error,
     description: 'Input Validation failed.',
   })
-  async login(@Res() response, @CurrentUser() user: User) {
-    const token: string = this.authService.getToken(user.id);
-    response.setHeader(X_ACCESS_TOKEN, token);
-    response.setHeader(
-      'Set-Cookie',
-      this.authService.getCookieWithJwtToken(token),
+  async login(@Req() request: Request, @CurrentUser() user: User) {
+    const refreshToken: string = await this.authService.getRefreshToken(
+      user.id,
     );
-    return response.send(user);
+    request.res = this.authService.setHeaders(request.res, refreshToken, user.id)
+    return user;
   }
 
   @Get('me')
@@ -111,8 +153,12 @@ export class AuthController {
   })
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  async logOut(@Res() response) {
-    response.setHeader('Set-Cookie', this.authService.getCookieForLogOut());
-    return response.sendStatus(HttpStatus.NO_CONTENT);
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async logOut(@Req() request: Request, @CurrentUser() user: User) {
+    request.res.setHeader(
+      'Set-Cookie',
+      await this.authService.getCookieForLogOut(user.id),
+    );
+    return null;
   }
 }

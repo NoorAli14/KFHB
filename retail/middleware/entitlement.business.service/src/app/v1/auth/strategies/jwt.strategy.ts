@@ -4,11 +4,11 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
 import { ConfigurationService } from '@common/configuration/configuration.service';
 import { UserService } from '@app/v1/users/users.service';
-import { X_ACCESS_TOKEN } from '@common/constants';
-
+import { X_ACCESS_TOKEN, RedisClientService } from '@common/index';
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
+    private readonly redisService: RedisClientService,
     private readonly configService: ConfigurationService,
     private readonly userService: UserService,
   ) {
@@ -28,6 +28,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
+    if (!(await this.redisService.getValue(payload.id))) return null;
     return this.userService.findOne(payload.id);
   }
 }
