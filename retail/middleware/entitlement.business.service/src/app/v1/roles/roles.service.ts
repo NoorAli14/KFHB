@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { toGraphql, GqlClientService } from '@common/index';
+
 import { Role } from './role.entity';
 import { RoleDto } from './role.dto';
-import { toGraphql } from '@common/utilities';
-import { GqlClientService } from '@common/libs/gqlclient/gqlclient.service';
 
 @Injectable()
 export class RoleService {
@@ -47,36 +47,32 @@ export class RoleService {
   }`;
   async list(): Promise<Role[]> {
     const params = `query {
-      roles: rolesList ${this.output}
+      result: rolesList ${this.output}
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.roles;
+    return this.gqlClient.send(params);
   }
 
   async create(input: RoleDto): Promise<Role> {
     const params = `mutation {
-      role: addRole(input: ${toGraphql(input)}) ${this.output}
+      result: addRole(input: ${toGraphql(input)}) ${this.output}
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.role;
+    return this.gqlClient.send(params);
   }
 
   async findOne(id: string): Promise<Role> {
     const params = `query {
-      role: findRole(id: "${id}") 
+      result: findRole(id: "${id}") 
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.role;
+    return this.gqlClient.send(params);
   }
 
   async findById(id: string): Promise<Role> {
     const params = `query {
-      role: findRole(id: "${id}") {
+      result: findRole(id: "${id}") {
         id
       }
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.role;
+    return this.gqlClient.send(params);
   }
 
   async update(id: string, input: RoleDto): Promise<Role> {
@@ -85,10 +81,9 @@ export class RoleService {
       throw new NotFoundException('Role Not Found');
     }
     const params = `mutation {
-      role: updateRole(id: "${id}", input: ${toGraphql(input)}) ${this.output}
+      result: updateRole(id: "${id}", input: ${toGraphql(input)}) ${this.output}
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.role;
+    return this.gqlClient.send(params);
   }
 
   async delete(id: string): Promise<boolean> {
@@ -97,9 +92,8 @@ export class RoleService {
       throw new NotFoundException('Role Not Found');
     }
     const params = `mutation {
-      role: deleteRole(id: "${id}") 
+      result: deleteRole(id: "${id}") 
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.role;
+    return this.gqlClient.send(params);
   }
 }
