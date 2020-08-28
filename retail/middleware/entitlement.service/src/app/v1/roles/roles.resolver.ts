@@ -8,6 +8,8 @@ import { RoleInput } from "@app/v1/roles/role.dto";
 import { KeyValInput } from "@common/inputs/key-val.input";
 import { Module } from "@app/v1/modules/module.model";
 import {Fields} from '@common/decorators';
+import {HttpException, HttpStatus} from '@nestjs/common';
+import {MESSAGES} from '@common/constants';
 
 @Resolver(Role)
 export class RolesResolver {
@@ -19,8 +21,13 @@ export class RolesResolver {
   }
 
   @Query(() => Role)
-  async findRole(@Args('id') id: string, @Fields() columns: string[]): Promise<Role> {
-    return this.roleService.findById(id, columns);
+  async findRoleById(@Args('id') id: string, @Fields() columns: string[]): Promise<Role> {
+    const role: Role = await this.roleService.findById(id,columns);
+    if(!role) throw new HttpException({
+      status: HttpStatus.NOT_FOUND,
+      error: MESSAGES.NOT_FOUND,
+    }, HttpStatus.NOT_FOUND);
+    return role;
   }
 
   @Query(() => [Role])
@@ -42,11 +49,21 @@ export class RolesResolver {
     @Args('input') input: RoleInput,
     @Fields() columns: string[]
   ): Promise<Role> {
+    const role: Role = await this.roleService.findById(id,columns);
+    if(!role) throw new HttpException({
+      status: HttpStatus.NOT_FOUND,
+      error: MESSAGES.NOT_FOUND,
+    }, HttpStatus.NOT_FOUND);
     return this.roleService.update(id, input, columns);
   }
 
   @Mutation(() => Boolean)
   async deleteRole(@Args('id') id: string): Promise<boolean> {
+    const role: Role = await this.roleService.findById(id, ['id']);
+    if(!role) throw new HttpException({
+      status: HttpStatus.NOT_FOUND,
+      error: MESSAGES.NOT_FOUND,
+    }, HttpStatus.NOT_FOUND);
     return this.roleService.delete(id);
   }
 

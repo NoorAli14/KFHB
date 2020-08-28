@@ -13,14 +13,7 @@ export class LeavesService {
   }
 
   async findById(id: string, keys?: string[]): Promise<any> {
-    const result = await this.leaveRepository.findOne({ id: id }, keys);
-    if(!result){
-      throw new HttpException({
-        status: HttpStatus.NOT_FOUND,
-        error: MESSAGES.NOT_FOUND,
-      }, HttpStatus.NOT_FOUND);
-    }
-    return result;
+    return this.leaveRepository.findOne({ id: id }, keys);
   }
 
   async findByProperty(checks: KeyValInput[], keys?: string[]): Promise<any> {
@@ -28,14 +21,7 @@ export class LeavesService {
     checks.forEach(check => {
       conditions[check.record_key] = check.record_value;
     });
-    const result = await this.leaveRepository.findBy(conditions, keys);
-    if(!result){
-      throw new HttpException({
-        status: HttpStatus.NOT_FOUND,
-        error: MESSAGES.NOT_FOUND,
-      }, HttpStatus.NOT_FOUND);
-    }
-    return result;
+    return this.leaveRepository.findBy(conditions, keys);
   }
 
   async update(
@@ -55,15 +41,14 @@ export class LeavesService {
         error: MESSAGES.INVALID_WEEKDAY,
       }, HttpStatus.BAD_REQUEST);
     }
-    const result = await this.leaveRepository.update({ id: id }, newObj, keys);
-    if(result?.length > 0) {
-      return result[0]
-    } else {
+    const [result] = await this.leaveRepository.update({ id: id }, newObj, keys);
+    if(!result) {
       throw new HttpException({
         status: HttpStatus.BAD_REQUEST,
         error: MESSAGES.BAD_REQUEST,
       }, HttpStatus.BAD_REQUEST);
     }
+    return result;
   }
 
   async create(newObj: Record<string, any>, keys?: string[]): Promise<any> {

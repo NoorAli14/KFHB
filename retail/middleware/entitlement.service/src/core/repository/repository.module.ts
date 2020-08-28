@@ -7,7 +7,8 @@ import {RoleRepository} from "@core/repository/role.repository";
 import {ModuleRepository} from "@core/repository/module.repository";
 import {PermissionRepository} from "@core/repository/permission.repository";
 
-const repos: any = [UserRepository,
+const repos: any = [
+  UserRepository,
   RoleRepository,
   ModuleRepository,
   PermissionRepository,

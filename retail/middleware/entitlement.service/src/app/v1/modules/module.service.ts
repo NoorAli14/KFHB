@@ -13,14 +13,7 @@ export class ModuleService {
   }
 
   async findById(id: string, keys?: string[]): Promise<any> {
-    const result = await this.moduleDB.findOne({ id: id }, keys);
-    if(!result){
-      throw new HttpException({
-        status: HttpStatus.NOT_FOUND,
-        error: MESSAGES.NOT_FOUND,
-      }, HttpStatus.NOT_FOUND);
-    }
-    return result;
+    return await this.moduleDB.findOne({ id: id }, keys);
   }
 
   async findByProperty(checks: KeyValInput[], keys?: string[]): Promise<any> {
@@ -28,14 +21,7 @@ export class ModuleService {
     checks.forEach(check => {
       conditions[check.record_key] = check.record_value;
     });
-    const result = await this.moduleDB.findBy(conditions, keys);
-    if(!result){
-      throw new HttpException({
-        status: HttpStatus.NOT_FOUND,
-        error: MESSAGES.NOT_FOUND,
-      }, HttpStatus.NOT_FOUND);
-    }
-    return result;
+    return this.moduleDB.findBy(conditions, keys);
   }
 
   async update(
@@ -49,15 +35,14 @@ export class ModuleService {
         error: MESSAGES.INVALID_STATUS,
       }, HttpStatus.BAD_REQUEST);
     }
-    const result = await this.moduleDB.update({ id: id }, moduleObj, keys);
-    if(result?.length > 0) {
-      return result[0]
-    } else {
+    const [result] = await this.moduleDB.update({ id: id }, moduleObj, keys);
+    if(!result) {
       throw new HttpException({
         status: HttpStatus.BAD_REQUEST,
         error: MESSAGES.BAD_REQUEST,
       }, HttpStatus.BAD_REQUEST);
     }
+    return result;
   }
 
   async create(newModule: Record<string, any>, keys?: string[]): Promise<any> {

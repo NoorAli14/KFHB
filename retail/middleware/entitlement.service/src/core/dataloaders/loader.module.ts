@@ -9,19 +9,29 @@ import {
   ModulesDataLoaderByUser,
   LeavesDataLoader,
   PermissionLoader,
-  UserModulesDataLoader, SubModulesLoader
+  UserModulesDataLoader,
+  SubModulesLoader,
+  LeavesLoader,
+  ModulesLoader,
+  RolesLoader
 } from './';
 import {RepositoryModule} from "@core/repository/repository.module";
 
-const loaders: any = [RolesDataLoader,
+const loaders: any = [
+  RolesDataLoader,
   ModulesDataLoader,
   SubModulesDataLoader,
   PermissionsDataLoader,
   ModulesDataLoaderByUser,
   LeavesDataLoader,
+
   PermissionLoader,
   UserModulesDataLoader,
-  SubModulesLoader,];
+  SubModulesLoader,
+  LeavesLoader,
+  ModulesLoader,
+  RolesLoader,
+];
 
 @Module({
   imports: [RepositoryModule],
