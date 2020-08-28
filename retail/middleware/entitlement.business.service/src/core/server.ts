@@ -1,14 +1,14 @@
 import { Transport } from '@nestjs/microservices';
 import { INestApplication, ValidationPipe, Logger } from '@nestjs/common';
-import { CommonModule } from '@common/common.module';
+import * as cookieParser from 'cookie-parser';
 import {
+  CommonModule,
+  ConfigurationService,
+  HttpExceptionFilter,
   LoggingInterceptor,
   TransformInterceptor,
-} from '@common/interceptors/';
-import * as cookieParser from 'cookie-parser';
-import { HttpExceptionFilter } from '@common/filters/http-exception.filter';
-import { ConfigurationService } from '@common/configuration/configuration.service';
-import { CustomValidationPipe } from '@common/pipes/';
+} from '@common/index';
+
 import { KernelMiddleware } from '@core/middlewares/index';
 
 export default class Server {

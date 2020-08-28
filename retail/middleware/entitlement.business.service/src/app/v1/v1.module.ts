@@ -1,7 +1,16 @@
 import { Module as RubixModule } from '@nestjs/common';
 import { GATEWAY_BUILD_SERVICE, GraphQLGatewayModule } from '@nestjs/graphql';
 import { RemoteGraphQLDataSource } from '@apollo/gateway';
-import { CommonModule } from '@common/common.module';
+import { RedisModule } from 'nestjs-redis';
+import {
+  CommonModule,
+  GqlClientModule,
+  ConfigurationService,
+  X_USER_ID,
+  X_TENANT_ID,
+  iSERVICE,
+} from '@common/index';
+
 import { AuthModule } from './auth/auth.module';
 import { RolesModule } from './roles/roles.module';
 import { PermissionModule } from './permissions/permissions.module';
@@ -9,26 +18,24 @@ import { ModuleModule } from './modules/modules.module';
 import { UserModule } from './users/users.module';
 import { InvitationModule } from './invitations/invitation.module';
 import { ForgotPasswordModule } from './forgot_passwords/forgot_password.module';
-import { GqlClientModule } from '@common/libs/gqlclient/gqlclient.module';
 
-let serviceList: any = [];
-if (process.env.NODE_ENV === 'production') {
-  serviceList = [
-    { name: 'users', url: 'http://user_management_service:5020/graphql' },
-    { name: 'notifications', url: 'http://notification_service:5030/graphql' },
-  ];
-} else {
-  serviceList = [
+let services: iSERVICE[];
+  if (process.env.NODE_ENV === 'production') {
+    services = [
+      { name: 'users', url: 'http://user_management_service:5020/graphql' },
+      { name: 'notifications', url: 'http://notification_service:5030/graphql' },
+    ];
+  }  else{
+   services = [
     { name: 'users', url: 'http://localhost:5020/graphql' },
     { name: 'notifications', url: 'http://localhost:5030/graphql' },
   ];
 }
-
 class AuthenticatedDataSource extends RemoteGraphQLDataSource {
   async willSendRequest({ request, context }) {
     const { userId, tenantId } = context;
-    request.http.headers.set('x-user-id', userId);
-    request.http.headers.set('x-tenant-id', tenantId);
+    request.http.headers.set(X_USER_ID, userId);
+    request.http.headers.set(X_TENANT_ID, tenantId);
   }
 }
 
@@ -49,6 +56,7 @@ class AuthenticatedDataSource extends RemoteGraphQLDataSource {
   exports: [GATEWAY_BUILD_SERVICE],
 })
 class BuildServiceModule {}
+
 @RubixModule({
   imports: [
     CommonModule,
@@ -61,22 +69,28 @@ class BuildServiceModule {}
     ModuleModule,
     PermissionModule,
     GraphQLGatewayModule.forRootAsync({
+      imports: [BuildServiceModule],
       useFactory: async () => ({
         gateway: {
           // Note: All these values comes through service registry. For Demo purposes we hardcode service list
-          serviceList: serviceList,
+          serviceList: services,
         },
         server: {
           context: ({ req }) => ({
-            userId: req.headers['x-user-id'],
-            tenantId: req.headers['x-tenant-id'],
+            userId: req.headers[X_USER_ID],
+            tenantId: req.headers[X_TENANT_ID],
           }),
           // ... Apollo server options
           cors: true,
         },
       }),
-      imports: [BuildServiceModule],
       inject: [GATEWAY_BUILD_SERVICE],
+    }),
+    RedisModule.forRootAsync({
+      imports: [CommonModule],
+      useFactory: (_config: ConfigurationService) =>
+        _config.REDIS_CONNECTION,
+      inject: [ConfigurationService],
     }),
   ],
 })

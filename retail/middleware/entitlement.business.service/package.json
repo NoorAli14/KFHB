@@ -45,6 +45,7 @@
     "graphql-tools": "^6.0.12",
     "helmet": "^3.23.3",
     "hpp": "^0.2.3",
+    "nestjs-redis": "^1.2.8",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
