@@ -5,7 +5,7 @@ import Server from '@core/server';
 import NativeEvent from '@core/native.event';
 import { AppModule } from '@app/app.module';
 
-if (false && cluster.isMaster ) {
+if (process.env.NODE === 'production' && cluster.isMaster) {
   /**
    * Catches the process events
    */

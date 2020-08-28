@@ -1,17 +1,27 @@
 import * as DataLoader from 'dataloader';
-import {Injectable, Scope} from '@nestjs/common';
+import {Injectable} from '@nestjs/common';
 import { NestDataLoader } from 'nestjs-dataloader';
 
 import {Module} from "@app/v1/modules/module.model";
-import {ModuleService} from "@app/v1/modules/module.service";
+import {ModuleRepository} from '@core/repository';
+import {loaderSerializer} from '@common/utilities';
 
+@Injectable()
+export class SubModulesLoader {
+    constructor(private readonly moduleDb: ModuleRepository) {}
 
-@Injectable({ scope: Scope.REQUEST })
+    async findModulesByParentID(keys): Promise<any> {
+        const modules = await this.moduleDb.listModulesByParentModuleID(keys);
+        return loaderSerializer(modules, keys, 'parent_id', 'module_id')
+    }
+}
+
+@Injectable()
 export class SubModulesDataLoader implements NestDataLoader<string, Module> {
-    constructor(private readonly moduleService: ModuleService) { }
+    constructor(private readonly loader: SubModulesLoader) { }
 
     generateDataLoader(): DataLoader<string, Module> {
-        return new DataLoader<string, Module>(keys => this.moduleService.findModulesByParentModuleID(keys));
+        return new DataLoader<string, Module>(keys => this.loader.findModulesByParentID(keys));
     }
 }
 

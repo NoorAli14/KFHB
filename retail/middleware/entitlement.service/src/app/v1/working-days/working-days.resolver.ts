@@ -3,7 +3,7 @@ import {
   Query,
   Mutation,
   Args,
-  Info,
+  Info, ResolveField, Parent,
 } from "@nestjs/graphql";
 import { graphqlKeys } from "@common/utilities";
 import { KeyValInput } from "@common/inputs/key-val.input";
@@ -55,5 +55,15 @@ export class WorkingDaysResolver {
   @Mutation(() => Boolean)
   async deleteWorkingDay(@Args('id') id: string): Promise<boolean> {
     return this.workingDaysService.delete(id);
+  }
+
+  @ResolveField('start_time', returns => String)
+  async getStartTime(@Parent() workingDay: WorkingDay) {
+    return new Date(workingDay.start_time).toISOString()
+  }
+
+  @ResolveField('end_time', returns => String)
+  async getEndTime(@Parent() workingDay: WorkingDay) {
+    return new Date(workingDay.end_time).toISOString()
   }
 }

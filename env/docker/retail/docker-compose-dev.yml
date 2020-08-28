@@ -2,6 +2,14 @@ version: "3.2"
 
 services:
   #=================================================================
+  # Redis Server
+  #=================================================================
+  redis-server:
+    image: redis:alpine
+    container_name: cache
+    networks:
+      - core_service_network
+  #=================================================================
   # Gateway Service
   #=================================================================
   gateway-servcie:
@@ -20,7 +28,7 @@ services:
       - ENV_RBX_ONBOARDING_PORT=$ENV_RBX_ONBOARDING_PORT
       - ENV_RBX_NGINX_MAX_BODY=$ENV_RBX_NGINX_MAX_BODY
     networks:
-      - rubix-middleware-network
+      - core_service_network
     ports:
       - 80:80
 
@@ -34,10 +42,11 @@ services:
     image: "webportal:v1"
     container_name: "webportal_service"
     environment:
-      - ENV_CDT_API_BASE_URL=$ENV_CDT_API_BASE_URL
+      - ENV_RBX_API_BASE_URL=$ENV_RBX_API_BASE_URL
+      - ENV_RBX_APP_SECRET=$ENV_RBX_APP_SECRET
     restart: always
     networks:
-      - rubix-middleware-network
+      - core_service_network
     ports:
       - 3000:4200
   #=================================================================
@@ -53,12 +62,22 @@ services:
       - ENV_RBX_PORT=5000
       - ENV_RBX_APP_NAME=Rubix | Entitlement Business Service
       - ENV_RBX_SWAGGER_ENABLED=true
-      - ENV_RBX_API_URL_PREFIX=api/v1/entitlements/
+      - ENV_RBX_API_URL_PREFIX=api/v1/entitlements
+      - ENV_RBX_CORS_ORIGIN=$ENV_RBX_CORS_ORIGIN
+      - ENV_RBX_CORS_ENABLED=$ENV_RBX_CORS_ENABLED
+      - ENV_RBX_JWT_EXPIRY_MINUTES=$ENV_RBX_JWT_EXPIRY_MINUTES
+      - ENV_RBX_JWT_REFRESH_EXPIRY_DAYS=$ENV_RBX_JWT_REFRESH_EXPIRY_DAYS
+      - ENV_RBX_JWT_SECRET=$ENV_RBX_JWT_SECRET
+      - ENV_RBX_JWT_REFRESH_SECRET=$ENV_RBX_JWT_REFRESH_SECRET
+      - ENV_RBX_JWT_ALGORITHM=$ENV_RBX_JWT_ALGORITHM
+      - ENV_RBX_WEB_ONBOARDING_LINK=$ENV_RBX_WEB_ONBOARDING_LINK
+      - ENV_RBX_WEB_RESET_PASSWORD_LINK=$ENV_RBX_WEB_RESET_PASSWORD_LINK
+      - ENV_RBX_REDIS_URL=$ENV_RBX_REDIS_URL
     restart: always
+    depends_on:
+      - redis-server
     networks:
-      - rubix-middleware-network
-    ports:
-      - 5000:5000
+      - core_service_network
 
   #=================================================================
   # Onboarding Business Service
@@ -76,9 +95,7 @@ services:
       - ENV_RBX_API_URL_PREFIX=api/v1/onboarding/
     restart: always
     networks:
-      - rubix-middleware-network
-    ports:
-      - 4000:4000
+      - core_service_network
 
   #=================================================================
   # Template Service
@@ -103,10 +120,66 @@ services:
       - ENV_RBX_GRAPHQL_PLAYGROUND=$ENV_RBX_GRAPHQL_PLAYGROUND
     restart: always
     networks:
-      - rubix-middleware-network
-    ports:
-      - 5010:5010
+      - core_service_network
+
+  #=================================================================
+  # User Management Service
+  #=================================================================
+  user-management-service:
+    build:
+      context: ../../../retail/middleware/entitlement.service
+      dockerfile: Dockerfile
+    image: "user-management-service:v1"
+    container_name: "user_management_service"
+    environment:
+      - ENV_RBX_PORT=5020
+      - ENV_RBX_DB_USERNAME=$ENV_RBX_DB_USERNAME
+      - ENV_RBX_DB_PASS=$ENV_RBX_DB_PASS
+      - ENV_RBX_DB_NAME=$ENV_RBX_DB_NAME
+      - ENV_RBX_DB_HOST=$ENV_RBX_DB_HOST
+      - ENV_RBX_DB_PORT=$ENV_RBX_DB_PORT
+      - ENV_RBX_DB_TIMEOUT=$ENV_RBX_DB_TIMEOUT
+      - ENV_RBX_DB_DIALECT=$ENV_RBX_DB_DIALECT
+      - ENV_RBX_DB_DEBUG=$ENV_RBX_DB_DEBUG
+      - ENV_RBX_GRAPHQL_DEBUG=$ENV_RBX_GRAPHQL_DEBUG
+      - ENV_RBX_GRAPHQL_PLAYGROUND=$ENV_RBX_GRAPHQL_PLAYGROUND
+    restart: always
+    networks:
+      - core_service_network
+
+  #=================================================================
+  # Notification Service
+  #=================================================================
+  notification-service:
+    build:
+      context: ../../../retail/middleware/notifications
+      dockerfile: Dockerfile
+    image: "notification-service:v1"
+    container_name: "notification_service"
+    environment:
+      - ENV_RBX_PORT=5030
+      - ENV_RBX_DB_USERNAME=$ENV_RBX_DB_USERNAME
+      - ENV_RBX_DB_PASS=$ENV_RBX_DB_PASS
+      - ENV_RBX_DB_NAME=$ENV_RBX_DB_NAME
+      - ENV_RBX_DB_HOST=$ENV_RBX_DB_HOST
+      - ENV_RBX_DB_PORT=$ENV_RBX_DB_PORT
+      - ENV_RBX_DB_TIMEOUT=$ENV_RBX_DB_TIMEOUT
+      - ENV_RBX_DB_DIALECT=$ENV_RBX_DB_DIALECT
+      - ENV_RBX_DB_DEBUG=$ENV_RBX_DB_DEBUG
+      - ENV_RBX_GRAPHQL_DEBUG=$ENV_RBX_GRAPHQL_DEBUG
+      - ENV_RBX_GRAPHQL_PLAYGROUND=$ENV_RBX_GRAPHQL_PLAYGROUND
+      - ENV_RBX_SMTP_HOST=$ENV_RBX_SMTP_HOST
+      - ENV_RBX_SMTP_PORT=$ENV_RBX_SMTP_PORT
+      - ENV_RBX_SMTP_IGNORETLS=$ENV_RBX_SMTP_IGNORETLS
+      - ENV_RBX_SMTP_SECURE=$ENV_RBX_SMTP_SECURE
+      - ENV_RBX_SMTP_USER=$ENV_RBX_SMTP_USER
+      - ENV_RBX_SMTP_PASS=$ENV_RBX_SMTP_PASS
+      - ENV_RBX_SMTP_SENDING_NAME=$ENV_RBX_SMTP_SENDING_NAME
+      - ENV_RBX_SMTP_SENDING_EMAIL=$ENV_RBX_SMTP_SENDING_EMAIL
+    restart: always
+    networks:
+      - core_service_network
 
 networks:
-  rubix-middleware-network:
+  core_service_network:
     driver: bridge

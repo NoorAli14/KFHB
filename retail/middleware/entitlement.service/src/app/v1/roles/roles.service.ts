@@ -1,4 +1,5 @@
 import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
+
 import {RoleRepository} from "@core/repository/role.repository";
 import {MESSAGES, STATUS} from "@common/constants";
 import { KeyValInput } from "@common/inputs/key-val.input";
@@ -8,7 +9,7 @@ export class RoleService {
   constructor(private roleDB: RoleRepository) {}
 
   async list(keys: string[]): Promise<any> {
-    return this.roleDB.list(keys,{"status" : STATUS.ACTIVE});
+    return this.roleDB.list(keys,{"deleted_on" : null});
   }
 
   async findById(id: string, keys?: string[]): Promise<any> {
@@ -37,37 +38,19 @@ export class RoleService {
     return result;
   }
 
-  async findRolesByUserID(userIds): Promise<any>{
-    const roles = await this.roleDB.listRolesByUserID(userIds);
-    const rolesLookups = {};
-    roles.forEach(role => {
-      if (!rolesLookups[role.user_id]) {
-        rolesLookups[role.user_id] = role || {};
-      }else{
-        const prev = rolesLookups[role.user_id];
-        if(Array.isArray(prev)) {
-          rolesLookups[role.user_id] = [...prev, role]
-        } else {
-          rolesLookups[role.user_id] = [prev, role]
-        }
-      }
-    });
-    return userIds.map(id => {
-      if(rolesLookups[id]){
-        return rolesLookups[id];
-      } else {
-        return null
-      }
-    });
-  }
-
   async update(
     id: string,
     roleObj: Record<string, any>,
     keys?: string[],
   ): Promise<any> {
+    if(roleObj.status && !STATUS[roleObj.status]){
+      throw new HttpException({
+        status: HttpStatus.BAD_REQUEST,
+        error: MESSAGES.INVALID_STATUS,
+      }, HttpStatus.BAD_REQUEST);
+    }
     const result = await this.roleDB.update({ id: id }, roleObj, keys);
-    if(result && result.length) {
+    if(result?.length > 0) {
       return result[0]
     } else {
       throw new HttpException({
@@ -79,10 +62,15 @@ export class RoleService {
 
   async create(newRole: Record<string, any>, keys?: string[]): Promise<any> {
     if(!newRole.status){
-      newRole.status = STATUS.PENDING;
+      newRole.status = STATUS.ACTIVE;
+    } else if(!STATUS[newRole.status]){
+      throw new HttpException({
+        status: HttpStatus.BAD_REQUEST,
+        error: MESSAGES.INVALID_STATUS,
+      }, HttpStatus.BAD_REQUEST);
     }
     const result = await this.roleDB.create(newRole, keys);
-    if(result && result.length) {
+    if(result?.length > 0) {
       return result[0]
     } else {
       throw new HttpException({

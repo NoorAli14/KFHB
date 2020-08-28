@@ -22,28 +22,17 @@ export class PermissionService {
     return result;
   }
 
-  async findPermissionsByModuleID(moduleIds): Promise<any>{
-    const permissions = await this.permissionDB.listPermissionsByModuleID(moduleIds);
+  async findPermissionsByModuleID(ids): Promise<any>{
+    const permissions = await this.permissionDB.listPermissionsByModuleID(ids);
     const permissionLookUps = {};
     permissions.forEach(permission => {
-      if (!permissionLookUps[permission.module_id]) {
-        permissionLookUps[permission.module_id] = permission || {};
-      }else{
-        const prev = permissionLookUps[permission.module_id];
-        if(Array.isArray(prev)) {
-          permissionLookUps[permission.module_id] = [...prev, permission]
-        } else {
-          permissionLookUps[permission.module_id] = [prev, permission]
-        }
-      }
+      if (!permissionLookUps[permission.module_id])
+        permissionLookUps[permission.module_id] = [];
+      permissionLookUps[permission.module_id].push(permission);
     });
-    return moduleIds.map(id => {
-      if(permissionLookUps[id]){
-        return permissionLookUps[id];
-      } else {
-        return null
-      }
-    });
+    if (typeof ids[0] != 'string')
+      return ids.map(obj => permissionLookUps[obj.module_id] || []);
+    return ids.map(id => permissionLookUps[id] || []);
   }
 
   async findByProperty(checks: KeyValInput[], keys?: string[]): Promise<any> {
@@ -67,7 +56,7 @@ export class PermissionService {
     keys?: string[],
   ): Promise<any> {
     const result = await this.permissionDB.update({ id: id }, permissionObj, keys);
-    if(result && result.length) {
+    if(result?.length > 0) {
       return result[0]
     } else {
       throw new HttpException({
@@ -79,7 +68,7 @@ export class PermissionService {
 
   async create(permissionObj: Record<string, any>, keys?: string[]): Promise<any> {
     const result = await this.permissionDB.create(permissionObj, keys);
-    if(result && result.length) {
+    if(result?.length > 0) {
       return result[0]
     } else {
       throw new HttpException({

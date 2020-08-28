@@ -1,16 +1,16 @@
 import * as DataLoader from "dataloader";
-import {Injectable, Scope} from "@nestjs/common";
+import {Injectable} from "@nestjs/common";
 import { NestDataLoader } from "nestjs-dataloader";
 
-import {RoleService} from "@app/v1/roles/roles.service";
 import {Role} from "@app/v1/roles/role.model";
+import {RoleRepository} from '@core/repository';
 
 
-@Injectable({ scope: Scope.REQUEST })
+@Injectable()
 export class RolesDataLoader implements NestDataLoader<string, Role> {
-    constructor(private readonly roleService: RoleService) { }
+    constructor(private readonly roleDB: RoleRepository) { }
 
     generateDataLoader(): DataLoader<string, Role> {
-        return new DataLoader<string, Role>(keys => this.roleService.findRolesByUserID(keys));
+        return new DataLoader<string, Role>(keys => this.roleDB.listRolesByUserID(keys));
     }
 }

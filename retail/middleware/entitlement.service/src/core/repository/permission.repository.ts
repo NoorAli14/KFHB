@@ -4,15 +4,26 @@ import { TABLE } from '@common/constants';
 
 @Injectable()
 export class PermissionRepository extends BaseRepository {
+
+  private readonly __attributes : string[] = [`${TABLE.PERMISSION}.id`,`${TABLE.PERMISSION}.record_type`,`${TABLE.PERMISSION}.created_on`,`${TABLE.PERMISSION}.created_by`,];
+
   constructor() {
     super(TABLE.PERMISSION);
   }
 
-  async listPermissionsByModuleID(moduleIds): Promise<any>{
-    return this._connection(TABLE.PERMISSION)
-        .select(`${TABLE.PERMISSION}.*`, `${TABLE.ROLE_MODULE}.module_id`)
-        .leftJoin(TABLE.ROLE_MODULE_PERMISSION, `${TABLE.PERMISSION}.id`, `${TABLE.ROLE_MODULE_PERMISSION}.permission_id`)
-        .leftJoin(TABLE.ROLE_MODULE, `${TABLE.ROLE_MODULE}.id`, `${TABLE.ROLE_MODULE_PERMISSION}.role_module_id`)
-        .whereIn(`${TABLE.ROLE_MODULE}.module_id`, moduleIds)
+  async listPermissionsByModuleID(ids: any): Promise<any> {
+    if (typeof ids[0] === 'string') {
+      return this._connection(TABLE.PERMISSION)
+      .select([...this.__attributes, `${TABLE.MODULE_PERMISSION}.module_id`])
+      .innerJoin(TABLE.MODULE_PERMISSION, `${TABLE.PERMISSION}.id`, `${TABLE.MODULE_PERMISSION}.permission_id`)
+      .whereIn(`${TABLE.MODULE_PERMISSION}.module_id`, ids)
+    } else {
+      return this._connection(TABLE.PERMISSION)
+      .distinct([...this.__attributes, `${TABLE.MODULE_PERMISSION_ROLE}.role_id`, `${TABLE.MODULE_PERMISSION}.module_id`])
+      .innerJoin(TABLE.MODULE_PERMISSION, `${TABLE.PERMISSION}.id`, `${TABLE.MODULE_PERMISSION}.permission_id`)
+      .innerJoin(TABLE.MODULE_PERMISSION_ROLE, `${TABLE.MODULE_PERMISSION_ROLE}.module_permission_id`, `${TABLE.MODULE_PERMISSION}.id`)
+      .whereIn(`${TABLE.MODULE_PERMISSION_ROLE}.role_id`, ids.map(obj => obj.role_id))
+      .whereIn(`${TABLE.MODULE_PERMISSION}.module_id`, ids.map(obj => obj.module_id));
+    }
   }
 }
