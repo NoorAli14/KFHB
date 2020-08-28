@@ -2,6 +2,14 @@ version: "3.2"
 
 services:
   #=================================================================
+  # Redis Server
+  #=================================================================
+  redis-server:
+    image: redis:alpine
+    container_name: cache
+    networks:
+      - core_service_network
+  #=================================================================
   # Gateway Service
   #=================================================================
   gateway-servcie:
@@ -20,7 +28,7 @@ services:
       - ENV_RBX_ONBOARDING_PORT=$ENV_RBX_ONBOARDING_PORT
       - ENV_RBX_NGINX_MAX_BODY=$ENV_RBX_NGINX_MAX_BODY
     networks:
-      - rubix-middleware-network
+      - core_service_network
     ports:
       - 80:80
 
@@ -38,7 +46,7 @@ services:
       - ENV_RBX_APP_SECRET=$ENV_RBX_APP_SECRET
     restart: always
     networks:
-      - rubix-middleware-network
+      - core_service_network
     ports:
       - 3000:4200
   #=================================================================
@@ -57,16 +65,19 @@ services:
       - ENV_RBX_API_URL_PREFIX=api/v1/entitlements
       - ENV_RBX_CORS_ORIGIN=$ENV_RBX_CORS_ORIGIN
       - ENV_RBX_CORS_ENABLED=$ENV_RBX_CORS_ENABLED
-      - ENV_RBX_JWT_EXPIRY_IN_MINUTES=$ENV_RBX_JWT_EXPIRY_IN_MINUTES
+      - ENV_RBX_JWT_EXPIRY_MINUTES=$ENV_RBX_JWT_EXPIRY_MINUTES
+      - ENV_RBX_JWT_REFRESH_EXPIRY_DAYS=$ENV_RBX_JWT_REFRESH_EXPIRY_DAYS
       - ENV_RBX_JWT_SECRET=$ENV_RBX_JWT_SECRET
+      - ENV_RBX_JWT_REFRESH_SECRET=$ENV_RBX_JWT_REFRESH_SECRET
       - ENV_RBX_JWT_ALGORITHM=$ENV_RBX_JWT_ALGORITHM
       - ENV_RBX_WEB_ONBOARDING_LINK=$ENV_RBX_WEB_ONBOARDING_LINK
       - ENV_RBX_WEB_RESET_PASSWORD_LINK=$ENV_RBX_WEB_RESET_PASSWORD_LINK
+      - ENV_RBX_REDIS_URL=$ENV_RBX_REDIS_URL
     restart: always
+    depends_on:
+      - redis-server
     networks:
-      - rubix-middleware-network
-    ports:
-      - 5000:5000
+      - core_service_network
 
   #=================================================================
   # Onboarding Business Service
@@ -84,9 +95,7 @@ services:
       - ENV_RBX_API_URL_PREFIX=api/v1/onboarding/
     restart: always
     networks:
-      - rubix-middleware-network
-    ports:
-      - 4000:4000
+      - core_service_network
 
   #=================================================================
   # Template Service
@@ -111,9 +120,7 @@ services:
       - ENV_RBX_GRAPHQL_PLAYGROUND=$ENV_RBX_GRAPHQL_PLAYGROUND
     restart: always
     networks:
-      - rubix-middleware-network
-    ports:
-      - 5010:5010
+      - core_service_network
 
   #=================================================================
   # User Management Service
@@ -138,9 +145,8 @@ services:
       - ENV_RBX_GRAPHQL_PLAYGROUND=$ENV_RBX_GRAPHQL_PLAYGROUND
     restart: always
     networks:
-      - rubix-middleware-network
-    ports:
-      - 5020:5020
+      - core_service_network
+
   #=================================================================
   # Notification Service
   #=================================================================
@@ -172,9 +178,9 @@ services:
       - ENV_RBX_SMTP_SENDING_EMAIL=$ENV_RBX_SMTP_SENDING_EMAIL
     restart: always
     networks:
-      - rubix-middleware-network
-    ports:
-      - 5030:5030
+      - core_service_network
+
 networks:
-  rubix-middleware-network:
+  core_service_network:
     driver: bridge
+    name: core_service_network
