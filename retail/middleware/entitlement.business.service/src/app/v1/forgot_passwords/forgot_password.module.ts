@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
+import { GqlClientModule, GqlClientService } from '@common/index';
+
 import { UserService } from '@app/v1/users/users.service';
 import { UserModule } from '@app/v1/users/users.module';
-import { GqlClientService } from '@common/libs/gqlclient/gqlclient.service';
-import { GqlClientModule } from '@common/libs/gqlclient/gqlclient.module';
 import { ForgotPasswordController } from './forgot_password.controller';
 import { ForgotPasswordService } from './forgot_password.service';
 import { NotificationModule } from '@app/v1/notifications/notification.module';

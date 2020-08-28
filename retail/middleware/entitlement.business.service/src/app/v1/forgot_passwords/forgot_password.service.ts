@@ -3,10 +3,9 @@ import {
   BadRequestException,
   NotFoundException,
 } from '@nestjs/common';
+import { GqlClientService, SuccessDto } from '@common/index';
 import { UserService } from '@app/v1/users/users.service';
-import { SuccessDto } from '@common/dtos/';
 import { User } from '@app/v1/users/user.entity';
-import { GqlClientService } from '@common/libs/gqlclient/gqlclient.service';
 import { NotificationsService } from '@app/v1/notifications/notifications.service';
 
 @Injectable()
@@ -27,7 +26,7 @@ export class ForgotPasswordService {
       throw new BadRequestException(`Invalid Request`);
     }
     const params = `query {
-      forgotPassword(input: {email: "${user.email}"}) {
+      result: forgotPassword(input: {email: "${user.email}"}) {
         password_reset_token
         password_reset_token_expiry
       }
@@ -36,11 +35,11 @@ export class ForgotPasswordService {
     const result: any = await this.gqlClient.send(params);
     await this.notificationService.sendResetPasswordLink(
       user.email,
-      result?.forgotPassword?.password_reset_token,
+      result?.password_reset_token,
     );
     return {
       status: 'SUCCESS',
-      expired_at: result?.forgotPassword?.password_reset_token_expiry,
+      expired_at: result?.password_reset_token_expiry,
       message: 'Reset password link has been successfully sent.',
     };
   }

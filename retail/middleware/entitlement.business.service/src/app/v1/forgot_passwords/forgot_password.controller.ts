@@ -17,7 +17,7 @@ import {
   ApiBadRequestResponse,
 } from '@nestjs/swagger';
 import { ForgotPasswordService } from './forgot_password.service';
-import { SuccessDto } from '@common/dtos/';
+import { SuccessDto } from '@common/index';
 
 @ApiTags('Forgot Password')
 @Controller('users/password')
