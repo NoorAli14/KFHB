@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { map, timeout, catchError } from 'rxjs/operators';
 import { TimeoutError, throwError } from 'rxjs';
-import {} from '@common/decorators';
+
 @Injectable()
 export class GqlClientService {
   constructor(private readonly http: HttpService) {}
@@ -43,7 +43,7 @@ export class GqlClientService {
             );
             return throwError(err.exception);
           }
-          return response.data?.data;
+          return response.data?.data?.result || response.data?.data;
         }),
         timeout(5000),
         catchError(err => {
