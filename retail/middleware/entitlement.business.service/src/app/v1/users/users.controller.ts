@@ -21,11 +21,10 @@ import {
   ApiNotFoundResponse,
   ApiNoContentResponse,
 } from '@nestjs/swagger';
-import { AuthGuard } from '@common/guards/';
+import { AuthGuard, SuccessDto } from '@common/index';
 import { UserService } from './users.service';
 import { User } from './user.entity';
 import { ChangePasswordDto, UpdateUserDto } from './user.dto';
-import { SuccessDto } from '@common/dtos/';
 
 @ApiTags('User')
 @Controller('users')
