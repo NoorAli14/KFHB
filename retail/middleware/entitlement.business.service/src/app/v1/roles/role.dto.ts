@@ -21,5 +21,5 @@ export class RoleDto {
   description?: string;
 
   @ApiProperty({ type: [IdsDto], description: 'List of module IDs.' })
-  modules?: IdsDto[];
+  permissions?: IdsDto[];
 }
