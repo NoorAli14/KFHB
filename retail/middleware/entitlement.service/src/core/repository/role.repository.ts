@@ -48,7 +48,7 @@ export class RoleRepository extends BaseRepository {
         await trx(TABLE.MODULE_PERMISSION_ROLE)
           .whereIn('module_permission_id', modulePermissionsToDelete)
           .where({role_id: response[0].id || response[0]})
-          .update({status: STATUS.INACTIVE});
+          .del();
         const module_permission_roles = module_permission_ids.filter(module_permission_id => !module_permission_id._deleted)
           .map(module_permission_id => {
             return {
