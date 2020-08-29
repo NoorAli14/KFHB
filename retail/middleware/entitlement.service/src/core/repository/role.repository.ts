@@ -46,20 +46,30 @@ export class RoleRepository extends BaseRepository {
       delete role.permissions;
       const response = await trx(TABLE.ROLE).where(condition).update(role, keys);
       if(module_permission_ids.length > 0) {
-        // deleting role and module-permission relations
-        const modulePermissionsToDelete = module_permission_ids.filter(module_permission_id => module_permission_id._deleted)
-          .map(module_permission_id => module_permission_id.id);
-        await trx(TABLE.MODULE_PERMISSION_ROLE)
-          .whereIn('module_permission_id', modulePermissionsToDelete)
+        const modulePermissionsToDelete = [];
+        const newModulePermissions = [];
+        for (const mpi of module_permission_ids) {
+          mpi._deleted ? modulePermissionsToDelete.push(mpi.id) : newModulePermissions.push(mpi.id);
+        }
+        // deleting module-permission-roles
+        if (modulePermissionsToDelete.length > 0)
+          await trx(TABLE.MODULE_PERMISSION_ROLE).whereIn('module_permission_id', modulePermissionsToDelete)
           .where({role_id: response[0].id || response[0]})
           .del();
-        //creating role and module-permission relations
-        const module_permission_roles = module_permission_ids.filter(module_permission_id => !module_permission_id._deleted)
-          .map(module_permission_id => {
-            return {
-              role_id : response[0].id || response[0],
-              module_permission_id : module_permission_id.id,
-            };
+        // checking which of Ids already exist
+        const idsAlready = await trx(TABLE.MODULE_PERMISSION_ROLE).select(['module_permission_id'])
+          .whereIn('module_permission_id', newModulePermissions)
+          .where({role_id: response[0].id || response[0]});
+        // removing already existing Ids
+        idsAlready.forEach(idObj => {
+          newModulePermissions.splice(newModulePermissions.indexOf(idObj.module_permission_id || idObj), 1)
+        });
+        // creating new module-permission-roles
+        const module_permission_roles = newModulePermissions.map(mpi => {
+          return {
+            role_id : response[0].id || response[0],
+            module_permission_id : mpi,
+          };
         });
         if(module_permission_roles.length > 0) await trx(TABLE.MODULE_PERMISSION_ROLE).insert(module_permission_roles, ['id']);
       }

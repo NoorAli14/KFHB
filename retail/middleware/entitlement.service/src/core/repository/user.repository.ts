@@ -20,17 +20,29 @@ export class UserRepository extends BaseRepository {
       delete user.roles;
       const response = await trx(TABLE.USER).where(condition).update(user, keys);
       if(roles.length > 0) {
-        // deleting role-user relations
-        const rolesToDelete = roles.filter(role => role._deleted).map(role => role.id);
-        await trx(TABLE.USER_ROLE)
-          .whereIn('role_id', rolesToDelete)
+        const rolesToDelete = [];
+        const newUserRoles = [];
+        for (const role of roles) {
+          role._deleted ? rolesToDelete.push(role.id) : newUserRoles.push(role.id);
+        }
+        // deleting user-roles
+        if (rolesToDelete.length > 0)
+          await trx(TABLE.USER_ROLE).whereIn('role_id', rolesToDelete)
           .where({user_id: response[0].id || response[0]})
-          .update({status: STATUS.INACTIVE});
-        // creating role-user relations
-        const user_roles = roles.filter(role => !role._deleted).map(role => {
+          .del();
+        // checking which of Ids already exist
+        const idsAlready = await trx(TABLE.USER_ROLE).select(['role_id'])
+        .whereIn('role_id', newUserRoles)
+        .where({user_id: response[0].id || response[0]});
+        // removing already existing Ids
+        idsAlready.forEach(idObj => {
+          newUserRoles.splice(newUserRoles.indexOf(idObj.role_id || idObj), 1)
+        });
+        // creating new user-roles
+        const user_roles = newUserRoles.map(role_id => {
           return {
             user_id : response[0].id || response[0],
-            role_id : role.id,
+            role_id : role_id,
             status : STATUS.ACTIVE,
             created_by : TEMP_ROLE.ADMIN,
           };
