@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Request } from 'express';
 import {
   X_ACCESS_TOKEN,
   X_REFRESH_TOKEN,
@@ -33,7 +32,12 @@ export class AuthService {
       secret: this.configService.JWT.REFRESH_SECRET,
       expiresIn: `${this.configService.JWT.REFRESH_EXPIRY_SECONDS}s`,
     });
-    await this.redisService.setValue(userId, token, 'EX', this.configService.JWT.REFRESH_EXPIRY_SECONDS);
+    await this.redisService.setValue(
+      userId,
+      token,
+      'EX',
+      this.configService.JWT.REFRESH_EXPIRY_SECONDS,
+    );
     return token;
   }
 
@@ -58,10 +62,7 @@ export class AuthService {
     const token: string = this.getToken(userId);
     res.setHeader(X_REFRESH_TOKEN, refresh_token);
     res.setHeader(X_ACCESS_TOKEN, token);
-    res.setHeader(
-      'Set-Cookie',
-      this.getCookieWithJwtToken(token),
-    );
+    res.setHeader('Set-Cookie', this.getCookieWithJwtToken(token));
     return res;
-  } 
+  }
 }

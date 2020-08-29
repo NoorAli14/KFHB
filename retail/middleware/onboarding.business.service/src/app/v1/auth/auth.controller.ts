@@ -32,15 +32,15 @@ import {
 } from '@common/index';
 import { UserService } from '@app/v1/users/users.service';
 import { CurrentUserUpdateDto } from '@app/v1/users/user.dto';
-import { User } from '@app/v1/users/user.entity';
-import { LocalAuthGuard } from './localAuth.guard';
+import { RegisterCustomerDto } from './auth.dto';
+import { User as Customer } from '@app/v1/users/user.entity';
 import { AuthService } from './auth.service';
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(
-    private readonly userService: UserService,
+    private readonly customerService: UserService,
     private readonly authService: AuthService,
   ) {}
 
@@ -67,10 +67,15 @@ export class AuthController {
   ): Promise<SuccessDto> {
     if (!refresh_token)
       throw new BadRequestException(`${X_REFRESH_TOKEN} can't be blank`);
-    const payload: any = await this.authService.validateRefreshToken(refresh_token);
-    if(!payload) 
-      throw new UnauthorizedException();
-    request.res = this.authService.setHeaders(request.res, refresh_token,payload.aud)
+    const payload: any = await this.authService.validateRefreshToken(
+      refresh_token,
+    );
+    if (!payload) throw new UnauthorizedException();
+    request.res = this.authService.setHeaders(
+      request.res,
+      refresh_token,
+      payload.aud,
+    );
     return {
       status: 'SUCCESS',
       message: `${X_ACCESS_TOKEN} has been successfully generated.`,
@@ -78,16 +83,15 @@ export class AuthController {
   }
 
   @HttpCode(HttpStatus.OK)
-  @UseGuards(LocalAuthGuard)
-  @Post('/login')
+  @Post('/register')
   @ApiOperation({
-    summary: 'User Login',
+    summary: 'Register new Customer',
     description:
-      'A successful request returns the HTTP 200 OK status code and a JSON response body that shows user information.',
+      'A successful request returns the HTTP 200 OK status code and a JSON response body that shows customer information.',
   })
   @ApiOkResponse({
-    type: User,
-    description: 'User has been successfully loggedIn.',
+    type: Customer,
+    description: 'Customer has been successfully registered.',
   })
   @ApiUnauthorizedResponse({
     type: Error,
@@ -97,41 +101,52 @@ export class AuthController {
     type: Error,
     description: 'Input Validation failed.',
   })
-  async login(@Req() request: Request, @CurrentUser() user: User) {
+  async register(
+    @Req() request: Request,
+    @Body() input: RegisterCustomerDto,
+  ): Promise<Customer> {
+    const customer: any = await this.customerService.create(input);
     const refreshToken: string = await this.authService.getRefreshToken(
-      user.id,
+      customer.id,
     );
-    request.res = this.authService.setHeaders(request.res, refreshToken, user.id)
-    return user;
+    request.res = this.authService.setHeaders(
+      request.res,
+      refreshToken,
+      customer.id,
+    );
+    return customer;
   }
 
   @Get('me')
   @UseGuards(AuthGuard)
   @ApiOperation({
     description:
-      'A successful request returns the HTTP 200 OK status code and a JSON response body that shows loggedIn user information.',
-    summary: 'Fetch loggedIn User Profile by Token.',
+      'A successful request returns the HTTP 200 OK status code and a JSON response body that shows loggedIn customer information.',
+    summary: 'Fetch loggedIn customer Profile by Token.',
   })
-  @ApiOkResponse({ type: User, description: 'Current User Information.' })
+  @ApiOkResponse({
+    type: Customer,
+    description: 'Current Customer Information.',
+  })
   @ApiBearerAuth(X_ACCESS_TOKEN)
-  async me(@CurrentUser() user: User): Promise<User> {
-    return user;
+  async me(@CurrentUser() customer: Customer): Promise<Customer> {
+    return customer;
   }
 
   @Put('me')
   @UseGuards(AuthGuard)
   @ApiBody({
-    description: 'Sets the user properties.',
+    description: 'Sets the customer properties.',
     type: CurrentUserUpdateDto,
   })
   @ApiOperation({
-    summary: 'Update loggedIn User Profile by Token.',
+    summary: 'Update loggedIn Customer Profile by Token.',
     description:
-      'A successful request returns the HTTP 200 OK status code and a JSON response body that shows user information.',
+      'A successful request returns the HTTP 200 OK status code and a JSON response body that shows customer information.',
   })
   @ApiOkResponse({
-    type: User,
-    description: 'User Information has been successfully updated.',
+    type: Customer,
+    description: 'Customer Information has been successfully updated.',
   })
   @ApiBadRequestResponse({
     type: Error,
@@ -139,25 +154,25 @@ export class AuthController {
   })
   @ApiBearerAuth()
   async update(
-    @CurrentUser() user: User,
+    @CurrentUser() customer: Customer,
     @Body() input: CurrentUserUpdateDto,
-  ): Promise<User> {
-    return this.userService.update(user.id, input);
+  ): Promise<Customer> {
+    return this.customerService.update(customer.id, input);
   }
 
   @Delete('logout')
   @ApiOperation({
     description:
       'A successful request returns the HTTP 204 NO CONTENT status code.',
-    summary: 'User Logout',
+    summary: 'Customer Logout',
   })
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   @HttpCode(HttpStatus.NO_CONTENT)
-  async logOut(@Req() request: Request, @CurrentUser() user: User) {
+  async logOut(@Req() request: Request, @CurrentUser() customer: Customer) {
     request.res.setHeader(
       'Set-Cookie',
-      await this.authService.getCookieForLogOut(user.id),
+      await this.authService.getCookieForLogOut(customer.id),
     );
     return null;
   }

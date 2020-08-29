@@ -10,7 +10,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
     private readonly redisService: RedisClientService,
     private readonly configService: ConfigurationService,
-    private readonly userService: UserService,
+    private readonly customerService: UserService,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
@@ -29,6 +29,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   async validate(payload: any) {
     if (!(await this.redisService.getValue(payload.id))) return null;
-    return this.userService.findOne(payload.id);
+    return this.customerService.findOne(payload.id);
   }
 }

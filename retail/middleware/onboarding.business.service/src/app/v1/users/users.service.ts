@@ -8,54 +8,12 @@ import { GqlClientService, toGraphql } from '@common/index';
 
 @Injectable()
 export class UserService {
-  private readonly output: string = ` {
+  private readonly output: string = `{
     id
     first_name
-    middle_name
     last_name
-    username
-    email
     contact_no
-    gender
-    nationality_id
-    date_of_birth
-    roles {
-      id
-      name
-      description
-      status
-      created_on
-      created_by
-    }
-    modules {
-        id
-        name
-        parent_id
-        sub_modules {
-          id
-          name
-          parent_id
-          permissions {
-            id
-            record_type
-            created_on
-            created_by
-          }
-          status
-          created_on
-          created_by
-        }
-        permissions {
-          id
-          record_type
-          created_on
-          created_by
-        }
-        status
-        created_on
-        created_by
-      }
-    status
+    email
     created_on
     created_by
     updated_on
@@ -95,15 +53,15 @@ export class UserService {
     return this.gqlClient.send(params);
   }
 
-  async create(input: any): Promise<User> {
-    const user: User = await this.findByEmail(input.email);
-    if (user) {
-      throw new UnprocessableEntityException(
-        `User Already Exist with email ${input.email}`,
-      );
-    }
+  async create(input: any): Promise<any> {
+    // const user: User = await this.findByEmail(input.email);
+    // if (user) {
+    //   throw new UnprocessableEntityException(
+    //     `User Already Exist with email ${input.email}`,
+    //   );
+    // }
     const params = `mutation {
-      result: addUser(input: ${toGraphql(input)}) ${this.output}
+      result: addCustomer(input: ${toGraphql(input)}) ${this.output}
     }`;
     return this.gqlClient.send(params);
   }
@@ -111,7 +69,7 @@ export class UserService {
   async findOne(id: string, output?: string): Promise<User> {
     const _output: string = output ? output : this.output;
     const params = `query {
-      result: findUserById(id: "${id}") ${_output}
+      result: findCustomerById(id: "${id}") ${_output}
     }`;
     return this.gqlClient.send(params);
   }
