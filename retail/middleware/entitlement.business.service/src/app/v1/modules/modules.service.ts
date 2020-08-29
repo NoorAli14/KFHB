@@ -19,6 +19,7 @@ export class ModuleService {
       parent_id
       permissions {
         id
+        module_permission_id
         record_type
         created_by
         created_on
@@ -29,6 +30,7 @@ export class ModuleService {
     }
     permissions {
       id
+      module_permission_id
       record_type
       created_by
       created_on
