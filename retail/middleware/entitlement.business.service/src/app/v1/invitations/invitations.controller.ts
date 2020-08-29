@@ -21,7 +21,7 @@ import {
   ApiBadRequestResponse,
   ApiNotFoundResponse,
 } from '@nestjs/swagger';
-import { AuthGuard, SuccessDto } from '@common/index';
+import { AuthGuard, SuccessDto, USER_STATUSES } from '@common/index';
 import { UserService } from '@app/v1/users/users.service';
 import { NewUserDto } from '@app/v1/users/user.dto';
 import { User } from '@app/v1/users/user.entity';
@@ -77,9 +77,10 @@ export class InvitationsController {
   })
   async findOne(@Param('token') token: string): Promise<User> {
     const invitation = await this.userService.findByInvitationToken(token);
+    console.log(invitation);
     if (!invitation) {
       throw new NotFoundException('User Not Found');
-    } else if (invitation.status != 'PENDING') {
+    } else if (invitation.status != USER_STATUSES.PENDING) {
       throw new BadRequestException('User has been already onboard.');
     } else if (new Date() > new Date(invitation.invitation_token_expiry)) {
       throw new BadRequestException('Token is expired');
@@ -116,7 +117,7 @@ export class InvitationsController {
     const invitation = await this.userService.findByInvitationToken(token);
     if (!invitation) {
       throw new NotFoundException('User Not Found');
-    } else if (invitation.status != 'PENDING') {
+    } else if (invitation.status != USER_STATUSES.PENDING) {
       throw new BadRequestException('User has been already onboard.');
     }
     // } else if (new Date() > new Date(invitation.invitation_token_expiry)) {
