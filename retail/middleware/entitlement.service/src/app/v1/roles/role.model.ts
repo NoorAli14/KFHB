@@ -1,6 +1,7 @@
 import {Field, ID, ObjectType} from "@nestjs/graphql";
 
 import {Module} from "@app/v1/modules/module.model";
+import {PaginationModel} from '@common/models';
 
 @ObjectType()
 export class Role {
@@ -36,4 +37,13 @@ export class Role {
 
   @Field(type => [Module], { nullable: true })
   modules?: Module[];
+}
+
+@ObjectType()
+export class RoleWithPagination {
+  @Field({ nullable: true })
+  pagination?: PaginationModel;
+
+  @Field(type => [Role], { nullable: true })
+  data?: Role[];
 }

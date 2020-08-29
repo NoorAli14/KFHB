@@ -8,8 +8,8 @@ import { KeyValInput } from "@common/inputs/key-val.input";
 export class RoleService {
   constructor(private roleDB: RoleRepository) {}
 
-  async list(keys: string[]): Promise<any> {
-    return this.roleDB.list(keys,{"deleted_on" : null});
+  async list(keys: string[], paginationParams: Record<string, any>): Promise<any> {
+    return this.roleDB.listWithPagination(paginationParams, keys,{"deleted_on" : null});
   }
 
   async findById(id: string, keys?: string[]): Promise<any> {

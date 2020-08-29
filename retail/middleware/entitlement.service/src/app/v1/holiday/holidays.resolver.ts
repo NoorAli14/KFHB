@@ -1,11 +1,10 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import {Resolver, Query, Mutation, Args, Context, GraphQLExecutionContext} from '@nestjs/graphql';
 
 import { KeyValInput } from '@common/inputs/key-val.input';
-import { Holiday } from '@app/v1/holiday/holiday.model';
+import {Holiday, HolidayWithPagination} from '@app/v1/holiday/holiday.model';
 import { HolidaysService } from '@app/v1/holiday/holidays.service';
 import { HolidayInput } from '@app/v1/holiday/holiday.dto';
 import {Fields} from '@common/decorators';
-import {User} from '@app/v1/users/user.model';
 import {HttpException, HttpStatus} from '@nestjs/common';
 import {MESSAGES} from '@common/constants';
 
@@ -13,9 +12,9 @@ import {MESSAGES} from '@common/constants';
 export class HolidaysResolver {
   constructor(private readonly holidaysService: HolidaysService) {}
 
-  @Query(() => [Holiday])
-  async holidaysList(@Fields() columns: string[]): Promise<Holiday[]> {
-    return this.holidaysService.list(columns);
+  @Query(() => HolidayWithPagination)
+  async holidaysList(@Fields() columns: string[], @Context() context: GraphQLExecutionContext): Promise<HolidayWithPagination> {
+    return this.holidaysService.list(columns, context['req'].query);
   }
 
   @Query(() => Holiday)

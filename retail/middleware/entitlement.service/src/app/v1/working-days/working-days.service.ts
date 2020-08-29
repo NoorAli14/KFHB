@@ -8,8 +8,8 @@ import { WorkingDaysRepository } from "@core/repository";
 export class WorkingDaysService {
   constructor(private workingDaysRepository: WorkingDaysRepository) {}
 
-  async list(keys: string[]): Promise<any> {
-    return this.workingDaysRepository.list(keys,{"status" : STATUS.ACTIVE});
+  async list(keys: string[], paginationParams: Record<string, any>): Promise<any> {
+    return this.workingDaysRepository.listWithPagination(paginationParams, keys,{"status" : STATUS.ACTIVE});
   }
 
   async findById(id: string, keys?: string[]): Promise<any> {

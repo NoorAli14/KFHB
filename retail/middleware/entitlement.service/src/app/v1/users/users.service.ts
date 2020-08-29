@@ -13,8 +13,8 @@ export class UserService {
               private encrypter: Encrypter,
               private configService: ConfigurationService) {}
 
-  async list(keys: string[]): Promise<any> {
-    return this.userDB.list(keys,{"deleted_on" : null});
+  async list(keys: string[], paginationParams: Record<string, any>): Promise<any> {
+    return this.userDB.listWithPagination(paginationParams, keys,{"deleted_on" : null});
   }
 
   async findById(id: string, keys?: string[]): Promise<any> {

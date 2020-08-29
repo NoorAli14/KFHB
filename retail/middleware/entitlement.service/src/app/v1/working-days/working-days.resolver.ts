@@ -3,10 +3,10 @@ import {
   Query,
   Mutation,
   Args,
-  ResolveField, Parent,
+  ResolveField, Parent, Context, GraphQLExecutionContext,
 } from "@nestjs/graphql";
 import { KeyValInput } from "@common/inputs/key-val.input";
-import { WorkingDay } from "@app/v1/working-days/working-day.model";
+import {WorkingDay, WorkingDayWithPagination} from "@app/v1/working-days/working-day.model";
 import { WorkingDaysService } from "@app/v1/working-days/working-days.service";
 import { WorkingDayInput } from "@app/v1/working-days/working-day.dto";
 import {Fields} from '@common/decorators';
@@ -17,9 +17,9 @@ import {MESSAGES} from '@common/constants';
 export class WorkingDaysResolver {
   constructor(private readonly workingDaysService: WorkingDaysService) {}
 
-  @Query(() => [WorkingDay])
-  async workingDaysList(@Fields() columns: string[]): Promise<WorkingDay[]> {
-    return this.workingDaysService.list(columns);
+  @Query(() => WorkingDayWithPagination)
+  async workingDaysList(@Fields() columns: string[], @Context() context: GraphQLExecutionContext): Promise<WorkingDayWithPagination> {
+    return this.workingDaysService.list(columns, context['req'].query);
   }
 
   @Query(() => WorkingDay)

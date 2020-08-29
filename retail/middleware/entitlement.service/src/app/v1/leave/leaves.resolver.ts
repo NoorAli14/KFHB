@@ -2,10 +2,10 @@ import {
   Resolver,
   Query,
   Mutation,
-  Args,
+  Args, Context, GraphQLExecutionContext,
 } from "@nestjs/graphql";
 import { KeyValInput } from "@common/inputs/key-val.input";
-import {Leave} from "@app/v1/leave/leave.model";
+import {Leave, LeaveWithPagination} from "@app/v1/leave/leave.model";
 import {LeavesService} from "@app/v1/leave/leaves.service";
 import {LeaveInput} from "@app/v1/leave/leave.dto";
 import {HttpException, HttpStatus} from '@nestjs/common';
@@ -16,9 +16,9 @@ import {Fields} from '@common/decorators';
 export class LeavesResolver {
   constructor(private readonly leavesService: LeavesService) {}
 
-  @Query(() => [Leave])
-  async leavesList(@Fields() columns: string[]): Promise<Leave[]> {
-    return this.leavesService.list(columns);
+  @Query(() => LeaveWithPagination)
+  async leavesList(@Fields() columns: string[], @Context() context: GraphQLExecutionContext): Promise<LeaveWithPagination> {
+    return this.leavesService.list(columns, context['req'].query);
   }
 
   @Query(() => Leave)

@@ -1,4 +1,5 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
+import {PaginationModel} from '@common/models';
 
 @ObjectType()
 export class Holiday {
@@ -40,4 +41,13 @@ export class Holiday {
 
   @Field({ nullable: true })
   deleted_by?: string;
+}
+
+@ObjectType()
+export class HolidayWithPagination {
+  @Field({ nullable: true })
+  pagination?: PaginationModel;
+
+  @Field(type => [Holiday], { nullable: true })
+  data?: Holiday[];
 }

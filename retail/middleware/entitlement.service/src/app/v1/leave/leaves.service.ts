@@ -8,8 +8,8 @@ import {LeaveRepository} from "@core/repository/leave.repository";
 export class LeavesService {
   constructor(private leaveRepository: LeaveRepository) {}
 
-  async list(keys: string[]): Promise<any> {
-    return this.leaveRepository.list(keys,{"status" : STATUS.ACTIVE});
+  async list(keys: string[], paginationParams: Record<string, any>): Promise<any> {
+    return this.leaveRepository.listWithPagination(paginationParams, keys,{"status" : STATUS.ACTIVE});
   }
 
   async findById(id: string, keys?: string[]): Promise<any> {

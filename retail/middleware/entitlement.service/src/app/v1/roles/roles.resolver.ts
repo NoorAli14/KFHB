@@ -1,9 +1,9 @@
-import { Resolver, Query, Mutation, Args, ResolveField, Parent } from '@nestjs/graphql';
+import {Resolver, Query, Mutation, Args, ResolveField, Parent, Context, GraphQLExecutionContext} from '@nestjs/graphql';
 import * as DataLoader from 'dataloader';
 import { Loader } from 'nestjs-dataloader';
 
 import { RoleService } from "@app/v1/roles/roles.service";
-import { Role } from "@app/v1/roles/role.model";
+import {Role, RoleWithPagination} from "@app/v1/roles/role.model";
 import { RoleInput } from "@app/v1/roles/role.dto";
 import { KeyValInput } from "@common/inputs/key-val.input";
 import { Module } from "@app/v1/modules/module.model";
@@ -15,9 +15,9 @@ import {MESSAGES} from '@common/constants';
 export class RolesResolver {
   constructor(private readonly roleService: RoleService) {}
 
-  @Query(() => [Role])
-  async rolesList(@Fields() columns: string[]): Promise<Role[]> {
-    return this.roleService.list(columns);
+  @Query(() => RoleWithPagination)
+  async rolesList(@Fields() columns: string[], @Context() context: GraphQLExecutionContext): Promise<RoleWithPagination> {
+    return this.roleService.list(columns, context['req'].query);
   }
 
   @Query(() => Role)

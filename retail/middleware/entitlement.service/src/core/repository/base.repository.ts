@@ -1,4 +1,6 @@
 import { InjectKnex, Knex } from 'nestjs-knex';
+import {PaginationModel} from '@common/models';
+import {NUMBERS} from '@common/constants';
 export abstract class BaseRepository {
   @InjectKnex() protected readonly _connection: Knex;
   protected _tableName: string;
@@ -11,11 +13,30 @@ export abstract class BaseRepository {
     return this._connection;
   }
 
-  async list(keys: string | string[], condition?: Record<string, any>): Promise<any> {
-    const query = this._connection(this._tableName).select(keys);
-    if(condition)
-      return query.where(condition);
-    return query
+  async listWithPagination(paginationParams: Record<string, any>,
+                           keys: string | string[],
+                           condition?: Record<string, any>): Promise<any> {
+    const perPage = parseInt(String(paginationParams['perPage']), 10);
+    const currentPage = parseInt(String(paginationParams['currentPage']), 10);
+    const pagination: PaginationModel = {};
+    const limitPerPage = perPage || NUMBERS.DEFAULT_PAGE_SIZE;
+    const page = Math.max(currentPage || 1, 1);
+    const offset = (page - 1) * limitPerPage;
+    const total = condition?
+      await this._connection(this._tableName).where(condition).count('id as count').first():
+      await this._connection(this._tableName).count('id as count').first();
+    const rows = condition?
+      await this._connection(this._tableName).where(condition).offset(offset).limit(limitPerPage):
+      await this._connection(this._tableName).offset(offset).limit(limitPerPage);
+    const count = parseInt(String(total.count), 10);
+    pagination.from= offset;
+    pagination.to = offset + rows.length;
+    pagination.total = count;
+    pagination.perPage = limitPerPage;
+    pagination.currentPage = page;
+    pagination.lastPage = Math.ceil(count / limitPerPage);
+    pagination.offset = offset;
+    return {pagination: pagination, data: rows};
   }
 
   async create(newObj: Record<string, any>, keys: string[]): Promise<any> {

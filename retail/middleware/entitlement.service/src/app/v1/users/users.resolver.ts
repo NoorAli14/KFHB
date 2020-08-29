@@ -4,12 +4,12 @@ import {
   Mutation,
   Args,
   ResolveField,
-  Parent,
+  Parent, GraphQLExecutionContext, Context,
 } from "@nestjs/graphql";
 import * as DataLoader from 'dataloader';
 import { Loader } from 'nestjs-dataloader';
 
-import {User} from "@app/v1/users/user.model";
+import {User, UserWithPagination} from "@app/v1/users/user.model";
 import { UserService } from "@app/v1/users/users.service";
 import { CreateUserInput, UpdateUserInput } from "@app/v1/users/user.dto";
 import { Role } from "@app/v1/roles/role.model";
@@ -24,9 +24,9 @@ import {MESSAGES} from '@common/constants';
 export class UsersResolver {
   constructor(private readonly userService: UserService) {}
 
-  @Query(() => [User])
-  async usersList(@Fields() columns: string[]): Promise<User[]> {
-    return this.userService.list(columns);
+  @Query(() => UserWithPagination)
+  async usersList(@Fields() columns: string[], @Context() context: GraphQLExecutionContext): Promise<UserWithPagination> {
+    return this.userService.list(columns, context['req'].query);
   }
 
   @Query(() => User)

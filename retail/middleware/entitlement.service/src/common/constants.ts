@@ -18,6 +18,7 @@ export const NUMBERS = {
   TOKEN_LENGTH: 64,
   MAX_COLUMN_LENGTH: 255,
   NATIONALITY_ID_LENGTH: 96,
+  DEFAULT_PAGE_SIZE: 25,
 };
 
 export const STATUS = {

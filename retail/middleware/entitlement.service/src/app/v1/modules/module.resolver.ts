@@ -1,15 +1,13 @@
-import {Resolver, Query, Mutation, Args, ResolveField, Parent} from '@nestjs/graphql';
+import {Resolver, Query, Mutation, Args, ResolveField, Parent, Context, GraphQLExecutionContext} from '@nestjs/graphql';
 import * as DataLoader from 'dataloader';
 import { Loader } from 'nestjs-dataloader';
 
-import { graphqlKeys } from '@common/utilities';
 import {ModuleService} from "@app/v1/modules/module.service";
-import {Module} from "@app/v1/modules/module.model";
+import {Module, ModuleWithPagination} from "@app/v1/modules/module.model";
 import {ModuleInput} from "@app/v1/modules/module.dto";
 import { KeyValInput } from "@common/inputs/key-val.input";
 import {Permission} from "@app/v1/permissions/permission.model";
 import {Fields} from '@common/decorators';
-import {User} from '@app/v1/users/user.model';
 import {HttpException, HttpStatus} from '@nestjs/common';
 import {MESSAGES} from '@common/constants';
 
@@ -17,9 +15,9 @@ import {MESSAGES} from '@common/constants';
 export class ModuleResolver {
   constructor(private readonly moduleService: ModuleService) {}
 
-  @Query(() => [Module])
-  async modulesList(@Fields() columns: string[]): Promise<Module[]> {
-    return this.moduleService.list(columns);
+  @Query(() => ModuleWithPagination)
+  async modulesList(@Fields() columns: string[], @Context() context: GraphQLExecutionContext): Promise<ModuleWithPagination> {
+    return this.moduleService.list(columns, context['req'].query);
   }
 
   @Query(() => Module)

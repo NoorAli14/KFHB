@@ -8,8 +8,8 @@ import { HolidayRepository } from '@core/repository/holiday.repository';
 export class HolidaysService {
   constructor(private holidayRepository: HolidayRepository) {}
 
-  async list(keys: string[]): Promise<any> {
-    return this.holidayRepository.list(keys, { status: STATUS.ACTIVE });
+  async list(keys: string[], paginationParams: Record<string, any>): Promise<any> {
+    return this.holidayRepository.listWithPagination(paginationParams, keys, { status: STATUS.ACTIVE });
   }
 
   async findById(id: string, keys?: string[]): Promise<any> {
