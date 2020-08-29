@@ -10,45 +10,37 @@ export class UserRepository extends BaseRepository {
     super(TABLE.USER);
   }
 
-  async update_pending(user: Record<string, any>, keys: string[]): Promise<any> {
-    if(user.roles?.length) {
+  async update(condition: Record<string, any>,
+               user: Record<string, any>,
+               keys: string[]): Promise<any> {
+    const trxProvider = this._connection.transactionProvider();
+    const trx = await trxProvider();
+    try{
       const roles: IdsInput[] = user.roles;
       delete user.roles;
-      const rolesToDelete = roles.filter(role => role._deleted);
-
-      const trxProvider = this._connection.transactionProvider();
-      const trx = await trxProvider();
-      const response = await trx(TABLE.USER).insert(user, keys);
-      if(response){
-        const user_roles = [];
-        roles.forEach(role => {
-          const user_role = {
+      const response = await trx(TABLE.USER).where(condition).update(user, keys);
+      if(roles.length > 0) {
+        // deleting rol-user relations
+        const rolesToDelete = roles.filter(role => role._deleted).map(role => role.id);
+        await trx(TABLE.USER_ROLE)
+          .whereIn('role_id', rolesToDelete)
+          .where({user_id: response[0].id || response[0]})
+          .update({status: STATUS.INACTIVE});
+        const user_roles = roles.filter(role => !role._deleted).map(role => {
+          return {
             user_id : response[0].id || response[0],
-            role_id : role['id'],
+            role_id : role.id,
             status : STATUS.ACTIVE,
             created_by : TEMP_ROLE.ADMIN,
           };
-          user_roles.push(user_role);
         });
-        const result = await trx(TABLE.USER_ROLE).insert(user_roles, "id");
-        if(!result){
-          await trx.rollback();
-          throw new HttpException({
-            status: HttpStatus.BAD_REQUEST,
-            error: MESSAGES.BAD_REQUEST,
-          }, HttpStatus.BAD_REQUEST);
-        }
-      } else {
-        await trx.rollback();
-        throw new HttpException({
-          status: HttpStatus.BAD_REQUEST,
-          error: MESSAGES.BAD_REQUEST,
-        }, HttpStatus.BAD_REQUEST);
+        if(user_roles.length > 0) await trx(TABLE.USER_ROLE).insert(user_roles, ['id']);
       }
       await trx.commit();
       return response
-    } else {
-      return super.create(user,keys)
+    } catch (e) {
+      await trx.rollback();
+      throw e
     }
   }
 
