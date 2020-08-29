@@ -1,6 +1,6 @@
 import {Injectable} from '@nestjs/common';
 import { BaseRepository } from './base.repository';
-import {STATUS, TABLE, TEMP_ROLE,} from '@common/constants';
+import {STATUS, TABLE} from '@common/constants';
 import {IdsInput} from '@common/inputs/ids.input';
 
 @Injectable()
@@ -49,6 +49,7 @@ export class RoleRepository extends BaseRepository {
           .whereIn('module_permission_id', modulePermissionsToDelete)
           .where({role_id: response[0].id || response[0]})
           .del();
+        //creating role and module-permission relations
         const module_permission_roles = module_permission_ids.filter(module_permission_id => !module_permission_id._deleted)
           .map(module_permission_id => {
             return {

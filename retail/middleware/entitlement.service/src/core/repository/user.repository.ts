@@ -1,7 +1,7 @@
-import {HttpException, HttpStatus, Injectable} from "@nestjs/common";
+import {Injectable} from "@nestjs/common";
 
 import { BaseRepository } from "./base.repository";
-import {MESSAGES, STATUS, TABLE, TEMP_ROLE} from "@common/constants";
+import {STATUS, TABLE, TEMP_ROLE} from "@common/constants";
 import {IdsInput} from "@common/inputs/ids.input";
 
 @Injectable()
@@ -20,12 +20,13 @@ export class UserRepository extends BaseRepository {
       delete user.roles;
       const response = await trx(TABLE.USER).where(condition).update(user, keys);
       if(roles.length > 0) {
-        // deleting rol-user relations
+        // deleting role-user relations
         const rolesToDelete = roles.filter(role => role._deleted).map(role => role.id);
         await trx(TABLE.USER_ROLE)
           .whereIn('role_id', rolesToDelete)
           .where({user_id: response[0].id || response[0]})
           .update({status: STATUS.INACTIVE});
+        // creating role-user relations
         const user_roles = roles.filter(role => !role._deleted).map(role => {
           return {
             user_id : response[0].id || response[0],
