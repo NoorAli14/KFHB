@@ -12,41 +12,24 @@ export abstract class BaseRepository {
   }
 
   async list(keys: string | string[], condition?: Record<string, any>): Promise<any> {
-    if(condition){
-      return this._connection(this._tableName).select(keys).where(condition);
-    }
-    return this._connection(this._tableName).select(keys);
+    const query = this._connection(this._tableName).select(keys);
+    if(condition)
+      return query.where(condition);
+    return query
   }
 
   async create(newObj: Record<string, any>, keys: string[]): Promise<any> {
-    const result = await this._connection(this._tableName).insert(newObj, keys);
-    if(result.length && typeof result[0] === 'string'){
-      const re = {};
-      re[keys[0]] = result[0];
-      return [re]
-    }
-    return result
+    return this._connection(this._tableName).insert(newObj, keys);
   }
 
   async update(
     condition: Record<string, any>,
     newObj: Record<string, any>,
-    keys?: string[],
+    keys: string[],
   ): Promise<any> {
-    if (keys){
-      const result = await this._connection(this._tableName)
-          .where(condition)
-          .update(newObj, keys);
-      if(result.length && typeof result[0] === 'string'){
-        const re = {};
-        re[keys[0]] = result[0];
-        return [re]
-      }
-      return result
-    }
     return this._connection(this._tableName)
         .where(condition)
-        .update(newObj, "*");
+        .update(newObj, keys);
   }
 
   async delete(condition: Record<string, any>): Promise<any> {

@@ -2,6 +2,7 @@ import { Field, ID, ObjectType } from "@nestjs/graphql";
 
 import { Role } from "@app/v1/roles/role.model";
 import {Module} from "@app/v1/modules/module.model";
+import {Leave} from "@app/v1/leave/leave.model";
 
 @ObjectType()
 export class User {
@@ -33,7 +34,7 @@ export class User {
   date_of_birth?: string;
 
   @Field({ nullable: true })
-  nationality_id?: number;
+  nationality_id?: string;
 
   @Field({ nullable: true })
   status?: string;
@@ -61,4 +62,19 @@ export class User {
 
   @Field(type => [Module], { nullable: true })
   modules?: Module[];
+
+  @Field({ nullable: true })
+  invitation_token?: string;
+
+  @Field({ nullable: true })
+  invitation_token_expiry?: Date;
+
+  @Field({ nullable: true })
+  password_reset_token?: string;
+
+  @Field({ nullable: true })
+  password_reset_token_expiry?: Date;
+
+  @Field(type => [Leave], { nullable: true })
+  leaves?: Leave[];
 }

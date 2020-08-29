@@ -1,13 +1,14 @@
 import { Transport } from '@nestjs/microservices';
 import { INestApplication, ValidationPipe, Logger } from '@nestjs/common';
-import { CommonModule } from '@common/common.module';
+import * as cookieParser from 'cookie-parser';
 import {
+  CommonModule,
+  ConfigurationService,
+  HttpExceptionFilter,
   LoggingInterceptor,
   TransformInterceptor,
-} from '@common/interceptors/';
-import * as cookieParser from 'cookie-parser';
-import { HttpExceptionFilter } from '@common/filters/http-exception.filter';
-import { ConfigurationService } from '@common/configuration/configuration.service';
+} from '@common/index';
+
 import { KernelMiddleware } from '@core/middlewares/index';
 
 export default class Server {
@@ -47,7 +48,9 @@ export default class Server {
     this.app.useGlobalInterceptors(new TransformInterceptor());
     this.app.useGlobalInterceptors(new LoggingInterceptor());
     this.app.useGlobalFilters(new HttpExceptionFilter());
-    this.app.useGlobalPipes(new ValidationPipe());
+    this.app.useGlobalPipes(
+      new ValidationPipe({ whitelist: true, transform: true }),
+    );
     this.app.setGlobalPrefix(this.Config.APP.API_URL_PREFIX);
     this.app.use(cookieParser());
   }

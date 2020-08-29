@@ -21,9 +21,9 @@ export class Module {
   @Field({ nullable: true })
   created_by?: string;
 
-  @Field(type => [Permission], { nullable: true })
-  permissions?: Permission[];
-
   @Field(type => [Module], { nullable: true })
   sub_modules?: Module[];
+
+  @Field(type => [Permission], { nullable: true })
+  permissions?: Permission[];
 }

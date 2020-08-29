@@ -23,11 +23,11 @@ export class NavbarVerticalStyle1Component extends UnsubscribeOnDestroyAdapter i
 {
     fuseConfig: any;
     navigation: any;
-currentUser:any
     // Private
     private _fusePerfectScrollbar: FusePerfectScrollbarDirective;
     private _unsubscribeAll: Subject<any>;
     appName:string;
+    user:any;
     constructor(
         private _fuseConfigService: FuseConfigService,
         private _fuseNavigationService: FuseNavigationService,
@@ -92,9 +92,9 @@ currentUser:any
     ngOnInit(): void
     {
         this.subs.sink = this.eventService.on(Events.USER_UPDATED, (user) => {
-            this.currentUser=user;
+            this.user=user;
           })
-        this.currentUser=this._authUserService.User;
+        this.user=this._authUserService.User;
         this._router.events
             .pipe(
                 filter((event) => event instanceof NavigationEnd),

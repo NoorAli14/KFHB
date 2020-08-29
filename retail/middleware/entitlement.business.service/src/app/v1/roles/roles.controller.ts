@@ -23,10 +23,11 @@ import {
   ApiBadRequestResponse,
   ApiNotFoundResponse,
 } from '@nestjs/swagger';
+import { AuthGuard } from '@common/index';
+
 import { RoleService } from './roles.service';
 import { Role } from './role.entity';
 import { RoleDto } from './role.dto';
-import { AuthGuard } from '@common/guards/';
 
 @ApiTags('Role')
 @Controller('roles')

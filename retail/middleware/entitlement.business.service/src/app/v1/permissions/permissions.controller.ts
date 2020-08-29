@@ -8,6 +8,7 @@ import {
   Delete,
   ParseUUIDPipe,
   HttpCode,
+  NotFoundException,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -81,7 +82,9 @@ export class PermissionsController {
     description: 'Permission Not Found.',
   })
   async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<Permission> {
-    return this.permissionService.findOne(id);
+    const permission = await this.permissionService.findOne(id);
+    if (!permission) throw new NotFoundException(`Permission not found.`);
+    return permission;
   }
 
   @Put(':id')

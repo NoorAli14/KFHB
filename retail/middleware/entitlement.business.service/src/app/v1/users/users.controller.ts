@@ -4,9 +4,12 @@ import {
   Body,
   Param,
   Put,
+  Delete,
   NotFoundException,
   ParseUUIDPipe,
   UseGuards,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -16,12 +19,12 @@ import {
   ApiBearerAuth,
   ApiBadRequestResponse,
   ApiNotFoundResponse,
+  ApiNoContentResponse,
 } from '@nestjs/swagger';
-import { AuthGuard } from '@common/guards/';
+import { AuthGuard, SuccessDto } from '@common/index';
 import { UserService } from './users.service';
 import { User } from './user.entity';
 import { ChangePasswordDto, UpdateUserDto } from './user.dto';
-import { SuccessDto } from '@common/dtos/';
 
 @ApiTags('User')
 @Controller('users')
@@ -84,9 +87,9 @@ export class UsersController {
   })
   async update(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() userDto: UpdateUserDto,
+    @Body() input: UpdateUserDto,
   ): Promise<User> {
-    return this.userService.update(id, userDto);
+    return this.userService.update(id, input);
   }
 
   @Put('/password')
@@ -106,5 +109,23 @@ export class UsersController {
     @Body() changePasswordDto: ChangePasswordDto,
   ): Promise<any> {
     // this.userService.create(userDto);
+  }
+
+  @Delete(':id')
+  @ApiOperation({
+    summary: 'Delete a User by ID',
+    description:
+      'A successful request returns the HTTP 204 No Content status code with empty response body.',
+  })
+  @ApiNoContentResponse({
+    description: 'User has been successfully deleted.',
+  })
+  @ApiNotFoundResponse({
+    type: Error,
+    description: 'User Not Found.',
+  })
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async delete(@Param('id', ParseUUIDPipe) id: string): Promise<any> {
+    return this.userService.delete(id);
   }
 }

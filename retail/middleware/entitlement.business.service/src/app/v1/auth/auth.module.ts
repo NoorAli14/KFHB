@@ -5,16 +5,17 @@ import { PassportModule } from '@nestjs/passport';
 import { UserService } from '@app/v1/users/users.service';
 import { UserModule } from '@app/v1/users/users.module';
 
-import { GqlClientService } from '@common/libs/gqlclient/gqlclient.service';
-import { GqlClientModule } from '@common/libs/gqlclient/gqlclient.module';
-
-import { CommonModule } from '@common/common.module';
-import { ConfigurationService } from '@common/configuration/configuration.service';
-
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import {
+  RedisClientService,
+  GqlClientService,
+  GqlClientModule,
+  CommonModule,
+  ConfigurationService,
+} from '@common/index';
 
 @Module({
   imports: [
@@ -31,9 +32,7 @@ import { AuthService } from './auth.service';
       inject: [ConfigurationService],
       useFactory: async (configService: ConfigurationService) => ({
         secret: configService.JWT.SECRET,
-        signOptions: {
-          expiresIn: configService.JWT.EXPIRY,
-        },
+        algorithm: configService.JWT.ALGORITHM
       }),
     }),
   ],
@@ -45,6 +44,7 @@ import { AuthService } from './auth.service';
     LocalStrategy,
     ConfigurationService,
     JwtStrategy,
+    RedisClientService,
   ],
   exports: [PassportModule, LocalStrategy, AuthService],
 })

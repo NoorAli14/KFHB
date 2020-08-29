@@ -31,6 +31,14 @@ export class ConfigurationService {
       VERSION: this.get('ENV_RBX_APP_VERSION', DEFAULT_ENV.APP.VERSION),
       HOST: this.get('ENV_RBX_HOST', DEFAULT_ENV.APP.HOST),
       PORT: parseInt(this.get('ENV_RBX_PORT', DEFAULT_ENV.APP.PORT), 10),
+      WEB_ONBOARDING_LINK: this.get(
+        'ENV_RBX_WEB_ONBOARDING_LINK',
+        DEFAULT_ENV.APP.WEB_ONBOARDING_LINK,
+      ),
+      WEB_RESET_PASSWORD_LINK: this.get(
+        'ENV_RBX_WEB_RESET_PASSWORD_LINK',
+        DEFAULT_ENV.APP.WEB_RESET_PASSWORD_LINK,
+      ),
     };
   }
 
@@ -43,11 +51,21 @@ export class ConfigurationService {
     };
   }
 
+  get REDIS_CONNECTION() {
+    return {
+      url: this.get('ENV_RBX_REDIS_URL', ''),
+    };
+  }
   get JWT() {
     return {
-      EXPIRY: `${parseInt(this.get('ENV_RBX_JWT_EXPIRY_IN_MINUTES', 0), 10) *
-        60}s`,
+      EXPIRY_SECONDS: parseInt(this.get('ENV_RBX_JWT_EXPIRY_MINUTES', 0), 10) *
+        60,
+      REFRESH_EXPIRY_SECONDS: parseInt(
+        this.get('ENV_RBX_JWT_REFRESH_EXPIRY_DAYS', 0),
+        10,
+      ) * 24 * 60 * 60,
       SECRET: this.get('ENV_RBX_JWT_SECRET', null),
+      REFRESH_SECRET: this.get('ENV_RBX_JWT_REFRESH_SECRET', null),
       ALGORITHM: this.get('ENV_RBX_JWT_ALGORITHM', 'HS256'),
       IGNORE_EXPIRY: false,
     };

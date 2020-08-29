@@ -13,4 +13,7 @@ export class Permission {
 
   @Field({ nullable: true })
   created_by?: string;
+
+  @Field({ nullable: true })
+  module_permission_id?: string;
 }

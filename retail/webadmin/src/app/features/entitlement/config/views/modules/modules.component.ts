@@ -7,10 +7,7 @@ import {
     Inject,
     Injector,
 } from "@angular/core";
-import {
-    MatDialog,
-    
-} from "@angular/material/dialog";
+import { MatDialog } from "@angular/material/dialog";
 import { fuseAnimations } from "@fuse/animations";
 import { Permission } from "@feature/entitlement/models/config.model";
 import { MatTableDataSource } from "@angular/material/table";
@@ -40,7 +37,7 @@ export class ModulesComponent extends BaseComponent implements OnInit {
     dialogRef: any;
     modules: Modules[];
     permissions: Permission[];
- 
+
     displayedColumns = ["name", "status", "parent", "createdOn", "actions"];
     pageSize: number = CONFIG.PAGE_SIZE;
     pageSizeOptions: Array<number> = CONFIG.PAGE_SIZE_OPTIONS;
@@ -52,7 +49,7 @@ export class ModulesComponent extends BaseComponent implements OnInit {
 
     constructor(
         private _service: ConfigMiddlewareService,
-        public _matDialog: MatDialog,
+        public _matDialog: MatDialog
     ) {
         super("Config");
     }
@@ -92,20 +89,22 @@ export class ModulesComponent extends BaseComponent implements OnInit {
                 this.makeFlat(response[0]);
                 this.updateGrid(this.modules);
             },
-           (response=>super.onError(response))
+            (response) => super.onError(response)
         );
     }
     makeFlat(response: any[]) {
         response.forEach((item) => {
-            item.parentModule = item.parent;
-            item.parent = item.parent ? item.parent.name : "N/A";
+            item.parent = this.getParent(item.parent_id);
             this.modules.push(item);
             if (item.sub_modules) {
                 this.makeFlat(item.sub_modules);
             }
         });
     }
-
+    getParent(id) {
+        const parent = this.modules.find((item) => item.id === id);
+        return parent ? parent.name : "N/A";
+    }
     camelToSentenceCase(text) {
         return camelToSentenceCase(text);
     }
@@ -132,30 +131,28 @@ export class ModulesComponent extends BaseComponent implements OnInit {
     createModule(data: Modules) {
         this._service.createModule(data).subscribe(
             (response) => {
-                 this.errorType = "success";
-                 this.responseMessage = MESSAGES.CREATED("Module");
+                this.errorType = "success";
+                this.responseMessage = MESSAGES.CREATED("Module");
                 const data = this.dataSource.data;
-                response.parentModule = response.parent;
-                response.parent = response.parent
-                    ? response.parent.name
-                    : "N/A";
+                const parent :any = this.getParent(response.parent_id);
+                response.parent = parent ? parent.name : "N/A";
                 data.push(response);
                 this.updateGrid(data);
                 this._matDialog.closeAll();
             },
-           (response=>super.onError(response))
+            (response) => super.onError(response)
         );
     }
     hideMessage() {
         setTimeout(() => {
-             this.responseMessage = "";
+            this.responseMessage = "";
         }, 2000);
     }
     editModule(model: Modules) {
         this._service.editModule(model.id, model).subscribe(
             (response) => {
-                 this.errorType = "success";
-                 this.responseMessage = MESSAGES.UPDATED("Module");
+                this.errorType = "success";
+                this.responseMessage = MESSAGES.UPDATED("Module");
                 response.parentModule = response.parent;
                 response.parent = response.parent
                     ? response.parent.name
@@ -168,7 +165,7 @@ export class ModulesComponent extends BaseComponent implements OnInit {
                 this.hideMessage();
                 this._matDialog.closeAll();
             },
-           (response=>super.onError(response))
+            (response) => super.onError(response)
         );
     }
     deleteModule(id: string) {
@@ -177,11 +174,11 @@ export class ModulesComponent extends BaseComponent implements OnInit {
                 const index = this.dataSource.data.findIndex((x) => x.id == id);
                 this.modules.splice(index, 1);
                 this.updateGrid(this.modules);
-                 this.errorType = "success";
+                this.errorType = "success";
                 this.hideMessage();
-                 this.responseMessage = MESSAGES.DELETED("Module");
+                this.responseMessage = MESSAGES.DELETED("Module");
             },
-           (response=>super.onError(response))
+            (response) => super.onError(response)
         );
     }
     updateGrid(data) {
