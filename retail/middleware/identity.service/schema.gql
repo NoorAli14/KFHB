@@ -12,8 +12,34 @@ directive @requires(fields: String!) on FIELD_DEFINITION
 
 directive @provides(fields: String!) on FIELD_DEFINITION
 
+input CreateCustomerInput {
+  first_name: String
+  last_name: String
+  email: String
+  contact_no: String
+}
+
 input CreateSessionInput {
   reference_id: String
+}
+
+type Customer {
+  id: ID
+  email: String
+  contact_no: String
+  first_name: String
+  middle_name: String
+  last_name: String
+  gender: String
+  date_of_birth: String
+  nationality_id: String
+  status: String
+  created_on: String
+  created_by: String
+  updated_on: String
+  updated_by: String
+  deleted_on: String
+  deleted_by: String
 }
 
 """
@@ -23,6 +49,11 @@ scalar DateTime
 
 type Mutation {
   addSession(input: CreateSessionInput!): Session!
+  addCustomer(input: CreateCustomerInput!): Customer!
+}
+
+type Query {
+  findCustomerById(id: String!): Customer!
 }
 
 type Session {

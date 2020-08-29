@@ -11,7 +11,7 @@ import {
 } from '@rubix/common/interfaces/configuration.interface';
 export const DEFAULT_ENV: iConfig = {
   APP: {
-    NAME: 'Rubix | Boilerplate',
+    NAME: 'Rubix | Identity Service',
     DESCRIPTION: '',
     VERSION: '1.0.0',
     ENVIRONMENT: 'development',
@@ -48,6 +48,16 @@ export class ConfigurationService {
     dotenv.config();
   }
 
+  get IDENTITYX() {
+    return {
+      BASE_URL: 'https://aionuatserver.uaenorth.cloudapp.azure.com:8443',
+      VERSION: 'v1',
+      USERNAME: 'aionadmin',
+      PASSWORD: 'iondigital123',
+      TOKEN: null,
+      TENANT: 'kfhk-test',
+    };
+  }
   // Parse iApp Environment Variables
   public get APP(): iAPP {
     return {

@@ -1,13 +1,16 @@
 import { Module } from '@nestjs/common';
-import {IdentityModule} from '@rubix/app/identity/identity.module'
-import {IdentityService} from '@rubix/app/identity/identity.service'
-import { RepositoryModule } from '@rubix/core/repository/repository.module';
-import { CustomerRepository } from '@rubix/core/repository/';
-import {CutomersService} from './cutomers.service';
-import {CutomersResolver} from './cutomers.resolver'
+import { IdentityModule, IdentityService } from '@rubix/common';
+import { RepositoryModule, CustomerRepository } from '@rubix/core';
+import { CustomersService } from './customers.service';
+import { CustomersResolver } from './customers.resolver';
 
 @Module({
   imports: [RepositoryModule, IdentityModule],
-  providers: [IdentityService, CustomerRepository, CutomersService, CutomersResolver]
+  providers: [
+    IdentityService,
+    CustomerRepository,
+    CustomersService,
+    CustomersResolver,
+  ],
 })
 export class CustomerModule {}

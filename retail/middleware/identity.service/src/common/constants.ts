@@ -20,6 +20,8 @@ export const DOCUMENT_TYPES = [
 ];
 
 export const CUSTOMER_STATUSES = {
- PENDING: 'PENDING',
- COMPLETED: 'COMPLETED'
-}
+  PENDING: 'PENDING',
+  COMPLETED: 'COMPLETED',
+};
+
+export const DEFAULT_CREATED_BY = 'API';
