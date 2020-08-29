@@ -54,8 +54,6 @@ export class RoleRepository extends BaseRepository {
             return {
               role_id : response[0].id || response[0],
               module_permission_id : module_permission_id.id,
-              status : STATUS.ACTIVE,
-              created_by : TEMP_ROLE.ADMIN,
             };
         });
         if(module_permission_roles.length > 0) await trx(TABLE.MODULE_PERMISSION_ROLE).insert(module_permission_roles, ['id']);
