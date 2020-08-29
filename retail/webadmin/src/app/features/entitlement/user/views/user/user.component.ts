@@ -164,7 +164,9 @@ export class UserComponent extends BaseComponent implements OnInit {
                 // this.updateGrid(data);
                 this._matDialog.closeAll();
             },
-            (response=>super.onError(response))
+            (response) => {
+                debugger
+            }
         );
     }
     hideMessage() {
@@ -185,7 +187,9 @@ export class UserComponent extends BaseComponent implements OnInit {
                 this.hideMessage();
                 this._matDialog.closeAll();
             },
-            (response=>super.onError(response))
+            (response) => {
+                debugger
+            }
         );
     }
     deleteUser(id: string) {

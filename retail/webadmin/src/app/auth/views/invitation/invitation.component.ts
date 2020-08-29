@@ -90,7 +90,9 @@ export class InvitationComponent extends BaseComponent implements OnInit {
                 this.router.navigateByUrl('/auth/login');
             }, 1000);
           },
-          (response=>super.onError(response))
+          (error)=>{
+              debugger
+          }
       );
     }
     getData(token) {
@@ -99,7 +101,15 @@ export class InvitationComponent extends BaseComponent implements OnInit {
                 const user= snakeToCamelObject(response);
                 this.userForm.patchValue(user)
             },
-            (response=>super.onError(response))
+            (response)=>{
+                this.errorType = "error";
+                if(response.error){
+                    this.errorType = "info";
+                    this.responseMessage = MESSAGES.ALREADY_ONBOARD;
+                }else{
+                    this.responseMessage = MESSAGES.UNKNOWN;
+                }
+            }
         );
     }
 }

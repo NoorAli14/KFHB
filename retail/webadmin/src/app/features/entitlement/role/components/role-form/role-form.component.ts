@@ -45,33 +45,21 @@ export class RoleFormComponent extends BaseComponent implements OnInit {
             ]),
             modules: new FormArray([]),
         });
-        const flat = this.makeFlat(this.data.modules, "");
-        // this.modules.forEach((module) =>{
-        //     module.module= module.name;
-        //     module.canView= module.permissions.find(item=>item.record_type=='view') ? true : false;
-        //     module.canCreate= module.permissions.find(item=>item.record_type=='create') ? true : false;
-        //     module.canDelete= module.permissions.find(item=>item.record_type=='delete') ? true : false;
-        //     module.canEdit= module.permissions.find(item=>item.record_type=='edit') ? true : false;
-        // })
-        // this.makeFlat(this.modules,'');
         const formArray=this.modules;
-        this.modulesMapped.forEach((item) => {
+        this.data.modules.forEach((item) => {
           const form=  this.createFormGroup(item);
           formArray.push(form)
         });
-        this.dataSource.data = this.modulesMapped;
+        this.dataSource.data = this.data.modules;
     }
     get modules() {
         return this.roleForm.get("modules") as FormArray;
     }
-    hello(d){
-        
-    }
+   
     createControl() {
-        return new FormControl(true);
+        return new FormControl(false);
     }
     getFormControl(form,key){
-        debugger
        return form.get(key)
     }
     createFormGroup(module) {
@@ -83,21 +71,12 @@ export class RoleFormComponent extends BaseComponent implements OnInit {
         });
         return form;
     }
-
     onSubmit() {
         const model = { ...this.roleForm.value };
+        model.permissions = model.modules.map((module) =>{
+            
+        })
         this.sendResponse.emit(model);
-    }
-
-    makeFlat(modules: any[], parent_id) {
-        modules.forEach((item) => {
-            item.parent = item.parent_id ? item.parent_id : "N/A";
-            item.module = item.name;
-            this.modulesMapped.push(item);
-            if (item.sub_modules && item.sub_modules.length > 0) {
-                this.makeFlat(item.sub_modules, item.module);
-            }
-        });
     }
     camelToSentenceCase(text) {
         return camelToSentenceCase(text);

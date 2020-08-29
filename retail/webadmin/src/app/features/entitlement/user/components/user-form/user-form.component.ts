@@ -86,15 +86,16 @@ export class UserFormComponent extends BaseComponent implements OnInit {
             ]),
             roles: new FormControl(this.data.user.roles.map((x) => x.id), [
                 Validators.required,
-            ]),
-            status: new FormControl(this.data.user.status, [
-                this.requiredIfUpdating(() => this.userForm.get("id").value),
-            ]),
+            ])
         });
         this.roles = this.data.roles;
+        if(this.data.user.id){
+                this.userForm.get('email').disable()
+        }
     }
 
     onSubmit() {
+        debugger
         let model = { ...this.userForm.value };
         model.roles = this.userForm.value.roles.map((item) => ({
             id: item,
