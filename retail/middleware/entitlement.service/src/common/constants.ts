@@ -23,7 +23,7 @@ export const NUMBERS = {
 export const STATUS = {
   ACTIVE: 'ACTIVE',
   INACTIVE: 'INACTIVE',
-  PENDING: 'PENDING'
+  PENDING: 'PENDING',
 };
 
 export const TEMP_ROLE = {
@@ -34,66 +34,66 @@ export const TEMP_ROLE = {
 
 export const MODULES = [
   {
-    "name": "Entitlement",
-    "sub_modules": [
+    name: 'Entitlement',
+    sub_modules: [
       {
-        "name": "User",
-        "permissions": [
+        name: 'User Management',
+        permissions: [
           {
-            "name": "view"
+            name: 'view',
           },
           {
-            "name": "edit"
+            name: 'edit',
           },
           {
-            "name": "delete"
+            name: 'delete',
           },
           {
-            "name": "create"
-          }
-        ]
+            name: 'create',
+          },
+        ],
       },
       {
-        "name": "Config",
-        "permissions": [
+        name: 'Role Management',
+        permissions: [
           {
-            "name": "view"
-          }
-        ]
-      }
+            name: 'view',
+          },
+        ],
+      },
     ],
-    "permissions": [
+    permissions: [
       {
-        "name": "view"
-      }
-    ]
+        name: 'view',
+      },
+    ],
   },
   {
-    "name": "Calender",
-    "sub_modules": [
+    name: 'Calender',
+    sub_modules: [
       {
-        "name": "Working Week",
-        "permissions": [
+        name: 'Working Week',
+        permissions: [
           {
-            "name": "view"
-          }
-        ]
+            name: 'view',
+          },
+        ],
       },
       {
-        "name": "Holidays",
-        "permissions": [
+        name: 'Holidays',
+        permissions: [
           {
-            "name": "view"
-          }
-        ]
-      }
+            name: 'view',
+          },
+        ],
+      },
     ],
-    "permissions": [
+    permissions: [
       {
-        "name": "view"
-      }
-    ]
-  }
+        name: 'view',
+      },
+    ],
+  },
 ];
 
 export const WEEK_DAYS = {
@@ -120,7 +120,7 @@ export const MESSAGES = {
   BAD_REQUEST: 'Bad Request',
   BAD_TIME_FORMAT: 'Bad Time Format',
   INVALID_WEEKDAY: `Weekday should be one of ${Object.keys(WEEK_DAYS)}`,
-  INVALID_STATUS: `Status should be one of ${Object.keys(STATUS)}`
+  INVALID_STATUS: `Status should be one of ${Object.keys(STATUS)}`,
 };
 
 export const DATABASE_UUID_METHOD = 'NEWID()';
