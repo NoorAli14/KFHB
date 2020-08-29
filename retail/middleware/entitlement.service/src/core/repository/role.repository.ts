@@ -6,16 +6,16 @@ import {IdsInput} from '@common/inputs/ids.input';
 @Injectable()
 export class RoleRepository extends BaseRepository {
   private readonly __attributes: string[] = [
-    `${TABLE.MODULE}.id`,
-    `${TABLE.MODULE}.name`,
-    `${TABLE.MODULE}.status`,
-    `${TABLE.MODULE}.description`,
-    `${TABLE.MODULE}.updated_on`,
-    `${TABLE.MODULE}.updated_by`,
-    `${TABLE.MODULE}.deleted_on`,
-    `${TABLE.MODULE}.deleted_by`,
-    `${TABLE.MODULE}.created_by`,
-    `${TABLE.MODULE}.created_on`
+    `${TABLE.ROLE}.id`,
+    `${TABLE.ROLE}.name`,
+    `${TABLE.ROLE}.status`,
+    `${TABLE.ROLE}.description`,
+    `${TABLE.ROLE}.updated_on`,
+    `${TABLE.ROLE}.updated_by`,
+    `${TABLE.ROLE}.deleted_on`,
+    `${TABLE.ROLE}.deleted_by`,
+    `${TABLE.ROLE}.created_by`,
+    `${TABLE.ROLE}.created_on`
   ];
 
   constructor() {
