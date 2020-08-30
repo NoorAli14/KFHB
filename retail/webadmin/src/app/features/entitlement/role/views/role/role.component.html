@@ -44,11 +44,8 @@
             <div *ngIf="responseMessage.length > 0" fxLayout="row" fxLayoutAlign="center" class="p-16  message-box {{ errorType }} ">
                 {{ responseMessage }}
             </div>
-            <app-table-row  [dataSource]="roles" [displayedColumns]="displayedColumns"  >
+            <app-table-row (delete)="confirmDialog($event)"  [roles]="roles" [displayedColumns]="displayedColumns"  >
             </app-table-row>
-          
-           
-        
         </div>
         <!-- / CONTENT CARD -->
     </div>

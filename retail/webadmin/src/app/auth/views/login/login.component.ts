@@ -55,11 +55,11 @@ export class LoginComponent extends BaseComponent implements OnInit {
     ngOnInit(): void {
         this.returnUrl = this.route.snapshot.queryParamMap.get("returnUrl");
         this.loginForm = new FormGroup({
-            email: new FormControl("r@g.com", [
+            email: new FormControl("", [
                 Validators.required,
                 Validators.email,
             ]),
-            password: new FormControl("Abcd@123", [Validators.required]),
+            password: new FormControl("", [Validators.required]),
             // rememberMe: new FormControl(""),
         });
 

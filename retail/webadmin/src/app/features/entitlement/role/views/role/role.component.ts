@@ -34,7 +34,7 @@ export class RoleComponent extends BaseComponent implements OnInit {
     dialogRef: any;
 
     roleName: FormControl;
-    displayedColumns = [ "roleName","description","createdOn","expandIcon"];
+    displayedColumns = [ "roleName","description","createdOn","expandIcon","action"];
 
     constructor(
         public _matDialog: MatDialog,
@@ -114,7 +114,7 @@ export class RoleComponent extends BaseComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe((status) => {
             if (status) {
-                this.deleteRole(id);
+                this.onDelete(id);
             }
         });
     }
@@ -151,18 +151,18 @@ export class RoleComponent extends BaseComponent implements OnInit {
         //    (response=>super.onError(response))
         // );
     }
-    deleteRole(id: string) {
-        // this._service.deleteRole(id).subscribe(
-        //     (response) => {
-        //         const index = this.dataSource.data.findIndex((x) => x.id == id);
-        //         this.roles.splice(index, 1);
-        //         this.updateGrid(this.roles);
-        //         this.errorType = "success";
-        //         this.hideMessage();
-        //         this.responseMessage = MESSAGES.DELETED("Role");
-        //     },
-        //    (response=>super.onError(response))
-        // );
+    onDelete(id: string) {
+        this._service.deleteRole(id).subscribe(
+            (response) => {
+                // const index = this.dataSource.data.findIndex((x) => x.id == id);
+                // this.roles.splice(index, 1);
+                // this.updateGrid(this.roles);
+                this.errorType = "success";
+                this.hideMessage();
+                this.responseMessage = MESSAGES.DELETED("Role");
+            },
+           (response=>super.onError(response))
+        );
     }
     updateGrid(data) {
         // this.dataSource.data = data;

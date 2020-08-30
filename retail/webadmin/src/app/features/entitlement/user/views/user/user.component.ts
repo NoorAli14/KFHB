@@ -42,12 +42,12 @@ export class UserComponent extends BaseComponent implements OnInit {
     pageSizeOptions: Array<number> = CONFIG.PAGE_SIZE_OPTIONS;
 
     displayedColumns = [
-        "username",
+        // "username",
         "firstName",
         "lastName",
-        "gender",
+        // "gender",
         "email",
-        "contactNo",
+        // "contactNo",
         "status",
         "actions",
     ];
