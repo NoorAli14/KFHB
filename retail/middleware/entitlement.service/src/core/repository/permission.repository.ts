@@ -24,7 +24,7 @@ export class PermissionRepository extends BaseRepository {
       .whereIn(`${TABLE.MODULE_PERMISSION}.module_id`, ids)
     } else {
       return this._connection(TABLE.PERMISSION)
-      .distinct([...this.__attributes, `${TABLE.MODULE_PERMISSION_ROLE}.role_id`, `${TABLE.MODULE_PERMISSION}.module_id`, `${TABLE.MODULE_PERMISSION}.id as module_permission_id`])
+      .distinct([...this.__attributes, `${TABLE.MODULE_PERMISSION}.module_id`, `${TABLE.MODULE_PERMISSION}.id as module_permission_id`])
       .innerJoin(TABLE.MODULE_PERMISSION, `${TABLE.PERMISSION}.id`, `${TABLE.MODULE_PERMISSION}.permission_id`)
       .innerJoin(TABLE.MODULE_PERMISSION_ROLE, `${TABLE.MODULE_PERMISSION_ROLE}.module_permission_id`, `${TABLE.MODULE_PERMISSION}.id`)
       .whereIn(`${TABLE.MODULE_PERMISSION_ROLE}.role_id`, ids.map(obj => obj.role_id))

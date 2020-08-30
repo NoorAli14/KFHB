@@ -88,13 +88,14 @@ export class ModuleResolver {
   @ResolveField('sub_modules', returns => [Module])
   async getSubModules(@Parent() module: Module,
                        @Loader('SubModulesDataLoader') subModulesLoader: DataLoader<Module['id'], Module>) {
-    let input: any = module.id;
-    if(module['role_id']) {
-      input = {
-        module_id: module.id,
-        role_id: module['role_id']
-      };
-    }
+    if(!module.id) return [];
+    const input: any = module.id;
+    // if(module['role_id']) {
+    //   input = {
+    //     module_id: module.id,
+    //     role_id: module['role_id']
+    //   };
+    // }
     return subModulesLoader.load(input);
   }
 }
