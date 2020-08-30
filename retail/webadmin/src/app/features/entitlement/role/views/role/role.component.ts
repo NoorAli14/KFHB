@@ -32,8 +32,7 @@ export class RoleComponent extends BaseComponent implements OnInit {
     roles: Role[];
     modules: any[];
     dialogRef: any;
-    pageSize:number=CONFIG.PAGE_SIZE;
-    pageSizeOptions:Array<number>=CONFIG.PAGE_SIZE_OPTIONS;
+
     roleName: FormControl;
     displayedColumns = [ "roleName","description","createdOn","expandIcon"];
 
@@ -85,20 +84,6 @@ export class RoleComponent extends BaseComponent implements OnInit {
             });
     }
 
-    // getData() {
-    //     this._service.forkRolesData().subscribe(
-    //         (response) => {
-    //             [this.roles,] = response;
-    //             this.modules= this.mapModules(response[1])
-    //             this.dataSource = new MatTableDataSource(this.roles);
-    //             this.dataSource.paginator = this.paginator;
-    //             this.dataSource.sort = this.sort;
-    //             this.responseMessage = "";
-    //             debugger
-    //         },
-    //        (response=>super.onError(response))
-    //     );
-    // }
     mapModules(modules){
         const mapped=modules.map((item)=>{
             item.text=item.name;
@@ -135,18 +120,14 @@ export class RoleComponent extends BaseComponent implements OnInit {
     }
 
     createRole(data: Role) {
-        // this._service.createRole(data).subscribe(
-        //     (response) => {
-        //         this.errorType = "success";
-        //         this.responseMessage = MESSAGES.CREATED("Role");
-        //         const data = this.dataSource.data;
-
-        //         data.push(response);
-        //         this.updateGrid(data);
-        //         this._matDialog.closeAll();
-        //     },
-        //    (response=>super.onError(response))
-        // );
+        this._service.createRole(data).subscribe(
+            (response) => {
+                this.errorType = "success";
+                this.responseMessage = MESSAGES.CREATED("Role");
+                this._matDialog.closeAll();
+            },
+           (response=>super.onError(response))
+        );
     }
     hideMessage() {
         setTimeout(() => {

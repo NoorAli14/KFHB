@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Input, Output, EventEmitter, ViewChild } from "@angular/core";
 import {
     trigger,
     state,
@@ -8,6 +8,9 @@ import {
 } from "@angular/animations";
 import { MatDialog } from '@angular/material/dialog';
 import { getName, camelToSentenceCase, camelToSnakeCaseText } from "@shared/helpers/global.helper";
+import { CONFIG } from '@config/index';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 
 
 @Component({
@@ -43,9 +46,12 @@ export class TableRowComponent {
     @Input() displayedColumns: string[];
     @Input() title: string;
     @Input() renderTemplate: string;
-
+    pageSize:number=CONFIG.PAGE_SIZE;
+    pageSizeOptions:Array<number>=CONFIG.PAGE_SIZE_OPTIONS;
     expandedId: string = "";
-
+    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+    @ViewChild(MatSort, { static: false }) sort: MatSort;
+    
     constructor(public _matDialog: MatDialog) {
     }
 
