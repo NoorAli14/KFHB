@@ -1,18 +1,25 @@
 import * as Knex from 'knex';
-import { TABLE, DATABASE_UUID_METHOD } from '@rubix/common/constants';
+import { TABLE, DATABASE_UUID_METHOD } from '@rubix/common';
 export async function up(knex: Knex): Promise<any> {
   return knex.schema.createTable(TABLE.CUSTOMER, table => {
     table
       .uuid('id')
       .primary()
       .defaultTo(knex.raw(DATABASE_UUID_METHOD));
-    table.uuid('tenant_id').notNullable();
-    table.uuid('session_id');
 
-    table.string('first_name')
+    table.string('first_name');
+    table.string('middle_name');
     table.string('last_name');
     table.string('email');
     table.string('contact_no');
+    table.string('gender');
+    table.string('date_of_birth');
+    table.string('national_id');
+    table.string('nationality');
+
+    table.string('target_user_id');
+    table.uuid('tenant_id').notNullable();
+    table.uuid('session_id');
 
     table.string('status');
 
@@ -29,6 +36,7 @@ export async function up(knex: Knex): Promise<any> {
     table.index('tenant_id', 'IDT_CUSTOMER_TENANT_ID_INDEX');
     table.index('email', 'IDT_CUSTOMER_EMAIL_INDEX');
     table.index('status', 'IDT_CUSTOMER_STATUS_INDEX');
+    table.index('target_user_id', 'IDT_CUSTOMER_TARGET_USER_ID_INDEX');
   });
 }
 

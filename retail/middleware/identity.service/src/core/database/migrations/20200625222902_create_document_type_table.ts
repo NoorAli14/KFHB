@@ -1,5 +1,5 @@
 import * as Knex from 'knex';
-import { TABLE, DATABASE_UUID_METHOD } from '@rubix/common/constants';
+import { TABLE, DATABASE_UUID_METHOD } from '@rubix/common';
 export async function up(knex: Knex): Promise<any> {
   return knex.schema.createTable(TABLE.DOCUMENT_TYPE, table => {
     table
