@@ -62,6 +62,12 @@ export interface iEMAILSENDER {
   EMAIL: string
 }
 
+export interface iFIREBASE {
+  CLIENT_EMAIL: string,
+  PRIVATE_KEY: string,
+  PROJECT_ID: string
+}
+
 export interface iConfig {
   /** Application Details */
   APP: iAPP;
@@ -73,6 +79,7 @@ export interface iConfig {
   OTP?: iOTP;
   SMS?: iSMS;
   EMAILSENDER?: iEMAILSENDER;
+  FIREBASE?: iFIREBASE;
   /**
    * The log level to use.
    * @example 'verbose', 'info', 'warn', 'error'

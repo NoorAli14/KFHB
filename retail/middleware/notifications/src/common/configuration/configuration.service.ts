@@ -12,6 +12,7 @@ import {
   iOTP,
   iSMS,
   iEMAILSENDER,
+  iFIREBASE,
 } from '@common/interfaces/configuration.interface';
 import {
   DEFAULT_OTP_STATUS,
@@ -82,6 +83,12 @@ export const DEFAULT_ENV: iConfig = {
   EMAILSENDER: {
     NAME: DEFAULT_SENDING_NAME,
     EMAIL: DEFAULT_SENDING_EMAIL
+  },
+
+  FIREBASE: {
+    CLIENT_EMAIL: '',
+    PRIVATE_KEY: '',
+    PROJECT_ID:''
   }
 };
 @Injectable()
@@ -181,6 +188,14 @@ export class ConfigurationService {
         'ENV_RBX_SMTP_SENDING_EMAIL',
         DEFAULT_ENV.EMAILSENDER.EMAIL,
       ),
+    };
+  }
+
+  public get FIREBASE(): iFIREBASE {
+    return {
+      CLIENT_EMAIL: this.get('ENV_RBX_FIREBASE_CLINET_EMAIL', DEFAULT_ENV.FIREBASE.CLIENT_EMAIL),
+      PRIVATE_KEY: this.get('ENV_RBX_FIREBASE_PRIVATE_KEY', DEFAULT_ENV.FIREBASE.PRIVATE_KEY),
+      PROJECT_ID: this.get('ENV_RBX_FIREBASE_PROJECT_ID', DEFAULT_ENV.FIREBASE.PROJECT_ID),
     };
   }
 
