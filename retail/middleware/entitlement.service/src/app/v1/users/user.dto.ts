@@ -50,7 +50,7 @@ export class UpdateUserInput {
 
   @Field({ nullable: true })
   @IsOptional()
-  is_owner?: boolean | string;
+  is_owner?: string;
 
   @Field({ nullable: true })
   @IsString()
