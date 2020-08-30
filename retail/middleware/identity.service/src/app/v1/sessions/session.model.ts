@@ -12,13 +12,16 @@ export class Session {
   tenant_id: string;
 
   @Field()
-  reference_id: string;
+  check_id?: string;
+
+  @Field()
+  reference_id?: string;
 
   @Field({ nullable: true })
   target_user_id?: string;
 
   @Field({ nullable: true })
-  status: string;
+  status?: string;
 
   @Field()
   created_by: string;

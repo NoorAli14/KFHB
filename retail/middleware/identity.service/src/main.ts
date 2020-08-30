@@ -1,2 +1,2 @@
-import Server from '@core/server';
+import Server from './core/server';
 Server.setup();

@@ -7,8 +7,7 @@ import {
   Parent,
 } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@rubix/common/guards';
-import { Fields, CurrentUser, Tenant } from '@rubix/common/decorators';
+import { AuthGuard, Fields, CurrentUser, Tenant } from '@rubix/common';
 import { Session } from './session.model';
 import { SessionsService } from './sessions.service';
 import { NewSessionInput } from './session.dto';
