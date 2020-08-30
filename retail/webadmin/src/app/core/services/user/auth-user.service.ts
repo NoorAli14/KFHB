@@ -77,6 +77,7 @@ export class AuthUserService {
     }
 
     set User(user) {
+        debugger
         this._user = snakeToCamelObject(user);
         this.eventService.emit(
             new EmitEvent(Events.USER_UPDATED, this._user )

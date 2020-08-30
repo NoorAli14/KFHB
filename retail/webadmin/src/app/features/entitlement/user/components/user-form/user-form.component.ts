@@ -16,12 +16,14 @@ import { UserService } from "@feature/entitlement/user/services/user.service";
 import { Role } from "@feature/entitlement/models/role.model";
 import { camelToSnakeCase } from "@shared/helpers/global.helper";
 import { BaseComponent } from '@shared/components/base/base.component';
+import { fuseAnimations } from '@fuse/animations';
 
 @Component({
     selector: "app-user-form",
     templateUrl: "./user-form.component.html",
     styleUrls: ["./user-form.component.scss"],
     encapsulation: ViewEncapsulation.None,
+    animations: fuseAnimations,
 })
 export class UserFormComponent extends BaseComponent implements OnInit {
     userForm: FormGroup;

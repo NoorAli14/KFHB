@@ -22,7 +22,7 @@ export class AuthenticationService {
     get accessToken() {
         return this.storage.getItem(APP_CONST.ACCESS_TOKEN);
     }
-    get accessRefreshToken() {
+    get refreshToken() {
         return this.storage.getItem(APP_CONST.REFRESH_TOKEN);
     }
     set accessToken(token) {

@@ -10,7 +10,7 @@ import {
 import { Observable, empty, of } from "rxjs";
 import { StorageService } from "../storage/storage.service";
 import { mergeMap, } from "rxjs/operators";
-import { APP_CONST, URI } from "@shared/constants/app.constants";
+import { APP_CONST, URI, createUrl } from "@shared/constants/app.constants";
 import { EventBusService } from "../event-bus/event-bus.service";
 import { EmitEvent } from "@shared/models/emit-event.model";
 import { Events } from "@shared/enums/events.enum";
@@ -35,11 +35,13 @@ export class AuthInterceptorService implements HttpInterceptor {
       
     const decodedToken = this.authService.getDecodeToken();
     var current = (new Date().getTime() / 1000);
-    const hasRefreshToken = request.url.includes("refreshToken");
+    const hasRefreshToken = request.url.includes("refresh-token");
+    const flag= this.isPublicUrl(request.url)
+    
     let httpOptions = this.getHttpOption(hasRefreshToken);
 
     //Refresh token
-    if (!hasRefreshToken && decodedToken && decodedToken.exp < current) {
+    if (!flag && decodedToken && decodedToken.exp < current) {
       this.isRefreshTokenInProgress = true;
       return this.refreshToken()
         .pipe(
@@ -66,9 +68,10 @@ export class AuthInterceptorService implements HttpInterceptor {
     }
   }
   refreshToken() {
-    return this.http.post(URI.REFRESH, null, { observe: 'response' });
+    const endPoint = `${createUrl(URI.REFRESH)}`;
+    return this.http.post(endPoint, null, { observe: 'response' });
   }
-  getHttpOption(hasRefreshToken) {
+  getHttpOption(refreshing) {
     const token = this.storage.getItem(APP_CONST.ACCESS_TOKEN);
     const httpOptions = {
       headers: new HttpHeaders({
@@ -77,7 +80,7 @@ export class AuthInterceptorService implements HttpInterceptor {
       })
     };
 
-    if (!hasRefreshToken) {
+    if (!refreshing) {
       httpOptions.headers = httpOptions.headers.set('x-access-token', ` ${token}`);
     } else {
       const refreshToken = this.authService.refreshToken;
@@ -85,4 +88,9 @@ export class AuthInterceptorService implements HttpInterceptor {
     }
     return httpOptions;
   }
+  isPublicUrl(url){
+    const authUrls=['login','logout','refresh-token']
+    return authUrls.some(el => url.includes(el));
+  }
+
 }

@@ -1,10 +1,11 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, ViewEncapsulation } from "@angular/core";
 
 import { ConfigMiddlewareService } from "../../services/config-middleware.service";
 import {  camelToSentenceCase } from "@shared/helpers/global.helper";
 import { Permission } from "@feature/entitlement/models/config.model";
 import { MatTableDataSource } from "@angular/material/table";
 import { BaseComponent } from '@shared/components/base/base.component';
+import { fuseAnimations } from '@fuse/animations';
 
 @Component({
     selector: "app-permission",
@@ -12,7 +13,8 @@ import { BaseComponent } from '@shared/components/base/base.component';
     styles:[`:host {
         width: 100%;
         padding:10px;
-    }`]
+    }`],
+    animations: fuseAnimations,
 })
 export class PermissionComponent extends BaseComponent implements OnInit {
     title = "";

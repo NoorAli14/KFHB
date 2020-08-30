@@ -59,6 +59,7 @@ import { GlobalErrorService } from "@core/services/global-error/global-error.ser
             useClass: AuthInterceptorService,
             multi: true,
         },
+       
         // {
         //     provide: HTTP_INTERCEPTORS,
         //     useClass: ErrorInterceptorService,
