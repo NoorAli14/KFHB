@@ -24,7 +24,14 @@ export class IdentityService {
   async createUser(userId: string): Promise<any> {
     Logger.log(`Identity User Create with ${userId} ID`);
     return this.__identity.users.create({
-      userId: userId,
+      data: { userId: userId },
+    });
+  }
+
+  async createCheckId(userId: string): Promise<any> {
+    Logger.log(`Create Check ID with daon User ${userId}`);
+    return this.__identity.idChecks(userId).create({
+      data: { referenceId: userId },
     });
   }
 }

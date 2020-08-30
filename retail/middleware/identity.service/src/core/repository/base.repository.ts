@@ -19,11 +19,7 @@ export abstract class BaseRepository {
     }
     return qb.limit(10);
   }
-  async create(
-    newObj: { [key: string]: any },
-    keys: string[],
-    trx?: any,
-  ): Promise<any> {
+  async create(newObj: { [key: string]: any }, keys: string[], trx?: any) {
     const _knex: any = trx || this.connection;
     return _knex(this._tableName).insert(newObj, keys);
   }
@@ -31,8 +27,10 @@ export abstract class BaseRepository {
     condition: { [key: string]: any },
     newObj: { [key: string]: any },
     columns?: string[],
-  ): Promise<any> {
-    return this.connection(this.tableName)
+    trx?: any,
+  ) {
+    const _knex: any = trx || this.connection;
+    return _knex(this.tableName)
       .where(condition)
       .update(newObj, columns);
   }
@@ -59,5 +57,9 @@ export abstract class BaseRepository {
       .first();
   }
 
-  async transaction(): Promise<any> {}
+  async transaction(): Promise<any> {
+    const trxProvider = this._connection.transactionProvider();
+    const trx = await trxProvider();
+    return trx;
+  }
 }
