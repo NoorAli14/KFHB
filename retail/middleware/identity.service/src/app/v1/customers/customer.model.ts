@@ -6,7 +6,13 @@ export class Customer {
   id: string;
 
   @Field({ nullable: true })
+  tenant_id?: string;
+
+  @Field({ nullable: true })
   email?: string;
+
+  @Field({ nullable: true })
+  target_user_id?: string;
 
   @Field({ nullable: true })
   contact_no?: string;
