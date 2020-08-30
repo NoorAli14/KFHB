@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
-import { IdentityModule, IdentityService } from '@rubix/common';
-import { RepositoryModule, CustomerRepository } from '@rubix/core';
+import { IdentityModule } from '@rubix/common/http/identity/identity.module';
+import { IdentityService } from '@rubix/common/http/identity/identity.service';
+
+import { RepositoryModule, CustomerRepository } from '@rubix/core/repository/';
 import { CustomersService } from './customers.service';
 import { CustomersResolver } from './customers.resolver';
 
