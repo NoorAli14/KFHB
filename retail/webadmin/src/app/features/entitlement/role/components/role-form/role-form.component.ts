@@ -8,6 +8,7 @@ import { fuseAnimations } from "@fuse/animations";
 import { MatTableDataSource } from "@angular/material/table";
 import { Permission } from "@feature/entitlement/models/config.model";
 import { camelToSentenceCase } from "@shared/helpers/global.helper";
+import { ErrorEmitterService } from '@core/services/error-emitter/error-emitter.service';
 
 @Component({
     selector: "app-role-form",
@@ -18,19 +19,24 @@ import { camelToSentenceCase } from "@shared/helpers/global.helper";
 })
 export class RoleFormComponent extends BaseComponent implements OnInit {
     roleForm: FormGroup;
-    title = "";
     displayedColumns = ["module", "view", "delete", "edit", "create"];
     dataSource = new MatTableDataSource<Permission>();
     modulesMapped: any[] = [];
     @Output() sendResponse: EventEmitter<Role> = new EventEmitter<any>();
+
     constructor(
         public matDialogRef: MatDialogRef<RoleFormComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: any
+        @Inject(MAT_DIALOG_DATA) public data: any,
+       
     ) {
         super("Config");
     }
 
     ngOnInit(): void {
+        this._errorEmitService.currentMessage.subscribe(item=>{
+            this.errorType=item.type;
+            this.responseMessage=item.message;
+        })
         this.roleForm = new FormGroup({
             id: new FormControl(this.data.role.id),
             name: new FormControl(this.data.role.name, [Validators.required]),

@@ -45,7 +45,7 @@ export class ProfileComponent extends BaseComponent implements OnInit {
     }
 
     onUpdateProfile(data) {
-        debugger;
+        
         data = camelToSnakeCase(data);
         this._settingService.updateProfile(data).subscribe(
             (response: User) => {

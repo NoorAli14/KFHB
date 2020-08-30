@@ -1,13 +1,9 @@
 import { BaseComponent } from "@shared/components/base/base.component";
-import { CONFIG } from "./../../../../../config/index";
 import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
 import { fuseAnimations } from "@fuse/animations";
 import { MatDialog } from "@angular/material/dialog";
 import { Role } from "@feature/entitlement/models/role.model";
 
-import { MatPaginator } from "@angular/material/paginator";
-import { MatSort } from "@angular/material/sort";
-import { MatTableDataSource } from "@angular/material/table";
 import {
     camelToSentenceCase,
     camelToSnakeCaseText,
@@ -17,10 +13,9 @@ import {
     ConfirmDialogModel,
     ConfirmDialogComponent,
 } from "@shared/components/confirm-dialog/confirm-dialog.component";
-import { Modules } from '@feature/entitlement/models/modules.model';
-import { ConfigMiddlewareService } from '../../services/config-middleware.service';
-import { FormControl } from '@angular/forms';
-import { RoleFormComponent } from '../../components/role-form/role-form.component';
+import { ConfigMiddlewareService } from "../../services/config-middleware.service";
+import { FormControl } from "@angular/forms";
+import { RoleFormComponent } from "../../components/role-form/role-form.component";
 
 @Component({
     selector: "app-role",
@@ -34,33 +29,40 @@ export class RoleComponent extends BaseComponent implements OnInit {
     dialogRef: any;
 
     roleName: FormControl;
-    displayedColumns = [ "roleName","description","createdOn","expandIcon","action"];
+    displayedColumns = [
+        "roleName",
+        "description",
+        "createdOn",
+        "expandIcon",
+        "action",
+    ];
 
     constructor(
         public _matDialog: MatDialog,
-        
+
         private _service: ConfigMiddlewareService
     ) {
-        super()
+        super();
     }
     ngOnInit(): void {
-        this.roleName= new FormControl();
+        this.roleName = new FormControl();
         this.getData();
         this.initSearch();
     }
     initSearch() {
-        this.roleName.valueChanges.subscribe((text: string) => {
-            // this.loadAllUsers();
-        });
+        this.roleName.valueChanges.subscribe((text: string) => {});
     }
     getData() {
         this._service.forkRolesData().subscribe(
             (response) => {
                 this.roles = response[0];
                 this.modules = response[1];
-                this.roles= this.roles.map((role) =>( {...role,role_name: role.name}));
+                this.roles = this.roles.map((role) => ({
+                    ...role,
+                    role_name: role.name,
+                }));
             },
-           (response=>super.onError(response))
+            (response) => super.onError(response)
         );
     }
     openDialog(data): void {
@@ -70,8 +72,8 @@ export class RoleComponent extends BaseComponent implements OnInit {
                 data: {
                     role: data ? data : new Role(),
                     userPermissions: this.userPermissions,
-                    modules:this.modules,
-                    roles:this.roles
+                    modules: this.modules,
+                    roles: this.roles,
                 },
                 panelClass: "app-role-form",
             })
@@ -84,16 +86,16 @@ export class RoleComponent extends BaseComponent implements OnInit {
             });
     }
 
-    mapModules(modules){
-        const mapped=modules.map((item)=>{
-            item.text=item.name;
-            item.value=item.id
-            if (item.sub_modules && item.sub_modules.length>0) {
-                item.children=item.sub_modules;
+    mapModules(modules) {
+        const mapped = modules.map((item) => {
+            item.text = item.name;
+            item.value = item.id;
+            if (item.sub_modules && item.sub_modules.length > 0) {
+                item.children = item.sub_modules;
                 this.mapModules(item.sub_modules);
             }
             return item;
-        })
+        });
         return mapped;
     }
     camelToSentenceCase(text) {
@@ -122,11 +124,17 @@ export class RoleComponent extends BaseComponent implements OnInit {
     createRole(data: Role) {
         this._service.createRole(data).subscribe(
             (response) => {
-                this.errorType = "success";
-                this.responseMessage = MESSAGES.CREATED("Role");
-                this._matDialog.closeAll();
+                this._errorEmitService.emit(
+                    MESSAGES.CREATED("Role"),
+                    "success"
+                );
             },
-           (response=>super.onError(response))
+            (response=>{
+                this._errorEmitService.emit(
+                    MESSAGES.UNKNOWN,
+                    "error"
+                );
+            })
         );
     }
     hideMessage() {
@@ -139,7 +147,6 @@ export class RoleComponent extends BaseComponent implements OnInit {
         //     (response) => {
         //         this.errorType = "success";
         //         this.responseMessage = MESSAGES.UPDATED("Role");
-
         //         const index = this.dataSource.data.findIndex(
         //             (x) => x.id == model.id
         //         );
@@ -154,19 +161,11 @@ export class RoleComponent extends BaseComponent implements OnInit {
     onDelete(id: string) {
         this._service.deleteRole(id).subscribe(
             (response) => {
-                // const index = this.dataSource.data.findIndex((x) => x.id == id);
-                // this.roles.splice(index, 1);
-                // this.updateGrid(this.roles);
                 this.errorType = "success";
                 this.hideMessage();
                 this.responseMessage = MESSAGES.DELETED("Role");
             },
-           (response=>super.onError(response))
+            (response) => super.onError(response)
         );
-    }
-    updateGrid(data) {
-        // this.dataSource.data = data;
-        // this.dataSource.paginator = this.paginator;
-        // this.dataSource.sort = this.sort;
     }
 }

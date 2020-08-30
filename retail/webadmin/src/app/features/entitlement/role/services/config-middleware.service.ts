@@ -13,20 +13,9 @@ export class ConfigMiddlewareService {
     constructor(private _networkService: NetworkService) {}
   
 
-    // ************************Modules Section**********************************
     getModules() {
         return this._networkService.getAll(URI.MODULE);
     }
-    createModule(model: Modules) {
-        return this._networkService.post(URI.MODULE, model);
-    }
-    editModule(id: string,model: Modules) {
-        return this._networkService.onUpdate(`${URI.MODULE}/${id}`, model);
-    }
-    deleteModule(id: string) {
-        return this._networkService.onDelete(`${URI.MODULE}/${id}`);
-    }
-     // ************************Roles Section**********************************
      getRoles() {
         return this._networkService.getAll(URI.ROLE);
     }
@@ -45,28 +34,11 @@ export class ConfigMiddlewareService {
             this.getModules()
         ]);
     }
-    // ************************Roles Section**********************************
     getPermissions() {
         return this._networkService.getAll(URI.PERMISSION);
     }
     getRoleModulePermissions(roleModuleId) {
         return this._networkService.getAll('ROLE_MODULE_BY_ID', { roleModuleId });
     }
-    forkConfigData() {
-        return forkJoin([
-            this.getModules(),
-            this.getRoles(),
-            this._networkService.getAll('ROLE_MODULE'),
-            this.getPermissions(),
-        ]);
-    }
-    forkModulesData() {
-        return forkJoin([this.getModules(), this.getPermissions()]);
-    }
-    forkPermissionData(roleModuleId) {
-        return forkJoin([
-            this.getRoleModulePermissions(roleModuleId),
-            this.getPermissions(),
-        ]);
-    }
+ 
 }

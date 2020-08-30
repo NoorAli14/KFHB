@@ -91,7 +91,7 @@ export class InvitationComponent extends BaseComponent implements OnInit {
             }, 1000);
           },
           (error)=>{
-              debugger
+              
           }
       );
     }

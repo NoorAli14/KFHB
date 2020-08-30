@@ -3,7 +3,6 @@ import { camelToSentenceCase } from '@shared/helpers/global.helper';
 import { MatTableDataSource } from '@angular/material/table';
 import { Permission } from '@feature/entitlement/models/config.model';
 import { ConfigMiddlewareService } from '../../services/config-middleware.service';
-import { BaseComponent } from '@shared/components/base/base.component';
 
 @Component({
   selector: 'app-permission-form',

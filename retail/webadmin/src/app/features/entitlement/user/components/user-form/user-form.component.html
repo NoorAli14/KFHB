@@ -22,6 +22,9 @@
     </mat-toolbar>
 
     <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
+        <div *ngIf="responseMessage.length > 0" fxLayout="row" fxLayoutAlign="center" class="p-16  message-box {{ errorType }} ">
+            {{ responseMessage }}
+        </div>
         <div fxLayout="row">
             <form class="p-24" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0" name="userForm" (ngSubmit)="onSubmit()" novalidate [formGroup]="userForm">
                 <div fxLayout="row wrap" fxLayout.lt-lg="column" fxLayoutAlign.lt-lg="center" fxLayoutGap="10px" fxLayoutAlign="start center" fxFlex="1 1 auto">

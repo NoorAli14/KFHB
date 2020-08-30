@@ -1,6 +1,5 @@
 import { ValidatorService } from '@core/services/validator-service/validator.service';
 import { NATIONALITY_LIST, STATUS_LIST, GENDER_LIST } from '@shared/constants/app.constants';
-import { AuthUserService } from "@core/services/user/auth-user.service";
 import {
     Component,
     OnInit,
@@ -12,7 +11,6 @@ import {
 import { FormGroup, Validators, FormControl } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { User } from "@feature/entitlement/models/user.model";
-import { UserService } from "@feature/entitlement/user/services/user.service";
 import { Role } from "@feature/entitlement/models/role.model";
 import { camelToSnakeCase } from "@shared/helpers/global.helper";
 import { BaseComponent } from '@shared/components/base/base.component';
@@ -55,6 +53,10 @@ export class UserFormComponent extends BaseComponent implements OnInit {
         };
     }
     ngOnInit(): void {
+        this._errorEmitService.currentMessage.subscribe(item=>{
+            this.errorType=item.type;
+            this.responseMessage=item.message;
+        })
         this.permissions = this._authUserService.getPermissionsByModule("User");
         this.userForm = new FormGroup({
             id: new FormControl(this.data.user.id),
@@ -97,7 +99,7 @@ export class UserFormComponent extends BaseComponent implements OnInit {
     }
 
     onSubmit() {
-        debugger
+        
         let model = { ...this.userForm.value };
         model.roles = this.userForm.value.roles.map((item) => ({
             id: item,

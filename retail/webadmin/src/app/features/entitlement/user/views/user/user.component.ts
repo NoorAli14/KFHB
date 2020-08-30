@@ -157,15 +157,19 @@ export class UserComponent extends BaseComponent implements OnInit {
     createUser(model: User) {
         this._service.createUser(model).subscribe(
             (response) => {
-                 this.errorType = "success";
-                 this.responseMessage = MESSAGES.INVITATION_SENT;
                 // const data = this.dataSource.data;
                 // data.push(response);
                 // this.updateGrid(data);
-                this._matDialog.closeAll();
+                this._errorEmitService.emit(
+                    MESSAGES.INVITATION_SENT,
+                    "success"
+                );
             },
             (response) => {
-                debugger
+                this._errorEmitService.emit(
+                    MESSAGES.UNKNOWN,
+                    "error"
+                );
             }
         );
     }
@@ -188,7 +192,7 @@ export class UserComponent extends BaseComponent implements OnInit {
                 this._matDialog.closeAll();
             },
             (response) => {
-                debugger
+                
             }
         );
     }
