@@ -1,6 +1,8 @@
 import { Global, Module } from '@nestjs/common';
-import { ConfigurationService } from '@common/configuration/configuration.service';
-import { DBConfigurationService } from '@common/configuration/dbconfiguration.service';
+import {
+  ConfigurationService,
+  DBConfigurationService,
+} from '@rubix/common/configuration/';
 
 @Global()
 @Module({
