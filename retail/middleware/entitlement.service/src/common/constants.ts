@@ -21,6 +21,11 @@ export const NUMBERS = {
   DEFAULT_PAGE_SIZE: 25,
 };
 
+export const HEADER_NAMES = {
+  X_USER_ID: "x-user-id",
+  X_TENANT_ID: "x-tenant-id",
+};
+
 export const STATUS = {
   ACTIVE: 'ACTIVE',
   INACTIVE: 'INACTIVE',

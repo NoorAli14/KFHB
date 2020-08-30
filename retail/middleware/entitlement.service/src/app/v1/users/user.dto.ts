@@ -49,6 +49,10 @@ export class UpdateUserInput {
   gender?: string;
 
   @Field({ nullable: true })
+  @IsOptional()
+  is_owner?: boolean | string;
+
+  @Field({ nullable: true })
   @IsString()
   @IsOptional()
   date_of_birth?: string;

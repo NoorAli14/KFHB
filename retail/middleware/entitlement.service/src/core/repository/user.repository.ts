@@ -1,7 +1,7 @@
 import {Injectable} from "@nestjs/common";
 
 import { BaseRepository } from "./base.repository";
-import {STATUS, TABLE, TEMP_ROLE} from "@common/constants";
+import {STATUS, TABLE} from "@common/constants";
 import {IdsInput} from "@common/inputs/ids.input";
 
 @Injectable()
@@ -19,7 +19,7 @@ export class UserRepository extends BaseRepository {
       const roles: IdsInput[] = user.roles;
       delete user.roles;
       const response = await trx(TABLE.USER).where(condition).update(user, keys);
-      if(roles.length > 0) {
+      if(roles?.length > 0) {
         const rolesToDelete = [];
         const newUserRoles = [];
         for (const role of roles) {
@@ -44,7 +44,8 @@ export class UserRepository extends BaseRepository {
             user_id : response[0].id || response[0],
             role_id : role_id,
             status : STATUS.ACTIVE,
-            created_by : TEMP_ROLE.ADMIN,
+            created_by : user.updated_by,
+            created_on : user.updated_on,
           };
         });
         if(user_roles.length > 0) await trx(TABLE.USER_ROLE).insert(user_roles, ['id']);
@@ -70,7 +71,8 @@ export class UserRepository extends BaseRepository {
             user_id : response[0].id || response[0],
             role_id : role['id'],
             status : STATUS.ACTIVE,
-            created_by : TEMP_ROLE.ADMIN,
+            created_by : user.created_by,
+            created_on : user.created_on,
           };
         });
         await trx(TABLE.USER_ROLE).insert(user_roles, ['id']);

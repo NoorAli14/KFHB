@@ -10,6 +10,7 @@ import {Permission} from "@app/v1/permissions/permission.model";
 import {Fields} from '@common/decorators';
 import {HttpException, HttpStatus} from '@nestjs/common';
 import {MESSAGES} from '@common/constants';
+import {getMutateProps} from '@common/utilities';
 
 @Resolver(Module)
 export class ModuleResolver {
@@ -39,7 +40,10 @@ export class ModuleResolver {
   }
 
   @Mutation(() => Module)
-  async addModule(@Args('input') input: ModuleInput, @Fields() columns: string[]): Promise<Module> {
+  async addModule(@Args('input') input: ModuleInput,
+                  @Fields() columns: string[],
+                  @Context() context: GraphQLExecutionContext): Promise<Module> {
+    input = getMutateProps('created', context['req'].headers, input);
     return this.moduleService.create(input, columns);
   }
 

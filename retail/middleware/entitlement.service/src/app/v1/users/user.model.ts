@@ -32,6 +32,12 @@ export class User {
   gender?: string;
 
   @Field({ nullable: true })
+  is_owner?: string;
+
+  @Field({ nullable: true })
+  tenant_id?: string;
+
+  @Field({ nullable: true })
   date_of_birth?: string;
 
   @Field({ nullable: true })

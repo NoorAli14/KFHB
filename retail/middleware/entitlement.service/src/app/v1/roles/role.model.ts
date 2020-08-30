@@ -15,6 +15,9 @@ export class Role {
   description?: string;
 
   @Field({ nullable: true })
+  tenant_id?: string;
+
+  @Field({ nullable: true })
   status?: string;
 
   @Field({ nullable: true })

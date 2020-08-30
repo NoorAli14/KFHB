@@ -18,7 +18,8 @@ import {Module} from "@app/v1/modules/module.model";
 import {Leave} from "@app/v1/leave/leave.model";
 import {Fields} from "@common/decorators";
 import {HttpException, HttpStatus} from '@nestjs/common';
-import {MESSAGES} from '@common/constants';
+import {MESSAGES, STATUS} from '@common/constants';
+import {getMutateProps, getTenantID} from '@common/utilities';
 
 @Resolver(User)
 export class UsersResolver {
@@ -58,7 +59,11 @@ export class UsersResolver {
   }
 
   @Mutation(() => User)
-  async addUser(@Args('input') input: CreateUserInput, @Fields() columns: string[]): Promise<User> {
+  async addUser(@Args('input') input: CreateUserInput,
+                @Fields() columns: string[],
+                @Context() context: GraphQLExecutionContext): Promise<User> {
+    input = getMutateProps('created', context['req'].headers, input);
+    input['tenant_id'] = getTenantID(context['req'].headers);
     return this.userService.create(input, columns);
   }
 
@@ -66,24 +71,31 @@ export class UsersResolver {
   async updateUser(
     @Args('id') id: string,
     @Args('input') input: UpdateUserInput,
-    @Fields() columns: string[]
+    @Fields() columns: string[],
+    @Context() context: GraphQLExecutionContext
   ): Promise<User> {
     const user: User = await this.userService.findById(id,['id']);
     if(!user) throw new HttpException({
       status: HttpStatus.NOT_FOUND,
       error: MESSAGES.NOT_FOUND,
     }, HttpStatus.NOT_FOUND);
+    input = getMutateProps('updated', context['req'].headers, input);
+    input['tenant_id'] = getTenantID(context['req'].headers);
     return this.userService.update(id, input, columns);
   }
 
   @Mutation(() => Boolean)
-  async deleteUser(@Args('id') id: string): Promise<boolean> {
+  async deleteUser(@Args('id') id: string,
+                   @Context() context: GraphQLExecutionContext): Promise<boolean> {
     const user: User = await this.userService.findById(id,['id']);
     if(!user) throw new HttpException({
       status: HttpStatus.NOT_FOUND,
       error: MESSAGES.NOT_FOUND,
     }, HttpStatus.NOT_FOUND);
-    return this.userService.delete(id);
+    let input = {status: STATUS.INACTIVE};
+    input = getMutateProps('deleted', context['req'].headers, input);
+    input['tenant_id'] = getTenantID(context['req'].headers);
+    return this.userService.delete(id, input);
   }
 
   @ResolveField('roles', returns => [Role])

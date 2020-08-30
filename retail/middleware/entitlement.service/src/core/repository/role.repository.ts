@@ -1,4 +1,5 @@
 import {Injectable} from '@nestjs/common';
+
 import { BaseRepository } from './base.repository';
 import {STATUS, TABLE} from '@common/constants';
 import {IdsInput} from '@common/inputs/ids.input';
@@ -9,6 +10,7 @@ export class RoleRepository extends BaseRepository {
     `${TABLE.ROLE}.id`,
     `${TABLE.ROLE}.name`,
     `${TABLE.ROLE}.status`,
+    `${TABLE.ROLE}.tenant_id`,
     `${TABLE.ROLE}.description`,
     `${TABLE.ROLE}.updated_on`,
     `${TABLE.ROLE}.updated_by`,
@@ -45,7 +47,7 @@ export class RoleRepository extends BaseRepository {
       const module_permission_ids: IdsInput[] = role.permissions;
       delete role.permissions;
       const response = await trx(TABLE.ROLE).where(condition).update(role, keys);
-      if(module_permission_ids.length > 0) {
+      if(module_permission_ids?.length > 0) {
         const modulePermissionsToDelete = [];
         const newModulePermissions = [];
         for (const mpi of module_permission_ids) {

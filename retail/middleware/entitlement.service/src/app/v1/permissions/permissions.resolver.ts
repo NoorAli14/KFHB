@@ -6,6 +6,7 @@ import { KeyValInput } from "@common/inputs/key-val.input";
 import {Fields} from '@common/decorators';
 import {HttpException, HttpStatus} from '@nestjs/common';
 import {MESSAGES} from '@common/constants';
+import {getMutateProps} from '@common/utilities';
 
 @Resolver(Permission)
 export class PermissionsResolver {
@@ -35,7 +36,10 @@ export class PermissionsResolver {
   }
 
   @Mutation(() => Permission)
-  async addPermission(@Args('input') input: PermissionInput, @Fields() columns: string[]): Promise<Permission> {
+  async addPermission(@Args('input') input: PermissionInput,
+                      @Fields() columns: string[],
+                      @Context() context: GraphQLExecutionContext): Promise<Permission> {
+    input = getMutateProps('created', context['req'].headers, input);
     return this.permissionService.create(input, columns);
   }
 

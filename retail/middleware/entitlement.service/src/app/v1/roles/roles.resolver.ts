@@ -9,7 +9,8 @@ import { KeyValInput } from "@common/inputs/key-val.input";
 import { Module } from "@app/v1/modules/module.model";
 import {Fields} from '@common/decorators';
 import {HttpException, HttpStatus} from '@nestjs/common';
-import {MESSAGES} from '@common/constants';
+import {MESSAGES, STATUS} from '@common/constants';
+import {getMutateProps, getTenantID} from '@common/utilities';
 
 @Resolver(Role)
 export class RolesResolver {
@@ -39,7 +40,11 @@ export class RolesResolver {
   }
 
   @Mutation(() => Role)
-  async addRole(@Args('input') input: RoleInput, @Fields() columns: string[]): Promise<Role> {
+  async addRole(@Args('input') input: RoleInput,
+                @Fields() columns: string[],
+                @Context() context: GraphQLExecutionContext): Promise<Role> {
+    input = getMutateProps('created', context['req'].headers, input);
+    input['tenant_id'] = getTenantID(context['req'].headers);
     return this.roleService.create(input, columns);
   }
 
@@ -47,24 +52,31 @@ export class RolesResolver {
   async updateRole(
     @Args('id') id: string,
     @Args('input') input: RoleInput,
-    @Fields() columns: string[]
+    @Fields() columns: string[],
+    @Context() context: GraphQLExecutionContext
   ): Promise<Role> {
     const role: Role = await this.roleService.findById(id,columns);
     if(!role) throw new HttpException({
       status: HttpStatus.NOT_FOUND,
       error: MESSAGES.NOT_FOUND,
     }, HttpStatus.NOT_FOUND);
+    input = getMutateProps('updated', context['req'].headers, input);
+    input['tenant_id'] = getTenantID(context['req'].headers);
     return this.roleService.update(id, input, columns);
   }
 
   @Mutation(() => Boolean)
-  async deleteRole(@Args('id') id: string): Promise<boolean> {
+  async deleteRole(@Args('id') id: string,
+                   @Context() context: GraphQLExecutionContext): Promise<boolean> {
     const role: Role = await this.roleService.findById(id, ['id']);
     if(!role) throw new HttpException({
       status: HttpStatus.NOT_FOUND,
       error: MESSAGES.NOT_FOUND,
     }, HttpStatus.NOT_FOUND);
-    return this.roleService.delete(id);
+    let input = {status: STATUS.INACTIVE};
+    input = getMutateProps('deleted', context['req'].headers, input);
+    input['tenant_id'] = getTenantID(context['req'].headers);
+    return this.roleService.delete(id, input);
   }
 
   @ResolveField('modules', returns => [Module])

@@ -88,8 +88,8 @@ export class UserService {
     }
   }
 
-  async delete(id: string): Promise<any> {
-    const result = await this.update(id, {status: STATUS.INACTIVE});
+  async delete(id: string, input: Record<any, any>): Promise<any> {
+    const result = await this.update(id, input, ['id']);
     return !!result;
   }
 }

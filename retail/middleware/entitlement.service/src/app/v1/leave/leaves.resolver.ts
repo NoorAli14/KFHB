@@ -9,8 +9,9 @@ import {Leave, LeaveWithPagination} from "@app/v1/leave/leave.model";
 import {LeavesService} from "@app/v1/leave/leaves.service";
 import {LeaveInput} from "@app/v1/leave/leave.dto";
 import {HttpException, HttpStatus} from '@nestjs/common';
-import {MESSAGES} from '@common/constants';
+import {MESSAGES, STATUS} from '@common/constants';
 import {Fields} from '@common/decorators';
+import {getMutateProps} from '@common/utilities';
 
 @Resolver(Leave)
 export class LeavesResolver {
@@ -40,7 +41,10 @@ export class LeavesResolver {
   }
 
   @Mutation(() => Leave)
-  async addLeave(@Args('input') input: LeaveInput, @Fields() columns: string[]): Promise<Leave> {
+  async addLeave(@Args('input') input: LeaveInput,
+                 @Fields() columns: string[],
+                 @Context() context: GraphQLExecutionContext): Promise<Leave> {
+    input = getMutateProps('created', context['req'].headers, input);
     return this.leavesService.create(input, columns);
   }
 
@@ -48,23 +52,28 @@ export class LeavesResolver {
   async updateLeave(
     @Args('id') id: string,
     @Args('input') input: LeaveInput,
-    @Fields() columns: string[]
+    @Fields() columns: string[],
+    @Context() context: GraphQLExecutionContext
   ): Promise<Leave> {
     const leave: Leave = await this.leavesService.findById(id,['id']);
     if(!leave) throw new HttpException({
       status: HttpStatus.NOT_FOUND,
       error: MESSAGES.NOT_FOUND,
     }, HttpStatus.NOT_FOUND);
+    input = getMutateProps('updated', context['req'].headers, input);
     return this.leavesService.update(id, input, columns);
   }
 
   @Mutation(() => Boolean)
-  async deleteLeave(@Args('id') id: string): Promise<boolean> {
+  async deleteLeave(@Args('id') id: string,
+                    @Context() context: GraphQLExecutionContext): Promise<boolean> {
     const leave: Leave = await this.leavesService.findById(id,['id']);
     if(!leave) throw new HttpException({
       status: HttpStatus.NOT_FOUND,
       error: MESSAGES.NOT_FOUND,
     }, HttpStatus.NOT_FOUND);
-    return this.leavesService.delete(id);
+    let input = {status: STATUS.INACTIVE};
+    input = getMutateProps('deleted', context['req'].headers, input);
+    return this.leavesService.delete(id, input);
   }
 }
