@@ -9,6 +9,9 @@ export class Customer {
   tenant_id?: string;
 
   @Field({ nullable: true })
+  session_id?: string;
+
+  @Field({ nullable: true })
   email?: string;
 
   @Field({ nullable: true })

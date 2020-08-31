@@ -5,18 +5,22 @@ import {
   RepositoryModule,
   SessionRepository,
   CustomerRepository,
+  DocumentTypeRepository,
+  SessionReferenceRepository,
 } from '@rubix/core';
-import { SessionsResolver } from './sessions.resolver';
-import { SessionsService } from './sessions.service';
+import { DocumentsResolver } from './documents.resolver';
+import { DocumentsService } from './documents.service';
 
 @Module({
   imports: [RepositoryModule, IdentityModule],
   providers: [
-    SessionsService,
+    DocumentsService,
     SessionRepository,
     CustomerRepository,
-    SessionsResolver,
+    DocumentsResolver,
     IdentityService,
+    DocumentTypeRepository,
+    SessionReferenceRepository,
   ],
 })
-export class SessionModule {}
+export class DocumentModule {}

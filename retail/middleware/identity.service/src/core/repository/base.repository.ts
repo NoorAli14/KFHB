@@ -32,7 +32,10 @@ export abstract class BaseRepository {
     const _knex: any = trx || this.connection;
     return _knex(this.tableName)
       .where(condition)
-      .update(newObj, columns);
+      .update(
+        { ...newObj, ...{ updated_on: this.connection.fn.now() } },
+        columns,
+      );
   }
   async delete(condition: { [key: string]: any }): Promise<any> {
     return this.connection(this.tableName)

@@ -1,24 +1,24 @@
 import { Field, ObjectType, ID } from '@nestjs/graphql';
 
 @ObjectType()
-export class Session {
+export class Document {
   @Field(() => ID)
   id?: string;
 
   @Field()
-  customer_id: string;
+  session_id: string;
 
   @Field()
   tenant_id: string;
 
   @Field()
-  check_id?: string;
+  document_type_id?: string;
 
   @Field()
-  reference_id?: string;
+  attachable_id?: string;
 
   @Field({ nullable: true })
-  target_user_id?: string;
+  processed_data?: string;
 
   @Field({ nullable: true })
   status?: string;
@@ -34,4 +34,10 @@ export class Session {
 
   @Field()
   updated_on?: Date;
+
+  @Field()
+  deleted_by: string;
+
+  @Field()
+  deleted_on?: Date;
 }

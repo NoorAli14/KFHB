@@ -5,12 +5,13 @@ import { SESSION_STATUSES } from '@rubix/common';
 import { SessionRepository, CustomerRepository } from '@rubix/core';
 import { Session } from './session.model';
 import { Customer } from '../customers/customer.model';
+import { IdentityService } from '@rubix/common/http/';
 
 @Injectable({ scope: Scope.REQUEST })
 export class SessionsService {
   constructor(
     @Inject(REQUEST) private request: Request,
-    // private readonly identityService: IdentityService,
+    private readonly identityService: IdentityService,
     private readonly sessionDB: SessionRepository,
     private readonly customerDB: CustomerRepository,
   ) {
@@ -19,9 +20,10 @@ export class SessionsService {
 
   async getCustomer(input): Promise<Customer> {
     const customer: any = await this.customerDB.findByIdAndTenentId(
-      input.user.id,
-      input.tenent_id,
+      input.customer_id,
+      input.tenant_id,
     );
+    console.log(`Customer is: ${JSON.stringify(customer, null, 2)}`);
     return customer;
   }
   async create(
@@ -32,25 +34,32 @@ export class SessionsService {
     try {
       console.log(input);
       const customer: Customer = await this.getCustomer(input);
-      // const checkId: any = await this.identityService.createUser(
-      //   customer.target_user_id,
-      // );
+
+      const checkId: any = await this.identityService.createCheckId(
+        customer.target_user_id,
+        input.reference_id,
+      );
       input = {
         ...input,
         ...{
           target_user_id: customer.target_user_id,
-          // check_id: checkId.id,
+          check_id: checkId.id,
           status: SESSION_STATUSES.ACTIVE,
         },
       };
       await this.sessionDB.update(
-        { user_id: customer.id },
+        { customer_id: customer.id },
         { status: SESSION_STATUSES.ARCHIVED },
         ['id'],
         trx,
       );
       const [session] = await this.sessionDB.create(input, columns, trx);
-      await this.customerDB.update({ session_id: session.id }, ['id'], trx),
+      await this.customerDB.update(
+        { id: customer.id },
+        { session_id: session.id },
+        ['id'],
+        trx,
+      ),
         await trx.commit();
       return session;
     } catch (error) {

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { get } from 'lodash';
 import * as dotenv from 'dotenv';
-import { isTruthy } from '@common/utilities';
+import { isTruthy } from '@rubix/common/utilities';
 import {
   iAPP,
   iDATABASE,
@@ -9,6 +9,7 @@ import {
   iGRAPHQL,
   iConfig,
 } from '@rubix/common/interfaces/configuration.interface';
+
 export const DEFAULT_ENV: iConfig = {
   APP: {
     NAME: 'Rubix | Identity Service',
@@ -50,12 +51,12 @@ export class ConfigurationService {
 
   get IDENTITYX() {
     return {
-      BASE_URL: 'https://aionuatserver.uaenorth.cloudapp.azure.com:8443',
+      BASE_URL: 'https://aiondaonserver3.westindia.cloudapp.azure.com',
       VERSION: 'v1',
       USERNAME: 'aionadmin',
-      PASSWORD: 'iondigital123',
-      TOKEN: null,
-      TENANT: 'kfhk-test',
+      PASSWORD: 'aiondigital123',
+      TOKEN: 'Basic YWRtaW46RTloZ29ZbnQ=',
+      TENANT: 'aion',
     };
   }
   // Parse iApp Environment Variables

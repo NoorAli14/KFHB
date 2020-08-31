@@ -13,16 +13,16 @@ import {
   Fields,
   CurrentUser,
   Tenant,
-  SESSION_STATUSES,
+  DOCUMENT_STATUSES,
 } from '@rubix/common';
-import { Session } from './session.model';
-import { SessionsService } from './sessions.service';
-import { NewSessionInput } from './session.dto';
+import { Document } from './document.model';
+import { DocumentsService } from './documents.service';
+import { NewDocumentInput } from './document.dto';
 
-@Resolver(Session)
+@Resolver(Document)
 @UseGuards(AuthGuard)
-export class SessionsResolver {
-  constructor(private readonly sessionService: SessionsService) {}
+export class DocumentsResolver {
+  constructor(private readonly documentService: DocumentsService) {}
 
   // @Query(() => [Session])
   // users(@Fields() columns: string[]): Promise<Session[]> {
@@ -41,22 +41,24 @@ export class SessionsResolver {
   //   return user;
   // }
 
-  @Mutation(() => Session)
-  addSession(
-    // @Args('input') input: NewSessionInput,
+  @Mutation(() => Document)
+  addDocument(
+    @Args('input') input: NewDocumentInput,
     @CurrentUser() customer: any,
     @Tenant() tenant: any,
     @Fields() columns: string[],
-  ): Promise<Session> {
-    const params: Session = {
-      customer_id: customer.id,
-      tenant_id: tenant.id,
-      reference_id: uuid(),
-      status: SESSION_STATUSES.ACTIVE,
-      created_by: customer.id,
-      updated_by: customer.id,
+  ): Promise<Document> {
+    const params: any = {
+      ...input,
+      ...{
+        customer_id: customer.id,
+        tenant_id: tenant.id,
+        status: DOCUMENT_STATUSES.PROCESSING,
+        created_by: customer.id,
+        updated_by: customer.id,
+      },
     };
-    return this.sessionService.create(params, columns);
+    return this.documentService.create(params, columns);
   }
 
   // @Mutation(() => Session)

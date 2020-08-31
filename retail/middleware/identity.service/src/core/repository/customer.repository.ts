@@ -4,6 +4,11 @@ import { BaseRepository } from './base.repository';
 
 @Injectable()
 export class CustomerRepository extends BaseRepository {
+  private readonly __attributes: string[] = [
+    'id',
+    'session_id',
+    'target_user_id',
+  ];
   constructor() {
     super(TABLE.CUSTOMER);
   }
@@ -13,9 +18,8 @@ export class CustomerRepository extends BaseRepository {
     tenant_id: string,
     columns?: string[],
   ): Promise<any> {
-    columns = columns || ['id', 'session_id', 'target_user_id'];
     return this.connection(this.tableName)
-      .select(columns)
+      .select(columns || this.__attributes)
       .where({ id, tenant_id, deleted_on: null })
       .first();
   }
