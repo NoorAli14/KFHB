@@ -79,23 +79,23 @@ services:
     networks:
       - core_service_network
 
-  #=================================================================
-  # Onboarding Business Service
-  #=================================================================
-  onboarding-business-service:
-    build:
-      context: ../../../retail/middleware/onboarding.business.service
-      dockerfile: Dockerfile
-    image: "onboarding-business-service:v1"
-    container_name: "onboarding_business_service"
-    environment:
-      - ENV_RBX_PORT=4000
-      - ENV_RBX_APP_NAME=Rubix Onboarding Business Service
-      - ENV_RBX_SWAGGER_ENABLED=true
-      - ENV_RBX_API_URL_PREFIX=api/v1/onboarding/
-    restart: always
-    networks:
-      - core_service_network
+  # #=================================================================
+  # # Onboarding Business Service
+  # #=================================================================
+  # onboarding-business-service:
+  #   build:
+  #     context: ../../../retail/middleware/onboarding.business.service
+  #     dockerfile: Dockerfile
+  #   image: "onboarding-business-service:v1"
+  #   container_name: "onboarding_business_service"
+  #   environment:
+  #     - ENV_RBX_PORT=4000
+  #     - ENV_RBX_APP_NAME=Rubix Onboarding Business Service
+  #     - ENV_RBX_SWAGGER_ENABLED=true
+  #     - ENV_RBX_API_URL_PREFIX=api/v1/onboarding/
+  #   restart: always
+  #   networks:
+  #     - core_service_network
 
   #=================================================================
   # Template Service
