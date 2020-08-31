@@ -59,24 +59,15 @@ export class RoleService {
     return this.gqlClient.send(params);
   }
 
-  async findOne(id: string): Promise<Role> {
+  async findOne(id: string, output?: string): Promise<Role> {
     const params = `query {
-      result: findRole(id: "${id}") 
-    }`;
-    return this.gqlClient.send(params);
-  }
-
-  async findById(id: string): Promise<Role> {
-    const params = `query {
-      result: findRole(id: "${id}") {
-        id
-      }
+      result: findRoleById(id: "${id}") ${output || this.output}
     }`;
     return this.gqlClient.send(params);
   }
 
   async update(id: string, input: RoleDto): Promise<Role> {
-    const role: Role = await this.findById(id);
+    const role: Role = await this.findOne(id, '{id}');
     if (!role) {
       throw new NotFoundException('Role Not Found');
     }
@@ -87,7 +78,7 @@ export class RoleService {
   }
 
   async delete(id: string): Promise<boolean> {
-    const role: Role = await this.findById(id);
+    const role: Role = await this.findOne(id, '{id}');
     if (!role) {
       throw new NotFoundException('Role Not Found');
     }

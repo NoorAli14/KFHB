@@ -76,10 +76,10 @@ export class RoleRepository extends BaseRepository {
         if(module_permission_roles.length > 0) await trx(TABLE.MODULE_PERMISSION_ROLE).insert(module_permission_roles, ['id']);
       }
       await trx.commit();
-      return response
+      return response;
     } catch (e) {
       await trx.rollback();
-      throw e
+      throw e;
     }
   }
 

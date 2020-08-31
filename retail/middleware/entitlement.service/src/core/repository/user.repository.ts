@@ -78,10 +78,10 @@ export class UserRepository extends BaseRepository {
         await trx(TABLE.USER_ROLE).insert(user_roles, ['id']);
       }
       await trx.commit();
-      return response
+      return response;
     } catch (e) {
       await trx.rollback();
-      throw e
+      throw e;
     }
   }
 }

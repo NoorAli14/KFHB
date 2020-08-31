@@ -1,0 +1,92 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+directive @key(fields: String!) on OBJECT | INTERFACE
+
+directive @extends on OBJECT | INTERFACE
+
+directive @external on OBJECT | FIELD_DEFINITION
+
+directive @requires(fields: String!) on FIELD_DEFINITION
+
+directive @provides(fields: String!) on FIELD_DEFINITION
+
+input CreateCustomerInput {
+  first_name: String
+  last_name: String
+  email: String
+  contact_no: String
+}
+
+input CreateSessionInput {
+  type: String
+  file: String
+}
+
+type Customer {
+  id: ID
+  tenant_id: String
+  session_id: String
+  email: String
+  target_user_id: String
+  contact_no: String
+  first_name: String
+  middle_name: String
+  last_name: String
+  gender: String
+  date_of_birth: String
+  nationality_id: String
+  status: String
+  created_on: String
+  created_by: String
+  updated_on: String
+  updated_by: String
+  deleted_on: String
+  deleted_by: String
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Document {
+  id: ID!
+  session_id: String!
+  tenant_id: String!
+  document_type_id: String!
+  attachable_id: String!
+  processed_data: String
+  status: String
+  created_by: String!
+  created_on: DateTime!
+  updated_by: String!
+  updated_on: DateTime!
+  deleted_by: String!
+  deleted_on: DateTime!
+}
+
+type Mutation {
+  addSession: Session!
+  addCustomer(input: CreateCustomerInput!): Customer!
+  addDocument(input: CreateSessionInput!): Document!
+}
+
+type Query {
+  findCustomerById(id: String!): Customer!
+}
+
+type Session {
+  id: ID!
+  customer_id: String!
+  tenant_id: String!
+  check_id: String!
+  reference_id: String!
+  target_user_id: String
+  status: String
+  created_by: String!
+  created_on: DateTime!
+  updated_by: String!
+  updated_on: DateTime!
+}

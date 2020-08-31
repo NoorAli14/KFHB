@@ -1,18 +1,51 @@
-import { Module, HttpModule } from '@nestjs/common';
+import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
+
+import { UserService } from '@app/v1/users/users.service';
+import { UserModule } from '@app/v1/users/users.module';
+
+import { LocalStrategy } from './strategies/local.strategy';
+import { JwtStrategy } from './strategies/jwt.strategy';
 import { AuthController } from './auth.controller';
-import { CommonModule } from '@common/common.module';
-import { ServiceRegistry } from '@common/service.registry';
+import { AuthService } from './auth.service';
+import {
+  RedisClientService,
+  GqlClientService,
+  GqlClientModule,
+  CommonModule,
+  ConfigurationService,
+} from '@common/index';
 
 @Module({
   imports: [
-    HttpModule.registerAsync({
+    CommonModule,
+    UserModule,
+    GqlClientModule,
+    PassportModule.register({
+      defaultStrategy: 'jwt',
+      property: 'user',
+      session: false,
+    }),
+    JwtModule.registerAsync({
       imports: [CommonModule],
-      useFactory: async (serviceRegistry: ServiceRegistry) =>
-        serviceRegistry.get('CUSTOMER'),
-      inject: [ServiceRegistry],
+      inject: [ConfigurationService],
+      useFactory: async (configService: ConfigurationService) => ({
+        secret: configService.JWT.SECRET,
+        algorithm: configService.JWT.ALGORITHM
+      }),
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthController],
+  providers: [
+    UserService,
+    AuthService,
+    GqlClientService,
+    LocalStrategy,
+    ConfigurationService,
+    JwtStrategy,
+    RedisClientService,
+  ],
+  exports: [PassportModule, LocalStrategy, AuthService],
 })
 export class AuthModule {}
