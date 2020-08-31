@@ -25,7 +25,7 @@ input CreateUserInput {
   middle_name: String
   last_name: String
   gender: String
-  is_owner: String
+  is_owner: Boolean
   date_of_birth: String
   nationality_id: String
   status: String
@@ -259,7 +259,7 @@ input UpdateUserInput {
   middle_name: String
   last_name: String
   gender: String
-  is_owner: String
+  is_owner: Boolean
   date_of_birth: String
   nationality_id: String
   status: String
