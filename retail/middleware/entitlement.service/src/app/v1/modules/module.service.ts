@@ -9,7 +9,7 @@ export class ModuleService {
   constructor(private moduleDB: ModuleRepository) {}
 
   async list(keys: string[], paginationParams: Record<string, any>): Promise<any> {
-    return this.moduleDB.listWithPagination(paginationParams, keys);
+    return this.moduleDB.listWithPagination(paginationParams, keys, {parent_id: null});
   }
 
   async findById(id: string, keys?: string[]): Promise<any> {
