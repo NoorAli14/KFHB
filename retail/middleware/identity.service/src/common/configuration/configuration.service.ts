@@ -51,12 +51,12 @@ export class ConfigurationService {
 
   get IDENTITYX() {
     return {
-      BASE_URL: 'https://aiondaonserver3.westindia.cloudapp.azure.com',
-      VERSION: 'v1',
-      USERNAME: 'aionadmin',
-      PASSWORD: 'aiondigital123',
-      TOKEN: 'Basic YWRtaW46RTloZ29ZbnQ=',
-      TENANT: 'aion',
+      BASE_URL: this.get('ENV_RBX_IDENTITYX_BASE_URL'),
+      VERSION: this.get('ENV_RBX_IDENTITYX_API_VERSION'),
+      USERNAME: this.get('ENV_RBX_IDENTITYX_USERNAME'),
+      PASSWORD: this.get('ENV_RBX_IDENTITYX_PASSWORD'),
+      TOKEN: this.get('ENV_RBX_IDENTITYX_TOKEN'),
+      TENANT: this.get('ENV_RBX_IDENTITYX_TENANT'),
     };
   }
   // Parse iApp Environment Variables
