@@ -80,7 +80,6 @@ export class UsersResolver {
       error: MESSAGES.NOT_FOUND,
     }, HttpStatus.NOT_FOUND);
     input = getMutateProps('updated', context['req'].headers, input);
-    input['tenant_id'] = getTenantID(context['req'].headers);
     return this.userService.update(id, input, columns);
   }
 
@@ -94,7 +93,6 @@ export class UsersResolver {
     }, HttpStatus.NOT_FOUND);
     let input = {status: STATUS.INACTIVE};
     input = getMutateProps('deleted', context['req'].headers, input);
-    input['tenant_id'] = getTenantID(context['req'].headers);
     return this.userService.delete(id, input);
   }
 
