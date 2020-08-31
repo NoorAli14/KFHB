@@ -26,8 +26,8 @@ export abstract class BaseRepository {
       await this._connection(this._tableName).where(condition).count('id as count').first():
       await this._connection(this._tableName).count('id as count').first();
     const rows = condition?
-      await this._connection(this._tableName).where(condition).offset(offset).limit(limitPerPage):
-      await this._connection(this._tableName).offset(offset).limit(limitPerPage);
+      await this._connection(this._tableName).where(condition).offset(offset).limit(limitPerPage).orderBy('created_on', 'desc'):
+      await this._connection(this._tableName).offset(offset).limit(limitPerPage).orderBy('created_on', 'desc');
     const count = parseInt(String(total.count), 10);
     pagination.from= offset;
     pagination.to = offset + rows.length;
