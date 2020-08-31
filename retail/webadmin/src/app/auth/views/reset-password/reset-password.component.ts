@@ -83,7 +83,7 @@ export class ResetPasswordComponent extends BaseComponent implements OnInit, OnD
         this._authService.resetPassword(model,this.token).subscribe(
             (response) => {
                  this.errorType = "success";
-                 this.responseMessage = MESSAGES.PASSWORD_UPDATED;
+                 this.responseMessage = MESSAGES.PASSWORD_UPDATED();
             },
            (response=>super.onError(response))
         );
@@ -95,7 +95,7 @@ export class ResetPasswordComponent extends BaseComponent implements OnInit, OnD
             },
             (error) => {
                  this.errorType = "error";
-                 this.responseMessage = MESSAGES.INVALID_RESET_TOKEN;
+                 this.responseMessage = MESSAGES.INVALID_RESET_TOKEN();
             }
         );
     }

@@ -75,7 +75,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
         this._authService.login(model).subscribe(
             (response) => {
                 this.errorType = "success";
-                this.responseMessage = MESSAGES.LOGGED_IN;
+                this.responseMessage = MESSAGES.LOGGED_IN();
                 // if (model.rememberMe) {
                 //     this.cookie.set("email", model.email);
                 //     this.cookie.set("password", model.password);
@@ -92,9 +92,9 @@ export class LoginComponent extends BaseComponent implements OnInit {
             (response) => {
                 this.errorType = "error";
                 if(response.statusCode===401){
-                    this.responseMessage = MESSAGES.INVALID_CREDENTIAL;
+                    this.responseMessage = MESSAGES.INVALID_CREDENTIAL();
                 }else{
-                    this.responseMessage = MESSAGES.UNKNOWN;
+                    this.responseMessage = MESSAGES.UNKNOWN();
                 }
             }
         );

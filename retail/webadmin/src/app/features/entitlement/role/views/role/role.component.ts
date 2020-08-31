@@ -105,7 +105,7 @@ export class RoleComponent extends BaseComponent implements OnInit {
         return camelToSnakeCaseText(text);
     }
     confirmDialog(id): void {
-        const message = MESSAGES.REMOVE_CONFIRMATION;
+        const message = MESSAGES.REMOVE_CONFIRMATION();
         const dialogData = new ConfirmDialogModel("Confirm Action", message);
         const dialogRef = this._matDialog.open(ConfirmDialogComponent, {
             data: dialogData,
@@ -131,7 +131,7 @@ export class RoleComponent extends BaseComponent implements OnInit {
             },
             (response=>{
                 this._errorEmitService.emit(
-                    MESSAGES.UNKNOWN,
+                    MESSAGES.UNKNOWN(),
                     "error"
                 );
             })

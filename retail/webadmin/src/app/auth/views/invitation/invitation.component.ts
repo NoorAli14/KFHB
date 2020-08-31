@@ -94,7 +94,7 @@ export class InvitationComponent extends BaseComponent implements OnInit {
           },
           (error)=>{
             this.errorType = "error";
-            this.responseMessage = MESSAGES.UNKNOWN;
+            this.responseMessage = MESSAGES.UNKNOWN();
           }
       );
     }
@@ -108,9 +108,9 @@ export class InvitationComponent extends BaseComponent implements OnInit {
                 this.errorType = "error";
                 if(response.error){
                     this.errorType = "info";
-                    this.responseMessage = MESSAGES.ALREADY_ONBOARD;
+                    this.responseMessage = MESSAGES.ALREADY_ONBOARD();
                 }else{
-                    this.responseMessage = MESSAGES.UNKNOWN;
+                    this.responseMessage = MESSAGES.UNKNOWN();
                 }
             }
         );

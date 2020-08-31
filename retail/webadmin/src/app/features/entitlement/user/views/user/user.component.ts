@@ -137,7 +137,7 @@ export class UserComponent extends BaseComponent implements OnInit {
         return camelToSentenceCase(text);
     }
     confirmDialog(type,id): void {
-        const message = type==='invite' ? MESSAGES.RESEND_INVITE : MESSAGES.REMOVE_CONFIRMATION;
+        const message = type==='invite' ? MESSAGES.RESEND_INVITE() : MESSAGES.REMOVE_CONFIRMATION();
         const dialogData = new ConfirmDialogModel("Confirm Action", message);
         const dialogRef = this._matDialog.open(ConfirmDialogComponent, {
             data: dialogData,
@@ -156,7 +156,7 @@ export class UserComponent extends BaseComponent implements OnInit {
         this._service.resendInvite(id).subscribe(
             (response) => {
                 this.errorType = "success";
-                this.responseMessage = MESSAGES.INVITE_RESENT;
+                this.responseMessage = MESSAGES.INVITE_RESENT();
                this.hideMessage()
             },
             (response=>super.onError(response))
@@ -175,7 +175,7 @@ export class UserComponent extends BaseComponent implements OnInit {
             },
             (response) => {
                 this._errorEmitService.emit(
-                    MESSAGES.UNKNOWN,
+                    MESSAGES.UNKNOWN(),
                     "error"
                 );
             }
@@ -201,7 +201,7 @@ export class UserComponent extends BaseComponent implements OnInit {
             },
             (response) => {
                 this._errorEmitService.emit(
-                    MESSAGES.UNKNOWN,
+                    MESSAGES.UNKNOWN(),
                     "error"
                 );
             }

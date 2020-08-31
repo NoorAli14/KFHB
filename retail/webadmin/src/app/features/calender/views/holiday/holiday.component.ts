@@ -92,7 +92,7 @@ export class HolidayComponent extends BaseComponent implements OnInit {
         });
     }
     confirmDialog(): void {
-        const message = MESSAGES.REMOVE_CONFIRMATION;
+        const message = MESSAGES.REMOVE_CONFIRMATION();
         const dialogData = new ConfirmDialogModel("Confirm Action", message);
         const dialogRef = this._matDialog.open(ConfirmDialogComponent, {
             data: dialogData,

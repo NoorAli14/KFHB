@@ -13,6 +13,7 @@ export class BaseComponent implements OnInit {
     userPermissions: any[];
     responseMessage: string = "";
     errorType: string = "";
+    randomNo: number;
     protected _authUserService: AuthUserService;
     protected   _errorEmitService:ErrorEmitterService;
     constructor(
@@ -23,12 +24,13 @@ export class BaseComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.randomNo= Math.random();
         this.userPermissions = this._authUserService.getPermissionsByModule(
             this.moduleType
           );
     }
     onError(response){
         this.errorType = "error";
-        this.responseMessage = MESSAGES.UNKNOWN;
+        this.responseMessage = MESSAGES.UNKNOWN();
     }
 }
