@@ -41,10 +41,10 @@ FROM node:12.18.3-alpine
 # Version will be changed during CI/CD process
 LABEL maintainer="AionDigital"
 LABEL version="0.1.0 (alpha)"
-LABEL description="Container for running rubix boilerplate"
+LABEL description="Container for running identity service"
 
 # Define default arguments
-ARG PORT=4000
+ARG PORT=4010
 ARG WORKDIR=/home/aiondigital/rubix
 ARG USER=node
 ARG NODE_ENV=production
@@ -83,7 +83,7 @@ RUN rm -rf src test
 # These variables will be different from application to application
 ENV ENV_RBX_HOST=${PORT} \
     NODE_ENV=${NODE_ENV} \
-    ENV_RBX_APP_NAME="Rubix boilerplate"  \
+    ENV_RBX_APP_NAME="Identity Service"  \
     ENV_RBX_API_URL_PREFIX="/api/v1/" \
     ENV_RBX_HOST="http://localhost" \
     TZ=${TZ} \
