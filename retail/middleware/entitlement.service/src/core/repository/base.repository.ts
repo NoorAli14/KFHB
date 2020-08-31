@@ -1,6 +1,6 @@
 import { InjectKnex, Knex } from 'nestjs-knex';
 import {PaginationModel} from '@common/models';
-import {NUMBERS} from '@common/constants';
+import {NUMBERS, PAGINATION_PARAMS} from '@common/constants';
 export abstract class BaseRepository {
   @InjectKnex() protected readonly _connection: Knex;
   protected _tableName: string;
@@ -16,8 +16,8 @@ export abstract class BaseRepository {
   async listWithPagination(paginationParams: Record<string, any>,
                            keys: string | string[],
                            condition?: Record<string, any>): Promise<any> {
-    const perPage = parseInt(String(paginationParams['perPage']), 10);
-    const currentPage = parseInt(String(paginationParams['currentPage']), 10);
+    const perPage = parseInt(String(paginationParams[PAGINATION_PARAMS.PER_PAGE]), 10);
+    const currentPage = parseInt(String(paginationParams[PAGINATION_PARAMS.PAGE]), 10);
     const pagination: PaginationModel = {};
     const limitPerPage = perPage || NUMBERS.DEFAULT_PAGE_SIZE;
     const page = Math.max(currentPage || 1, 1);

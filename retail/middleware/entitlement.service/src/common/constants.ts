@@ -32,6 +32,11 @@ export const STATUS = {
   PENDING: 'PENDING',
 };
 
+export const PAGINATION_PARAMS = {
+  PAGE: 'page',
+  PER_PAGE: 'perPage',
+};
+
 export const TEMP_ROLE = {
   ADMIN: 'ADMIN',
   SYSTEM: 'SYSTEM',
