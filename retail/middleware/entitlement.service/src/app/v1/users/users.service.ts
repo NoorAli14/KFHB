@@ -14,11 +14,11 @@ export class UserService {
               private configService: ConfigurationService) {}
 
   async list(keys: string[], paginationParams: Record<string, any>): Promise<any> {
-    return this.userDB.listWithPagination(paginationParams, keys,{"deleted_on" : null});
+    return this.userDB.listWithPagination(paginationParams, keys,{deleted_on : null});
   }
 
   async findById(id: string, keys?: string[]): Promise<any> {
-    return this.userDB.findOne({ id: id }, keys);
+    return this.userDB.findOne({ id: id, deleted_on : null }, keys);
   }
 
   async resetInvitationToken(id: string, keys?: string[]): Promise<any> {
@@ -34,6 +34,7 @@ export class UserService {
     checks.forEach(check => {
       conditions[check.record_key] = check.record_value;
     });
+    conditions['deleted_on'] = null;
     return this.userDB.findBy(conditions, keys);
   }
 
@@ -52,7 +53,7 @@ export class UserService {
       userObj.password_digest = this.encrypter.encryptPassword(userObj.password);
       delete userObj.password;
     }
-    const [result] = await this.userDB.update({ id: id }, userObj, keys);
+    const [result] = await this.userDB.update({ id: id, deleted_on : null }, userObj, keys);
     if(!result) {
       throw new HttpException({
         status: HttpStatus.BAD_REQUEST,

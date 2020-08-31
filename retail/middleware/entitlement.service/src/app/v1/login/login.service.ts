@@ -4,7 +4,7 @@ import { KeyValInput } from "@common/inputs/key-val.input";
 import {UserService} from "@app/v1/users/users.service";
 import {LoginInput} from "@app/v1/login/login.dto";
 import {Encrypter} from "@common/encrypter";
-import {MESSAGES, STATUS} from "@common/constants";
+import {MESSAGES} from "@common/constants";
 
 @Injectable()
 export class LoginService {
@@ -17,8 +17,8 @@ export class LoginService {
         record_value: loginInput.email
       },
       {
-        record_key: 'status',
-        record_value: STATUS.ACTIVE
+        record_key: 'deleted_on',
+        record_value: null
       }
     ];
     keys.push('password_digest');

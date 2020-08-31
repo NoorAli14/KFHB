@@ -9,11 +9,11 @@ export class HolidaysService {
   constructor(private holidayRepository: HolidayRepository) {}
 
   async list(keys: string[], paginationParams: Record<string, any>): Promise<any> {
-    return this.holidayRepository.listWithPagination(paginationParams, keys, { status: STATUS.ACTIVE });
+    return this.holidayRepository.listWithPagination(paginationParams, keys, {deleted_on : null});
   }
 
   async findById(id: string, keys?: string[]): Promise<any> {
-    return this.holidayRepository.findOne({ id: id }, keys);
+    return this.holidayRepository.findOne({ id: id, deleted_on : null }, keys);
   }
 
   async findByProperty(checks: KeyValInput[], keys?: string[]): Promise<any> {
@@ -21,6 +21,7 @@ export class HolidaysService {
     checks.forEach(check => {
       conditions[check.record_key] = check.record_value;
     });
+    conditions['deleted_on'] = null;
     return this.holidayRepository.findBy(conditions, keys);
   }
 
@@ -42,7 +43,7 @@ export class HolidaysService {
         }, HttpStatus.BAD_REQUEST,
       );
     }
-    const [result] = await this.holidayRepository.update({ id: id }, newObj, keys);
+    const [result] = await this.holidayRepository.update({ id: id, deleted_on : null }, newObj, keys);
     if(!result) {
       throw new HttpException({
         status: HttpStatus.BAD_REQUEST,

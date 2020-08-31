@@ -9,7 +9,7 @@ export class ModuleService {
   constructor(private moduleDB: ModuleRepository) {}
 
   async list(keys: string[], paginationParams: Record<string, any>): Promise<any> {
-    return this.moduleDB.listWithPagination(paginationParams, keys,{"status":STATUS.ACTIVE});
+    return this.moduleDB.listWithPagination(paginationParams, keys);
   }
 
   async findById(id: string, keys?: string[]): Promise<any> {
@@ -66,7 +66,6 @@ export class ModuleService {
   }
 
   async delete(id: string): Promise<any> {
-    const result = await this.update(id, {status: STATUS.INACTIVE}, ['id']);
-    return !!result;
+    return await this.moduleDB.delete({ id: id });
   }
 }

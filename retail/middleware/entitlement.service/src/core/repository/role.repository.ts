@@ -27,6 +27,7 @@ export class RoleRepository extends BaseRepository {
   async listRolesByUserID(userIds): Promise<any> {
     const condition = {};
     condition[`${TABLE.ROLE}.status`] = STATUS.ACTIVE;
+    condition[`${TABLE.ROLE}.deleted_on`] = null;
     return this._connection(TABLE.ROLE)
       .select([...this.__attributes, `${TABLE.USER_ROLE}.user_id`])
       .leftJoin(
