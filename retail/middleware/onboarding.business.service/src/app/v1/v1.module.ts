@@ -20,13 +20,11 @@ let services: iSERVICE[];
 if (process.env.NODE_ENV === 'production') {
   services = [
     { name: 'identity', url: 'http://identity_service:4010/graphql' },
-    { name: 'users', url: 'http://user_management_service:5020/graphql' },
-    { name: 'notifications', url: 'http://notification_service:5030/graphql' },
+    { name: 'compliance', url: 'http://compliance_service:5010/graphql' },
   ];
 } else {
   services = [
     { name: 'identity', url: 'http://localhost:4010/graphql' },
-    { name: 'users', url: 'http://localhost:5020/graphql' },
     { name: 'compliance', url: 'http://localhost:5010/graphql' },
   ];
 }
