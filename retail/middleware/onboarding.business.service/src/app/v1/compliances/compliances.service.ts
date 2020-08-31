@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Template } from './compliance.entity';
-import { GqlClientService } from '@common/index';
+import { GqlClientService, toGraphql } from '@common/index';
 
 @Injectable()
 export class ComplianceService {
@@ -41,6 +41,20 @@ export class ComplianceService {
     const params = `query {
       result: findTemplateByName(name: "${name}") ${this._output}
     }`;
+    return this.gqlClient.send(params);
+  }
+
+  async submitResponse(input: { [key: string]: string }): Promise<any> {
+    const params: string = `mutation {
+      result: addTemplateResponse(input: ${toGraphql(input)}
+      ) {
+        id
+        remarks
+        created_on
+        updated_on
+      }
+    }
+  }`;
     return this.gqlClient.send(params);
   }
 }
