@@ -74,8 +74,6 @@ services:
       - ENV_RBX_WEB_RESET_PASSWORD_LINK=$ENV_RBX_WEB_RESET_PASSWORD_LINK
       - ENV_RBX_REDIS_URL=$ENV_RBX_REDIS_URL
     restart: always
-    depends_on:
-      - redis-server
     networks:
       - core_service_network
 
