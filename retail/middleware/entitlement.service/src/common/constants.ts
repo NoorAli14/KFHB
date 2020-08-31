@@ -70,6 +70,15 @@ export const MODULES = [
           {
             name: 'view',
           },
+          {
+            name: 'edit',
+          },
+          {
+            name: 'delete',
+          },
+          {
+            name: 'create',
+          },
         ],
       },
     ],
