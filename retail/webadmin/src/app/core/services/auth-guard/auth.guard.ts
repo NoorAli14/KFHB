@@ -9,7 +9,7 @@ import {
 import { CoreModule } from "@core/core.module";
 
 @Injectable({
-    providedIn: CoreModule,
+    providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
     constructor(

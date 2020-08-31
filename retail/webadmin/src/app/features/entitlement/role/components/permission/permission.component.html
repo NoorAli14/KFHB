@@ -1,0 +1,32 @@
+<div [class.sub-row]="title" *ngIf="modulesMapped.length>0">
+    <p>{{ title }}</p>
+    <mat-table #table matSort matSortActive="id" matSortDirection="asc" matSortDisableClear [dataSource]="dataSource" [@animateStagger]="{ value: '50' }">
+
+         <!-- COLUMNS AND ROWS-->
+         <ng-container *ngFor="let key of displayedColumns" [matColumnDef]="key">
+            <mat-header-cell *matHeaderCellDef>{{ camelToSentenceCase(key)  }}</mat-header-cell>
+    
+            <mat-cell *matCellDef="let element; let i = dataIndex">
+                <span *ngIf="!key.includes('can'); else icon">{{ element[key]  }}</span>
+
+                <ng-template #icon>
+                   <span style="margin-left: 5px;"> <mat-icon style="color:green" *ngIf="element[key]" >done </mat-icon>
+                    <mat-icon style="color:red"  *ngIf="!element[key]" >close</mat-icon></span>
+                </ng-template>
+            </mat-cell>
+        </ng-container>
+        <!-- -->
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;" [@animate]="{value:'*',params:{y:'100%'}}">
+        </mat-row>
+    </mat-table>
+</div>
+
+<div
+*ngIf="modulesMapped.length <1"
+fxLayout="row"
+fxLayoutAlign="center"
+class="p-16 "
+>
+ No module assigned to this role
+</div>
