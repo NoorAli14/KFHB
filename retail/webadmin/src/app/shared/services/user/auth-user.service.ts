@@ -115,7 +115,6 @@ export class AuthUserService {
                 if (!element.children) return;
                 const returned = this.findPermission(element.children, name);
                 module = returned;
-                flag = true;
             } else {
                 flag = true;
                 module = element;

@@ -8,7 +8,6 @@ import { fuseAnimations } from "@fuse/animations";
 import { MatTableDataSource } from "@angular/material/table";
 import { Permission } from "@feature/entitlement/models/config.model";
 import { camelToSentenceCase } from "@shared/helpers/global.helper";
-import { ErrorEmitterService } from '@core/services/error-emitter/error-emitter.service';
 
 @Component({
     selector: "app-role-form",
@@ -29,7 +28,7 @@ export class RoleFormComponent extends BaseComponent implements OnInit {
         @Inject(MAT_DIALOG_DATA) public data: any,
        
     ) {
-        super("Config");
+        super("Role Management");
     }
 
     ngOnInit(): void {

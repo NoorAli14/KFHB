@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, SimpleChanges } from "@angular/core";
 
 @Component({
     selector: "app-message-box",
@@ -11,6 +11,11 @@ export class MessageBoxComponent implements OnInit {
     isVisible: boolean;
     constructor() {}
 
+    ngOnChanges(changes: SimpleChanges){
+        if(changes.message.currentValue!=changes.message.previousValue){
+            this.isVisible=true;
+        }
+    }
     ngOnInit(): void {
       this.isVisible=true;
     }

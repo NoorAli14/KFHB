@@ -15,6 +15,8 @@ export enum APP_CONST {
 export const MESSAGES = {
     UNKNOWN: "We are unable to process the request.",
     REMOVE_CONFIRMATION: "Are you sure you want to delete?",
+    RESEND_INVITE: "Are you sure you want to resend invitation?",
+    INVITE_RESENT: "An invitation link has been sent to provided user email?",
     INVALID_CREDENTIAL: "Username or password is incorrect",
     LOGGED_IN: "You have successfully logged in. Taking you to portal",
     PASSWORD_RESET_SENT: "Reset password link has been sent to your email.",

@@ -9,7 +9,7 @@ import {
 
 import { FuseConfigService } from "@fuse/services/config.service";
 import { fuseAnimations } from "@fuse/animations";
-import { AuthenticationService } from "@core/services/auth/authentication.service";
+import { AuthenticationService } from "@shared/services/auth/authentication.service";
 import { MESSAGES } from "@shared/constants/app.constants";
 import { BaseComponent } from "@shared/components/base/base.component";
 import { CookieService } from "ngx-cookie-service";

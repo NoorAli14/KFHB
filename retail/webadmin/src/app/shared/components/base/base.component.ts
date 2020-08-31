@@ -1,8 +1,8 @@
 import { AppInjector } from './../../app.injector';
 import { Component, OnInit } from "@angular/core";
-import { AuthUserService } from "@core/services/user/auth-user.service";
+import { AuthUserService } from "@shared/services/user/auth-user.service";
 import { MESSAGES } from '@shared/constants/app.constants';
-import { ErrorEmitterService } from '@core/services/error-emitter/error-emitter.service';
+import { ErrorEmitterService } from '@shared/services/error-emitter/error-emitter.service';
 
 @Component({
     selector: "app-base",

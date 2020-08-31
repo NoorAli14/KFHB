@@ -2,7 +2,7 @@ import { URI } from '@shared/constants/app.constants';
 import { Injectable } from "@angular/core";
 import { Observable, forkJoin } from "rxjs";
 import { User } from "../../models/user.model";
-import { NetworkService } from "@core/services/network/network.service";
+import { NetworkService } from '@shared/services/network/network.service';
 
 @Injectable({
     providedIn: "root",
@@ -12,6 +12,9 @@ export class UserService {
     constructor(private _networkService: NetworkService) {}
     createUser(user: User) {
         return this._networkService.post(URI.USER_INVITATION, user);
+    }
+    resendInvite(id:string) {
+        return this._networkService.post(`${URI.USER_INVITATION}/${id}/resend`,{});
     }
     getUserById(id: string) {
         return this._networkService.getById(`${URI.USER}/${id}`);

@@ -58,7 +58,7 @@ export class UserComponent extends BaseComponent implements OnInit {
     @ViewChild(MatSort, { static: false }) sort: MatSort;
 
     constructor(public _matDialog: MatDialog, private _service: UserService) {
-        super("User");
+        super("User Management");
     }
 
     ngOnInit(): void {
@@ -66,7 +66,6 @@ export class UserComponent extends BaseComponent implements OnInit {
         super.ngOnInit();
         this.username = new FormControl("");
         this.initSearch();
-        
     }
 
     loadAllUsers() {
@@ -137,8 +136,8 @@ export class UserComponent extends BaseComponent implements OnInit {
     camelToSentenceCase(text) {
         return camelToSentenceCase(text);
     }
-    confirmDialog(id): void {
-        const message = MESSAGES.REMOVE_CONFIRMATION;
+    confirmDialog(type,id): void {
+        const message = type==='invite' ? MESSAGES.RESEND_INVITE : MESSAGES.REMOVE_CONFIRMATION;
         const dialogData = new ConfirmDialogModel("Confirm Action", message);
         const dialogRef = this._matDialog.open(ConfirmDialogComponent, {
             data: dialogData,
@@ -149,21 +148,30 @@ export class UserComponent extends BaseComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe((status) => {
             if (status) {
-                this.deleteUser(id);
+                type==='invite' ?   this.resendInvitation(id) : this.deleteUser(id)
             }
         });
     }
-
+    resendInvitation(id) {
+        this._service.resendInvite(id).subscribe(
+            (response) => {
+                this.errorType = "success";
+                this.responseMessage = MESSAGES.INVITE_RESENT;
+               this.hideMessage()
+            },
+            (response=>super.onError(response))
+        );
+    }
     createUser(model: User) {
         this._service.createUser(model).subscribe(
             (response) => {
-                // const data = this.dataSource.data;
-                // data.push(response);
-                // this.updateGrid(data);
-                this._errorEmitService.emit(
-                    MESSAGES.INVITATION_SENT,
-                    "success"
-                );
+                const data = this.dataSource.data;
+                data.unshift(response);
+                this.updateGrid(data);
+                this.errorType = "success";
+                this.responseMessage = MESSAGES.CREATED("User");
+               this._matDialog.closeAll();
+               this.hideMessage()
             },
             (response) => {
                 this._errorEmitService.emit(
@@ -182,17 +190,20 @@ export class UserComponent extends BaseComponent implements OnInit {
         this._service.editUser(model.id, model).subscribe(
             (response) => {
                  this.errorType = "success";
-                 this.responseMessage = MESSAGES.UPDATED("Module");
+                 this.responseMessage = MESSAGES.UPDATED("User");
                 const index = this.dataSource.data.findIndex(
                     (x) => x.id == model.id
                 );
+                this.hideMessage()
                 this.users[index] = response;
                 this.updateGrid(this.users);
-                this.hideMessage();
                 this._matDialog.closeAll();
             },
             (response) => {
-                
+                this._errorEmitService.emit(
+                    MESSAGES.UNKNOWN,
+                    "error"
+                );
             }
         );
     }
@@ -203,7 +214,7 @@ export class UserComponent extends BaseComponent implements OnInit {
                 this.users.splice(index, 1);
                 this.updateGrid(this.users);
                  this.errorType = "success";
-                this.hideMessage();
+                // this.hideMessage();
                  this.responseMessage = MESSAGES.DELETED("User");
             },
             (response=>super.onError(response))

@@ -54,7 +54,7 @@ export class TableRowComponent extends BaseComponent {
     @ViewChild(MatSort, { static: false }) sort: MatSort;
     dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
     constructor(public _matDialog: MatDialog) {
-        super("Role");
+        super("Role Management");
     }
     ngOnChanges(changes: SimpleChanges): void {
         if(changes.roles.currentValue!=changes.roles.previousValue){

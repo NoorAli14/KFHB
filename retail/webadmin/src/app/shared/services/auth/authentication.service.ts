@@ -1,7 +1,7 @@
 import { APP_CONST } from "@shared/constants/app.constants";
 import { URI } from "./../../../shared/constants/app.constants";
-import { AuthUserService } from "@core/services/user/auth-user.service";
-import { NetworkService } from "@core/services/network/network.service";
+import { AuthUserService } from "@shared/services/user/auth-user.service";
+import { NetworkService } from "@shared/services/network/network.service";
 import { Login } from "./../../../auth/model/login.model";
 import { throwError as observableThrowError, Observable, pipe } from "rxjs";
 import { map, catchError } from "rxjs/operators";
@@ -72,4 +72,7 @@ export class AuthenticationService {
         const token = this.accessToken
         return token ? jwt_decode(token) : null;
     };
+    flushAll(){
+       this.storage.clearAll();
+    }
 }

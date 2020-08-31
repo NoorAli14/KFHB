@@ -2,12 +2,11 @@ import { SettingService } from './../../setting.service';
 import { Component, OnInit, ViewEncapsulation, Inject, Output, EventEmitter } from "@angular/core";
 import { FormGroup,  FormControl, Validators } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { MESSAGES, GENDER_LIST, NATIONALITY_LIST } from "@shared/constants/app.constants";
+import {  GENDER_LIST, NATIONALITY_LIST } from "@shared/constants/app.constants";
 import { fuseAnimations } from '@fuse/animations';
 import { User } from '@feature/entitlement/models/user.model';
-import { UserService } from '@feature/entitlement/user/services/user.service';
 import { BaseComponent } from '@shared/components/base/base.component';
-import { ValidatorService } from '@core/services/validator-service/validator.service';
+import { ValidatorService } from '@shared/services/validator-service/validator.service';
 
 @Component({
   selector: 'app-update-profile',

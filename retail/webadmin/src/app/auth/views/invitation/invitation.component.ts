@@ -2,12 +2,12 @@ import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { User } from "@feature/entitlement/models/user.model";
 import { NATIONALITY_LIST, GENDER_LIST, MESSAGES } from "@shared/constants/app.constants";
-import { AuthenticationService } from "@core/services/auth/authentication.service";
+import { AuthenticationService } from "@shared/services/auth/authentication.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { FuseConfigService } from "@fuse/services/config.service";
 import { BaseComponent } from "@shared/components/base/base.component";
 import { snakeToCamelObject, camelToSnakeCase } from '@shared/helpers/global.helper';
-import { ValidatorService } from '@core/services/validator-service/validator.service';
+import { ValidatorService } from '@shared/services/validator-service/validator.service';
 import { fuseAnimations } from '@fuse/animations';
 
 @Component({

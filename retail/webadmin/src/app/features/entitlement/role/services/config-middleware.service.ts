@@ -1,10 +1,9 @@
-import { URI } from './../../../../shared/constants/app.constants';
-import { Modules } from "@feature/entitlement/models/modules.model";
+import { URI } from '@shared/constants/app.constants';
 import { Injectable } from "@angular/core";
-import { NetworkService } from "@core/services/network/network.service";
 
 import { forkJoin } from "rxjs";
 import { Role } from '@feature/entitlement/models/role.model';
+import { NetworkService } from '@shared/services/network/network.service';
 
 @Injectable({
     providedIn: "root",

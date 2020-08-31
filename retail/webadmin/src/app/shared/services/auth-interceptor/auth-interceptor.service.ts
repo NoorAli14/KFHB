@@ -36,12 +36,12 @@ export class AuthInterceptorService implements HttpInterceptor {
     const decodedToken = this.authService.getDecodeToken();
     var current = (new Date().getTime() / 1000);
     const hasRefreshToken = request.url.includes("refresh-token");
-    const flag= this.isPublicUrl(request.url)
+    const isPublicUrl= this.isPublicUrl(request.url)
     
     let httpOptions = this.getHttpOption(hasRefreshToken);
 
     //Refresh token
-    if (!flag && decodedToken && decodedToken.exp < current) {
+    if (!isPublicUrl && decodedToken && decodedToken.exp < current) {
       this.isRefreshTokenInProgress = true;
       return this.refreshToken()
         .pipe(

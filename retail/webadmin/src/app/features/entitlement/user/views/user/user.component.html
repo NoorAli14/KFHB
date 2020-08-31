@@ -66,7 +66,8 @@
                         </ng-template>
                         
                         <ng-template #action>
-                            <mat-icon appPermission [permissions]="userPermissions" [type]="'delete'" color="warn" type="button" (click)=" confirmDialog(element['id'])">delete</mat-icon> &nbsp;&nbsp;
+                            <mat-icon   color="success" type="button" (click)=" confirmDialog('invite',element['id'])">near_me</mat-icon> &nbsp;&nbsp;
+                            <mat-icon appPermission [permissions]="userPermissions" [type]="'delete'" color="warn" type="button" (click)=" confirmDialog('delete',element['id'])">delete</mat-icon> &nbsp;&nbsp;
                             <mat-icon type="button" (click)="openDialog(element)">mode_edit</mat-icon> &nbsp;&nbsp;
                             <mat-icon type="button" (click)="onDetail(element['id'])">explore</mat-icon>
                         </ng-template>
