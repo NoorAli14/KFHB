@@ -8,11 +8,13 @@ import { FuseConfigService } from "@fuse/services/config.service";
 import { BaseComponent } from "@shared/components/base/base.component";
 import { snakeToCamelObject, camelToSnakeCase } from '@shared/helpers/global.helper';
 import { ValidatorService } from '@core/services/validator-service/validator.service';
+import { fuseAnimations } from '@fuse/animations';
 
 @Component({
     selector: "app-invitation",
     templateUrl: "./invitation.component.html",
     styleUrls: ["./invitation.component.scss"],
+    animations: fuseAnimations,
 })
 export class InvitationComponent extends BaseComponent implements OnInit {
     userForm: FormGroup;
@@ -86,12 +88,13 @@ export class InvitationComponent extends BaseComponent implements OnInit {
           (response) => {
             this.errorType = "success";
             this.responseMessage = MESSAGES.UPDATED('Your Profile');
-            setTimeout(() => {
-                this.router.navigateByUrl('/auth/login');
-            }, 1000);
+            // setTimeout(() => {
+            //     this.router.navigateByUrl('/auth/login');
+            // }, 1000);
           },
           (error)=>{
-              
+            this.errorType = "error";
+            this.responseMessage = MESSAGES.UNKNOWN;
           }
       );
     }

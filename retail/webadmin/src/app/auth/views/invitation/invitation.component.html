@@ -12,14 +12,7 @@
             }"
         >
         <div class="title">UPDATE YOUR PROFILE</div>
-            <div
-                *ngIf="responseMessage.length > 0"
-                fxLayout="row"
-                fxLayoutAlign="center"
-                class="p-16  message-box {{ errorType }} "
-            >
-                {{ responseMessage }}
-            </div>
+            <app-message-box [type]="errorType" [message]="responseMessage"></app-message-box>
             <div fxLayout="row">
                 <form
                     class="p-24"

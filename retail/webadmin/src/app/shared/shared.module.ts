@@ -13,6 +13,7 @@ import { WClockComponent } from "./components/time-control/w-clock.component";
 import { WTimeDialogComponent } from "./components/time-control/w-time-dialog.component";
 import { BaseComponent } from './components/base/base.component';
 import { DefaultTextComponent } from './components/default-text/default-text.component';
+import { MessageBoxComponent } from './components/message-box/message-box.component';
 
 @NgModule({
     declarations: [
@@ -24,6 +25,7 @@ import { DefaultTextComponent } from './components/default-text/default-text.com
         PermissionDirective,
         BaseComponent,
         DefaultTextComponent,
+        MessageBoxComponent,
     ],
     imports: [
         ReactiveFormsModule,
@@ -39,6 +41,7 @@ import { DefaultTextComponent } from './components/default-text/default-text.com
         MatTableComponent,
         WTimeDialogComponent,
         PermissionDirective,
+        MessageBoxComponent,
         BaseComponent,
         DefaultTextComponent,
     ],

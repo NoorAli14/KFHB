@@ -41,9 +41,7 @@
 
         <!-- CONTENT CARD -->
         <div class="content-card" fusePerfectScrollbar>
-            <div *ngIf="responseMessage.length > 0" fxLayout="row" fxLayoutAlign="center" class="p-16  message-box {{ errorType }} ">
-                {{ responseMessage }}
-            </div>
+            <app-message-box [type]="errorType" [message]="responseMessage"></app-message-box>
             <app-table-row (delete)="confirmDialog($event)"  [roles]="roles" [displayedColumns]="displayedColumns"  >
             </app-table-row>
         </div>
