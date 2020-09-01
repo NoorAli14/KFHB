@@ -1,5 +1,7 @@
 import * as path from 'path';
 import * as glob from 'glob';
+import { HEADER_NAMES } from './constants';
+import * as moment from 'moment'
 
 // requires all the files which conform to the given pattern and returns the list of defaults exports
 export const requireDefaults = (pattern: string): any => {
@@ -63,4 +65,16 @@ export const generateRandomString = (length: number): string => {
     .toString(36)
     .replace(/[^a-zA-Z0-9]+/g, '')
     .substr(0, length);
+};
+
+export const getMutateProps = (key: string, headers: any, model: any): any => {
+  const x_user_id = headers[HEADER_NAMES.X_USER_ID];
+  const date = moment().format();
+  model[`${key}_by`] = x_user_id;
+  model[`${key}_on`] = date;
+  return model
+};
+
+export const getTenantID = (headers: any): any => {
+  return headers[HEADER_NAMES.X_TENANT_ID];
 };

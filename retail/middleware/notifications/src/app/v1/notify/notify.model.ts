@@ -12,7 +12,13 @@ export class Notify {
   device_id: string;
 
   @Field()
-  text: string;
+  message_title: string;
+
+  @Field()
+  message_body: string;
+
+  @Field()
+  image_url?: string;
 
   @Field()
   status: string;

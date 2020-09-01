@@ -14,5 +14,17 @@ export class NotifyInput {
   device_id: string;
 
   @Field()
-  text?: string;
+  token?: string;
+
+  @Field()
+  @Length(5, 255)
+  message_title: string;
+
+  @Field()
+  @Length(5, 255)
+  message_body: string;
+
+  @Field()
+  @Length(5, 255)
+  image_url?: string;
 }

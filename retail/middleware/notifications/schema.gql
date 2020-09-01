@@ -54,7 +54,9 @@ type Notify {
   id: String!
   platform: String!
   device_id: String!
-  text: String!
+  message_title: String!
+  message_body: String!
+  image_url: String!
   status: String!
   created_on: DateTime!
   created_by: String!
@@ -67,7 +69,10 @@ type Notify {
 input NotifyInput {
   platform: String!
   device_id: String!
-  text: String!
+  token: String!
+  message_title: String!
+  message_body: String!
+  image_url: String!
 }
 
 type Otp {
