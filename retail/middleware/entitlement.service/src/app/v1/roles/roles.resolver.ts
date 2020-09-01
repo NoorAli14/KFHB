@@ -16,8 +16,8 @@ import {getMutateProps, getTenantID} from '@common/utilities';
 export class RolesResolver {
   constructor(private readonly roleService: RoleService) {}
 
-  @Query(() => RoleWithPagination)
-  async rolesList(@Fields() columns: string[], @Context() context: GraphQLExecutionContext): Promise<RoleWithPagination> {
+  @Query(() => [Role])
+  async rolesList(@Fields() columns: string[], @Context() context: GraphQLExecutionContext): Promise<Role[]> {
     return this.roleService.list(columns, context['req'].query);
   }
 

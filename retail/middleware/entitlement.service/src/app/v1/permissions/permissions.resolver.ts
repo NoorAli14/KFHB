@@ -12,8 +12,8 @@ import {getMutateProps} from '@common/utilities';
 export class PermissionsResolver {
   constructor(private readonly permissionService: PermissionService) {}
 
-  @Query(() => PermissionWithPagination)
-  async permissionsList(@Fields() columns: string[], @Context() context: GraphQLExecutionContext): Promise<PermissionWithPagination> {
+  @Query(() => [Permission])
+  async permissionsList(@Fields() columns: string[], @Context() context: GraphQLExecutionContext): Promise<Permission[]> {
     return this.permissionService.list(columns, context['req'].query);
   }
 

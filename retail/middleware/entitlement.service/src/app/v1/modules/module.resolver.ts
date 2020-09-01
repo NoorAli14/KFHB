@@ -16,8 +16,8 @@ import {getMutateProps} from '@common/utilities';
 export class ModuleResolver {
   constructor(private readonly moduleService: ModuleService) {}
 
-  @Query(() => ModuleWithPagination)
-  async modulesList(@Fields() columns: string[], @Context() context: GraphQLExecutionContext): Promise<ModuleWithPagination> {
+  @Query(() => [Module])
+  async modulesList(@Fields() columns: string[], @Context() context: GraphQLExecutionContext): Promise<Module[]> {
     return this.moduleService.list(columns, context['req'].query);
   }
 

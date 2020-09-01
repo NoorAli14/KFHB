@@ -13,8 +13,8 @@ import {getMutateProps} from '@common/utilities';
 export class HolidaysResolver {
   constructor(private readonly holidaysService: HolidaysService) {}
 
-  @Query(() => HolidayWithPagination)
-  async holidaysList(@Fields() columns: string[], @Context() context: GraphQLExecutionContext): Promise<HolidayWithPagination> {
+  @Query(() => [Holiday])
+  async holidaysList(@Fields() columns: string[], @Context() context: GraphQLExecutionContext): Promise<Holiday[]> {
     return this.holidaysService.list(columns, context['req'].query);
   }
 

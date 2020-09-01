@@ -25,8 +25,8 @@ import {getMutateProps, getTenantID} from '@common/utilities';
 export class UsersResolver {
   constructor(private readonly userService: UserService) {}
 
-  @Query(() => UserWithPagination)
-  async usersList(@Fields() columns: string[], @Context() context: GraphQLExecutionContext): Promise<UserWithPagination> {
+  @Query(() => [User])
+  async usersList(@Fields() columns: string[], @Context() context: GraphQLExecutionContext): Promise<User[]> {
     return this.userService.list(columns, context['req'].query);
   }
 

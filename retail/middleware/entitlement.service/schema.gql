@@ -71,11 +71,6 @@ input HolidayInput {
   status: String
 }
 
-type HolidayWithPagination {
-  pagination: PaginationModel
-  data: [Holiday!]
-}
-
 input IdsInput {
   id: String!
   _deleted: Boolean
@@ -113,11 +108,6 @@ input LeaveInput {
   status: String
 }
 
-type LeaveWithPagination {
-  pagination: PaginationModel
-  data: [Leave!]
-}
-
 input LoginInput {
   email: String!
   password: String!
@@ -138,11 +128,6 @@ input ModuleInput {
   name: String!
   parent_id: String
   status: String
-}
-
-type ModuleWithPagination {
-  pagination: PaginationModel
-  data: [Module!]
 }
 
 type Mutation {
@@ -193,33 +178,28 @@ input PermissionInput {
   record_type: String!
 }
 
-type PermissionWithPagination {
-  pagination: PaginationModel
-  data: [Permission!]
-}
-
 type Query {
-  usersList: UserWithPagination!
+  usersList: [User!]!
   findUserById(id: String!): User!
   findUserBy(checks: [KeyValInput!]!): [User!]!
-  rolesList: RoleWithPagination!
+  rolesList: [Role!]!
   findRoleById(id: String!): Role!
   findRoleBy(checks: [KeyValInput!]!): [Role!]!
-  modulesList: ModuleWithPagination!
+  modulesList: [Module!]!
   findModuleById(id: String!): Module!
   findModuleBy(checks: [KeyValInput!]!): [Module!]!
-  permissionsList: PermissionWithPagination!
+  permissionsList: [Permission!]!
   findPermissionById(id: String!): Permission!
   findPermissionBy(checks: [KeyValInput!]!): [Permission!]!
   login(input: LoginInput!): User!
   forgotPassword(input: ForgotPasswordInput!): User!
-  workingDaysList: WorkingDayWithPagination!
+  workingDaysList: [WorkingDay!]!
   findWorkingDayById(id: String!): WorkingDay!
   findWorkingDayBy(checks: [KeyValInput!]!): [WorkingDay!]!
-  holidaysList: HolidayWithPagination!
+  holidaysList: [Holiday!]!
   findHolidayById(id: String!): Holiday!
   findHolidayBy(checks: [KeyValInput!]!): [Holiday!]!
-  leavesList: LeaveWithPagination!
+  leavesList: [Leave!]!
   findLeaveById(id: String!): Leave!
   findLeaveBy(checks: [KeyValInput!]!): [Leave!]!
 }
@@ -244,11 +224,6 @@ input RoleInput {
   description: String
   status: String
   permissions: [IdsInput!]
-}
-
-type RoleWithPagination {
-  pagination: PaginationModel
-  data: [Role!]
 }
 
 input UpdateUserInput {
@@ -299,11 +274,6 @@ type User {
   leaves: [Leave!]!
 }
 
-type UserWithPagination {
-  pagination: PaginationModel
-  data: [User!]
-}
-
 type WorkingDay {
   id: ID
   week_day: String
@@ -327,9 +297,4 @@ input WorkingDayInput {
   full_day: Float
   remarks: String
   status: String
-}
-
-type WorkingDayWithPagination {
-  pagination: PaginationModel
-  data: [WorkingDay!]
 }

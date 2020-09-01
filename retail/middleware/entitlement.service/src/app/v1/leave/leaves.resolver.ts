@@ -17,8 +17,8 @@ import {getMutateProps} from '@common/utilities';
 export class LeavesResolver {
   constructor(private readonly leavesService: LeavesService) {}
 
-  @Query(() => LeaveWithPagination)
-  async leavesList(@Fields() columns: string[], @Context() context: GraphQLExecutionContext): Promise<LeaveWithPagination> {
+  @Query(() => [Leave])
+  async leavesList(@Fields() columns: string[], @Context() context: GraphQLExecutionContext): Promise<Leave[]> {
     return this.leavesService.list(columns, context['req'].query);
   }
 

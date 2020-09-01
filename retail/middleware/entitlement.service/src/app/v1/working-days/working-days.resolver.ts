@@ -18,8 +18,8 @@ import {getMutateProps} from '@common/utilities';
 export class WorkingDaysResolver {
   constructor(private readonly workingDaysService: WorkingDaysService) {}
 
-  @Query(() => WorkingDayWithPagination)
-  async workingDaysList(@Fields() columns: string[], @Context() context: GraphQLExecutionContext): Promise<WorkingDayWithPagination> {
+  @Query(() => [WorkingDay])
+  async workingDaysList(@Fields() columns: string[], @Context() context: GraphQLExecutionContext): Promise<WorkingDay[]> {
     return this.workingDaysService.list(columns, context['req'].query);
   }
 
