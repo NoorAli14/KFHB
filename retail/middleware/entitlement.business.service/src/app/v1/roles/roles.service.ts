@@ -11,6 +11,7 @@ export class RoleService {
   private output: string = `{
     id
     name
+    description
     modules {
       id
       name
