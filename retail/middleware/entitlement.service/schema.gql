@@ -13,7 +13,7 @@ directive @requires(fields: String!) on FIELD_DEFINITION
 directive @provides(fields: String!) on FIELD_DEFINITION
 
 input ChangePasswordInput {
-  token: String!
+  password_reset_token: String!
   password: String!
 }
 
@@ -26,8 +26,12 @@ input CreateUserInput {
   last_name: String
   gender: String
   date_of_birth: String
-  nationality_id: Float
+  nationality_id: String
   status: String
+  invitation_token: String
+  invitation_token_expiry: String
+  password_reset_token: String
+  password_reset_token_expiry: String
   roles: [IdsInput!]
   email: String!
 }
@@ -41,9 +45,29 @@ input ForgotPasswordInput {
   email: String!
 }
 
-type ForgotPasswordOutput {
-  token: String!
-  token_expiry: DateTime!
+type Holiday {
+  id: ID
+  calendar_day: String
+  holiday_type: String
+  holiday_details: String
+  remarks: String
+  is_repetitive: Float
+  status: String
+  created_on: String
+  created_by: String
+  updated_on: String
+  updated_by: String
+  deleted_on: String
+  deleted_by: String
+}
+
+input HolidayInput {
+  calendar_day: String!
+  holiday_type: String
+  holiday_details: String
+  is_repetitive: Float
+  remarks: String
+  status: String
 }
 
 input IdsInput {
@@ -54,6 +78,33 @@ input IdsInput {
 input KeyValInput {
   record_key: String!
   record_value: String!
+}
+
+type Leave {
+  id: ID
+  user_id: String
+  calendar_day: String
+  holiday_type: String
+  holiday_details: String
+  remarks: String
+  is_repetitive: Float
+  status: String
+  created_on: String
+  created_by: String
+  updated_on: String
+  updated_by: String
+  deleted_on: String
+  deleted_by: String
+}
+
+input LeaveInput {
+  user_id: String!
+  calendar_day: String!
+  holiday_type: String
+  holiday_details: String
+  is_repetitive: Float
+  remarks: String
+  status: String
 }
 
 input LoginInput {
@@ -68,8 +119,8 @@ type Module {
   status: String
   created_on: String
   created_by: String
-  permissions: [Permission!]!
   sub_modules: [Module!]!
+  permissions: [Permission!]!
 }
 
 input ModuleInput {
@@ -78,7 +129,19 @@ input ModuleInput {
   status: String
 }
 
+type ModuleInRole {
+  id: ID
+  name: String
+  parent_id: String
+  status: String
+  created_on: String
+  created_by: String
+  sub_modules: [Module!]!
+  permissions: [Permission!]
+}
+
 type Mutation {
+  resetInvitationToken(id: String!): User!
   addUser(input: CreateUserInput!): User!
   updateUser(input: UpdateUserInput!, id: String!): User!
   deleteUser(id: String!): Boolean!
@@ -91,19 +154,16 @@ type Mutation {
   addPermission(input: PermissionInput!): Permission!
   updatePermission(input: PermissionInput!, id: String!): Permission!
   deletePermission(id: String!): Boolean!
-  updateUserRole(input: UserRoleInput!, id: String!): UserRole!
-  addUserRole(input: UserRoleInput!): UserRole!
-  deleteUserRole(id: String!): Boolean!
-  addRoleModule(input: RoleModuleInput!): RoleModule!
-  updateRoleModule(input: RoleModuleInput!, id: String!): RoleModule!
-  deleteRoleModule(id: String!): Boolean!
-  addRoleModulePermission(input: RoleModulePermissionInput!): RoleModulePermission!
-  updateRoleModulePermission(input: RoleModulePermissionInput!, id: String!): RoleModulePermission!
-  deleteRoleModulePermission(id: String!): Boolean!
-  changePassword(input: ChangePasswordInput!): String!
+  changePassword(input: ChangePasswordInput!): User!
   addWorkingDay(input: WorkingDayInput!): WorkingDay!
   updateWorkingDay(input: WorkingDayInput!, id: String!): WorkingDay!
   deleteWorkingDay(id: String!): Boolean!
+  addHoliday(input: HolidayInput!): Holiday!
+  updateHoliday(input: HolidayInput!, id: String!): Holiday!
+  deleteHoliday(id: String!): Boolean!
+  addLeave(input: LeaveInput!): Leave!
+  updateLeave(input: LeaveInput!, id: String!): Leave!
+  deleteLeave(id: String!): Boolean!
 }
 
 type Permission {
@@ -122,28 +182,25 @@ type Query {
   findUserById(id: String!): User!
   findUserBy(checks: [KeyValInput!]!): [User!]!
   rolesList: [Role!]!
-  findRole(id: String!): Role!
+  findRoleById(id: String!): Role!
   findRoleBy(checks: [KeyValInput!]!): [Role!]!
   modulesList: [Module!]!
-  findModule(id: String!): Module!
+  findModuleById(id: String!): Module!
   findModuleBy(checks: [KeyValInput!]!): [Module!]!
   permissionsList: [Permission!]!
-  findPermission(id: String!): Permission!
+  findPermissionById(id: String!): Permission!
   findPermissionBy(checks: [KeyValInput!]!): [Permission!]!
-  userRolesList: [UserRole!]!
-  findUserRole(id: String!): UserRole!
-  findUserRoleBy(checks: [KeyValInput!]!): [UserRole!]!
-  roleModulesList: [RoleModule!]!
-  findRoleModule(id: String!): RoleModule!
-  findRoleModuleBy(checks: [KeyValInput!]!): [RoleModule!]!
-  roleModulePermissionsList: [RoleModulePermission!]!
-  findRoleModulePermission(id: String!): RoleModulePermission!
-  findRoleModulePermissionBy(checks: [KeyValInput!]!): [RoleModulePermission!]!
   login(input: LoginInput!): User!
-  forgotPassword(input: ForgotPasswordInput!): ForgotPasswordOutput!
+  forgotPassword(input: ForgotPasswordInput!): User!
   workingDaysList: [WorkingDay!]!
   findWorkingDayById(id: String!): WorkingDay!
   findWorkingDayBy(checks: [KeyValInput!]!): [WorkingDay!]!
+  holidaysList: [Holiday!]!
+  findHolidayById(id: String!): Holiday!
+  findHolidayBy(checks: [KeyValInput!]!): [Holiday!]!
+  leavesList: [Leave!]!
+  findLeaveById(id: String!): Leave!
+  findLeaveBy(checks: [KeyValInput!]!): [Leave!]!
 }
 
 type Role {
@@ -164,36 +221,7 @@ input RoleInput {
   name: String!
   description: String
   status: String
-}
-
-type RoleModule {
-  id: ID
-  module_id: String
-  role_id: String
-  status: String
-  created_on: String
-  created_by: String
-}
-
-input RoleModuleInput {
-  module_id: String!
-  role_id: String!
-  status: String
-}
-
-type RoleModulePermission {
-  id: ID
-  role_module_id: String
-  permission_id: String
-  status: String
-  created_on: String
-  created_by: String
-}
-
-input RoleModulePermissionInput {
-  role_module_id: String!
-  permission_id: String!
-  status: String
+  permissions: [IdsInput!]
 }
 
 input UpdateUserInput {
@@ -205,8 +233,12 @@ input UpdateUserInput {
   last_name: String
   gender: String
   date_of_birth: String
-  nationality_id: Float
+  nationality_id: String
   status: String
+  invitation_token: String
+  invitation_token_expiry: String
+  password_reset_token: String
+  password_reset_token_expiry: String
   roles: [IdsInput!]
 }
 
@@ -220,7 +252,7 @@ type User {
   last_name: String
   gender: String
   date_of_birth: String
-  nationality_id: Float
+  nationality_id: String
   status: String
   created_on: String
   created_by: String
@@ -230,28 +262,18 @@ type User {
   deleted_by: String
   roles: [Role!]!
   modules: [Module!]!
-}
-
-type UserRole {
-  id: ID!
-  user_id: String!
-  role_id: String!
-  status: String
-  created_on: String
-  created_by: String
-}
-
-input UserRoleInput {
-  user_id: String!
-  role_id: String!
-  status: String
+  invitation_token: String
+  invitation_token_expiry: DateTime
+  password_reset_token: String
+  password_reset_token_expiry: DateTime
+  leaves: [Leave!]!
 }
 
 type WorkingDay {
   id: ID
   week_day: String
-  start_time: String
-  end_time: String
+  start_time: String!
+  end_time: String!
   remarks: String
   full_day: Float
   status: String
@@ -264,7 +286,7 @@ type WorkingDay {
 }
 
 input WorkingDayInput {
-  week_day: String
+  week_day: String!
   start_time: String
   end_time: String
   full_day: Float

@@ -5,11 +5,10 @@ import { NUMBERS } from "@common/constants";
 
 @InputType()
 export class WorkingDayInput {
-  @Field({ nullable: true })
+  @Field()
   @IsString()
-  @IsOptional()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  week_day?: string;
+  week_day: string;
 
   @Field({ nullable: true })
   @IsString()

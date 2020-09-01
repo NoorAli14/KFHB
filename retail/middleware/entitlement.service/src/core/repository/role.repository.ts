@@ -1,58 +1,57 @@
-import { Injectable } from '@nestjs/common';
+import {Injectable} from '@nestjs/common';
 import { BaseRepository } from './base.repository';
-import { TABLE } from '@common/constants';
+import {STATUS, TABLE,} from '@common/constants';
 
 @Injectable()
 export class RoleRepository extends BaseRepository {
+  private readonly __attributes: string[] = [
+    `${TABLE.MODULE}.id`,
+    `${TABLE.MODULE}.name`,
+    `${TABLE.MODULE}.status`,
+    `${TABLE.MODULE}.description`,
+    `${TABLE.MODULE}.updated_on`,
+    `${TABLE.MODULE}.updated_by`,
+    `${TABLE.MODULE}.deleted_on`,
+    `${TABLE.MODULE}.deleted_by`,
+    `${TABLE.MODULE}.created_by`,
+    `${TABLE.MODULE}.created_on`
+  ];
+
   constructor() {
     super(TABLE.ROLE);
   }
 
   async listRolesByUserID(userIds): Promise<any>{
+    const condition = {};
+    condition[`${TABLE.ROLE}.status`] = STATUS.ACTIVE;
     return this._connection(TABLE.ROLE)
-        .select(`${TABLE.ROLE}.*`, `${TABLE.USER_ROLE}.user_id`)
+        .select([...this.__attributes, `${TABLE.USER_ROLE}.user_id`])
         .leftJoin(TABLE.USER_ROLE, `${TABLE.ROLE}.id`, `${TABLE.USER_ROLE}.role_id`)
         .whereIn(`${TABLE.USER_ROLE}.user_id`, userIds)
+        .where(condition);
   }
 
-  // async create(role: Record<string, any>, keys: string[]): Promise<any> {
-  //   const moduleIds: [] = role.module_ids;
-  //   delete role.module_ids;
-  //   const permissionIds: [] = role.permission_ids;
-  //   delete role.permission_ids;
-  //   return this._connection(TABLE.ROLE)
-  //   .insert(role, keys)
-  //   .then(async function (response) {
-  //     const role_modules = [];
-  //     moduleIds.forEach(moduleId => {
-  //       const role_module = {
-  //         role_id : response[0].id,
-  //         module_id : moduleId,
-  //         status : STATUS.ACTIVE,
-  //         created_by : TEMP_ROLE.ADMIN,
-  //       };
-  //       role_modules.push(role_module);
-  //     });
-  //
-  //
-  //     await this._connection(TABLE.ROLE_MODULE).insert(role_modules, "*")
-  //     .then(async function (role_module_responses) {
-  //         const role_module_permissions = [];
-  //         permissionIds.forEach(permissionId => {
-  //             role_module_responses.forEach(role_module_response => {
-  //                 const role_module_permission = {
-  //                     role_module_id : role_module_response.id,
-  //                     permission_id : permissionId,
-  //                     status : STATUS.ACTIVE,
-  //                     created_by : TEMP_ROLE.ADMIN,
-  //                 };
-  //                 role_module_permissions.push(role_module_permission);
-  //             });
-  //         });
-  //         await this._connection(TABLE.ROLE_MODULE_PERMISSION).insert(role_module_permissions);
-  //         return response;
-  //     }.bind(this));
-  //     return response;
-  //   }.bind(this))
-  // }
+  async create(role: Record<string, any>, keys: string[]): Promise<any> {
+    const trxProvider = this._connection.transactionProvider();
+    const trx = await trxProvider();
+    try{
+      const permissions = role.permissions;
+      delete role.permissions;
+      const response = await trx(TABLE.ROLE).insert(role, keys);
+      if(permissions) {
+        const module_permission_roles = permissions.map(module_permission => {
+          return {
+            role_id : response[0].id || response[0],
+            module_permission_id : module_permission['id'],
+          };
+        });
+        await trx(TABLE.MODULE_PERMISSION_ROLE).insert(module_permission_roles, ['module_permission_id']);
+      }
+      await trx.commit();
+      return response
+    } catch (e) {
+      await trx.rollback();
+      throw e
+    }
+  }
 }

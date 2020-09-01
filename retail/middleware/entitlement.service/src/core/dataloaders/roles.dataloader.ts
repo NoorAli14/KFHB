@@ -1,16 +1,26 @@
 import * as DataLoader from "dataloader";
-import {Injectable, Scope} from "@nestjs/common";
+import {Injectable} from "@nestjs/common";
 import { NestDataLoader } from "nestjs-dataloader";
 
-import {RoleService} from "@app/v1/roles/roles.service";
 import {Role} from "@app/v1/roles/role.model";
+import {RoleRepository} from '@core/repository';
+import {loaderSerializer} from '@common/utilities';
 
+@Injectable()
+export class RolesLoader {
+    constructor(private readonly roleDB: RoleRepository) {}
 
-@Injectable({ scope: Scope.REQUEST })
+    async findRolesByUserID(keys): Promise<any> {
+        const roles = await this.roleDB.listRolesByUserID(keys);
+        return loaderSerializer(roles, keys, 'user_id')
+    }
+}
+
+@Injectable()
 export class RolesDataLoader implements NestDataLoader<string, Role> {
-    constructor(private readonly roleService: RoleService) { }
+    constructor(private readonly loader: RolesLoader) { }
 
     generateDataLoader(): DataLoader<string, Role> {
-        return new DataLoader<string, Role>(keys => this.roleService.findRolesByUserID(keys));
+        return new DataLoader<string, Role>(keys => this.loader.findRolesByUserID(keys));
     }
 }

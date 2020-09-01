@@ -20,6 +20,8 @@ export const MESSAGES = {
     PASSWORD_RESET_SENT: "Reset password link has been sent to your email.",
     PASSWORD_UPDATED: "Your password has been updated.",
     INVALID_RESET_TOKEN: "Reset password token is invalid.",
+    INVITATION_SENT: "User created successfully. An invitation link has been sent to provided user email.",
+    THANKS: "Update your profile to login to your account.",
     CREATED: (name) => `${name} created successfully.`,
     DELETED: (name) => `${name} deleted successfully.`,
     UPDATED: (name) => `${name} updated successfully.`,
@@ -37,7 +39,21 @@ export const GENDER_LIST: Array<Select> = [
 ];
 
 export const NATIONALITY_LIST: Array<Select> = [
-    { id: 1, name: "Pakistan" },
-    { id: 2, name: "Bahrain" },
-    { id: 3, name: "Kuwait" },
+    { id: '1', name: "Pakistan" },
+    { id: '2', name: "Bahrain" },
+    { id: '3', name: "Kuwait" },
 ];
+
+const URI_PREFIX='/api/v1/entitlements/';
+
+export const URI={
+    USER_INVITATION:`${URI_PREFIX}invitations`,
+    USER :`${URI_PREFIX}users`,
+    ROLE :`${URI_PREFIX}roles`,
+    PERMISSION :`${URI_PREFIX}permissions`,
+    MODULE :`${URI_PREFIX}modules`,
+    LOGIN :`${URI_PREFIX}auth/login`,
+    LOGOUT :`${URI_PREFIX}auth/logout`,
+    FORGOT_PASSWORD :`${URI_PREFIX}users/password`,
+    RESET_PASSWORD :`${URI_PREFIX}`,
+}
