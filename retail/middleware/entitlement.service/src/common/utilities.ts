@@ -74,8 +74,6 @@ export const getMutateProps = (key: string, headers: any, model: any): any => {
   const date = moment().format();
   model[`${key}_by`] = x_user_id;
   model[`${key}_on`] = date;
-  console.log("///////////////////date//////////////////")
-  console.log(model)
   return model
 };
 

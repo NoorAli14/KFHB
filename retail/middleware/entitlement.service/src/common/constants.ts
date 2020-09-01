@@ -141,6 +141,7 @@ export const MESSAGES = {
   BAD_TIME_FORMAT: 'Bad Time Format',
   INVALID_WEEKDAY: `Weekday should be one of ${Object.keys(WEEK_DAYS)}`,
   INVALID_STATUS: `Status should be one of ${Object.keys(STATUS)}`,
+  ROLE_EXISTS: 'Role with this name already exists',
 };
 
 export const DATABASE_UUID_METHOD = 'NEWID()';

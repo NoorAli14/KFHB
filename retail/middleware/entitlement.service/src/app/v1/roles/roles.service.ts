@@ -50,6 +50,7 @@ export class RoleService {
         error: MESSAGES.INVALID_STATUS,
       }, HttpStatus.BAD_REQUEST);
     }
+    await this.isNameTaken(roleObj);
     const result = await this.roleDB.update({ id: id, deleted_on : null }, roleObj, keys);
     if(result?.length > 0) {
       return result[0]
@@ -70,6 +71,7 @@ export class RoleService {
         error: MESSAGES.INVALID_STATUS,
       }, HttpStatus.BAD_REQUEST);
     }
+    await this.isNameTaken(newRole);
     const result = await this.roleDB.create(newRole, keys);
     if(result?.length > 0) {
       return result[0]
@@ -84,5 +86,26 @@ export class RoleService {
   async delete(id: string, input: Record<any, any>): Promise<any> {
     const result = await this.update(id, input, ['id']);
     return !!result;
+  }
+
+  async isNameTaken(role: Record<any, any>): Promise<any> {
+    const checks: KeyValInput[] = [
+      {
+        record_key:"name",
+        record_value: role.name
+      }];
+    if (role.tenant_id){
+      checks.push({
+        record_key: "tenant_id",
+        record_value: role.tenant_id
+      })
+    }
+    const role_a = await this.findByProperty(checks, ['id', 'name']);
+    if (role_a?.length) {
+      throw new HttpException({
+        status: HttpStatus.BAD_REQUEST,
+        error: MESSAGES.ROLE_EXISTS,
+      }, HttpStatus.BAD_REQUEST);
+    }
   }
 }
