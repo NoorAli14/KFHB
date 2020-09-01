@@ -18,6 +18,7 @@ import {
     camelToSentenceCase,
     camelToSnakeCaseText,
     snakeToCamelObject,
+    removeRandom,
 } from "@shared/helpers/global.helper";
 import {
     ConfirmDialogModel,
@@ -137,7 +138,7 @@ export class UserComponent extends BaseComponent implements OnInit {
         return camelToSentenceCase(text);
     }
     confirmDialog(type,id): void {
-        const message = type==='invite' ? MESSAGES.RESEND_INVITE() : MESSAGES.REMOVE_CONFIRMATION();
+        const message = type==='invite' ? removeRandom(MESSAGES.RESEND_INVITE())  :removeRandom( MESSAGES.REMOVE_CONFIRMATION());
         const dialogData = new ConfirmDialogModel("Confirm Action", message);
         const dialogRef = this._matDialog.open(ConfirmDialogComponent, {
             data: dialogData,

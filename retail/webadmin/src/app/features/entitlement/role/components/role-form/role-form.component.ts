@@ -25,17 +25,16 @@ export class RoleFormComponent extends BaseComponent implements OnInit {
 
     constructor(
         public matDialogRef: MatDialogRef<RoleFormComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: any,
-       
+        @Inject(MAT_DIALOG_DATA) public data: any
     ) {
         super("Role Management");
     }
 
     ngOnInit(): void {
-        this._errorEmitService.currentMessage.subscribe(item=>{
-            this.errorType=item.type;
-            this.responseMessage=item.message;
-        })
+        this._errorEmitService.currentMessage.subscribe((item) => {
+            this.errorType = item.type;
+            this.responseMessage = item.message;
+        });
         this.roleForm = new FormGroup({
             id: new FormControl(this.data.role.id),
             name: new FormControl(this.data.role.name, [Validators.required]),
@@ -55,8 +54,8 @@ export class RoleFormComponent extends BaseComponent implements OnInit {
         return this.roleForm.get("modules") as FormArray;
     }
 
-    createControl() {
-        return new FormControl(false);
+    createControl(value) {
+        return new FormControl(value ? value : false);
     }
     getFormControl(form, key) {
         return form.get(key);
@@ -66,7 +65,10 @@ export class RoleFormComponent extends BaseComponent implements OnInit {
             module: new FormControl(module),
         });
         module.permissions.forEach((permission) => {
-            form.addControl(permission.record_type, this.createControl());
+            form.addControl(
+                permission.record_type,
+                this.createControl(permission.value)
+            );
         });
         return form;
     }
@@ -74,10 +76,9 @@ export class RoleFormComponent extends BaseComponent implements OnInit {
         const model = { ...this.roleForm.value };
         let permissions = [];
         model.modules.forEach((element) => {
-            const module = element.module;
             const data = this.getCheckedKey(element);
             if (data && data.length > 0) {
-                permissions= permissions.concat(data)
+                permissions = permissions.concat(data);
             }
         });
         model.permissions = permissions;
@@ -87,13 +88,31 @@ export class RoleFormComponent extends BaseComponent implements OnInit {
         const checked = Object.keys(element).filter((key) => {
             return element[key] == true;
         });
+        const module = this.data.modules.find(
+            (module) => module.id === element.module.id
+        );
         const permissions = [];
         checked.forEach((key) => {
             const permission = element.module.permissions.find(
                 (item) => item.record_type == key
             );
+
             permissions.push({ id: permission.module_permission_id });
         });
+        if (this.data.role.id && this.data.role.id.length > 0) {
+            module.permissions.forEach((x) => {
+                const exist = permissions.find(
+                    (item) => item.id == x.module_permission_id
+                );
+                if (!exist && x.value) {
+                    permissions.push({
+                        id: x.module_permission_id,
+                        _deleted: true,
+                    });
+                }
+            });
+        }
+
         return permissions;
     }
     camelToSentenceCase(text) {

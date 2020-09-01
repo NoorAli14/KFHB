@@ -11,7 +11,7 @@
 
                 <ng-template #icon>
                    <span style="margin-left: 5px;"> <mat-icon style="color:green" *ngIf="element[key]" >done </mat-icon>
-                    <mat-icon style="color:red"  *ngIf="!element[key]" >close</mat-icon></span>
+                    <mat-icon matTooltip="No Permission" style="color:red"  *ngIf="!element[key]" >close</mat-icon></span>
                 </ng-template>
             </mat-cell>
         </ng-container>

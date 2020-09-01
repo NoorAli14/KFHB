@@ -7,6 +7,7 @@ import { Role } from "@feature/entitlement/models/role.model";
 import {
     camelToSentenceCase,
     camelToSnakeCaseText,
+    removeRandom,
 } from "@shared/helpers/global.helper";
 import { MESSAGES } from "@shared/constants/app.constants";
 import {
@@ -16,6 +17,7 @@ import {
 import { ConfigMiddlewareService } from "../../services/config-middleware.service";
 import { FormControl } from "@angular/forms";
 import { RoleFormComponent } from "../../components/role-form/role-form.component";
+import { cloneDeep } from 'lodash';
 
 @Component({
     selector: "app-role",
@@ -65,14 +67,15 @@ export class RoleComponent extends BaseComponent implements OnInit {
             (response) => super.onError(response)
         );
     }
-    openDialog(data): void {
+    openDialog(data,modules): void {
+        
         var _this = this;
         this.dialogRef = this._matDialog
             .open(RoleFormComponent, {
                 data: {
                     role: data ? data : new Role(),
                     userPermissions: this.userPermissions,
-                    modules: this.modules,
+                    modules:modules? modules: cloneDeep(this.modules),
                     roles: this.roles,
                 },
                 panelClass: "app-role-form",
@@ -85,7 +88,10 @@ export class RoleComponent extends BaseComponent implements OnInit {
                 }
             });
     }
-
+    createEditData(){
+        console.log(this.modules);
+        
+    }
     mapModules(modules) {
         const mapped = modules.map((item) => {
             item.text = item.name;
@@ -105,7 +111,7 @@ export class RoleComponent extends BaseComponent implements OnInit {
         return camelToSnakeCaseText(text);
     }
     confirmDialog(id): void {
-        const message = MESSAGES.REMOVE_CONFIRMATION();
+        const message = removeRandom(MESSAGES.REMOVE_CONFIRMATION())
         const dialogData = new ConfirmDialogModel("Confirm Action", message);
         const dialogRef = this._matDialog.open(ConfirmDialogComponent, {
             data: dialogData,
@@ -120,7 +126,38 @@ export class RoleComponent extends BaseComponent implements OnInit {
             }
         });
     }
-
+  
+    onEditHandler(data){
+        let modules=cloneDeep(this.modules)
+       modules=modules.map(el=>{
+            const exist=  this.findPermission(data.modules,el.id)
+            if(!exist)return el;
+            el.permissions=exist.permissions.map(x=>{
+                return {
+                    ...x,
+                    value:true,
+                   ... el.permissions.find(y=>y.id==x.id)
+                }
+            });
+            return el;
+        });
+        this.openDialog(data,modules)
+    }
+    findPermission(modules, id) {
+        let module, flag;
+        modules.forEach((element) => {
+            if (flag) return;
+            if (element.id !== id) {
+                if (!element.sub_modules) return;
+                const returned = this.findPermission(element.sub_modules, id);
+                module = returned;
+            } else {
+                flag = true;
+                module = element;
+            }
+        });
+        return module;
+    }
     createRole(data: Role) {
         this._service.createRole(data).subscribe(
             (response) => {
@@ -128,6 +165,9 @@ export class RoleComponent extends BaseComponent implements OnInit {
                     MESSAGES.CREATED("Role"),
                     "success"
                 );
+                const clone= cloneDeep(this.roles)
+                clone.unshift(response)
+                this.roles=clone;
             },
             (response=>{
                 this._errorEmitService.emit(
@@ -143,26 +183,30 @@ export class RoleComponent extends BaseComponent implements OnInit {
         }, 2000);
     }
     editRole(model: Role) {
-        // this._service.editRole(model.id, model).subscribe(
-        //     (response) => {
-        //         this.errorType = "success";
-        //         this.responseMessage = MESSAGES.UPDATED("Role");
-        //         const index = this.dataSource.data.findIndex(
-        //             (x) => x.id == model.id
-        //         );
-        //         this.roles[index] = response;
-        //         this.updateGrid(this.roles);
-        //         this.hideMessage();
-        //         this._matDialog.closeAll();
-        //     },
-        //    (response=>super.onError(response))
-        // );
+        this._service.editRole(model.id, model).subscribe(
+            (response) => {
+                this.errorType = "success";
+                this.responseMessage = MESSAGES.UPDATED("Role");
+                // const index = this.dataSource.data.findIndex(
+                //     (x) => x.id == model.id
+                // );
+                // this.roles[index] = response;
+                // this.updateGrid(this.roles);
+                // this.hideMessage();
+                // this._matDialog.closeAll();
+            },
+           (response=>super.onError(response))
+        );
     }
     onDelete(id: string) {
         this._service.deleteRole(id).subscribe(
             (response) => {
                 this.errorType = "success";
                 this.hideMessage();
+                const index = this.roles.findIndex((x) => x.id == id);
+                const clone= cloneDeep(this.roles)
+                clone.splice(index, 1);
+                this.roles=clone;
                 this.responseMessage = MESSAGES.DELETED("Role");
             },
             (response) => super.onError(response)

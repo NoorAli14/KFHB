@@ -47,6 +47,7 @@ export class TableRowComponent extends BaseComponent {
     @Input() roles: any[];
     @Input() displayedColumns: string[];
     @Output() delete=new EventEmitter();
+    @Output() edit=new EventEmitter();
     pageSize:number=CONFIG.PAGE_SIZE;
     pageSizeOptions:Array<number>=CONFIG.PAGE_SIZE_OPTIONS;
     expandedId: string = "";
@@ -57,6 +58,7 @@ export class TableRowComponent extends BaseComponent {
         super("Role Management");
     }
     ngOnChanges(changes: SimpleChanges): void {
+        debugger
         if(changes.roles.currentValue!=changes.roles.previousValue){
             this.dataSource = new MatTableDataSource(this.roles);
             this.dataSource.paginator = this.paginator;
@@ -77,5 +79,8 @@ export class TableRowComponent extends BaseComponent {
      }
      onDelete(id){
         this.delete.emit(id);
+     }
+     onEdit(data){
+        this.edit.emit(data);
      }
 }

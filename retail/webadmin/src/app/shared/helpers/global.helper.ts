@@ -60,3 +60,8 @@ export const camelToSentenceCase = (text) => {
     var finalResult = result.charAt(0).toUpperCase() + result.slice(1);
     return finalResult;
 };
+
+
+export const removeRandom=(text)=>{
+    return text.replace(/\d+/g, '');
+}

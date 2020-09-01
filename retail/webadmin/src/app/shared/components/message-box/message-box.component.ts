@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, SimpleChanges } from "@angular/core";
+import { removeRandom } from '@shared/helpers/global.helper';
 
 @Component({
     selector: "app-message-box",
@@ -15,7 +16,7 @@ export class MessageBoxComponent implements OnInit {
     ngOnChanges(changes: SimpleChanges){
         if(changes.message.currentValue!=changes.message.previousValue){
             this.isVisible=true;
-            this.responseMessage=this.message.replace(/\d+/g, '');
+            this.responseMessage=removeRandom(this.message)
         }
     }
     ngOnInit(): void {
