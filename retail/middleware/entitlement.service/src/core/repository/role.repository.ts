@@ -74,7 +74,7 @@ export class RoleRepository extends BaseRepository {
             module_permission_id : mpi,
           };
         });
-        if(module_permission_roles.length > 0) await trx(TABLE.MODULE_PERMISSION_ROLE).insert(module_permission_roles, ['id']);
+        if(module_permission_roles.length > 0) await trx(TABLE.MODULE_PERMISSION_ROLE).insert(module_permission_roles);
       }
       await trx.commit();
       return response;

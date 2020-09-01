@@ -44,6 +44,7 @@ export const graphqlFields = (info: { [key: string]: any }): string[] => {
 
   // we need the id in every query
   keys.push('id');
+  keys.push('created_on');
   return keys
 };
 
