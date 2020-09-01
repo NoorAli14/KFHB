@@ -18,12 +18,23 @@ export const NUMBERS = {
   TOKEN_LENGTH: 64,
   MAX_COLUMN_LENGTH: 255,
   NATIONALITY_ID_LENGTH: 96,
+  DEFAULT_PAGE_SIZE: 25,
+};
+
+export const HEADER_NAMES = {
+  X_USER_ID: "x-user-id",
+  X_TENANT_ID: "x-tenant-id",
 };
 
 export const STATUS = {
   ACTIVE: 'ACTIVE',
   INACTIVE: 'INACTIVE',
   PENDING: 'PENDING',
+};
+
+export const PAGINATION_PARAMS = {
+  PAGE: 'page',
+  PER_PAGE: 'perPage',
 };
 
 export const TEMP_ROLE = {
@@ -58,6 +69,15 @@ export const MODULES = [
         permissions: [
           {
             name: 'view',
+          },
+          {
+            name: 'edit',
+          },
+          {
+            name: 'delete',
+          },
+          {
+            name: 'create',
           },
         ],
       },

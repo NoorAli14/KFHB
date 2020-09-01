@@ -1,4 +1,5 @@
 import {Field, ID, ObjectType} from "@nestjs/graphql";
+import {PaginationModel} from '@common/models';
 
 @ObjectType()
 export class Permission {
@@ -16,4 +17,13 @@ export class Permission {
 
   @Field({ nullable: true })
   module_permission_id?: string;
+}
+
+@ObjectType()
+export class PermissionWithPagination {
+  @Field({ nullable: true })
+  pagination?: PaginationModel;
+
+  @Field(type => [Permission], { nullable: true })
+  data?: Permission[];
 }

@@ -8,8 +8,8 @@ import { KeyValInput } from "@common/inputs/key-val.input";
 export class ModuleService {
   constructor(private moduleDB: ModuleRepository) {}
 
-  async list(keys: string[]): Promise<any> {
-    return this.moduleDB.list(keys,{"status":STATUS.ACTIVE});
+  async list(keys: string[], paginationParams: Record<string, any>): Promise<any> {
+    return this.moduleDB.listWithPagination(paginationParams, keys, {parent_id: null});
   }
 
   async findById(id: string, keys?: string[]): Promise<any> {
@@ -66,7 +66,6 @@ export class ModuleService {
   }
 
   async delete(id: string): Promise<any> {
-    const result = await this.update(id, {status: STATUS.INACTIVE});
-    return !!result;
+    return await this.moduleDB.delete({ id: id });
   }
 }

@@ -8,12 +8,12 @@ import { KeyValInput } from "@common/inputs/key-val.input";
 export class RoleService {
   constructor(private roleDB: RoleRepository) {}
 
-  async list(keys: string[]): Promise<any> {
-    return this.roleDB.list(keys,{"deleted_on" : null});
+  async list(keys: string[], paginationParams: Record<string, any>): Promise<any> {
+    return this.roleDB.listWithPagination(paginationParams, keys,{deleted_on : null});
   }
 
   async findById(id: string, keys?: string[]): Promise<any> {
-    const result = await this.roleDB.findOne({ id: id }, keys);
+    const result = await this.roleDB.findOne({ id: id, deleted_on : null }, keys);
     if(!result){
       throw new HttpException({
         status: HttpStatus.NOT_FOUND,
@@ -28,6 +28,7 @@ export class RoleService {
     checks.forEach(check => {
       conditions[check.record_key] = check.record_value;
     });
+    conditions['deleted_on'] = null;
     const result = await this.roleDB.findBy(conditions, keys);
     if(!result){
       throw new HttpException({
@@ -49,7 +50,7 @@ export class RoleService {
         error: MESSAGES.INVALID_STATUS,
       }, HttpStatus.BAD_REQUEST);
     }
-    const result = await this.roleDB.update({ id: id }, roleObj, keys);
+    const result = await this.roleDB.update({ id: id, deleted_on : null }, roleObj, keys);
     if(result?.length > 0) {
       return result[0]
     } else {
@@ -80,8 +81,8 @@ export class RoleService {
     }
   }
 
-  async delete(id: string): Promise<any> {
-    const result = await this.update(id, {status: STATUS.INACTIVE});
+  async delete(id: string, input: Record<any, any>): Promise<any> {
+    const result = await this.update(id, input, ['id']);
     return !!result;
   }
 }

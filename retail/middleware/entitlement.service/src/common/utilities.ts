@@ -1,5 +1,7 @@
 import * as path from 'path';
 import * as Crypto from 'crypto';
+import {HEADER_NAMES} from '@common/constants';
+import * as moment from 'moment';
 
 /**
  * graphqlKeys string[]
@@ -42,6 +44,7 @@ export const graphqlFields = (info: { [key: string]: any }): string[] => {
 
   // we need the id in every query
   keys.push('id');
+  keys.push('created_on');
   return keys
 };
 
@@ -64,6 +67,18 @@ export const loaderSerializer = (data: any, serializer:string[], key: string, se
   if (typeof serializer[0] != 'string')
     return serializer.map(obj => loaderLookups[obj[serializerKey]] || []);
   return serializer.map(id => loaderLookups[id] || []);
+};
+
+export const getMutateProps = (key: string, headers: any, model: any): any => {
+  const x_user_id = headers[HEADER_NAMES.X_USER_ID];
+  const date = moment().format();
+  model[`${key}_by`] = x_user_id;
+  model[`${key}_on`] = date;
+  return model
+};
+
+export const getTenantID = (headers: any): any => {
+  return headers[HEADER_NAMES.X_TENANT_ID];
 };
 
 /**

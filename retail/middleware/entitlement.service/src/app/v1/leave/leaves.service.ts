@@ -8,12 +8,12 @@ import {LeaveRepository} from "@core/repository/leave.repository";
 export class LeavesService {
   constructor(private leaveRepository: LeaveRepository) {}
 
-  async list(keys: string[]): Promise<any> {
-    return this.leaveRepository.list(keys,{"status" : STATUS.ACTIVE});
+  async list(keys: string[], paginationParams: Record<string, any>): Promise<any> {
+    return this.leaveRepository.listWithPagination(paginationParams, keys,{deleted_on : null});
   }
 
   async findById(id: string, keys?: string[]): Promise<any> {
-    return this.leaveRepository.findOne({ id: id }, keys);
+    return this.leaveRepository.findOne({ id: id, deleted_on : null }, keys);
   }
 
   async findByProperty(checks: KeyValInput[], keys?: string[]): Promise<any> {
@@ -21,6 +21,7 @@ export class LeavesService {
     checks.forEach(check => {
       conditions[check.record_key] = check.record_value;
     });
+    conditions['deleted_on'] = null;
     return this.leaveRepository.findBy(conditions, keys);
   }
 
@@ -41,7 +42,7 @@ export class LeavesService {
         error: MESSAGES.INVALID_WEEKDAY,
       }, HttpStatus.BAD_REQUEST);
     }
-    const [result] = await this.leaveRepository.update({ id: id }, newObj, keys);
+    const [result] = await this.leaveRepository.update({ id: id, deleted_on : null }, newObj, keys);
     if(!result) {
       throw new HttpException({
         status: HttpStatus.BAD_REQUEST,
@@ -77,8 +78,8 @@ export class LeavesService {
     }
   }
 
-  async delete(id: string): Promise<any> {
-    const result = await this.update(id, {status: STATUS.INACTIVE});
+  async delete(id: string, input: Record<any, any>): Promise<any> {
+    const result = await this.update(id, input, ['id']);
     return !!result;
   }
 }

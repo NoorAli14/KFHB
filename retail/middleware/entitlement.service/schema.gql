@@ -25,6 +25,7 @@ input CreateUserInput {
   middle_name: String
   last_name: String
   gender: String
+  is_owner: Boolean
   date_of_birth: String
   nationality_id: String
   status: String
@@ -155,6 +156,16 @@ type Mutation {
   deleteLeave(id: String!): Boolean!
 }
 
+type PaginationModel {
+  from: Float
+  to: Float
+  total: Float
+  perPage: Float
+  currentPage: Float
+  lastPage: Float
+  offset: Float
+}
+
 type Permission {
   id: ID
   record_type: String
@@ -197,6 +208,7 @@ type Role {
   id: ID
   name: String
   description: String
+  tenant_id: String
   status: String
   created_on: String
   created_by: String
@@ -222,6 +234,7 @@ input UpdateUserInput {
   middle_name: String
   last_name: String
   gender: String
+  is_owner: Boolean
   date_of_birth: String
   nationality_id: String
   status: String
@@ -241,6 +254,8 @@ type User {
   middle_name: String
   last_name: String
   gender: String
+  is_owner: String
+  tenant_id: String
   date_of_birth: String
   nationality_id: String
   status: String

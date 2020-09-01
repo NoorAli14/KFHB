@@ -3,6 +3,7 @@ import { Field, ID, ObjectType } from "@nestjs/graphql";
 import { Role } from "@app/v1/roles/role.model";
 import {Module} from "@app/v1/modules/module.model";
 import {Leave} from "@app/v1/leave/leave.model";
+import {PaginationModel} from "@common/models";
 
 @ObjectType()
 export class User {
@@ -29,6 +30,12 @@ export class User {
 
   @Field({ nullable: true })
   gender?: string;
+
+  @Field({ nullable: true })
+  is_owner?: string;
+
+  @Field({ nullable: true })
+  tenant_id?: string;
 
   @Field({ nullable: true })
   date_of_birth?: string;
@@ -77,4 +84,13 @@ export class User {
 
   @Field(type => [Leave], { nullable: true })
   leaves?: Leave[];
+}
+
+@ObjectType()
+export class UserWithPagination {
+  @Field({ nullable: true })
+  pagination?: PaginationModel;
+
+  @Field(type => [User], { nullable: true })
+  data?: User[];
 }

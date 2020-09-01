@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {Injectable} from '@nestjs/common';
+
 import { BaseRepository } from './base.repository';
-import { STATUS, TABLE } from '@common/constants';
-import { IdsInput } from '@common/inputs/ids.input';
+import {STATUS, TABLE} from '@common/constants';
+import {IdsInput} from '@common/inputs/ids.input';
 
 @Injectable()
 export class RoleRepository extends BaseRepository {
@@ -9,13 +10,14 @@ export class RoleRepository extends BaseRepository {
     `${TABLE.ROLE}.id`,
     `${TABLE.ROLE}.name`,
     `${TABLE.ROLE}.status`,
+    `${TABLE.ROLE}.tenant_id`,
     `${TABLE.ROLE}.description`,
     `${TABLE.ROLE}.updated_on`,
     `${TABLE.ROLE}.updated_by`,
     `${TABLE.ROLE}.deleted_on`,
     `${TABLE.ROLE}.deleted_by`,
     `${TABLE.ROLE}.created_by`,
-    `${TABLE.ROLE}.created_on`,
+    `${TABLE.ROLE}.created_on`
   ];
 
   constructor() {
@@ -25,6 +27,7 @@ export class RoleRepository extends BaseRepository {
   async listRolesByUserID(userIds): Promise<any> {
     const condition = {};
     condition[`${TABLE.ROLE}.status`] = STATUS.ACTIVE;
+    condition[`${TABLE.ROLE}.deleted_on`] = null;
     return this._connection(TABLE.ROLE)
       .select([...this.__attributes, `${TABLE.USER_ROLE}.user_id`])
       .leftJoin(
@@ -36,41 +39,42 @@ export class RoleRepository extends BaseRepository {
       .where(condition);
   }
 
-  async update(
-    condition: Record<string, any>,
-    role: Record<string, any>,
-    keys: string[],
-  ): Promise<any> {
+  async update(condition: Record<string, any>,
+               role: Record<string, any>,
+               keys: string[]): Promise<any> {
     const trxProvider = this._connection.transactionProvider();
     const trx = await trxProvider();
-    try {
+    try{
       const module_permission_ids: IdsInput[] = role.permissions;
       delete role.permissions;
-      const response = await trx(TABLE.ROLE)
-        .where(condition)
-        .update(role, keys);
-      if (module_permission_ids?.length > 0) {
-        // deleting role and module-permission relations
-        const modulePermissionsToDelete = module_permission_ids
-          .filter(module_permission_id => module_permission_id._deleted)
-          .map(module_permission_id => module_permission_id.id);
-        await trx(TABLE.MODULE_PERMISSION_ROLE)
-          .whereIn('module_permission_id', modulePermissionsToDelete)
-          .where({ role_id: response[0].id || response[0] })
+      const response = await trx(TABLE.ROLE).where(condition).update(role, keys);
+      if(module_permission_ids?.length > 0) {
+        const modulePermissionsToDelete = [];
+        const newModulePermissions = [];
+        for (const mpi of module_permission_ids) {
+          mpi._deleted ? modulePermissionsToDelete.push(mpi.id) : newModulePermissions.push(mpi.id);
+        }
+        // deleting module-permission-roles
+        if (modulePermissionsToDelete.length > 0)
+          await trx(TABLE.MODULE_PERMISSION_ROLE).whereIn('module_permission_id', modulePermissionsToDelete)
+          .where({role_id: response[0].id || response[0]})
           .del();
-        //creating role and module-permission relations
-        const module_permission_roles = module_permission_ids
-          .filter(module_permission_id => !module_permission_id._deleted)
-          .map(module_permission_id => {
-            return {
-              role_id: response[0].id || response[0],
-              module_permission_id: module_permission_id.id,
-            };
-          });
-        if (module_permission_roles?.length > 0)
-          await trx(
-            TABLE.MODULE_PERMISSION_ROLE,
-          ).insert(module_permission_roles, ['module_permission_id']);
+        // checking which of Ids already exist
+        const idsAlready = await trx(TABLE.MODULE_PERMISSION_ROLE).select(['module_permission_id'])
+          .whereIn('module_permission_id', newModulePermissions)
+          .where({role_id: response[0].id || response[0]});
+        // removing already existing Ids
+        idsAlready.forEach(idObj => {
+          newModulePermissions.splice(newModulePermissions.indexOf(idObj.module_permission_id || idObj), 1)
+        });
+        // creating new module-permission-roles
+        const module_permission_roles = newModulePermissions.map(mpi => {
+          return {
+            role_id : response[0].id || response[0],
+            module_permission_id : mpi,
+          };
+        });
+        if(module_permission_roles.length > 0) await trx(TABLE.MODULE_PERMISSION_ROLE).insert(module_permission_roles);
       }
       await trx.commit();
       return response;
