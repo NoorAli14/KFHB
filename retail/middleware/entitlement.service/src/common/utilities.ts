@@ -81,6 +81,10 @@ export const getTenantID = (headers: any): any => {
   return headers[HEADER_NAMES.X_TENANT_ID];
 };
 
+export const getXUserID = (headers: any): any => {
+  return headers[HEADER_NAMES.X_USER_ID];
+};
+
 /**
  * Full path string
  * @param fileOrDir

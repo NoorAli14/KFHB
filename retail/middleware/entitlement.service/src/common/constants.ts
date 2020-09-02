@@ -142,6 +142,7 @@ export const MESSAGES = {
   INVALID_WEEKDAY: `Weekday should be one of ${Object.keys(WEEK_DAYS)}`,
   INVALID_STATUS: `Status should be one of ${Object.keys(STATUS)}`,
   ROLE_EXISTS: 'Role with this name already exists',
+  PASSWORD_MISMATCH: 'Current password did not match',
 };
 
 export const DATABASE_UUID_METHOD = 'NEWID()';

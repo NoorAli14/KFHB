@@ -49,10 +49,6 @@ export class UserService {
         error: MESSAGES.INVALID_STATUS,
       }, HttpStatus.BAD_REQUEST);
     }
-    if(userObj.password) {
-      userObj.password_digest = this.encrypter.encryptPassword(userObj.password);
-      delete userObj.password;
-    }
     const [result] = await this.userDB.update({ id: id, deleted_on : null }, userObj, keys);
     if(!result) {
       throw new HttpException({
@@ -92,5 +88,20 @@ export class UserService {
   async delete(id: string, input: Record<any, any>): Promise<any> {
     const result = await this.update(id, input, ['id']);
     return !!result;
+  }
+
+  async updateUserPassword(user: Record<string, any>,
+                           input: Record<string, any>,
+                           keys: string[]): Promise<any> {
+    if (!this.encrypter.comparePassword(input.current_password, user.password_digest)){
+      throw new HttpException({
+        status: HttpStatus.BAD_REQUEST,
+        error: MESSAGES.PASSWORD_MISMATCH,
+      }, HttpStatus.BAD_REQUEST);
+    }
+    const userObj = {
+      password_digest : this.encrypter.encryptPassword(input.new_password)
+    };
+    return this.update(user.id, userObj, keys);
   }
 }

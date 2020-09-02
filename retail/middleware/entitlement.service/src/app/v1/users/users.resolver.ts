@@ -11,7 +11,7 @@ import { Loader } from 'nestjs-dataloader';
 
 import {User, UserWithPagination} from "@app/v1/users/user.model";
 import { UserService } from "@app/v1/users/users.service";
-import { CreateUserInput, UpdateUserInput } from "@app/v1/users/user.dto";
+import {CreateUserInput, UpdateUserInput, UpdatePasswordInput} from "@app/v1/users/user.dto";
 import { Role } from "@app/v1/roles/role.model";
 import {KeyValInput} from "@common/inputs/key-val.input";
 import {Module} from "@app/v1/modules/module.model";
@@ -19,7 +19,7 @@ import {Leave} from "@app/v1/leave/leave.model";
 import {Fields} from "@common/decorators";
 import {HttpException, HttpStatus} from '@nestjs/common';
 import {MESSAGES, STATUS} from '@common/constants';
-import {getMutateProps, getTenantID} from '@common/utilities';
+import {getMutateProps, getTenantID, getXUserID} from '@common/utilities';
 
 @Resolver(User)
 export class UsersResolver {
@@ -48,6 +48,18 @@ export class UsersResolver {
       error: MESSAGES.NOT_FOUND,
     }, HttpStatus.NOT_FOUND);
     return this.userService.resetInvitationToken(id, columns);
+  }
+
+  @Mutation(() => User)
+  async updatePassword(@Args('input') input: UpdatePasswordInput,
+                       @Fields() columns: string[],
+                       @Context() context: GraphQLExecutionContext): Promise<User> {
+    const user: User = await this.userService.findById(getXUserID(context['req'].headers),['id', 'password_digest']);
+    if(!user) throw new HttpException({
+      status: HttpStatus.NOT_FOUND,
+      error: MESSAGES.NOT_FOUND,
+    }, HttpStatus.NOT_FOUND);
+    return this.userService.updateUserPassword(user, input, columns);
   }
 
   @Query(() => [User])
