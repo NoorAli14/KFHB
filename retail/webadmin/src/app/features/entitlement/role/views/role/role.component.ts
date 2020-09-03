@@ -5,8 +5,6 @@ import { MatDialog } from "@angular/material/dialog";
 import { Role } from "@feature/entitlement/models/role.model";
 
 import {
-    camelToSentenceCase,
-    camelToSnakeCaseText,
     removeRandom,
 } from "@shared/helpers/global.helper";
 import { MESSAGES } from "@shared/constants/app.constants";
@@ -27,7 +25,7 @@ import { cloneDeep } from 'lodash';
 })
 export class RoleComponent extends BaseComponent implements OnInit {
     roles: Role[];
-    modules: any[];
+    modules: any[]=[]
     dialogRef: any;
 
     roleName: FormControl;
@@ -58,7 +56,8 @@ export class RoleComponent extends BaseComponent implements OnInit {
         this._service.forkRolesData().subscribe(
             (response) => {
                 this.roles = response[0];
-                this.modules = response[1];
+              const modules = response[1];
+                this.makeFlat(modules,'')
                 this.roles = this.roles.map((role) => ({
                     ...role,
                     role_name: role.name,
@@ -66,6 +65,14 @@ export class RoleComponent extends BaseComponent implements OnInit {
             },
             (response) => super.onError(response)
         );
+    }
+    makeFlat(modules: any[], parent) {
+        modules.forEach((item) => {
+            this.modules.push(item);
+            if (item.sub_modules) {
+                this.makeFlat(item.sub_modules, item.name);
+            }
+        });
     }
     openDialog(data,modules): void {
         
@@ -87,28 +94,6 @@ export class RoleComponent extends BaseComponent implements OnInit {
                     _this.createRole(response);
                 }
             });
-    }
-    createEditData(){
-        console.log(this.modules);
-        
-    }
-    mapModules(modules) {
-        const mapped = modules.map((item) => {
-            item.text = item.name;
-            item.value = item.id;
-            if (item.sub_modules && item.sub_modules.length > 0) {
-                item.children = item.sub_modules;
-                this.mapModules(item.sub_modules);
-            }
-            return item;
-        });
-        return mapped;
-    }
-    camelToSentenceCase(text) {
-        return camelToSentenceCase(text);
-    }
-    camelToSnakeCase(text) {
-        return camelToSnakeCaseText(text);
     }
     confirmDialog(id): void {
         const message = removeRandom(MESSAGES.REMOVE_CONFIRMATION())
@@ -161,13 +146,15 @@ export class RoleComponent extends BaseComponent implements OnInit {
     createRole(data: Role) {
         this._service.createRole(data).subscribe(
             (response) => {
-                this._errorEmitService.emit(
-                    MESSAGES.CREATED("Role"),
-                    "success"
-                );
+               
+                this.errorType = "success";
+                this.responseMessage = MESSAGES.CREATED("Role");
                 const clone= cloneDeep(this.roles)
+                response.role_name=response.name;
                 clone.unshift(response)
                 this.roles=clone;
+                this.hideMessage()
+                this._matDialog.closeAll();
             },
             (response=>{
                 this._errorEmitService.emit(
@@ -186,14 +173,16 @@ export class RoleComponent extends BaseComponent implements OnInit {
         this._service.editRole(model.id, model).subscribe(
             (response) => {
                 this.errorType = "success";
+                response.role_name=response.name;
                 this.responseMessage = MESSAGES.UPDATED("Role");
-                // const index = this.dataSource.data.findIndex(
-                //     (x) => x.id == model.id
-                // );
-                // this.roles[index] = response;
-                // this.updateGrid(this.roles);
-                // this.hideMessage();
-                // this._matDialog.closeAll();
+                const clone= cloneDeep(this.roles)
+                const index =clone.findIndex(
+                    (x) => x.id == model.id
+                );
+                clone[index] = response;
+                this.roles=clone;
+                this.hideMessage();
+                this._matDialog.closeAll();
             },
            (response=>super.onError(response))
         );

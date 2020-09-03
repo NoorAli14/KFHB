@@ -15,7 +15,8 @@ export class AboutComponent implements OnInit {
     nationalityList: any[] = NATIONALITY_LIST;
     constructor() {}
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+    }
     getNationality(id) {
         return getName(id, "name", this.nationalityList);
     }
