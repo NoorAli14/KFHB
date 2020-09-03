@@ -39,7 +39,9 @@
     - [API Gateway](#api-gateway)
     - [Microservices](#microservices)
     - [Notes](#notes)
-  - [Packages](#packages)
+  - [Service Specific](#service-specific)
+    - [Packages](#packages)
+    - [Env Variables](#env-variables)
 
 ![divider](./divider.png)
 
@@ -259,7 +261,16 @@ npm run test:cov
 - Nest JS loads the Loader from first Module registered in the AppModule and if there is any Loader missing in the first Module and added in the second Module this will make problems.
   - Solution: Unify the Loaders Module and add that in the Appmodule directly (on Global level).
 
-## Packages
+## Service Specific
+
+### Packages
 
 - @nestjs/schedule
-- cron
+- cron (Not Using currently)
+- nestjs-redis
+
+### Env Variables
+
+- MINUTES_BEFORE_CALL_TO_SEND_NOTIFICATION=15
+- ENV_RBX_REDIS_URL=redis://127.0.0.1:6379/4
+- ENV_RBX_MAX_APPOINTMENTS_AT_A_TIME=5 (Related to the Available Agents at a time)

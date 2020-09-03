@@ -1,3 +1,5 @@
+import { registerEnumType } from '@nestjs/graphql';
+
 export enum TABLE {
   APPOINTMENT = 'VC_APPOINTMENT',
 }
@@ -14,9 +16,13 @@ export enum GENDER {
 export enum APPOINTMENT_STATUS {
   SCHEDULED = 'scheduled',
   RESCHEDULED = 'rescheduled',
+  QUEUED = 'queued',
+  NOTIFICATION = 'notification',
   ATTENDED = 'attended',
   CANCELLED = 'cancelled',
 }
+registerEnumType(GENDER, { name: 'GENDER' });
+registerEnumType(APPOINTMENT_STATUS, { name: 'APPOINTMENT_STATUS' });
 
 export const DATABASE_UUID_METHOD = 'NEWID()';
 

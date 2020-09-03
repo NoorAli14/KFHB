@@ -1,22 +1,68 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Field, ObjectType } from '@nestjs/graphql';
+import { GENDER, APPOINTMENT_STATUS } from '@common/constants';
+import { IsDate, IsEnum } from 'class-validator';
 
-export class Option {
+@ObjectType()
+export class UserGQL {
+  @Field()
+  id?: string;
+
+  @Field()
+  first_name?: string;
+
+  @Field()
+  middle_name?: string;
+
+  @Field()
+  last_name?: string;
+
+  @Field()
+  email?: string;
+
+  @Field()
+  gender?: string;
+
+  @Field()
+  @IsDate()
+  date_of_birth?: Date;
+
+  @Field()
+  nationality_id?: string;
+
+  @Field()
+  username?: string;
+
+  @Field()
+  contact_no?: string;
+
+  @Field()
+  created_on?: Date;
+
+  @Field()
+  updated_on?: Date;
+}
+
+export class Appointment {
   readonly id: string;
 
   @ApiProperty({
     example: 'Call Time',
+    type: Date,
     description: 'Scheduled time of the Call',
   })
   call_time: Date;
 
   @ApiProperty({
     example: 'male',
+    enum: GENDER,
     description: 'Gender of the Agent',
   })
   gender: GENDER;
 
   @ApiProperty({
     example: 'male',
+    enum: APPOINTMENT_STATUS,
     description: 'Gender of the Agent',
   })
   status: APPOINTMENT_STATUS;
@@ -28,28 +74,27 @@ export class Option {
   user_id: string;
 }
 
-// Graphql Model
-import { Field, ObjectType } from '@nestjs/graphql';
-import { GENDER, APPOINTMENT_STATUS } from '@common/constants';
-
 @ObjectType()
-export class OptionGQL {
+export class AppointmentGQL {
   @Field()
   id: string;
 
   @Field()
+  @IsDate()
   call_time: Date;
 
-  @Field()
+  @Field(() => GENDER)
+  @IsEnum(GENDER)
   gender: GENDER;
 
-  @Field()
+  @Field(() => APPOINTMENT_STATUS)
+  @IsEnum(APPOINTMENT_STATUS)
   status: APPOINTMENT_STATUS;
 
   user_id?: string;
 
-  // @Field(() => UserGQL)
-  // user?: UserGQL;
+  @Field(() => UserGQL) // Will get this field from another service using ResolveField function.
+  user?: UserGQL;
 
   @Field()
   created_on: Date;

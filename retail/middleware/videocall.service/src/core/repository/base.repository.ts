@@ -59,4 +59,16 @@ export abstract class BaseRepository {
     }
     return result;
   }
+
+  async between(
+    column_name: string,
+    start: string | Date | any,
+    end: string | Date | any,
+    keys?: string[],
+  ): Promise<any> {
+    return this._connection(this._tableName)
+      .select(keys)
+      .where(column_name, '>=', start)
+      .where(column_name, '<', end);
+  }
 }

@@ -14,13 +14,29 @@ export function graphqlFields(info: Record<string, unknown>): string[] {
   return keys;
 }
 
-export const uuidV4 = (): string => {
+export function uuidV4(): string {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
     const r = (Math.random() * 16) | 0,
       v = c == 'x' ? r : (r & 0x3) | 0x8;
     return v.toString(16);
   });
-};
+}
+
+/**
+ * Validate an UUID v4 string
+ *
+ * @param uuid a string value containing UUID
+ * @returns Validity of the provided param
+ */
+export function validate_uuidV4(uuid: string): boolean {
+  const validationRegex = /^[A-Za-z0-9]{8}-[A-Za-z0-9]{4}-4[A-Za-z0-9]{3}-[A-Za-z0-9]{4}-[A-Za-z0-9]{12}$/;
+  try {
+    const result = validationRegex.test(uuid);
+    return result;
+  } catch (error) {
+    console.log('error', error);
+  }
+}
 
 /**
  * Full path string

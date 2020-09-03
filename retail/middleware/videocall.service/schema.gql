@@ -12,95 +12,61 @@ directive @requires(fields: String!) on FIELD_DEFINITION
 
 directive @provides(fields: String!) on FIELD_DEFINITION
 
+enum APPOINTMENT_STATUS {
+  SCHEDULED
+  RESCHEDULED
+  QUEUED
+  NOTIFICATION
+  ATTENDED
+  CANCELLED
+}
+
+type AppointmentGQL {
+  id: String!
+  call_time: DateTime!
+  gender: GENDER!
+  status: APPOINTMENT_STATUS!
+  user: UserGQL!
+  created_on: DateTime!
+  updated_on: DateTime!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
 
+enum GENDER {
+  MALE
+  FEMALE
+}
+
 type Mutation {
-  addTemplateResponse(input: NewTemplateResponseInput!): TemplateResponseGQL!
+  addAppointment(input: NewAppointmentInput!): AppointmentGQL!
 }
 
-input NewTemplateResponseInput {
-  results: String!
-  remarks: String!
-  template_id: String!
+input NewAppointmentInput {
+  call_time: DateTime!
+  gender: GENDER!
+  status: APPOINTMENT_STATUS!
   user_id: String!
-}
-
-type OptionGQL {
-  id: String!
-  name: String!
-  name_ar: String!
-  question: QuestionGQL!
-  created_on: DateTime!
-  updated_on: DateTime!
 }
 
 type Query {
-  optionsList: [OptionGQL!]!
-  findOption(id: String!): OptionGQL!
-  questionsList: [QuestionGQL!]!
-  findQuestion(id: String!): QuestionGQL!
-  sectionsList: [SectionGQL!]!
-  findSection(id: String!): SectionGQL!
-  templatesList: [TemplateGQL!]!
-  findTemplateByName(name: String!): TemplateGQL!
-  findTemplate(id: String!): TemplateGQL!
-  templatesQuestionsList: [TemplateQuestionGQL!]!
-  findTemplateQuestion(id: String!): TemplateQuestionGQL!
+  findAppointment(id: String!): AppointmentGQL!
 }
 
-type QuestionGQL {
+type UserGQL {
   id: String!
-  title: String!
-  title_ar: String!
-  type: String!
-  rules: String!
-  status: Boolean!
-  options: [OptionGQL!]!
-  section: SectionGQL!
-  created_on: DateTime!
-  updated_on: DateTime!
-}
-
-type SectionGQL {
-  id: String!
-  name: String!
-  name_ar: String!
-  level: String!
-  questions: [QuestionGQL!]!
-  template: TemplateGQL!
-  created_on: DateTime!
-  updated_on: DateTime!
-}
-
-type TemplateGQL {
-  id: String!
-  name: String!
-  name_ar: String!
-  sections: [SectionGQL!]!
-  created_on: DateTime!
-  updated_on: DateTime!
-}
-
-type TemplateQuestionGQL {
-  id: String!
-  rules: String!
-  status: Boolean!
-  template: TemplateGQL!
-  section: SectionGQL!
-  question: QuestionGQL!
-  created_on: DateTime!
-  updated_on: DateTime!
-}
-
-type TemplateResponseGQL {
-  id: String!
-  results: String!
-  remarks: String!
-  user_id: String!
-  template: TemplateGQL!
+  first_name: String!
+  middle_name: String!
+  last_name: String!
+  email: String!
+  gender: String!
+  date_of_birth: DateTime!
+  nationality_id: String!
+  username: String!
+  contact_no: String!
   created_on: DateTime!
   updated_on: DateTime!
 }

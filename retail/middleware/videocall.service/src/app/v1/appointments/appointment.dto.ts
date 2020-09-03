@@ -1,14 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsString,
-  MaxLength,
-  IsUUID,
-  IsOptional,
-  IsDate,
-  IsEnum,
-} from 'class-validator';
+import { IsUUID, IsOptional, IsDate, IsEnum } from 'class-validator';
 
-export class CreateOptionDto {
+import { Field, InputType } from '@nestjs/graphql';
+import { GENDER, APPOINTMENT_STATUS } from '@common/constants';
+
+export class CreateAppointmentDto {
   @IsUUID()
   @IsOptional()
   readonly id?: string;
@@ -29,22 +25,20 @@ export class CreateOptionDto {
   user_id: string;
 }
 
-// Graphql Example DTO
-import { Field, InputType } from '@nestjs/graphql';
-import { GENDER, APPOINTMENT_STATUS } from '@common/constants';
-
 @InputType()
-export class NewOptionInput {
+export class NewAppointmentInput {
   @Field()
   call_time: Date;
 
-  @Field()
+  @Field(() => GENDER)
+  @IsEnum(GENDER)
   gender: GENDER;
 
-  @Field()
+  @Field(() => APPOINTMENT_STATUS)
+  @IsEnum(APPOINTMENT_STATUS)
   status: APPOINTMENT_STATUS;
 
   @Field()
-  @IsUUID()
+  @IsUUID('all', { message: 'user_id is not a valid UUID', always: true })
   user_id: string;
 }

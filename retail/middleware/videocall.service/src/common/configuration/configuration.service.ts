@@ -9,6 +9,8 @@ import {
   iGRAPHQL,
   iConfig,
 } from '@common/interfaces/configuration.interface';
+import { RedisModuleOptions } from 'nestjs-redis';
+
 export const DEFAULT_ENV: iConfig = {
   APP: {
     NAME: 'Rubix | Template Service',
@@ -37,6 +39,10 @@ export const DEFAULT_ENV: iConfig = {
     ROUTE: '/graphql',
     PLAYGROUND: true,
     DEBUG: true,
+  },
+  REDIS: {
+    name: 'development',
+    url: 'redis://127.0.0.1:6379/4',
   },
   logLevel: 'info',
 };
@@ -103,6 +109,15 @@ export class ConfigurationService {
       ),
     };
   }
+
+  public get REDIS(): RedisModuleOptions {
+    return {
+      name: this.get('NODE_ENV', DEFAULT_ENV.REDIS.name),
+      url: this.get('ENV_RBX_REDIS_URL', DEFAULT_ENV.REDIS.url),
+      enableReadyCheck: true,
+    };
+  }
+
   get(name: string, _default: any = undefined): string {
     return get(this.env, name, _default);
   }

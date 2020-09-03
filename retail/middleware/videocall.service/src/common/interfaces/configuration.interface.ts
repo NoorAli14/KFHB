@@ -1,3 +1,5 @@
+import { RedisModuleOptions } from 'nestjs-redis';
+
 export interface iSWAGGER {
   ROUTE?: string;
 }
@@ -31,6 +33,7 @@ export interface iDATABASE {
   TIMEOUT?: number;
   IS_DEBUG?: boolean;
 }
+
 export interface iConfig {
   /** Application Details */
   APP: iAPP;
@@ -38,6 +41,7 @@ export interface iConfig {
   DATABASE?: iDATABASE;
   SWAGGER?: iSWAGGER;
   GRAPHQL?: iGRAPHQL;
+  REDIS?: RedisModuleOptions;
 
   /**
    * The log level to use.
