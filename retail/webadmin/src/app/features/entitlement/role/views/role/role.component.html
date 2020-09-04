@@ -42,7 +42,7 @@
         <!-- CONTENT CARD -->
         <div class="content-card" fusePerfectScrollbar>
             <app-message-box [type]="errorType" [message]="responseMessage"></app-message-box>
-            <app-table-row (delete)="confirmDialog($event)"  (edit)="onEditHandler($event)" [roles]="roles" [displayedColumns]="displayedColumns"  >
+            <app-table-row (delete)="confirmDialog($event)"  (edit)="onEditHandler($event)" [roles]="roles" [permissions]="permissions" [displayedColumns]="displayedColumns"  >
             </app-table-row>
         </div>
         <!-- / CONTENT CARD -->

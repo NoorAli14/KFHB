@@ -18,7 +18,7 @@ import { camelToSentenceCase } from "@shared/helpers/global.helper";
 })
 export class RoleFormComponent extends BaseComponent implements OnInit {
     roleForm: FormGroup;
-    displayedColumns = ["module", "view", "delete", "edit", "create"];
+    displayedColumns = ["module"];
     dataSource = new MatTableDataSource<Permission>();
     modulesMapped: any[] = [];
     @Output() sendResponse: EventEmitter<Role> = new EventEmitter<any>();
@@ -31,6 +31,9 @@ export class RoleFormComponent extends BaseComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        const totalPermissions=this.data.permissions.map((x)=>x.record_type)
+        this.displayedColumns= this.displayedColumns.concat(totalPermissions)
+
         this._errorEmitService.currentMessage.subscribe((item) => {
             this.errorType = item.type;
             this.responseMessage = item.message;

@@ -46,6 +46,7 @@ import { MatTableDataSource } from '@angular/material/table';
 export class TableRowComponent extends BaseComponent {
     @Input() roles: any[];
     @Input() displayedColumns: string[];
+    @Input() permissions: string[];
     @Output() delete=new EventEmitter();
     @Output() edit=new EventEmitter();
     pageSize:number=CONFIG.PAGE_SIZE;
@@ -58,7 +59,6 @@ export class TableRowComponent extends BaseComponent {
         super("Role Management");
     }
     ngOnChanges(changes: SimpleChanges): void {
-        debugger
         if(changes.roles.currentValue!=changes.roles.previousValue){
             this.dataSource = new MatTableDataSource(this.roles);
             this.dataSource.paginator = this.paginator;

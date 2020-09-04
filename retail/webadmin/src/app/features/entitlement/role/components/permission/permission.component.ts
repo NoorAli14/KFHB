@@ -1,65 +1,56 @@
+import { Modules } from "./../../../models/modules.model";
 import { Component, OnInit, Input } from "@angular/core";
 
-import { ConfigMiddlewareService } from "../../services/config-middleware.service";
-import {  camelToSentenceCase } from "@shared/helpers/global.helper";
+import { camelToSentenceCase } from "@shared/helpers/global.helper";
 import { Permission } from "@feature/entitlement/models/config.model";
 import { MatTableDataSource } from "@angular/material/table";
-import { BaseComponent } from '@shared/components/base/base.component';
-import { fuseAnimations } from '@fuse/animations';
+import { BaseComponent } from "@shared/components/base/base.component";
+import { fuseAnimations } from "@fuse/animations";
+import { cloneDeep } from "lodash";
 
 @Component({
     selector: "app-permission",
     templateUrl: "./permission.component.html",
-    styles:[`:host {
-        width: 100%;
-        padding:10px;
-    }`],
+    styles: [
+        `
+            :host {
+                width: 100%;
+                padding: 10px;
+            }
+        `,
+    ],
     animations: fuseAnimations,
 })
 export class PermissionComponent extends BaseComponent implements OnInit {
     title = "";
-    @Input() modules: Array<any> 
-    displayedColumns = ["module","canView","canCreate","canDelete","canEdit"];
-    dataSource = new MatTableDataSource<Permission>();
-    modulesMapped:any[]=[]
-    constructor(private _service: ConfigMiddlewareService) {
-        super()
+    @Input() modules: Array<Modules>;
+    @Input() permissions: Array<Permission>;
+    displayedColumns = ["module"];
+    dataSource = new MatTableDataSource<any>();
+    constructor() {
+        super();
     }
 
     ngOnInit(): void {
-        this.makeFlat(this.modules,'');
-        this.modulesMapped.forEach((module) =>{
-            module.module= module.name;
-            module.canView= module.permissions.find(item=>item.record_type=='view') ? true : false;
-            module.canCreate= module.permissions.find(item=>item.record_type=='create') ? true : false;
-            module.canDelete= module.permissions.find(item=>item.record_type=='delete') ? true : false;
-            module.canEdit= module.permissions.find(item=>item.record_type=='edit') ? true : false;
-        })
-        this.dataSource.data = this.modulesMapped;
-    }
-
-    getData() {
-        // this._service.forkPermissionData(this.roleModuleId).subscribe(
-        //     (response) => {
-        //         [this.roleModulesList,this.permissions]=response;
-        //         this.dataSource.data = this.roleModulesList;
-        //         console.log(response)
-        //     },
-        //    (response=>super.onError(response))
-        // );
-    }
-
-    makeFlat(modules: any[], parent_id) {
-        modules.forEach((item) => {
-            item.parent = item.parent_id? item.parent_id :'N/A';
-            item.module= item.name;
-            this.modulesMapped.push(item);
-            if (item.sub_modules && item.sub_modules.length > 0) {
-                this.makeFlat(item.sub_modules, item.module);
-            }
+        this.modules = this._mapperService.makeModulesFlat(
+            cloneDeep(this.modules)
+        );
+        const totalPermissions = this.permissions.map((x) => x.record_type);
+        this.displayedColumns = this.displayedColumns.concat(totalPermissions);
+        this.modules.forEach((module) => {
+            module['module'] = module.name;
+            totalPermissions.forEach((permission) => {
+                module[permission] = module.permissions.find(
+                    (item) => item.record_type == permission
+                )
+                    ? true
+                    : false;
+            });
         });
+        this.dataSource.data = this.modules;
     }
-    camelToSentenceCase(text){
-        return camelToSentenceCase(text)
-     }
+
+    camelToSentenceCase(text) {
+        return camelToSentenceCase(text);
+    }
 }

@@ -30,7 +30,8 @@ export class ConfigMiddlewareService {
     forkRolesData() {
         return forkJoin([
             this.getRoles(),
-            this.getModules()
+            this.getModules(),
+            this.getPermissions()
         ]);
     }
     getPermissions() {

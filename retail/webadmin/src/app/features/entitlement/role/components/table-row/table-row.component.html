@@ -34,7 +34,7 @@
 
         <ng-container matColumnDef="expandedDetail">
             <mat-cell *matCellDef="let element" [@expandableRow]="element['id'] === expandedId ? 'expanded' : 'collapsed'">
-                <app-permission *ngIf="expandedId==element['id']" [modules]="element['modules']"></app-permission>
+                <app-permission *ngIf="expandedId==element['id']" [permissions]="permissions" [modules]="element['modules']"></app-permission>
             </mat-cell>
         </ng-container>
 

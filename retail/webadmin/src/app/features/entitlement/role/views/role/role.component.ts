@@ -16,6 +16,7 @@ import { ConfigMiddlewareService } from "../../services/config-middleware.servic
 import { FormControl } from "@angular/forms";
 import { RoleFormComponent } from "../../components/role-form/role-form.component";
 import { cloneDeep } from 'lodash';
+import { Modules } from '@feature/entitlement/models/modules.model';
 
 @Component({
     selector: "app-role",
@@ -25,7 +26,8 @@ import { cloneDeep } from 'lodash';
 })
 export class RoleComponent extends BaseComponent implements OnInit {
     roles: Role[];
-    modules: any[]=[]
+    modules: Modules[]=[]
+    permissions: Permissions[]=[]
     dialogRef: any;
 
     roleName: FormControl;
@@ -57,6 +59,7 @@ export class RoleComponent extends BaseComponent implements OnInit {
             (response) => {
                 this.roles = response[0];
               const modules = response[1];
+              this.permissions = response[2];
                 this.makeFlat(modules,'')
                 this.roles = this.roles.map((role) => ({
                     ...role,
@@ -84,6 +87,7 @@ export class RoleComponent extends BaseComponent implements OnInit {
                     userPermissions: this.userPermissions,
                     modules:modules? modules: cloneDeep(this.modules),
                     roles: this.roles,
+                    permissions:this.permissions
                 },
                 panelClass: "app-role-form",
             })
