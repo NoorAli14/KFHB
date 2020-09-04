@@ -35,7 +35,7 @@ export const MESSAGES = {
 
 export const STATUS_LIST: Array<Select> = [
     { id: "ACTIVE", name: "Active" },
-    { id: "IN_ACTIVE", name: "In Active" },
+    { id: "IN_ACTIVE", name: "InActive" },
     { id: "LOCKED", name: "Locked" },
     { id: "PENDING", name: "Pending" },
 ];
