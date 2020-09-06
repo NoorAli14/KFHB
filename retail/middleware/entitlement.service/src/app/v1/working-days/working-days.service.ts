@@ -25,6 +25,10 @@ export class WorkingDaysService {
     return this.workingDaysRepository.findBy(conditions, keys);
   }
 
+  async findByDuration(obj: Record<string, any>, keys?: string[]): Promise<any> {
+    return this.workingDaysRepository.findByDuration(obj, keys);
+  }
+
   async update(
     id: string,
     newObj: Record<string, any>,

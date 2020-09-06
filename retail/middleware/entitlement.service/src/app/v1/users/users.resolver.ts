@@ -11,7 +11,7 @@ import { Loader } from 'nestjs-dataloader';
 
 import {User, UserWithPagination} from "@app/v1/users/user.model";
 import { UserService } from "@app/v1/users/users.service";
-import {CreateUserInput, UpdateUserInput, UpdatePasswordInput} from "@app/v1/users/user.dto";
+import {CreateUserInput, UpdateUserInput, UpdatePasswordInput, CheckAvailabilityInput} from "@app/v1/users/user.dto";
 import { Role } from "@app/v1/roles/role.model";
 import {KeyValInput} from "@common/inputs/key-val.input";
 import {Module} from "@app/v1/modules/module.model";
@@ -38,6 +38,11 @@ export class UsersResolver {
       error: MESSAGES.NOT_FOUND,
     }, HttpStatus.NOT_FOUND);
     return user;
+  }
+
+  @Query(() => [User])
+  async findAvailableUsers(@Args('input') input: CheckAvailabilityInput, @Fields() columns: string[]): Promise<User[]> {
+    return this.userService.check_availability(input,columns);
   }
 
   @Mutation(() => User)

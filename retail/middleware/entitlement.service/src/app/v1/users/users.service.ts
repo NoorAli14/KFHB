@@ -6,12 +6,18 @@ import {MESSAGES, NUMBERS, STATUS} from "@common/constants";
 import { KeyValInput } from "@common/inputs/key-val.input";
 import {addMinutes, generateRandomString} from "@common/utilities";
 import {ConfigurationService} from "@common/configuration/configuration.service";
+import {HolidaysService} from '@app/v1/holiday/holidays.service';
+import {LeavesService} from '@app/v1/leave/leaves.service';
+import {validateDate, validateGender} from '@common/validator';
 
 @Injectable()
 export class UserService {
   constructor(private userDB: UserRepository,
               private encrypter: Encrypter,
-              private configService: ConfigurationService) {}
+              private configService: ConfigurationService,
+              private holidaysService: HolidaysService,
+              private leavesService: LeavesService,
+              ) {}
 
   async list(keys: string[], paginationParams: Record<string, any>): Promise<any> {
     return this.userDB.listWithPagination(paginationParams, keys,{deleted_on : null});
@@ -104,4 +110,45 @@ export class UserService {
     };
     return this.update(user.id, userObj, keys);
   }
+
+  async check_availability(obj?: Record<string, any>, keys?: string[]): Promise<any> {
+    validateDate(obj.call_time);
+    obj.gender && validateGender(obj.gender);
+    obj.call_time = obj.call_time.substring(0,10);
+    if(!await this.isHoliday(obj)){
+      return this.availableAgents(obj, keys)
+    } else{
+      return []
+    }
+  }
+
+  async isHoliday(obj: Record<string, any>): Promise<boolean> {
+    const checks: KeyValInput[] = [
+      {
+        record_key: 'calendar_day',
+        record_value: obj.call_time
+      }];
+    const holidays = await this.holidaysService.findByProperty(checks, ['id', 'created_on']);
+    return !!holidays.length;
+  }
+
+  async availableAgents(obj: Record<string, any>, keys: string[]): Promise<any> {
+    const checks: KeyValInput[] = [
+      {
+        record_key: 'calendar_day',
+        record_value: obj.call_time
+      }];
+    const leaves = await this.leavesService.findByProperty(checks, ['id', 'user_id', 'created_on']);
+    const userIds: [] = leaves.map(leave => leave.user_id);
+    const condition = {deleted_on : null};
+    if (obj.gender) {
+      condition['gender'] = obj.gender;
+    }
+    return this.userDB.listExcludedUsers(userIds, condition, keys)
+  }
+
+  // async isWorkingDay(obj: Record<string, any>): Promise<boolean> {
+  //   const weekDay = Object.keys(WEEK_DAYS)[new Date("2020-09-06").getDay()];
+  //   return true
+  // }
 }

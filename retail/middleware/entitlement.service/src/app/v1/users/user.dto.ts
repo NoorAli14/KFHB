@@ -119,3 +119,17 @@ export class UpdatePasswordInput {
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   new_password: string;
 }
+
+@InputType()
+export class CheckAvailabilityInput {
+  @Field()
+  @IsString()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  call_time: string;
+
+  @Field({ nullable: true })
+  @IsString()
+  @IsOptional()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  gender?: string;
+}

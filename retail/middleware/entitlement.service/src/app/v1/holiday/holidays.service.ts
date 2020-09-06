@@ -1,8 +1,9 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 
-import { MESSAGES, STATUS, WEEK_DAYS } from '@common/constants';
+import { MESSAGES, STATUS } from '@common/constants';
 import { KeyValInput } from '@common/inputs/key-val.input';
 import { HolidayRepository } from '@core/repository/holiday.repository';
+import {validateCalendarDay} from '@common/validator';
 
 @Injectable()
 export class HolidaysService {
@@ -30,18 +31,12 @@ export class HolidaysService {
     newObj: Record<string, any>,
     keys?: string[],
   ): Promise<any> {
+    if (newObj.calendar_day) newObj.calendar_day = validateCalendarDay(newObj.calendar_day);
     if(newObj.status && !STATUS[newObj.status]){
       throw new HttpException({
         status: HttpStatus.BAD_REQUEST,
         error: MESSAGES.INVALID_STATUS,
       }, HttpStatus.BAD_REQUEST);
-    }
-    if (newObj.calendar_day && !WEEK_DAYS[newObj.calendar_day]) {
-      throw new HttpException({
-          status: HttpStatus.BAD_REQUEST,
-          error: MESSAGES.INVALID_WEEKDAY,
-        }, HttpStatus.BAD_REQUEST,
-      );
     }
     const [result] = await this.holidayRepository.update({ id: id, deleted_on : null }, newObj, keys);
     if(!result) {
@@ -54,6 +49,7 @@ export class HolidaysService {
   }
 
   async create(newObj: Record<string, any>, keys?: string[]): Promise<any> {
+    newObj.calendar_day = validateCalendarDay(newObj.calendar_day);
     if (!newObj.status) {
       newObj.status = STATUS.ACTIVE;
     } else if(!STATUS[newObj.status]){
@@ -61,13 +57,6 @@ export class HolidaysService {
         status: HttpStatus.BAD_REQUEST,
         error: MESSAGES.INVALID_STATUS,
       }, HttpStatus.BAD_REQUEST);
-    }
-    if (!WEEK_DAYS[newObj.calendar_day]) {
-      throw new HttpException({
-          status: HttpStatus.BAD_REQUEST,
-          error: MESSAGES.INVALID_WEEKDAY,
-        }, HttpStatus.BAD_REQUEST,
-      );
     }
     const result = await this.holidayRepository.create(newObj, keys);
     if(result?.length > 0) {

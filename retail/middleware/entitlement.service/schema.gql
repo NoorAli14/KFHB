@@ -17,6 +17,11 @@ input ChangePasswordInput {
   password: String!
 }
 
+input CheckAvailabilityInput {
+  call_time: String!
+  gender: String
+}
+
 input CreateUserInput {
   username: String
   contact_no: String
@@ -98,6 +103,16 @@ type Leave {
   deleted_by: String
 }
 
+input LeaveCreateInput {
+  user_id: String!
+  calendar_day: String!
+  holiday_type: String
+  holiday_details: String
+  is_repetitive: Float
+  remarks: String
+  status: String
+}
+
 input LeaveInput {
   user_id: String!
   calendar_day: String!
@@ -152,7 +167,7 @@ type Mutation {
   addHoliday(input: HolidayInput!): Holiday!
   updateHoliday(input: HolidayInput!, id: String!): Holiday!
   deleteHoliday(id: String!): Boolean!
-  addLeave(input: LeaveInput!): Leave!
+  addLeave(input: LeaveCreateInput!): Leave!
   updateLeave(input: LeaveInput!, id: String!): Leave!
   deleteLeave(id: String!): Boolean!
 }
@@ -182,6 +197,7 @@ input PermissionInput {
 type Query {
   usersList: [User!]!
   findUserById(id: String!): User!
+  findAvailableUsers(input: CheckAvailabilityInput!): [User!]!
   findUserBy(checks: [KeyValInput!]!): [User!]!
   rolesList: [Role!]!
   findRoleById(id: String!): Role!
