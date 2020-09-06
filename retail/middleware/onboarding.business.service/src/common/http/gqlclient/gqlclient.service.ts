@@ -4,24 +4,34 @@ import {
   HttpException,
   RequestTimeoutException,
   BadRequestException,
+  Scope,
+  Inject,
+  Logger,
 } from '@nestjs/common';
 import { map, timeout, catchError } from 'rxjs/operators';
 import { TimeoutError, throwError } from 'rxjs';
-
+import { IHEADER } from '@common/interfaces/';
 @Injectable()
 export class GqlClientService {
+  private readonly logger: Logger = new Logger(GqlClientService.name);
+  private __header: IHEADER;
   constructor(private readonly http: HttpService) {}
 
+  public setHeaders(header: IHEADER): GqlClientService {
+    this.__header = header;
+    return this;
+  }
   public async send(input: string): Promise<any> {
-    const params = {
-      query: input,
-    };
-    const headersRequest: any = {
-      'x-user-id': '3D47E986-D5D6-45A0-92F4-9B0798827A5F',
-      'x-tenant-id': `3D47E986-D5D6-45A0-92F4-9B0798827A5F`,
-    };
+    console.log(`GQL Header: ${JSON.stringify(this.__header, null, 2)}`);
+
     return this.http
-      .post('/graphql', params, { headers: headersRequest })
+      .post(
+        '/graphql',
+        {
+          query: input,
+        },
+        { headers: this.__header || {} },
+      )
       .pipe(
         map(response => {
           if (response.data?.errors?.extensions) {
