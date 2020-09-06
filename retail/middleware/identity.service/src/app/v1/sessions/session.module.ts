@@ -5,6 +5,7 @@ import {
   RepositoryModule,
   SessionRepository,
   CustomerRepository,
+  SessionReferenceRepository,
 } from '@rubix/core';
 import { SessionsResolver } from './sessions.resolver';
 import { SessionsService } from './sessions.service';
@@ -17,6 +18,7 @@ import { SessionsService } from './sessions.service';
     CustomerRepository,
     SessionsResolver,
     IdentityService,
+    SessionReferenceRepository,
   ],
 })
 export class SessionModule {}
