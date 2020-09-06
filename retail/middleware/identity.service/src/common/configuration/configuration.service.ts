@@ -57,6 +57,9 @@ export class ConfigurationService {
       PASSWORD: this.get('ENV_RBX_IDENTITYX_PASSWORD'),
       TOKEN: this.get('ENV_RBX_IDENTITYX_TOKEN'),
       TENANT: this.get('ENV_RBX_IDENTITYX_TENANT'),
+      REG_POLICY: this.get('ENV_RBX_IDENTITYX_REG_POLICY'),
+      APPLICATION: this.get('ENV_RBX_IDENTITYX_APPLICATION'),
+      EVALUATION_POLICY: this.get('ENV_RBX_IDENTITYX_EVALUATION_POLICY'),
     };
   }
   // Parse iApp Environment Variables
