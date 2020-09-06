@@ -6,11 +6,13 @@ import { CommonModule } from '@rubix/common/common.module';
 import { ConfigurationService } from '@rubix/common/configuration/configuration.service';
 import { SessionModule } from './sessions/session.module';
 import { CustomerModule } from './customers/customer.module';
+import { FaceModule } from './faces/face.module';
 import { DocumentModule } from './documents/document.module';
 @Module({
   imports: [
     DataloaderModule,
     CustomerModule,
+    FaceModule,
     SessionModule,
     DocumentModule,
     GraphQLFederationModule.forRootAsync({
