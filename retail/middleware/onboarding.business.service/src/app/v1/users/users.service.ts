@@ -1,10 +1,7 @@
-import {
-  Injectable,
-  NotFoundException,
-  UnprocessableEntityException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { User } from './user.entity';
 import { GqlClientService, toGraphql } from '@common/index';
+import { IHEADER } from '@common/interfaces';
 
 @Injectable()
 export class UserService {
@@ -53,7 +50,7 @@ export class UserService {
     return this.gqlClient.send(params);
   }
 
-  async create(input: any): Promise<any> {
+  async create(header: IHEADER, input: any): Promise<any> {
     // const user: User = await this.findByEmail(input.email);
     // if (user) {
     //   throw new UnprocessableEntityException(
@@ -63,7 +60,7 @@ export class UserService {
     const params = `mutation {
       result: addCustomer(input: ${toGraphql(input)}) ${this.output}
     }`;
-    return this.gqlClient.send(params);
+    return this.gqlClient.setHeaders(header).send(params);
   }
 
   async findOne(id: string, output?: string): Promise<User> {

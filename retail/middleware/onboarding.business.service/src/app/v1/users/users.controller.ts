@@ -26,8 +26,8 @@ import { UserService } from './users.service';
 import { User } from './user.entity';
 import { ChangePasswordDto, UpdateUserDto } from './user.dto';
 
-@ApiTags('User')
-@Controller('users')
+@ApiTags('Customer')
+@Controller('customers')
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
 export class UsersController {
