@@ -1,11 +1,4 @@
-import {
-  Resolver,
-  Query,
-  Mutation,
-  Args,
-  ResolveField,
-  Parent,
-} from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { UseGuards, NotFoundException } from '@nestjs/common';
 import {
   AuthGuard,
@@ -26,7 +19,7 @@ export class CustomersResolver {
   addCustomer(
     @Args('input') input: NewCustomerInput,
     @Tenant() tenant: any,
-    @Fields() columns: string[],
+    @Fields() output: string[],
   ): Promise<Customer> {
     const params: any = {
       created_by: CREATED_BY.API,
@@ -35,15 +28,16 @@ export class CustomersResolver {
       email: input.email,
       status: CUSTOMER_STATUSES.PENDING,
     };
-    return this.customerService.create(params, columns);
+    return this.customerService.create(params, output);
   }
 
+  @UseGuards(AuthGuard)
   @Query(() => Customer)
   async findCustomerById(
     @Args('id') id: string,
-    @Fields() columns: string[],
+    @Fields() output: string[],
   ): Promise<Customer> {
-    const customer: Customer = await this.customerService.findById(id, columns);
+    const customer: Customer = await this.customerService.findById(id, output);
     if (!customer) throw new NotFoundException('Customer Not Found');
     return customer;
   }

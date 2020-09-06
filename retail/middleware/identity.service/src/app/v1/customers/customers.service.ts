@@ -13,19 +13,18 @@ export class CustomersService {
 
   async create(
     input: { [key: string]: any },
-    columns?: string[],
+    output: string[],
   ): Promise<Customer> {
-    const [customer] = await this.customerDB.create(input, ['id', 'status']);
-    const targetUser: any = await this.identityService.createUser(customer.id);
-    const [_customer] = await this.customerDB.update(
-      { id: customer.id },
-      { target_user_id: targetUser.id },
-      columns,
-    );
-    return _customer;
+    const [customer] = await this.customerDB.create(input, output);
+    // const [_customer] = await this.customerDB.update(
+    //   { id: customer.id },
+    //   { target_user_id: targetUser.id },
+    //   columns,
+    // );
+    return customer;
   }
 
-  async findById(id: string, keys?: string[]): Promise<Customer> {
-    return this.customerDB.findOne({ id: id }, keys);
+  async findById(id: string, output: string[]): Promise<Customer> {
+    return this.customerDB.findOne({ id: id }, output);
   }
 }
