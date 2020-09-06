@@ -10,11 +10,14 @@ import {
   X_USER_ID,
   X_TENANT_ID,
   iSERVICE,
+  X_CORRELATION_KEY,
 } from '@common/index';
 
 import { AuthModule } from './auth/auth.module';
 import { ComplianceModule } from './compliances/compliances.module';
 import { UserModule } from './users/users.module';
+import { SessionModule } from './sessions/session.module';
+import { AttachmentModule } from './attachments/attachment.module';
 
 let services: iSERVICE[];
 if (process.env.NODE_ENV === 'production') {
@@ -30,9 +33,10 @@ if (process.env.NODE_ENV === 'production') {
 }
 class AuthenticatedDataSource extends RemoteGraphQLDataSource {
   async willSendRequest({ request, context }) {
-    const { userId, tenantId } = context;
+    const { userId, tenantId, correlationId } = context;
     request.http.headers.set(X_USER_ID, userId);
     request.http.headers.set(X_TENANT_ID, tenantId);
+    request.http.headers.set(X_CORRELATION_KEY, correlationId);
   }
 }
 
@@ -59,8 +63,10 @@ class BuildServiceModule {}
     CommonModule,
     GqlClientModule,
     AuthModule,
-    ComplianceModule,
+    SessionModule,
+    AttachmentModule,
     UserModule,
+    ComplianceModule,
     GraphQLGatewayModule.forRootAsync({
       imports: [BuildServiceModule],
       useFactory: async () => ({
@@ -72,6 +78,7 @@ class BuildServiceModule {}
           context: ({ req }) => ({
             userId: req.headers[X_USER_ID],
             tenantId: req.headers[X_TENANT_ID],
+            correlationId: req.headers[X_CORRELATION_KEY],
           }),
           // ... Apollo server options
           cors: true,
