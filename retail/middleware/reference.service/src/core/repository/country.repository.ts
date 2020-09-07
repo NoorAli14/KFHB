@@ -14,10 +14,8 @@ export class CountryRepository extends BaseRepository {
     'status',
     'created_by',
     'updated_by',
-    'deleted_by',
     'created_on',
     'updated_on',
-    'deleted_on',
   ]
   constructor() {
     super(TABLE.COUNTRY);
