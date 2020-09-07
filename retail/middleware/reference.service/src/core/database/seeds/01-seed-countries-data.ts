@@ -14,6 +14,8 @@ export async function seed(knex: Knex): Promise<any> {
             capital_name: country.capital,
             phone_code: country.phone,
             currency_code: country.currency,
+            created_by: 'SYSTEM',
+            updated_by: 'SYSTEM',
         }
     });
     // Inserts data to db in bulk
