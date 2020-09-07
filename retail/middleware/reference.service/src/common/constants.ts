@@ -1,5 +1,6 @@
 export const TABLE = {
-  COUNTRY: 'REF_COUNTRY'
+  COUNTRY: 'REF_COUNTRY',
+  NATIONALITY: 'REF_NATIONALITY',
 };
 
 export const DATABASE_UUID_METHOD = 'NEWID()';
