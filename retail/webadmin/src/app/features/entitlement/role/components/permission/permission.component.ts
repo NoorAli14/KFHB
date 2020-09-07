@@ -1,5 +1,5 @@
 import { Modules } from "./../../../models/modules.model";
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, Injector } from "@angular/core";
 
 import { camelToSentenceCase } from "@shared/helpers/global.helper";
 import { Permission } from "@feature/entitlement/models/config.model";
@@ -27,8 +27,8 @@ export class PermissionComponent extends BaseComponent implements OnInit {
     @Input() permissions: Array<Permission>;
     displayedColumns = ["module"];
     dataSource = new MatTableDataSource<any>();
-    constructor() {
-        super();
+    constructor(injector: Injector) {
+        super(injector);
     }
 
     ngOnInit(): void {

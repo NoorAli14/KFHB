@@ -1,5 +1,5 @@
 import { SettingService } from "./../../setting.service";
-import { Component, OnInit, ViewEncapsulation } from "@angular/core";
+import { Component, OnInit, ViewEncapsulation, Injector } from "@angular/core";
 import { fuseAnimations } from "@fuse/animations";
 import { MatDialog } from "@angular/material/dialog";
 import { UpdateProfileComponent } from "@feature/setting/components/update-profile/update-profile.component";
@@ -21,9 +21,10 @@ export class ProfileComponent extends BaseComponent implements OnInit {
     currentUser: any;
     constructor(
         public _matDialog: MatDialog,
-        private _settingService: SettingService
-    ) {
-        super();
+        private _settingService: SettingService ,
+        injector: Injector
+        ) {
+            super(injector);
     }
 
     ngOnInit(): void {

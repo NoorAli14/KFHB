@@ -1,6 +1,6 @@
 import { WorkingDayFormComponent } from './../../components/working-day-form/working-day-form.component';
 import {  WorkingDay } from './../../models/working-week.model';
-import { Component, OnInit, ViewEncapsulation, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ViewChild, Injector } from '@angular/core';
 import { fuseAnimations } from '@fuse/animations';
 import { MESSAGES } from '@shared/constants/app.constants';
 import { ConfirmDialogModel, ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
@@ -43,8 +43,10 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
     constructor(
         public _matDialog: MatDialog,
         private _calenderService: CalendarService
-    ) {
-        super()
+        ,
+        injector: Injector
+        ) {
+            super(injector);
     }
 
     ngOnInit(): void {

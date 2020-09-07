@@ -1,5 +1,5 @@
 import { BaseComponent } from '@shared/components/base/base.component';
-import { Component, OnInit, ViewEncapsulation, Inject } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Inject, Injector } from '@angular/core';
 import { fuseAnimations } from '@fuse/animations';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
@@ -25,8 +25,10 @@ export class HolidayFormComponent extends BaseComponent implements OnInit {
       @Inject(MAT_DIALOG_DATA) public data: Holiday,
       private _service: CalendarService,
       private dialog: MatDialog
-  ) {
-      super()
+      ,
+      injector: Injector
+      ) {
+          super(injector);
   }
 
   ngOnInit(): void {

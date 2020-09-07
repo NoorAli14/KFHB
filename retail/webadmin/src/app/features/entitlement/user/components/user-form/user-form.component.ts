@@ -10,6 +10,7 @@ import {
     Inject,
     EventEmitter,
     Output,
+    Injector,
 } from "@angular/core";
 import { FormGroup, Validators, FormControl } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
@@ -40,10 +41,11 @@ export class UserFormComponent extends BaseComponent implements OnInit {
 
     constructor(
         public matDialogRef: MatDialogRef<UserFormComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: any
-    ) {
-        super();
-    }
+        @Inject(MAT_DIALOG_DATA) public data: any,
+        injector: Injector
+        ) {
+            super(injector);
+        }
     requiredIfUpdating(predicate) {
         return (formControl) => {
             if (!formControl.parent) {

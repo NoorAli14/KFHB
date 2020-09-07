@@ -1,5 +1,5 @@
 import { Router, ActivatedRoute } from "@angular/router";
-import { Component, OnInit, ViewEncapsulation } from "@angular/core";
+import { Component, OnInit, ViewEncapsulation, Injector } from "@angular/core";
 import {
     FormBuilder,
     FormGroup,
@@ -23,16 +23,17 @@ import { CookieService } from "ngx-cookie-service";
 })
 export class LoginComponent extends BaseComponent implements OnInit {
     loginForm: FormGroup;
-
     returnUrl: string;
+
     constructor(
         private _fuseConfigService: FuseConfigService,
         private _authService: AuthenticationService,
         private route: ActivatedRoute,
         private router: Router,
-        private cookie: CookieService
+        private cookie: CookieService,
+        injector: Injector
     ) {
-        super();
+        super(injector);
         // Configure the layout
         this._fuseConfigService.config = {
             layout: {
@@ -55,10 +56,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
     ngOnInit(): void {
         this.returnUrl = this.route.snapshot.queryParamMap.get("returnUrl");
         this.loginForm = new FormGroup({
-            email: new FormControl("", [
-                Validators.required,
-                Validators.email,
-            ]),
+            email: new FormControl("", [Validators.required, Validators.email]),
             password: new FormControl("", [Validators.required]),
             // rememberMe: new FormControl(""),
         });
@@ -91,9 +89,9 @@ export class LoginComponent extends BaseComponent implements OnInit {
             },
             (response) => {
                 this.errorType = "error";
-                if(response.statusCode===401){
+                if (response.statusCode === 401) {
                     this.responseMessage = MESSAGES.INVALID_CREDENTIAL();
-                }else{
+                } else {
                     this.responseMessage = MESSAGES.UNKNOWN();
                 }
             }

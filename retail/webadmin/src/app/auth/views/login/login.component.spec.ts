@@ -7,6 +7,7 @@ import { CookieService } from "ngx-cookie-service";
 import { ReactiveFormsModule } from "@angular/forms";
 import { MockBuilder, MockRender, ngMocks, MockComponent } from "ng-mocks";
 import { BaseComponent } from "@shared/components/base/base.component";
+import { Injector } from '@angular/core';
 
 describe("LoginComponent", () => {
     let component: LoginComponent;
@@ -15,11 +16,15 @@ describe("LoginComponent", () => {
     let fuseConfigServiceMock: any;
     let authenticationServiceMock: any;
     let cookieServiceMock: any;
+    let injectorMock: any;
 
     beforeEach(async(() => {
       
         fuseConfigServiceMock = jasmine.createSpyObj("FuseConfigService", [
             "config",
+        ]);
+        injectorMock = jasmine.createSpyObj("Injector", [
+            "get",
         ]);
         authenticationServiceMock = jasmine.createSpyObj(
             "AuthenticationService",
@@ -37,6 +42,10 @@ describe("LoginComponent", () => {
                 {
                     provide: AuthenticationService,
                     useValue: authenticationServiceMock,
+                },
+                {
+                    provide: Injector,
+                    useValue: injectorMock,
                 },
                 {
                     provide: FuseConfigService,

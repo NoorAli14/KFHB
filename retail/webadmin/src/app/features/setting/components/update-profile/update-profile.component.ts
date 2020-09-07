@@ -1,5 +1,5 @@
 import { SettingService } from './../../setting.service';
-import { Component, OnInit, ViewEncapsulation, Inject, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, ViewEncapsulation, Inject, Output, EventEmitter, Injector } from "@angular/core";
 import { FormGroup,  FormControl, Validators } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import {  GENDER_LIST, NATIONALITY_LIST } from "@shared/constants/app.constants";
@@ -27,9 +27,10 @@ export class UpdateProfileComponent extends BaseComponent implements OnInit {
     constructor(
         public matDialogRef: MatDialogRef<UpdateProfileComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
-        private _settingService: SettingService
-    ) {
-        super()
+        private _settingService: SettingService ,
+        injector: Injector
+        ) {
+            super(injector);
     }
 
     ngOnInit(): void {

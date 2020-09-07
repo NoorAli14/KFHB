@@ -1,4 +1,4 @@
-import { Output, EventEmitter, Injectable } from "@angular/core";
+import { Output, EventEmitter, Injectable, Injector } from "@angular/core";
 import { BaseComponent } from "@shared/components/base/base.component";
 import { Component, OnInit, Inject, ViewEncapsulation } from "@angular/core";
 import { Validators, FormArray, FormGroup, FormControl } from "@angular/forms";
@@ -26,8 +26,10 @@ export class RoleFormComponent extends BaseComponent implements OnInit {
     constructor(
         public matDialogRef: MatDialogRef<RoleFormComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any
-    ) {
-        super("Role Management");
+        ,
+        injector: Injector
+        ) {
+            super(injector,"Role Management");
     }
 
     ngOnInit(): void {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Injector } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { User } from "@feature/entitlement/models/user.model";
 import { NATIONALITY_LIST, GENDER_LIST, MESSAGES } from "@shared/constants/app.constants";
@@ -28,8 +28,10 @@ export class InvitationComponent extends BaseComponent implements OnInit {
         private _fuseConfigService: FuseConfigService,
         private activatedRoute: ActivatedRoute,
         private router: Router
-    ) {
-        super();
+        ,
+        injector: Injector
+        ) {
+            super(injector);
         this.token= this.activatedRoute.snapshot.paramMap.get("token");
 
         this.getData( this.token);

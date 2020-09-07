@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ViewChild, SimpleChanges } from "@angular/core";
+import { Component, Input, Output, EventEmitter, ViewChild, SimpleChanges, Injector } from "@angular/core";
 import {
     trigger,
     state,
@@ -55,8 +55,11 @@ export class TableRowComponent extends BaseComponent {
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: false }) sort: MatSort;
     dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
-    constructor(public _matDialog: MatDialog) {
-        super("Role Management");
+    constructor(public _matDialog: MatDialog  ,
+        injector: Injector
+        ) {
+            super(injector,"Role Management");
+        
     }
     ngOnChanges(changes: SimpleChanges): void {
         if(changes.roles.currentValue!=changes.roles.previousValue){

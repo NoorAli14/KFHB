@@ -1,6 +1,6 @@
 import { BaseComponent } from "@shared/components/base/base.component";
 import { CONFIG } from "@config/index";
-import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewEncapsulation, ViewChild, Injector } from "@angular/core";
 import { fuseAnimations } from "@fuse/animations";
 import { MatDialog } from "@angular/material/dialog";
 import { UserFormComponent } from "../../components/user-form/user-form.component";
@@ -58,8 +58,10 @@ export class UserComponent extends BaseComponent implements OnInit {
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: false }) sort: MatSort;
 
-    constructor(public _matDialog: MatDialog, private _service: UserService) {
-        super("User Management");
+    constructor(public _matDialog: MatDialog, private _service: UserService ,
+        injector: Injector
+        ) {
+            super(injector,"User Management");
     }
 
     ngOnInit(): void {

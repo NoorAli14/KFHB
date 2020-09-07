@@ -1,10 +1,9 @@
-import { AppInjector } from './../../app.injector';
 import { Component, OnInit } from "@angular/core";
 import { AuthUserService } from "@shared/services/user/auth-user.service";
 import { MESSAGES } from '@shared/constants/app.constants';
 import { ErrorEmitterService } from '@shared/services/error-emitter/error-emitter.service';
 import { MapperService } from '@shared/services/mapper.service';
-
+import {Injector} from '@angular/core';
 @Component({
     selector: "app-base",
     templateUrl: "./base.component.html",
@@ -19,11 +18,12 @@ export class BaseComponent implements OnInit {
     protected   _errorEmitService:ErrorEmitterService;
     protected   _mapperService:MapperService;
     constructor(
-        private moduleType?: String
+        private injector: Injector,
+        private moduleType?: String, 
     ) {
-        this._authUserService= AppInjector.injector.get(AuthUserService)
-        this._errorEmitService= AppInjector.injector.get(ErrorEmitterService)
-        this._mapperService= AppInjector.injector.get(MapperService)
+        this._authUserService= injector.get(AuthUserService)
+        this._errorEmitService= injector.get(ErrorEmitterService)
+        this._mapperService= injector.get(MapperService)
     }
 
     ngOnInit(): void {
