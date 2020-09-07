@@ -5,27 +5,26 @@ import { AuthenticationService } from "@shared/services/auth/authentication.serv
 import { FuseConfigService } from "@fuse/services/config.service";
 import { CookieService } from "ngx-cookie-service";
 import { ReactiveFormsModule } from "@angular/forms";
-import { MockBuilder, MockRender, ngMocks, MockComponent } from "ng-mocks";
-import { BaseComponent } from "@shared/components/base/base.component";
-import { Injector } from '@angular/core';
+import { Injector } from "@angular/core";
+import { NoopAnimationsModule } from "@angular/platform-browser/animations";
+import { DOMHelper } from "testing/dom.helper";
+import { By } from "@angular/platform-browser";
 
 describe("LoginComponent", () => {
     let component: LoginComponent;
     let fixture: ComponentFixture<LoginComponent>;
-
+    let dh: DOMHelper<LoginComponent>;
     let fuseConfigServiceMock: any;
     let authenticationServiceMock: any;
     let cookieServiceMock: any;
     let injectorMock: any;
 
     beforeEach(async(() => {
-      
         fuseConfigServiceMock = jasmine.createSpyObj("FuseConfigService", [
             "config",
         ]);
-        injectorMock = jasmine.createSpyObj("Injector", [
-            "get",
-        ]);
+        injectorMock = jasmine.createSpyObj("Injector", ["get"]);
+
         authenticationServiceMock = jasmine.createSpyObj(
             "AuthenticationService",
             ["login"]
@@ -36,8 +35,12 @@ describe("LoginComponent", () => {
             "delete",
         ]);
         TestBed.configureTestingModule({
-            declarations: [LoginComponent, MockComponent(BaseComponent)],
-            imports: [RouterTestingModule, ReactiveFormsModule],
+            declarations: [LoginComponent],
+            imports: [
+                RouterTestingModule,
+                ReactiveFormsModule,
+                NoopAnimationsModule,
+            ],
             providers: [
                 {
                     provide: AuthenticationService,
@@ -62,10 +65,15 @@ describe("LoginComponent", () => {
     beforeEach(() => {
         fixture = TestBed.createComponent(LoginComponent);
         component = fixture.componentInstance;
+        dh = new DOMHelper(fixture);
         fixture.detectChanges();
     });
 
     it("should create", () => {
         expect(component).toBeTruthy();
+    });
+    it("should have the login page title ", () => {
+        const el = fixture.debugElement.query(By.css(".title"));
+        expect(el.nativeElement.textContent).toBe("LOGIN TO YOUR ACCOUNT");
     });
 });
