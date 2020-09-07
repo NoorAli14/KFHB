@@ -1,7 +1,6 @@
 import { Router, ActivatedRoute } from "@angular/router";
 import { Component, OnInit, ViewEncapsulation, Injector } from "@angular/core";
 import {
-    FormBuilder,
     FormGroup,
     Validators,
     FormControl,
@@ -12,7 +11,6 @@ import { fuseAnimations } from "@fuse/animations";
 import { AuthenticationService } from "@shared/services/auth/authentication.service";
 import { MESSAGES } from "@shared/constants/app.constants";
 import { BaseComponent } from "@shared/components/base/base.component";
-import { CookieService } from "ngx-cookie-service";
 
 @Component({
     selector: "app-login",
@@ -30,11 +28,9 @@ export class LoginComponent extends BaseComponent implements OnInit {
         private _authService: AuthenticationService,
         private route: ActivatedRoute,
         private router: Router,
-        private cookie: CookieService,
         injector: Injector
     ) {
         super(injector);
-        // Configure the layout
         this._fuseConfigService.config = {
             layout: {
                 navbar: {
@@ -58,15 +54,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
         this.loginForm = new FormGroup({
             email: new FormControl("", [Validators.required, Validators.email]),
             password: new FormControl("", [Validators.required]),
-            // rememberMe: new FormControl(""),
         });
-
-        // const email = this.cookie.get("email");
-        // const password = this.cookie.get("password");
-        // if (email) {
-        //     this.loginForm.patchValue({ email });
-        //     this.loginForm.patchValue({ password });
-        // }
     }
     onSubmit() {
         const model = this.loginForm.value;
@@ -74,13 +62,6 @@ export class LoginComponent extends BaseComponent implements OnInit {
             (response) => {
                 this.errorType = "success";
                 this.responseMessage = MESSAGES.LOGGED_IN();
-                // if (model.rememberMe) {
-                //     this.cookie.set("email", model.email);
-                //     this.cookie.set("password", model.password);
-                // } else {
-                //     this.cookie.delete("email", model.email);
-                //     this.cookie.delete("password", model.password);
-                // }
                 setTimeout(() => {
                     this.router.navigateByUrl(
                         this.returnUrl ? this.returnUrl : "/ent/user"
