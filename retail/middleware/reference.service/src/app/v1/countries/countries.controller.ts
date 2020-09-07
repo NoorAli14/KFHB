@@ -1,25 +1,15 @@
 import {
     Controller,
     Get,
-    Body,
     Param,
-    Put,
-    Delete,
     NotFoundException,
     ParseUUIDPipe,
-    UseGuards,
-    HttpCode,
-    HttpStatus,
   } from '@nestjs/common';
   import {
     ApiTags,
     ApiOkResponse,
     ApiOperation,
-    ApiBody,
-    ApiBearerAuth,
-    ApiBadRequestResponse,
     ApiNotFoundResponse,
-    ApiNoContentResponse,
   } from '@nestjs/swagger';
   import { CountriesService } from './countries.service';
   import { Country } from './country.modal';

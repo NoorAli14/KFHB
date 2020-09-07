@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsOptional, IsDate } from 'class-validator';
 
 export class Country {
   @ApiProperty({
