@@ -68,7 +68,6 @@ export class Country {
   @ApiProperty({ required: false })
   updated_by?: string;
 
-  @ApiProperty({ required: false })
   deleted_by?: string;
 
   @ApiProperty({
@@ -83,9 +82,5 @@ export class Country {
   })
   updated_on?: Date;
 
-  @ApiProperty({
-    description: 'timestamp without time zone',
-    required: false,
-  })
   deleted_on?: Date;
 }
