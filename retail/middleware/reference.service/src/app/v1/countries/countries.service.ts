@@ -4,7 +4,7 @@ import {CountryRepository} from "@core/repository";
 
 @Injectable()
 export class CountriesService {
-  constructor(private countryDB: CountryRepository) {}
+  constructor(private readonly countryDB: CountryRepository) {}
 
   async list(): Promise<any> {
     return this.countryDB.list();
