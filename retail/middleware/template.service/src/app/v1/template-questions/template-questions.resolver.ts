@@ -26,7 +26,6 @@ export class TemplateQuestionsResolver {
     @Loader(TemplateLoaderForTemplateQuestion.name)
     templateLoader: DataLoader<TemplateGQL['id'], TemplateGQL>,
   ): Promise<any> {
-    // TODO: Find a way to pass selection keys to this function so Database query can be optimized.
     return templateLoader.loadWithKeys(templateQuestion.template_id, columns);
   }
 

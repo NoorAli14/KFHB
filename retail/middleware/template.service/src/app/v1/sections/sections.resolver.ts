@@ -28,7 +28,6 @@ export class SectionsResolver {
     @Loader(TemplateLoaderForSection.name)
     templateLoader: DataLoader<TemplateGQL['id'], TemplateGQL>,
   ): Promise<any> {
-    // TODO: Find a way to pass selection keys to this function so Database query can be optimized.
     return templateLoader.loadWithKeys(section.template_id, columns);
   }
 
