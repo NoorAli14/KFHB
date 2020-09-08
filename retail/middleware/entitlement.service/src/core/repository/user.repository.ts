@@ -84,4 +84,12 @@ export class UserRepository extends BaseRepository {
       throw e;
     }
   }
+
+  async listExcludedUsers(userIds: string[], condition: Record<string, any>, keys: string[]): Promise<any>{
+    return this._connection(TABLE.USER)
+    .select(keys)
+    .whereNotIn('id', userIds)
+    .where(condition)
+    .orderBy('created_on', 'desc');
+  }
 }

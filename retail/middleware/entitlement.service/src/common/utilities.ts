@@ -37,7 +37,7 @@ export const graphqlFields = (info: { [key: string]: any }): string[] => {
   });
 
   // filtering some keys
-  const filters = ['id', 'roles', 'modules', 'permissions', 'sub_modules', 'leaves'];
+  const filters = ['id', 'created_on', 'roles', 'modules', 'permissions', 'sub_modules', 'leaves'];
   keys = keys.filter(function(key) {
     return filters.indexOf(key) === -1;
   });
@@ -79,6 +79,10 @@ export const getMutateProps = (key: string, headers: any, model: any): any => {
 
 export const getTenantID = (headers: any): any => {
   return headers[HEADER_NAMES.X_TENANT_ID];
+};
+
+export const getXUserID = (headers: any): any => {
+  return headers[HEADER_NAMES.X_USER_ID];
 };
 
 /**

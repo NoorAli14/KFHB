@@ -26,7 +26,8 @@ export class ModuleRepository extends BaseRepository {
         .innerJoin(TABLE.MODULE_PERMISSION, `${TABLE.MODULE}.id`, `${TABLE.MODULE_PERMISSION}.module_id`)
         .innerJoin(TABLE.MODULE_PERMISSION_ROLE, `${TABLE.MODULE_PERMISSION_ROLE}.module_permission_id`, `${TABLE.MODULE_PERMISSION}.id`)
         .whereIn(`${TABLE.MODULE_PERMISSION_ROLE}.role_id`, roleIds)
-        .where(condition);
+        .where(condition)
+        .orderBy(`${TABLE.MODULE}.created_on`, 'desc');
   }
 
   async listModulesByParentModuleID(parentIds): Promise<any>{
@@ -37,6 +38,7 @@ export class ModuleRepository extends BaseRepository {
       query = this._connection(TABLE.MODULE)
       .select(this.__attributes)
       .whereIn(`${TABLE.MODULE}.parent_id`, parentIds)
+      .orderBy(`${TABLE.MODULE}.created_on`, 'desc');
     } else {
       query = this._connection(TABLE.MODULE)
       .distinct([...this.__attributes, `${TABLE.MODULE_PERMISSION_ROLE}.role_id`, `${TABLE.MODULE_PERMISSION}.module_id`])
@@ -44,6 +46,7 @@ export class ModuleRepository extends BaseRepository {
       .innerJoin(TABLE.MODULE_PERMISSION_ROLE, `${TABLE.MODULE_PERMISSION_ROLE}.module_permission_id`, `${TABLE.MODULE_PERMISSION}.id`)
       .whereIn(`${TABLE.MODULE_PERMISSION_ROLE}.role_id`, parentIds.map(obj => obj.role_id))
       .whereIn(`${TABLE.MODULE}.parent_id`, parentIds.map(obj => obj.module_id))
+      .orderBy(`${TABLE.MODULE}.created_on`, 'desc');
     }
     return query.where(condition);
   }
@@ -60,6 +63,7 @@ export class ModuleRepository extends BaseRepository {
     .innerJoin(TABLE.ROLE, `${TABLE.ROLE}.id`, `${TABLE.MODULE_PERMISSION_ROLE}.role_id`)
     .innerJoin(TABLE.USER_ROLE, `${TABLE.ROLE}.id`, `${TABLE.USER_ROLE}.role_id`)
     .whereIn(`${TABLE.USER_ROLE}.user_id`, userIds)
-    .where(condition);
+    .where(condition)
+    .orderBy(`${TABLE.MODULE}.created_on`, 'desc');
   }
 }

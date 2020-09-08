@@ -17,10 +17,14 @@ input ChangePasswordInput {
   password: String!
 }
 
+input CheckAvailabilityInput {
+  call_time: String!
+  gender: String
+}
+
 input CreateUserInput {
   username: String
   contact_no: String
-  password: String
   first_name: String
   middle_name: String
   last_name: String
@@ -35,6 +39,7 @@ input CreateUserInput {
   password_reset_token_expiry: String
   roles: [IdsInput!]
   email: String!
+  password: String
 }
 
 """
@@ -98,6 +103,16 @@ type Leave {
   deleted_by: String
 }
 
+input LeaveCreateInput {
+  user_id: String!
+  calendar_day: String!
+  holiday_type: String
+  holiday_details: String
+  is_repetitive: Float
+  remarks: String
+  status: String
+}
+
 input LeaveInput {
   user_id: String!
   calendar_day: String!
@@ -132,6 +147,7 @@ input ModuleInput {
 
 type Mutation {
   resetInvitationToken(id: String!): User!
+  updatePassword(input: UpdatePasswordInput!): User!
   addUser(input: CreateUserInput!): User!
   updateUser(input: UpdateUserInput!, id: String!): User!
   deleteUser(id: String!): Boolean!
@@ -151,7 +167,7 @@ type Mutation {
   addHoliday(input: HolidayInput!): Holiday!
   updateHoliday(input: HolidayInput!, id: String!): Holiday!
   deleteHoliday(id: String!): Boolean!
-  addLeave(input: LeaveInput!): Leave!
+  addLeave(input: LeaveCreateInput!): Leave!
   updateLeave(input: LeaveInput!, id: String!): Leave!
   deleteLeave(id: String!): Boolean!
 }
@@ -181,6 +197,7 @@ input PermissionInput {
 type Query {
   usersList: [User!]!
   findUserById(id: String!): User!
+  findAvailableUsers(input: CheckAvailabilityInput!): [User!]!
   findUserBy(checks: [KeyValInput!]!): [User!]!
   rolesList: [Role!]!
   findRoleById(id: String!): Role!
@@ -226,10 +243,14 @@ input RoleInput {
   permissions: [IdsInput!]
 }
 
+input UpdatePasswordInput {
+  current_password: String!
+  new_password: String!
+}
+
 input UpdateUserInput {
   username: String
   contact_no: String
-  password: String
   first_name: String
   middle_name: String
   last_name: String

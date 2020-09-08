@@ -8,12 +8,14 @@ export class LeaveInput {
   @Field()
   @IsString()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  user_id: string;
+  @IsOptional()
+  user_id?: string;
 
   @Field()
   @IsString()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  calendar_day: string;
+  @IsOptional()
+  calendar_day?: string;
 
   @Field({ nullable: true })
   @IsString()
@@ -43,4 +45,17 @@ export class LeaveInput {
   @IsOptional()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   status?: string;
+}
+
+@InputType()
+export class LeaveCreateInput extends LeaveInput {
+  @Field()
+  @IsString()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  user_id: string;
+
+  @Field()
+  @IsString()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  calendar_day: string;
 }

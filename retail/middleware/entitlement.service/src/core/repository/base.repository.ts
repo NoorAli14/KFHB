@@ -37,7 +37,7 @@ export abstract class BaseRepository {
     // pagination.lastPage = Math.ceil(count / limitPerPage);
     // pagination.offset = offset;
     // return {pagination: pagination, data: rows};
-    const query = this._connection(this._tableName).select(keys);
+    const query = this._connection(this._tableName).select(keys).orderBy('created_on', 'desc');
     if(condition)
       return query.where(condition);
     return query

@@ -22,12 +22,6 @@ export class UpdateUserInput {
   @IsString()
   @IsOptional()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  password?: string;
-
-  @Field({ nullable: true })
-  @IsString()
-  @IsOptional()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   first_name?: string;
 
   @Field({ nullable: true })
@@ -105,4 +99,37 @@ export class CreateUserInput extends UpdateUserInput{
   @IsEmail()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   email: string;
+
+  @Field({ nullable: true })
+  @IsString()
+  @IsOptional()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  password?: string;
+}
+
+@InputType()
+export class UpdatePasswordInput {
+  @Field()
+  @IsString()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  current_password: string;
+
+  @Field()
+  @IsString()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  new_password: string;
+}
+
+@InputType()
+export class CheckAvailabilityInput {
+  @Field()
+  @IsString()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  call_time: string;
+
+  @Field({ nullable: true })
+  @IsString()
+  @IsOptional()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  gender?: string;
 }

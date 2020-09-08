@@ -36,7 +36,8 @@ export class RoleRepository extends BaseRepository {
         `${TABLE.USER_ROLE}.role_id`,
       )
       .whereIn(`${TABLE.USER_ROLE}.user_id`, userIds)
-      .where(condition);
+      .where(condition)
+      .orderBy(`${TABLE.ROLE}.created_on`, 'desc');
   }
 
   async update(condition: Record<string, any>,

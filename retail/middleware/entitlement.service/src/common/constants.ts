@@ -32,6 +32,12 @@ export const STATUS = {
   PENDING: 'PENDING',
 };
 
+export const GENDER = {
+  M: 'M',
+  F: 'F',
+  O: 'O',
+};
+
 export const PAGINATION_PARAMS = {
   PAGE: 'page',
   PER_PAGE: 'perPage',
@@ -117,19 +123,21 @@ export const MODULES = [
 ];
 
 export const WEEK_DAYS = {
+  SUNDAY: 'SUNDAY',
   MONDAY: 'MONDAY',
   TUESDAY: 'TUESDAY',
   WEDNESDAY: 'WEDNESDAY',
   THURSDAY: 'THURSDAY',
   FRIDAY: 'FRIDAY',
   SATURDAY: 'SATURDAY',
-  SUNDAY: 'SUNDAY',
 };
 
 export const MESSAGES = {
   DELETED: 'Deleted Successfully.',
   INVALID_EMAIL: 'Invalid Email Address',
   INVALID_ID: 'Invalid ID',
+  INVALID_DATE: 'Invalid Date format',
+  INVALID_CALENDAR_DAY: 'calendar_day should be in YYYY-MM-DD format or an ISO string',
   INVALID_PASSWORD: 'Invalid Password.',
   INVALID_Email_OR_PASSWORD: 'Invalid Email or Password.',
   INTERNAL_ERROR: 'Internal Error',
@@ -137,10 +145,14 @@ export const MESSAGES = {
   TOKEN_EXPIRED: 'Token Expired.',
   PASSWORD_UPDATED: 'Password Updated.',
   NOT_FOUND: 'No Record Found',
+  USER_NOT_FOUND: 'No user exists against this user_id',
   BAD_REQUEST: 'Bad Request',
   BAD_TIME_FORMAT: 'Bad Time Format',
   INVALID_WEEKDAY: `Weekday should be one of ${Object.keys(WEEK_DAYS)}`,
   INVALID_STATUS: `Status should be one of ${Object.keys(STATUS)}`,
+  INVALID_GENDER: `Gender should be one of ${Object.keys(GENDER)}`,
+  ROLE_EXISTS: 'Role with this name already exists',
+  PASSWORD_MISMATCH: 'Current password did not match',
 };
 
 export const DATABASE_UUID_METHOD = 'NEWID()';
