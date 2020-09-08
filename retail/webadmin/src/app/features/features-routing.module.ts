@@ -23,11 +23,12 @@ const routes: Routes = [
     loadChildren: () => import('./error/error.module').then(m => m.ErrorModule)
   },
   {
-    path: '**', redirectTo: 'error'
+    path: 'refferals',
+    loadChildren: () => import('./referrals/referrals.module').then(m => m.ReferralsModule)
   },
   {
-    path: 'referralScheme', redirectTo: 'error'
-  }
+    path: '**', redirectTo: 'error'
+  },
 ];
 
 @NgModule({

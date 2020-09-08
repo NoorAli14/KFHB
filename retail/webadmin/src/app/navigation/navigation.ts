@@ -59,12 +59,14 @@ export const navigation: FuseNavigation[] = [
                 ]
             },
             {
-                id       : 'referralScheme',
-                title    : 'Referral Scheme',
-                translate: 'FEATURES.ENTITLEMENT.TITLE',
-                type     : 'collapsable',
-                icon     : 'assignment_ind',
-            }
+                id       : 'referrals',
+                title    : 'Referrals',
+                translate: 'FEATURES.REFERRALS.TITLE',
+                type     : 'item',
+                icon     : 'calendar_today',
+                url      : '/referrals',
+
+            },
             
         ]
         

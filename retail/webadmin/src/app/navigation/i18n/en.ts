@@ -14,7 +14,7 @@ export const locale = {
                     BADGE: "25",
                 }
             },
-            CALENDER:{
+            CALENDER: {
                 TITLE: "Calender",
                 WORKING_DAYS: {
                     TITLE: "Working Days",
@@ -24,8 +24,12 @@ export const locale = {
                     TITLE: "Holidays",
                     BADGE: "25",
                 }
-            }
-           
+            },
+            REFERRALS: {
+                TITLE: "Referrals",
+                BADGE: "25",
+            },
+
         }
     },
 };
