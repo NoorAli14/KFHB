@@ -1,6 +1,6 @@
 import {Injectable} from '@nestjs/common';
-import { Country } from '@app/v1/countries/country.modal'
 import {CountryRepository} from "@core/repository";
+import { Country } from './country.modal'
 
 @Injectable()
 export class CountriesService {
