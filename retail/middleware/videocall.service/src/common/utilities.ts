@@ -1,6 +1,15 @@
 import * as path from 'path';
 
 /**
+ * Make JSON.Stringify compatible with GraphQL by removing quotes from the Keys.
+ * In Futuer we can add this to the JSON Prototype to extend the functionality of JSON library instead of calling a custom function
+ * @param object Object to Stringify
+ */
+export const stringifyForGQL = (object: { [key: string]: any }): string => {
+  return JSON.stringify(object).replace(/\"([^(\")"]+)\":/g, '$1:');
+};
+
+/**
  * graphqlKeys string[]
  * @param info
  */

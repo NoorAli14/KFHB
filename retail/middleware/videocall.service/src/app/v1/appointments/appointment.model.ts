@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Field, ObjectType } from '@nestjs/graphql';
-import { GENDER, APPOINTMENT_STATUS } from '@common/constants';
+import { GENDER, APPOINTMENT_STATUS, PLATFORMS } from '@common/constants';
 import { IsDate, IsEnum } from 'class-validator';
 
 @ObjectType()
@@ -16,6 +16,15 @@ export class UserGQL {
 
   @Field()
   last_name?: string;
+
+  @Field()
+  platform?: PLATFORMS;
+
+  @Field()
+  device_id?: string;
+
+  @Field()
+  firebase_token?: string;
 
   @Field()
   email?: string;

@@ -24,6 +24,13 @@ export enum APPOINTMENT_STATUS {
 registerEnumType(GENDER, { name: 'GENDER' });
 registerEnumType(APPOINTMENT_STATUS, { name: 'APPOINTMENT_STATUS' });
 
+export enum PLATFORMS {
+  ANDROID = 'android',
+  IOS = 'ios',
+  WEB = 'web',
+}
+registerEnumType(PLATFORMS, { name: 'MOBILE_PLATFORMS' });
+
 export const DATABASE_UUID_METHOD = 'NEWID()';
 
 export const DATABASE_MIGRATION_TABLE_NAME =

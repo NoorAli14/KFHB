@@ -42,6 +42,7 @@
   - [Service Specific](#service-specific)
     - [Packages](#packages)
     - [Env Variables](#env-variables)
+    - [TODOs](#todos)
 
 ![divider](./divider.png)
 
@@ -271,6 +272,17 @@ npm run test:cov
 
 ### Env Variables
 
-- MINUTES_BEFORE_CALL_TO_SEND_NOTIFICATION=15
+- ENV_RBX_MINUTES_BEFORE_CALL_TO_SEND_NOTIFICATION=15
 - ENV_RBX_REDIS_URL=redis://127.0.0.1:6379/4
 - ENV_RBX_MAX_APPOINTMENTS_AT_A_TIME=5 (Related to the Available Agents at a time)
+- ENV_RBX_NOTIFICATION_SERVER=http://127.0.0.1:4000/graphql (Temporary)
+- ENV_RBX_ENTITLEMENT_SERVER=http://127.0.0.1:5000/graphql (Temporary)
+- ENV_RBX_IDENTITY_SERVER=http://127.0.0.1:6000/graphql (Temporary)
+
+### TODOs
+
+1. Midnight Cron Job Fallback Approaches.
+   1.1. Add a Retry mechanism inside Midnight Cron Job.
+   1.2. Create a Rest API to invoke the action to manually invoke the process.
+2. Remove the URL environment variables for other services and use Service Registry for this.
+3. Double check the TimeZone difference when sending the Push Notification.

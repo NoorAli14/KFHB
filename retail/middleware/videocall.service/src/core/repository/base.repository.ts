@@ -26,6 +26,17 @@ export abstract class BaseRepository {
       .where(condition)
       .update(newObj, keys);
   }
+
+  async updateByIds(
+    ids: string[],
+    newObj: Record<string, any>,
+    keys?: string[],
+  ): Promise<any> {
+    return this._connection(this._tableName)
+      .whereIn('id', ids)
+      .update(newObj, keys);
+  }
+
   async delete(condition: Record<string, any>): Promise<any> {
     return this._connection(this._tableName)
       .where(condition)
@@ -65,7 +76,7 @@ export abstract class BaseRepository {
     start: string | Date | any,
     end: string | Date | any,
     keys?: string[],
-  ): Promise<any> {
+  ): Promise<any[]> {
     return this._connection(this._tableName)
       .select(keys)
       .where(column_name, '>=', start)

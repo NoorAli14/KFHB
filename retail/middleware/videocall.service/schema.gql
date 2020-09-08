@@ -42,7 +42,7 @@ enum GENDER {
 }
 
 type Mutation {
-  addAppointment(input: NewAppointmentInput!): AppointmentGQL!
+  addAppointment(appointment: NewAppointmentInput!): AppointmentGQL!
 }
 
 input NewAppointmentInput {
@@ -53,7 +53,7 @@ input NewAppointmentInput {
 }
 
 type Query {
-  findAppointment(id: String!): AppointmentGQL!
+  findAppointment(appointment_id: String!): AppointmentGQL!
 }
 
 type UserGQL {
@@ -61,6 +61,9 @@ type UserGQL {
   first_name: String!
   middle_name: String!
   last_name: String!
+  platform: String!
+  device_id: String!
+  firebase_token: String!
   email: String!
   gender: String!
   date_of_birth: DateTime!

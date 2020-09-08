@@ -7,6 +7,10 @@ import { AppointmentRepository } from '@core/repository';
 import { ConfigurationService } from '@common/configuration/configuration.service';
 import { AppointmentGQL } from './appointment.model';
 import * as moment from 'moment';
+import { APPOINTMENT_STATUS, GENDER } from '@common/constants';
+import { GqlClientService } from '@common/libs/gqlclient/gqlclient.service';
+import { PushNotificationModel } from './push_notification.model';
+import { stringifyForGQL } from '@common/utilities';
 
 @Injectable()
 export class AppointmentsService {
@@ -16,6 +20,7 @@ export class AppointmentsService {
     private readonly appointmentDB: AppointmentRepository,
     private readonly configService: ConfigurationService,
     private readonly redisService: RedisService,
+    private readonly gqlClient: GqlClientService,
   ) {}
 
   private async throw_if_appointment_exist(call_time: Date, user_id: string) {
@@ -30,7 +35,7 @@ export class AppointmentsService {
     if (record) throw new Error('Appointment for this user already exist.');
   }
 
-  private async appointment_limit_at_this_time(call_time: Date) {
+  private async throw_if_appointment_limit_exceed(call_time: Date) {
     const appointments_at_this_time: any[] = await this.appointmentDB.findBy(
       {
         call_time: call_time,
@@ -38,10 +43,14 @@ export class AppointmentsService {
       ['id'],
     );
 
-    return (
-      appointments_at_this_time.length <
-      parseInt(process.env.ENV_RBX_MAX_APPOINTMENTS_AT_A_TIME)
-    );
+    if (
+      appointments_at_this_time.length >=
+      parseInt(this.configService.get('ENV_RBX_MAX_APPOINTMENTS_AT_A_TIME'))
+    ) {
+      throw new Error(
+        'Appointment cannot be saved at this time, Please choose another time.',
+      );
+    }
   }
 
   async create(
@@ -49,19 +58,24 @@ export class AppointmentsService {
     keys?: string[],
   ): Promise<any> {
     // Section: Validating Input
-    // TODO: Validate the input and Time of the appointment
+    // Validate the input and Time of the appointment
     // Check the Past date and time
     if (newAppointment.call_time <= new Date()) {
       throw new Error('Selected call time is in the Past.');
     }
 
     // Query the other service to check the available slots in the Holidays and working days.
+    this.check_agent_availability(
+      newAppointment.call_time,
+      newAppointment.gender,
+      newAppointment.user_id,
+    );
 
     // End Section: Validating Input
 
     // Section: Check the Duplicate
     // TODO: Only if we want to allow limited number of appointment on a specific time.
-    // this.appointment_limit_at_this_time(newAppointment.call_time)
+    // this.throw_if_appointment_limit_exceed(newAppointment.call_time)
 
     this.throw_if_appointment_exist(
       newAppointment.call_time,
@@ -84,7 +98,8 @@ export class AppointmentsService {
   @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async every_midnight_cron(): Promise<void> {
     console.log('Cron is running at Midnight.');
-    // TODO: Get all Appointments for today.
+
+    // Get all Appointments for today.
     const start_date_time = new Date();
     const end_date_time = new Date(start_date_time);
     // Add a day to filter only 1 day appointments
@@ -94,21 +109,38 @@ export class AppointmentsService {
     const start_date = start_date_time.toISOString().split('T')[0];
     const end_date = end_date_time.toISOString().split('T')[0];
 
-    const appointments = await this.appointmentDB.between(
+    const appointments: AppointmentGQL[] = await this.appointmentDB.between(
       'call_time',
       start_date,
       end_date,
     );
 
-    // TODO: Save all these in Redis instance
+    // Save all these in Redis instance
     const redis_client = await this.redisService.getClient(
       this.configService.REDIS.name,
     );
-    redis_client.set(this.REDIS_KEY, JSON.stringify(appointments));
+    const redis_response = redis_client.set(
+      this.REDIS_KEY,
+      JSON.stringify(appointments),
+    );
 
-    // TODO: Register all dynamically into Cron library
-    // OR: Create another Cron job and check for calls every minute in Redis (within MINUTES_BEFORE_CALL_TO_SEND_NOTIFICATION).
-    // If Found send Push Notification right away.
+    // Update Appointment status to QUEUED when saved in Redis
+    if (redis_response == null) {
+      // Send Priority Exception Message
+    } else {
+      const appointment_ids: string[] = appointments.map(appointment => {
+        // Update DB status to Queued
+        return appointment.id;
+      });
+
+      this.appointmentDB.updateByIds(
+        appointment_ids,
+        {
+          status: APPOINTMENT_STATUS.QUEUED,
+        },
+        ['id'],
+      );
+    }
   }
 
   // *   *   *   *   *   *
@@ -119,7 +151,6 @@ export class AppointmentsService {
   // |   |   hour
   // |   minute
   // second (optional)
-  // @Cron(`0 ${process.env.MINUTES_BEFORE_CALL_TO_SEND_NOTIFICATION} * * * *`)
   @Cron('0 */1 * * * *')
   async cron_to_send_push_notification(): Promise<void> {
     console.log('Cron job is running every 1 minute.');
@@ -134,30 +165,151 @@ export class AppointmentsService {
 
     const appointments: AppointmentGQL[] = JSON.parse(key_result);
 
-    // TODO: Filter the appointments under 15 minutes from Date.now()
+    // Filter the appointments under 15 minutes from Date.now()
     const appointments_coming = appointments.filter(appointment => {
       const diff_in_minutes = Math.round(
         moment.utc(appointment.call_time).diff(moment.utc(), 'minutes', true),
       );
 
       if (
-        diff_in_minutes > 0 &&
+        appointment.status === APPOINTMENT_STATUS.QUEUED &&
+        diff_in_minutes >= 0 &&
         diff_in_minutes <=
-          Number(process.env.MINUTES_BEFORE_CALL_TO_SEND_NOTIFICATION)
+          Number(
+            this.configService.get(
+              'ENV_RBX_MINUTES_BEFORE_CALL_TO_SEND_NOTIFICATION',
+            ),
+          )
       ) {
         return true;
       }
     });
 
-    // TODO: Send Push Notification through the Notification Service.
+    // Send Push Notification through the Notification Service.
     appointments_coming.forEach(appointment => {
       console.log('Appointment Coming At:', appointment.call_time);
 
       // Send Push Notification
+      const notification: PushNotificationModel = {
+        platform: appointment.user.platform,
+        device_id: appointment.user.device_id,
+        token: appointment.user.firebase_token,
+        message_title: 'Dummy: until get from Business Team.',
+        message_body: 'Dummy: until get from Business Team.',
+        image_url: 'http://lorempixel.com/400/200',
+      };
+
+      const user_id = appointment.user_id;
+
+      this.send_push_notification(notification, user_id);
+
       // If success then
-      // Update Entry in the Database with Status=Notification.
-      // If success then
-      // Remove entry from Redis.
+      if (true) {
+        // Update Entry in Redis and Database with Status=Notification.
+        // This is a Reference Object, So changing this item will update the List object as well.
+        appointment.status = APPOINTMENT_STATUS.NOTIFICATION;
+
+        // Updating in DB
+        this.appointmentDB.update(
+          { id: appointment.id },
+          {
+            status: APPOINTMENT_STATUS.NOTIFICATION,
+          },
+          ['id'],
+        );
+      }
     });
+
+    // Update only if there is any Notification Sent.
+    if (appointments_coming.length > 0) {
+      const redis_response = redis_client.set(
+        this.REDIS_KEY,
+        JSON.stringify(appointments),
+      );
+    }
+  }
+
+  async get_user_by_id_from_service(user_id: string) {
+    const params = `query{
+        findCustomerById(id: ${user_id}) {
+        id
+        email
+        contact_no
+        first_name
+        middle_name
+        last_name
+        gender
+      }
+    }`;
+
+    const headers = {
+      'x-user-id': user_id,
+      'x-tenant-id': user_id,
+    };
+
+    const result = await this.gqlClient.send(
+      params,
+      headers,
+      this.configService.get('ENV_RBX_IDENTITY_SERVER'),
+    );
+    return result;
+  }
+
+  private async check_agent_availability(
+    call_time: Date,
+    gender: GENDER,
+    user_id: string,
+  ) {
+    const params = `query{
+        findAvailableUsers(input:{call_time: ${call_time}, gender: ${gender}}){
+        id
+        email
+      }
+    }`;
+
+    const headers = {
+      'x-user-id': user_id,
+      'x-tenant-id': user_id,
+    };
+
+    const result = await this.gqlClient.send(
+      params,
+      headers,
+      this.configService.get('ENV_RBX_ENTITLEMENT_SERVER'),
+    );
+    return result;
+  }
+
+  private async send_push_notification(
+    input: PushNotificationModel,
+    user_id: string,
+  ) {
+    const keys = stringifyForGQL(input);
+
+    const params = `mutation {
+      sendPushNotification(input: ${keys}) {
+        id
+        platform
+        device_id
+        message_title
+        message_body
+        image_url
+        status
+        created_on
+        created_by
+      }
+    }`;
+
+    const headers = {
+      'x-user-id': user_id,
+      'x-tenant-id': user_id,
+    };
+
+    const result = await this.gqlClient.send(
+      params,
+      headers,
+      this.configService.get('ENV_RBX_NOTIFICATION_SERVER'),
+    );
+    return result;
   }
 }
