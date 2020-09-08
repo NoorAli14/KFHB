@@ -14,7 +14,7 @@ export class Nationality {
     example: 'Pakistani',
     required: true,
   })
-  name?: string;
+  name: string;
 
   @ApiProperty({
     title: 'Country ISO Code',
@@ -22,33 +22,33 @@ export class Nationality {
     example: 'PK',
     required: true,
   })
-  country_code?: string;
+  country_code: string;
 
   @ApiProperty({
     description: 'Nationality status',
     required: false,
   })
-  status?: string;
+  status: string;
 
   @ApiProperty({ required: false })
-  created_by?: string;
+  created_by: string;
 
   @ApiProperty({ required: false })
-  updated_by?: string;
+  updated_by: string;
 
-  deleted_by?: string;
+  deleted_by: string;
 
   @ApiProperty({
     description: 'timestamp without time zone',
     required: false,
   })
-  created_on?: Date;
+  created_on: Date;
 
   @ApiProperty({
     description: 'timestamp without time zone',
     required: false,
   })
-  updated_on?: Date;
+  updated_on: Date;
 
-  deleted_on?: Date;
+  deleted_on: Date;
 }
