@@ -33,17 +33,6 @@ import { ChangePasswordDto, UpdateUserDto } from './user.dto';
 export class UsersController {
   constructor(private readonly userService: UserService) {}
 
-  @Get('/')
-  @ApiOperation({
-    description:
-      'A successful request returns the HTTP 200 OK status code and a JSON response body that shows list of users information.',
-    summary: 'List of all users.',
-  })
-  @ApiOkResponse({ type: [User], description: 'List of all users.' })
-  async list(): Promise<User[]> {
-    return this.userService.list();
-  }
-
   @Get(':id')
   @ApiOperation({
     summary: 'Find a user by ID',
