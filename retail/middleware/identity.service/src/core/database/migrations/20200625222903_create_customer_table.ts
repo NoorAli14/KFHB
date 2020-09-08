@@ -16,6 +16,8 @@ export async function up(knex: Knex): Promise<any> {
     table.string('date_of_birth');
     table.string('national_id');
     table.string('nationality');
+    table.string('device_id');
+    table.string('platform');
 
     // table.string('target_user_id');
     table.uuid('tenant_id').notNullable();
@@ -35,6 +37,8 @@ export async function up(knex: Knex): Promise<any> {
     table.index('session_id', 'IDT_CUSTOMER_SESSION_ID_INDEX');
     table.index('tenant_id', 'IDT_CUSTOMER_TENANT_ID_INDEX');
     table.index('email', 'IDT_CUSTOMER_EMAIL_INDEX');
+    table.index('device_id', 'IDT_CUSTOMER_DEVICE_ID_INDEX');
+    table.index('platform', 'IDT_CUSTOMER_PLATFORM_INDEX');
     table.index('status', 'IDT_CUSTOMER_STATUS_INDEX');
   });
 }

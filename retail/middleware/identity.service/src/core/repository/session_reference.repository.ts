@@ -38,13 +38,18 @@ export class SessionReferenceRepository extends BaseRepository {
   }
 
   async recentDocumentByType(
-    session_id: string,
+    session_id: string | string[],
     document_type: string | string[],
   ): Promise<any> {
+    document_type = Array.isArray(document_type)
+      ? document_type
+      : [document_type];
+    const __session_id: string[] = Array.isArray(session_id)
+      ? session_id
+      : [session_id];
+
     const condition: { [key: string]: any } = {};
-    condition[`${TABLE.SESSION_REFERENCE}.session_id`] = session_id;
     condition[`${TABLE.SESSION}.status`] = SESSION_STATUSES.ACTIVE;
-    // condition[`${TABLE.DOCUMENT_TYPE}.name`] = document_type;
     condition[`${TABLE.DOCUMENT_TYPE}.status`] = DOCUMENT_TYPE_STATUSES.ACTIVE;
     condition[`${TABLE.SESSION_REFERENCE}.deleted_on`] = null;
     condition[`${TABLE.SESSION}.deleted_on`] = null;
@@ -67,12 +72,49 @@ export class SessionReferenceRepository extends BaseRepository {
         `${TABLE.SESSION_REFERENCE}.session_id`,
       )
       .where(condition)
+      .whereIn(`${TABLE.DOCUMENT_TYPE}.name`, document_type)
+      .whereIn(`${TABLE.SESSION_REFERENCE}.session_id`, __session_id)
+      .whereNot(`${TABLE.SESSION_REFERENCE}.status`, DOCUMENT_STATUSES.ARCHIVED)
       .orderBy(`${TABLE.SESSION_REFERENCE}.created_on`, 'desc');
-    if (Array.isArray(document_type)) {
-      query = query.whereIn(`${TABLE.DOCUMENT_TYPE}.name`, document_type);
-    } else {
-      query = query.where(`${TABLE.DOCUMENT_TYPE}.name`, document_type).first();
-    }
+
+    if (!Array.isArray(session_id) && !Array.isArray(document_type))
+      query = query.first();
     return query;
+  }
+
+  async getDocumentByCustomerAndId(
+    customer_id: string,
+    id: string,
+  ): Promise<any> {
+    const condition: { [key: string]: any } = {};
+
+    condition[`${TABLE.SESSION}.customer_id`] = customer_id;
+    condition[`${TABLE.SESSION_REFERENCE}.id`] = id;
+    condition[`${TABLE.SESSION}.status`] = SESSION_STATUSES.ACTIVE;
+    condition[`${TABLE.DOCUMENT_TYPE}.status`] = DOCUMENT_TYPE_STATUSES.ACTIVE;
+    condition[`${TABLE.SESSION_REFERENCE}.deleted_on`] = null;
+    condition[`${TABLE.SESSION}.deleted_on`] = null;
+
+    return this.connection(this.tableName)
+      .select([
+        ...this.__attributes,
+        `${TABLE.SESSION}.target_user_id`,
+        `${TABLE.SESSION}.check_id`,
+        `${TABLE.DOCUMENT_TYPE}.name`,
+      ])
+      .innerJoin(
+        TABLE.DOCUMENT_TYPE,
+        `${TABLE.DOCUMENT_TYPE}.id`,
+        `${TABLE.SESSION_REFERENCE}.document_type_id`,
+      )
+      .innerJoin(
+        TABLE.SESSION,
+        `${TABLE.SESSION}.id`,
+        `${TABLE.SESSION_REFERENCE}.session_id`,
+      )
+      .where(condition)
+      .whereNot(`${TABLE.SESSION_REFERENCE}.status`, DOCUMENT_STATUSES.ARCHIVED)
+      .orderBy(`${TABLE.SESSION_REFERENCE}.created_on`, 'desc')
+      .first();
   }
 }

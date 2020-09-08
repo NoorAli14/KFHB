@@ -1,4 +1,11 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  Parent,
+  ResolveField,
+} from '@nestjs/graphql';
 import { UseGuards, NotFoundException } from '@nestjs/common';
 import {
   AuthGuard,
@@ -7,9 +14,14 @@ import {
   CREATED_BY,
   CUSTOMER_STATUSES,
 } from '@rubix/common';
+import * as DataLoader from 'dataloader';
+import { Loader } from 'nestjs-dataloader';
+import { Document } from '@rubix/app/v1/documents/document.model';
+
 import { Customer } from './customer.model';
 import { CustomersService } from './customers.service';
 import { NewCustomerInput } from './customer.dto';
+import { String } from 'lodash';
 
 @Resolver(Customer)
 export class CustomersResolver {
@@ -22,10 +34,10 @@ export class CustomersResolver {
     @Fields() output: string[],
   ): Promise<Customer> {
     const params: any = {
+      ...input,
       created_by: CREATED_BY.API,
       updated_by: CREATED_BY.API,
       tenant_id: tenant.id,
-      email: input.email,
       status: CUSTOMER_STATUSES.PENDING,
     };
     return this.customerService.create(params, output);
@@ -40,5 +52,16 @@ export class CustomersResolver {
     const customer: Customer = await this.customerService.findById(id, output);
     if (!customer) throw new NotFoundException('Customer Not Found');
     return customer;
+  }
+
+  @ResolveField(() => [Document])
+  documents(
+    @Parent() customer: Customer,
+    @Loader('DocumentLoader') postLoader: DataLoader<Document['id'], Document>,
+  ) {
+    console.log(`Session IDs: ${customer.session_id}`);
+    if (!customer.session_id) return [];
+
+    return postLoader.load(customer.session_id);
   }
 }
