@@ -4,7 +4,7 @@ import { Routes, RouterModule } from "@angular/router";
 const routes: Routes = [
   {
     path: "",
-    redirectTo:'ent', pathMatch:'full'
+    redirectTo: 'ent', pathMatch: 'full'
   },
   {
     path: 'ent',
@@ -15,7 +15,7 @@ const routes: Routes = [
     loadChildren: () => import('./calender/calender.module').then(m => m.CalenderModule)
   },
   {
-     path: 'setting',
+    path: 'setting',
     loadChildren: () => import('./setting/setting.module').then(m => m.SettingModule)
   },
   {
@@ -23,12 +23,15 @@ const routes: Routes = [
     loadChildren: () => import('./error/error.module').then(m => m.ErrorModule)
   },
   {
-    path: '**', redirectTo:'error'
+    path: '**', redirectTo: 'error'
+  },
+  {
+    path: 'referralScheme', redirectTo: 'error'
   }
 ];
 
 @NgModule({
-    imports: [RouterModule.forChild(routes)],
-    exports: [RouterModule],
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule],
 })
-export class FeaturesRoutingModule {}
+export class FeaturesRoutingModule { }

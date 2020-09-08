@@ -57,7 +57,16 @@ export const navigation: FuseNavigation[] = [
                         url      : '/calender/holidays',
                     }
                 ]
-            }]
+            },
+            {
+                id       : 'referralScheme',
+                title    : 'Referral Scheme',
+                translate: 'FEATURES.ENTITLEMENT.TITLE',
+                type     : 'collapsable',
+                icon     : 'assignment_ind',
+            }
+            
+        ]
         
     }
 ];
