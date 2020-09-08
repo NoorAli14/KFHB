@@ -22,3 +22,16 @@ export class ProcessDocumentInput {
   @MaxLength(36)
   type: string;
 }
+
+@InputType('PreviewDocumentInput')
+export class PreviewDocumentInput {
+  @Field()
+  @IsString()
+  @IsNotEmpty()
+  customer_id: string;
+
+  @Field()
+  @IsString()
+  @IsNotEmpty()
+  attachment_id: string;
+}

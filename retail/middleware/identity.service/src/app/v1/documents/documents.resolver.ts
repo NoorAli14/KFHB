@@ -1,23 +1,14 @@
-import {
-  Resolver,
-  Query,
-  Mutation,
-  Args,
-  ResolveField,
-  Parent,
-} from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { uuid, ICurrentUser } from '@rubix/common';
 import { UseGuards } from '@nestjs/common';
-import {
-  AuthGuard,
-  Fields,
-  CurrentUser,
-  Tenant,
-  DOCUMENT_STATUSES,
-} from '@rubix/common';
-import { Document } from './document.model';
+import { AuthGuard, Fields, CurrentUser } from '@rubix/common';
+import { Document, PreviewDocument } from './document.model';
 import { DocumentsService } from './documents.service';
-import { NewDocumentInput, ProcessDocumentInput } from './document.dto';
+import {
+  NewDocumentInput,
+  ProcessDocumentInput,
+  PreviewDocumentInput,
+} from './document.dto';
 
 @Resolver(Document)
 @UseGuards(AuthGuard)
@@ -28,26 +19,25 @@ export class DocumentsResolver {
   addDocument(
     @Args('input') input: NewDocumentInput,
     @CurrentUser() currentUser: ICurrentUser,
-    @Fields() columns: string[],
+    @Fields() output: string[],
   ): Promise<Document> {
-    return this.documentService.create(currentUser, input, columns);
+    return this.documentService.create(currentUser, input, output);
   }
 
   @Mutation(() => Document)
   processDocument(
     @Args('input') input: ProcessDocumentInput,
-    @CurrentUser() customer: any,
-    @Tenant() tenant: any,
-    @Fields() columns: string[],
-  ): Promise<Document> {
-    const params: any = {
-      ...input,
-      ...{
-        customer_id: customer.id,
-        tenant_id: tenant.id,
-        updated_by: customer.id,
-      },
-    };
-    return this.documentService.process(params, columns);
+    @CurrentUser() currentUser: ICurrentUser,
+    @Fields() output: string[],
+  ): Promise<Document | Error> {
+    return this.documentService.process(currentUser, input, output);
+  }
+
+  @UseGuards(AuthGuard)
+  @Query(() => PreviewDocument)
+  async previewAttachment(
+    @Args('input') input: PreviewDocumentInput,
+  ): Promise<PreviewDocument> {
+    return this.documentService.preview(input);
   }
 }

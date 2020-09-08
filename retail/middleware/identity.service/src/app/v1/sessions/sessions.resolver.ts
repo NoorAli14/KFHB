@@ -1,6 +1,6 @@
 import { Resolver, Mutation, Args } from '@nestjs/graphql';
 import { uuid } from '@rubix/common';
-import { UseGuards } from '@nestjs/common';
+import { UseGuards, Logger } from '@nestjs/common';
 import { AuthGuard, Fields, CurrentUser, ICurrentUser } from '@rubix/common';
 import { Session } from './session.model';
 import { SessionsService } from './sessions.service';
@@ -11,6 +11,7 @@ import { EVALUATION_RESPONSE } from './session.interface';
 @Resolver(Session)
 @UseGuards(AuthGuard)
 export class SessionsResolver {
+  private readonly __logger: Logger = new Logger(SessionsResolver.name);
   constructor(private readonly sessionService: SessionsService) {}
 
   @Mutation(() => Session)

@@ -1,42 +1,27 @@
-import { Injectable, Logger, Scope, Inject } from '@nestjs/common';
-import { REQUEST } from '@nestjs/core';
-import { Request } from 'express';
+import { Injectable, Logger } from '@nestjs/common';
 import {
   SessionRepository,
   CustomerRepository,
   DocumentTypeRepository,
   SessionReferenceRepository,
 } from '@rubix/core';
-import { Document } from './document.model';
-import { Customer } from '../customers/customer.model';
+import { Document, PreviewDocument } from './document.model';
 import { IdentityService } from '@rubix/common/http/';
-import { DOCUMENT_STATUSES, ICurrentUser } from '@rubix/common/';
-@Injectable({ scope: Scope.REQUEST })
+import {
+  DOCUMENT_STATUSES,
+  ICurrentUser,
+  DOCUMENT_TYPES,
+} from '@rubix/common/';
+@Injectable()
 export class DocumentsService {
   private readonly logger: Logger = new Logger(DocumentsService.name);
   constructor(
-    @Inject(REQUEST) private request: Request,
     private readonly identityService: IdentityService,
     private readonly documentTypeDB: DocumentTypeRepository,
     private readonly sessionReferenceDB: SessionReferenceRepository,
     private readonly sessionDB: SessionRepository,
     private readonly customerDB: CustomerRepository,
-  ) {
-    console.log(`Deocument Request Headers: ${this.request.headers}`);
-  }
-
-  async getCustomer(input): Promise<Customer> {
-    const customer: any = await this.customerDB.findByIdAndTenentId(
-      input.customer_id,
-      input.tenant_id,
-    );
-    console.log(`Customer is: ${JSON.stringify(customer, null, 2)}`);
-    return customer;
-  }
-
-  async getSession(id: string): Promise<any> {
-    return this.sessionDB.findById(id);
-  }
+  ) {}
 
   async create(
     currentUser: ICurrentUser,
@@ -81,14 +66,23 @@ export class DocumentsService {
   }
 
   async process(
+    currentUser: ICurrentUser,
     input: { [key: string]: any },
-    columns?: string[],
+    output?: string[],
   ): Promise<Document> {
-    const customer: Customer = await this.getCustomer(input);
-    const reference: any = await this.sessionReferenceDB.recentDocumentByType(
-      customer.session_id,
+    //  Fetch customer recent active session
+    const customerSession = await this.customerDB.getRecentSession(
+      currentUser.tenant_id,
+      currentUser.id,
+    );
+    const [reference]: any = await this.sessionReferenceDB.recentDocumentByType(
+      customerSession.session_id,
       input.type,
     );
+
+    this.logger.log(`${JSON.stringify(customerSession, null, 2)}`);
+    this.logger.log(`${JSON.stringify(reference, null, 2)}`);
+
     if (reference?.status === DOCUMENT_STATUSES.PROCESSING) {
       const status: any = await this.identityService.getDocument(
         reference.target_user_id,
@@ -96,7 +90,7 @@ export class DocumentsService {
         reference.attachable_id,
       );
       const _input: { [key: string]: any } = {
-        updated_by: customer.id,
+        updated_by: customerSession.id,
         status:
           DOCUMENT_STATUSES[status?.processingStatus] ||
           DOCUMENT_STATUSES.FAILED,
@@ -119,16 +113,44 @@ export class DocumentsService {
       const [sessionRef] = await this.sessionReferenceDB.update(
         { id: reference.id },
         _input,
-        columns,
+        output,
       );
       return sessionRef;
     } else {
       return reference;
     }
   }
-}
 
-// async delete(id: string): Promise<boolean> {
-//   return await this.userDB.delete({ id });
-// }
-// }
+  async preview(input: any): Promise<PreviewDocument> {
+    const reference: any = await this.sessionReferenceDB.getDocumentByCustomerAndId(
+      input.customer_id,
+      input.attachment_id,
+    );
+
+    //  Fetch Liveness base64 Content
+    if (reference?.name === DOCUMENT_TYPES.LIVENESS) {
+      const image: any = await this.identityService.getLivenessImage(
+        reference.target_user_id,
+        reference.check_id,
+        reference.attachable_id,
+      );
+      return { image: image.value };
+    }
+    // Fetch Document Base64 Content
+    else if (
+      [
+        DOCUMENT_TYPES.NATIONAL_ID_FRONT_SIDE,
+        DOCUMENT_TYPES.NATIONAL_ID_BACK_SIDE,
+        DOCUMENT_TYPES.PASSPORT,
+        DOCUMENT_TYPES.DRIVING_LICENSE,
+      ].includes(reference.name)
+    ) {
+      const image: any = await this.identityService.getProcessedClientImage(
+        reference.target_user_id,
+        reference.check_id,
+        reference.attachable_id,
+      );
+      return { image: image.value };
+    }
+  }
+}

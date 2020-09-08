@@ -106,6 +106,16 @@ export class IdentityService {
     });
   }
 
+  async getLivenessImage(
+    userId: string,
+    checkId: string,
+    livenessId: string,
+  ): Promise<any> {
+    this.logger.log(`Uploading Liveness of User ID: ${userId}`);
+    return this.__identity.faces(userId, checkId).getLivenessSensitiveData({
+      params: { id: livenessId },
+    });
+  }
   async createDocument(
     userId: string,
     checkId: string,
@@ -157,6 +167,16 @@ export class IdentityService {
       .getServerProcessedOCRSensitiveData(documentId);
   }
 
+  async getProcessedClientImage(
+    userId: string,
+    checkId: string,
+    documentId: string,
+  ) {
+    this.logger.log(`Get document processed Image with ID ${documentId}`);
+    return this.__identity
+      .documents(userId, checkId)
+      .getProcessedClientImage(documentId);
+  }
   async createEvaluation(userId: string, checkId: string): Promise<any> {
     this.logger.log(`Creating evaluation with User ID ${userId}`);
     return this.__identity.evaluation(userId, checkId).create();
