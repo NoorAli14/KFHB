@@ -42,7 +42,10 @@ export class FacesController {
     @Body() input: UploadSelfieDTO,
     @Header() header: IHEADER,
   ): Promise<Session> {
-    return this.sessionService.update(header, input);
+    const params: FaceUploadingInput = {
+      file: input.file,
+    };
+    return this.sessionService.update(header, params);
   }
 
   @Post('liveness/upload')

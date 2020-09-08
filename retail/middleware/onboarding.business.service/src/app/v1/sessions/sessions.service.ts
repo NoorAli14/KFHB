@@ -37,8 +37,30 @@ export class SessionsService {
    */
   async update(header: IHEADER, input: FaceUploadingInput): Promise<Session> {
     // Construct GraphQL request
-    const params: string = `mutation {
-      result: updateSession(input: ${toGraphql(input)}) {id customer_id}
+    // const params: string = `mutation {
+    //   result: updateSession(input:  {
+    //     file: '${JSON.stringify(JSON.parse(input.file)).replace(/"/g, '\\"')}'
+    //   })} {id customer_id}
+    // }`;
+
+    const params = `mutation {
+      session: updateSession(input: {
+          file: "${input.file}"
+        }) {
+        id
+        customer_id
+        tenant_id
+        reference_id
+        target_user_id
+        fido_reg_req_id
+        fido_reg_req
+        check_id
+        status
+        created_on
+        created_by
+        updated_on
+        updated_by   
+      }
     }`;
     this.logger.log(params);
     return this.gqlClient.setHeaders(header).send(params);

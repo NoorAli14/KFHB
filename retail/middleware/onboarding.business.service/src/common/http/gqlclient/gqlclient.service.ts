@@ -4,8 +4,6 @@ import {
   HttpException,
   RequestTimeoutException,
   BadRequestException,
-  Scope,
-  Inject,
   Logger,
 } from '@nestjs/common';
 import { map, timeout, catchError } from 'rxjs/operators';
@@ -22,8 +20,6 @@ export class GqlClientService {
     return this;
   }
   public async send(input: string): Promise<any> {
-    console.log(`GQL Header: ${JSON.stringify(this.__header, null, 2)}`);
-
     return this.http
       .post(
         '/graphql',
