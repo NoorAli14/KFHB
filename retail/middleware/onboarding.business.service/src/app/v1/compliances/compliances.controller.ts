@@ -18,7 +18,7 @@ import {
   ApiNotFoundResponse,
   ApiBody,
 } from '@nestjs/swagger';
-import { AuthGuard, CurrentUser } from '@common/index';
+import { AuthGuard, CurrentUser, Header, IHEADER } from '@common/index';
 
 import { Template } from './compliance.entity';
 import { ComplianceService } from './compliances.service';
@@ -49,8 +49,9 @@ export class CompliancesController {
     type: Error,
     description: 'Template Not Found.',
   })
-  async crs(): Promise<Template> {
+  async crs(@Header() header: IHEADER): Promise<Template> {
     const compliance = await this.complianceService.findOneByName(
+      header,
       this.__template.CRS,
     );
     if (!compliance) throw new NotFoundException(`Template not found.`);
@@ -71,8 +72,9 @@ export class CompliancesController {
     type: Error,
     description: 'Template Not Found.',
   })
-  async kyc(): Promise<Template> {
+  async kyc(@Header() header: IHEADER): Promise<Template> {
     const compliance = await this.complianceService.findOneByName(
+      header,
       this.__template.KYC,
     );
     if (!compliance) throw new NotFoundException(`Template not found.`);
@@ -93,8 +95,9 @@ export class CompliancesController {
     type: Error,
     description: 'Template Not Found.',
   })
-  async findOne(): Promise<Template> {
+  async fatca(@Header() header: IHEADER): Promise<Template> {
     const compliance = await this.complianceService.findOneByName(
+      header,
       this.__template.FATCA,
     );
     if (!compliance) throw new NotFoundException(`Template not found.`);
@@ -122,14 +125,15 @@ export class CompliancesController {
   async submit(
     @Param('template_id', ParseUUIDPipe) template_id: string,
     @CurrentUser() customer: any,
+    @Header() header: IHEADER,
     @Body() input: ComplianceDto,
   ): Promise<Template> {
-    const params: any = {
+    const params: { [key: string]: any } = {
       template_id: template_id,
       user_id: customer.id,
-      results: input.results,
+      results: JSON.stringify(input.results),
       remarks: input.remarks,
     };
-    return this.complianceService.submitResponse(params);
+    return this.complianceService.submitResponse(header, params);
   }
 }

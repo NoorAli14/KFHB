@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty } from 'class-validator';
+import { IsString, IsNotEmpty, IsJSON } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class ComplianceDto {
@@ -6,9 +6,9 @@ export class ComplianceDto {
     required: true,
     description: 'Template result',
   })
-  @IsString()
+  @IsJSON()
   @IsNotEmpty()
-  results: string;
+  results: any;
 
   @ApiProperty({
     required: true,
