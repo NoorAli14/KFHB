@@ -1,5 +1,5 @@
 import * as Knex from 'knex';
-import { TABLE, DATABASE_UUID_METHOD } from '@rubix/common/constants';
+import { TABLE, DATABASE_UUID_METHOD, STATUS } from '@rubix/common/constants';
 export async function up(knex: Knex): Promise<any> {
   return knex.schema.createTable(TABLE.COUNTRY, table => {
     table.uuid('id').primary().defaultTo(knex.raw(DATABASE_UUID_METHOD));
@@ -9,7 +9,7 @@ export async function up(knex: Knex): Promise<any> {
     table.string('capital_name');
     table.string('phone_code');
     table.string('currency_code');
-    table.string('status').defaultTo('ACTIVE');
+    table.string('status').defaultTo(STATUS.ACTIVE);
     table.string('created_by');
     table.string('updated_by');
     table.string('deleted_by');

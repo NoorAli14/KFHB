@@ -1,5 +1,5 @@
 import * as Knex from "knex";
-import { TABLE } from '@rubix/common/constants';
+import { TABLE, CREATED_BY, UPDATED_BY } from '@rubix/common/constants';
 import { nationalities } from "@common/assets/nationalities";
 
 export async function seed(knex: Knex): Promise<any> {
@@ -10,8 +10,8 @@ export async function seed(knex: Knex): Promise<any> {
         return {
             name: nationality,
             country_code: key,
-            created_by: 'SYSTEM',
-            updated_by: 'SYSTEM',
+            created_by: CREATED_BY.SYSTEM,
+            updated_by: UPDATED_BY.SYSTEM,
         }
     });
     // Inserts data to db in bulk
