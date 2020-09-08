@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
+import { GqlClientModule, GqlClientService } from '@common/index';
+
 import { RolesController } from './roles.controller';
 import { RoleService } from './roles.service';
-import { GqlClientModule } from '@common/libs/gqlclient/gqlclient.module';
-import { GqlClientService } from '@common/libs/gqlclient/gqlclient.service';
 
 @Module({
   imports: [GqlClientModule],

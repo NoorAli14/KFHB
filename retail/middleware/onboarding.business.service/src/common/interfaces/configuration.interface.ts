@@ -25,6 +25,8 @@ export interface iAPP {
   API_INFO_ENABLED?: boolean;
   SWAGGER_ENABLED?: boolean;
   MONITOR_ENABLED?: boolean;
+  WEB_ONBOARDING_LINK?: string;
+  WEB_RESET_PASSWORD_LINK?: string;
 }
 export interface iDATABASE {
   USERNAME: string;

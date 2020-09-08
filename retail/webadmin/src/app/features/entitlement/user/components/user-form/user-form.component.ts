@@ -78,7 +78,7 @@ export class UserFormComponent extends BaseComponent implements OnInit {
                 Validators.required,
                 Validators.email,
             ]),
-            dateOfBirth: new FormControl(this.data.user.dateOfBirth, [
+            dateOfBirth: new FormControl(this.data.dateOfBirth ? new Date(this.data.dateOfBirth) : null, [
                 this.requiredIfUpdating(() => this.userForm.get("id").value),
             ]),
             nationalityId: new FormControl(this.data.user.nationalityId, [

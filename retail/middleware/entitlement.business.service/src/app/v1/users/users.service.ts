@@ -1,8 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { SuccessDto } from '@common/dtos/';
+import {
+  Injectable,
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { User } from './user.entity';
-import { toGraphql } from '@common/utilities';
-import { GqlClientService } from '@common/libs/gqlclient/gqlclient.service';
+import { GqlClientService, toGraphql } from '@common/index';
+
 @Injectable()
 export class UserService {
   private readonly output: string = ` {
@@ -19,15 +22,29 @@ export class UserService {
     roles {
       id
       name
+      description
+      status
+      created_on
+      created_by
     }
     modules {
-      id
-      name
-      parent_id
-      sub_modules {
         id
         name
         parent_id
+        sub_modules {
+          id
+          name
+          parent_id
+          permissions {
+            id
+            record_type
+            created_on
+            created_by
+          }
+          status
+          created_on
+          created_by
+        }
         permissions {
           id
           record_type
@@ -38,16 +55,6 @@ export class UserService {
         created_on
         created_by
       }
-      permissions {
-        id
-        record_type
-        created_on
-        created_by
-      }
-      status
-      created_on
-      created_by
-    }
     status
     created_on
     created_by
@@ -59,7 +66,7 @@ export class UserService {
 
   async list(): Promise<User[]> {
     const params = `query {
-      users: usersList {
+      result: usersList {
         id
         first_name
         middle_name
@@ -73,6 +80,7 @@ export class UserService {
         roles {
           id
           name
+          description
           status
           created_on
           created_by
@@ -84,49 +92,43 @@ export class UserService {
         updated_by
       }
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.users;
+    return this.gqlClient.send(params);
   }
 
   async create(input: any): Promise<User> {
+    const user: User = await this.findByEmail(input.email);
+    if (user) {
+      throw new UnprocessableEntityException(
+        `User Already Exist with email ${input.email}`,
+      );
+    }
     const params = `mutation {
-      user: addUser(input: ${toGraphql(input)}) ${this.output}
+      result: addUser(input: ${toGraphql(input)}) ${this.output}
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.user;
+    return this.gqlClient.send(params);
   }
 
   async findOne(id: string, output?: string): Promise<User> {
     const _output: string = output ? output : this.output;
     const params = `query {
-      user: findUserById(id: "${id}") ${_output}
+      result: findUserById(id: "${id}") ${_output}
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.user;
-  }
-
-  async findOneByToken(token: string): Promise<User> {
-    // return this.users.find(role => role.id === token);
-    return new User();
+    return this.gqlClient.send(params);
   }
 
   async login(email: string, password: string): Promise<any> {
     const params = `query {
-        user: login(input: ${toGraphql({ email, password })}) ${this.output}
+        result: login(input: ${toGraphql({ email, password })}) ${this.output}
       }`;
-    const result = await this.gqlClient.send(params);
-    return result?.user;
+    return this.gqlClient.send(params);
   }
 
   async findBy(condition: any, output?: string): Promise<User[]> {
-    console.log(`Condition is: ${JSON.stringify(condition, null, 2)}`);
     const _output: string = output ? output : this.output;
     const params = `query {
-      user: findUserBy(checks: ${toGraphql(condition)}) ${_output}
+      result: findUserBy(checks: ${toGraphql(condition)}) ${_output}
     }`;
-    console.log(`Params is: ${params}`);
-    const result = await this.gqlClient.send(params);
-    return result?.user;
+    return this.gqlClient.send(params);
   }
 
   async findByEmail(email: string) {
@@ -137,7 +139,20 @@ export class UserService {
           record_value: email,
         },
       ],
-      `{id email}`,
+      `{id email status}`,
+    );
+    return user;
+  }
+
+  async findByInvitationToken(token: string): Promise<any> {
+    const [user] = await this.findBy(
+      [
+        {
+          record_key: 'invitation_token',
+          record_value: token,
+        },
+      ],
+      `{id status invitation_token invitation_token_expiry}`,
     );
     return user;
   }
@@ -146,31 +161,24 @@ export class UserService {
     const [user] = await this.findBy(
       [
         {
-          record_key: 'token',
+          record_key: 'password_reset_token',
           record_value: token,
         },
       ],
-      `{id token token_expiry}`,
+      `{id password_reset_token password_reset_token_expiry status}`,
     );
     return user;
   }
 
-  async updateByToken(token: string, user: any): Promise<User> {
-    // this.users[token] = user;
-    return new User();
-
-    // return user;
-  }
   async update(id: string, input: any): Promise<User> {
     const user: User = await this.findOne(id, `{id}`);
     if (!user) {
       throw new NotFoundException('User Not Found');
     }
     const params = `mutation {
-      user: updateUser(id: "${id}", input: ${toGraphql(input)}) ${this.output}
+      result: updateUser(id: "${id}", input: ${toGraphql(input)}) ${this.output}
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.user;
+    return this.gqlClient.send(params);
   }
 
   async delete(id: string): Promise<boolean> {
@@ -179,13 +187,8 @@ export class UserService {
       throw new NotFoundException('User Not Found');
     }
     const params = `mutation {
-      user: deleteUser(id: "${id}") 
+      result: deleteUser(id: "${id}") 
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.user;
-  }
-
-  async resendInvitationLink(user_id: string) {
-    return true;
+    return this.gqlClient.send(params);
   }
 }

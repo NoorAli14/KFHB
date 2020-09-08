@@ -1,16 +1,26 @@
 import * as DataLoader from 'dataloader';
-import {Injectable, Scope} from '@nestjs/common';
+import {Injectable} from '@nestjs/common';
 import { NestDataLoader } from 'nestjs-dataloader';
 
 import {Permission} from "@app/v1/permissions/permission.model";
-import {PermissionService} from "@app/v1/permissions/permissions.service";
+import {PermissionRepository} from '@core/repository';
+import {loaderSerializer} from '@common/utilities';
 
+@Injectable()
+export class PermissionLoader {
+    constructor(private readonly permissionDB: PermissionRepository) {}
 
-@Injectable({ scope: Scope.REQUEST })
+    async findPermissionsByModuleID(keys): Promise<any> {
+        const permissions: any = await this.permissionDB.listPermissionsByModuleID(keys);
+        return loaderSerializer(permissions, keys, 'module_id')
+    }
+}
+
+@Injectable()
 export class PermissionsDataLoader implements NestDataLoader<string, Permission> {
-    constructor(private readonly permissionService: PermissionService) { }
+    constructor(private readonly loader: PermissionLoader) { }
 
     generateDataLoader(): DataLoader<string, Permission> {
-        return new DataLoader<string, Permission>(keys => this.permissionService.findPermissionsByModuleID(keys));
+        return new DataLoader<string, Permission>(keys => this.loader.findPermissionsByModuleID(keys));
     }
 }

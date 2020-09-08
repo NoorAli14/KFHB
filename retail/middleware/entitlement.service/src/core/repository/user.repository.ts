@@ -1,7 +1,8 @@
-import {HttpException, HttpStatus, Injectable} from "@nestjs/common";
+import {Injectable} from "@nestjs/common";
 
 import { BaseRepository } from "./base.repository";
-import {MESSAGES, STATUS, TABLE, TEMP_ROLE} from "@common/constants";
+import {STATUS, TABLE} from "@common/constants";
+import {IdsInput} from "@common/inputs/ids.input";
 
 @Injectable()
 export class UserRepository extends BaseRepository {
@@ -9,43 +10,86 @@ export class UserRepository extends BaseRepository {
     super(TABLE.USER);
   }
 
-  async create(user: Record<string, any>, keys: string[]): Promise<any> {
-    if(user.roles && user.roles.length) {
-      const roles: [] = user.roles;
+  async update(condition: Record<string, any>,
+               user: Record<string, any>,
+               keys: string[]): Promise<any> {
+    const trxProvider = this._connection.transactionProvider();
+    const trx = await trxProvider();
+    try{
+      const roles: IdsInput[] = user.roles;
       delete user.roles;
-      const trxProvider = this._connection.transactionProvider();
-      const trx = await trxProvider();
-      const response = await trx(TABLE.USER).insert(user, keys);
-      if(response){
-        const user_roles = [];
-        roles.forEach(role => {
-          const user_role = {
-            user_id : response[0].id || response[0],
-            role_id : role['id'],
-            status : STATUS.ACTIVE,
-            created_by : TEMP_ROLE.ADMIN,
-          };
-          user_roles.push(user_role);
-        });
-        const result = await trx(TABLE.USER_ROLE).insert(user_roles, "*");
-        if(!result){
-          await trx.rollback();
-          throw new HttpException({
-            status: HttpStatus.BAD_REQUEST,
-            error: MESSAGES.BAD_REQUEST,
-          }, HttpStatus.BAD_REQUEST);
+      const response = await trx(TABLE.USER).where(condition).update(user, keys);
+      if(roles?.length > 0) {
+        const rolesToDelete = [];
+        const newUserRoles = [];
+        for (const role of roles) {
+          role._deleted ? rolesToDelete.push(role.id) : newUserRoles.push(role.id);
         }
-      } else {
-        await trx.rollback();
-        throw new HttpException({
-          status: HttpStatus.BAD_REQUEST,
-          error: MESSAGES.BAD_REQUEST,
-        }, HttpStatus.BAD_REQUEST);
+        // deleting user-roles
+        if (rolesToDelete.length > 0)
+          await trx(TABLE.USER_ROLE).whereIn('role_id', rolesToDelete)
+          .where({user_id: response[0].id || response[0]})
+          .del();
+        // checking which of Ids already exist
+        const idsAlready = await trx(TABLE.USER_ROLE).select(['role_id'])
+        .whereIn('role_id', newUserRoles)
+        .where({user_id: response[0].id || response[0]});
+        // removing already existing Ids
+        idsAlready.forEach(idObj => {
+          newUserRoles.splice(newUserRoles.indexOf(idObj.role_id || idObj), 1)
+        });
+        // creating new user-roles
+        const user_roles = newUserRoles.map(role_id => {
+          return {
+            user_id : response[0].id || response[0],
+            role_id : role_id,
+            status : STATUS.ACTIVE,
+            created_by : user.updated_by,
+            created_on : user.updated_on,
+          };
+        });
+        if(user_roles.length > 0) await trx(TABLE.USER_ROLE).insert(user_roles, ['id']);
       }
       await trx.commit();
       return response
-    } else {
-      return super.create(user,keys)
+    } catch (e) {
+      await trx.rollback();
+      throw e
     }
+  }
+
+  async create(user: Record<string, any>, keys: string[]): Promise<any> {
+    const trxProvider = this._connection.transactionProvider();
+    const trx = await trxProvider();
+    try{
+      const roles = user.roles;
+      delete user.roles;
+      const response = await trx(TABLE.USER).insert(user, keys);
+      if(roles) {
+        const user_roles = roles.map(role => {
+          return {
+            user_id : response[0].id || response[0],
+            role_id : role['id'],
+            status : STATUS.ACTIVE,
+            created_by : user.created_by,
+            created_on : user.created_on,
+          };
+        });
+        await trx(TABLE.USER_ROLE).insert(user_roles, ['id']);
+      }
+      await trx.commit();
+      return response;
+    } catch (e) {
+      await trx.rollback();
+      throw e;
+    }
+  }
+
+  async listExcludedUsers(userIds: string[], condition: Record<string, any>, keys: string[]): Promise<any>{
+    return this._connection(TABLE.USER)
+    .select(keys)
+    .whereNotIn('id', userIds)
+    .where(condition)
+    .orderBy('created_on', 'desc');
   }
 }

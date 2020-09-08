@@ -7,16 +7,13 @@ import { FuseSharedModule } from "@fuse/shared.module";
 import { ForgotPasswordComponent } from './views/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './views/reset-password/reset-password.component';
 import { MaterialFormsModule } from '@shared/modules/material-forms/material-forms.module';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
+
 import { PhoneVerificationComponent } from './views/phone-verification/phone-verification.component';
 import { SharedModule } from '@shared/shared.module';
+import { InvitationComponent } from './views/invitation/invitation.component';
 
 @NgModule({
-    declarations: [LoginComponent,  ForgotPasswordComponent, ResetPasswordComponent, PhoneVerificationComponent],
+    declarations: [LoginComponent,  ForgotPasswordComponent, ResetPasswordComponent, PhoneVerificationComponent, InvitationComponent],
     imports: [
         CommonModule,
         MaterialFormsModule,
