@@ -44,7 +44,7 @@ LABEL version="0.1.0 (alpha)"
 LABEL description="Container for running rubix boilerplate"
 
 # Define default arguments
-ARG PORT=4000
+ARG PORT=5010
 ARG WORKDIR=/home/aiondigital/rubix
 ARG USER=node
 ARG NODE_ENV=production
