@@ -72,4 +72,15 @@ export class AttachmentsService {
       document.processed_data = JSON.parse(document.processed_data);
     return document;
   }
+
+  async preview(header: IHEADER, input: any): Promise<any> {
+    // Construct GraphQL request
+    const params: string = `query {
+      result: previewAttachment(
+          input: ${toGraphql(input)}) {
+        image
+      }
+    }`;
+    return this.gqlClient.setHeaders(header).send(params);
+  }
 }
