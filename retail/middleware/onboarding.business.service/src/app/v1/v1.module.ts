@@ -22,7 +22,7 @@ import { AttachmentModule } from './attachments/attachment.module';
 let services: iSERVICE[];
 if (process.env.NODE_ENV === 'production') {
   services = [
-    // { name: 'identity', url: 'http://identity_service:4010/graphql' },
+    { name: 'identity', url: 'http://identity_service:4010/graphql' },
     { name: 'compliance', url: 'http://compliance_service:5010/graphql' },
   ];
 } else {
