@@ -1,10 +1,6 @@
 import { Router, ActivatedRoute } from "@angular/router";
 import { Component, OnInit, ViewEncapsulation, Injector } from "@angular/core";
-import {
-    FormGroup,
-    Validators,
-    FormControl,
-} from "@angular/forms";
+import { FormGroup, Validators, FormControl } from "@angular/forms";
 
 import { FuseConfigService } from "@fuse/services/config.service";
 import { fuseAnimations } from "@fuse/animations";

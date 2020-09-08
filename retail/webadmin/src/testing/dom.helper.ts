@@ -1,47 +1,43 @@
-import {ComponentFixture} from '@angular/core/testing';
-import {By} from '@angular/platform-browser';
+import { ComponentFixture } from '@angular/core/testing';
+import { FormGroup } from '@angular/forms';
+import { By } from '@angular/platform-browser';
 
 export class DOMHelper<T> {
   private fixture: ComponentFixture<T>
+  config:any;
   constructor(fixture: ComponentFixture<T>) {
     this.fixture = fixture;
+    this.config={
+      layout: {
+          navbar: {
+              hidden: true,
+          },
+          toolbar: {
+              hidden: true,
+          },
+          footer: {
+              hidden: true,
+          },
+          sidepanel: {
+              hidden: true,
+          },
+      },
+  };
   }
 
-  singleText(tagName: string): string {
-    const h2Ele = this.fixture.debugElement.query(By.css(tagName));
-    if (h2Ele) {
-      return h2Ele.nativeElement.textContent;
-    }
+  clickElement(tagName){
+    const button: HTMLButtonElement = this.fixture.debugElement.query(
+        By.css(tagName)
+    ).nativeElement;
+    button.click();
   }
-  findOne(tagName: string) {
-    return this.fixture.debugElement
-      .query(By.css(tagName));
+  findOne(tagName){
+    return this.fixture.debugElement.query(
+        By.css(tagName)
+    ).nativeElement;
   }
- 
-  count(tagName: string): number {
-    const elements = this.fixture.debugElement
-      .queryAll(By.css(tagName));
-    return elements.length;
-  }
-
-  countText(tagName: string, text: string): number {
-    const elements = this.fixture.debugElement
-      .queryAll(By.css(tagName));
-    return elements.filter(element => element.nativeElement.textContent === text).length;
-  }
-
-  clickButton(buttonText: string) {
-    this.findAll('button').forEach(button => {
-      const buttonElement: HTMLButtonElement =
-        button.nativeElement;
-      if (buttonElement.textContent === buttonText) {
-        buttonElement.click();
-      }
-    });
-  }
-
-  findAll(tagName: string) {
-    return this.fixture.debugElement
-      .queryAll(By.css(tagName));
+  setForm(form: FormGroup,value){
+      form.patchValue(value);
+      this.fixture.detectChanges();
   }
 }

@@ -22,7 +22,7 @@
                     name="userForm"
                     (ngSubmit)="onSubmit()"
                     novalidate
-                    [formGroup]="userForm"
+                    [formGroup]="invitationForm"
                 >
                     <div
                         fxLayout="row wrap"
@@ -44,7 +44,7 @@
                             >
                             <mat-error>
                                 <app-mat-error
-                                    [control]="userForm.get('firstName')"
+                                    [control]="invitationForm.get('firstName')"
                                 ></app-mat-error>
                             </mat-error>
                         </mat-form-field>
@@ -60,7 +60,7 @@
                             >
                             <mat-error>
                                 <app-mat-error
-                                    [control]="userForm.get('middleName')"
+                                    [control]="invitationForm.get('middleName')"
                                 ></app-mat-error>
                             </mat-error>
                         </mat-form-field>
@@ -76,7 +76,7 @@
                             >
                             <mat-error>
                                 <app-mat-error
-                                    [control]="userForm.get('lastName')"
+                                    [control]="invitationForm.get('lastName')"
                                 ></app-mat-error>
                             </mat-error>
                         </mat-form-field>
@@ -86,7 +86,7 @@
                             class="pl-4"
                         >
                             <mat-label>Email</mat-label>
-                            <input matInput disabled formControlName="email" />
+                            <input matInput  formControlName="email" />
                             <mat-icon matSuffix class="secondary-text"
                                 >email</mat-icon
                             >
@@ -110,7 +110,7 @@
                             <!-- <mat-icon matSuffix class="secondary-text">vpn_key</mat-icon> -->
                             <mat-error>
                                 <app-mat-error
-                                    [control]="userForm.get('dateOfBirth')"
+                                    [control]="invitationForm.get('dateOfBirth')"
                                 ></app-mat-error>
                             </mat-error>
                         </mat-form-field>
@@ -133,7 +133,7 @@
                             >
                             <mat-error>
                                 <app-mat-error
-                                    [control]="userForm.get('gender')"
+                                    [control]="invitationForm.get('gender')"
                                 ></app-mat-error>
                             </mat-error>
                         </mat-form-field>
@@ -156,7 +156,7 @@
                             >
                             <mat-error>
                                 <app-mat-error
-                                    [control]="userForm.get('nationalityId')"
+                                    [control]="invitationForm.get('nationalityId')"
                                 ></app-mat-error>
                             </mat-error>
                         </mat-form-field>
@@ -173,7 +173,7 @@
                             >
                             <mat-error>
                                 <app-mat-error
-                                    [control]="userForm.get('contactNo')"
+                                    [control]="invitationForm.get('contactNo')"
                                 ></app-mat-error>
                             </mat-error>
                         </mat-form-field>
@@ -189,7 +189,7 @@
                             >
                             <mat-error>
                                 <app-mat-error
-                                    [control]="userForm.get('password')"
+                                    [control]="invitationForm.get('password')"
                                 ></app-mat-error>
                             </mat-error>
                         </mat-form-field>
@@ -205,7 +205,7 @@
                         >
                         <mat-error>
                             <app-mat-error
-                                [control]="userForm.get('confirmPassword')"
+                                [control]="invitationForm.get('confirmPassword')"
                             ></app-mat-error>
                         </mat-error>
                     </mat-form-field>
@@ -227,8 +227,9 @@
                         </button>
                         &nbsp;&nbsp;
                         <button
+                        class="submit-button"
                             type="submit"
-                            [disabled]="userForm.invalid"
+                            [disabled]="invitationForm.invalid"
                             mat-raised-button
                             color="accent"
                             aria-label="Send Message"

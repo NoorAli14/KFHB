@@ -31,7 +31,8 @@ export class ResetPasswordComponent extends BaseComponent implements OnInit, OnD
 
     constructor(
         private _fuseConfigService: FuseConfigService,
-        private _authService: AuthenticationService, private activatedRoute: ActivatedRoute
+        private _authService: AuthenticationService,
+         private activatedRoute: ActivatedRoute
         ,
         injector: Injector
         ) {
