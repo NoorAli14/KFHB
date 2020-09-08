@@ -40,17 +40,19 @@ export class GqlClientService {
                 ),
               );
             }
-            console.log(`GQL Response Error: ${JSON.stringify(err, null, 2)}`);
+            this.logger.log(
+              `GQL Response Error: ${JSON.stringify(err, null, 2)}`,
+            );
             return throwError(err.exception);
           }
-          console.log(
+          this.logger.log(
             `GQL Response: ${JSON.stringify(response.data, null, 2)}`,
           );
           return response.data?.data?.result || response.data?.data;
         }),
         timeout(5000),
         catchError(err => {
-          console.log(`GQL Error: ${JSON.stringify(err, null, 2)}`);
+          this.logger.log(`GQL Error: ${JSON.stringify(err, null, 2)}`);
           if (err instanceof TimeoutError) {
             return throwError(new RequestTimeoutException());
           }
