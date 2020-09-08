@@ -8,12 +8,12 @@ import { WorkingDaysRepository } from "@core/repository";
 export class WorkingDaysService {
   constructor(private workingDaysRepository: WorkingDaysRepository) {}
 
-  async list(keys: string[]): Promise<any> {
-    return this.workingDaysRepository.list(keys,{"status" : STATUS.ACTIVE});
+  async list(keys: string[], paginationParams: Record<string, any>): Promise<any> {
+    return this.workingDaysRepository.listWithPagination(paginationParams, keys,{deleted_on : null});
   }
 
   async findById(id: string, keys?: string[]): Promise<any> {
-    return this.workingDaysRepository.findOne({ id: id }, keys);
+    return this.workingDaysRepository.findOne({ id: id, deleted_on : null }, keys);
   }
 
   async findByProperty(checks: KeyValInput[], keys?: string[]): Promise<any> {
@@ -21,7 +21,12 @@ export class WorkingDaysService {
     checks.forEach(check => {
       conditions[check.record_key] = check.record_value;
     });
+    conditions['deleted_on'] = null;
     return this.workingDaysRepository.findBy(conditions, keys);
+  }
+
+  async findByDuration(obj: Record<string, any>, keys?: string[]): Promise<any> {
+    return this.workingDaysRepository.findByDuration(obj, keys);
   }
 
   async update(
@@ -54,7 +59,7 @@ export class WorkingDaysService {
         }, HttpStatus.BAD_REQUEST);
       }
     }
-    const [result] = await this.workingDaysRepository.update({ id: id }, newObj, keys);
+    const [result] = await this.workingDaysRepository.update({ id: id, deleted_on : null }, newObj, keys);
     if(!result) {
       throw new HttpException({
         status: HttpStatus.BAD_REQUEST,
@@ -103,8 +108,8 @@ export class WorkingDaysService {
     }
   }
 
-  async delete(id: string): Promise<any> {
-    const result = await this.update(id, {status: STATUS.INACTIVE});
+  async delete(id: string, input: Record<any, any>): Promise<any> {
+    const result = await this.update(id, input, ['id']);
     return !!result;
   }
 }

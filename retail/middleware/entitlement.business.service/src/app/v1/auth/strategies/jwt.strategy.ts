@@ -2,9 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { Request } from 'express';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
-import { ConfigurationService } from '@common/configuration/configuration.service';
+import {
+  X_ACCESS_TOKEN,
+  RedisClientService,
+  ConfigurationService,
+} from '@common/index';
 import { UserService } from '@app/v1/users/users.service';
-import { X_ACCESS_TOKEN, RedisClientService } from '@common/index';
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(

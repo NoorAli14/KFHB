@@ -18,12 +18,29 @@ export const NUMBERS = {
   TOKEN_LENGTH: 64,
   MAX_COLUMN_LENGTH: 255,
   NATIONALITY_ID_LENGTH: 96,
+  DEFAULT_PAGE_SIZE: 25,
+};
+
+export const HEADER_NAMES = {
+  X_USER_ID: "x-user-id",
+  X_TENANT_ID: "x-tenant-id",
 };
 
 export const STATUS = {
   ACTIVE: 'ACTIVE',
   INACTIVE: 'INACTIVE',
-  PENDING: 'PENDING'
+  PENDING: 'PENDING',
+};
+
+export const GENDER = {
+  M: 'M',
+  F: 'F',
+  O: 'O',
+};
+
+export const PAGINATION_PARAMS = {
+  PAGE: 'page',
+  PER_PAGE: 'perPage',
 };
 
 export const TEMP_ROLE = {
@@ -34,82 +51,93 @@ export const TEMP_ROLE = {
 
 export const MODULES = [
   {
-    "name": "Entitlement",
-    "sub_modules": [
+    name: 'Entitlement',
+    sub_modules: [
       {
-        "name": "User",
-        "permissions": [
+        name: 'User Management',
+        permissions: [
           {
-            "name": "view"
+            name: 'view',
           },
           {
-            "name": "edit"
+            name: 'edit',
           },
           {
-            "name": "delete"
+            name: 'delete',
           },
           {
-            "name": "create"
-          }
-        ]
+            name: 'create',
+          },
+        ],
       },
       {
-        "name": "Config",
-        "permissions": [
+        name: 'Role Management',
+        permissions: [
           {
-            "name": "view"
-          }
-        ]
-      }
+            name: 'view',
+          },
+          {
+            name: 'edit',
+          },
+          {
+            name: 'delete',
+          },
+          {
+            name: 'create',
+          },
+        ],
+      },
     ],
-    "permissions": [
+    permissions: [
       {
-        "name": "view"
-      }
-    ]
+        name: 'view',
+      },
+    ],
   },
   {
-    "name": "Calender",
-    "sub_modules": [
+    name: 'Calender',
+    sub_modules: [
       {
-        "name": "Working Week",
-        "permissions": [
+        name: 'Working Week',
+        permissions: [
           {
-            "name": "view"
-          }
-        ]
+            name: 'view',
+          },
+        ],
       },
       {
-        "name": "Holidays",
-        "permissions": [
+        name: 'Holidays',
+        permissions: [
           {
-            "name": "view"
-          }
-        ]
-      }
+            name: 'view',
+          },
+        ],
+      },
     ],
-    "permissions": [
+    permissions: [
       {
-        "name": "view"
-      }
-    ]
-  }
+        name: 'view',
+      },
+    ],
+  },
 ];
 
 export const WEEK_DAYS = {
+  SUNDAY: 'SUNDAY',
   MONDAY: 'MONDAY',
   TUESDAY: 'TUESDAY',
   WEDNESDAY: 'WEDNESDAY',
   THURSDAY: 'THURSDAY',
   FRIDAY: 'FRIDAY',
   SATURDAY: 'SATURDAY',
-  SUNDAY: 'SUNDAY',
 };
 
 export const MESSAGES = {
   DELETED: 'Deleted Successfully.',
   INVALID_EMAIL: 'Invalid Email Address',
   INVALID_ID: 'Invalid ID',
+  INVALID_DATE: 'Invalid Date format',
+  INVALID_CALENDAR_DAY: 'calendar_day should be in YYYY-MM-DD format or an ISO string',
   INVALID_PASSWORD: 'Invalid Password.',
   INVALID_Email_OR_PASSWORD: 'Invalid Email or Password.',
   INTERNAL_ERROR: 'Internal Error',
@@ -117,10 +145,14 @@ export const MESSAGES = {
   TOKEN_EXPIRED: 'Token Expired.',
   PASSWORD_UPDATED: 'Password Updated.',
   NOT_FOUND: 'No Record Found',
+  USER_NOT_FOUND: 'No user exists against this user_id',
   BAD_REQUEST: 'Bad Request',
   BAD_TIME_FORMAT: 'Bad Time Format',
   INVALID_WEEKDAY: `Weekday should be one of ${Object.keys(WEEK_DAYS)}`,
-  INVALID_STATUS: `Status should be one of ${Object.keys(STATUS)}`
+  INVALID_STATUS: `Status should be one of ${Object.keys(STATUS)}`,
+  INVALID_GENDER: `Gender should be one of ${Object.keys(GENDER)}`,
+  ROLE_EXISTS: 'Role with this name already exists',
+  PASSWORD_MISMATCH: 'Current password did not match',
 };
 
 export const DATABASE_UUID_METHOD = 'NEWID()';

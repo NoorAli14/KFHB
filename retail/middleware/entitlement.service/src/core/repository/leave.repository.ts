@@ -29,6 +29,8 @@ export class LeaveRepository extends BaseRepository {
   async listLeavesByUserID(userIds): Promise<any>{
     return this._connection(TABLE.LEAVE)
     .select(this.__attributes)
-    .whereIn(`${TABLE.LEAVE}.user_id`, userIds);
+    .whereIn('user_id', userIds)
+    .where({deleted_on : null})
+    .orderBy('created_on', 'desc');
   }
 }

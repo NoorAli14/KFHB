@@ -12,7 +12,7 @@ export class SubModulesLoader {
 
     async findModulesByParentID(keys): Promise<any> {
         const modules = await this.moduleDb.listModulesByParentModuleID(keys);
-        return loaderSerializer(modules, keys, 'parent_id', 'module_id')
+        return loaderSerializer(modules, keys, 'parent_id')
     }
 }
 
