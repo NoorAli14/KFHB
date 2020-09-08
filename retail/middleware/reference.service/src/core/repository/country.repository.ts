@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { TABLE } from '@rubix/common/constants';
+import { Country } from '@app/v1/countries/country.modal'
 import { BaseRepository } from './base.repository';
 
 @Injectable()
@@ -17,10 +18,12 @@ export class CountryRepository extends BaseRepository {
     'created_on',
     'updated_on',
   ]
+
   constructor() {
     super(TABLE.COUNTRY);
   }
-  async list(): Promise<any> {
+
+  async list(): Promise<Country[]> {
     return this.connection(TABLE.COUNTRY).select(this.__attributes)
       .where({
         status: 'ACTIVE',
@@ -28,7 +31,8 @@ export class CountryRepository extends BaseRepository {
       })
       .orderBy('name', 'asc');
   }
-  async findById(id: string): Promise<any> {
+
+  async findById(id: string): Promise<Country> {
     return super.findOne({
       id,
       status: 'ACTIVE',

@@ -45,7 +45,7 @@ import {
       description: 'Country Not Found.',
     })
     async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<Country> {
-      const country = await this.countryService.findOne(id);
+      const country: Country = await this.countryService.findOne(id);
       if (!country) {
         throw new NotFoundException('Country Not Found');
       }
