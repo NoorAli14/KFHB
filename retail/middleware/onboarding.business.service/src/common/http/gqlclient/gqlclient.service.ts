@@ -30,8 +30,8 @@ export class GqlClientService {
       )
       .pipe(
         map(response => {
-          if (response.data?.errors?.extensions) {
-            const err: any = response.data?.errors.extensions;
+          if (response.data?.errors) {
+            const err: any = response.data?.errors[0].extensions;
             if (err.exception?.response) {
               return throwError(
                 new HttpException(
@@ -40,15 +40,12 @@ export class GqlClientService {
                 ),
               );
             }
-            console.log(
-              `GQL Response Error: ${JSON.stringify(
-                response.data?.errors,
-                null,
-                2,
-              )}`,
-            );
+            console.log(`GQL Response Error: ${JSON.stringify(err, null, 2)}`);
             return throwError(err.exception);
           }
+          console.log(
+            `GQL Response: ${JSON.stringify(response.data, null, 2)}`,
+          );
           return response.data?.data?.result || response.data?.data;
         }),
         timeout(5000),
