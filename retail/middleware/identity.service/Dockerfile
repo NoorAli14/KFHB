@@ -10,6 +10,9 @@
 # Using latest LTS version running on alpine
 FROM node:12.18.3-alpine AS builder
 
+RUN apk update && apk upgrade && \
+    apk add --no-cache bash git openssh
+
 COPY package.json package-lock.json ./
 
 # Install all Dependencies
@@ -25,6 +28,9 @@ RUN npm run build
 #=================================================================
 # Using latest LTS version running on alpine
 FROM node:12.18.3-alpine AS node_modules
+
+RUN apk update && apk upgrade && \
+    apk add --no-cache bash git openssh
 
 COPY package.json package-lock.json ./
 
