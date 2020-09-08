@@ -23,7 +23,7 @@ export class OtpResolver {
   generateOtp(
     @Args('input') input: GenerateOTPInput,
     @Fields() columns: string[]
-  ): Promise<Otp> {
+  ): Promise<Otp | any> {
     return this.otpService.create(input, columns);
   }
 

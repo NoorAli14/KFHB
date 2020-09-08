@@ -12,6 +12,7 @@ import {
   iOTP,
   iSMS,
   iEMAILSENDER,
+  iHTTP,
 } from '@common/interfaces/configuration.interface';
 import {
   DEFAULT_OTP_STATUS,
@@ -23,6 +24,8 @@ import {
   DEFAULT_RUBIX_OTP_BY_API,
   DEFAULT_SENDING_NAME,
   DEFAULT_SENDING_EMAIL,
+  DEFAULT_HTTP_TIMEOUT,
+  DEFAULT_HTTP_MAX_REDIRECTS,
 } from '@rubix/common/constants';
 
 export const DEFAULT_ENV: iConfig = {
@@ -81,6 +84,10 @@ export const DEFAULT_ENV: iConfig = {
   EMAILSENDER: {
     NAME: DEFAULT_SENDING_NAME,
     EMAIL: DEFAULT_SENDING_EMAIL
+  },
+  HTTP: {
+    TIMEOUT: DEFAULT_HTTP_TIMEOUT,
+    MAXDIRECTS: DEFAULT_HTTP_MAX_REDIRECTS
   }
 };
 @Injectable()
@@ -179,6 +186,19 @@ export class ConfigurationService {
       EMAIL: this.get(
         'ENV_RBX_SMTP_SENDING_EMAIL',
         DEFAULT_ENV.EMAILSENDER.EMAIL,
+      ),
+    };
+  }
+
+  public get HTTP(): iHTTP{
+    return {
+      TIMEOUT: parseInt(
+        this.get('ENV_RBX_HTTP_TIMEOUT', DEFAULT_HTTP_TIMEOUT),
+        10,
+      ),
+      MAXDIRECTS: parseInt(
+        this.get('ENV_RBX_HTTP_MAX_REDIRECTS', DEFAULT_HTTP_MAX_REDIRECTS),
+        10,
       ),
     };
   }

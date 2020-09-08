@@ -1,7 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpService } from '@nestjs/common';
 import * as randomize from 'randomatic';
-import axios from 'axios';
-
 
 import { OtpRepository } from '@rubix/core/repository/';
 import { Otp, OTPResponse } from './otp.model';
@@ -21,7 +19,7 @@ export class OtpService {
     private readonly _config: ConfigurationService,
     private readonly emailService: EmailService,
     private readonly smsService: SMSService,
-    
+    private readonly httpService: HttpService,
   ) {}
 
   async verify(
@@ -64,24 +62,28 @@ export class OtpService {
   async create(
     otpOBJ: { [key: string]: any },
     columns?: string[],
-  ): Promise<Otp> {
+  ): Promise<Otp | any> {
     if(this._config.OTP.OTP_BY_API){
-
-      axios.post(this._config.OTP.API_URL, {
+      
+     await this.httpService.post(this._config.OTP.API_URL,
+      {
         pattern: this._config.OTP.pattern,
         otp_length: this._config.OTP.otp_length,
-      }).then(function (response: { [key: string]: any }) {
-        console.log(response)
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }).toPromise().then(response => {
         otpOBJ.otp_code = response.data.OTP;
-      })
-      .catch(function (error) {
+      }).catch(function (error) {
         console.log(error);
         return { 
           "error": error,
           "code": 401
         }
       });
-
+      
     }else{
       otpOBJ.otp_code = await randomize(
         this._config.OTP.pattern,

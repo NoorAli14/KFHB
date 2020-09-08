@@ -62,6 +62,12 @@ export interface iEMAILSENDER {
   EMAIL: string
 }
 
+export interface iHTTP {
+  TIMEOUT: number,
+  MAXDIRECTS: number
+}
+
+
 export interface iConfig {
   /** Application Details */
   APP: iAPP;
@@ -73,6 +79,7 @@ export interface iConfig {
   OTP?: iOTP;
   SMS?: iSMS;
   EMAILSENDER?: iEMAILSENDER;
+  HTTP: iHTTP;
   /**
    * The log level to use.
    * @example 'verbose', 'info', 'warn', 'error'
