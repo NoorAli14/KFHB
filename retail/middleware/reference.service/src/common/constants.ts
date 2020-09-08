@@ -1,6 +1,7 @@
 export const TABLE = {
   COUNTRY: 'REF_COUNTRY',
   NATIONALITY: 'REF_NATIONALITY',
+  CURRENCY: 'REF_CURRENCY',
 };
 
 export const STATUS = {
