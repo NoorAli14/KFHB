@@ -11,7 +11,7 @@ import {
   SessionReferenceRepository,
 } from '@rubix/core';
 import { Session } from './session.model';
-import { IdentityService } from '@rubix/common/http/';
+import { IdentityService } from '@rubix/common/connectors';
 import { NewFaceInput } from '../faces/face.dto';
 import { NewSessionInput } from './session.dto';
 import { EVALUATION_RESPONSE, MISMATCHED_DOCUMENT } from './session.interface';
@@ -192,11 +192,10 @@ export class SessionsService {
       };
     } else {
       // Fetch evaluation result from Document Processing server
-      let evaluation: any = await this.identityService.createEvaluation(
+      const evaluation: any = await this.identityService.createEvaluation(
         customerSession.target_user_id,
         customerSession.check_id,
       );
-
       // Updating evaluation_id of current active session
       await this.sessionDB.update(
         { id: customerSession.session_id },
@@ -221,6 +220,31 @@ export class SessionsService {
         };
       }
 
+      // Find national id back
+      const nationalID: any = documents.find(
+        document => document.name === DOCUMENT_TYPES.NATIONAL_ID_BACK_SIDE,
+      );
+
+      // Prase processed_data to JSON
+      const processed_data: { [key: string]: any } = JSON.parse(
+        nationalID.processed_data,
+      );
+
+      // Save information in customer table
+      await this.customerDB.update(
+        { id: customerSession.id },
+        {
+          first_name: processed_data.mrz['Given Names'],
+          last_name: processed_data.mrz['Surname'],
+          date_of_birth: processed_data.mrz['Date Of Birth'],
+          national_id_no: processed_data.mrz['Optional Data'],
+          national_id_expiry: processed_data.mrz['Date Of Expiry'],
+          nationality: processed_data.mrz['Nationality'],
+          nationality_code: processed_data.mrz['Nationality Code'],
+          gender: processed_data.mrz['Sex'],
+        },
+        ['id'],
+      );
       // Return success response
       return {
         success: true,
