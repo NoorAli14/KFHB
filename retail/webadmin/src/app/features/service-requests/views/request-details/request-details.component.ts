@@ -1,6 +1,6 @@
 import { BaseComponent } from '@shared/components/base/base.component';
 import { CONFIG } from '../../../../config';
-import { Component, OnInit, ViewEncapsulation, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ViewChild ,Input} from '@angular/core';
 import { fuseAnimations } from '@fuse/animations';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -20,29 +20,22 @@ import {
   ConfirmDialogModel,
   ConfirmDialogComponent,
 } from '@shared/components/confirm-dialog/confirm-dialog.component';
-
 @Component({
-  selector: 'app-requests-list',
-  templateUrl: './requests-list.component.html',
-  styleUrls: ['./requests-list.component.scss'],
+  selector: 'app-request-details',
+  templateUrl: './request-details.component.html',
+  styleUrls: ['./request-details.component.scss'],
   animations: fuseAnimations,
   encapsulation: ViewEncapsulation.None,
 })
-export class RequestsListComponent extends BaseComponent implements OnInit {
+export class RequestDetailsComponent extends BaseComponent implements OnInit {
   dialogRef: any;
   userPermissions: any[];
   username: FormControl;
   pageSize: number = CONFIG.PAGE_SIZE;
   pageSizeOptions: Array<number> = CONFIG.PAGE_SIZE_OPTIONS;
-
   displayedColumns = [
-    'Request Type',
-    'Customer RIM',
-    'Customer Mobile',
-    'Customer Email',
-    'Request Date',
-    'Status'
-
+    'Document Name',
+    'View Upload & Download PDF',
   ];
 
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();

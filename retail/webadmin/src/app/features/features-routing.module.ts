@@ -27,7 +27,7 @@ const routes: Routes = [
     loadChildren: () => import('./referrals/referrals.module').then(m => m.ReferralsModule)
   },
   {
-    path: 'requests',
+    path: 'req',
     loadChildren: () => import('./service-requests/service-requests.module').then(m => m.ServiceRequestModule)
   },
   {

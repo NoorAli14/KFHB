@@ -9,7 +9,12 @@ const routes: Routes = [
   {
     path: 'list',
     loadChildren: () =>
-        import('./views/requests-list/request-list.module').then((m) => m.RequestListModule),
+        import('./views/requests-list/requests-list.module').then((m) => m.RequestsListModule),
+},
+{
+  path: 'details',
+  loadChildren: () =>
+      import('./views/request-details/request-details.module').then((m) => m.RequestDetailsModule),
 },
 ];
 

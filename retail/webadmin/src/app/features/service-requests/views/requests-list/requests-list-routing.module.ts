@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { RequestListComponent } from './requests-list.component';
+import { RequestsListComponent } from './requests-list.component';
 
 const routes: Routes = [
   {
       path: "",
-      component: RequestListComponent
+      component: RequestsListComponent
       
   },
 ];
