@@ -1,4 +1,4 @@
-import { NetworkService } from './../../core/services/network/network.service';
+import { NetworkService } from '@shared/services/network/network.service';
 import { Injectable } from '@angular/core';
 import { ChangePasswordModel } from './models/setting.model';
 import { UPDATE_PASSWORD, UPDATE_PROFILE } from './setting.constant';

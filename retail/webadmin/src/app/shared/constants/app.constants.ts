@@ -1,4 +1,4 @@
-import { Select } from './../models/common.model';
+import { Select } from "./../models/common.model";
 import { environment } from "@env/environment";
 const VERSION = "";
 export function createUrl(actionName: string): string {
@@ -10,50 +10,57 @@ export enum APP_CONST {
     SIDEBAR = "_sidebar",
     ACCESS_TOKEN = "_token",
     REFRESH_TOKEN = "_refresh_token",
-    APP_NAME='Rubix'
+    APP_NAME = "Rubix",
 }
+
+const getRandomNumber = () => {
+    return Math.floor(Math.random() * 11);
+};
 export const MESSAGES = {
-    UNKNOWN: "We are unable to process the request.",
-    REMOVE_CONFIRMATION: "Are you sure you want to delete?",
-    INVALID_CREDENTIAL: "Username or password is incorrect",
-    LOGGED_IN: "You have successfully logged in. Taking you to portal",
-    PASSWORD_RESET_SENT: "Reset password link has been sent to your email.",
-    PASSWORD_UPDATED: "Your password has been updated.",
-    INVALID_RESET_TOKEN: "Reset password token is invalid.",
-    INVITATION_SENT: "User created successfully. An invitation link has been sent to provided user email.",
-    THANKS: "Update your profile to login to your account.",
-    CREATED: (name) => `${name} created successfully.`,
-    DELETED: (name) => `${name} deleted successfully.`,
-    UPDATED: (name) => `${name} updated successfully.`,
+    UNKNOWN:()=> `We are unable to process the request. ${getRandomNumber()}`,
+    REMOVE_CONFIRMATION:()=> `Are you sure you want to delete? ${getRandomNumber()}`,
+    RESEND_INVITE:()=> `Are you sure you want to resend invitation? ${getRandomNumber()}`,
+    INVITE_RESENT:()=> `Invitation link has been sent to user email? ${getRandomNumber()}`,
+    INVALID_CREDENTIAL:()=> `Email or password is incorrect. ${getRandomNumber()}`,
+    LOGGED_IN:()=> `You have successfully logged in. Taking you to portal. ${getRandomNumber()}`,
+    PASSWORD_RESET_SENT:()=> `Reset password link has been sent to your email. ${getRandomNumber()}`,
+    PASSWORD_UPDATED:()=> `Your password has been updated. ${getRandomNumber()}`,
+    INVALID_RESET_TOKEN:()=> `Reset password token is invalid. ${getRandomNumber()}`,
+    INVITATION_SENT:()=> `User created successfully. Invitation link has been sent to user email. ${getRandomNumber()}`,
+    ALREADY_ONBOARD:()=> `You have already been on boarded.`,
+    CREATED: (name) => `${name} created successfully. ${getRandomNumber()}`,
+    DELETED: (name) => `${name} deleted successfully. ${getRandomNumber()}`,
+    UPDATED: (name) => `${name} updated successfully. ${getRandomNumber()}`,
 };
 
 export const STATUS_LIST: Array<Select> = [
     { id: "ACTIVE", name: "Active" },
-    { id: "IN_ACTIVE", name: "In Active" },
+    { id: "IN_ACTIVE", name: "InActive" },
     { id: "LOCKED", name: "Locked" },
     { id: "PENDING", name: "Pending" },
 ];
 export const GENDER_LIST: Array<Select> = [
-    { id: 'M', name: "Male" },
-    { id: 'F', name: "Female" },
+    { id: "M", name: "Male" },
+    { id: "F", name: "Female" },
 ];
 
 export const NATIONALITY_LIST: Array<Select> = [
-    { id: '1', name: "Pakistan" },
-    { id: '2', name: "Bahrain" },
-    { id: '3', name: "Kuwait" },
+    { id: "1", name: "Pakistan" },
+    { id: "2", name: "Bahrain" },
+    { id: "3", name: "Kuwait" },
 ];
 
-const URI_PREFIX='/api/v1/entitlements/';
+const URI_PREFIX = "/api/v1/entitlements/";
 
-export const URI={
-    USER_INVITATION:`${URI_PREFIX}invitations`,
-    USER :`${URI_PREFIX}users`,
-    ROLE :`${URI_PREFIX}roles`,
-    PERMISSION :`${URI_PREFIX}permissions`,
-    MODULE :`${URI_PREFIX}modules`,
-    LOGIN :`${URI_PREFIX}auth/login`,
-    LOGOUT :`${URI_PREFIX}auth/logout`,
-    FORGOT_PASSWORD :`${URI_PREFIX}users/password`,
-    RESET_PASSWORD :`${URI_PREFIX}`,
-}
+export const URI = {
+    USER_INVITATION: `${URI_PREFIX}invitations`,
+    USER: `${URI_PREFIX}users`,
+    ROLE: `${URI_PREFIX}roles`,
+    PERMISSION: `${URI_PREFIX}permissions`,
+    MODULE: `${URI_PREFIX}modules`,
+    LOGIN: `${URI_PREFIX}auth/login`,
+    REFRESH: `${URI_PREFIX}auth/refresh-token`,
+    LOGOUT: `${URI_PREFIX}auth/logout`,
+    FORGOT_PASSWORD: `${URI_PREFIX}users/password`,
+    RESET_PASSWORD: `${URI_PREFIX}`,
+};
