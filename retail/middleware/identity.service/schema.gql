@@ -23,17 +23,19 @@ input CreateCustomerInput {
 
 type Customer {
   id: ID
-  tenant_id: String
-  session_id: String
-  email: String
-  target_user_id: String
-  contact_no: String
   first_name: String
   middle_name: String
   last_name: String
+  tenant_id: String
+  session_id: String
+  email: String
+  contact_no: String
   gender: String
   date_of_birth: String
-  nationality_id: String
+  national_id_no: String
+  national_id_expiry: String
+  nationality: String
+  nationality_code: String
   device_id: String
   platform: String
   status: String

@@ -6,21 +6,6 @@ export class Customer {
   id: string;
 
   @Field({ nullable: true })
-  tenant_id: string;
-
-  @Field({ nullable: true })
-  session_id: string;
-
-  @Field({ nullable: true })
-  email?: string;
-
-  @Field({ nullable: true })
-  target_user_id: string;
-
-  @Field({ nullable: true })
-  contact_no: string;
-
-  @Field({ nullable: true })
   first_name: string;
 
   @Field({ nullable: true })
@@ -30,13 +15,34 @@ export class Customer {
   last_name: string;
 
   @Field({ nullable: true })
+  tenant_id: string;
+
+  @Field({ nullable: true })
+  session_id: string;
+
+  @Field({ nullable: true })
+  email: string;
+
+  @Field({ nullable: true })
+  contact_no: string;
+
+  @Field({ nullable: true })
   gender: string;
 
   @Field({ nullable: true })
   date_of_birth: string;
 
   @Field({ nullable: true })
-  nationality_id?: string;
+  national_id_no: string;
+
+  @Field({ nullable: true })
+  national_id_expiry: string;
+
+  @Field({ nullable: true })
+  nationality: string;
+
+  @Field({ nullable: true })
+  nationality_code: string;
 
   @Field({ nullable: true })
   device_id: string;

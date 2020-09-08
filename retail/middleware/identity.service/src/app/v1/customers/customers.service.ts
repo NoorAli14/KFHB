@@ -1,5 +1,5 @@
 import { Injectable, Logger, forwardRef, Inject } from '@nestjs/common';
-import { IdentityService } from '@rubix/common/http/';
+import { IdentityService } from '@rubix/common/connectors';
 import { CustomerRepository } from '@rubix/core';
 import { Customer } from './customer.model';
 

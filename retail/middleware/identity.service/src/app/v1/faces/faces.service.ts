@@ -5,7 +5,7 @@ import {
   SessionReferenceRepository,
 } from '@rubix/core';
 import { Face } from './face.model';
-import { IdentityService } from '@rubix/common/http/';
+import { IdentityService } from '@rubix/common/connectors';
 import {
   DOCUMENT_STATUSES,
   ICurrentUser,

@@ -1,4 +1,4 @@
-export * from './http/';
+export * from './connectors';
 export * from './decorators/';
 export * from './guards/';
 export * from './constants';

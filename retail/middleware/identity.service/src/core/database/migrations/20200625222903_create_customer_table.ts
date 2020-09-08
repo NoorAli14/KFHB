@@ -14,8 +14,11 @@ export async function up(knex: Knex): Promise<any> {
     table.string('contact_no');
     table.string('gender');
     table.string('date_of_birth');
-    table.string('national_id');
+    table.string('national_id_no');
+    table.string('national_id_expiry');
+
     table.string('nationality');
+    table.string('nationality_code');
     table.string('device_id');
     table.string('platform');
 
@@ -37,8 +40,9 @@ export async function up(knex: Knex): Promise<any> {
     table.index('session_id', 'IDT_CUSTOMER_SESSION_ID_INDEX');
     table.index('tenant_id', 'IDT_CUSTOMER_TENANT_ID_INDEX');
     table.index('email', 'IDT_CUSTOMER_EMAIL_INDEX');
+    table.index('national_id_no', 'IDT_CUSTOMER_NATIONAL_ID_NO_INDEX');
+    table.index('nationality_code', 'IDT_CUSTOMER_NATIONALITY_CODE_INDEX');
     table.index('device_id', 'IDT_CUSTOMER_DEVICE_ID_INDEX');
-    table.index('platform', 'IDT_CUSTOMER_PLATFORM_INDEX');
     table.index('status', 'IDT_CUSTOMER_STATUS_INDEX');
   });
 }

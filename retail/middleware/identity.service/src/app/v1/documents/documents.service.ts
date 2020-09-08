@@ -6,7 +6,7 @@ import {
   SessionReferenceRepository,
 } from '@rubix/core';
 import { Document, PreviewDocument } from './document.model';
-import { IdentityService } from '@rubix/common/http/';
+import { IdentityService } from '@rubix/common/connectors';
 import {
   DOCUMENT_STATUSES,
   ICurrentUser,
