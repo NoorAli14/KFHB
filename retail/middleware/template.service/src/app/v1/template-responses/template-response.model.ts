@@ -30,7 +30,7 @@ export class TemplateResponse {
 
 // Graphql Model
 import { Field, ObjectType } from '@nestjs/graphql';
-import { IsJSON } from 'class-validator';
+import { IsJSON, IsUUID } from 'class-validator';
 import { TemplateGQL } from '../templates/template.model';
 
 @ObjectType()
@@ -45,7 +45,7 @@ export class TemplateResponseGQL {
   @Field()
   remarks: string;
 
-  @Field()
+	@Field()
   user_id: string;
 
   template_id: string;

@@ -8,6 +8,10 @@ export class TemplateResponsesService {
     private readonly templateResponsesDB: TemplateResponsesRepository,
   ) {}
 
+  async list(keys: string[]): Promise<any> {
+    return this.templateResponsesDB.list(keys);
+  }
+
   async create(
     newTemplateResponse: NewTemplateResponseInput,
     keys?: string[],
@@ -17,6 +21,10 @@ export class TemplateResponsesService {
       keys,
     );
     return response;
+  }
+
+  async findByUserId(user_id: string, columns?: string[]): Promise<any> {
+    return this.templateResponsesDB.findOne({ user_id: user_id }, columns);
   }
 
   async findByIds(ids: readonly string[]): Promise<any> {

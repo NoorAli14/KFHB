@@ -38,6 +38,7 @@ type OptionGQL {
 }
 
 type Query {
+  findTemplateResponseByUserId(user_id: String!): TemplateResponseGQL!
   optionsList: [OptionGQL!]!
   findOption(id: String!): OptionGQL!
   questionsList: [QuestionGQL!]!
