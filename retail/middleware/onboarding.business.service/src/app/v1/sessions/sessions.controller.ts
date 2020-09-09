@@ -10,7 +10,7 @@ import { AuthGuard, Header, IHEADER } from '@common/index';
 import { SessionsService } from './sessions.service';
 import { Session } from './session.entity';
 
-@ApiTags('Session')
+@ApiTags('Session Module')
 @Controller('sessions')
 @ApiBearerAuth()
 @UseGuards(AuthGuard)

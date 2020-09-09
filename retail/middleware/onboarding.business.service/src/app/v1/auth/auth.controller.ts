@@ -40,7 +40,7 @@ import { RegisterCustomerDto } from './auth.dto';
 import { User as Customer } from '@app/v1/users/user.entity';
 import { AuthService } from './auth.service';
 
-@ApiTags('Auth')
+@ApiTags('Authentication / Authorization Module')
 @Controller('auth')
 export class AuthController {
   constructor(

@@ -14,7 +14,7 @@ import { FaceUploadingInput } from './attachment.interface';
 import { SessionsService } from '../sessions/sessions.service';
 import { Session } from '../sessions/session.entity';
 
-@ApiTags('Face')
+@ApiTags('Face Images Uploading Module')
 @Controller('faces')
 @ApiBearerAuth()
 @UseGuards(AuthGuard)

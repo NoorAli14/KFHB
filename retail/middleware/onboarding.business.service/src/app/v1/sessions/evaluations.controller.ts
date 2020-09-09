@@ -16,7 +16,7 @@ import { AuthGuard, Header, IHEADER } from '@common/index';
 import { SessionsService } from './sessions.service';
 import { Evaluation } from './session.entity';
 
-@ApiTags('Evaluation')
+@ApiTags('Evaluation Module')
 @Controller('evaluations')
 @ApiBearerAuth()
 @UseGuards(AuthGuard)

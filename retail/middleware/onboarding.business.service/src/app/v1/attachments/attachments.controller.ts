@@ -12,11 +12,10 @@ import {
   ApiOperation,
   ApiBearerAuth,
   ApiBadRequestResponse,
-  ApiCreatedResponse,
+  ApiOkResponse,
 } from '@nestjs/swagger';
 import { AuthGuard, Header, IHEADER, CurrentUser } from '@common/index';
 import { AttachmentsService } from './attachments.service';
-import { Attachment } from './attachment.entity';
 
 @ApiTags('Attachment')
 @Controller('attachments')
@@ -29,18 +28,11 @@ export class AttachmentsController {
 
   @Get(':id/preview')
   @ApiOperation({
-    summary: 'Upload a national ID front side',
+    summary: 'Preview a identity image',
     description:
-      'A successful request returns the HTTP 201 CREATED status code and a JSON response body that shows document information.',
+      'A successful request returns the HTTP 20O OK status code and a response return a multipart buffer stream.',
   })
-  @ApiCreatedResponse({
-    type: Attachment,
-    description: 'National ID front has been successfully uploaded.',
-  })
-  @ApiBadRequestResponse({
-    type: Error,
-    description: 'Input Validation failed.',
-  })
+  @ApiOkResponse({})
   async preview(
     @Param('id', ParseUUIDPipe) id: string,
     @CurrentUser() currentUser: any,

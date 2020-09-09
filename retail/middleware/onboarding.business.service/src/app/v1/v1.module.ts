@@ -15,7 +15,7 @@ import {
 
 import { AuthModule } from './auth/auth.module';
 import { ComplianceModule } from './compliances/compliances.module';
-import { UserModule } from './users/users.module';
+import { OtpModule } from './otp/otp.module';
 import { SessionModule } from './sessions/session.module';
 import { AttachmentModule } from './attachments/attachment.module';
 
@@ -65,6 +65,7 @@ class BuildServiceModule {}
     AuthModule,
     SessionModule,
     AttachmentModule,
+    OtpModule,
     ComplianceModule,
     GraphQLGatewayModule.forRootAsync({
       imports: [BuildServiceModule],

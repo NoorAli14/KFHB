@@ -23,7 +23,7 @@ import { AuthGuard, CurrentUser, Header, IHEADER } from '@common/index';
 import { Template } from './compliance.entity';
 import { ComplianceService } from './compliances.service';
 import { ComplianceDto } from './compliance.dto';
-@ApiTags('Compliance')
+@ApiTags('Compliance Module')
 @Controller('compliances')
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
