@@ -44,7 +44,7 @@ LABEL version="0.1.0 (alpha)"
 LABEL description="Container for running rubix boilerplate"
 
 # Define default arguments
-ARG PORT=4000
+ARG PORT=5000
 ARG WORKDIR=/home/aiondigital/rubix
 ARG USER=node
 ARG NODE_ENV=production
@@ -83,12 +83,12 @@ RUN rm -rf src test
 # These variables will be different from application to application
 ENV ENV_RBX_HOST=${PORT} \
     NODE_ENV=${NODE_ENV} \
-    ENV_RBX_APP_NAME="Onboarding Business service"  \
-    ENV_RBX_API_URL_PREFIX="/api/v1/onboarding" \
+    ENV_RBX_APP_NAME="Rubix | Entitlement Business service"  \
+    ENV_RBX_API_URL_PREFIX="/api/v1/entitlements" \
     ENV_RBX_HOST="http://localhost" \
     TZ=${TZ} \
     ENV_RBX_SWAGGER_ENABLED="true" \
-    ENV_RBX_SWAGGER_ROUTE="/api/v1/onboarding/docs"
+    ENV_RBX_SWAGGER_ROUTE="/api/v1/entitlements/docs"
 
 # Set user node for future commands
 USER $USER

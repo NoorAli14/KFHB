@@ -1,25 +1,24 @@
-import {Resolver, Query, Mutation, Args, ResolveField, Parent} from '@nestjs/graphql';
+import {Resolver, Query, Mutation, Args, ResolveField, Parent, Context, GraphQLExecutionContext} from '@nestjs/graphql';
 import * as DataLoader from 'dataloader';
 import { Loader } from 'nestjs-dataloader';
 
-import { graphqlKeys } from '@common/utilities';
 import {ModuleService} from "@app/v1/modules/module.service";
-import {Module} from "@app/v1/modules/module.model";
+import {Module, ModuleWithPagination} from "@app/v1/modules/module.model";
 import {ModuleInput} from "@app/v1/modules/module.dto";
 import { KeyValInput } from "@common/inputs/key-val.input";
 import {Permission} from "@app/v1/permissions/permission.model";
 import {Fields} from '@common/decorators';
-import {User} from '@app/v1/users/user.model';
 import {HttpException, HttpStatus} from '@nestjs/common';
 import {MESSAGES} from '@common/constants';
+import {getMutateProps} from '@common/utilities';
 
 @Resolver(Module)
 export class ModuleResolver {
   constructor(private readonly moduleService: ModuleService) {}
 
   @Query(() => [Module])
-  async modulesList(@Fields() columns: string[]): Promise<Module[]> {
-    return this.moduleService.list(columns);
+  async modulesList(@Fields() columns: string[], @Context() context: GraphQLExecutionContext): Promise<Module[]> {
+    return this.moduleService.list(columns, context['req'].query);
   }
 
   @Query(() => Module)
@@ -41,7 +40,10 @@ export class ModuleResolver {
   }
 
   @Mutation(() => Module)
-  async addModule(@Args('input') input: ModuleInput, @Fields() columns: string[]): Promise<Module> {
+  async addModule(@Args('input') input: ModuleInput,
+                  @Fields() columns: string[],
+                  @Context() context: GraphQLExecutionContext): Promise<Module> {
+    input = getMutateProps('created', context['req'].headers, input);
     return this.moduleService.create(input, columns);
   }
 
@@ -86,13 +88,14 @@ export class ModuleResolver {
   @ResolveField('sub_modules', returns => [Module])
   async getSubModules(@Parent() module: Module,
                        @Loader('SubModulesDataLoader') subModulesLoader: DataLoader<Module['id'], Module>) {
-    let input: any = module.id;
-    if(module['role_id']) {
-      input = {
-        module_id: module.id,
-        role_id: module['role_id']
-      };
-    }
+    if(!module.id) return [];
+    const input: any = module.id;
+    // if(module['role_id']) {
+    //   input = {
+    //     module_id: module.id,
+    //     role_id: module['role_id']
+    //   };
+    // }
     return subModulesLoader.load(input);
   }
 }

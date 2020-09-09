@@ -1,19 +1,20 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import {Resolver, Query, Mutation, Args, Context, GraphQLExecutionContext} from '@nestjs/graphql';
 import {PermissionService} from "@app/v1/permissions/permissions.service";
-import {Permission} from "@app/v1/permissions/permission.model";
+import {Permission, PermissionWithPagination} from "@app/v1/permissions/permission.model";
 import {PermissionInput} from "@app/v1/permissions/permission.dto";
 import { KeyValInput } from "@common/inputs/key-val.input";
 import {Fields} from '@common/decorators';
 import {HttpException, HttpStatus} from '@nestjs/common';
 import {MESSAGES} from '@common/constants';
+import {getMutateProps} from '@common/utilities';
 
 @Resolver(Permission)
 export class PermissionsResolver {
   constructor(private readonly permissionService: PermissionService) {}
 
   @Query(() => [Permission])
-  async permissionsList(@Fields() columns: string[]): Promise<Permission[]> {
-    return this.permissionService.list(columns);
+  async permissionsList(@Fields() columns: string[], @Context() context: GraphQLExecutionContext): Promise<Permission[]> {
+    return this.permissionService.list(columns, context['req'].query);
   }
 
   @Query(() => Permission)
@@ -35,7 +36,10 @@ export class PermissionsResolver {
   }
 
   @Mutation(() => Permission)
-  async addPermission(@Args('input') input: PermissionInput, @Fields() columns: string[]): Promise<Permission> {
+  async addPermission(@Args('input') input: PermissionInput,
+                      @Fields() columns: string[],
+                      @Context() context: GraphQLExecutionContext): Promise<Permission> {
+    input = getMutateProps('created', context['req'].headers, input);
     return this.permissionService.create(input, columns);
   }
 

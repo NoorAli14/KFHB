@@ -17,14 +17,19 @@ input ChangePasswordInput {
   password: String!
 }
 
+input CheckAvailabilityInput {
+  call_time: String!
+  gender: String
+}
+
 input CreateUserInput {
   username: String
   contact_no: String
-  password: String
   first_name: String
   middle_name: String
   last_name: String
   gender: String
+  is_owner: Boolean
   date_of_birth: String
   nationality_id: String
   status: String
@@ -34,6 +39,7 @@ input CreateUserInput {
   password_reset_token_expiry: String
   roles: [IdsInput!]
   email: String!
+  password: String
 }
 
 """
@@ -97,6 +103,16 @@ type Leave {
   deleted_by: String
 }
 
+input LeaveCreateInput {
+  user_id: String!
+  calendar_day: String!
+  holiday_type: String
+  holiday_details: String
+  is_repetitive: Float
+  remarks: String
+  status: String
+}
+
 input LeaveInput {
   user_id: String!
   calendar_day: String!
@@ -129,19 +145,9 @@ input ModuleInput {
   status: String
 }
 
-type ModuleInRole {
-  id: ID
-  name: String
-  parent_id: String
-  status: String
-  created_on: String
-  created_by: String
-  sub_modules: [Module!]!
-  permissions: [Permission!]
-}
-
 type Mutation {
   resetInvitationToken(id: String!): User!
+  updatePassword(input: UpdatePasswordInput!): User!
   addUser(input: CreateUserInput!): User!
   updateUser(input: UpdateUserInput!, id: String!): User!
   deleteUser(id: String!): Boolean!
@@ -161,9 +167,19 @@ type Mutation {
   addHoliday(input: HolidayInput!): Holiday!
   updateHoliday(input: HolidayInput!, id: String!): Holiday!
   deleteHoliday(id: String!): Boolean!
-  addLeave(input: LeaveInput!): Leave!
+  addLeave(input: LeaveCreateInput!): Leave!
   updateLeave(input: LeaveInput!, id: String!): Leave!
   deleteLeave(id: String!): Boolean!
+}
+
+type PaginationModel {
+  from: Float
+  to: Float
+  total: Float
+  perPage: Float
+  currentPage: Float
+  lastPage: Float
+  offset: Float
 }
 
 type Permission {
@@ -171,6 +187,7 @@ type Permission {
   record_type: String
   created_on: String
   created_by: String
+  module_permission_id: String
 }
 
 input PermissionInput {
@@ -180,6 +197,7 @@ input PermissionInput {
 type Query {
   usersList: [User!]!
   findUserById(id: String!): User!
+  findAvailableUsers(input: CheckAvailabilityInput!): [User!]!
   findUserBy(checks: [KeyValInput!]!): [User!]!
   rolesList: [Role!]!
   findRoleById(id: String!): Role!
@@ -207,6 +225,7 @@ type Role {
   id: ID
   name: String
   description: String
+  tenant_id: String
   status: String
   created_on: String
   created_by: String
@@ -224,14 +243,19 @@ input RoleInput {
   permissions: [IdsInput!]
 }
 
+input UpdatePasswordInput {
+  current_password: String!
+  new_password: String!
+}
+
 input UpdateUserInput {
   username: String
   contact_no: String
-  password: String
   first_name: String
   middle_name: String
   last_name: String
   gender: String
+  is_owner: Boolean
   date_of_birth: String
   nationality_id: String
   status: String
@@ -251,6 +275,8 @@ type User {
   middle_name: String
   last_name: String
   gender: String
+  is_owner: String
+  tenant_id: String
   date_of_birth: String
   nationality_id: String
   status: String

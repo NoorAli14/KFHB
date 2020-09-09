@@ -8,8 +8,8 @@ import {MESSAGES} from "@common/constants";
 export class PermissionService {
   constructor(private permissionDB: PermissionRepository) {}
 
-  async list(keys: string[]): Promise<any> {
-    return this.permissionDB.list(keys);
+  async list(keys: string[], paginationParams: Record<string, any>): Promise<any> {
+    return this.permissionDB.listWithPagination(paginationParams,keys);
   }
 
   async findById(id: string, keys?: string[]): Promise<any> {

@@ -1,7 +1,7 @@
-import { QueryBuilder } from 'knex';
 import { Injectable } from '@nestjs/common';
 import { BaseRepository } from './base.repository';
 import { TABLE } from '@common/constants';
+import { TemplateResponseGQL } from '@app/v1/template-responses/template-response.model';
 
 @Injectable()
 export class TemplateResponsesRepository extends BaseRepository {
@@ -9,14 +9,7 @@ export class TemplateResponsesRepository extends BaseRepository {
     super(TABLE.TEMPLATE_RESPONSE);
   }
 
-  async list(keys: string | string[]): Promise<any> {
+  async list(keys: string | string[]): Promise<TemplateResponseGQL[]> {
     return this._connection(this._tableName).select(keys);
-  }
-
-  async findOne(condition: Record<string, any>, keys?: string[]): Promise<any> {
-    return this._connection(this._tableName)
-      .select(keys)
-      .where(condition)
-      .first();
   }
 }
