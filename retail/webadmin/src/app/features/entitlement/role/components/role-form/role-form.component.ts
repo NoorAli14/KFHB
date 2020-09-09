@@ -8,6 +8,9 @@ import { fuseAnimations } from "@fuse/animations";
 import { MatTableDataSource } from "@angular/material/table";
 import { Permission } from "@feature/entitlement/models/config.model";
 import { camelToSentenceCase } from "@shared/helpers/global.helper";
+import { MODULES } from '@shared/constants/app.constants';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: "app-role-form",
@@ -21,6 +24,8 @@ export class RoleFormComponent extends BaseComponent implements OnInit {
     displayedColumns = ["module"];
     dataSource = new MatTableDataSource<Permission>();
     modulesMapped: any[] = [];
+    private _unsubscribeAll: Subject<any>;
+    
     @Output() sendResponse: EventEmitter<Role> = new EventEmitter<any>();
 
     constructor(
@@ -29,14 +34,15 @@ export class RoleFormComponent extends BaseComponent implements OnInit {
         ,
         injector: Injector
         ) {
-            super(injector,"Role Management");
+            super(injector,MODULES.ROLE_MANAGEMENT);
     }
 
     ngOnInit(): void {
+        this._unsubscribeAll = new Subject();
         const totalPermissions=this.data.permissions.map((x)=>x.record_type)
         this.displayedColumns= this.displayedColumns.concat(totalPermissions)
 
-        this._errorEmitService.currentMessage.subscribe((item) => {
+        this._errorEmitService.currentMessage.pipe(takeUntil(this._unsubscribeAll)).subscribe((item) => {
             this.errorType = item.type;
             this.responseMessage = item.message;
         });
@@ -123,4 +129,10 @@ export class RoleFormComponent extends BaseComponent implements OnInit {
     camelToSentenceCase(text) {
         return camelToSentenceCase(text);
     }
+    ngOnDestroy(): void {
+        // Unsubscribe from all subscriptions
+        this._unsubscribeAll.next();
+        this._unsubscribeAll.complete();
+    }
+    
 }
