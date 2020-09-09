@@ -8,7 +8,7 @@ import { Field, InputType } from '@nestjs/graphql';
 @InputType()
 export class SendSMSInput {
   @Field()
-  @MaxLength(1000)
+  @MaxLength(30)
   to: string;
 
   @Field()
