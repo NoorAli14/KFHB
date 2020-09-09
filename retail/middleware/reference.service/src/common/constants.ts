@@ -1,5 +1,22 @@
 export const TABLE = {
-  COUNTRY: 'REF_COUNTRY'
+  COUNTRY: 'REF_COUNTRY',
+  NATIONALITY: 'REF_NATIONALITY',
+  CURRENCY: 'REF_CURRENCY',
+};
+
+export const STATUS = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+};
+
+export const CREATED_BY = {
+  SYSTEM: 'SYSTEM',
+  API: 'API',
+};
+
+export const UPDATED_BY = {
+  SYSTEM: 'SYSTEM',
+  API: 'API',
 };
 
 export const DATABASE_UUID_METHOD = 'NEWID()';

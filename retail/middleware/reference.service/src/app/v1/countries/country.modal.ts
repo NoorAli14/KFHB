@@ -14,7 +14,7 @@ export class Country {
     example: 'Pakistan',
     required: true,
   })
-  name?: string;
+  name: string;
 
   @ApiProperty({
     title: 'ISO Code',
@@ -22,7 +22,7 @@ export class Country {
     example: 'PK',
     required: true,
   })
-  iso_code?: string;
+  iso_code: string;
 
   @ApiProperty({
     title: 'Continent Code',
@@ -30,7 +30,7 @@ export class Country {
     example: 'AS',
     required: true,
   })
-  continent_code?: string;
+  continent_code: string;
 
   @ApiProperty({
     title: 'Capital Name',
@@ -38,7 +38,7 @@ export class Country {
     example: 'Islamabad',
     required: true,
   })
-  capital_name?: string;
+  capital_name: string;
 
   @ApiProperty({
     title: 'Phone Code',
@@ -46,7 +46,7 @@ export class Country {
     example: '92',
     required: true,
   })
-  phone_code?: string;
+  phone_code: string;
 
   @ApiProperty({
     title: 'Currency Code',
@@ -54,33 +54,33 @@ export class Country {
     example: 'PKR',
     required: true,
   })
-  contact_no?: string;
+  contact_no: string;
 
   @ApiProperty({
     description: 'Country status',
     required: false,
   })
-  status?: string;
+  status: string;
 
   @ApiProperty({ required: false })
-  created_by?: string;
+  created_by: string;
 
   @ApiProperty({ required: false })
-  updated_by?: string;
+  updated_by: string;
 
-  deleted_by?: string;
+  deleted_by: string;
 
   @ApiProperty({
     description: 'timestamp without time zone',
     required: false,
   })
-  created_on?: Date;
+  created_on: Date;
 
   @ApiProperty({
     description: 'timestamp without time zone',
     required: false,
   })
-  updated_on?: Date;
+  updated_on: Date;
 
-  deleted_on?: Date;
+  deleted_on: Date;
 }

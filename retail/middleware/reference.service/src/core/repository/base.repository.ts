@@ -12,8 +12,8 @@ export abstract class BaseRepository {
   get connection(): Knex {
     return this._connection;
   }
-  async findAll(columns: string[], limit?: number): Promise<any> {
-    const qb = this._connection(this._tableName).select(columns);
+  async findAll(columns: string[]): Promise<any> {
+    return this._connection(this._tableName).select(columns);
   }
   async create(newObj: {[key: string]: any}, keys: string[]): Promise<any> {
     return this._connection(this._tableName).insert(newObj, keys);
