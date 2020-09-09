@@ -78,8 +78,8 @@ export const DEFAULT_ENV: iConfig = {
     API_URL: '',
   },
   SMS: {
-    api_url: DEFAULT_SMS_API_URL,
     from: DEFAULT_SMS_SENDER,
+    api_url: DEFAULT_SMS_API_URL,
   },
   EMAILSENDER: {
     NAME: DEFAULT_SENDING_NAME,
@@ -175,8 +175,8 @@ export class ConfigurationService {
 
   public get SMS(): iSMS {
     return {
-      from: this.get('ENV_RBX_SMS_API_URL', DEFAULT_ENV.SMS.from),
-      api_url: this.get('ENV_RBX_SMS_SENDER', DEFAULT_ENV.SMS.api_url),
+      from: this.get('ENV_RBX_SMS_SENDER', DEFAULT_ENV.SMS.from),
+      api_url: this.get('ENV_RBX_SMS_API_URL', DEFAULT_ENV.SMS.api_url),
     };
   }
 

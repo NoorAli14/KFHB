@@ -5,22 +5,16 @@ import { OtpResolver } from './otp.resolver';
 import { OtpService } from './otp.service';
 import { EmailModule } from '../email/email.module';
 import { SMSModule } from '../sms/sms.module';
-import { ConfigurationService } from '@rubix/common/configuration/configuration.service';
-
+import { httpClientService } from '@common/connections/httpclient/httpclient.service'
+import { httpClientModule } from '@common/connections/httpclient/httpclinet.module'
 @Module({
-  imports: [RepositoryModule, EmailModule, SMSModule, 
-    HttpModule.registerAsync({
-      useFactory: async (_config: ConfigurationService) => ({
-        timeout: _config.HTTP.TIMEOUT,
-        maxRedirects: _config.HTTP.MAXDIRECTS
-      }),
-      inject: [ConfigurationService],
-    })
+  imports: [RepositoryModule, EmailModule, SMSModule, httpClientModule
   ],
   providers: [
     OtpService,
     OtpRepository,
     OtpResolver,
+    httpClientService,
   ],
 })
 export class OtpModule {}

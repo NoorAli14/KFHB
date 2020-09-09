@@ -1,34 +1,27 @@
-import { Injectable, HttpService } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { SMS } from './sms.model';
 import { ConfigurationService } from '@common/configuration/configuration.service';
-import { map } from 'rxjs/operators';
+import { httpClientService } from '@common/connections/httpclient/httpclient.service'
 
 @Injectable()
 export class SMSService {
   constructor(
     private readonly _config: ConfigurationService,
-    private readonly httpService: HttpService,
+    private readonly httpClientService : httpClientService,
     ) {}
-  async sendSMS(smsObj: Record<string, any>, keys?: string[]): Promise< any | SMS > {
-    return this.httpService.post(this._config.SMS.api_url, {
-      from: this._config.SMS.from,
-      body: smsObj.body,
-      to: smsObj.to
-    },
-    {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }).toPromise().then(response => {
-      console.log("Message Delivered Successfully!");
-      console.log(response.data);
-      return {'to':smsObj.to, 'body': smsObj.body};
-    }).catch(function (error) {
-      console.log(error);
-      return { 
-        "error": error,
-        "code": 401
+
+    async sendSMS(smsObj: Record<string, any>, keys?: string[]): Promise< any | SMS > {
+
+      const params = {
+        from: this._config.SMS.from,
+        body: smsObj.body,
+        to: smsObj.to
       }
-    });
-  }
+      const apiObj = await this.httpClientService.send(this._config.SMS.api_url, params);
+      if(!apiObj.data) throw new Error(apiObj);
+      console.log(apiObj.data)
+      // In case of Success, I'm going to send Sample Response, It will be change in future acc to API.
+      const responseObj = { "to": smsObj.to, "body":smsObj.body}
+      return responseObj;
+    }
 }
