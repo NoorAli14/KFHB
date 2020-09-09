@@ -142,6 +142,7 @@ export class SessionsService {
       DOCUMENT_TYPES.NATIONAL_ID_FRONT_SIDE,
       DOCUMENT_TYPES.NATIONAL_ID_BACK_SIDE,
       DOCUMENT_TYPES.PASSPORT,
+      DOCUMENT_TYPES.DRIVING_LICENSE,
     ];
     //  Fetch customer recent active session
     const customerSession = await this.customerDB.getRecentSession(
