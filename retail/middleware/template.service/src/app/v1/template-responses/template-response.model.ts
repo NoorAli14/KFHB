@@ -30,7 +30,7 @@ export class TemplateResponse {
 
 // Graphql Model
 import { Field, ObjectType } from '@nestjs/graphql';
-import { IsJSON, IsUUID } from 'class-validator';
+import { IsJSON } from 'class-validator';
 import { TemplateGQL } from '../templates/template.model';
 
 @ObjectType()
