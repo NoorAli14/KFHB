@@ -19,16 +19,18 @@ export class PermissionRepository extends BaseRepository {
   async listPermissionsByModuleID(ids: any): Promise<any> {
     if (typeof ids[0] === 'string') {
       return this._connection(TABLE.PERMISSION)
-      .select([...this.__attributes, `${TABLE.MODULE_PERMISSION}.module_id`])
+      .select([...this.__attributes, `${TABLE.MODULE_PERMISSION}.module_id`, `${TABLE.MODULE_PERMISSION}.id as module_permission_id`])
       .innerJoin(TABLE.MODULE_PERMISSION, `${TABLE.PERMISSION}.id`, `${TABLE.MODULE_PERMISSION}.permission_id`)
       .whereIn(`${TABLE.MODULE_PERMISSION}.module_id`, ids)
+      .orderBy(`${TABLE.PERMISSION}.created_on`, 'desc');
     } else {
       return this._connection(TABLE.PERMISSION)
-      .distinct([...this.__attributes, `${TABLE.MODULE_PERMISSION_ROLE}.role_id`, `${TABLE.MODULE_PERMISSION}.module_id`])
+      .distinct([...this.__attributes, `${TABLE.MODULE_PERMISSION}.module_id`, `${TABLE.MODULE_PERMISSION}.id as module_permission_id`])
       .innerJoin(TABLE.MODULE_PERMISSION, `${TABLE.PERMISSION}.id`, `${TABLE.MODULE_PERMISSION}.permission_id`)
       .innerJoin(TABLE.MODULE_PERMISSION_ROLE, `${TABLE.MODULE_PERMISSION_ROLE}.module_permission_id`, `${TABLE.MODULE_PERMISSION}.id`)
       .whereIn(`${TABLE.MODULE_PERMISSION_ROLE}.role_id`, ids.map(obj => obj.role_id))
-      .whereIn(`${TABLE.MODULE_PERMISSION}.module_id`, ids.map(obj => obj.module_id));
+      .whereIn(`${TABLE.MODULE_PERMISSION}.module_id`, ids.map(obj => obj.module_id))
+      .orderBy(`${TABLE.PERMISSION}.created_on`, 'desc');
     }
   }
 }

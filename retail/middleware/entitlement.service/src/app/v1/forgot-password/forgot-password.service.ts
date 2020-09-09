@@ -3,7 +3,7 @@ import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import { KeyValInput } from "@common/inputs/key-val.input";
 import {UserService} from "@app/v1/users/users.service";
 import {Encrypter} from "@common/encrypter";
-import {MESSAGES, NUMBERS, STATUS} from "@common/constants";
+import {MESSAGES, NUMBERS} from "@common/constants";
 import {ChangePasswordInput, ForgotPasswordInput} from "@app/v1/forgot-password/forgot-password.dto";
 import {addMinutes, generateRandomString} from "@common/utilities";
 import {ConfigurationService} from "@common/configuration/configuration.service";
@@ -21,8 +21,8 @@ export class ForgotPasswordService {
         record_value: forgetPasswordInput.email
       },
       {
-        record_key: 'status',
-        record_value: STATUS.ACTIVE
+        record_key: 'deleted_on',
+        record_value: null
       }
     ];
     const [user] = await this.userService.findByProperty(check, ['id']);
@@ -40,10 +40,15 @@ export class ForgotPasswordService {
   }
 
   async changePassword(changePasswordInput: ChangePasswordInput, keys?: string[]): Promise<any> {
-    const check: KeyValInput[] = [{
-      record_key: 'password_reset_token',
-      record_value: changePasswordInput.password_reset_token
-    }];
+    const check: KeyValInput[] = [
+      {
+        record_key: 'password_reset_token',
+        record_value: changePasswordInput.password_reset_token
+      },
+      {
+        record_key: 'deleted_on',
+        record_value: null
+      }];
     const [user] = await this.userService.findByProperty(check, ['id', 'password_reset_token_expiry']);
     if(!user) throw new HttpException({
       status: HttpStatus.UNAUTHORIZED,

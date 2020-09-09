@@ -145,7 +145,7 @@ export class UserService {
   }
 
   async findByInvitationToken(token: string): Promise<any> {
-    return this.findBy(
+    const [user] = await this.findBy(
       [
         {
           record_key: 'invitation_token',
@@ -154,10 +154,11 @@ export class UserService {
       ],
       `{id status invitation_token invitation_token_expiry}`,
     );
+    return user;
   }
 
   async findByPasswordResetToken(token: string) {
-    return this.findBy(
+    const [user] = await this.findBy(
       [
         {
           record_key: 'password_reset_token',
@@ -166,6 +167,7 @@ export class UserService {
       ],
       `{id password_reset_token password_reset_token_expiry status}`,
     );
+    return user;
   }
 
   async update(id: string, input: any): Promise<User> {

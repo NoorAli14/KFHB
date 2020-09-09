@@ -3,23 +3,24 @@ import {
   Query,
   Mutation,
   Args,
-  ResolveField, Parent,
+  ResolveField, Parent, Context, GraphQLExecutionContext,
 } from "@nestjs/graphql";
 import { KeyValInput } from "@common/inputs/key-val.input";
-import { WorkingDay } from "@app/v1/working-days/working-day.model";
+import {WorkingDay, WorkingDayWithPagination} from "@app/v1/working-days/working-day.model";
 import { WorkingDaysService } from "@app/v1/working-days/working-days.service";
 import { WorkingDayInput } from "@app/v1/working-days/working-day.dto";
 import {Fields} from '@common/decorators';
 import {HttpException, HttpStatus} from '@nestjs/common';
-import {MESSAGES} from '@common/constants';
+import {MESSAGES, STATUS} from '@common/constants';
+import {getMutateProps} from '@common/utilities';
 
 @Resolver(WorkingDay)
 export class WorkingDaysResolver {
   constructor(private readonly workingDaysService: WorkingDaysService) {}
 
   @Query(() => [WorkingDay])
-  async workingDaysList(@Fields() columns: string[]): Promise<WorkingDay[]> {
-    return this.workingDaysService.list(columns);
+  async workingDaysList(@Fields() columns: string[], @Context() context: GraphQLExecutionContext): Promise<WorkingDay[]> {
+    return this.workingDaysService.list(columns, context['req'].query);
   }
 
   @Query(() => WorkingDay)
@@ -41,7 +42,10 @@ export class WorkingDaysResolver {
   }
 
   @Mutation(() => WorkingDay)
-  async addWorkingDay(@Args('input') input: WorkingDayInput, @Fields() columns: string[]): Promise<WorkingDay> {
+  async addWorkingDay(@Args('input') input: WorkingDayInput,
+                      @Fields() columns: string[],
+                      @Context() context: GraphQLExecutionContext): Promise<WorkingDay> {
+    input = getMutateProps('created', context['req'].headers, input);
     return this.workingDaysService.create(input, columns);
   }
 
@@ -49,24 +53,29 @@ export class WorkingDaysResolver {
   async updateWorkingDay(
     @Args('id') id: string,
     @Args('input') input: WorkingDayInput,
-    @Fields() columns: string[]
+    @Fields() columns: string[],
+    @Context() context: GraphQLExecutionContext
   ): Promise<WorkingDay> {
     const workingDay: WorkingDay = await this.workingDaysService.findById(id,columns);
     if(!workingDay) throw new HttpException({
       status: HttpStatus.NOT_FOUND,
       error: MESSAGES.NOT_FOUND,
     }, HttpStatus.NOT_FOUND);
+    input = getMutateProps('updated', context['req'].headers, input);
     return this.workingDaysService.update(id, input, columns);
   }
 
   @Mutation(() => Boolean)
-  async deleteWorkingDay(@Args('id') id: string): Promise<boolean> {
+  async deleteWorkingDay(@Args('id') id: string,
+                         @Context() context: GraphQLExecutionContext): Promise<boolean> {
     const workingDay: WorkingDay = await this.workingDaysService.findById(id,['id']);
     if(!workingDay) throw new HttpException({
       status: HttpStatus.NOT_FOUND,
       error: MESSAGES.NOT_FOUND,
     }, HttpStatus.NOT_FOUND);
-    return this.workingDaysService.delete(id);
+    let input = {status: STATUS.INACTIVE};
+    input = getMutateProps('deleted', context['req'].headers, input);
+    return this.workingDaysService.delete(id, input);
   }
 
   @ResolveField('start_time', returns => String)
