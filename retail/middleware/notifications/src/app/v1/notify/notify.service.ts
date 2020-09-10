@@ -1,24 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import * as admin from 'firebase-admin';
-
 import { NotifyRepository } from '@rubix/core/repository/';
-import { ConfigurationService } from '@rubix/common/configuration/configuration.service';
 import { Notify } from './notify.model';
 import { DEFAULT_NOTIFY_STATUS } from '@rubix/common/constants';
+import { FirebaseService } from '@rubix/common/connections/firebase/firebase.service';
 
 @Injectable()
 export class NotifyService {
   constructor(
     private readonly notifyDB: NotifyRepository,
-    private readonly _config: ConfigurationService,
+    private readonly firebaseService :FirebaseService,
   ) {
-    admin.initializeApp({
-      credential: admin.credential.cert({
-        clientEmail: this._config.FIREBASE.CLIENT_EMAIL,
-        privateKey: this._config.FIREBASE.PRIVATE_KEY,
-        projectId: this._config.FIREBASE.PROJECT_ID.replace(/\\n/g, '\n'),
-      }),
-    });
   }
 
   async sendPushNotification(
@@ -44,23 +35,16 @@ export class NotifyService {
       token: notifyOBJ.token,
     };
 
-    return admin
-      .messaging()
-      .send(message)
-      .then(async response => {
-        // Response is a message ID string.
-        console.log('Successfully sent message:', response);
-        delete notifyOBJ.token;
-        notifyOBJ = {
-          ...notifyOBJ,
-          status: DEFAULT_NOTIFY_STATUS,
-        };
-        console.log(notifyOBJ);
-        const [notify] = await this.notifyDB.create(notifyOBJ, columns);
-        return notify;
-      })
-      .catch(error => {
-        console.log('Error sending message:', error);
-      });
+    const notifyResponse = await this.firebaseService.send(message);
+    if(!notifyResponse) throw new Error(notifyResponse);
+    console.log('Successfully sent message:', notifyResponse);
+    delete notifyOBJ.token;
+    notifyOBJ = {
+      ...notifyOBJ,
+      status: DEFAULT_NOTIFY_STATUS,
+    };
+    console.log(notifyOBJ);
+    const [notify] = await this.notifyDB.create(notifyOBJ, columns);
+    return notify;
   }
 }

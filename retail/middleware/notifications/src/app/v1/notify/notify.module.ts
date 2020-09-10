@@ -3,10 +3,11 @@ import { RepositoryModule } from '@rubix/core/repository/repository.module';
 import { NotifyRepository } from '@rubix/core/repository/';
 import { NotifyService } from './notify.service';
 import { NotifyResolver } from './notify.resolver';
+import { FirebaseModule } from '@rubix/common/connections/firebase/firebase.module';
 
 
 @Module({
-  imports: [RepositoryModule],
+  imports: [RepositoryModule,FirebaseModule],
   providers: [
     NotifyService,
     NotifyRepository,
