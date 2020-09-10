@@ -1,5 +1,5 @@
 import { SettingService } from "./../../setting.service";
-import { Component, OnInit, ViewEncapsulation } from "@angular/core";
+import { Component, OnInit, ViewEncapsulation, Injector } from "@angular/core";
 import { fuseAnimations } from "@fuse/animations";
 import { MatDialog } from "@angular/material/dialog";
 import { UpdateProfileComponent } from "@feature/setting/components/update-profile/update-profile.component";
@@ -21,17 +21,17 @@ export class ProfileComponent extends BaseComponent implements OnInit {
     currentUser: any;
     constructor(
         public _matDialog: MatDialog,
-        private _settingService: SettingService
-    ) {
-        super();
+        private _settingService: SettingService ,
+        injector: Injector
+        ) {
+            super(injector);
     }
 
     ngOnInit(): void {
         this.currentUser = this._authUserService.User;
     }
-    openDialoge(): void {
+    openDialog(): void {
         const _this = this;
-        const user = new User();
         this.dialogRef = this._matDialog
             .open(UpdateProfileComponent, {
                 data: this.currentUser,
@@ -45,7 +45,6 @@ export class ProfileComponent extends BaseComponent implements OnInit {
     }
 
     onUpdateProfile(data) {
-        
         data = camelToSnakeCase(data);
         this._settingService.updateProfile(data).subscribe(
             (response: User) => {

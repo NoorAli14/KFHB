@@ -44,6 +44,10 @@ export const GENDER_LIST: Array<Select> = [
     { id: "F", name: "Female" },
 ];
 
+export const MODULES={
+    USER_MANAGEMENT:'User Management',
+    ROLE_MANAGEMENT:'Role Management',
+}
 export const NATIONALITY_LIST: Array<Select> = [
     { id: "1", name: "Pakistan" },
     { id: "2", name: "Bahrain" },

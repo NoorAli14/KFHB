@@ -10,7 +10,7 @@ describe('GlobalErrorService', () => {
     service = TestBed.inject(GlobalErrorService);
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
+  // it('should be created', () => {
+  //   expect(service).toBeTruthy();
+  // });
 });
