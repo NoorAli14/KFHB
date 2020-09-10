@@ -1,25 +1,33 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { AboutComponent } from './about.component';
+import { AboutComponent } from "./about.component";
 
-describe('AboutComponent', () => {
-  let component: AboutComponent;
-  let fixture: ComponentFixture<AboutComponent>;
+describe("AboutComponent", () => {
+    let component: AboutComponent;
+    let fixture: ComponentFixture<AboutComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ AboutComponent ]
-    })
-    .compileComponents();
-  }));
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            declarations: [AboutComponent],
+        }).compileComponents();
+    }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(AboutComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    beforeEach(() => {
+        fixture = TestBed.createComponent(AboutComponent);
+        component = fixture.componentInstance;
+        component.user = {};
+        fixture.detectChanges();
+    });
 
-  // it('should create', () => {
-  //   expect(component).toBeTruthy();
-  // });
+    it("should create AboutComponent", () => {
+        expect(component).toBeTruthy();
+    });
+    it("should nationalityList array property initialized with more than 1 record", () => {
+        expect(component.nationalityList.length).toBeGreaterThan(1);
+    });
+    it("should getNationality be called", () => {
+        spyOn(component, "getNationality");
+        component.getNationality(1);
+        expect(component.getNationality).toHaveBeenCalled();
+    });
 });

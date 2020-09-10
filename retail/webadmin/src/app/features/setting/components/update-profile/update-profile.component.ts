@@ -18,8 +18,6 @@ import { ValidatorService } from '@shared/services/validator-service/validator.s
 export class UpdateProfileComponent extends BaseComponent implements OnInit {
 
     userForm: FormGroup;
-    
-    
     response: User;
     @Output() sendResponse: EventEmitter<User> = new EventEmitter<any>();
     nationalityList: any[]=NATIONALITY_LIST;
@@ -27,7 +25,6 @@ export class UpdateProfileComponent extends BaseComponent implements OnInit {
     constructor(
         public matDialogRef: MatDialogRef<UpdateProfileComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
-        private _settingService: SettingService ,
         injector: Injector
         ) {
             super(injector);
@@ -41,20 +38,16 @@ export class UpdateProfileComponent extends BaseComponent implements OnInit {
             lastName: new FormControl(this.data.lastName),
             contactNo: new FormControl(this.data.contactNo,[Validators.required,ValidatorService.numbersOnly]),
             gender: new FormControl(this.data.gender,[Validators.required]),
-            email: new FormControl(this.data.email, [
-                Validators.email,
-            ]),
+            email: new FormControl({value:this.data.email, disabled:true}),
             dateOfBirth: new FormControl(this.data.dateOfBirth ? new Date(this.data.dateOfBirth) : null, [Validators.required]),
             nationalityId: new FormControl(this.data.nationalityId, [Validators.required] ),
         });
-        this.userForm.get('email').disable();
     }
    
     onSubmit() {
         const model = { ...this.userForm.value };
         model.dateOfBirth= new Date(model.dateOfBirth).toLocaleDateString()
         this.sendResponse.emit(model);
-       
     }
     onClose() {
         this.matDialogRef.close(this.response);

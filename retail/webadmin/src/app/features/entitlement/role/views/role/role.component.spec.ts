@@ -1,40 +1,36 @@
 import { RoleFormComponent } from './../../components/role-form/role-form.component';
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { RouterTestingModule } from "@angular/router/testing";
-import { AuthenticationService } from "@shared/services/auth/authentication.service";
-import { FuseConfigService } from "@fuse/services/config.service";
 import {
     ReactiveFormsModule,
-    AbstractControl,
-    FormGroup,
 } from "@angular/forms";
 import { MockComponent } from 'ng-mocks';
 import { Injector } from "@angular/core";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
-import { By } from "@angular/platform-browser";
 import { of, throwError } from "rxjs";
 import { DOMHelper } from "testing/dom.helper";
 import { RoleComponent } from "./role.component";
-import { ConfigMiddlewareService } from "../../services/config-middleware.service";
+import { RoleService } from "../../services/role.service";
 import { MatDialog } from "@angular/material/dialog";
 
 describe("RoleComponent", async () => {
     let component: RoleComponent;
     let fixture: ComponentFixture<RoleComponent>;
-    let configMiddlewareServiceMock: any;
+    let roleServiceMock: any;
     let matDialogMock: any;
     let injectorMock: any;
     let helper: DOMHelper<RoleComponent>;
     let dialogRefSpyObj = jasmine.createSpyObj({ afterClosed : of({}), close: null });
+    dialogRefSpyObj.componentInstance = { body: '' };
     beforeEach(async(() => {
         injectorMock = jasmine.createSpyObj("Injector", ["get"]);
         matDialogMock = jasmine.createSpyObj("MatDialog", ["open", "closeAll"]);
      
-        configMiddlewareServiceMock = jasmine.createSpyObj(
-            "ConfigMiddlewareService",
+        roleServiceMock = jasmine.createSpyObj(
+            "RoleService",
             ["forkRolesData", "createRole", "editRole", "deleteRole"]
         );
-        configMiddlewareServiceMock.forkRolesData.and.returnValue(
+        roleServiceMock.forkRolesData.and.returnValue(
             of([[], [], []])
         );
         TestBed.configureTestingModule({
@@ -47,8 +43,8 @@ describe("RoleComponent", async () => {
             ],
             providers: [
                 {
-                    provide: ConfigMiddlewareService,
-                    useValue: configMiddlewareServiceMock,
+                    provide: RoleService,
+                    useValue: roleServiceMock,
                 },
                 {
                     provide: MatDialog,
@@ -87,7 +83,7 @@ describe("RoleComponent", async () => {
             expect(component.displayedColumns.length).toBe(5);
         });
         it("should display error if forkRolesData failed ", () => {
-            configMiddlewareServiceMock.forkRolesData.and.returnValue(throwError(''))
+            roleServiceMock.forkRolesData.and.returnValue(throwError(''))
             component.ngOnInit();
             fixture.detectChanges();
             expect(component.errorType).toEqual('error');

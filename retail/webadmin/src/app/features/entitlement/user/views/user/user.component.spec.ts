@@ -18,6 +18,7 @@ describe("UserComponent", async () => {
     let userServiceMock: any;
     let helper: DOMHelper<UserComponent>;
     let dialogRefSpyObj = jasmine.createSpyObj({ afterClosed : of({}), close: null });
+    dialogRefSpyObj.componentInstance = { body: '' };
     beforeEach(async(() => {
         injectorMock = jasmine.createSpyObj("Injector", ["get"]);
         userServiceMock = jasmine.createSpyObj("UserService", ["get"]);

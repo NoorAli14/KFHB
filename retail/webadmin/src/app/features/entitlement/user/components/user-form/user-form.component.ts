@@ -2,6 +2,7 @@ import {
     NATIONALITY_LIST,
     STATUS_LIST,
     GENDER_LIST,
+    MODULES,
 } from "@shared/constants/app.constants";
 import {
     Component,
@@ -19,7 +20,9 @@ import { Role } from "@feature/entitlement/models/role.model";
 import { camelToSnakeCase } from "@shared/helpers/global.helper";
 import { BaseComponent } from "@shared/components/base/base.component";
 import { fuseAnimations } from "@fuse/animations";
-import { ValidatorService } from '@shared/services/validator-service/validator.service';
+import { ValidatorService } from "@shared/services/validator-service/validator.service";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: "app-user-form",
@@ -38,14 +41,15 @@ export class UserFormComponent extends BaseComponent implements OnInit {
     genderList: any[] = GENDER_LIST;
     statusList: any[] = STATUS_LIST;
     @Output() sendResponse: EventEmitter<User> = new EventEmitter<any>();
+    private _unsubscribeAll: Subject<any>;
 
     constructor(
         public matDialogRef: MatDialogRef<UserFormComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
         injector: Injector
-        ) {
-            super(injector);
-        }
+    ) {
+        super(injector, MODULES.USER_MANAGEMENT);
+    }
     requiredIfUpdating(predicate) {
         return (formControl) => {
             if (!formControl.parent) {
@@ -58,11 +62,13 @@ export class UserFormComponent extends BaseComponent implements OnInit {
         };
     }
     ngOnInit(): void {
-        this._errorEmitService.currentMessage.subscribe((item) => {
-            this.errorType = item.type;
-            this.responseMessage = item.message;
-        });
-        this.permissions = this._authUserService.getPermissionsByModule("User");
+        this._unsubscribeAll = new Subject();
+        this._errorEmitService.currentMessage
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe((item) => {
+                this.errorType = item.type;
+                this.responseMessage = item.message;
+            });
         this.userForm = new FormGroup({
             id: new FormControl(this.data.user.id),
             username: new FormControl(this.data.user.username, [
@@ -75,35 +81,41 @@ export class UserFormComponent extends BaseComponent implements OnInit {
             lastName: new FormControl(this.data.user.lastName, [
                 this.requiredIfUpdating(() => this.userForm.get("id").value),
             ]),
-            contactNo: new FormControl(this.data.user.contactNo, [
-                ValidatorService.numbersOnly,
-            ]),
+            contactNo: new FormControl(
+                {
+                    value: this.data.user.contactNo,
+                    disabled: this.data.user.id ? true : false,
+                },
+                [ValidatorService.numbersOnly]
+            ),
             gender: new FormControl(this.data.user.gender, [
                 this.requiredIfUpdating(() => this.userForm.get("id").value),
             ]),
-            email: new FormControl(this.data.user.email, [
-                Validators.required,
-                Validators.email,
-            ]),
-            dateOfBirth: new FormControl(
-                this.data.user.dateOfBirth
-                    ? new Date(this.data.user.dateOfBirth)
-                    : null
+            email: new FormControl(
+                {
+                    value: this.data.user.email,
+                    disabled: this.data.user.id ? true : false,
+                },
+                [Validators.required, Validators.email]
             ),
-            nationalityId: new FormControl(this.data.user.nationalityId),
+            dateOfBirth: new FormControl({
+                value: this.data.user.dateOfBirth
+                    ? new Date(this.data.user.dateOfBirth)
+                    : null,
+                disabled: this.data.user.id ? true : false,
+            }),
+            nationalityId: new FormControl({
+                value: this.data.user.nationalityId,
+                disabled: this.data.user.id ? true : false,
+            }),
             roles: new FormControl(
                 this.data.user.roles.map((x) => x.id),
                 [Validators.required]
             ),
         });
         this.roles = this.data.roles;
-        if (this.data.user.id) {
-            this.userForm.get("email").disable();
-            this.userForm.get("dateOfBirth").disable();
-            this.userForm.get("nationalityId").disable();
-            this.userForm.get("contactNo").disable();
-        }
     }
+   
     isExist(roles, roleId) {
         return roles.find((x) => x == roleId);
     }
@@ -115,12 +127,15 @@ export class UserFormComponent extends BaseComponent implements OnInit {
         if (model.id && model.id.length > 0) {
             this.data.user.roles.forEach((item) => {
                 const isExist = this.isExist(model.roles, item.id);
-                if (!isExist)
-                    model.roles.push({ id: item.id, _deleted: true });
+                if (!isExist) model.roles.push({ id: item.id, _deleted: true });
             });
         }
         model = camelToSnakeCase(model);
 
         this.sendResponse.emit(model);
+    }
+    ngOnDestroy(): void {
+        this._unsubscribeAll.next();
+        this._unsubscribeAll.complete();
     }
 }

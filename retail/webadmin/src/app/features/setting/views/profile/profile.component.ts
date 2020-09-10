@@ -30,9 +30,8 @@ export class ProfileComponent extends BaseComponent implements OnInit {
     ngOnInit(): void {
         this.currentUser = this._authUserService.User;
     }
-    openDialoge(): void {
+    openDialog(): void {
         const _this = this;
-        const user = new User();
         this.dialogRef = this._matDialog
             .open(UpdateProfileComponent, {
                 data: this.currentUser,
@@ -46,7 +45,6 @@ export class ProfileComponent extends BaseComponent implements OnInit {
     }
 
     onUpdateProfile(data) {
-        
         data = camelToSnakeCase(data);
         this._settingService.updateProfile(data).subscribe(
             (response: User) => {
