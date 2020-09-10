@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject,ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, Inject,ViewEncapsulation, Injector } from '@angular/core';
 import { FormGroup,  FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { fuseAnimations } from '@fuse/animations';
@@ -27,8 +27,10 @@ export class WorkingDayFormComponent  extends BaseComponent implements OnInit  {
         @Inject(MAT_DIALOG_DATA) public data: WorkingDay,
         private _service: CalendarService,
         private dialog: MatDialog
-    ) {
-        super()
+        ,
+        injector: Injector
+        ) {
+            super(injector);
     }
   
     ngOnInit(): void {

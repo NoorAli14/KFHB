@@ -1,5 +1,5 @@
 import { AuthenticationService } from "@shared/services/auth/authentication.service";
-import { Component, OnInit, ViewEncapsulation } from "@angular/core";
+import { Component, OnInit, ViewEncapsulation, Injector } from "@angular/core";
 import { FormGroup, Validators, FormControl } from "@angular/forms";
 
 import { FuseConfigService } from "@fuse/services/config.service";
@@ -20,9 +20,10 @@ export class ForgotPasswordComponent extends BaseComponent implements OnInit {
     forgotPasswordForm: FormGroup;
     constructor(
         private _fuseConfigService: FuseConfigService,
-        private _authService: AuthenticationService
-    ) {
-        super()
+        private _authService: AuthenticationService,
+        injector: Injector
+        ) {
+            super(injector);
         // Configure the layout
         this._fuseConfigService.config = {
             layout: {

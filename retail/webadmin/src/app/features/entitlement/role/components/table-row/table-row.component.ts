@@ -1,4 +1,12 @@
-import { Component, Input, Output, EventEmitter, ViewChild, SimpleChanges } from "@angular/core";
+import {
+    Component,
+    Input,
+    Output,
+    EventEmitter,
+    ViewChild,
+    SimpleChanges,
+    Injector,
+} from "@angular/core";
 import {
     trigger,
     state,
@@ -6,14 +14,18 @@ import {
     transition,
     animate,
 } from "@angular/animations";
-import { MatDialog } from '@angular/material/dialog';
-import { getName, camelToSentenceCase, camelToSnakeCaseText } from "@shared/helpers/global.helper";
-import { CONFIG } from '@config/index';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { BaseComponent } from '@shared/components/base/base.component';
-import { MatTableDataSource } from '@angular/material/table';
-
+import { MatDialog } from "@angular/material/dialog";
+import {
+    getName,
+    camelToSentenceCase,
+    camelToSnakeCaseText,
+} from "@shared/helpers/global.helper";
+import { CONFIG } from "@config/index";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatSort } from "@angular/material/sort";
+import { BaseComponent } from "@shared/components/base/base.component";
+import { MatTableDataSource } from "@angular/material/table";
+import { MODULES } from "@shared/constants/app.constants";
 
 @Component({
     selector: "app-table-row",
@@ -47,19 +59,19 @@ export class TableRowComponent extends BaseComponent {
     @Input() roles: any[];
     @Input() displayedColumns: string[];
     @Input() permissions: string[];
-    @Output() delete=new EventEmitter();
-    @Output() edit=new EventEmitter();
-    pageSize:number=CONFIG.PAGE_SIZE;
-    pageSizeOptions:Array<number>=CONFIG.PAGE_SIZE_OPTIONS;
+    @Output() delete = new EventEmitter();
+    @Output() edit = new EventEmitter();
+    pageSize: number = CONFIG.PAGE_SIZE;
+    pageSizeOptions: Array<number> = CONFIG.PAGE_SIZE_OPTIONS;
     expandedId: string = "";
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: false }) sort: MatSort;
     dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
-    constructor(public _matDialog: MatDialog) {
-        super("Role Management");
+    constructor(public _matDialog: MatDialog, injector: Injector) {
+        super(injector, MODULES.ROLE_MANAGEMENT);
     }
     ngOnChanges(changes: SimpleChanges): void {
-        if(changes.roles.currentValue!=changes.roles.previousValue){
+        if (changes.roles.currentValue != changes.roles.previousValue) {
             this.dataSource = new MatTableDataSource(this.roles);
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
@@ -74,13 +86,13 @@ export class TableRowComponent extends BaseComponent {
     camelToSnakeCase(text) {
         return camelToSnakeCaseText(text);
     }
-    camelToSentenceCase(text){
-        return camelToSentenceCase(text)
-     }
-     onDelete(id){
+    camelToSentenceCase(text) {
+        return camelToSentenceCase(text);
+    }
+    onDelete(id) {
         this.delete.emit(id);
-     }
-     onEdit(data){
+    }
+    onEdit(data) {
         this.edit.emit(data);
-     }
+    }
 }

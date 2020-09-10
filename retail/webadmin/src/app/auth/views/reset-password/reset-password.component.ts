@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewEncapsulation, Injector } from "@angular/core";
 import {
     FormBuilder,
     FormGroup,
@@ -31,9 +31,12 @@ export class ResetPasswordComponent extends BaseComponent implements OnInit, OnD
 
     constructor(
         private _fuseConfigService: FuseConfigService,
-        private _authService: AuthenticationService, private activatedRoute: ActivatedRoute
-    ) {
-        super()
+        private _authService: AuthenticationService,
+         private activatedRoute: ActivatedRoute
+        ,
+        injector: Injector
+        ) {
+            super(injector);
         this.token= this.activatedRoute.snapshot.paramMap.get("token");
         // Configure the layout
         this._fuseConfigService.config = {

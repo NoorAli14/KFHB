@@ -1,4 +1,4 @@
-import { Output, EventEmitter, Injectable } from "@angular/core";
+import { Output, EventEmitter, Injectable, Injector } from "@angular/core";
 import { BaseComponent } from "@shared/components/base/base.component";
 import { Component, OnInit, Inject, ViewEncapsulation } from "@angular/core";
 import { Validators, FormArray, FormGroup, FormControl } from "@angular/forms";
@@ -8,6 +8,10 @@ import { fuseAnimations } from "@fuse/animations";
 import { MatTableDataSource } from "@angular/material/table";
 import { Permission } from "@feature/entitlement/models/config.model";
 import { camelToSentenceCase } from "@shared/helpers/global.helper";
+import { MODULES } from '@shared/constants/app.constants';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { RoleService } from '../../services/role.service';
 
 @Component({
     selector: "app-role-form",
@@ -21,20 +25,25 @@ export class RoleFormComponent extends BaseComponent implements OnInit {
     displayedColumns = ["module"];
     dataSource = new MatTableDataSource<Permission>();
     modulesMapped: any[] = [];
+    private _unsubscribeAll: Subject<any>;
+    
     @Output() sendResponse: EventEmitter<Role> = new EventEmitter<any>();
 
     constructor(
         public matDialogRef: MatDialogRef<RoleFormComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: any
-    ) {
-        super("Role Management");
+        @Inject(MAT_DIALOG_DATA) public data: any, private _roleService: RoleService
+        ,
+        injector: Injector
+        ) {
+            super(injector,MODULES.ROLE_MANAGEMENT);
     }
 
     ngOnInit(): void {
+        this._unsubscribeAll = new Subject();
         const totalPermissions=this.data.permissions.map((x)=>x.record_type)
         this.displayedColumns= this.displayedColumns.concat(totalPermissions)
 
-        this._errorEmitService.currentMessage.subscribe((item) => {
+        this._errorEmitService.currentMessage.pipe(takeUntil(this._unsubscribeAll)).subscribe((item) => {
             this.errorType = item.type;
             this.responseMessage = item.message;
         });
@@ -79,7 +88,7 @@ export class RoleFormComponent extends BaseComponent implements OnInit {
         const model = { ...this.roleForm.value };
         let permissions = [];
         model.modules.forEach((element) => {
-            const data = this.getCheckedKey(element);
+            const data = this._roleService.getSelectedPermissions(this.data,element);
             if (data && data.length > 0) {
                 permissions = permissions.concat(data);
             }
@@ -87,38 +96,13 @@ export class RoleFormComponent extends BaseComponent implements OnInit {
         model.permissions = permissions;
         this.sendResponse.emit(model);
     }
-    getCheckedKey(element) {
-        const checked = Object.keys(element).filter((key) => {
-            return element[key] == true;
-        });
-        const module = this.data.modules.find(
-            (module) => module.id === element.module.id
-        );
-        const permissions = [];
-        checked.forEach((key) => {
-            const permission = element.module.permissions.find(
-                (item) => item.record_type == key
-            );
-
-            permissions.push({ id: permission.module_permission_id });
-        });
-        if (this.data.role.id && this.data.role.id.length > 0) {
-            module.permissions.forEach((x) => {
-                const exist = permissions.find(
-                    (item) => item.id == x.module_permission_id
-                );
-                if (!exist && x.value) {
-                    permissions.push({
-                        id: x.module_permission_id,
-                        _deleted: true,
-                    });
-                }
-            });
-        }
-
-        return permissions;
-    }
+    
     camelToSentenceCase(text) {
         return camelToSentenceCase(text);
     }
+    ngOnDestroy(): void {
+        this._unsubscribeAll.next();
+        this._unsubscribeAll.complete();
+    }
+    
 }
