@@ -82,16 +82,11 @@ export class OtpService {
         this._config.OTP.pattern,
         this._config.OTP.otp_length,
       );
+      if(!otpOBJ.otp_code  || otpOBJ.otp_code == undefined) throw new Error("OTP_GENERATION_FAILED");
     }
 
-    otpOBJ.status = this._config.OTP.status;
-    otpOBJ.created_on = new Date();
-    otpOBJ.tenent_id = otpOBJ.user_id;
-    otpOBJ.created_by = otpOBJ.user_id;
-
-    const [otp] = await this.otpDB.create(otpOBJ, columns);
     // Send OTP Via email function call.
-    if (otp && (otpOBJ.delivery_mode == 'email' || otpOBJ.delivery_mode == 'both')) {
+    if (otpOBJ.delivery_mode == 'email' || otpOBJ.delivery_mode == 'both') {
       const emailObj = {
         to: otpOBJ.email,
         subject: DEFAULT_OTP_EMAIL_SUBJECT,
@@ -104,13 +99,17 @@ export class OtpService {
     }
 
     // Send OTP via SMS function call.
-    if (otp && (otpOBJ.delivery_mode == 'mobile' || otpOBJ.delivery_mode == 'both')) {
+    if (otpOBJ.delivery_mode == 'mobile' || otpOBJ.delivery_mode == 'both') {
       const smsObj = {
         to: otpOBJ.mobile_no,
         body: OTP_SMS_CONTENT.replace('<otp_code>',otpOBJ.otp_code).replace('<user_id>', otpOBJ.user_id),
       };
       await this.smsService.sendSMS(smsObj, ['mobile_no']);
     }
+
+    // Saving a entry into database.
+    otpOBJ.status = this._config.OTP.status;
+    const [otp] = await this.otpDB.create(otpOBJ, columns);
     return otp;
   }
 }
