@@ -34,6 +34,28 @@ $typography: mat-typography-config( $font-family: 'Muli, Helvetica Neue, Arial, 
 }
 
 // -----------------------------------------------------------------------------------------------------
+// @ Define the custom theme
+// -----------------------------------------------------------------------------------------------------
+// Define the primary, accent and warn palettes
+$custom-primary-palette: mat-palette($fuse-navy);
+$custom-accent-palette: mat-palette($mat-cyan, 600, 400, 700);
+$custom-warn-palette: mat-palette($mat-red);
+// Create the Material theme object
+$custom-theme: mat-light-theme($custom-primary-palette, $custom-accent-palette, $custom-warn-palette);
+// Add ".theme-default" class to the body to activate this theme.
+// Class name must start with "theme-" !!!
+body.theme-custom {
+    // Create an Angular Material theme from the $theme map
+    @include angular-material-theme($custom-theme);
+    // Apply the theme to the Fuse Core
+    @include fuse-core-theme($custom-theme);
+    // Apply the theme to the user components
+    @include components-theme($custom-theme);
+    // Generate Fuse color classes for primary, accent and warn colors
+    $palettes: ( primary: $custom-primary-palette, accent: $custom-accent-palette, warn: $custom-warn-palette);
+    @include fuse-color-classes($palettes);
+}
+// -----------------------------------------------------------------------------------------------------
 // @ Define the default theme
 // -----------------------------------------------------------------------------------------------------
 // Define the primary, accent and warn palettes
