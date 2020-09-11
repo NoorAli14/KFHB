@@ -5,6 +5,6 @@ export const Header = createParamDecorator((data, ctx: ExecutionContext) => {
   const headers: { [key: string]: string } = {};
   headers[X_CORRELATION_KEY] = req.headers[X_CORRELATION_KEY];
   if (req.user) headers[X_USER_ID] = req.user.id;
-  headers[X_TENANT_ID] = '958CA3EF-608E-4489-A0C8-E4D40F2E10D5';
+  headers[X_TENANT_ID] = req.headers[X_TENANT_ID];
   return headers;
 });

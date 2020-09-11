@@ -1,9 +1,10 @@
-import { Injectable, Logger, Scope, Inject } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import {
   SESSION_STATUSES,
   ICurrentUser,
   DOCUMENT_TYPES,
   DOCUMENT_STATUSES,
+  base64ToStr,
 } from '@rubix/common';
 import {
   SessionRepository,
@@ -110,7 +111,7 @@ export class SessionsService {
     const challenge: any = await this.identityService.updateRegistrationChallenge(
       customerSession.fido_reg_req_id,
       {
-        file: input.file,
+        file: base64ToStr(input.file),
       },
     );
     const trx: any = await this.customerDB.transaction();
@@ -144,6 +145,7 @@ export class SessionsService {
       DOCUMENT_TYPES.PASSPORT,
       DOCUMENT_TYPES.DRIVING_LICENSE,
     ];
+
     //  Fetch customer recent active session
     const customerSession = await this.customerDB.getRecentSession(
       currentUser.tenant_id,
@@ -155,6 +157,7 @@ export class SessionsService {
       ? await this.identityService.findUserById(customerSession.target_user_id)
       : null;
 
+    this.logger.log(targetUser);
     // Checking user has uploaded his selfie or not.
     if (!targetUser?.faceEnrolled) {
       return {

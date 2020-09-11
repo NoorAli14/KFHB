@@ -2,6 +2,16 @@ import * as path from 'path';
 import * as glob from 'glob';
 import { v4 as uuidV4 } from 'uuid';
 
+export const strToBase64 = (data: any): string => {
+  const buff: Buffer = new Buffer(data);
+  return buff.toString('base64');
+};
+
+export const base64ToStr = (data: string): any => {
+  let buff: Buffer = new Buffer(data, 'base64');
+  return buff.toString('ascii');
+};
+
 /**
  * Serialize Loader result
  * @return serialize object

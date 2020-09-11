@@ -157,7 +157,7 @@ export class DocumentsController {
 
   @Post('passport/process')
   @ApiOperation({
-    summary: 'Process a passport side',
+    summary: 'Process a passport',
     description:
       'A successful request returns the HTTP 200 OK status code and a JSON response body that shows document information.',
   })
