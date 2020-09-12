@@ -9,6 +9,7 @@ import {RepositoryModule} from "@core/repository/repository.module";
 import {UserRepository} from "@core/repository";
 import {HolidaysService} from '@app/v1/holiday/holidays.service';
 import {LeavesService} from '@app/v1/leave/leaves.service';
+import {WorkingDaysService} from '@app/v1/working-days/working-days.service';
 
 @Module({
   imports: [UsersModule, RepositoryModule],
@@ -19,7 +20,8 @@ import {LeavesService} from '@app/v1/leave/leaves.service';
     UserRepository,
     Encrypter,
     HolidaysService,
-    LeavesService
+    LeavesService,
+    WorkingDaysService,
   ],
 })
 export class ForgotPasswordModule {}
