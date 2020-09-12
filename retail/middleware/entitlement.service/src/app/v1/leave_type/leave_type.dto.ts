@@ -4,24 +4,12 @@ import {IsOptional, IsString, MaxLength} from "class-validator";
 import { NUMBERS } from "@common/constants";
 
 @InputType()
-export class HolidayInput {
-  @Field({ nullable: true })
-  @IsString()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  @IsOptional()
-  holiday_date?: string;
-
+export class LeaveTypeInput {
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  holiday_description?: string;
-
-  @Field({ nullable: true })
-  @IsString()
-  @IsOptional()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  remarks?: string;
+  leave_type?: string;
 
   @Field({ nullable: true })
   @IsString()
@@ -31,9 +19,9 @@ export class HolidayInput {
 }
 
 @InputType()
-export class HolidayCreateInput extends HolidayInput{
+export class LeaveTypeCreateInput extends LeaveTypeInput {
   @Field()
   @IsString()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  holiday_date: string;
+  leave_type: string;
 }
