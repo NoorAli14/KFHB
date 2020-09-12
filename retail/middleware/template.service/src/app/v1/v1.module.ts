@@ -11,6 +11,8 @@ import { TemplatesModule } from './templates/templates.module';
 import { DataloaderModule } from '@core/dataloaders/loader.module';
 import { RepositoryModule } from '@core/repository/repository.module';
 // import { TemplateQuestionsModule } from './template-questions/template-questions.module';
+import { AmlRequestModule } from './aml-request/aml-request.module';
+import { AmlResponseModule } from './aml-response/aml-response.module';
 
 @Module({
   imports: [
@@ -34,6 +36,8 @@ import { RepositoryModule } from '@core/repository/repository.module';
       }),
       inject: [ConfigurationService],
     }),
+    AmlRequestModule,
+    AmlResponseModule,
   ],
 })
 export class V1Module {}
