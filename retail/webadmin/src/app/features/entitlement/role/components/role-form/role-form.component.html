@@ -46,7 +46,7 @@
             fxFlex="1 1 auto"
         >
             <mat-form-field appearance="outline" fxFlex="100" class="pr-4" >
-                <mat-label>Name</mat-label>
+                <mat-label>Name <app-required-indicator></app-required-indicator></mat-label>
                 <input matInput formControlName="name" />
                 <mat-icon matSuffix class="secondary-text"
                     >account_circle</mat-icon
@@ -58,7 +58,7 @@
                 </mat-error>
             </mat-form-field>
             <mat-form-field appearance="outline" fxFlex="100" class="pr-4">
-                <mat-label>Description</mat-label>
+                <mat-label>Description <app-required-indicator></app-required-indicator></mat-label>
                 <textarea matInput placeholder="Description" formControlName="description"></textarea>
                 <mat-icon matSuffix class="secondary-text"
                     >account_circle</mat-icon>

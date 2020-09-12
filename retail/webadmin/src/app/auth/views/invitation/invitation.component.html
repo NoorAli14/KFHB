@@ -37,7 +37,7 @@
                             fxFlex="48"
                             class="pl-4"
                         >
-                            <mat-label>First Name</mat-label>
+                            <mat-label>First Name <app-required-indicator></app-required-indicator></mat-label>
                             <input matInput formControlName="firstName" />
                             <mat-icon matSuffix class="secondary-text"
                                 >account_circle</mat-icon
@@ -69,7 +69,7 @@
                             fxFlex="48"
                             class="pl-4"
                         >
-                            <mat-label>Last Name</mat-label>
+                            <mat-label>Last Name <app-required-indicator></app-required-indicator></mat-label>
                             <input matInput formControlName="lastName" />
                             <mat-icon matSuffix class="secondary-text"
                                 >account_circle</mat-icon
@@ -96,7 +96,7 @@
                             fxFlex="48"
                             class="pl-4"
                         >
-                            <mat-label>Date of Birth</mat-label>
+                            <mat-label>Date of Birth <app-required-indicator></app-required-indicator></mat-label>
                             <input
                                 matInput
                                 [matDatepicker]="picker"
@@ -119,7 +119,7 @@
                             fxFlex="48"
                             class="pr-4"
                         >
-                            <mat-label>Gender</mat-label>
+                            <mat-label>Gender <app-required-indicator></app-required-indicator></mat-label>
                             <mat-select formControlName="gender">
                                 <mat-option
                                     *ngFor="let item of genderList"
@@ -142,7 +142,7 @@
                             fxFlex="48"
                             class="pr-4"
                         >
-                            <mat-label>Nationality</mat-label>
+                            <mat-label>Nationality <app-required-indicator></app-required-indicator></mat-label>
                             <mat-select formControlName="nationalityId">
                                 <mat-option
                                     *ngFor="let item of nationalityList"
@@ -166,7 +166,7 @@
                             fxFlex="48"
                             class="pl-4"
                         >
-                            <mat-label>Contact No</mat-label>
+                            <mat-label>Contact No <app-required-indicator></app-required-indicator></mat-label>
                             <input matInput formControlName="contactNo" />
                             <mat-icon matSuffix class="secondary-text"
                                 >phone</mat-icon
@@ -182,7 +182,7 @@
                             fxFlex="48"
                             class="pl-4"
                         >
-                            <mat-label>Password</mat-label>
+                            <mat-label>Password <app-required-indicator></app-required-indicator></mat-label>
                             <input type="password" matInput formControlName="password" />
                             <mat-icon matSuffix class="secondary-text"
                                 >account_circle</mat-icon
@@ -198,7 +198,7 @@
                         fxFlex="48"
                         class="pl-4"
                     >
-                        <mat-label>Confirm Password</mat-label>
+                        <mat-label>Confirm Password <app-required-indicator></app-required-indicator></mat-label>
                         <input type="password" matInput formControlName="confirmPassword" />
                         <mat-icon matSuffix class="secondary-text"
                             >account_circle</mat-icon
