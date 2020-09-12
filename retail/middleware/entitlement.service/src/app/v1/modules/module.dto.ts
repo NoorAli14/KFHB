@@ -4,10 +4,11 @@ import {NUMBERS} from "@common/constants";
 
 @InputType()
 export class ModuleInput {
-  @Field()
+  @Field({ nullable: true })
   @IsString()
+  @IsOptional()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  name: string;
+  name?: string;
 
   @Field({ nullable: true })
   @IsString()
@@ -20,4 +21,12 @@ export class ModuleInput {
   @IsOptional()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   status?: string;
+}
+
+@InputType()
+export class ModuleCreateInput extends ModuleInput{
+  @Field()
+  @IsString()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  name: string;
 }
