@@ -1,12 +1,15 @@
 import { InjectKnex, Knex } from 'nestjs-knex';
 export abstract class BaseRepository {
   @InjectKnex() private readonly _connection: Knex;
-  public _tableName: string;
+  private _tableName: string;
   constructor(tableName: string) {
     this._tableName = tableName;
   }
   get connection(): Knex {
     return this._connection;
+  }
+  get tableName(): string {
+    return this._tableName;
   }
   async list(keys: string | string[]): Promise<any> {
     return this._connection(this._tableName).select(keys);

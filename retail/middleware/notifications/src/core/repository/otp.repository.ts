@@ -21,7 +21,7 @@ export class OtpRepository extends BaseRepository {
 
   async findByUserId(user_id: string): Promise<any> {
     return await this.connection
-      .table(this._tableName)
+      .table(this.tableName)
       .where('user_id', user_id)
       .select(this.columns)
       .first()
