@@ -9,6 +9,7 @@ import {
   OptionRepository,
   TemplateQuestionsRepository,
   TemplateResponsesRepository,
+  AmlRequestRepository,
 } from './';
 
 const repositories = [
@@ -18,6 +19,7 @@ const repositories = [
   OptionRepository,
   TemplateQuestionsRepository,
   TemplateResponsesRepository,
+  AmlRequestRepository,
 ];
 
 @Module({

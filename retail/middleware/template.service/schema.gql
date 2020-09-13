@@ -48,6 +48,14 @@ scalar DateTime
 
 type Mutation {
   addTemplateResponse(input: NewTemplateResponseInput!): TemplateResponseGQL!
+  addAmlRequest(input: NewAlmRequestInput!): AmlRequest!
+}
+
+input NewAlmRequestInput {
+  customer_id: String!
+  aml_text: String!
+  remarks: String!
+  status: String!
 }
 
 input NewTemplateResponseInput {
