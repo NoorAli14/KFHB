@@ -8,9 +8,10 @@ export async function seed(knex: Knex): Promise<any> {
     // Formats data according to db
     const formattedCurrencies = Object.entries(currencies).map(([key, currency]) => {
         return {
-            name: currency.name,
+            name: currency.currency,
             iso_code: key,
-            country_code: currency.country_code,
+            numeric_code: currency.numericCode,
+            minor_unit: currency.minorUnit,
             created_by: CREATED_BY.SYSTEM,
             updated_by: UPDATED_BY.SYSTEM,
         }

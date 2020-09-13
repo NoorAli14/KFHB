@@ -11,12 +11,7 @@ export class CountryRepository extends BaseRepository {
     'iso_code',
     'continent_code',
     'phone_code',
-    'currency_code',
-    'status',
-    'created_by',
-    'updated_by',
-    'created_on',
-    'updated_on',
+    'nationality',
   ]
 
   constructor() {

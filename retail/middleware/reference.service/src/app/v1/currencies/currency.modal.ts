@@ -11,7 +11,7 @@ export class Currency {
   @ApiProperty({
     title: 'Currency Name',
     description: 'Name of the currency',
-    example: 'Pakistani Rupee',
+    example: 'Pakistan Rupee',
     required: true,
   })
   name: string;
@@ -25,37 +25,31 @@ export class Currency {
   iso_code: string;
 
   @ApiProperty({
-    title: 'Country ISO Code',
-    description: 'Two characters iso code of the country',
-    example: 'PK',
+    title: 'Currency Numeric Code',
+    description: 'Numeric code of the currency',
+    example: 586,
     required: true,
   })
-  country_code: string;
+  numeric_code: number;
 
   @ApiProperty({
-    description: 'Currency status',
-    required: false,
+    title: 'Currency Minor Unit',
+    description: 'Minor unit of the currency',
+    example: 2,
+    required: true,
   })
+  minor_unit: number;
+
   status: string;
 
-  @ApiProperty({ required: false })
   created_by: string;
 
-  @ApiProperty({ required: false })
   updated_by: string;
 
   deleted_by: string;
 
-  @ApiProperty({
-    description: 'timestamp without time zone',
-    required: false,
-  })
   created_on: Date;
 
-  @ApiProperty({
-    description: 'timestamp without time zone',
-    required: false,
-  })
   updated_on: Date;
 
   deleted_on: Date;
