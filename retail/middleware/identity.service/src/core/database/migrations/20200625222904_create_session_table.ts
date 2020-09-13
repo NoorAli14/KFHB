@@ -13,8 +13,11 @@ export async function up(knex: Knex): Promise<any> {
       .onDelete('cascade');
     table.uuid('tenant_id').notNullable();
     table.uuid('reference_id').notNullable();
+    table.string('check_id').notNullable();
     table.string('target_user_id').notNullable();
-    table.string('check_id');
+    table.string('fido_reg_req_id').notNullable();
+    table.text('fido_reg_req').notNullable();
+    table.string('evaluation_id');
 
     table.string('status');
 
@@ -31,6 +34,7 @@ export async function up(knex: Knex): Promise<any> {
     table.index('reference_id', 'IDT_SESSION_REFERENCE_ID_INDEX');
     table.index('target_user_id', 'IDT_SESSION_TARGET_USER_ID_INDEX');
     table.index('check_id', 'IDT_SESSION_TARGET_CHECK_ID_INDEX');
+    table.index('evaluation_id', 'IDT_SESSION_EVALUATION_ID_INDEX');
   });
 }
 

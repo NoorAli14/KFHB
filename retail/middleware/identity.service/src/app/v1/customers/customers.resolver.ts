@@ -3,8 +3,8 @@ import {
   Query,
   Mutation,
   Args,
-  ResolveField,
   Parent,
+  ResolveField,
 } from '@nestjs/graphql';
 import { UseGuards, NotFoundException } from '@nestjs/common';
 import {
@@ -14,9 +14,14 @@ import {
   CREATED_BY,
   CUSTOMER_STATUSES,
 } from '@rubix/common';
+import * as DataLoader from 'dataloader';
+import { Loader } from 'nestjs-dataloader';
+import { Document } from '@rubix/app/v1/documents/document.model';
+
 import { Customer } from './customer.model';
 import { CustomersService } from './customers.service';
 import { NewCustomerInput } from './customer.dto';
+import { String } from 'lodash';
 
 @Resolver(Customer)
 export class CustomersResolver {
@@ -26,25 +31,37 @@ export class CustomersResolver {
   addCustomer(
     @Args('input') input: NewCustomerInput,
     @Tenant() tenant: any,
-    @Fields() columns: string[],
+    @Fields() output: string[],
   ): Promise<Customer> {
     const params: any = {
+      ...input,
       created_by: CREATED_BY.API,
       updated_by: CREATED_BY.API,
       tenant_id: tenant.id,
-      email: input.email,
       status: CUSTOMER_STATUSES.PENDING,
     };
-    return this.customerService.create(params, columns);
+    return this.customerService.create(params, output);
   }
 
+  @UseGuards(AuthGuard)
   @Query(() => Customer)
   async findCustomerById(
     @Args('id') id: string,
-    @Fields() columns: string[],
+    @Fields() output: string[],
   ): Promise<Customer> {
-    const customer: Customer = await this.customerService.findById(id, columns);
+    const customer: Customer = await this.customerService.findById(id, output);
     if (!customer) throw new NotFoundException('Customer Not Found');
     return customer;
+  }
+
+  @ResolveField(() => [Document])
+  documents(
+    @Parent() customer: Customer,
+    @Loader('DocumentLoader') postLoader: DataLoader<Document['id'], Document>,
+  ) {
+    console.log(`Session IDs: ${customer.session_id}`);
+    if (!customer.session_id) return [];
+
+    return postLoader.load(customer.session_id);
   }
 }

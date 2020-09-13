@@ -7,6 +7,7 @@ import { LoggingInterceptor } from '@rubix/common/interceptors/';
 import { HttpExceptionFilter } from '@rubix/common/filters/http-exception.filter';
 import { ConfigurationService } from '@rubix/common/configuration/configuration.service';
 import { KernelMiddleware } from '@rubix/core/middlewares/index';
+import * as bodyParser from 'body-parser';
 
 class Server {
   private _app: INestApplication;
@@ -34,6 +35,8 @@ class Server {
    */
   private mountMiddlewares(): void {
     this._app = KernelMiddleware.init(this.app, this.Config);
+    this._app.use(bodyParser.json({ limit: '50mb' }));
+    this._app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
   }
 
   /**

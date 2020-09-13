@@ -6,6 +6,9 @@ export class Document {
   id?: string;
 
   @Field()
+  name?: string;
+
+  @Field()
   session_id: string;
 
   @Field()
@@ -40,4 +43,10 @@ export class Document {
 
   @Field()
   deleted_on?: Date;
+}
+
+@ObjectType()
+export class PreviewDocument {
+  @Field()
+  image: string;
 }

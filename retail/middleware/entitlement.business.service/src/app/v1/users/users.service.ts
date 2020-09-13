@@ -178,6 +178,7 @@ export class UserService {
     const params = `mutation {
       result: updateUser(id: "${id}", input: ${toGraphql(input)}) ${this.output}
     }`;
+    console.log(params);
     return this.gqlClient.send(params);
   }
 
