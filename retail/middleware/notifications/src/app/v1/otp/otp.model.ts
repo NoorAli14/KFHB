@@ -12,12 +12,6 @@ export class Otp {
   delivery_mode: string;
 
   @Field()
-  mobile_no?: string;
-
-  @Field()
-  email?: string;
-
-  @Field()
   otp_code: string;
 
   @Field()

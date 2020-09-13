@@ -108,6 +108,8 @@ export class OtpService {
     }
 
     // Saving a entry into database.
+    delete otpOBJ.mobile_no;
+    delete otpOBJ.email;
     otpOBJ.status = this._config.OTP.status;
     const [otp] = await this.otpDB.create(otpOBJ, columns);
     return otp;
