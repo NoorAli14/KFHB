@@ -9,6 +9,7 @@ import {
   ParseUUIDPipe,
   HttpCode,
   NotFoundException,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -21,6 +22,7 @@ import {
   ApiBadRequestResponse,
   ApiNotFoundResponse,
 } from '@nestjs/swagger';
+import { AuthGuard, Header, IHEADER } from '@common/index';
 import { Permission } from './permission.entity';
 import { PermissionService } from './permissions.service';
 import { PermissionDto } from './permission.dto';
@@ -28,6 +30,7 @@ import { PermissionDto } from './permission.dto';
 @ApiTags('Permission')
 @Controller('permissions')
 @ApiBearerAuth()
+@UseGuards(AuthGuard)
 export class PermissionsController {
   constructor(private readonly permissionService: PermissionService) {}
 
@@ -49,8 +52,11 @@ export class PermissionsController {
     type: Error,
     description: 'Input Validation failed.',
   })
-  async create(@Body() permissionDto: PermissionDto): Promise<Permission> {
-    return this.permissionService.create(permissionDto);
+  async create(
+    @Header() header: IHEADER,
+    @Body() permissionDto: PermissionDto,
+  ): Promise<Permission> {
+    return this.permissionService.create(header, permissionDto);
   }
 
   @Get('/')
@@ -63,8 +69,8 @@ export class PermissionsController {
     type: [Permission],
     description: 'List of all the permissions.',
   })
-  async list(): Promise<Permission[]> {
-    return this.permissionService.list();
+  async list(@Header() header: IHEADER): Promise<Permission[]> {
+    return this.permissionService.list(header);
   }
 
   @Get(':id')
@@ -81,8 +87,14 @@ export class PermissionsController {
     type: Error,
     description: 'Permission Not Found.',
   })
-  async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<Permission> {
-    const permission = await this.permissionService.findOne(id);
+  async findOne(
+    @Header() header: IHEADER,
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<Permission> {
+    const permission: Permission = await this.permissionService.findOne(
+      header,
+      id,
+    );
     if (!permission) throw new NotFoundException(`Permission not found.`);
     return permission;
   }
@@ -110,10 +122,11 @@ export class PermissionsController {
     description: 'Permission Not Found.',
   })
   async update(
+    @Header() header: IHEADER,
     @Param('id', ParseUUIDPipe) id: string,
     @Body() permissionDto: PermissionDto,
   ): Promise<Permission> {
-    return this.permissionService.update(id, permissionDto);
+    return this.permissionService.update(header, id, permissionDto);
   }
 
   @Delete(':id')
@@ -130,7 +143,10 @@ export class PermissionsController {
     description: 'Permission Not Found.',
   })
   @HttpCode(204)
-  async delete(@Param('id', ParseUUIDPipe) id: string): Promise<any> {
-    return this.permissionService.delete(id);
+  async delete(
+    @Header() header: IHEADER,
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<any> {
+    return this.permissionService.delete(header, id);
   }
 }
