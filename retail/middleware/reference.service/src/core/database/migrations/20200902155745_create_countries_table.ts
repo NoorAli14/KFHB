@@ -8,7 +8,7 @@ export async function up(knex: Knex): Promise<any> {
     table.string('continent_code');
     table.string('capital_name');
     table.string('phone_code');
-    table.string('currency_code');
+    table.string('nationality');
     table.string('status').defaultTo(STATUS.ACTIVE);
     table.string('created_by');
     table.string('updated_by');
