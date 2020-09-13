@@ -39,7 +39,7 @@ type Mutation {
   sendEmail(input: SendEmailInput!): EmailGQL!
   generateOtp(input: NewPostInput!): Otp!
   verifyOtp(input: VerifyOTPInput!): OTPResponse!
-  sendSMS(input: SendSMSInput!): SMSGQL!
+  sendSMS(input: SendSMSInput!): SMS!
   sendPushNotification(input: NotifyInput!): Notify!
 }
 
@@ -109,7 +109,7 @@ input SendSMSInput {
   body: String!
 }
 
-type SMSGQL {
+type SMS {
   to: String!
   body: String!
 }

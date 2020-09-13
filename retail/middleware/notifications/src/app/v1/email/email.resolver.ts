@@ -3,15 +3,17 @@ import { EmailService } from './email.service';
 import { SendEmailInput } from './email.dto';
 import { EmailGQL } from './email.model';
 import { graphqlFields } from '@common/utilities';
+import { Fields } from '@rubix/common/decorators';
 
 @Resolver(EmailGQL)
 export class EmailResolver {
   constructor(private readonly emailService: EmailService) {}
 
   @Mutation(() => EmailGQL)
-  async sendEmail(@Args('input') input: SendEmailInput, @Info() info: Record<string, any>): Promise<EmailGQL> {
-        const keys = graphqlFields(info);
-
-    return this.emailService.sendEmail(input, keys);
+  sendEmail(
+    @Args('input') input: SendEmailInput,
+    @Fields() columns: string[]
+  ): Promise<EmailGQL | any> {
+    return  this.emailService.sendEmail(input, columns);
   }
 }

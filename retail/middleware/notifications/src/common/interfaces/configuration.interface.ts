@@ -68,6 +68,12 @@ export interface iFIREBASE {
   PROJECT_ID: string
 }
 
+export interface iHTTP {
+  TIMEOUT: number,
+  MAXDIRECTS: number
+}
+
+
 export interface iConfig {
   /** Application Details */
   APP: iAPP;
@@ -80,6 +86,7 @@ export interface iConfig {
   SMS?: iSMS;
   EMAILSENDER?: iEMAILSENDER;
   FIREBASE?: iFIREBASE;
+  HTTP: iHTTP;
   /**
    * The log level to use.
    * @example 'verbose', 'info', 'warn', 'error'
