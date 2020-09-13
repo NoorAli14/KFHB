@@ -1,38 +1,32 @@
 import { Injectable } from '@nestjs/common';
 import { TABLE, STATUS } from '@rubix/common/constants';
-import { Country } from '@app/v1/countries/country.modal'
+import { Nationality } from '@app/v1/nationalities/nationality.modal';
 import { BaseRepository } from './base.repository';
 
 @Injectable()
-export class CountryRepository extends BaseRepository {
+export class NationalityRepository extends BaseRepository {
   private readonly __attributes: string[] = [
     'id',
     'name',
-    'iso_code',
-    'continent_code',
-    'phone_code',
-    'currency_code',
+    'country_code',
     'status',
     'created_by',
     'updated_by',
     'created_on',
     'updated_on',
   ]
-
   constructor() {
-    super(TABLE.COUNTRY);
+    super(TABLE.NATIONALITY);
   }
-
-  async list(): Promise<Country[]> {
-    return this.connection(TABLE.COUNTRY).select(this.__attributes)
+  async list(): Promise<Nationality[]> {
+    return this.connection(TABLE.NATIONALITY).select(this.__attributes)
       .where({
         status: STATUS.ACTIVE,
         deleted_on: null,
       })
       .orderBy('name', 'asc');
   }
-
-  async findById(id: string): Promise<Country> {
+  async findById(id: string): Promise<Nationality> {
     return super.findOne({
       id,
       status: STATUS.ACTIVE,
