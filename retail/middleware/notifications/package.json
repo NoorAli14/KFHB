@@ -92,6 +92,15 @@
     "hooks": {}
   },
   "jest": {
+    "moduleDirectories": [
+      "node_modules",
+      "src"
+    ],
+    "globals": {
+      "ts-jest": {
+        "tsConfig": "tsconfig.test.json"
+      }
+    },
     "moduleFileExtensions": [
       "js",
       "json",
