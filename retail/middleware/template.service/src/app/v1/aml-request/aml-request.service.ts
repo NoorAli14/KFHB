@@ -3,12 +3,20 @@ import { NewAlmRequestInput } from './aml-request-dot';
 import { AmlRequest } from './aml.request.model';
 import { AmlRequestRepository } from '@core/repository/aml-request-repository';
 
+import { GqlClientService, toGraphql } from '@common/index';
+
 @Injectable()
 export class AmlRequestService {
-  constructor(private readonly amlRequestDB: AmlRequestRepository) {}
+  constructor(
+    private readonly gqlClient: GqlClientService,
+    private readonly amlRequestDB: AmlRequestRepository,
+  ) {}
   //Get customer details
-  async findUserById(customer_id: string): Promise<any> {
+  async findUserById(user_id: string): Promise<any> {
     // Here we call the identity service to fetch user details
+    const params = `query {
+      result: findCustomerById(id: ${user_id})
+    }`;
     return;
   }
 

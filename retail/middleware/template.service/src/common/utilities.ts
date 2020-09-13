@@ -14,6 +14,10 @@ export function graphqlFields(info: Record<string, unknown>): string[] {
   return keys;
 }
 
+export const toGraphql = (input: { [key: string]: any }): string => {
+  return JSON.stringify(input).replace(/\"([^(\")"]+)\":/g, '$1:');
+};
+
 export const uuidV4 = (): string => {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
     const r = (Math.random() * 16) | 0,
