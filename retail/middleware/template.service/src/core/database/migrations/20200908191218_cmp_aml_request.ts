@@ -8,10 +8,14 @@ export async function up(knex: Knex): Promise<void> {
       .primary()
       .defaultTo(knex.raw(DATABASE_UUID_METHOD));
 
+    table.uuid('tenent_id').notNullable();
     table.uuid('customer_id').notNullable();
+
     table.string('aml_text');
     table.string('remarks');
+
     table.string('status');
+    table.string('request_reference');
 
     table.timestamp('created_on').defaultTo(knex.fn.now());
     table.string('created_by');

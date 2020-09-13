@@ -7,7 +7,8 @@ export async function up(knex: Knex): Promise<void> {
       .uuid('id')
       .primary()
       .defaultTo(knex.raw(DATABASE_UUID_METHOD));
-    table.string('request_reference');
+
+    table.uuid('request_id');
     table.string('response_status');
 
     table.timestamp('response_on');
@@ -21,7 +22,7 @@ export async function up(knex: Knex): Promise<void> {
 
     table.timestamp('deleted_on');
     table.string('deleted_by');
-    table.uuid('request_id');
+
     table
       .foreign('request_id')
       .references('id')
