@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigurationService } from '../../../common/configuration/configuration.service';
 import * as admin from 'firebase-admin';
+import { FCMNotification } from '@rubix/common/interfaces/connections.interface';
 
 @Injectable()
 export class FirebaseService {
@@ -13,7 +14,7 @@ export class FirebaseService {
       }),
     });
   }
-  public async send(obj: any): Promise<any> {
+  public async send(obj: FCMNotification): Promise<any> {
     return await admin.messaging().send(obj);
   }
 }
