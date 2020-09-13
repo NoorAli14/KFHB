@@ -12,6 +12,7 @@
                     background: mat-color($fuse-navy, 600);
                 } @else {
                     background: map-get($background, card);
+              
                 }
             }
         }
@@ -22,7 +23,7 @@
 @mixin app-auth-form-theme($theme) {
     .auth-container {
         width: 100%;
-        background: url('/assets/images/backgrounds/dark-material-bg.jpg') no-repeat;
+        background-image: linear-gradient(150deg, #197586 51%, #3CA3B5 75%);
         background-size: cover;
 
         .auth-form-wrapper {
@@ -46,7 +47,7 @@
                 }
 
                 .logo {
-                    width: 100px;
+                    width: 70px;
                     margin: 32px auto;
                 }
 

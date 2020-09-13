@@ -10,7 +10,7 @@
             <!-- TITLE -->
             <div class="logo mb-24 mb-md-0" fxLayout="row" fxLayoutAlign="start center">
                 <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
-                    mobile_screen_share
+                    refresh
                 </mat-icon>
                 <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
                     Referrals
@@ -48,9 +48,11 @@
 
                             </span>
                         </span>
+
                         <ng-template #defaultText>
                             <app-default-text></app-default-text>
                         </ng-template>
+
                         <ng-template #action>
                             <mat-icon appPermission [permissions]="userPermissions" matTooltip="Delete user"
                                 [type]="'delete'" color="warn" type="button"
@@ -66,6 +68,7 @@
                         <ng-template #date>
                             {{element[camelToSnakeCase(key)] | date:'mediumDate'}}
                         </ng-template>
+
                     </mat-cell>
                 </ng-container>
                 <!-- -->

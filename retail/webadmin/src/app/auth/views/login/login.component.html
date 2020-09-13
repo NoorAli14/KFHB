@@ -1,85 +1,48 @@
 <div class="auth-container" fxLayout="column">
-    <div
-        class="auth-form-wrapper"
-        fxLayout="column"
-        fxLayoutAlign="center center"
-    >
-        <div
-            class="auth-form"
-            [@animate]="{
+    <div class="auth-form-wrapper" fxLayout="column" fxLayoutAlign="center center">
+        <div class="auth-form" [@animate]="{
                 value: '*',
                 params: { duration: '300ms', y: '100px' }
-            }"
-        >
+            }">
             <div class="logo">
-                <img src="assets/images/logos/fuse.svg" />
+                <img src="assets/images/logos/rubix-icon.png" />
             </div>
 
             <div class="title">LOGIN TO YOUR ACCOUNT</div>
             <app-message-box [type]="errorType" [message]="responseMessage"></app-message-box>
             <br>
-            <form
-                name="loginForm"
-                [formGroup]="loginForm"
-                (ngSubmit)="onSubmit()"
-                novalidate
-            >
+            <form name="loginForm" [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
                 <mat-form-field appearance="outline">
                     <mat-label>Email</mat-label>
                     <input matInput formControlName="email" />
                     <mat-icon matSuffix class="secondary-text">mail</mat-icon>
                     <mat-error>
-                        <app-mat-error
-                            [control]="loginForm.get('email')"
-                        ></app-mat-error>
+                        <app-mat-error [control]="loginForm.get('email')"></app-mat-error>
                     </mat-error>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
                     <mat-label>Password</mat-label>
-                    <input
-                        matInput
-                        type="password"
-                        formControlName="password"
-                    />
-                    <mat-icon matSuffix class="secondary-text"
-                        >vpn_key</mat-icon
-                    >
+                    <input matInput type="password" formControlName="password" />
+                    <mat-icon matSuffix class="secondary-text">vpn_key</mat-icon>
                     <mat-error>
-                        <app-mat-error
-                            [control]="loginForm.get('password')"
-                        ></app-mat-error>
+                        <app-mat-error [control]="loginForm.get('password')"></app-mat-error>
                     </mat-error>
                 </mat-form-field>
 
-                <div
-                    class="remember-forgot-password"
-                    fxLayout="row"
-                    fxLayout.xs="column"
-                    fxLayoutAlign="space-between center"
-                >
+                <div class="remember-forgot-password" fxLayout="row" fxLayout.xs="column"
+                    fxLayoutAlign="space-between center">
                     <mat-checkbox class="remember-me" aria-label="Remember Me">
                         Remember Me
                     </mat-checkbox>
 
-                    <a
-                        class="forgot-password"
-                        mat-button
-                        color="warn"
-                        [routerLink]="'/auth/forgot-password'"
-                    >
+                    <a class="forgot-password" mat-button color="warn" [routerLink]="'/auth/forgot-password'">
                         Forgot Password?
                     </a>
                 </div>
 
-                <button
-                    type="submit"
-                    mat-raised-button
-                    color="accent"
-                    class="submit-button"
-                    aria-label="LOG IN"
-                    [disabled]="loginForm.invalid"
-                >
+                <button type="submit" mat-raised-button color="accent" class="submit-button" aria-label="LOG IN"
+                    [disabled]="loginForm.invalid">
                     LOGIN
                 </button>
             </form>
@@ -88,33 +51,17 @@
             </div>
 
             <div fxLayout="row" fxLayoutAlign="space-between">
-                <button
-                    mat-raised-button
-                    class="google"
-                    style="background-color: #d73d32; color: white;"
-                >
+                <button mat-raised-button class="google" style="background-color: #d73d32; color: white;">
                     Google
                 </button>
 
-                <button
-                    mat-raised-button
-                    class="facebook"
-                    style="background-color: rgb(63, 92, 154); color: white;"
-                >
+                <button mat-raised-button class="facebook" style="background-color: rgb(63, 92, 154); color: white;">
                     Facebook
                 </button>
-                <button
-                    mat-raised-button
-                    class="github"
-                    style="background-color: black; color: white;"
-                >
+                <button mat-raised-button class="github" style="background-color: black; color: white;">
                     Github
                 </button>
-                <button
-                    mat-raised-button
-                    class="twitter"
-                    style="background-color: #2196f3; color: white;"
-                >
+                <button mat-raised-button class="twitter" style="background-color: #2196f3; color: white;">
                     Twitter
                 </button>
             </div>
