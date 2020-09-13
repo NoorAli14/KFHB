@@ -5,7 +5,7 @@ import { Field, ObjectType } from '@nestjs/graphql';
 export class SMS {
   @Field()
   to: string;
-  
+
   @Field()
   body: string;
 }

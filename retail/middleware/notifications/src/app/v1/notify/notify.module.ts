@@ -5,13 +5,8 @@ import { NotifyService } from './notify.service';
 import { NotifyResolver } from './notify.resolver';
 import { FirebaseModule } from '@rubix/common/connections/firebase/firebase.module';
 
-
 @Module({
-  imports: [RepositoryModule,FirebaseModule],
-  providers: [
-    NotifyService,
-    NotifyRepository,
-    NotifyResolver,
-  ],
+  imports: [RepositoryModule, FirebaseModule],
+  providers: [NotifyService, NotifyRepository, NotifyResolver],
 })
 export class NotifyModule {}
