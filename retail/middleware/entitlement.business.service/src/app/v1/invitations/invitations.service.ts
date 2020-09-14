@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { GqlClientService } from '@common/index';
+import { GqlClientService, USER_STATUSES } from '@common/index';
 import { NotificationsService } from '@app/v1/notifications/notifications.service';
 import { UserService } from '@app/v1/users/users.service';
 import { UpdateUserDto } from '@app/v1/users/user.dto';
@@ -28,14 +28,14 @@ export class InvitationsService {
   }
 
   async acceptInvitation(id: string, input: any): Promise<User> {
-    input.status = 'ACTIVE';
+    input.status = USER_STATUSES.ACTIVE;
     input.invitation_token = null;
     input.invitation_token_expiry = null;
     return this.userService.update(id, input);
   }
 
   async resendInvitationLink(userId: string): Promise<any> {
-    const params: string = `query {
+    const params: string = `mutation {
       result: resetInvitationToken(id: "${userId}"){
         id
         email

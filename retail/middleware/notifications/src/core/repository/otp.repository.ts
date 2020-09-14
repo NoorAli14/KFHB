@@ -8,8 +8,6 @@ export class OtpRepository extends BaseRepository {
     'id',
     'user_id',
     'delivery_mode',
-    'mobile_no',
-    'email',
     'otp_code',
     'status',
     'created_on',
@@ -21,10 +19,10 @@ export class OtpRepository extends BaseRepository {
 
   async findByUserId(user_id: string): Promise<any> {
     return await this.connection
-      .table(this._tableName)
+      .table(this.tableName)
       .where('user_id', user_id)
       .select(this.columns)
       .first()
-      .orderBy('id', 'desc');
+      .orderBy('created_on', 'desc');
   }
 }

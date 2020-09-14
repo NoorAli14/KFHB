@@ -2,6 +2,16 @@ import * as path from 'path';
 import { v4 as uuidV4 } from 'uuid';
 import * as Crypto from 'crypto';
 
+export const strToBase64 = (data: any): string => {
+  const buff: Buffer = new Buffer(data);
+  return buff.toString('base64');
+};
+
+export const base64ToStr = (data: string): any => {
+  let buff: Buffer = new Buffer(data, 'base64');
+  return buff.toString('ascii');
+};
+
 export const toGraphql = (input: { [key: string]: any }): string => {
   return JSON.stringify(input).replace(/\"([^(\")"]+)\":/g, '$1:');
 };

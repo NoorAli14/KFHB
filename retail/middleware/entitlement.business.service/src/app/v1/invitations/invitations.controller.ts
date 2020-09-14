@@ -149,7 +149,7 @@ export class InvitationsController {
     const user = await this.userService.findByInvitationToken(token);
     if (!user) {
       throw new NotFoundException('User Not Found');
-    } else if (user.status != 'PENDING') {
+    } else if (user.status != USER_STATUSES.PENDING) {
       throw new BadRequestException('User has been already onboard.');
     }
 
@@ -188,7 +188,7 @@ export class InvitationsController {
     const user = await this.userService.findOne(user_id, `{id email status}`);
     if (!user) {
       throw new NotFoundException('User Not Found');
-    } else if (user.status != 'PENDING') {
+    } else if (user.status != USER_STATUSES.PENDING) {
       throw new BadRequestException('User has been already onboard.');
     }
     return this.invitationService.resendInvitationLink(user.id);

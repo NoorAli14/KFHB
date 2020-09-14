@@ -7,10 +7,15 @@ const routes: Routes = [
         loadChildren: () =>
             import("./user/user.module").then((m) => m.UserModule),
     },
+    // {
+    //     path: "config",
+    //     loadChildren: () =>
+    //         import("./config/config.module").then((m) => m.ConfigModule),
+    // },
     {
-        path: "config",
+        path: "role",
         loadChildren: () =>
-            import("./config/config.module").then((m) => m.ConfigModule),
+            import("./role/role.module").then((m) => m.RoleModule),
     },
 ];
 

@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { DataLoaderInterceptor } from 'nestjs-dataloader';
 import { RepositoryModule } from '@rubix/core/repository/repository.module';
-
-const loaders: any = [];
+import { DocumentDataLoader, DocumentLoader } from './document.loader';
+const loaders: any = [DocumentDataLoader, DocumentLoader];
 
 @Module({
   imports: [RepositoryModule],

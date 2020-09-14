@@ -1,6 +1,7 @@
 import * as Knex from "knex";
 import { TABLE, CREATED_BY, UPDATED_BY } from '@rubix/common/constants';
 import { countries } from "@common/assets/countries";
+import { nationalities } from "@common/assets/nationalities";
 
 export async function seed(knex: Knex): Promise<any> {
     // Deletes ALL existing entries
@@ -13,7 +14,7 @@ export async function seed(knex: Knex): Promise<any> {
             continent_code: country.continent,
             capital_name: country.capital,
             phone_code: country.phone,
-            currency_code: country.currency,
+            nationality: nationalities[key]?.nationality,
             created_by: CREATED_BY.SYSTEM,
             updated_by: UPDATED_BY.SYSTEM,
         }
