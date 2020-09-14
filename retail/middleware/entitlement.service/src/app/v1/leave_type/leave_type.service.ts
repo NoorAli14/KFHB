@@ -2,19 +2,18 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 
 import { MESSAGES, STATUS } from '@common/constants';
 import { KeyValInput } from '@common/inputs/key-val.input';
-import { HolidayRepository } from '@core/repository/holiday.repository';
-import {validateDate} from '@common/validator';
+import {LeaveTypeRepository} from '@core/repository/leave_type.repository';
 
 @Injectable()
-export class HolidaysService {
-  constructor(private holidayRepository: HolidayRepository) {}
+export class Leave_typeService {
+  constructor(private leaveTypeRepository: LeaveTypeRepository) {}
 
   async list(keys: string[], paginationParams: Record<string, any>): Promise<any> {
-    return this.holidayRepository.listWithPagination(paginationParams, keys, {deleted_on : null});
+    return this.leaveTypeRepository.listWithPagination(paginationParams, keys, {deleted_on : null});
   }
 
   async findById(id: string, keys?: string[]): Promise<any> {
-    return this.holidayRepository.findOne({ id: id, deleted_on : null }, keys);
+    return this.leaveTypeRepository.findOne({ id: id, deleted_on : null }, keys);
   }
 
   async findByProperty(checks: KeyValInput[], keys?: string[]): Promise<any> {
@@ -23,7 +22,7 @@ export class HolidaysService {
       conditions[check.record_key] = check.record_value;
     });
     conditions['deleted_on'] = null;
-    return this.holidayRepository.findBy(conditions, keys);
+    return this.leaveTypeRepository.findBy(conditions, keys);
   }
 
   async update(
@@ -31,14 +30,13 @@ export class HolidaysService {
     newObj: Record<string, any>,
     keys?: string[],
   ): Promise<any> {
-    if (newObj.holiday_date) newObj.holiday_date = validateDate(newObj.holiday_date).substring(0,10);
     if(newObj.status && !STATUS[newObj.status]){
       throw new HttpException({
         status: HttpStatus.BAD_REQUEST,
         error: MESSAGES.INVALID_STATUS,
       }, HttpStatus.BAD_REQUEST);
     }
-    const [result] = await this.holidayRepository.update({ id: id, deleted_on : null }, newObj, keys);
+    const [result] = await this.leaveTypeRepository.update({ id: id, deleted_on : null }, newObj, keys);
     if(!result) {
       throw new HttpException({
         status: HttpStatus.BAD_REQUEST,
@@ -49,7 +47,6 @@ export class HolidaysService {
   }
 
   async create(newObj: Record<string, any>, keys?: string[]): Promise<any> {
-    newObj.holiday_date = validateDate(newObj.holiday_date).substring(0,10);
     if (!newObj.status) {
       newObj.status = STATUS.ACTIVE;
     } else if(!STATUS[newObj.status]){
@@ -58,7 +55,7 @@ export class HolidaysService {
         error: MESSAGES.INVALID_STATUS,
       }, HttpStatus.BAD_REQUEST);
     }
-    const result = await this.holidayRepository.create(newObj, keys);
+    const result = await this.leaveTypeRepository.create(newObj, keys);
     if(result?.length > 0) {
       return result[0]
     } else {

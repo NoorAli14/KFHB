@@ -6,6 +6,7 @@ import {HolidayRepository, LeaveRepository, UserRepository, WorkingDaysRepositor
 import {RoleRepository} from "@core/repository/role.repository";
 import {ModuleRepository} from "@core/repository/module.repository";
 import {PermissionRepository} from "@core/repository/permission.repository";
+import {LeaveTypeRepository} from '@core/repository/leave_type.repository';
 
 const repos: any = [
   UserRepository,
@@ -14,7 +15,9 @@ const repos: any = [
   PermissionRepository,
   WorkingDaysRepository,
   HolidayRepository,
-  LeaveRepository];
+  LeaveRepository,
+  LeaveTypeRepository,
+];
 
 @Module({
   imports: [

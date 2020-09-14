@@ -3,7 +3,7 @@ import {Resolver, Query, Mutation, Args, Context, GraphQLExecutionContext} from 
 import { KeyValInput } from '@common/inputs/key-val.input';
 import {Holiday, HolidayWithPagination} from '@app/v1/holiday/holiday.model';
 import { HolidaysService } from '@app/v1/holiday/holidays.service';
-import { HolidayInput } from '@app/v1/holiday/holiday.dto';
+import {HolidayCreateInput, HolidayInput} from '@app/v1/holiday/holiday.dto';
 import {Fields} from '@common/decorators';
 import {HttpException, HttpStatus} from '@nestjs/common';
 import {MESSAGES, STATUS} from '@common/constants';
@@ -41,7 +41,7 @@ export class HolidaysResolver {
 
   @Mutation(() => Holiday)
   async addHoliday(
-    @Args('input') input: HolidayInput,
+    @Args('input') input: HolidayCreateInput,
     @Fields() columns: string[],
     @Context() context: GraphQLExecutionContext
   ): Promise<Holiday> {

@@ -53,11 +53,9 @@ input ForgotPasswordInput {
 
 type Holiday {
   id: ID
-  calendar_day: String
-  holiday_type: String
-  holiday_details: String
+  holiday_date: String
+  holiday_description: String
   remarks: String
-  is_repetitive: Float
   status: String
   created_on: String
   created_by: String
@@ -67,11 +65,16 @@ type Holiday {
   deleted_by: String
 }
 
+input HolidayCreateInput {
+  holiday_date: String!
+  holiday_description: String
+  remarks: String
+  status: String
+}
+
 input HolidayInput {
-  calendar_day: String!
-  holiday_type: String
-  holiday_details: String
-  is_repetitive: Float
+  holiday_date: String
+  holiday_description: String
   remarks: String
   status: String
 }
@@ -89,9 +92,10 @@ input KeyValInput {
 type Leave {
   id: ID
   user_id: String
-  calendar_day: String
-  holiday_type: String
-  holiday_details: String
+  leave_date: String
+  leave_duration: String
+  leave_type: String
+  leave_type_id: String
   remarks: String
   is_repetitive: Float
   status: String
@@ -105,22 +109,36 @@ type Leave {
 
 input LeaveCreateInput {
   user_id: String!
-  calendar_day: String!
-  holiday_type: String
-  holiday_details: String
+  leave_date: String!
+  leave_duration: String!
+  leave_type: String!
+  leave_type_id: String!
   is_repetitive: Float
   remarks: String
   status: String
 }
 
 input LeaveInput {
-  user_id: String!
-  calendar_day: String!
-  holiday_type: String
-  holiday_details: String
+  user_id: String
+  leave_date: String
+  leave_duration: String
+  leave_type: String
+  leave_type_id: String
   is_repetitive: Float
   remarks: String
   status: String
+}
+
+type LeaveType {
+  id: ID
+  leave_type: String
+  status: String
+  created_on: String
+  created_by: String
+  updated_on: String
+  updated_by: String
+  deleted_on: String
+  deleted_by: String
 }
 
 input LoginInput {
@@ -139,8 +157,14 @@ type Module {
   permissions: [Permission!]!
 }
 
-input ModuleInput {
+input ModuleCreateInput {
   name: String!
+  parent_id: String
+  status: String
+}
+
+input ModuleInput {
+  name: String
   parent_id: String
   status: String
 }
@@ -151,10 +175,10 @@ type Mutation {
   addUser(input: CreateUserInput!): User!
   updateUser(input: UpdateUserInput!, id: String!): User!
   deleteUser(id: String!): Boolean!
-  addRole(input: RoleInput!): Role!
+  addRole(input: RoleCreateInput!): Role!
   updateRole(input: RoleInput!, id: String!): Role!
   deleteRole(id: String!): Boolean!
-  addModule(input: ModuleInput!): Module!
+  addModule(input: ModuleCreateInput!): Module!
   updateModule(input: ModuleInput!, id: String!): Module!
   deleteModule(id: String!): Boolean!
   addPermission(input: PermissionInput!): Permission!
@@ -164,7 +188,7 @@ type Mutation {
   addWorkingDay(input: WorkingDayInput!): WorkingDay!
   updateWorkingDay(input: WorkingDayInput!, id: String!): WorkingDay!
   deleteWorkingDay(id: String!): Boolean!
-  addHoliday(input: HolidayInput!): Holiday!
+  addHoliday(input: HolidayCreateInput!): Holiday!
   updateHoliday(input: HolidayInput!, id: String!): Holiday!
   deleteHoliday(id: String!): Boolean!
   addLeave(input: LeaveCreateInput!): Leave!
@@ -236,8 +260,15 @@ type Role {
   modules: [Module!]!
 }
 
-input RoleInput {
+input RoleCreateInput {
   name: String!
+  description: String
+  status: String
+  permissions: [IdsInput!]
+}
+
+input RoleInput {
+  name: String
   description: String
   status: String
   permissions: [IdsInput!]
