@@ -1,7 +1,4 @@
-import {
-  IsOptional,
-  MaxLength,
-} from 'class-validator';
+import { MaxLength } from 'class-validator';
 
 import { Field, InputType } from '@nestjs/graphql';
 

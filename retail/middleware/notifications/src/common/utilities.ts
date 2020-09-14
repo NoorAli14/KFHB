@@ -1,7 +1,6 @@
 import * as path from 'path';
 import * as glob from 'glob';
-import { HEADER_NAMES } from './constants';
-import * as moment from 'moment'
+import * as randomize from 'randomatic';
 
 // requires all the files which conform to the given pattern and returns the list of defaults exports
 export const requireDefaults = (pattern: string): any => {
@@ -67,14 +66,14 @@ export const generateRandomString = (length: number): string => {
     .substr(0, length);
 };
 
-export const getMutateProps = (key: string, headers: any, model: any): any => {
-  const x_user_id = headers[HEADER_NAMES.X_USER_ID];
-  const date = moment().format();
-  model[`${key}_by`] = x_user_id;
-  model[`${key}_on`] = date;
-  return model
-};
+export const redomize = async (opts: any = {pattern: "", length: null}): Promise<string> => {
+  const otp = randomize(opts.pattern, opts.length);
+  return otp;
+}
 
-export const getTenantID = (headers: any): any => {
-  return headers[HEADER_NAMES.X_TENANT_ID];
-};
+export const calculateDuration = (date: Date): number => {
+  let diff = (new Date().getTime() - date.getTime()) / 1000;
+  diff /= 60;
+  diff = Math.abs(Math.round(diff));
+  return diff;
+}

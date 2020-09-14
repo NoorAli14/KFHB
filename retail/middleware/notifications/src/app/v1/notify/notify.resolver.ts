@@ -1,31 +1,19 @@
-import {
-  Resolver,
-  Mutation,
-  Args,
-  GraphQLExecutionContext,
-  Context,
-} from '@nestjs/graphql';
-import { Fields } from '@common/decorators';
+import { Resolver, Mutation, Args } from '@nestjs/graphql';
+import { Fields, CurrentUser } from '@common/decorators';
 import { Notify } from './notify.model';
 import { NotifyService } from './notify.service';
 import { NotifyInput } from './notify.dto';
-import { getTenantID, getMutateProps } from '@rubix/common/utilities';
 
 @Resolver(Notify)
 export class NotifyResolver {
-
-  constructor(
-    private readonly notifyService: NotifyService,
-  ) {}
+  constructor(private readonly notifyService: NotifyService) {}
 
   @Mutation(() => Notify)
   sendPushNotification(
     @Args('input') input: NotifyInput,
     @Fields() columns: string[],
-    @Context() context: GraphQLExecutionContext
+    @CurrentUser() user: { [key: string]: any },
   ): Promise<Notify> {
-    // input['tenant_id'] = getTenantID(context['req'].headers);
-    input = getMutateProps('created', context['req'].headers, input);
-    return this.notifyService.sendPushNotification(input, columns);
+    return this.notifyService.sendPushNotification(user, input, columns);
   }
 }

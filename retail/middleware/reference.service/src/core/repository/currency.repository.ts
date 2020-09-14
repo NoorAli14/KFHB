@@ -9,12 +9,8 @@ export class CurrencyRepository extends BaseRepository {
     'id',
     'name',
     'iso_code',
-    'country_code',
-    'status',
-    'created_by',
-    'updated_by',
-    'created_on',
-    'updated_on',
+    'numeric_code',
+    'minor_unit',
   ]
   constructor() {
     super(TABLE.CURRENCY);

@@ -183,8 +183,8 @@ export class ConfigurationService {
 
   public get SMS(): iSMS {
     return {
-      from: this.get('ENV_RBX_SMS_API_URL', DEFAULT_ENV.SMS.from),
-      api_url: this.get('ENV_RBX_SMS_SENDER', DEFAULT_ENV.SMS.api_url),
+      from: this.get('ENV_RBX_SMS_SENDER', DEFAULT_ENV.SMS.from),
+      api_url: this.get('ENV_RBX_SMS_API_URL', DEFAULT_ENV.SMS.api_url),
     };
   }
 

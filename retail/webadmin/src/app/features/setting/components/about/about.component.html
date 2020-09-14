@@ -10,24 +10,24 @@
                 <div fxLayout="column" fxFlex="48">
                     <div class="info-line">
                         <div class="title">User Name</div>
-                        <div class="info">{{user.username?user.username : 'N/A'}}</div>
+                        <div class="info" *ngIf="user.username ; else defaultText">{{user.username}}</div>
                     </div>
                     <div class="info-line">
                         <div class="title">First Name</div>
-                        <div class="info">{{user.firstName?user.firstName : 'N/A'}}</div>
+                        <div class="info" *ngIf="user.firstName ; else defaultText">{{user.firstName }}</div>
                     </div>
 
                     <div class="info-line">
                         <div class="title">Middle Name</div>
-                        <div class="info">{{user.middleName?user.middleName : 'N/A'}}</div>
+                        <div class="info" *ngIf="user.middleName ; else defaultText">{{user.middleName}}</div>
                     </div>
                     <div class="info-line">
                         <div class="title">Last Name</div>
-                        <div class="info">{{user.lastName?user.lastName : 'N/A'}}</div>
+                        <div class="info" *ngIf="user.lastName ; else defaultText">{{user.lastName}}</div>
                     </div>
                     <div class="info-line">
                         <div class="title">Email</div>
-                        <div class="info">{{user.email?user.email : 'N/A'}}</div>
+                        <div class="info" *ngIf="user.email ; else defaultText">{{user.email}}</div>
                     </div>
 
                    
@@ -35,27 +35,31 @@
                 <div fxLayout="column" fxFlex="48">
                     <div class="info-line">
                         <div class="title">Gender</div>
-                        <div class="info">{{user.gender?user.gender : 'N/A'}}</div>
+                        <div class="info" *ngIf="user.gender ; else defaultText">{{user.gender}}</div>
                     </div>
 
                     <div class="info-line">
                         <div class="title">Nationality</div>
-                        <div class="info">{{user.nationalityId?getNationality(user.nationalityId) : 'N/A'}}</div>
+                        <div class="info" *ngIf="user.nationalityId ; else defaultText">{{getNationality(user.nationalityId)}}</div>
                     </div>
 
                     <div class="info-line">
                         <div class="title">Date of Birth</div>
-                        <div class="info">{{user.dateOfBirth?user.dateOfBirth : 'N/A'}}</div>
+                        <div class="info" *ngIf="user.dateOfBirth ; else defaultText">{{user.dateOfBirth | date:'mediumDate'}}</div>
                     </div>
                     <div class="info-line">
                         <div class="title">Contact</div>
-                        <div class="info">{{user.contactNo?user.contactNo : 'N/A'}}</div>
+                        <div class="info" *ngIf="user.contactNo ; else defaultText">{{user.contactNo}}</div>
                     </div>
 
                     <div class="info-line">
                         <div class="title">Created On</div>
-                        <div class="info">{{user.createdOn?user.createdOn : 'N/A'}}</div>
+                        <div class="info" *ngIf="user.createdOn ; else defaultText">{{user.createdOn | date:'mediumDate'}}</div>
                     </div>
+
+                    <ng-template #defaultText>
+                        <app-default-text></app-default-text>
+                    </ng-template>
                 </div>
             </div>
         </div>

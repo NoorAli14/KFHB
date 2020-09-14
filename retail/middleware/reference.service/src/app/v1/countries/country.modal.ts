@@ -49,37 +49,23 @@ export class Country {
   phone_code: string;
 
   @ApiProperty({
-    title: 'Currency Code',
-    description: 'Currency code of the country',
-    example: 'PKR',
+    title: 'Nationality Name',
+    description: 'Nationality of the country',
+    example: 'Pakistani',
     required: true,
   })
-  contact_no: string;
+  nationality: string;
 
-  @ApiProperty({
-    description: 'Country status',
-    required: false,
-  })
   status: string;
 
-  @ApiProperty({ required: false })
   created_by: string;
 
-  @ApiProperty({ required: false })
   updated_by: string;
 
   deleted_by: string;
 
-  @ApiProperty({
-    description: 'timestamp without time zone',
-    required: false,
-  })
   created_on: Date;
 
-  @ApiProperty({
-    description: 'timestamp without time zone',
-    required: false,
-  })
   updated_on: Date;
 
   deleted_on: Date;

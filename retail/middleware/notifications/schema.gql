@@ -79,8 +79,6 @@ type Otp {
   id: String!
   user_id: String!
   delivery_mode: String!
-  mobile_no: String!
-  email: String!
   otp_code: String!
   status: String!
   created_on: DateTime!

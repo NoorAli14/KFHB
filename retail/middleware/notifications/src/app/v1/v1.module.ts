@@ -8,7 +8,6 @@ import { CommonModule } from '@common/common.module';
 import { ConfigurationService } from '@common/configuration/configuration.service';
 import { NotifyModule } from './notify/notify.module';
 
-
 @Module({
   imports: [
     EmailModule,

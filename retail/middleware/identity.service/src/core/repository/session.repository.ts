@@ -8,6 +8,7 @@ export class SessionRepository extends BaseRepository {
     'id',
     'check_id',
     'target_user_id',
+    'fido_reg_req_id',
   ];
   constructor() {
     super(TABLE.SESSION);

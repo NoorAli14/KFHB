@@ -42,7 +42,7 @@ export class AuthService {
   }
 
   getToken(userId): string {
-    const payload = { id: userId, type: 'user' };
+    const payload = { id: userId, tenant: userId, type: 'user' };
     return this.jwtService.sign(payload, {
       secret: this.configService.JWT.SECRET,
       expiresIn: `${this.configService.JWT.EXPIRY_SECONDS}s`,

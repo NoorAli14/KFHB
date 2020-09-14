@@ -1,16 +1,37 @@
 import { MaxLength, IsString, IsNotEmpty } from 'class-validator';
 import { Field, InputType } from '@nestjs/graphql';
 
-@InputType('CreateSessionInput')
+@InputType('UploadDocumentInput')
 export class NewDocumentInput {
-  @Field({ nullable: true })
+  @Field()
+  @IsString()
+  @IsNotEmpty()
+  type: string;
+
+  @Field()
+  @IsString()
+  @IsNotEmpty()
+  file: string;
+}
+
+@InputType('ProcessDocumentInput')
+export class ProcessDocumentInput {
+  @Field()
   @IsString()
   @IsNotEmpty()
   @MaxLength(36)
   type: string;
+}
 
-  @Field({ nullable: true })
+@InputType('PreviewDocumentInput')
+export class PreviewDocumentInput {
+  @Field()
   @IsString()
   @IsNotEmpty()
-  file: string;
+  customer_id: string;
+
+  @Field()
+  @IsString()
+  @IsNotEmpty()
+  attachment_id: string;
 }

@@ -1,97 +1,134 @@
-import { Injectable } from '@nestjs/common';
-import * as randomize from 'randomatic';
+import { Injectable, Logger } from '@nestjs/common';
+import { redomize, calculateDuration } from '@common/utilities';
 
 import { OtpRepository } from '@rubix/core/repository/';
 import { Otp, OTPResponse } from './otp.model';
 import { ConfigurationService } from '@rubix/common/configuration/configuration.service';
-import { httpClientService } from '@common/connections/httpclient/httpclient.service'
+import { HttpClientService } from '@common/connections/httpclient/httpclient.service';
 
 import { EmailService } from '../email/email.service';
 import { SMSService } from '../sms/sms.service';
- import { OTP_SMS_CONTENT } from '../sms/default_messages'
+import { OTP_SMS_CONTENT } from '../sms/default_messages';
 import {
   DEFAULT_OTP_EMAIL_TEMPLATE,
   DEFAULT_OTP_EMAIL_SUBJECT,
+  OTP_STATUSES,
+  DELIVERY_MODES,
 } from '@common/constants';
 
+interface iOtpInput {
+  user_id: string;
+  delivery_mode: string;
+  otp_code: string;
+  status: string;
+  created_by: string;
+  updated_by: string;
+  tenant_id: string;
+}
+
+interface iOtpGenerate {
+  pattern: string;
+  length: number;
+}
+
+interface iResponse {
+  status: number;
+  code: string;
+}
 @Injectable()
 export class OtpService {
+  private readonly __logger: Logger = new Logger(OtpService.name);
   constructor(
     private readonly otpDB: OtpRepository,
     private readonly _config: ConfigurationService,
     private readonly emailService: EmailService,
     private readonly smsService: SMSService,
-    private readonly httpClientService: httpClientService,
+    private readonly httpClientService: HttpClientService,
   ) {}
 
-  async verify(
-    otpOBJ: { [key: string]: any },
-    columns?: string[],
-  ): Promise<OTPResponse> {
+  async verify(otpOBJ: { [key: string]: any }): Promise<OTPResponse> {
+    const response: iResponse = {
+      status: 400,
+      code: '',
+    };
     // Find last record of OTP against user_id
     const data = await this.otpDB.findByUserId(otpOBJ.user_id);
-
-    if(!data || data == undefined)
-      return { status: 400, code: 'INVALID_USER'};
+    if (!data || data == undefined) {
+      response.code = 'INVALID_USER';
+      return response;
+    }
 
     // Check Already verified or not?
     if (data.status == 'varified') {
-      return { status: 400, code: 'OTP_ALREADY_VERIFIED' };
+      response.code = 'OTP_ALREADY_VERIFIED';
+      return response;
     }
 
     // check time expire or not?
-    var diff = (new Date().getTime() - data.created_on.getTime()) / 1000;
-    diff /= 60;
-    diff = Math.abs(Math.round(diff));
+    const duration = calculateDuration(data.created_on);
 
-    if (diff > this._config.OTP.duration) {
-      return { status: 400, code: 'OTP_EXPIRED' };
+    if (duration > this._config.OTP.duration) {
+      response.code = 'OTP_EXPIRED';
+      return response;
     }
 
     if (data.otp_code == otpOBJ.otp_code) {
-      const [otp] = await this.otpDB.update(
+      await this.otpDB.update(
         { id: data.id },
-        { status: 'varified', updated_on: new Date() },
+        { status: OTP_STATUSES.VERIFIED, updated_on: new Date() },
         ['id', 'status'],
       );
-      return { status: 200, code: 'OTP_VERIFIED' };
-    }
-    else{
-      return { status: 400, code: 'INVALID_OTP' };
+      response.code = 'OTP_VERIFIED';
+      response.status = 200;
+      return response;
+    } else {
+      response.code = 'INVALID_OTP';
+      return response;
     }
   }
 
   async create(
+    currentUser: { [key: string]: any },
     otpOBJ: { [key: string]: any },
     columns?: string[],
   ): Promise<Otp | any> {
-    if(this._config.OTP.OTP_BY_API){
-      
-      const params = {
-        pattern: this._config.OTP.pattern,
-        otp_length: this._config.OTP.otp_length
-      }
-      const apiObj = await this.httpClientService.send(this._config.OTP.API_URL, params);
-      if(!apiObj.data) throw new Error(apiObj);
-      // According to Orignal API Response, this assignment will be change.
-      otpOBJ.otp_code = apiObj.data.OTP;
-      console.log(apiObj.data)
-      
-    }else{
-      otpOBJ.otp_code = await randomize(
-        this._config.OTP.pattern,
-        this._config.OTP.otp_length,
+    this.__logger.log(`Start Generating OTP for user ID [${currentUser.id}]`);
+    const otpGenerate: iOtpGenerate = {
+      pattern: this._config.OTP.pattern,
+      length: this._config.OTP.otp_length,
+    };
+
+    const input: iOtpInput = {
+      status: OTP_STATUSES.PENDING,
+      created_by: currentUser.id,
+      updated_by: currentUser.id,
+      otp_code: null,
+      delivery_mode: otpOBJ.delivery_mode,
+      user_id: otpOBJ.user_id,
+      tenant_id: currentUser.id,
+    };
+
+    if (this._config.OTP.OTP_BY_API) {
+      const apiObj = await this.httpClientService.send(
+        this._config.OTP.API_URL,
+        otpGenerate,
       );
+      if (!apiObj.data) throw new Error(apiObj);
+      // According to Orignal API Response, this assignment will be change.
+      input.otp_code = apiObj.data.OTP;
+      console.log(apiObj.data);
+    } else {
+      input.otp_code = await redomize(otpGenerate);
     }
 
-    otpOBJ.status = this._config.OTP.status;
-    otpOBJ.created_on = new Date();
-    otpOBJ.tenent_id = otpOBJ.user_id;
-    otpOBJ.created_by = otpOBJ.user_id;
+    if (!input.otp_code) throw new Error('OTP_GENERATION_FAILED');
+    const promises = [this.otpDB.create(input, columns)];
 
-    const [otp] = await this.otpDB.create(otpOBJ, columns);
     // Send OTP Via email function call.
-    if (otp && (otpOBJ.delivery_mode == 'email' || otpOBJ.delivery_mode == 'both')) {
+    if (
+      otpOBJ.delivery_mode == DELIVERY_MODES.EMAIL ||
+      otpOBJ.delivery_mode == DELIVERY_MODES.BOTH
+    ) {
       const emailObj = {
         to: otpOBJ.email,
         subject: DEFAULT_OTP_EMAIL_SUBJECT,
@@ -100,17 +137,25 @@ export class OtpService {
           otp_code: otpOBJ.otp_code,
         },
       };
-      await this.emailService.sendEmail(emailObj, ['email']);
+      promises.push(this.emailService.sendEmail(emailObj));
     }
 
     // Send OTP via SMS function call.
-    if (otp && (otpOBJ.delivery_mode == 'mobile' || otpOBJ.delivery_mode == 'both')) {
+    if (
+      otpOBJ.delivery_mode == DELIVERY_MODES.MOBILE ||
+      otpOBJ.delivery_mode == DELIVERY_MODES.BOTH
+    ) {
       const smsObj = {
         to: otpOBJ.mobile_no,
-        body: OTP_SMS_CONTENT.replace('<otp_code>',otpOBJ.otp_code).replace('<user_id>', otpOBJ.user_id),
+        body: OTP_SMS_CONTENT.replace('<otp_code>', otpOBJ.otp_code).replace(
+          '<user_id>',
+          otpOBJ.user_id,
+        ),
       };
-      await this.smsService.sendSMS(smsObj, ['mobile_no']);
+      promises.push(this.smsService.sendSMS(smsObj));
     }
-    return otp;
+
+    const result = await Promise.all(promises);
+    return result[0][0];
   }
 }
