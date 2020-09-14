@@ -1,13 +1,27 @@
 import * as path from 'path';
+import * as glob from 'glob';
+import * as randomize from 'randomatic';
+
+// requires all the files which conform to the given pattern and returns the list of defaults exports
+export const requireDefaults = (pattern: string): any => {
+  return glob
+    .sync(pattern, { cwd: __dirname, absolute: true })
+    .map(require)
+    .map((imported: { default: any; }) => imported.default);
+};
 
 /**
- * graphqlKeys string[]
+ * graphqlFields string[]
  * @param info
  */
-export const graphqlKeys = (info: Record<string, any>): string[] => {
-  return info.fieldNodes[0].selectionSet.selections.map(
-    item => item.name.value,
-  );
+export const graphqlFields = (info: { [key: string]: any }): string[] => {
+  const keys = [];
+  info.fieldNodes[0].selectionSet.selections.forEach((item: { selectionSet: any; name: { value: any; }; }) => {
+    if (!item.selectionSet) {
+      keys.push(item.name.value);
+    }
+  });
+  return keys;
 };
 
 /**
@@ -51,3 +65,15 @@ export const generateRandomString = (length: number): string => {
     .replace(/[^a-zA-Z0-9]+/g, '')
     .substr(0, length);
 };
+
+export const redomize = async (opts: any = {pattern: "", length: null}): Promise<string> => {
+  const otp = randomize(opts.pattern, opts.length);
+  return otp;
+}
+
+export const calculateDuration = (date: Date): number => {
+  let diff = (new Date().getTime() - date.getTime()) / 1000;
+  diff /= 60;
+  diff = Math.abs(Math.round(diff));
+  return diff;
+}

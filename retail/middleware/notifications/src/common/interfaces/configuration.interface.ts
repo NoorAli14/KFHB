@@ -44,10 +44,35 @@ export interface iSMTP {
   auth: iSMTP_AUTH
 }
 
+export interface iOTP {
+  pattern: string,
+  otp_length: number,
+  status: string,
+  duration: number,
+  OTP_BY_API: boolean,
+  API_URL: string,
+}
+
+export interface iSMS {
+  from: string,
+  api_url: string
+}
 export interface iEMAILSENDER {
   NAME: string,
   EMAIL: string
 }
+
+export interface iFIREBASE {
+  CLIENT_EMAIL: string,
+  PRIVATE_KEY: string,
+  PROJECT_ID: string
+}
+
+export interface iHTTP {
+  TIMEOUT: number,
+  MAXDIRECTS: number
+}
+
 
 export interface iConfig {
   /** Application Details */
@@ -57,7 +82,11 @@ export interface iConfig {
   SWAGGER?: iSWAGGER;
   GRAPHQL?: iGRAPHQL;
   SMTP?: iSMTP;
+  OTP?: iOTP;
+  SMS?: iSMS;
   EMAILSENDER?: iEMAILSENDER;
+  FIREBASE?: iFIREBASE;
+  HTTP: iHTTP;
   /**
    * The log level to use.
    * @example 'verbose', 'info', 'warn', 'error'
