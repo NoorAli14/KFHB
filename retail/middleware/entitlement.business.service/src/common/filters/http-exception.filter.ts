@@ -16,9 +16,9 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const status = error.getStatus();
 
     if (status === HttpStatus.UNAUTHORIZED) {
-      if (typeof error.response !== 'string') {
+      if (typeof error?.response !== 'string') {
         error.response['message'] =
-          error.response.message ||
+          error.response?.message ||
           'You do not have permission to access this resource';
       }
     }
