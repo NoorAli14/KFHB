@@ -21,7 +21,7 @@ import {
   ApiNotFoundResponse,
   ApiNoContentResponse,
 } from '@nestjs/swagger';
-import { AuthGuard, SuccessDto } from '@common/index';
+import { AuthGuard, Header, IHEADER } from '@common/index';
 import { UserService } from './users.service';
 import { User } from './user.entity';
 import { ChangePasswordDto, UpdateUserDto } from './user.dto';
@@ -40,8 +40,8 @@ export class UsersController {
     summary: 'List of all users.',
   })
   @ApiOkResponse({ type: [User], description: 'List of all users.' })
-  async list(): Promise<User[]> {
-    return this.userService.list();
+  async list(@Header() header: IHEADER): Promise<User[]> {
+    return this.userService.list(header);
   }
 
   @Get(':id')
@@ -58,8 +58,11 @@ export class UsersController {
     type: Error,
     description: 'User Not Found.',
   })
-  async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<User> {
-    const user = await this.userService.findOne(id);
+  async findOne(
+    @Header() header: IHEADER,
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<User> {
+    const user = await this.userService.findOne(header, id);
     if (!user) {
       throw new NotFoundException('User Not Found');
     }
@@ -86,29 +89,11 @@ export class UsersController {
     description: 'User Not Found.',
   })
   async update(
+    @Header() header: IHEADER,
     @Param('id', ParseUUIDPipe) id: string,
     @Body() input: UpdateUserDto,
   ): Promise<User> {
-    return this.userService.update(id, input);
-  }
-
-  @Put('/password')
-  @ApiBody({
-    description: 'Sets the user properties.',
-    type: ChangePasswordDto,
-  })
-  @ApiOperation({
-    summary: 'Update user password',
-    description: 'A successful request returns the HTTP 200 OK status code.',
-  })
-  @ApiOkResponse({
-    type: SuccessDto,
-    description: 'User has been successfully updated their password.',
-  })
-  async update_password(
-    @Body() changePasswordDto: ChangePasswordDto,
-  ): Promise<any> {
-    // this.userService.create(userDto);
+    return this.userService.update(header, id, input);
   }
 
   @Delete(':id')
@@ -125,7 +110,10 @@ export class UsersController {
     description: 'User Not Found.',
   })
   @HttpCode(HttpStatus.NO_CONTENT)
-  async delete(@Param('id', ParseUUIDPipe) id: string): Promise<any> {
-    return this.userService.delete(id);
+  async delete(
+    @Header() header: IHEADER,
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<any> {
+    return this.userService.delete(header, id);
   }
 }
