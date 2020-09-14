@@ -33,11 +33,16 @@ export class AuthService {
       secret: this.configService.JWT.REFRESH_SECRET,
       expiresIn: `${this.configService.JWT.REFRESH_EXPIRY_SECONDS}s`,
     });
-    await this.redisService.setValue(userId, token, 'EX', this.configService.JWT.REFRESH_EXPIRY_SECONDS);
+    await this.redisService.setValue(
+      userId,
+      token,
+      'EX',
+      this.configService.JWT.REFRESH_EXPIRY_SECONDS,
+    );
     return token;
   }
 
-  getToken(userId): string {
+  getToken(userId: string): string {
     const payload = { id: userId, type: 'user' };
     return this.jwtService.sign(payload, {
       secret: this.configService.JWT.SECRET,
@@ -58,10 +63,7 @@ export class AuthService {
     const token: string = this.getToken(userId);
     res.setHeader(X_REFRESH_TOKEN, refresh_token);
     res.setHeader(X_ACCESS_TOKEN, token);
-    res.setHeader(
-      'Set-Cookie',
-      this.getCookieWithJwtToken(token),
-    );
+    res.setHeader('Set-Cookie', this.getCookieWithJwtToken(token));
     return res;
-  } 
+  }
 }

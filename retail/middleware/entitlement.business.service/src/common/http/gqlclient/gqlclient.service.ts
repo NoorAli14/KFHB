@@ -45,6 +45,7 @@ export class GqlClientService {
             );
             return throwError(err.exception);
           }
+          this.logger.log(response.data);
           return response.data?.data?.result || response.data?.data;
         }),
         timeout(5000),

@@ -29,9 +29,14 @@ import {
   AuthGuard,
   CurrentUser,
   SuccessDto,
+  IHEADER,
+  Header,
 } from '@common/index';
 import { UserService } from '@app/v1/users/users.service';
-import { CurrentUserUpdateDto } from '@app/v1/users/user.dto';
+import {
+  ChangePasswordDto,
+  CurrentUserUpdateDto,
+} from '@app/v1/users/user.dto';
 import { User } from '@app/v1/users/user.entity';
 import { LocalAuthGuard } from './localAuth.guard';
 import { AuthService } from './auth.service';
@@ -67,10 +72,15 @@ export class AuthController {
   ): Promise<SuccessDto> {
     if (!refresh_token)
       throw new BadRequestException(`${X_REFRESH_TOKEN} can't be blank`);
-    const payload: any = await this.authService.validateRefreshToken(refresh_token);
-    if(!payload) 
-      throw new UnauthorizedException();
-    request.res = this.authService.setHeaders(request.res, refresh_token,payload.aud)
+    const payload: any = await this.authService.validateRefreshToken(
+      refresh_token,
+    );
+    if (!payload) throw new UnauthorizedException();
+    request.res = this.authService.setHeaders(
+      request.res,
+      refresh_token,
+      payload.aud,
+    );
     return {
       status: 'SUCCESS',
       message: `${X_ACCESS_TOKEN} has been successfully generated.`,
@@ -101,7 +111,11 @@ export class AuthController {
     const refreshToken: string = await this.authService.getRefreshToken(
       user.id,
     );
-    request.res = this.authService.setHeaders(request.res, refreshToken, user.id)
+    request.res = this.authService.setHeaders(
+      request.res,
+      refreshToken,
+      user.id,
+    );
     return user;
   }
 
@@ -139,10 +153,42 @@ export class AuthController {
   })
   @ApiBearerAuth()
   async update(
+    @Header() header: IHEADER,
     @CurrentUser() user: User,
     @Body() input: CurrentUserUpdateDto,
   ): Promise<User> {
-    return this.userService.update(user.id, input);
+    return this.userService.update(header, user.id, input);
+  }
+
+  @Put('password')
+  @UseGuards(AuthGuard)
+  @ApiBody({
+    description: 'Sets the chnage password properties.',
+    type: ChangePasswordDto,
+  })
+  @ApiOperation({
+    summary: 'Update user password',
+    description: 'A successful request returns the HTTP 200 OK status code.',
+  })
+  @ApiOkResponse({
+    type: SuccessDto,
+    description: 'User has been successfully updated their password.',
+  })
+  async update_password(
+    @Header() header: IHEADER,
+    @Body() input: ChangePasswordDto,
+  ): Promise<SuccessDto> {
+    const result: any = await this.userService.changePassword(header, input);
+    if (!result?.id) {
+      return {
+        status: 'FAILED',
+        message: 'Invalid current password.',
+      };
+    }
+    return {
+      status: 'SUCCESS',
+      message: 'Password has been successfully updated.',
+    };
   }
 
   @Delete('logout')

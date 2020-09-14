@@ -11,3 +11,4 @@ export const USER_STATUSES = {
   INACTIVE: 'INACTIVE',
 };
 export const GENDER = ['M', 'F'];
+export const PASSWORD_REGEX = /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;

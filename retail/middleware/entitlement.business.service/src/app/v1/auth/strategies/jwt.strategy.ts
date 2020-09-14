@@ -6,6 +6,7 @@ import {
   X_ACCESS_TOKEN,
   RedisClientService,
   ConfigurationService,
+  IHEADER,
 } from '@common/index';
 import { UserService } from '@app/v1/users/users.service';
 @Injectable()
@@ -32,6 +33,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   async validate(payload: any) {
     if (!(await this.redisService.getValue(payload.id))) return null;
-    return this.userService.findOne(payload.id);
+    const header: IHEADER = {
+      'x-user-id': '123344',
+      'x-tenant-id': '1234221',
+      'x-correlation-id': '123123',
+    };
+    return this.userService.findOne(header, payload.id);
   }
 }
