@@ -16,7 +16,7 @@ services:
     build:
       context: ../../../../retail/middleware/gateway.service
       dockerfile: Dockerfile
-    image: "gateway-service:v1"
+    image: gateway-service:v1
     container_name: gateway_service
     environment:
       - ENV_RBX_NGINX_SERVER_NAME=$ENV_RBX_NGINX_SERVER_NAME
@@ -29,10 +29,17 @@ services:
       - ENV_RBX_REFERENCE_HOST=$ENV_RBX_REFERENCE_HOST
       - ENV_RBX_REFERENCE_PORT=$ENV_RBX_REFERENCE_PORT
       - ENV_RBX_NGINX_MAX_BODY=$ENV_RBX_NGINX_MAX_BODY
+    volumes:
+      - html:/usr/share/nginx/html
+      - dhparam:/etc/nginx/dhparam
+      - vhost:/etc/nginx/vhost.d
+      - certs:/etc/nginx/certs
+      - /run/docker.sock:/tmp/docker.sock:ro
     networks:
       - core_service_network
     ports:
       - 80:80
+      - 443:443
 
   #=================================================================
   # Admin Web Portal Service
@@ -218,6 +225,11 @@ services:
       - ENV_RBX_SMTP_PASS=$ENV_RBX_SMTP_PASS
       - ENV_RBX_SMTP_SENDING_NAME=$ENV_RBX_SMTP_SENDING_NAME
       - ENV_RBX_SMTP_SENDING_EMAIL=$ENV_RBX_SMTP_SENDING_EMAIL
+      - ENV_RBX_FIREBASE_CLINET_EMAIL=$ENV_RBX_FIREBASE_CLINET_EMAIL
+      - ENV_RBX_FIREBASE_PRIVATE_KEY=$ENV_RBX_FIREBASE_PRIVATE_KEY
+      - ENV_RBX_FIREBASE_PROJECT_ID=$ENV_RBX_FIREBASE_PROJECT_ID
+      - ENV_RBX_HTTP_TIMEOUT=$ENV_RBX_HTTP_TIMEOUT
+      - ENV_RBX_HTTP_MAX_REDIRECTS=$ENV_RBX_HTTP_MAX_REDIRECTS
     restart: always
     networks:
       - core_service_network
@@ -248,6 +260,31 @@ services:
     networks:
       - core_service_network
 
+  #=================================================================
+  # Letsencrypt Service
+  #=================================================================
+  letsencrypt:
+    image: "jrcs/letsencrypt-nginx-proxy-companion:latest"
+    container_name: "letsencrypt-helper"
+    volumes:
+      - "html:/usr/share/nginx/html"
+      - "dhparam:/etc/nginx/dhparam"
+      - "vhost:/etc/nginx/vhost.d"
+      - "certs:/etc/nginx/certs"
+      - "/run/docker.sock:/var/run/docker.sock:ro"
+    environment:
+      NGINX_PROXY_CONTAINER: "gateway_service"
+      DEFAULT_EMAIL: "faizan@aiondigital.com"
+    restart: "always"
+    depends_on:
+      - gateway_service
+    networks:
+      - core_service_network
+volumes:
+  certs:
+  html:
+  vhost:
+  dhparam:
 networks:
   core_service_network:
     driver: bridge
