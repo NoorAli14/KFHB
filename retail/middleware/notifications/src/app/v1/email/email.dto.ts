@@ -1,7 +1,4 @@
-import {
-  IsOptional,
-  MaxLength,
-} from 'class-validator';
+import { IsOptional, MaxLength } from 'class-validator';
 
 // Graphql Example DTO
 import { Field, InputType } from '@nestjs/graphql';
@@ -26,7 +23,7 @@ export class SendEmailInput {
   @MaxLength(5000)
   body?: string;
 
-  @Field(type => [Context], { nullable: true })
+  @Field(() => [Context], { nullable: true })
   @IsOptional()
   context?: Context[];
 }
@@ -34,7 +31,7 @@ export class SendEmailInput {
 class Context {
   @Field({ nullable: true })
   key: string;
-  
+
   @Field({ nullable: true })
   value: string;
 }
