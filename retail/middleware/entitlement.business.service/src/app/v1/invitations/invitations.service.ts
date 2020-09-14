@@ -1,5 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { GqlClientService, USER_STATUSES } from '@common/index';
+import {
+  GqlClientService,
+  USER_STATUSES,
+  IHEADER,
+  SuccessDto,
+} from '@common/index';
 import { NotificationsService } from '@app/v1/notifications/notifications.service';
 import { UserService } from '@app/v1/users/users.service';
 import { UpdateUserDto } from '@app/v1/users/user.dto';
@@ -13,29 +18,38 @@ export class InvitationsService {
     private readonly notificationService: NotificationsService,
   ) {}
 
-  async invite(input: UpdateUserDto): Promise<User> {
-    const user: User = await this.userService.create(input);
+  async invite(header: IHEADER, input: UpdateUserDto): Promise<User> {
+    const user: User = await this.userService.create(header, input);
     const invitation: any = await this.userService.findOne(
+      header,
       user.id,
       `{id invitation_token}`,
     );
 
     await this.notificationService.sendInvitationLink(
+      header,
       user.email,
       invitation.invitation_token,
     );
     return user;
   }
 
-  async acceptInvitation(id: string, input: any): Promise<User> {
+  async acceptInvitation(
+    header: IHEADER,
+    id: string,
+    input: any,
+  ): Promise<User> {
     input.status = USER_STATUSES.ACTIVE;
     input.invitation_token = null;
     input.invitation_token_expiry = null;
-    return this.userService.update(id, input);
+    return this.userService.update(header, id, input);
   }
 
-  async resendInvitationLink(userId: string): Promise<any> {
-    const params: string = `mutation {
+  async resendInvitationLink(
+    header: IHEADER,
+    userId: string,
+  ): Promise<SuccessDto> {
+    const mutation: string = `mutation {
       result: resetInvitationToken(id: "${userId}"){
         id
         email
@@ -43,8 +57,9 @@ export class InvitationsService {
         invitation_token_expiry
       }
     }`;
-    const invitation = await this.gqlClient.send(params);
+    const invitation = await this.gqlClient.setHeaders(header).send(mutation);
     await this.notificationService.sendInvitationLink(
+      header,
       invitation.email,
       invitation.invitation_token,
     );
