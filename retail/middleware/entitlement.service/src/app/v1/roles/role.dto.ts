@@ -6,10 +6,11 @@ import {IdsInput} from "@common/inputs/ids.input";
 
 @InputType()
 export class RoleInput {
-  @Field()
+  @Field({ nullable: true })
   @IsString()
+  @IsOptional()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  name: string;
+  name?: string;
 
   @Field({ nullable: true })
   @IsString()
@@ -25,4 +26,12 @@ export class RoleInput {
 
   @Field(type => [IdsInput], { nullable: true })
   permissions?: IdsInput[]; // module_permission_ids
+}
+
+@InputType()
+export class RoleCreateInput extends RoleInput{
+  @Field()
+  @IsString()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  name: string;
 }

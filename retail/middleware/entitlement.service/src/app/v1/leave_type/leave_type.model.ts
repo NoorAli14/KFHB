@@ -2,18 +2,12 @@ import { Field, ID, ObjectType } from "@nestjs/graphql";
 import {PaginationModel} from '@common/models';
 
 @ObjectType()
-export class Holiday {
+export class LeaveType {
   @Field(() => ID,{ nullable: true })
   id: string;
 
   @Field({ nullable: true })
-  holiday_date?: string;
-
-  @Field({ nullable: true })
-  holiday_description?: string;
-
-  @Field({ nullable: true })
-  remarks?: string;
+  leave_type?: string;
 
   @Field({ nullable: true })
   status?: string;
@@ -38,10 +32,10 @@ export class Holiday {
 }
 
 @ObjectType()
-export class HolidayWithPagination {
+export class LeaveTypeWithPagination {
   @Field({ nullable: true })
   pagination?: PaginationModel;
 
-  @Field(type => [Holiday], { nullable: true })
-  data?: Holiday[];
+  @Field(type => [LeaveType], { nullable: true })
+  data?: LeaveType[];
 }
