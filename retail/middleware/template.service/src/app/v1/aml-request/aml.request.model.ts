@@ -9,6 +9,12 @@ export class AmlRequest {
   customer_id: string;
 
   @Field()
+  tenant_id: string;
+
+  @Field()
+  request_reference: string;
+
+  @Field()
   aml_text: string;
 
   @Field()

@@ -3,12 +3,12 @@ import { NewAlmRequestInput } from './aml-request-dot';
 import { AmlRequest } from './aml.request.model';
 import { AmlRequestRepository } from '@core/repository/aml-request-repository';
 
-import { GqlClientService, toGraphql } from '@common/index';
+// import { GqlClientService, toGraphql } from '@common/index';
 
 @Injectable()
 export class AmlRequestService {
   constructor(
-    private readonly gqlClient: GqlClientService,
+    // private readonly gqlClient: GqlClientService,
     private readonly amlRequestDB: AmlRequestRepository,
   ) {}
   //Get customer details

@@ -5,8 +5,8 @@ import { RegistryService } from './services/registry.service';
 
 @Global()
 @Module({
-  providers: [ConfigurationService, DBConfigurationService, RegistryService],
-  exports: [ConfigurationService, DBConfigurationService, RegistryService],
+  providers: [ConfigurationService, DBConfigurationService],
+  exports: [ConfigurationService, DBConfigurationService],
   imports: [],
 })
 export class CommonModule {}

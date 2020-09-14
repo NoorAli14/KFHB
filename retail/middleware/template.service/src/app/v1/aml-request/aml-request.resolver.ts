@@ -20,19 +20,20 @@ export class AmlRequestResolver {
     }
     return this.almRequestService.checkAmlByUser(user);
   }
-
   @Mutation(() => AmlRequest)
   async addAmlRequest(
-    @Args('input') input: NewAlmRequestInput,
+    @Args('id') user_id: string,
     @Fields(AmlRequest) columns: string[],
   ): Promise<AmlRequest> {
-    try {
-      // Need to verify this check
-      JSON.parse(input.remarks);
-    } catch (error) {
-      throw new Error("Field 'results' should be a valid JASON.");
-    }
-
-    return this.almRequestService.create(input, columns);
+    const amlRequest: NewAlmRequestInput = {
+      aml_text: 'Some',
+      customer_id: user_id,
+      remarks: 'Testing',
+      request_reference: 'some ref',
+      status: 'SUCCESS',
+      tenant_id: '9013C327-1190-4875-A92A-83ACA9029160',
+    };
+    // const request = await this.almRequestService.create(amlRequest);
+    return this.almRequestService.create(amlRequest, columns);
   }
 }
