@@ -23,7 +23,7 @@ import {
   ApiBadRequestResponse,
   ApiNotFoundResponse,
 } from '@nestjs/swagger';
-import { AuthGuard } from '@common/index';
+import { AuthGuard, Header, IHEADER } from '@common/index';
 
 import { RoleService } from './roles.service';
 import { Role } from './role.entity';
@@ -51,8 +51,11 @@ export class RolesController {
     type: Error,
     description: 'Input Validation failed.',
   })
-  async create(@Body() roleDto: RoleDto): Promise<Role> {
-    return this.roleService.create(roleDto);
+  async create(
+    @Header() header: IHEADER,
+    @Body() input: RoleDto,
+  ): Promise<Role> {
+    return this.roleService.create(header, input);
   }
 
   @Get('/')
@@ -62,8 +65,8 @@ export class RolesController {
     summary: 'List of all the roles',
   })
   @ApiOkResponse({ type: [Role], description: 'List of all the roles.' })
-  async list(): Promise<Role[]> {
-    return this.roleService.list();
+  async list(@Header() header: IHEADER): Promise<Role[]> {
+    return this.roleService.list(header);
   }
 
   @Get(':id')
@@ -80,8 +83,11 @@ export class RolesController {
     type: Error,
     description: 'Role Not Found.',
   })
-  async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<Role> {
-    const role: Role = await this.roleService.findOne(id);
+  async findOne(
+    @Header() header: IHEADER,
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<Role> {
+    const role: Role = await this.roleService.findOne(header, id);
     if (!role) {
       throw new NotFoundException('Role Not Found');
     }
@@ -108,10 +114,11 @@ export class RolesController {
     description: 'Role Not Found.',
   })
   async update(
+    @Header() header: IHEADER,
     @Param('id', ParseUUIDPipe) id: string,
     @Body() roleDto: RoleDto,
   ): Promise<Role> {
-    return this.roleService.update(id, roleDto);
+    return this.roleService.update(header, id, roleDto);
   }
 
   @Delete(':id')
@@ -126,7 +133,10 @@ export class RolesController {
     description: 'Role Not Found.',
   })
   @HttpCode(HttpStatus.NO_CONTENT)
-  async delete(@Param('id', ParseUUIDPipe) id: string): Promise<any> {
-    return this.roleService.delete(id);
+  async delete(
+    @Header() header: IHEADER,
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<any> {
+    return this.roleService.delete(header, id);
   }
 }
