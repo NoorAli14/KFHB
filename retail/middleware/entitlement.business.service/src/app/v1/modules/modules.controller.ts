@@ -26,7 +26,7 @@ import {
 import { Module } from './module.entity';
 import { ModuleDto } from './module.dto';
 import { ModuleService } from './modules.service';
-import { AuthGuard } from '@common/index';
+import { AuthGuard, Header, IHEADER } from '@common/index';
 
 @ApiTags('Module')
 @Controller('modules')
@@ -50,8 +50,11 @@ export class ModulesController {
     type: Error,
     description: 'Input Validation failed.',
   })
-  async create(@Body() moduleDto: ModuleDto): Promise<Module> {
-    return this.moduleService.create(moduleDto);
+  async create(
+    @Header() header: IHEADER,
+    @Body() moduleDto: ModuleDto,
+  ): Promise<Module> {
+    return this.moduleService.create(header, moduleDto);
   }
 
   @Get('/')
@@ -61,8 +64,8 @@ export class ModulesController {
     summary: 'List of all the modules',
   })
   @ApiOkResponse({ type: [Module], description: 'List of all the modules.' })
-  async list(): Promise<Module[]> {
-    return this.moduleService.list();
+  async list(@Header() header: IHEADER): Promise<Module[]> {
+    return this.moduleService.list(header);
   }
 
   @Get(':id')
@@ -79,8 +82,11 @@ export class ModulesController {
     type: Error,
     description: 'Module Not Found.',
   })
-  async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<Module> {
-    const module = await this.moduleService.findOne(id);
+  async findOne(
+    @Header() header: IHEADER,
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<Module> {
+    const module = await this.moduleService.findOne(header, id);
     if (!module) {
       throw new NotFoundException('Module Not Found');
     }
@@ -107,10 +113,11 @@ export class ModulesController {
     description: 'Module Not Found.',
   })
   async update(
+    @Header() header: IHEADER,
     @Param('id', ParseUUIDPipe) id: string,
     @Body() moduleOtp: ModuleDto,
   ): Promise<Module> {
-    return this.moduleService.update(id, moduleOtp);
+    return this.moduleService.update(header, id, moduleOtp);
   }
 
   @Delete(':id')
@@ -127,7 +134,10 @@ export class ModulesController {
     description: 'Module Not Found.',
   })
   @HttpCode(HttpStatus.NO_CONTENT)
-  async delete(@Param('id', ParseUUIDPipe) id: string): Promise<any> {
-    return this.moduleService.delete(id);
+  async delete(
+    @Header() header: IHEADER,
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<any> {
+    return this.moduleService.delete(header, id);
   }
 }
