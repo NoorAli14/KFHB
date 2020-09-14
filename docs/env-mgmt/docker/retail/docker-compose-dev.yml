@@ -29,12 +29,6 @@ services:
       - ENV_RBX_REFERENCE_HOST=$ENV_RBX_REFERENCE_HOST
       - ENV_RBX_REFERENCE_PORT=$ENV_RBX_REFERENCE_PORT
       - ENV_RBX_NGINX_MAX_BODY=$ENV_RBX_NGINX_MAX_BODY
-    volumes:
-      - html:/usr/share/nginx/html
-      - dhparam:/etc/nginx/dhparam
-      - vhost:/etc/nginx/vhost.d
-      - certs:/etc/nginx/certs
-      - /run/docker.sock:/tmp/docker.sock:ro
     networks:
       - core_service_network
     ports:
