@@ -44,7 +44,7 @@ LABEL version="0.1.0 (alpha)"
 LABEL description="Container for running reference service"
 
 # Define default arguments
-ARG PORT=6000
+ARG PORT=2000
 ARG WORKDIR=/home/aiondigital/rubix
 ARG USER=node
 ARG NODE_ENV=production

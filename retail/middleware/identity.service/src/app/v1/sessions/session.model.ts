@@ -20,6 +20,15 @@ export class Session {
   @Field({ nullable: true })
   target_user_id?: string;
 
+  @Field()
+  fido_reg_req_id?: string;
+
+  @Field()
+  fido_reg_req?: string;
+
+  @Field({ nullable: true })
+  evaluation_id?: string;
+
   @Field({ nullable: true })
   status?: string;
 

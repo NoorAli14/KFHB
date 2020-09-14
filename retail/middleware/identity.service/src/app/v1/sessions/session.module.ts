@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
-import { IdentityModule, IdentityService } from '@rubix/common/http/';
+import { IdentityModule, IdentityService } from '@rubix/common/connectors';
 
 import {
   RepositoryModule,
   SessionRepository,
   CustomerRepository,
+  SessionReferenceRepository,
 } from '@rubix/core';
 import { SessionsResolver } from './sessions.resolver';
 import { SessionsService } from './sessions.service';
@@ -17,6 +18,7 @@ import { SessionsService } from './sessions.service';
     CustomerRepository,
     SessionsResolver,
     IdentityService,
+    SessionReferenceRepository,
   ],
 })
 export class SessionModule {}

@@ -22,6 +22,12 @@ export const DOCUMENT_TYPES = {
   NATIONAL_ID_FRONT_SIDE: 'NATIONAL_ID_FRONT_SIDE',
   NATIONAL_ID_BACK_SIDE: 'NATIONAL_ID_BACK_SIDE',
 };
+
+export const DOCUMENT_TYPE_STATUSES: { [key: string]: string } = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+};
+
 export const SESSION_STATUSES: { [key: string]: string } = {
   ACTIVE: 'ACTIVE',
   ARCHIVED: 'ARCHIVED',

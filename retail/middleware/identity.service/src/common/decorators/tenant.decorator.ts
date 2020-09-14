@@ -1,6 +1,6 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { X_TENANT_ID } from '@rubix/common/constants';
+import { X_TENANT_ID, ITenant } from '@rubix/common';
 
 export const Tenant = createParamDecorator(
   async (data: any, context: ExecutionContext & { [key: string]: any }) => {

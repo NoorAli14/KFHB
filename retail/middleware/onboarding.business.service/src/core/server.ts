@@ -1,6 +1,7 @@
 import { Transport } from '@nestjs/microservices';
 import { INestApplication, ValidationPipe, Logger } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
+import * as bodyParser from 'body-parser';
 import {
   CommonModule,
   ConfigurationService,
@@ -30,6 +31,8 @@ export default class Server {
 
   private mountConfig(): void {
     this._config = this.app.select(CommonModule).get(ConfigurationService);
+    this._app.use(bodyParser.json({ limit: '50mb' }));
+    this._app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
   }
 
   /**

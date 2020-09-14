@@ -15,37 +15,37 @@ export class AuthUserService {
     private _sidebarModules: any;
     private config = [
         {
-            id: "BE1FE00D-707D-4447-BEEF-59CE7D28DFA6",
+            id: "Entitlement",
             icon: "assignment_ind",
             url: "",
             translate: "FEATURES.ENTITLEMENT.TITLE",
         },
         {
-            id: "9E0FD005-B085-4699-98DD-24F7E89719FF",
+            id: "User Management",
             icon: "person",
             url: "/ent/user",
             translate: "FEATURES.ENTITLEMENT.USER.TITLE",
         },
         {
-            id: "72781F4D-BEEA-4374-98FE-3F71923F704A",
+            id: "Role Management",
             icon: "settings_applications",
-            url: "/ent/config",
-            translate: "FEATURES.ENTITLEMENT.CONFIG.TITLE",
+            url: "/ent/role",
+            translate: "FEATURES.ENTITLEMENT.ROLE.TITLE",
         },
         {
-            id: "91E4F1C7-6AEB-42A4-A339-48AA0CA8DB34",
+            id: "Calender",
             icon: "calendar_today",
             url: "",
             translate: "FEATURES.CALENDER.TITLE",
         },
         {
-            id: "C5007A91-6394-47EA-8E1F-9EC85AFB8A88",
+            id: "Working Week",
             icon: "calendar_today",
             url: "/calender/working-days",
             translate: "FEATURES.CALENDER.WORKING_DAYS.TITLE",
         },
         {
-            id: "DAED44E1-CEEC-47E7-B45B-1AAA0594C622",
+            id: "Holidays",
             icon: "calendar_today",
             url: "/calender/holidays",
             translate: "FEATURES.CALENDER.HOLIDAYS.TITLE",
@@ -77,6 +77,7 @@ export class AuthUserService {
     }
 
     set User(user) {
+        
         this._user = snakeToCamelObject(user);
         this.eventService.emit(
             new EmitEvent(Events.USER_UPDATED, this._user )
@@ -126,7 +127,7 @@ export class AuthUserService {
         return modules.map((item) => {
             const isChildren=item.sub_modules &&  item.sub_modules.length > 0;
             item.type = isChildren ? "collapsable" : "item";
-            const data = this.config.find((x) => x.id === item.id);
+            const data = this.config.find((x) => x.id === item.name);
             if (isChildren) {
                 const child = this.configureModules(item.sub_modules);
                 delete item.sub_modules;

@@ -17,26 +17,27 @@ input CreateCustomerInput {
   last_name: String
   email: String
   contact_no: String
-}
-
-input CreateSessionInput {
-  type: String
-  file: String
+  device_id: String
+  platform: String
 }
 
 type Customer {
   id: ID
-  tenant_id: String
-  session_id: String
-  email: String
-  target_user_id: String
-  contact_no: String
   first_name: String
   middle_name: String
   last_name: String
+  tenant_id: String
+  session_id: String
+  email: String
+  contact_no: String
   gender: String
   date_of_birth: String
-  nationality_id: String
+  national_id_no: String
+  national_id_expiry: String
+  nationality: String
+  nationality_code: String
+  device_id: String
+  platform: String
   status: String
   created_on: String
   created_by: String
@@ -44,6 +45,7 @@ type Customer {
   updated_by: String
   deleted_on: String
   deleted_by: String
+  documents: [Document!]!
 }
 
 """
@@ -52,6 +54,29 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 scalar DateTime
 
 type Document {
+  id: ID!
+  name: String!
+  session_id: String!
+  tenant_id: String!
+  document_type_id: String!
+  attachable_id: String!
+  processed_data: String
+  status: String
+  created_by: String!
+  created_on: DateTime!
+  updated_by: String!
+  updated_on: DateTime!
+  deleted_by: String!
+  deleted_on: DateTime!
+}
+
+type EVALUATION_RESPONSE {
+  success: Boolean!
+  status: String!
+  message: String
+}
+
+type Face {
   id: ID!
   session_id: String!
   tenant_id: String!
@@ -69,12 +94,30 @@ type Document {
 
 type Mutation {
   addSession: Session!
+  updateSession(input: UploadFaceInput!): Session!
+  evaluation: EVALUATION_RESPONSE!
   addCustomer(input: CreateCustomerInput!): Customer!
-  addDocument(input: CreateSessionInput!): Document!
+  uploadLiveness(input: UploadFaceInput!): Face!
+  addDocument(input: UploadDocumentInput!): Document!
+  processDocument(input: ProcessDocumentInput!): Document!
+}
+
+type PreviewDocument {
+  image: String!
+}
+
+input PreviewDocumentInput {
+  customer_id: String!
+  attachment_id: String!
+}
+
+input ProcessDocumentInput {
+  type: String!
 }
 
 type Query {
   findCustomerById(id: String!): Customer!
+  previewAttachment(input: PreviewDocumentInput!): PreviewDocument!
 }
 
 type Session {
@@ -84,9 +127,21 @@ type Session {
   check_id: String!
   reference_id: String!
   target_user_id: String
+  fido_reg_req_id: String!
+  fido_reg_req: String!
+  evaluation_id: String
   status: String
   created_by: String!
   created_on: DateTime!
   updated_by: String!
   updated_on: DateTime!
+}
+
+input UploadDocumentInput {
+  type: String!
+  file: String!
+}
+
+input UploadFaceInput {
+  file: String!
 }

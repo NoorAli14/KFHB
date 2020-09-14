@@ -2,58 +2,42 @@ import {
   IsString,
   Length,
   IsEmail,
-  MinLength,
   IsOptional,
+  IsNotEmpty,
+  MaxLength,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-
-export class LoginUserDto {
-  @ApiProperty({
-    required: true,
-    example: 'faizan@aiondigital.com',
-    description: 'User email address.',
-  })
-  @Length(3, 96, {
-    message: 'Name must be between 3 to 30 characters',
-  })
-  @IsEmail()
-  email: string;
-
-  @ApiProperty({
-    required: true,
-    description: 'User Password',
-  })
-  @IsString()
-  @MinLength(6)
-  password: string;
-}
+const DEVICES: string[] = ['ios', 'andriod'];
 
 export class RegisterCustomerDto {
   @ApiProperty({
     title: 'First Name',
     example: 'Faizan',
-    description: 'First Name of the user.',
+    description: 'First Name of the customer.',
     required: false,
   })
   @IsOptional()
-  first_name?: string;
+  @MaxLength(255)
+  first_name: string;
 
   @ApiProperty({
     title: 'Middle Name',
-    description: 'Middle Name of the user.',
+    description: 'Middle Name of the customer.',
     required: false,
   })
   @IsOptional()
-  middle_name?: string;
+  @MaxLength(255)
+  middle_name: string;
 
   @ApiProperty({
     title: 'Last Name',
     example: 'Ahmad',
-    description: 'Last Name of the user.',
+    description: 'Last Name of the customer.',
     required: false,
   })
   @IsOptional()
-  last_name?: string;
+  @MaxLength(255)
+  last_name: string;
 
   @ApiProperty({
     required: true,
@@ -61,26 +45,38 @@ export class RegisterCustomerDto {
     description: 'Customer email address.',
   })
   @Length(3, 96, {
-    message: 'Name must be between 3 to 30 characters',
+    message: 'Email must be between 3 to 30 characters',
   })
   @IsEmail()
   email: string;
 
   @ApiProperty({
     title: 'Contact No',
-    description: 'Contact No of the user.',
+    description: 'Contact No of the customer.',
     required: false,
   })
   @IsOptional()
-  contact_no?: string;
+  @MaxLength(20)
+  contact_no: string;
 
-  // @ApiProperty({
-  //   enum: GENDER,
-  //   title: 'Gender',
-  //   example: GENDER[0],
-  //   description: 'Gender of the user.',
-  //   required: false,
-  // })
-  // @IsOptional()
-  // gender?: string;
+  @ApiProperty({
+    title: 'Device ID',
+    description: 'Device ID of the customer.',
+    required: true,
+  })
+  @IsNotEmpty()
+  @IsString()
+  @MaxLength(255)
+  device_id: string;
+
+  @ApiProperty({
+    enum: DEVICES,
+    title: 'Platform',
+    example: DEVICES[0],
+    required: true,
+  })
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(10)
+  platform: string;
 }
