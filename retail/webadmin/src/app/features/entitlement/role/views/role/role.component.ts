@@ -49,17 +49,16 @@ export class RoleComponent extends BaseComponent implements OnInit {
         super(injector, MODULES.ROLE_MANAGEMENT);
     }
     ngOnInit(): void {
-        
         this.getData();
     }
-  
+
     getData() {
         this._roleService.forkRolesData().subscribe(
             (response) => {
                 this.roles = response[0];
                 const modules = response[1];
                 this.permissions = response[2];
-                this._mapperService.makeModulesFlat(modules);
+                this.modules = this._mapperService.makeModulesFlat(modules);
                 this.roles = this.roles.map((role) => ({
                     ...role,
                     role_name: role.name,
@@ -110,7 +109,10 @@ export class RoleComponent extends BaseComponent implements OnInit {
     onEditHandler(data) {
         let modules = cloneDeep(this.modules);
         modules = modules.map((el) => {
-            const exist = this._mapperService.findPermission(data.modules, el.id); 
+            const exist = this._mapperService.findPermission(
+                data.modules,
+                el.id
+            );
             if (!exist) return el;
             el.permissions = exist.permissions.map((x) => {
                 return {
@@ -123,7 +125,7 @@ export class RoleComponent extends BaseComponent implements OnInit {
         });
         this.openDialog(data, modules);
     }
- 
+
     createRole(data: Role) {
         this._roleService.createRole(data).subscribe(
             (response) => {

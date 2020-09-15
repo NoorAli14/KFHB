@@ -1,20 +1,20 @@
-import { HolidayComponent } from './views/holiday/holiday.component';
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
-import { WorkingDayComponent } from "./views/working-day/working-day.component";
 
 const routes: Routes = [
     {
         path: "",
-        redirectTo: "working-days",
-    },
+        redirectTo:'working-week', pathMatch:'full'
+      },
     {
         path: "working-days",
-        component: WorkingDayComponent
+        loadChildren: () =>
+            import("./working-day/working-day.module").then((m) => m.WorkingDayModule),
     },
     {
         path: "holidays",
-        component: HolidayComponent
+        loadChildren: () =>
+            import("./holiday/holiday.module").then((m) => m.HolidayModule),
     },
 ];
 

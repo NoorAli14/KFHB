@@ -22,7 +22,7 @@
             <!-- / APP TITLE -->
 
             <!-- ADD BUTTON -->
-            <button mat-raised-button color="accent" (click)="onCreateDialog()" class="add-product-button fuse-white mt-24 mt-md-0">
+            <button mat-raised-button color="accent" (click)="openDialog()" class="add-product-button fuse-white mt-24 mt-md-0">
                 <span>ADD NEW</span>
             </button>
             <!-- / ADD BUTTON -->
@@ -44,10 +44,24 @@
                     <mat-header-cell *matHeaderCellDef>{{ key.includes('action') ? 'Action' : camelToSentenceCase(key) }}</mat-header-cell>
             
                     <mat-cell *matCellDef="let element; let i = dataIndex">
-                        <span *ngIf="!key.includes('action'); else action">{{element[key] }}</span>
-                        <ng-template #action>
-                            <mat-icon type="button" (click)="onEditDialog(element)">mode_edit</mat-icon>
-                        </ng-template>
+                      <ng-container [ngSwitch]="key">
+                        <span *ngSwitchCase="'startTime'">
+                            {{element['fullDay']==1 ? 'N/A' : element[key]}}
+                        </span>
+                        <span *ngSwitchCase="'endTime'">
+                            {{element['fullDay']==1 ? 'N/A' : element[key]}}
+                        </span>
+                        <span *ngSwitchCase="'fullDay'">
+                            {{element[key]==1 ? 'Yes' : 'No'}}
+                        </span>
+                        <span *ngSwitchCase="'actions'">
+                            <mat-icon appPermission [permissions]="userPermissions" matTooltip="Delete working day" [type]="'delete'" color="warn" type="button" (click)=" confirmDialog('delete',element['id'])">delete</mat-icon> &nbsp;&nbsp;
+                            <mat-icon type="button" (click)="openDialog(element)" matTooltip="Edit working day">mode_edit</mat-icon> &nbsp;&nbsp;
+                        </span>
+                        <span *ngSwitchDefault >
+                            {{element[key]}}
+                        </span>
+                    </ng-container>
                     </mat-cell>
                 </ng-container>
                 <!-- -->
@@ -56,7 +70,7 @@
                 </mat-row>
             
             </mat-table>
-            <mat-paginator #paginator [pageIndex]="0" [pageSize]="3" showFirstLastButtons [pageSizeOptions]="[3,4]"></mat-paginator>
+            <mat-paginator #paginator [pageIndex]="0" [pageSize]="pageSize" showFirstLastButtons [pageSizeOptions]="pageSizeOptions"></mat-paginator>
         </div>
         <!-- / CONTENT CARD -->
     </div>
