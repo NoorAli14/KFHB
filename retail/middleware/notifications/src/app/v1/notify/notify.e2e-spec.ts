@@ -3,10 +3,11 @@ import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { NotifyModule } from './notify.module'
 import { NotifyService } from './notify.service'
+import Server from '@rubix/core/server';
 
 describe('Notify', () => {
   let app: INestApplication;
-  let notifyService = { notify: () => 
+  const notifyService = { notify: () => 
     [{
         "device_id": "4947-9df4-23a5fcf659",
         "message_title": "AION Digital",
@@ -24,7 +25,8 @@ describe('Notify', () => {
       .compile();
 
     app = moduleRef.createNestApplication();
-    await app.init();
+    const server = new Server(app);
+    await server.init();
   });
 
   it(`Send Push Notification using FCM Token to IOS Device`, () => {

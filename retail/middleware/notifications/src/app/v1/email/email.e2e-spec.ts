@@ -3,10 +3,11 @@ import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { EmailModule } from './email.module';
 import { EmailService } from './email.service';
+import Server from '@rubix/core/server';
 
 describe('Email', () => {
   let app: INestApplication;
-  let emailService = { sendEmail: () => [{"to": "ahmad.raza@virtualforce.io"}] };
+  const emailService = { sendEmail: () => [{"to": "ahmad.raza@virtualforce.io"}] };
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -17,7 +18,8 @@ describe('Email', () => {
       .compile();
 
     app = moduleRef.createNestApplication();
-    await app.init();
+    const server = new Server(app);
+    await server.init();
   });
 
   it(`Send Email with Template`, () => {
@@ -45,12 +47,22 @@ describe('Email', () => {
             data: emailService.sendEmail(),
         })
       .end((err,res) => {
+        console.log("-----------------------------------------------")
+        console.log("-----------------------------------------------")
+        console.log("-----------------------------------------------")
+        console.log("-----------------------------------------------")
+        console.log("-----------------------------------------------")
         console.log(res)
         console.log(err)
     })
   });
 
   it(`Send Email without Template`, () => {
+    console.log("-----------------------------------------------")
+    console.log("-----------------------------------------------")
+    console.log("-----------------------------------------------")
+    console.log("-----------------------------------------------")
+    console.log("-----------------------------------------------")
     return request(app.getHttpServer())
       .post('/graphql')
       .send(`mutation {

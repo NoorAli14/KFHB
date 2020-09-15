@@ -3,10 +3,11 @@ import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { SMSModule } from './sms.module';
 import { SMSService } from './sms.service';
+import Server from '@rubix/core/server';
 
 describe('SMS', () => {
   let app: INestApplication;
-  let smsService = { sendSMS: () => [{"to": "03217675129", "body":"this is sample message"}] };
+  const smsService = { sendSMS: () => [{"to": "03217675129", "body":"this is sample message"}] };
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -17,7 +18,8 @@ describe('SMS', () => {
       .compile();
 
     app = moduleRef.createNestApplication();
-    await app.init();
+    const server = new Server(app);
+    await server.init();
   });
 
   it(`Send SMS`, () => {

@@ -3,10 +3,11 @@ import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { OtpModule } from './otp.module';
 import { OtpService } from './otp.service';
+import Server from '@rubix/core/server';
 
 describe('Email', () => {
   let app: INestApplication;
-  let otpService = { sendOtp: () => [{"user_id": "515032eb-5af8-40f0-b3ed-6063000294ff"}] };
+  const otpService = { sendOtp: () => [{"user_id": "515032eb-5af8-40f0-b3ed-6063000294ff"}] };
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -17,7 +18,8 @@ describe('Email', () => {
       .compile();
 
     app = moduleRef.createNestApplication();
-    await app.init();
+    const server = new Server(app);
+    await server.init();
   });
 
   it(`Generate and Send OTP Code on via SMS and Email`, () => {
