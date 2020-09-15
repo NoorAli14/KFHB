@@ -23,6 +23,7 @@ import { OnboardingModule } from './onboarding/onboarding.module';
 import { WorkingDayModule } from './working-days/working-day.module';
 import {HolidayModule} from './holidays/holiday.module';
 import {LeaveModule} from './leaves/leave.module';
+import {LeaveTypeModule} from './leave-types/leave-type.module';
 
 let services: iSERVICE[];
 if (process.env.NODE_ENV === 'production') {
@@ -80,6 +81,7 @@ class BuildServiceModule {}
     OnboardingModule,
     WorkingDayModule,
     HolidayModule,
+    LeaveTypeModule,
     LeaveModule,
     GraphQLGatewayModule.forRootAsync({
       imports: [BuildServiceModule],
