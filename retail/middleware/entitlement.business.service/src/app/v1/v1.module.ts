@@ -21,6 +21,8 @@ import { InvitationModule } from './invitations/invitation.module';
 import { ForgotPasswordModule } from './forgot_passwords/forgot_password.module';
 import { OnboardingModule } from './onboarding/onboarding.module';
 import { WorkingDayModule } from './working-days/working-day.module';
+import {HolidayModule} from './holidays/holiday.module';
+
 let services: iSERVICE[];
 if (process.env.NODE_ENV === 'production') {
   services = [
@@ -76,6 +78,7 @@ class BuildServiceModule {}
     PermissionModule,
     OnboardingModule,
     WorkingDayModule,
+    HolidayModule,
     GraphQLGatewayModule.forRootAsync({
       imports: [BuildServiceModule],
       useFactory: async () => ({
