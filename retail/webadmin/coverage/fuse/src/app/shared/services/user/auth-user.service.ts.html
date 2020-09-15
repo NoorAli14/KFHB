@@ -22,30 +22,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">12.96% </span>
+                <span class="strong">25.93% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>7/54</span>
+                <span class='fraction'>14/54</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">4.17% </span>
+                <span class="strong">16.67% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/24</span>
+                <span class='fraction'>4/24</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">7.14% </span>
+                <span class="strong">21.43% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/14</span>
+                <span class='fraction'>3/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">12.77% </span>
+                <span class="strong">25.53% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/47</span>
+                <span class='fraction'>12/47</span>
             </div>
         
             
@@ -210,7 +210,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">81x</span>
+<span class="cline-any cline-yes">95x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -250,11 +250,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">81x</span>
-<span class="cline-any cline-yes">81x</span>
+<span class="cline-any cline-yes">95x</span>
+<span class="cline-any cline-yes">95x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">81x</span>
-<span class="cline-any cline-yes">81x</span>
+<span class="cline-any cline-yes">95x</span>
+<span class="cline-any cline-yes">95x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -275,16 +275,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -412,18 +412,18 @@ export class AuthUserService {
         }, 1000);
     }
 &nbsp;
-<span class="fstat-no" title="function not covered" >    set U</span>ser(user) {
+    set User(user) {
         
-<span class="cstat-no" title="statement not covered" >        this._user = snakeToCamelObject(user);</span>
-<span class="cstat-no" title="statement not covered" >        this.eventService.emit(</span>
+        this._user = snakeToCamelObject(user);
+        this.eventService.emit(
             new EmitEvent(Events.USER_UPDATED, this._user )
         );
-<span class="cstat-no" title="statement not covered" >        this.storage.setItem(APP_CONST.CURRENT_USER, this._user);</span>
+        this.storage.setItem(APP_CONST.CURRENT_USER, this._user);
     }
-<span class="fstat-no" title="function not covered" >    get U</span>ser() {
-<span class="cstat-no" title="statement not covered" >        if (this._user) <span class="cstat-no" title="statement not covered" >return this._user;</span></span>
-        const user = <span class="cstat-no" title="statement not covered" >this.storage.getItem(APP_CONST.CURRENT_USER);</span>
-<span class="cstat-no" title="statement not covered" >        return user ? user : null;</span>
+    get User() {
+        if (this._user) return this._user;
+        const user = this.storage.getItem(APP_CONST.CURRENT_USER);
+        return user ? <span class="branch-0 cbranch-no" title="branch not covered" >user </span>: null;
     }
 <span class="fstat-no" title="function not covered" >    setData(</span>response) {
         const clone= <span class="cstat-no" title="statement not covered" >cloneDeep(response)</span>
@@ -480,7 +480,7 @@ export class AuthUserService {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Thu Sep 10 2020 16:38:12 GMT+0500 (Pakistan Standard Time)
+                at Sat Sep 12 2020 23:07:12 GMT+0500 (Pakistan Standard Time)
             </div>
         </div>
         <script src="..\..\..\..\..\prettify.js"></script>
