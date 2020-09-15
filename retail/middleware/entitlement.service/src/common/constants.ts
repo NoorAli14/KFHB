@@ -154,6 +154,7 @@ export const MESSAGES = {
   INVALID_STATUS: `Status should be one of ${Object.keys(STATUS)}`,
   INVALID_GENDER: `Gender should be one of ${Object.keys(GENDER)}`,
   ROLE_EXISTS: 'Role with this name already exists',
+  WEEK_DAY_EXISTS: 'Week day already exists',
   PASSWORD_MISMATCH: 'Current password did not match',
 };
 

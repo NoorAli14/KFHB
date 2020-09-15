@@ -59,6 +59,12 @@ export class WorkingDaysService {
         }, HttpStatus.BAD_REQUEST);
       }
     }
+    if (newObj.week_day && await this.doesWeekdayExist(newObj)){
+      throw new HttpException({
+        status: HttpStatus.BAD_REQUEST,
+        error: MESSAGES.WEEK_DAY_EXISTS,
+      }, HttpStatus.BAD_REQUEST);
+    }
     const [result] = await this.workingDaysRepository.update({ id: id, deleted_on : null }, newObj, keys);
     if(!result) {
       throw new HttpException({
@@ -97,6 +103,12 @@ export class WorkingDaysService {
         }, HttpStatus.BAD_REQUEST);
       }
     }
+    if (await this.doesWeekdayExist(newObj)){
+      throw new HttpException({
+        status: HttpStatus.BAD_REQUEST,
+        error: MESSAGES.WEEK_DAY_EXISTS,
+      }, HttpStatus.BAD_REQUEST);
+    }
     const result = await this.workingDaysRepository.create(newObj, keys);
     if(result?.length > 0) {
       return result[0]
@@ -111,5 +123,15 @@ export class WorkingDaysService {
   async delete(id: string, input: Record<any, any>): Promise<any> {
     const result = await this.update(id, input, ['id']);
     return !!result;
+  }
+
+  async doesWeekdayExist(obj: Record<any, any>): Promise<boolean> {
+    const checks: KeyValInput[] = [
+      {
+        record_key:"week_day",
+        record_value: obj.week_day
+      }];
+    const weekDay = await this.findByProperty(checks, ['id', 'week_day']);
+    return weekDay.length && weekDay.length > 0;
   }
 }

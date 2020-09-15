@@ -117,7 +117,7 @@ export class UserService {
     const date = validateDate(obj.call_time);
     obj.gender && validateGender(obj.gender);
     obj.call_time = date.substring(0,10);
-    if(!await this.isHoliday(obj) && this.isWorkingDay(date)){
+    if(!await this.isHoliday(obj) && await this.isWorkingDay(date)){
       return this.availableAgents(obj, keys)
     } else{
       return []
