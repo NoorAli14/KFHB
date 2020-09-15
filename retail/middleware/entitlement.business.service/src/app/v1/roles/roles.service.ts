@@ -46,6 +46,7 @@ export class RoleService {
     updated_on
     updated_by
   }`;
+  
   async list(header: IHEADER): Promise<Role[]> {
     const query: string = `query {
       result: rolesList ${this.output}
