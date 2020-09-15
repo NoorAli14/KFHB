@@ -15,11 +15,13 @@ export class AmlRequestResolver {
     @Fields(AmlRequest) columns: string[],
   ): Promise<AmlRequest> {
     const user = await this.almRequestService.findUserById(user_id);
+    console.log(user, 'user details');
     if (!user) {
       throw new NotFoundException('User Not Found');
     }
     return this.almRequestService.checkAmlByUser(user);
   }
+
   @Mutation(() => AmlRequest)
   async addAmlRequest(
     @Args('id') user_id: string,
@@ -33,7 +35,6 @@ export class AmlRequestResolver {
       status: 'SUCCESS',
       tenant_id: '9013C327-1190-4875-A92A-83ACA9029160',
     };
-    // const request = await this.almRequestService.create(amlRequest);
     return this.almRequestService.create(amlRequest, columns);
   }
 }
