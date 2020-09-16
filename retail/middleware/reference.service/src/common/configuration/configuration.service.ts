@@ -8,38 +8,9 @@ import {
   iSWAGGER,
   iGRAPHQL,
   iConfig,
+  iCORS,
 } from '@rubix/common/interfaces/configuration.interface';
-export const DEFAULT_ENV: iConfig = {
-  APP: {
-    NAME: 'Rubix | Boilerplate',
-    DESCRIPTION: '',
-    VERSION: '1.0.0',
-    ENVIRONMENT: 'development',
-    PORT: 3000,
-    HOST: 'http://127.0.0.1',
-    API_URL_PREFIX: '/api/v1/',
-  },
-  DATABASE: {
-    USERNAME: '',
-    DB_PASS: '',
-    DB_NAME: '',
-    HOST: '',
-    PORT: 0,
-    DIALECT: '',
-    TIMEZONE: 'UTC',
-    TIMEOUT: 30000,
-    IS_DEBUG: false,
-  },
-  SWAGGER: {
-    ROUTE: '/api/docs',
-  },
-  GRAPHQL: {
-    ROUTE: '/graphql',
-    PLAYGROUND: true,
-    DEBUG: true,
-  },
-  logLevel: 'info',
-};
+import { DEFAULT_ENV } from './configuration.default';
 @Injectable()
 export class ConfigurationService {
   env: NodeJS.ProcessEnv = process.env;
@@ -60,6 +31,15 @@ export class ConfigurationService {
       VERSION: this.get('ENV_RBX_APP_VERSION', DEFAULT_ENV.APP.VERSION),
       HOST: this.get('ENV_RBX_HOST', DEFAULT_ENV.APP.HOST),
       PORT: parseInt(this.get('ENV_RBX_PORT', DEFAULT_ENV.APP.PORT), 10),
+    };
+  }
+
+  get CORS(): iCORS {
+    return {
+      ENABLE: isTruthy(
+        this.get('ENV_RBX_CORS_ENABLED', DEFAULT_ENV.CORS.ENABLE),
+      ),
+      ORIGIN: this.get('ENV_RBX_CORS_ORIGIN', DEFAULT_ENV.CORS.ORIGIN),
     };
   }
 
