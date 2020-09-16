@@ -15,7 +15,9 @@ export class MapperService {
         modules.forEach((item) => {
             item.parent = item.parent_id ? item.parent_id : "N/A";
             item.module = item.name;
-            this.result.push(item);
+            if (item.parent_id) {
+                this.result.push(item);
+            }
             if (item.sub_modules && item.sub_modules.length > 0) {
                 this.makeFlat(item.sub_modules, item.module);
             }
