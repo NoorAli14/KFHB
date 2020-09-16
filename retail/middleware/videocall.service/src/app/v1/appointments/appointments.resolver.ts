@@ -59,4 +59,12 @@ export class AppointmentsResolver {
   ): Promise<AppointmentGQL> {
     return this.appointmentsService.findById(appointment_id, columns);
   }
+
+  @Query(() => AppointmentGQL)
+  async findAppointmentByUserId(
+    @Args('user_id') user_id: string,
+    @Fields(AppointmentGQL) columns: string[],
+  ): Promise<AppointmentGQL> {
+    return this.appointmentsService.findByUserId(user_id, columns);
+  }
 }
