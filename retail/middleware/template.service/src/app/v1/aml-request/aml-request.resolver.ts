@@ -19,7 +19,7 @@ export class AmlRequestResolver {
     if (!user) {
       throw new NotFoundException('User Not Found');
     }
-    return this.almRequestService.checkAmlByUser(user);
+    return this.almRequestService.checkAmlByUser(user, columns);
   }
 
   @Mutation(() => AmlRequest)
