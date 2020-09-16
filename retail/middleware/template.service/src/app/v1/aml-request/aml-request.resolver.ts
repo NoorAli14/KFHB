@@ -11,7 +11,7 @@ export class AmlRequestResolver {
 
   @Query(() => AmlRequest)
   async checkAmlByUserId(
-    @Args('id') user_id: string,
+    @Args('user_id') user_id: string,
     @Fields(AmlRequest) columns: string[],
   ): Promise<AmlRequest> {
     const user = await this.almRequestService.findUserById(user_id);

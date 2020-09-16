@@ -80,8 +80,8 @@ type Query {
   templatesList: [TemplateGQL!]!
   findTemplateByName(name: String!): TemplateGQL!
   findTemplate(id: String!): TemplateGQL!
-  checkAmlByUserId(id: String!): AmlRequest!
-  getAmlStatueByRefNo(id: String!, reference_no: String!): AmlResponse!
+  checkAmlByUserId(user_id: String!): AmlRequest!
+  getAmlStatueByRefNo(user_id: String!, reference_no: String!): AmlResponse!
 }
 
 type QuestionGQL {

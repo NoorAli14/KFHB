@@ -10,7 +10,7 @@ export class AmlResponseResolver {
   @Query(() => AmlResponse)
   async getAmlStatueByRefNo(
     @Args('reference_no') reference_no: string,
-    @Args('id') user_id: string,
+    @Args('user_id') user_id: string,
     @Fields(AmlResponse) columns: string[],
   ): Promise<AmlResponse> {
     return this.amlResponseService.getAmlStatus(user_id, reference_no);
