@@ -240,6 +240,8 @@ services:
     environment:
       - ENV_RBX_PORT=2000
       - ENV_RBX_APP_NAME=Rubix | References Service
+      - ENV_RBX_CORS_ORIGIN=$ENV_RBX_CORS_ORIGIN
+      - ENV_RBX_CORS_ENABLED=$ENV_RBX_CORS_ENABLED
       - ENV_RBX_SWAGGER_ENABLED=true
       - ENV_RBX_API_URL_PREFIX=api/v1/references
       - ENV_RBX_SWAGGER_ROUTE=api/v1/references/docs
