@@ -14,7 +14,6 @@ import {
   Headers,
   UnauthorizedException,
   BadRequestException,
-  Res,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -161,8 +160,9 @@ export class AuthController {
   async update(
     @CurrentUser() customer: Customer,
     @Body() input: CurrentUserUpdateDto,
+    @Header() header: IHEADER,
   ): Promise<Customer> {
-    return this.customerService.update(customer.id, input);
+    return this.customerService.update(header, customer.id, input);
   }
 
   @Delete('logout')
