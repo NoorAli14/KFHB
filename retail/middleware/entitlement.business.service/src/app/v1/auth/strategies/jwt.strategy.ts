@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Request } from 'express';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
@@ -7,15 +7,20 @@ import {
   RedisClientService,
   ConfigurationService,
   IHEADER,
+  formattedHeader,
 } from '@common/index';
 import { UserService } from '@app/v1/users/users.service';
+import { User } from '@app/v1/users/user.entity';
+
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
+  private readonly logger: Logger = new Logger(JwtStrategy.name);
   constructor(
     private readonly redisService: RedisClientService,
     private readonly configService: ConfigurationService,
     private readonly userService: UserService,
   ) {
+    // passReqToCallback allows to have the request in the validate() function
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
         (request: Request) => {
@@ -26,18 +31,22 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
           );
         },
       ]),
+      passReqToCallback: true,
       ignoreExpiration: configService.JWT.IGNORE_EXPIRY,
       secretOrKey: configService.JWT.SECRET,
     });
   }
 
-  async validate(payload: any) {
+  /**
+   * Function to check that a given token is valid
+   * @param request
+   * @param payload Payload info
+   * @returns {Promise<User>}
+   */
+  async validate(request: Request, payload: any): Promise<User> {
+    this.logger.log(`Start authenticating with user ID with [${payload.id}]`);
     if (!(await this.redisService.getValue(payload.id))) return null;
-    const header: IHEADER = {
-      'x-user-id': '123344',
-      'x-tenant-id': '1234221',
-      'x-correlation-id': '123123',
-    };
+    const header: IHEADER = formattedHeader(payload.id, request.headers);
     return this.userService.findOne(header, payload.id);
   }
 }

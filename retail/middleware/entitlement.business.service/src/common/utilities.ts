@@ -1,6 +1,7 @@
 import * as path from 'path';
 import { v4 as uuidV4 } from 'uuid';
 import * as Crypto from 'crypto';
+import { X_CORRELATION_KEY, X_USER_ID, X_TENANT_ID } from './constants';
 
 export const toGraphql = (input: { [key: string]: any }): string => {
   return JSON.stringify(input).replace(/\"([^(\")"]+)\":/g, '$1:');
@@ -52,4 +53,15 @@ export const generateRandomString = (length = 36): string => {
   return Crypto.randomBytes(length)
     .toString('hex')
     .slice(0, length);
+};
+
+export const formattedHeader = (
+  user_id: string,
+  headers: { [key: string]: any },
+): any => {
+  const _headers: { [key: string]: string } = {};
+  _headers[X_CORRELATION_KEY] = headers[X_CORRELATION_KEY];
+  if (user_id) _headers[X_USER_ID] = user_id;
+  _headers[X_TENANT_ID] = headers[X_TENANT_ID];
+  return _headers;
 };
