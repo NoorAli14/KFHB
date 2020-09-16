@@ -16,6 +16,7 @@ import {
 } from "@shared/helpers/global.helper";
 import { ValidatorService } from "@shared/services/validator-service/validator.service";
 import { fuseAnimations } from "@fuse/animations";
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: "app-invitation",
@@ -70,7 +71,7 @@ export class InvitationComponent extends BaseComponent implements OnInit {
             ]),
             gender: new FormControl("", [Validators.required]),
             status: new FormControl(""),
-            email: new FormControl({disabled: true}),
+            email: new FormControl({value:"",disabled: true}),
             dateOfBirth: new FormControl("", [Validators.required]),
             nationalityId: new FormControl("", [Validators.required]),
             password: new FormControl("", Validators.required),
@@ -94,7 +95,7 @@ export class InvitationComponent extends BaseComponent implements OnInit {
         let model = { ...this.invitationForm.value };
         model.dateOfBirth = new Date(model.dateOfBirth).toLocaleDateString();
         model = camelToSnakeCase(model);
-        this._authService.updateInvitation(model, this.token).subscribe(
+        this._authService.updateInvitation(model, this.token).pipe(takeUntil(this._unsubscribeAll)).subscribe(
             (response) => {
                 this.errorType = "success";
                 this.responseMessage = MESSAGES.UPDATED("Your Profile");
@@ -109,9 +110,10 @@ export class InvitationComponent extends BaseComponent implements OnInit {
         );
     }
     getUserByToken(token) {
-        this._authService.getUserByToken(token).subscribe(
+        debugger
+        this._authService.getUserByToken(token).pipe(takeUntil(this._unsubscribeAll)).subscribe(
             (response) => {
-                const user = snakeToCamelObject(response);
+                const user = snakeToCamelObject(response[0]);
                 this.invitationForm.patchValue(user);
             },
             (response) => {

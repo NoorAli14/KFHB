@@ -25,7 +25,7 @@ export class RoleFormComponent extends BaseComponent implements OnInit {
     displayedColumns = ["module"];
     dataSource = new MatTableDataSource<Permission>();
     modulesMapped: any[] = [];
-    private _unsubscribeAll: Subject<any>;
+    
     
     @Output() sendResponse: EventEmitter<Role> = new EventEmitter<any>();
 
@@ -39,7 +39,7 @@ export class RoleFormComponent extends BaseComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this._unsubscribeAll = new Subject();
+       
         const totalPermissions=this.data.permissions.map((x)=>x.record_type)
         this.displayedColumns= this.displayedColumns.concat(totalPermissions)
 
@@ -100,9 +100,6 @@ export class RoleFormComponent extends BaseComponent implements OnInit {
     camelToSentenceCase(text) {
         return camelToSentenceCase(text);
     }
-    ngOnDestroy(): void {
-        this._unsubscribeAll.next();
-        this._unsubscribeAll.complete();
-    }
+  
     
 }

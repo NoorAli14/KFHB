@@ -31,6 +31,7 @@ import {
     ConfirmDialogComponent,
 } from "@shared/components/confirm-dialog/confirm-dialog.component";
 import { UserDetailComponent } from "../../components/user-detail/user-detail.component";
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: "app-user",
@@ -68,7 +69,7 @@ export class UserComponent extends BaseComponent implements OnInit {
     }
    
     getData() {
-        this._service.forkUserData().subscribe(
+        this._service.forkUserData().pipe(takeUntil(this._unsubscribeAll)).subscribe(
             (response) => {
                 [this.users, this.roles] = response;
                 this.updateGrid(this.users)
@@ -100,7 +101,7 @@ export class UserComponent extends BaseComponent implements OnInit {
             });
     }
     onDetail(id): void {
-        this._service.getUserById(id).subscribe(
+        this._service.getUserById(id).pipe(takeUntil(this._unsubscribeAll)).subscribe(
             (response) => {
                 this.openUserDetailModal(response);
             },
@@ -140,7 +141,7 @@ export class UserComponent extends BaseComponent implements OnInit {
         });
     }
     resendInvitation(id) {
-        this._service.resendInvite(id).subscribe(
+        this._service.resendInvite(id).pipe(takeUntil(this._unsubscribeAll)).subscribe(
             (response) => {
                 this.errorType = "success";
                 this.responseMessage = MESSAGES.INVITE_RESENT();
@@ -150,7 +151,7 @@ export class UserComponent extends BaseComponent implements OnInit {
         );
     }
     createUser(model: User) {
-        this._service.createUser(model).subscribe(
+        this._service.createUser(model).pipe(takeUntil(this._unsubscribeAll)).subscribe(
             (response) => {
                 const data = this.dataSource.data;
                 data.unshift(response);
@@ -171,7 +172,7 @@ export class UserComponent extends BaseComponent implements OnInit {
         }, 2000);
     }
     editUser(model: User) {
-        this._service.editUser(model.id, model).subscribe(
+        this._service.editUser(model.id, model).pipe(takeUntil(this._unsubscribeAll)).subscribe(
             (response) => {
                 this.errorType = "success";
                 this.responseMessage = MESSAGES.UPDATED("User");
@@ -189,7 +190,7 @@ export class UserComponent extends BaseComponent implements OnInit {
         );
     }
     deleteUser(id: string) {
-        this._service.deleteUser(id).subscribe(
+        this._service.deleteUser(id).pipe(takeUntil(this._unsubscribeAll)).subscribe(
             (response) => {
                 const index = this.dataSource.data.findIndex((x) => x.id == id);
                 this.users.splice(index, 1);

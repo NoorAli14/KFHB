@@ -36,7 +36,7 @@ export class AuthInterceptorService implements HttpInterceptor {
     const decodedToken = this.authService.getDecodeToken();
     var current = (new Date().getTime() / 1000);
     const hasRefreshToken = request.url.includes("refresh-token");
-    const isPublicUrl= this.isPublicUrl(request.url)
+    const isPublicUrl=   request.headers.get('public')?true: false;
     
     let httpOptions = this.getHttpOption(hasRefreshToken);
 
@@ -86,6 +86,7 @@ export class AuthInterceptorService implements HttpInterceptor {
     } else {
       const refreshToken = this.authService.refreshToken;
       httpOptions.headers = httpOptions.headers.set('x-refresh-token', ` ${refreshToken}`);
+      httpOptions.headers = httpOptions.headers.set('public', `true`);
     }
     return httpOptions;
   }

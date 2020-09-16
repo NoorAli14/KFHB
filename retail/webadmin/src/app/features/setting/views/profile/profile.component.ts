@@ -7,6 +7,7 @@ import { User } from "@feature/entitlement/models/user.model";
 import { MESSAGES } from "@shared/constants/app.constants";
 import { camelToSnakeCase } from "@shared/helpers/global.helper";
 import { BaseComponent } from "@shared/components/base/base.component";
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: "app-profile",
@@ -46,7 +47,7 @@ export class ProfileComponent extends BaseComponent implements OnInit {
 
     onUpdateProfile(data) {
         data = camelToSnakeCase(data);
-        this._settingService.updateProfile(data).subscribe(
+        this._settingService.updateProfile(data)  .pipe(takeUntil(this._unsubscribeAll)).subscribe(
             (response: User) => {
                 this._authUserService.User = response;
                 this.currentUser = this._authUserService.User;

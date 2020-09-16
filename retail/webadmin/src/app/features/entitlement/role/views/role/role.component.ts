@@ -20,6 +20,7 @@ import { RoleService } from "../../services/role.service";
 import { RoleFormComponent } from "../../components/role-form/role-form.component";
 import { cloneDeep } from "lodash";
 import { Modules } from "@feature/entitlement/models/modules.model";
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: "app-role",
@@ -53,7 +54,7 @@ export class RoleComponent extends BaseComponent implements OnInit {
     }
 
     getData() {
-        this._roleService.forkRolesData().subscribe(
+        this._roleService.forkRolesData().pipe(takeUntil(this._unsubscribeAll)).subscribe(
             (response) => {
                 this.roles = response[0];
                 const modules = response[1];
@@ -127,7 +128,7 @@ export class RoleComponent extends BaseComponent implements OnInit {
     }
 
     createRole(data: Role) {
-        this._roleService.createRole(data).subscribe(
+        this._roleService.createRole(data).pipe(takeUntil(this._unsubscribeAll)).subscribe(
             (response) => {
                 this.errorType = "success";
                 this.responseMessage = MESSAGES.CREATED("Role");
@@ -149,7 +150,7 @@ export class RoleComponent extends BaseComponent implements OnInit {
         }, 2000);
     }
     editRole(model: Role) {
-        this._roleService.editRole(model.id, model).subscribe(
+        this._roleService.editRole(model.id, model).pipe(takeUntil(this._unsubscribeAll)).subscribe(
             (response) => {
                 this.errorType = "success";
                 response.role_name = response.name;
@@ -165,7 +166,7 @@ export class RoleComponent extends BaseComponent implements OnInit {
         );
     }
     onDelete(id: string) {
-        this._roleService.deleteRole(id).subscribe(
+        this._roleService.deleteRole(id).pipe(takeUntil(this._unsubscribeAll)).subscribe(
             (response) => {
                 this.errorType = "success";
                 this.hideMessage();

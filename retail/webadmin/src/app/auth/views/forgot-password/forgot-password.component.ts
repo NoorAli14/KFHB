@@ -6,6 +6,7 @@ import { FuseConfigService } from "@fuse/services/config.service";
 import { fuseAnimations } from "@fuse/animations";
 import { MESSAGES } from "@shared/constants/app.constants";
 import { BaseComponent } from '@shared/components/base/base.component';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: "forgot-password",
@@ -50,7 +51,7 @@ export class ForgotPasswordComponent extends BaseComponent implements OnInit {
     }
     onSubmit() {
         this._authService
-            .forgotPassword(this.forgotPasswordForm.value)
+            .forgotPassword(this.forgotPasswordForm.value).pipe(takeUntil(this._unsubscribeAll))
             .subscribe(
                 (response) => {
                      this.errorType = "success";

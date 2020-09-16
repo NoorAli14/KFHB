@@ -12,7 +12,7 @@ import { createUrl } from "@shared/constants/app.constants";
 export class NetworkService {
     constructor(private http: HttpClient) {}
 
-    getAll(url: string, params?: Object): Observable<any> {
+    getAll(url: string, params?: Object,options?:Object): Observable<any> {
         let endPoint = createUrl(url);
         if (params) {
             endPoint = `${endPoint}?`;
@@ -22,7 +22,7 @@ export class NetworkService {
             });
         }
         return this.http
-            .get<any>(endPoint, {})
+            .get<any>(endPoint, options)
             .pipe(catchError(this.errorHandler), retry(1));
     }
 
@@ -39,17 +39,17 @@ export class NetworkService {
             .post<any[]>(endPoint, model,options)
     }
 
-    onUpdate(url: string, model: any): Observable<any> {
+    onUpdate(url: string, model: any, options?): Observable<any> {
         const endPoint = `${createUrl(url)}`;
         return this.http
-            .put<any[]>(endPoint, model)
+            .put<any[]>(endPoint, model,options)
             .pipe(catchError(this.errorHandlerMessage), retry(1));
     }
 
-    onDelete(url: string): Observable<any> {
+    onDelete(url: string,options?): Observable<any> {
         const endPoint = `${createUrl(url)}`;
         return this.http
-            .delete<any[]>(endPoint, {})
+            .delete<any[]>(endPoint, options)
             .pipe(catchError(this.errorHandlerMessage), retry(1));
     }
 

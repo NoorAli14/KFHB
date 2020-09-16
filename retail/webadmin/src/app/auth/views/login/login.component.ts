@@ -7,6 +7,7 @@ import { fuseAnimations } from "@fuse/animations";
 import { AuthenticationService } from "@shared/services/auth/authentication.service";
 import { MESSAGES } from "@shared/constants/app.constants";
 import { BaseComponent } from "@shared/components/base/base.component";
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: "app-login",
@@ -54,7 +55,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
     }
     onSubmit() {
         const model = this.loginForm.value;
-        this._authService.login(model).subscribe(
+        this._authService.login(model).pipe(takeUntil(this._unsubscribeAll)).subscribe(
             (response) => {
                 this.errorType = "success";
                 this.responseMessage = MESSAGES.LOGGED_IN();

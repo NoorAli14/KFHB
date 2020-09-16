@@ -5,6 +5,7 @@ import { fuseAnimations } from "@fuse/animations";
 import { MESSAGES } from "@shared/constants/app.constants";
 import { camelToSnakeCase } from "@shared/helpers/global.helper";
 import { BaseComponent } from '@shared/components/base/base.component';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: "app-update-password",
@@ -44,7 +45,7 @@ export class UpdatePasswordComponent extends BaseComponent implements OnInit {
     onSubmit() {
         let model = { ...this.updatePasswordForm.value };
         model = camelToSnakeCase(model);
-        this._settingService.updatePassword(model).subscribe(
+        this._settingService.updatePassword(model)  .pipe(takeUntil(this._unsubscribeAll)).subscribe(
             (response) => {
                  this.errorType = "success";
                  this.responseMessage = MESSAGES.UPDATED("Password");

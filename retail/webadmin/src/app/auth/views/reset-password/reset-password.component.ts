@@ -26,9 +26,7 @@ import { ActivatedRoute } from '@angular/router';
 export class ResetPasswordComponent extends BaseComponent implements OnInit, OnDestroy {
     resetPasswordForm: FormGroup;
    token:string;
-    // Private
-    private _unsubscribeAll: Subject<any>;
-
+ 
     constructor(
         private _fuseConfigService: FuseConfigService,
         private _authService: AuthenticationService,
@@ -57,7 +55,7 @@ export class ResetPasswordComponent extends BaseComponent implements OnInit, OnD
         };
 
         // Set the private defaults
-        this._unsubscribeAll = new Subject();
+       
     }
 
     ngOnInit(): void {
@@ -83,7 +81,7 @@ export class ResetPasswordComponent extends BaseComponent implements OnInit, OnD
     onSubmit() {
         let model = this.resetPasswordForm.value;
         model = camelToSnakeCase(model);
-        this._authService.resetPassword(model,this.token).subscribe(
+        this._authService.resetPassword(model,this.token).pipe(takeUntil(this._unsubscribeAll)).subscribe(
             (response) => {
                  this.errorType = "success";
                  this.responseMessage = MESSAGES.PASSWORD_UPDATED();
@@ -92,7 +90,7 @@ export class ResetPasswordComponent extends BaseComponent implements OnInit, OnD
         );
     }
     getEmailTokenStatus() {
-        this._authService.getTokenStatus(this.token).subscribe(
+        this._authService.getTokenStatus(this.token).pipe(takeUntil(this._unsubscribeAll)).subscribe(
             (response) => {
 
             },
@@ -102,8 +100,5 @@ export class ResetPasswordComponent extends BaseComponent implements OnInit, OnD
             }
         );
     }
-    ngOnDestroy(): void {
-        this._unsubscribeAll.next();
-        this._unsubscribeAll.complete();
-    }
+  
 }

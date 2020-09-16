@@ -61,19 +61,21 @@ export const NATIONALITY_LIST: Array<Select> = [
     { id: "3", name: "Kuwait" },
 ];
 
-const URI_PREFIX = "/api/v1/entitlements/";
+const ENTITLEMENT = "/api/v1/entitlements/";
+const REFERENCE = "/api/v1/references/";
 
 export const URI = {
-    USER_INVITATION: `${URI_PREFIX}invitations`,
-    USER: `${URI_PREFIX}users`,
-    ROLE: `${URI_PREFIX}roles`,
-    PERMISSION: `${URI_PREFIX}permissions`,
-    MODULE: `${URI_PREFIX}modules`,
-    LOGIN: `${URI_PREFIX}auth/login`,
-    REFRESH: `${URI_PREFIX}auth/refresh-token`,
-    LOGOUT: `${URI_PREFIX}auth/logout`,
-    FORGOT_PASSWORD: `${URI_PREFIX}users/password`,
-    RESET_PASSWORD: `${URI_PREFIX}`,
-    WORKING_DAYS: `${URI_PREFIX}working-days`,
-    HOLIDAYS: `${URI_PREFIX}holidays`,
+    USER_INVITATION: `${ENTITLEMENT}invitations`,
+    USER: `${ENTITLEMENT}users`,
+    ROLE: `${ENTITLEMENT}roles`,
+    PERMISSION: `${ENTITLEMENT}permissions`,
+    MODULE: `${ENTITLEMENT}modules`,
+    LOGIN: `${ENTITLEMENT}auth/login`,
+    REFRESH: `${ENTITLEMENT}auth/refresh-token`,
+    LOGOUT: `${ENTITLEMENT}auth/logout`,
+    FORGOT_PASSWORD: `${ENTITLEMENT}users/password`,
+    RESET_PASSWORD: `${ENTITLEMENT}`,
+    WORKING_DAYS: `${ENTITLEMENT}working-days`,
+    HOLIDAYS: `${ENTITLEMENT}holidays`,
+     COUNTRIES: `${REFERENCE}countries`,
 };

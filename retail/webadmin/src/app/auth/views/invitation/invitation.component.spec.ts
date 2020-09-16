@@ -134,14 +134,14 @@ describe("InvitationComponent", async () => {
         it("should the invitation button be enable if the form is valid", () => {
             helper.setForm(component.invitationForm, model);
             fixture.detectChanges();
-            const button: HTMLButtonElement = helper.findOne(".submit-button");
+            const button: HTMLButtonElement = helper.findOne(".post-button");
             expect(button.disabled).toBe(false);
         });
 
         it("should invitation submit button be disable if form is invalid ", () => {
             component.invitationForm.patchValue({ ...model, contactNo: null });
             fixture.detectChanges();
-            const button: HTMLButtonElement = helper.findOne(".submit-button");
+            const button: HTMLButtonElement = helper.findOne(".post-button");
             expect(button.disabled).toBe(true);
         });
 
@@ -152,7 +152,7 @@ describe("InvitationComponent", async () => {
                 confirmPassword: "hello1",
             });
             fixture.detectChanges();
-            const button: HTMLButtonElement = helper.findOne(".submit-button");
+            const button: HTMLButtonElement = helper.findOne(".post-button");
             expect(button.disabled).toBe(true);
         });
     });
@@ -161,25 +161,25 @@ describe("InvitationComponent", async () => {
         it("should call the onSubmit button only 1 time", () => {
             helper.setForm(component.invitationForm, model);
             spyOn(component, "onSubmit");
-            helper.clickElement(".submit-button");
+            helper.clickElement(".post-button");
             expect(component.onSubmit).toHaveBeenCalledTimes(1);
         });
 
         it("should call the authentication service one time ", () => {
             helper.setForm(component.invitationForm, model);
-            helper.clickElement(".submit-button");
+            helper.clickElement(".post-button");
             expect(authenticationMock.updateInvitation).toHaveBeenCalledTimes(1);
         });
 
         it("should show success message if succeed", () => {
             helper.setForm(component.invitationForm, model);
-            helper.clickElement(".submit-button");
+            helper.clickElement(".post-button");
             expect(component.errorType).toEqual("success");
         });
         it("should show error message if failed", () => {
             helper.setForm(component.invitationForm, model);
             authenticationMock.updateInvitation.and.returnValue(throwError(''));
-            helper.clickElement(".submit-button");
+            helper.clickElement(".post-button");
             expect(component.errorType).toEqual("error");
         });
     });

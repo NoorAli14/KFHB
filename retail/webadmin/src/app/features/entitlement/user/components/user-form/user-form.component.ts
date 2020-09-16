@@ -41,7 +41,7 @@ export class UserFormComponent extends BaseComponent implements OnInit {
     genderList: any[] = GENDER_LIST;
     statusList: any[] = STATUS_LIST;
     @Output() sendResponse: EventEmitter<User> = new EventEmitter<any>();
-    private _unsubscribeAll: Subject<any>;
+  
 
     constructor(
         public matDialogRef: MatDialogRef<UserFormComponent>,
@@ -134,8 +134,5 @@ export class UserFormComponent extends BaseComponent implements OnInit {
 
         this.sendResponse.emit(model);
     }
-    ngOnDestroy(): void {
-        this._unsubscribeAll.next();
-        this._unsubscribeAll.complete();
-    }
+  
 }
