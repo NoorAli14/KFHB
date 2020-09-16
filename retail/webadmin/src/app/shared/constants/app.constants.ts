@@ -75,4 +75,5 @@ export const URI = {
     FORGOT_PASSWORD: `${URI_PREFIX}users/password`,
     RESET_PASSWORD: `${URI_PREFIX}`,
     WORKING_DAYS: `${URI_PREFIX}working-days`,
+    HOLIDAYS: `${URI_PREFIX}holidays`,
 };

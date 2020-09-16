@@ -22,7 +22,7 @@
             <!-- / APP TITLE -->
 
             <!-- ADD BUTTON -->
-            <button mat-raised-button color="accent" (click)="onCreateDialog()" class="add-product-button fuse-white mt-24 mt-md-0">
+            <button mat-raised-button color="accent" (click)="openDialog()" class="add-product-button fuse-white mt-24 mt-md-0">
                 <span>ADD NEW</span>
             </button>
             <!-- / ADD BUTTON -->
@@ -58,7 +58,7 @@
             
             </mat-table>
             
-            <mat-paginator #paginator [pageIndex]="0" [pageSize]="3" showFirstLastButtons [pageSizeOptions]="[3,4]"></mat-paginator>
+            <mat-paginator #paginator [pageIndex]="0" [pageSize]="pageSize" showFirstLastButtons [pageSizeOptions]="pageSizeOptions"></mat-paginator>
         </div>
         <!-- / CONTENT CARD -->
     </div>
