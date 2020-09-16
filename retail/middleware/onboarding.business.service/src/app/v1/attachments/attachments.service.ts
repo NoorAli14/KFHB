@@ -33,10 +33,10 @@ export class AttachmentsService {
     input: FaceUploadingInput,
   ): Promise<Attachment> {
     // Construct GraphQL request
-    const params: string = `mutation {
+    const mutation: string = `mutation {
       result: uploadLiveness(input: ${toGraphql(input)}) ${this.output}
     }`;
-    return this.gqlClient.setHeaders(header).send(params);
+    return this.gqlClient.setHeaders(header).send(mutation);
   }
 
   /**
@@ -50,10 +50,10 @@ export class AttachmentsService {
     input: DocumentUploadingInput,
   ): Promise<Attachment> {
     // Construct GraphQL request
-    const params: string = `mutation {
+    const mutation: string = `mutation {
         result: addDocument(input: ${toGraphql(input)}) ${this.output}
       }`;
-    return this.gqlClient.setHeaders(header).send(params);
+    return this.gqlClient.setHeaders(header).send(mutation);
   }
 
   /**
@@ -64,10 +64,12 @@ export class AttachmentsService {
    */
   async process(header: IHEADER, input: IDocumentProcess): Promise<Attachment> {
     // Construct GraphQL request
-    const params: string = `mutation {
+    const mutation: string = `mutation {
         result: processDocument(input: ${toGraphql(input)}) ${this.output}
       }`;
-    const document: any = await this.gqlClient.setHeaders(header).send(params);
+    const document: any = await this.gqlClient
+      .setHeaders(header)
+      .send(mutation);
     if (document?.processed_data)
       document.processed_data = JSON.parse(document.processed_data);
     return document;
@@ -75,12 +77,12 @@ export class AttachmentsService {
 
   async preview(header: IHEADER, input: any): Promise<any> {
     // Construct GraphQL request
-    const params: string = `query {
+    const query: string = `query {
       result: previewAttachment(
           input: ${toGraphql(input)}) {
         image
       }
     }`;
-    return this.gqlClient.setHeaders(header).send(params);
+    return this.gqlClient.setHeaders(header).send(query);
   }
 }

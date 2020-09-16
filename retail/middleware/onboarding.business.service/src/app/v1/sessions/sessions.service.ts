@@ -28,10 +28,10 @@ export class SessionsService {
   constructor(private readonly gqlClient: GqlClientService) {}
 
   async create(header: IHEADER): Promise<Session> {
-    const params: string = `mutation {
+    const mutation: string = `mutation {
       result: addSession ${this.output}
     }`;
-    return this.gqlClient.setHeaders(header).send(params);
+    return this.gqlClient.setHeaders(header).send(mutation);
   }
 
   /**
@@ -42,12 +42,12 @@ export class SessionsService {
    */
   async update(header: IHEADER, input: FaceUploadingInput): Promise<Session> {
     // Construct GraphQL request
-    const params = `mutation {
+    const mutation: string = `mutation {
       result: updateSession(input: {
           file: "${strToBase64(input.file)}"
         }) ${this.output}
     }`;
-    return this.gqlClient.setHeaders(header).send(params);
+    return this.gqlClient.setHeaders(header).send(mutation);
   }
 
   /**
@@ -56,13 +56,13 @@ export class SessionsService {
    * @return The Evaluation object
    */
   async evaluation(header: IHEADER): Promise<Evaluation> {
-    const params: string = `mutation {
+    const mutation: string = `mutation {
       result: evaluation {
         success
         status
         message
       }
     }`;
-    return this.gqlClient.setHeaders(header).send(params);
+    return this.gqlClient.setHeaders(header).send(mutation);
   }
 }

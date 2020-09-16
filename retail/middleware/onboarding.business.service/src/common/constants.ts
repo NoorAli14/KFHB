@@ -1,17 +1,17 @@
-export const X_CORRELATION_KEY = 'x-correlation-id';
-export const X_ACCESS_TOKEN = 'x-access-token';
-export const X_REFRESH_TOKEN = 'x-refresh-token';
-export const X_USER_ID = 'x-user-id';
-export const X_TENANT_ID = 'x-tenant-id';
-export const MODULE_STATUSES = ['ACTIVE', 'INACTIVE'];
-export const ROLE_STATUSES = ['ACTIVE', 'INACTIVE'];
-export const USER_STATUSES = {
+export const X_CORRELATION_KEY: string = 'x-correlation-id';
+export const X_ACCESS_TOKEN: string = 'x-access-token';
+export const X_REFRESH_TOKEN: string = 'x-refresh-token';
+export const X_USER_ID: string = 'x-user-id';
+export const X_TENANT_ID: string = 'x-tenant-id';
+export const MODULE_STATUSES: string[] = ['ACTIVE', 'INACTIVE'];
+export const ROLE_STATUSES: string[] = ['ACTIVE', 'INACTIVE'];
+export const USER_STATUSES: { [key: string]: string } = {
   PENDING: 'PENDING',
   ACTIVE: 'ACTIVE',
   INACTIVE: 'INACTIVE',
 };
 
-export const GENDER = ['M', 'F'];
+export const GENDER: string[] = ['M', 'F'];
 
 export const DOCUMENT_TYPES = {
   SELFIE: 'SELFIE',
@@ -33,4 +33,15 @@ export const DOCUMENT_STATUSES: { [key: string]: string } = {
 export const SESSION_STATUSES: { [key: string]: string } = {
   ACTIVE: 'ACTIVE',
   ARCHIVED: 'ARCHIVED',
+};
+
+export const DELIVERY_MODES: { [key: string]: string } = {
+  EMAIL: 'email',
+  MOBILE: 'mobile',
+  BOTH: 'both',
+};
+
+export const STATUSES: { [key: string]: string } = {
+  SUCCESS: 'SUCCESS',
+  FAILED: 'FAILED',
 };

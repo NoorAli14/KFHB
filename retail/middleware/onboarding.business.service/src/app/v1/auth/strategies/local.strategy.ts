@@ -12,10 +12,10 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(email: string, password: string): Promise<any> {
-    const user = await this.userService.login(email, password);
-    if (!user) {
-      throw new UnauthorizedException('Wrong credentials provided');
-    }
-    return user;
+    // const user = await this.userService.login(email, password);
+    // if (!user) {
+    //   throw new UnauthorizedException('Wrong credentials provided');
+    // }
+    // return user;
   }
 }

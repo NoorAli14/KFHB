@@ -1,10 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Logger } from '@nestjs/common';
+import { GqlClientService, toGraphql, IHEADER } from '@common/index';
 import { User } from './user.entity';
-import { GqlClientService, toGraphql } from '@common/index';
-import { IHEADER } from '@common/interfaces';
 
 @Injectable()
 export class UserService {
+  private readonly logger: Logger = new Logger(UserService.name);
   private readonly output: string = `{
     id
     first_name
@@ -26,98 +26,39 @@ export class UserService {
 
   constructor(private readonly gqlClient: GqlClientService) {}
 
-  async create(header: IHEADER, input: any): Promise<any> {
+  async create(header: IHEADER, input: any): Promise<User> {
+    this.logger.log(`Start registering a new customer`);
     // const user: User = await this.findByEmail(input.email);
     // if (user) {
     //   throw new UnprocessableEntityException(
     //     `User Already Exist with email ${input.email}`,
     //   );
     // }
-    const params = `mutation {
+    const mutation: string = `mutation {
       result: addCustomer(input: ${toGraphql(input)}) ${this.output}
     }`;
-    return this.gqlClient.setHeaders(header).send(params);
+    return this.gqlClient.setHeaders(header).send(mutation);
   }
 
-  async findOne(id: string, output?: string): Promise<User> {
+  async findOne(header: IHEADER, id: string, output?: string): Promise<User> {
+    this.logger.log(`Find customer with ID [${id}]`);
     const _output: string = output ? output : this.output;
-    const params = `query {
+    const query: string = `query {
       result: findCustomerById(id: "${id}") ${_output}
     }`;
-    return this.gqlClient.send(params);
+    return this.gqlClient.setHeaders(header).send(query);
   }
 
-  async login(email: string, password: string): Promise<any> {
-    const params = `query {
-        result: login(input: ${toGraphql({ email, password })}) ${this.output}
-      }`;
-    return this.gqlClient.send(params);
-  }
-
-  async findBy(condition: any, output?: string): Promise<User[]> {
-    const _output: string = output ? output : this.output;
-    const params = `query {
-      result: findUserBy(checks: ${toGraphql(condition)}) ${_output}
-    }`;
-    return this.gqlClient.send(params);
-  }
-
-  async findByEmail(email: string) {
-    const [user] = await this.findBy(
-      [
-        {
-          record_key: 'email',
-          record_value: email,
-        },
-      ],
-      `{id email status}`,
-    );
-    return user;
-  }
-
-  async findByInvitationToken(token: string): Promise<any> {
-    return this.findBy(
-      [
-        {
-          record_key: 'invitation_token',
-          record_value: token,
-        },
-      ],
-      `{id status invitation_token invitation_token_expiry}`,
-    );
-  }
-
-  async findByPasswordResetToken(token: string) {
-    return this.findBy(
-      [
-        {
-          record_key: 'password_reset_token',
-          record_value: token,
-        },
-      ],
-      `{id password_reset_token password_reset_token_expiry status}`,
-    );
-  }
-
-  async update(id: string, input: any): Promise<User> {
-    const user: User = await this.findOne(id, `{id}`);
+  async update(header: IHEADER, id: string, input: any): Promise<User> {
+    const user: User = await this.findOne(header, id, `{id}`);
     if (!user) {
-      throw new NotFoundException('User Not Found');
+      throw new NotFoundException('Customer Not Found');
     }
-    const params = `mutation {
-      result: updateUser(id: "${id}", input: ${toGraphql(input)}) ${this.output}
-    }`;
-    return this.gqlClient.send(params);
-  }
-
-  async delete(id: string): Promise<boolean> {
-    const user: User = await this.findOne(id, `{id}`);
-    if (!user) {
-      throw new NotFoundException('User Not Found');
+    const mutation: string = `mutation {
+      result: updateCustomer(id: "${id}", input: ${toGraphql(input)}) ${
+      this.output
     }
-    const params = `mutation {
-      result: deleteUser(id: "${id}") 
     }`;
-    return this.gqlClient.send(params);
+    return this.gqlClient.setHeaders(header).send(mutation);
   }
 }

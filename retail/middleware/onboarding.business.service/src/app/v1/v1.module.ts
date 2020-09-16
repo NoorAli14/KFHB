@@ -27,6 +27,7 @@ if (process.env.NODE_ENV === 'production') {
   ];
 } else {
   services = [
+    { name: 'notification', url: 'http://localhost:5030/graphql' },
     { name: 'identity', url: 'http://localhost:4010/graphql' },
     { name: 'compliance', url: 'http://localhost:5010/graphql' },
   ];

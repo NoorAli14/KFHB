@@ -20,6 +20,7 @@ export class GqlClientService {
     return this;
   }
   public async send(input: string): Promise<any> {
+    this.logger.log(this.__header);
     return this.http
       .post(
         '/graphql',
