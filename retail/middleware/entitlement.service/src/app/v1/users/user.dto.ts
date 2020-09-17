@@ -43,6 +43,12 @@ export class UpdateUserInput {
   gender?: string;
 
   @Field({ nullable: true })
+  @IsString()
+  @IsOptional()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  password?: string;
+
+  @Field({ nullable: true })
   @IsOptional()
   @IsBoolean()
   is_owner?: boolean;
@@ -99,12 +105,6 @@ export class CreateUserInput extends UpdateUserInput{
   @IsEmail()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   email: string;
-
-  @Field({ nullable: true })
-  @IsString()
-  @IsOptional()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  password?: string;
 }
 
 @InputType()
