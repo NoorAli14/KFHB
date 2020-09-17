@@ -14,7 +14,7 @@ services:
   #=================================================================
   gateway-servcie:
     build:
-      context: ../../../retail/middleware/gateway.service
+      context: ../../../../retail/middleware/gateway.service
       dockerfile: Dockerfile
     image: "gateway-service:v1"
     container_name: gateway_service
@@ -26,6 +26,8 @@ services:
       - ENV_RBX_ENTITLEMENT_PORT=$ENV_RBX_ENTITLEMENT_PORT
       - ENV_RBX_ONBOARDING_HOST=$ENV_RBX_ONBOARDING_HOST
       - ENV_RBX_ONBOARDING_PORT=$ENV_RBX_ONBOARDING_PORT
+      - ENV_RBX_REFERENCE_HOST=$ENV_RBX_REFERENCE_HOST
+      - ENV_RBX_REFERENCE_PORT=$ENV_RBX_REFERENCE_PORT
       - ENV_RBX_NGINX_MAX_BODY=$ENV_RBX_NGINX_MAX_BODY
     networks:
       - core_service_network
@@ -37,7 +39,7 @@ services:
   #=================================================================
   webportal-service:
     build:
-      context: ../../../retail/webadmin/
+      context: ../../../../retail/webadmin/
       dockerfile: Dockerfile
     image: "webportal:v1"
     container_name: "webportal_service"
@@ -54,7 +56,7 @@ services:
   #=================================================================
   entitlement-business-service:
     build:
-      context: ../../../retail/middleware/entitlement.business.service
+      context: ../../../../retail/middleware/entitlement.business.service
       dockerfile: Dockerfile
     image: "entitlement-business-service:v1"
     container_name: "entitlement_business_service"
@@ -74,8 +76,6 @@ services:
       - ENV_RBX_WEB_RESET_PASSWORD_LINK=$ENV_RBX_WEB_RESET_PASSWORD_LINK
       - ENV_RBX_REDIS_URL=$ENV_RBX_REDIS_URL
     restart: always
-    depends_on:
-      - redis-server
     networks:
       - core_service_network
 
@@ -84,28 +84,70 @@ services:
   #=================================================================
   onboarding-business-service:
     build:
-      context: ../../../retail/middleware/onboarding.business.service
+      context: ../../../../retail/middleware/onboarding.business.service
       dockerfile: Dockerfile
     image: "onboarding-business-service:v1"
     container_name: "onboarding_business_service"
     environment:
       - ENV_RBX_PORT=4000
-      - ENV_RBX_APP_NAME=Rubix Onboarding Business Service
+      - ENV_RBX_APP_NAME=Rubix | Onboarding Business Service
       - ENV_RBX_SWAGGER_ENABLED=true
-      - ENV_RBX_API_URL_PREFIX=api/v1/onboarding/
+      - ENV_RBX_API_URL_PREFIX=api/v1/onboarding
+      - ENV_RBX_CORS_ORIGIN=$ENV_RBX_CORS_ORIGIN
+      - ENV_RBX_CORS_ENABLED=$ENV_RBX_CORS_ENABLED
+      - ENV_RBX_JWT_EXPIRY_MINUTES=$ENV_RBX_JWT_EXPIRY_MINUTES
+      - ENV_RBX_JWT_REFRESH_EXPIRY_DAYS=$ENV_RBX_JWT_REFRESH_EXPIRY_DAYS
+      - ENV_RBX_JWT_SECRET=$ENV_RBX_JWT_SECRET
+      - ENV_RBX_JWT_REFRESH_SECRET=$ENV_RBX_JWT_REFRESH_SECRET
+      - ENV_RBX_JWT_ALGORITHM=$ENV_RBX_JWT_ALGORITHM
+      - ENV_RBX_REDIS_URL=$ENV_RBX_REDIS_URL
     restart: always
     networks:
       - core_service_network
 
   #=================================================================
-  # Template Service
+  # Identity Service
   #=================================================================
-  template-service:
+  identity-service:
     build:
-      context: ../../../retail/middleware/template.service
+      context: ../../../../retail/middleware/identity.service
       dockerfile: Dockerfile
-    image: "template-service:v1"
-    container_name: "template_service"
+    image: "identity-service:v1"
+    container_name: "identity_service"
+    environment:
+      - ENV_RBX_PORT=4010
+      - ENV_RBX_DB_USERNAME=$ENV_RBX_DB_USERNAME
+      - ENV_RBX_DB_PASS=$ENV_RBX_DB_PASS
+      - ENV_RBX_DB_NAME=$ENV_RBX_DB_NAME
+      - ENV_RBX_DB_HOST=$ENV_RBX_DB_HOST
+      - ENV_RBX_DB_PORT=$ENV_RBX_DB_PORT
+      - ENV_RBX_DB_TIMEOUT=$ENV_RBX_DB_TIMEOUT
+      - ENV_RBX_DB_DIALECT=$ENV_RBX_DB_DIALECT
+      - ENV_RBX_DB_DEBUG=$ENV_RBX_DB_DEBUG
+      - ENV_RBX_GRAPHQL_DEBUG=$ENV_RBX_GRAPHQL_DEBUG
+      - ENV_RBX_GRAPHQL_PLAYGROUND=$ENV_RBX_GRAPHQL_PLAYGROUND
+      - ENV_RBX_IDENTITYX_BASE_URL=$ENV_RBX_IDENTITYX_BASE_URL
+      - ENV_RBX_IDENTITYX_API_VERSION=$ENV_RBX_IDENTITYX_API_VERSION
+      - ENV_RBX_IDENTITYX_TOKEN=$ENV_RBX_IDENTITYX_TOKEN
+      - ENV_RBX_IDENTITYX_TENANT=$ENV_RBX_IDENTITYX_TENANT
+      - ENV_RBX_IDENTITYX_USERNAME=$ENV_RBX_IDENTITYX_USERNAME
+      - ENV_RBX_IDENTITYX_PASSWORD=$ENV_RBX_IDENTITYX_PASSWORD
+      - ENV_RBX_IDENTITYX_REG_POLICY=$ENV_RBX_IDENTITYX_REG_POLICY
+      - ENV_RBX_IDENTITYX_APPLICATION=$ENV_RBX_IDENTITYX_APPLICATION
+      - ENV_RBX_IDENTITYX_EVALUATION_POLICY=$ENV_RBX_IDENTITYX_EVALUATION_POLICY
+      - NODE_TLS_REJECT_UNAUTHORIZED=$NODE_TLS_REJECT_UNAUTHORIZED
+    restart: always
+    networks:
+      - core_service_network
+  #=================================================================
+  # Compliance Service
+  #=================================================================
+  compliance-service:
+    build:
+      context: ../../../../retail/middleware/template.service
+      dockerfile: Dockerfile
+    image: "compliance-service:v1"
+    container_name: "compliance_service"
     environment:
       - ENV_RBX_PORT=5010
       - ENV_RBX_DB_USERNAME=$ENV_RBX_DB_USERNAME
@@ -122,12 +164,12 @@ services:
     networks:
       - core_service_network
 
-  #=================================================================
-  # User Management Service
-  #=================================================================
+  # #=================================================================
+  # # User Management Service
+  # #=================================================================
   user-management-service:
     build:
-      context: ../../../retail/middleware/entitlement.service
+      context: ../../../../retail/middleware/entitlement.service
       dockerfile: Dockerfile
     image: "user-management-service:v1"
     container_name: "user_management_service"
@@ -147,12 +189,12 @@ services:
     networks:
       - core_service_network
 
-  #=================================================================
-  # Notification Service
-  #=================================================================
+  # #=================================================================
+  # # Notification Service
+  # #=================================================================
   notification-service:
     build:
-      context: ../../../retail/middleware/notifications
+      context: ../../../../retail/middleware/notifications
       dockerfile: Dockerfile
     image: "notification-service:v1"
     container_name: "notification_service"
@@ -176,6 +218,32 @@ services:
       - ENV_RBX_SMTP_PASS=$ENV_RBX_SMTP_PASS
       - ENV_RBX_SMTP_SENDING_NAME=$ENV_RBX_SMTP_SENDING_NAME
       - ENV_RBX_SMTP_SENDING_EMAIL=$ENV_RBX_SMTP_SENDING_EMAIL
+    restart: always
+    networks:
+      - core_service_network
+
+  #=================================================================
+  # Reference Service
+  #=================================================================
+  reference-service:
+    build:
+      context: ../../../../retail/middleware/reference.service
+      dockerfile: Dockerfile
+    image: "reference-service:v1"
+    container_name: "reference_service"
+    environment:
+      - ENV_RBX_PORT=2000
+      - ENV_RBX_APP_NAME=Rubix | References Service
+      - ENV_RBX_SWAGGER_ENABLED=true
+      - ENV_RBX_API_URL_PREFIX=api/v1/references
+      - ENV_RBX_SWAGGER_ROUTE=api/v1/references/docs
+      - ENV_RBX_DB_USERNAME=$ENV_RBX_DB_USERNAME
+      - ENV_RBX_DB_PASS=$ENV_RBX_DB_PASS
+      - ENV_RBX_DB_NAME=$ENV_RBX_DB_NAME
+      - ENV_RBX_DB_HOST=$ENV_RBX_DB_HOST
+      - ENV_RBX_DB_PORT=$ENV_RBX_DB_PORT
+      - ENV_RBX_DB_TIMEOUT=$ENV_RBX_DB_TIMEOUT
+      - ENV_RBX_DB_DIALECT=$ENV_RBX_DB_DIALECT
     restart: always
     networks:
       - core_service_network

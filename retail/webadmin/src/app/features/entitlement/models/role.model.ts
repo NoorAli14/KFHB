@@ -4,5 +4,5 @@ import { Modules } from './modules.model';
 export class Role extends BaseModel{
     name:string;
     description:string;
-    modules:Array<Modules>=[];
+    permissions:Array<{id}>=[];
 }

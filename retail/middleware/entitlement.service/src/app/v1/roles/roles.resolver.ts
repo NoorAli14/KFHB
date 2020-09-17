@@ -4,7 +4,7 @@ import { Loader } from 'nestjs-dataloader';
 
 import { RoleService } from "@app/v1/roles/roles.service";
 import {Role, RoleWithPagination} from "@app/v1/roles/role.model";
-import { RoleInput } from "@app/v1/roles/role.dto";
+import {RoleCreateInput, RoleInput} from "@app/v1/roles/role.dto";
 import { KeyValInput } from "@common/inputs/key-val.input";
 import { Module } from "@app/v1/modules/module.model";
 import {Fields} from '@common/decorators';
@@ -40,7 +40,7 @@ export class RolesResolver {
   }
 
   @Mutation(() => Role)
-  async addRole(@Args('input') input: RoleInput,
+  async addRole(@Args('input') input: RoleCreateInput,
                 @Fields() columns: string[],
                 @Context() context: GraphQLExecutionContext): Promise<Role> {
     input = getMutateProps('created', context['req'].headers, input);

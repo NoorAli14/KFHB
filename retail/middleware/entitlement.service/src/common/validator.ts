@@ -12,22 +12,11 @@ export const validateGender = (gender: string) : any => {
 
 export const validateDate = (date: string) : any => {
   try{
-    new Date(date).toISOString();
+    return new Date(date).toISOString();
   } catch (e) {
     throw new HttpException({
       status: HttpStatus.BAD_REQUEST,
       error: MESSAGES.INVALID_DATE,
-    }, HttpStatus.BAD_REQUEST);
-  }
-};
-
-export const validateCalendarDay = (date: string) : any => {
-  try{
-    return new Date(date).toISOString().substring(0,10);
-  } catch (e) {
-    throw new HttpException({
-      status: HttpStatus.BAD_REQUEST,
-      error: MESSAGES.INVALID_CALENDAR_DAY,
     }, HttpStatus.BAD_REQUEST);
   }
 };

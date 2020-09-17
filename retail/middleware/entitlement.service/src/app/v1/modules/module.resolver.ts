@@ -4,7 +4,7 @@ import { Loader } from 'nestjs-dataloader';
 
 import {ModuleService} from "@app/v1/modules/module.service";
 import {Module, ModuleWithPagination} from "@app/v1/modules/module.model";
-import {ModuleInput} from "@app/v1/modules/module.dto";
+import {ModuleCreateInput, ModuleInput} from "@app/v1/modules/module.dto";
 import { KeyValInput } from "@common/inputs/key-val.input";
 import {Permission} from "@app/v1/permissions/permission.model";
 import {Fields} from '@common/decorators';
@@ -40,7 +40,7 @@ export class ModuleResolver {
   }
 
   @Mutation(() => Module)
-  async addModule(@Args('input') input: ModuleInput,
+  async addModule(@Args('input') input: ModuleCreateInput,
                   @Fields() columns: string[],
                   @Context() context: GraphQLExecutionContext): Promise<Module> {
     input = getMutateProps('created', context['req'].headers, input);
@@ -74,6 +74,16 @@ export class ModuleResolver {
   @ResolveField('permissions', returns => [Permission])
   async getPermissions(@Parent() module: Module,
                        @Loader('PermissionsDataLoader') permissionsLoader: DataLoader<Permission['id'], Permission>) {
+    return this.getData(module, permissionsLoader);
+  }
+
+  @ResolveField('sub_modules', returns => [Module])
+  async getSubModules(@Parent() module: Module,
+                       @Loader('SubModulesDataLoader') subModulesLoader: DataLoader<Module['id'], Module>) {
+    return this.getData(module, subModulesLoader);
+  }
+
+  async getData(module: Module, loader: any) : Promise<any> {
     if(!module.id) return [];
     let input: any = module.id;
     if(module['role_id']) {
@@ -82,20 +92,9 @@ export class ModuleResolver {
         role_id: module['role_id']
       };
     }
-    return permissionsLoader.load(input);
-  }
-
-  @ResolveField('sub_modules', returns => [Module])
-  async getSubModules(@Parent() module: Module,
-                       @Loader('SubModulesDataLoader') subModulesLoader: DataLoader<Module['id'], Module>) {
-    if(!module.id) return [];
-    const input: any = module.id;
-    // if(module['role_id']) {
-    //   input = {
-    //     module_id: module.id,
-    //     role_id: module['role_id']
-    //   };
-    // }
-    return subModulesLoader.load(input);
+    let result: any = await loader.load(input);
+    if(module['role_id'])
+      result = result.filter(res => res.role_id == module['role_id']);
+    return result
   }
 }

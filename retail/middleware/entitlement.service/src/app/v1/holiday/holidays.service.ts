@@ -3,7 +3,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { MESSAGES, STATUS } from '@common/constants';
 import { KeyValInput } from '@common/inputs/key-val.input';
 import { HolidayRepository } from '@core/repository/holiday.repository';
-import {validateCalendarDay} from '@common/validator';
+import {validateDate} from '@common/validator';
 
 @Injectable()
 export class HolidaysService {
@@ -31,7 +31,7 @@ export class HolidaysService {
     newObj: Record<string, any>,
     keys?: string[],
   ): Promise<any> {
-    if (newObj.calendar_day) newObj.calendar_day = validateCalendarDay(newObj.calendar_day);
+    if (newObj.holiday_date) newObj.holiday_date = validateDate(newObj.holiday_date).substring(0,10);
     if(newObj.status && !STATUS[newObj.status]){
       throw new HttpException({
         status: HttpStatus.BAD_REQUEST,
@@ -49,7 +49,7 @@ export class HolidaysService {
   }
 
   async create(newObj: Record<string, any>, keys?: string[]): Promise<any> {
-    newObj.calendar_day = validateCalendarDay(newObj.calendar_day);
+    newObj.holiday_date = validateDate(newObj.holiday_date).substring(0,10);
     if (!newObj.status) {
       newObj.status = STATUS.ACTIVE;
     } else if(!STATUS[newObj.status]){

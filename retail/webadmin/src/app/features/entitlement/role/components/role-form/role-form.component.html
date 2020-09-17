@@ -1,0 +1,135 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar class="mat-accent m-0">
+        <mat-toolbar-row
+            fxFlex
+            fxLayout="row"
+            fxLayoutAlign="space-between center"
+        >
+         <div class="logo mb-24 mb-md-0"
+                 fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon mr-12" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+                    security
+                </mat-icon>
+                <span class="logo-text" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                    Roles
+                </span>
+            </div>
+            <button
+                mat-icon-button
+                (click)="matDialogRef.close()"
+                aria-label="Close dialog"
+            >
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
+       
+        <form
+        class="p-24 mr-24"
+        fxLayout="column"
+        fxLayoutAlign="start"
+        fxFlex="1 0"
+        name="modulesForm"
+        (ngSubmit)="onSubmit()"
+        novalidate
+        [formGroup]="roleForm"
+    >
+    <app-message-box [type]="errorType" [message]="responseMessage"></app-message-box>
+    
+        <div
+            fxLayout="row wrap"
+            fxLayout.lt-lg="column"
+            fxLayoutAlign.lt-lg="center"
+            fxLayoutAlign="start center"
+            fxFlex="1 1 auto"
+        >
+            <mat-form-field appearance="outline" fxFlex="100" class="pr-4" >
+                <mat-label>Name</mat-label>
+                <input matInput formControlName="name" />
+                <mat-icon matSuffix class="secondary-text"
+                    >account_circle</mat-icon
+                >
+                <mat-error>
+                    <app-mat-error
+                        [control]="roleForm.get('name')"
+                    ></app-mat-error>
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" fxFlex="100" class="pr-4">
+                <mat-label>Description</mat-label>
+                <textarea matInput placeholder="Description" formControlName="description"></textarea>
+                <mat-icon matSuffix class="secondary-text"
+                    >account_circle</mat-icon>
+                <mat-error>
+                    <app-mat-error [control]="roleForm.get('description')"></app-mat-error>
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <hr>
+        <div class="actions" fxLayout="row" fxLayoutAlign="center center">
+            <mat-table style="width: 100%;" #table matSort matSortActive="id" matSortDirection="asc" matSortDisableClear [dataSource]="dataSource" [@animateStagger]="{ value: '50' }">
+                <!-- COLUMNS AND ROWS-->
+                <ng-container *ngFor="let key of displayedColumns;  " [matColumnDef]="key">
+                   <mat-header-cell  *matHeaderCellDef>
+                    <div *ngIf="key=='module'" fxLayout="row" fxLayoutAlign="start start">
+                        {{ camelToSentenceCase(key)  }}
+                       </div>   
+                       <div *ngIf="key!=='module'" fxLayout="row" fxLayoutAlign="center center">
+                        {{ camelToSentenceCase(key)  }}
+                       </div>   
+                   </mat-header-cell>
+                  
+                   <mat-cell  *matCellDef="let control of modules.controls; let i = index;" >
+                       <div *ngIf="key==='module'; else checkboxes" fxLayout="row" fxLayoutAlign="start start">
+                        <span >{{modules.controls[i].get(key).value.name}}</span>
+                       </div>
+                       <div fxLayout="row" fxLayoutAlign="center center">
+                        <ng-template #checkboxes>
+                            <ng-container *ngIf="modules.controls[i].get(key); else nothing">
+                                <input type="checkbox" [formControl]="modules.controls[i].get(key)" >
+                            </ng-container>
+                        <ng-template #nothing>
+                            <input type="checkbox" disabled >
+                        </ng-template>
+                        </ng-template>
+                       </div>
+                            
+                   </mat-cell>
+               </ng-container>
+               <!-- -->
+               <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+               <mat-row *matRowDef="let row; columns: displayedColumns;" [@animate]="{value:'*',params:{y:'100%'}}">
+               </mat-row>
+           </mat-table>
+        </div>
+        <br>
+        <div class="actions mb-24" fxLayout="row" fxLayoutAlign="end center">
+            <button
+                type="button"
+                mat-raised-button
+                (click)="matDialogRef.close()"
+                color="secondary"
+                aria-label="Follow"
+            >
+                Cancel
+            </button>
+            &nbsp;&nbsp;&nbsp;
+          
+            <button
+            appPermission
+            [permissions]="data.userPermissions"
+            [type]="data.role.id ? 'edit' : 'create'"
+                type="submit"
+                [disabled]="roleForm.invalid"
+                mat-raised-button
+                color="accent"
+                aria-label="Send Message"
+            >
+                Submit
+            </button>
+        </div>
+    </form>
+    </div>
+</div>

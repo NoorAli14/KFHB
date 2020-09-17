@@ -7,19 +7,13 @@ export class Holiday {
   id: string;
 
   @Field({ nullable: true })
-  calendar_day?: string;
+  holiday_date?: string;
 
   @Field({ nullable: true })
-  holiday_type?: string;
-
-  @Field({ nullable: true })
-  holiday_details?: string;
+  holiday_description?: string;
 
   @Field({ nullable: true })
   remarks?: string;
-
-  @Field({ nullable: true })
-  is_repetitive?: number;
 
   @Field({ nullable: true })
   status?: string;
