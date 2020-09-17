@@ -113,17 +113,17 @@ export class UserService {
 
   async findOne(header: IHEADER, id: string, output?: string): Promise<User> {
     const _output: string = output ? output : this.output;
-    const params = `query {
+    const query: string = `query {
       result: findUserById(id: "${id}") ${_output}
     }`;
-    return this.gqlClient.setHeaders(header).send(params);
+    return this.gqlClient.setHeaders(header).send(query);
   }
 
   async login(email: string, password: string): Promise<any> {
-    const params = `query {
+    const query: string = `query {
         result: login(input: ${toGraphql({ email, password })}) ${this.output}
       }`;
-    return this.gqlClient.send(params);
+    return this.gqlClient.send(query);
   }
 
   async findBy(
