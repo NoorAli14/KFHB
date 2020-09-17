@@ -16,6 +16,11 @@ const routes: Routes = [
         loadChildren: () =>
             import("./holiday/holiday.module").then((m) => m.HolidayModule),
     },
+    {
+        path: "leave",
+        loadChildren: () =>
+            import("./leave/leave.module").then((m) => m.LeaveModule),
+    },
 ];
 
 @NgModule({

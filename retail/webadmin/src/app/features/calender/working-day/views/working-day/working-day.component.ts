@@ -12,7 +12,7 @@ import {
     ConfirmDialogComponent,
     ConfirmDialogModel,
 } from "@shared/components/confirm-dialog/confirm-dialog.component";
-import { MESSAGES } from "@shared/constants/app.constants";
+import { MESSAGES } from '@shared/constants/messages.constant';
 import {
     camelToSentenceCase,
     camelToSnakeCase,

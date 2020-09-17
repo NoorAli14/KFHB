@@ -1,10 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 import { AuthUserService } from "@shared/services/user/auth-user.service";
-import { MESSAGES } from '@shared/constants/app.constants';
 import { ErrorEmitterService } from '@shared/services/error-emitter/error-emitter.service';
 import {Injector} from '@angular/core';
 import { MapperService } from '@shared/services/mappers/mapper.service';
 import { Subject } from 'rxjs';
+import { MESSAGES } from '@shared/constants/messages.constant';
 @Component({
     selector: "app-base",
     templateUrl: "./base.component.html",

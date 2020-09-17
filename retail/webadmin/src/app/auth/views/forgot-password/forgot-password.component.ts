@@ -4,9 +4,9 @@ import { FormGroup, Validators, FormControl } from "@angular/forms";
 
 import { FuseConfigService } from "@fuse/services/config.service";
 import { fuseAnimations } from "@fuse/animations";
-import { MESSAGES } from "@shared/constants/app.constants";
 import { BaseComponent } from '@shared/components/base/base.component';
 import { takeUntil } from 'rxjs/operators';
+import { MESSAGES } from '@shared/constants/messages.constant';
 
 @Component({
     selector: "forgot-password",

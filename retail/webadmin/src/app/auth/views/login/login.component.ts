@@ -5,9 +5,9 @@ import { FormGroup, Validators, FormControl } from "@angular/forms";
 import { FuseConfigService } from "@fuse/services/config.service";
 import { fuseAnimations } from "@fuse/animations";
 import { AuthenticationService } from "@shared/services/auth/authentication.service";
-import { MESSAGES } from "@shared/constants/app.constants";
 import { BaseComponent } from "@shared/components/base/base.component";
 import { takeUntil } from 'rxjs/operators';
+import { MESSAGES } from '@shared/constants/messages.constant';
 
 @Component({
     selector: "app-login",

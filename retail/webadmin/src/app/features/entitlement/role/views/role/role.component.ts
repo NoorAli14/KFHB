@@ -11,7 +11,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { Role } from "@feature/entitlement/models/role.model";
 
 import { removeRandom } from "@shared/helpers/global.helper";
-import { MESSAGES, MODULES } from "@shared/constants/app.constants";
+import {  MODULES } from "@shared/constants/app.constants";
 import {
     ConfirmDialogModel,
     ConfirmDialogComponent,
@@ -21,6 +21,7 @@ import { RoleFormComponent } from "../../components/role-form/role-form.componen
 import { cloneDeep } from "lodash";
 import { Modules } from "@feature/entitlement/models/modules.model";
 import { takeUntil } from 'rxjs/operators';
+import { MESSAGES } from '@shared/constants/messages.constant';
 
 @Component({
     selector: "app-role",

@@ -4,10 +4,10 @@ import { fuseAnimations } from "@fuse/animations";
 import { MatDialog } from "@angular/material/dialog";
 import { UpdateProfileComponent } from "@feature/setting/components/update-profile/update-profile.component";
 import { User } from "@feature/entitlement/models/user.model";
-import { MESSAGES } from "@shared/constants/app.constants";
 import { camelToSnakeCase } from "@shared/helpers/global.helper";
 import { BaseComponent } from "@shared/components/base/base.component";
 import { takeUntil } from 'rxjs/operators';
+import { MESSAGES } from '@shared/constants/messages.constant';
 
 @Component({
     selector: "app-profile",

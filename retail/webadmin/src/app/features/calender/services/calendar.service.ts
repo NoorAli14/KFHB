@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { NetworkService } from "@shared/services/network/network.service";
 import { WorkingDay } from '../models/working-week.model';
 import { Holiday } from '../models/holiday.model';
+import { Leave } from '../models/leave.model';
 
 @Injectable({
     providedIn: "root",
@@ -35,5 +36,19 @@ export class CalendarService {
     }
     deleteHoliday(id: string) {
         return this._networkService.onDelete(`${URI.HOLIDAYS}/${id}`);
+    }
+
+
+    getLeaves() {
+        return this._networkService.getAll(URI.LEAVES);
+    }
+    createLeave(model: Leave) {
+        return this._networkService.post(URI.LEAVES, model);
+    }
+    editLeave(id: string, model: Leave) {
+        return this._networkService.onUpdate(`${URI.LEAVES}/${id}`, model);
+    }
+    deleteLeave(id: string) {
+        return this._networkService.onDelete(`${URI.LEAVES}/${id}`);
     }
 }

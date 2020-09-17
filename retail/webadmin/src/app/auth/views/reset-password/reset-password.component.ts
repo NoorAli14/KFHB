@@ -11,10 +11,10 @@ import { takeUntil } from "rxjs/operators";
 import { FuseConfigService } from "@fuse/services/config.service";
 import { fuseAnimations } from "@fuse/animations";
 import { AuthenticationService } from "@shared/services/auth/authentication.service";
-import { MESSAGES } from "@shared/constants/app.constants";
 import { camelToSnakeCase } from "@shared/helpers/global.helper";
 import { BaseComponent } from '@shared/components/base/base.component';
 import { ActivatedRoute } from '@angular/router';
+import { MESSAGES } from '@shared/constants/messages.constant';
 
 @Component({
     selector: "reset-password",

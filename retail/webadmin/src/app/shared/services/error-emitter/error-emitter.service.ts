@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { MESSAGES } from '@shared/constants/app.constants';
 
 @Injectable({
   providedIn: 'root'

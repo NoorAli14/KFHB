@@ -12,10 +12,8 @@ export class ReferenceService {
     getCountries() {
         let headers = new HttpHeaders();
         headers = headers.set("public", "true");
-        debugger
         return this._service.getAll(URI.COUNTRIES, null, { headers }).pipe(
             map((data) => {
-                debugger;
                 const body = data.body;
                 if (body.response) {
                 }

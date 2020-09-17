@@ -1,53 +1,43 @@
-import { Component, OnInit, ViewEncapsulation, ViewChild, Injector } from '@angular/core';
-import {  MatDialog } from '@angular/material/dialog';
-
-import { fuseAnimations } from '@fuse/animations';
-import { camelToSentenceCase, camelToSnakeCase, snakeToCamelArray } from '@shared/helpers/global.helper';
-import { MatTableDataSource } from '@angular/material/table';
+import { Leave } from './../../../models/leave.model';
+import { Component, Injector, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { ConfirmDialogModel, ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
-import { CalendarService } from '@feature/calender/services/calendar.service';
-import { Holiday } from '@feature/calender/models/holiday.model';
-import { BaseComponent } from '@shared/components/base/base.component';
-import { HolidayFormComponent } from '../components/holiday-form/holiday-form.component';
+import { MatTableDataSource } from '@angular/material/table';
 import { CONFIG } from '@config/index';
+import { CalendarService } from '@feature/calender/services/calendar.service';
+import { WorkingDayFormComponent } from '@feature/calender/working-day/components/working-day-form/working-day-form.component';
+import { BaseComponent } from '@shared/components/base/base.component';
+import { ConfirmDialogModel, ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
+import { snakeToCamelArray, camelToSentenceCase, camelToSnakeCase } from '@shared/helpers/global.helper';
 import { MESSAGES } from '@shared/constants/messages.constant';
 
-
 @Component({
-  selector: 'app-holiday',
-  templateUrl: './holiday.component.html',
-  styleUrls: ['./holiday.component.scss'],
-  encapsulation: ViewEncapsulation.None,
-    animations   : fuseAnimations
+  selector: 'app-leave',
+  templateUrl: './leave.component.html',
+  styleUrls: ['./leave.component.scss']
 })
-export class HolidayComponent extends BaseComponent implements OnInit {
-    dialogRef: any;
-    holidays: Holiday[];
+export class LeaveComponent extends BaseComponent implements OnInit {
+
+  dialogRef: any;
+    leaves: Leave[];
     displayedColumns = [
-        "date",
-        "type",
-        "detail",
-        "isRepititive",
-        "remarks",
+        "leaveType",
         "status",
+        "createdOn",
         "actions",
     ];
-
-    dataSource = new MatTableDataSource<Holiday>();
-    @ViewChild(MatPaginator) paginator: MatPaginator;
-    @ViewChild(MatSort, { static: true }) sort: MatSort;
     pageSize: number = CONFIG.PAGE_SIZE;
     pageSizeOptions: Array<number> = CONFIG.PAGE_SIZE_OPTIONS;
-  
+    dataSource = new MatTableDataSource<Leave>();
+    @ViewChild(MatPaginator) paginator: MatPaginator;
+    @ViewChild(MatSort, { static: true }) sort: MatSort;
     constructor(
         public _matDialog: MatDialog,
-        private _service: CalendarService
-        ,
+        private _service: CalendarService,
         injector: Injector
-        ) {
-            super(injector);
+    ) {
+        super(injector);
     }
 
     ngOnInit(): void {
@@ -55,9 +45,9 @@ export class HolidayComponent extends BaseComponent implements OnInit {
     }
 
     getData() {
-        this._service.getHolidays().subscribe(
+        this._service.getLeaves().subscribe(
             (response) => {
-                this.holidays = snakeToCamelArray(response);
+                this.leaves = snakeToCamelArray(response);
                 this.dataSource = new MatTableDataSource(
                     snakeToCamelArray(response)
                 );
@@ -72,9 +62,9 @@ export class HolidayComponent extends BaseComponent implements OnInit {
     openDialog(): void {
         var _this = this;
         this.dialogRef = this._matDialog
-            .open(HolidayFormComponent, {
-                data: new Holiday(),
-                panelClass: "app-holiday-form",
+            .open(WorkingDayFormComponent, {
+                data: new Leave(),
+                panelClass: "app-working-day-form",
             })
             .componentInstance.sendResponse.subscribe((response) => {
                 if (response.id) {
@@ -85,14 +75,14 @@ export class HolidayComponent extends BaseComponent implements OnInit {
             });
     }
  
-    createWorkingDay(model: Holiday) {
-        this._service.createHoliday(model).subscribe(
+    createWorkingDay(model: Leave) {
+        this._service.createLeave(model).subscribe(
             (response) => {
                 const data = this.dataSource.data;
                 data.unshift(response);
                 this.updateGrid(data);
                 this.errorType = "success";
-                this.responseMessage = MESSAGES.CREATED("Holiday");
+                this.responseMessage = MESSAGES.CREATED("Leave");
                 this._matDialog.closeAll();
                 this.hideMessage();
             },
@@ -106,17 +96,17 @@ export class HolidayComponent extends BaseComponent implements OnInit {
             this.responseMessage = "";
         }, 2000);
     }
-    editWorkingDay(model: Holiday) {
-        this._service.editHoliday(model.id, model).subscribe(
+    editWorkingDay(model: Leave) {
+        this._service.editLeave(model.id, model).subscribe(
             (response) => {
                 this.errorType = "success";
-                this.responseMessage = MESSAGES.UPDATED("Holiday");
+                this.responseMessage = MESSAGES.UPDATED("Leave");
                 const index = this.dataSource.data.findIndex(
                     (x) => x.id == model.id
                 );
                 this.hideMessage();
-                this.holidays[index] = response;
-                this.updateGrid(this.holidays);
+                this.leaves[index] = response;
+                this.updateGrid(this.leaves);
                 this._matDialog.closeAll();
             },
             (response) => {
@@ -141,14 +131,14 @@ export class HolidayComponent extends BaseComponent implements OnInit {
         });
     }
     deleteWorkingDay(id: string) {
-        this._service.deleteWorkingDay(id).subscribe(
+        this._service.deleteLeave(id).subscribe(
             (response) => {
                 const index = this.dataSource.data.findIndex((x) => x.id == id);
-                this.holidays.splice(index, 1);
-                this.updateGrid(this.holidays);
+                this.leaves.splice(index, 1);
+                this.updateGrid(this.leaves);
                 this.errorType = "success";
                 this.hideMessage();
-                this.responseMessage = MESSAGES.DELETED("Holiday");
+                this.responseMessage = MESSAGES.DELETED("Leave");
             },
             (response) => super.onError(response)
         );

@@ -2,10 +2,10 @@ import { SettingService } from "./../../setting.service";
 import { Component, OnInit, ViewEncapsulation, Injector } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { fuseAnimations } from "@fuse/animations";
-import { MESSAGES } from "@shared/constants/app.constants";
 import { camelToSnakeCase } from "@shared/helpers/global.helper";
 import { BaseComponent } from '@shared/components/base/base.component';
 import { takeUntil } from 'rxjs/operators';
+import { MESSAGES } from '@shared/constants/messages.constant';
 
 @Component({
     selector: "app-update-password",

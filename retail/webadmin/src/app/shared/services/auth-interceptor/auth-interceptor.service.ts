@@ -7,14 +7,13 @@ import {
     HttpHeaders,
     HttpClient,
 } from "@angular/common/http";
-import { Observable, empty, of } from "rxjs";
+import { Observable,  throwError } from "rxjs";
 import { StorageService } from "../storage/storage.service";
-import { mergeMap } from "rxjs/operators";
+import { catchError, mergeMap } from "rxjs/operators";
 import { APP_CONST, URI, createUrl } from "@shared/constants/app.constants";
 import { EventBusService } from "../event-bus/event-bus.service";
-import { EmitEvent } from "@shared/models/emit-event.model";
-import { Events } from "@shared/enums/events.enum";
 import { AuthenticationService } from "../auth/authentication.service";
+import { Router } from '@angular/router';
 
 @Injectable()
 export class AuthInterceptorService implements HttpInterceptor {
@@ -23,7 +22,7 @@ export class AuthInterceptorService implements HttpInterceptor {
         private storage: StorageService,
         private http: HttpClient,
         private eventService: EventBusService,
-        private authService: AuthenticationService
+        private authService: AuthenticationService, private router: Router
     ) {}
 
     intercept(
@@ -52,7 +51,6 @@ export class AuthInterceptorService implements HttpInterceptor {
                         this.authService.refreshToken = response.headers.get(
                             "x-refresh-token"
                         );
-
                         console.log(
                             "----------------------------Token refreshed------------------------"
                         );
@@ -61,13 +59,19 @@ export class AuthInterceptorService implements HttpInterceptor {
                         const clonedRequest = request.clone(options);
                         return next.handle(clonedRequest);
                     }
+                    
+                    // this.eventService.emit(
+                    //     new EmitEvent(Events.SESSION_EXPIRED, true)
+                    // );
+                    // return empty();
+                }),
+                catchError((error:any)=>{
+                    console.log(error);
                     console.log(
                         "----------------------------Token expired------------------------"
                     );
-                    this.eventService.emit(
-                        new EmitEvent(Events.SESSION_EXPIRED, true)
-                    );
-                    return empty();
+                    this.router.navigateByUrl('/auth/login');
+                    return throwError(error)
                 })
             );
         } else {

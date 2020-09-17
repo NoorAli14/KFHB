@@ -4,7 +4,6 @@ import { User } from "@feature/entitlement/models/user.model";
 import {
     NATIONALITY_LIST,
     GENDER_LIST,
-    MESSAGES,
 } from "@shared/constants/app.constants";
 import { AuthenticationService } from "@shared/services/auth/authentication.service";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -17,6 +16,7 @@ import {
 import { ValidatorService } from "@shared/services/validator-service/validator.service";
 import { fuseAnimations } from "@fuse/animations";
 import { takeUntil } from 'rxjs/operators';
+import { MESSAGES } from '@shared/constants/messages.constant';
 
 @Component({
     selector: "app-invitation",
@@ -110,7 +110,6 @@ export class InvitationComponent extends BaseComponent implements OnInit {
         );
     }
     getUserByToken(token) {
-        debugger
         this._authService.getUserByToken(token).pipe(takeUntil(this._unsubscribeAll)).subscribe(
             (response) => {
                 const user = snakeToCamelObject(response[0]);

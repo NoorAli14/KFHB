@@ -12,7 +12,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { UserFormComponent } from "../../components/user-form/user-form.component";
 
 import { UserService } from "../../services/user.service";
-import { MESSAGES, MODULES } from "@shared/constants/app.constants";
+import { MODULES } from "@shared/constants/app.constants";
 
 import { FormControl } from "@angular/forms";
 import { User } from "@feature/entitlement/models/user.model";
@@ -32,6 +32,7 @@ import {
 } from "@shared/components/confirm-dialog/confirm-dialog.component";
 import { UserDetailComponent } from "../../components/user-detail/user-detail.component";
 import { takeUntil } from 'rxjs/operators';
+import { MESSAGES } from '@shared/constants/messages.constant';
 
 @Component({
     selector: "app-user",
