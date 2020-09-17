@@ -51,6 +51,10 @@ export class UserService {
     userObj: Record<string, any>,
     keys?: string[],
   ): Promise<any> {
+    if(userObj.password) {
+      userObj.password_digest = this.encrypter.encryptPassword(userObj.password);
+      delete userObj.password;
+    }
     if(userObj.status && !STATUS[userObj.status]){
       throw new HttpException({
         status: HttpStatus.BAD_REQUEST,
