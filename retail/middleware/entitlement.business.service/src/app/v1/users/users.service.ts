@@ -119,11 +119,11 @@ export class UserService {
     return this.gqlClient.setHeaders(header).send(query);
   }
 
-  async login(email: string, password: string): Promise<any> {
+  async login(header: IHEADER, email: string, password: string): Promise<any> {
     const query: string = `query {
         result: login(input: ${toGraphql({ email, password })}) ${this.output}
       }`;
-    return this.gqlClient.send(query);
+    return this.gqlClient.setHeaders(header).send(query);
   }
 
   async findBy(
