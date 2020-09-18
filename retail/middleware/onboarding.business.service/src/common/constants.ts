@@ -13,7 +13,7 @@ export const USER_STATUSES: { [key: string]: string } = {
 
 export const GENDER: string[] = ['M', 'F'];
 
-export const DOCUMENT_TYPES = {
+export const DOCUMENT_TYPES: { [key: string]: string } = {
   SELFIE: 'SELFIE',
   LIVENESS: 'LIVENESS',
   PASSPORT: 'PASSPORT',
@@ -45,3 +45,9 @@ export const STATUSES: { [key: string]: string } = {
   SUCCESS: 'SUCCESS',
   FAILED: 'FAILED',
 };
+
+export const CONTEXT_NAMESPACE_ID: string =
+  'a6a29a6f-6747-4b5f-b99f-07ee96e32f88';
+export const DAY_FORMAT = 'MM/DD/YYYY';
+export const HOUR_FORMAT = 'HH';
+export const DAY_WITH_HOUR_FORMAT = 'MM/DD/YYYY HH';

@@ -2,6 +2,7 @@ import { Module as RubixModule } from '@nestjs/common';
 import { GATEWAY_BUILD_SERVICE, GraphQLGatewayModule } from '@nestjs/graphql';
 import { RemoteGraphQLDataSource } from '@apollo/gateway';
 import { RedisModule } from 'nestjs-redis';
+
 import {
   CommonModule,
   GqlClientModule,
@@ -21,9 +22,9 @@ import { InvitationModule } from './invitations/invitation.module';
 import { ForgotPasswordModule } from './forgot_passwords/forgot_password.module';
 import { OnboardingModule } from './onboarding/onboarding.module';
 import { WorkingDayModule } from './working-days/working-day.module';
-import {HolidayModule} from './holidays/holiday.module';
-import {LeaveModule} from './leaves/leave.module';
-import {LeaveTypeModule} from './leave-types/leave-type.module';
+import { HolidayModule } from './holidays/holiday.module';
+import { LeaveModule } from './leaves/leave.module';
+import { LeaveTypeModule } from './leave-types/leave-type.module';
 
 let services: iSERVICE[];
 if (process.env.NODE_ENV === 'production') {
@@ -38,6 +39,7 @@ if (process.env.NODE_ENV === 'production') {
     { name: 'identity', url: 'http://localhost:4010/graphql' },
     { name: 'users', url: 'http://localhost:5020/graphql' },
     { name: 'notifications', url: 'http://localhost:5030/graphql' },
+    { name: 'compliance', url: 'http://localhost:5010/graphql' },
   ];
 }
 class AuthenticatedDataSource extends RemoteGraphQLDataSource {
@@ -87,7 +89,7 @@ class BuildServiceModule {}
       imports: [BuildServiceModule],
       useFactory: async () => ({
         gateway: {
-          // Note: All these values comes through service registry. For Demo purposes we hardcode service list
+          // Note: All these values comes through service registry. For Demo purposes we hardcoded service list.
           serviceList: services,
         },
         server: {

@@ -2,6 +2,7 @@ import * as path from 'path';
 import { v4 as uuidV4 } from 'uuid';
 import * as Crypto from 'crypto';
 import { X_CORRELATION_KEY, X_USER_ID, X_TENANT_ID } from './constants';
+import { User } from '@app/v1/users/user.entity';
 
 export const strToBase64 = (data: any): string => {
   const buff: Buffer = new Buffer(data);
