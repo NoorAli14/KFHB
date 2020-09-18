@@ -40,11 +40,26 @@ export class CustomersService {
 
   constructor(private readonly gqlClient: GqlClientService) {}
 
-  async findOne(header: IHEADER, id: string): Promise<Customer> {
+  async findOne(header: IHEADER, id: string): Promise<any> {
     this.logger.log(`Start finding customer360 with ID [${id}]`);
     const query: string = `query {
       result: findCustomerById(id: "${id}") ${this.output}
     }`;
-    return this.gqlClient.setHeaders(header).send(query);
+    const _query: string = `query {
+      result:  findTemplateResponseByUserId(user_id: "${id}") {
+        id
+        user_id
+        results
+        remarks
+        created_on
+        updated_on
+      }
+    }`;
+    const [customer, templates] = await Promise.all([
+      this.gqlClient.setHeaders(header).send(query),
+      this.gqlClient.setHeaders(header).send(_query),
+    ]);
+    customer.templates = templates?.[0] ? templates : [];
+    return customer;
   }
 }
