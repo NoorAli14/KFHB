@@ -27,8 +27,8 @@ export class TemplateResponsesService {
   async findByUserId(
     user_id: string,
     columns?: string[],
-  ): Promise<TemplateResponseGQL> {
-    return this.templateResponsesDB.findOne({ user_id: user_id }, columns);
+  ): Promise<TemplateResponseGQL[]> {
+    return this.templateResponsesDB.findBy({ user_id: user_id }, columns);
   }
 
   async findByIds(ids: readonly string[]): Promise<TemplateResponseGQL> {

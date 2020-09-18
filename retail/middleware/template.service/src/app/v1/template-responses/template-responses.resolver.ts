@@ -17,14 +17,13 @@ export class TemplateResponsesResolver {
   //   return this.templateResponseService.list(columns);
   // }
 
-  @Query(() => TemplateResponseGQL)
+  @Query(() => [TemplateResponseGQL])
   async findTemplateResponseByUserId(
     @Args('user_id') user_id: string,
     @Fields(TemplateResponseGQL) columns: string[],
-  ): Promise<TemplateResponseGQL> {
+  ): Promise<TemplateResponseGQL[]> {
     const result = this.templateResponseService.findByUserId(user_id, columns);
-    if (result) throw new Error('No Record found for this User.');
-
+    if (!result) throw new Error('No Record found for this User.');
     return result;
   }
 
@@ -33,11 +32,11 @@ export class TemplateResponsesResolver {
     @Args('input') input: NewTemplateResponseInput,
     @Fields(TemplateResponseGQL) columns: string[],
   ): Promise<TemplateResponseGQL> {
-    try {
-      JSON.parse(input.results);
-    } catch (error) {
-      throw new Error("field 'results' should be a valid JSON.");
-    }
+    // try {
+    //   JSON.parse(input.results);
+    // } catch (error) {
+    //   throw new Error("field 'results' should be a valid JSON.");
+    // }
 
     return this.templateResponseService.create(input, columns);
   }

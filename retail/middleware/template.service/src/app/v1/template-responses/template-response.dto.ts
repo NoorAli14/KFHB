@@ -31,7 +31,7 @@ import { Field, InputType } from '@nestjs/graphql';
 @InputType()
 export class NewTemplateResponseInput {
   @Field()
-  @MaxLength(1000)
+  // @MaxLength(1000)
   results: string;
 
   @Field()
