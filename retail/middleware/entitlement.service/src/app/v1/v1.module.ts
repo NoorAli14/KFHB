@@ -14,6 +14,7 @@ import { ForgotPasswordModule } from '@app/v1/forgot-password/forgot-password.mo
 import { WorkingDaysModule } from '@app/v1/working-days/working-days.module';
 import { HolidaysModule } from '@app/v1/holiday/holidays.module';
 import { LeavesModule } from '@app/v1/leave/leaves.module';
+import {Leave_typeModule} from '@app/v1/leave_type/leave_type.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { LeavesModule } from '@app/v1/leave/leaves.module';
     WorkingDaysModule,
     HolidaysModule,
     LeavesModule,
+    Leave_typeModule,
     GraphQLFederationModule.forRootAsync({
       imports: [CommonModule],
       useFactory: async (configService: ConfigurationService) => ({

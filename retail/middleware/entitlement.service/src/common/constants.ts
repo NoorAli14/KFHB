@@ -47,6 +47,7 @@ export const PAGINATION_PARAMS = {
 
 export const TEMP_ROLE = {
   ADMIN: 'ADMIN',
+  AGENT: 'AGENT',
   SYSTEM: 'SYSTEM',
   SUPER_ADMIN: 'SUPER ADMIN',
 };
@@ -115,6 +116,23 @@ export const MODULES = [
           },
         ],
       },
+      {
+        name: 'Leaves',
+        permissions: [
+          {
+            name: 'view',
+          },
+          {
+            name: 'edit',
+          },
+          {
+            name: 'delete',
+          },
+          {
+            name: 'create',
+          },
+        ],
+      },
     ],
     permissions: [
       {
@@ -150,10 +168,12 @@ export const MESSAGES = {
   LEAVE_TYPE_NOT_FOUND: 'No leave_type exists against this leave_type_id',
   BAD_REQUEST: 'Bad Request',
   BAD_TIME_FORMAT: 'Bad Time Format',
+  FD_ST_ET_REQUIRED: 'You need to fill full_day or start_time and end_time',
   INVALID_WEEKDAY: `Weekday should be one of ${Object.keys(WEEK_DAYS)}`,
   INVALID_STATUS: `Status should be one of ${Object.keys(STATUS)}`,
   INVALID_GENDER: `Gender should be one of ${Object.keys(GENDER)}`,
   ROLE_EXISTS: 'Role with this name already exists',
+  WEEK_DAY_EXISTS: 'Week day already exists',
   PASSWORD_MISMATCH: 'Current password did not match',
 };
 

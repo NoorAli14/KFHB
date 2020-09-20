@@ -41,8 +41,10 @@ export class UsersResolver {
   }
 
   @Query(() => [User])
-  async findAvailableUsers(@Args('input') input: CheckAvailabilityInput, @Fields() columns: string[]): Promise<User[]> {
-    return this.userService.check_availability(input,columns);
+  async findAvailableUsers(@Args('input') input: CheckAvailabilityInput,
+                           @Context() context: GraphQLExecutionContext): Promise<User[]> {
+    input['tenant_id'] = getTenantID(context['req'].headers);
+    return this.userService.check_availability(input);
   }
 
   @Mutation(() => User)
