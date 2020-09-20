@@ -1,92 +1,68 @@
 import * as request from 'supertest';
 import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import { EmailModule } from './email.module';
-import { EmailService } from './email.service';
-import Server from '@rubix/core/server';
+import { ApplicationModule } from '@rubix/app';
+import { SendEmailInput } from './email.dto';
+import { createQuery } from '@rubix/common/tests/e2e.tests';
 
-describe('Email', () => {
+describe('Email Module (e2e)', () => {
   let app: INestApplication;
-  const emailService = { sendEmail: () => [{"to": "ahmad.raza@virtualforce.io"}] };
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
-      imports: [EmailModule],
-    })
-      .overrideProvider(EmailService)
-      .useValue(emailService)
-      .compile();
+      imports: [ApplicationModule],
+    }).compile();
 
     app = moduleRef.createNestApplication();
-    const server = new Server(app);
-    await server.init();
+    await app.init();
   });
 
-  it(`Send Email with Template`, () => {
+  const sendEmailInput: SendEmailInput = {
+    subject: 'e2e testing email.',
+    template: 'default',
+    to: 'ahmad.raza@virtualforce.io',
+    body: '<p>Hello. this is e2e testing email.</p>',
+  };
+
+  it(`Send Email with default template`, done => {
     return request(app.getHttpServer())
       .post('/graphql')
-      .send(`mutation {
-        sendEmail(
-          input: {
-            to: "ahmad.raza@virtualforce.io"
-            template: "sample"
-            subject: "Congratulations for new Role Ahmad"
-            body: ""
-            context: [
-              { key: "title", value: "SAMPLETITLE" }
-              {key: "name", value: "Ahmad"}
-              {key: "body", value: "Hello Ahmad, hope this mail will find you in a good health"}
-            ]
-          }
-        ) {
-          to
-        }
-      }`)
+      .send({
+        query: createQuery("sendEmail",sendEmailInput, "to subject"),
+      })
+      .expect(({ body }) => {
+        const data = body.data.sendEmail;
+        expect(data.to).toBe(sendEmailInput.to);
+        expect(data.subject).toBe(sendEmailInput.subject);
+      })
       .expect(200)
-        .expect({
-            data: emailService.sendEmail(),
-        })
-      .end((err,res) => {
-        console.log("-----------------------------------------------")
-        console.log("-----------------------------------------------")
-        console.log("-----------------------------------------------")
-        console.log("-----------------------------------------------")
-        console.log("-----------------------------------------------")
-        console.log(res)
-        console.log(err)
-    })
+      .end(done);
   });
 
-  it(`Send Email without Template`, () => {
-    console.log("-----------------------------------------------")
-    console.log("-----------------------------------------------")
-    console.log("-----------------------------------------------")
-    console.log("-----------------------------------------------")
-    console.log("-----------------------------------------------")
+  const sendTemplateEmailInput : SendEmailInput ={
+    subject: 'e2e testing email with custome template.',
+    template: 'sample',
+    to: 'ahmad.raza@virtualforce.io',
+    context: [
+      { "key": "title", "value": "This is sample title from e2e testing." },
+      {"key": "name", "value": "This is sample value from e2e testing."},
+    ]
+  }
+
+  it(`Send Email with sample template`, done => {
     return request(app.getHttpServer())
       .post('/graphql')
-      .send(`mutation {
-        sendEmail(
-          input: {
-            to: "ahmad.raza@virtualforce.io"
-            template: "default"
-            subject: "This is sample subject from testcases."
-            body: "<p>This Sample message is going to deliver.</p>"
-          }
-        ) {
-          to
-        }
-      }`)
+      .send({
+        query: createQuery("sendEmail",sendTemplateEmailInput, "to subject"),
+      })
+      .expect(({ body }) => {
+        const data = body.data.sendEmail;
+        expect(data.to).toBe(sendTemplateEmailInput.to);
+        expect(data.subject).toBe(sendTemplateEmailInput.subject);
+      })
       .expect(200)
-        .expect({
-            data: emailService.sendEmail(),
-        })
-      .end((err,res) => {
-        console.log(res)
-        console.log(err)
-    })
+      .end(done);
   });
-
 
   afterAll(async () => {
     await app.close();
