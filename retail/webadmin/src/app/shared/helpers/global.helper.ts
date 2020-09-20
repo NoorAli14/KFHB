@@ -17,6 +17,7 @@ export const snakeToCamelArray = (array) => {
     return response;
 };
 export const snakeToCamelObject = (data) => {
+    if(!data)return;
     let mapped = {};
     Object.keys(data).forEach((key, index) => {
         const converted = key.replace(/([-_][a-z])/g, (group) =>
@@ -59,3 +60,8 @@ export const camelToSentenceCase = (text) => {
     var finalResult = result.charAt(0).toUpperCase() + result.slice(1);
     return finalResult;
 };
+
+
+export const removeRandom=(text)=>{
+    return text.replace(/\d+/g, '');
+}

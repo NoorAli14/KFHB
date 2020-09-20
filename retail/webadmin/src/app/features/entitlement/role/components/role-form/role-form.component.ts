@@ -1,4 +1,4 @@
-import { Output, EventEmitter, Injectable } from "@angular/core";
+import { Output, EventEmitter, Injectable, Injector } from "@angular/core";
 import { BaseComponent } from "@shared/components/base/base.component";
 import { Component, OnInit, Inject, ViewEncapsulation } from "@angular/core";
 import { Validators, FormArray, FormGroup, FormControl } from "@angular/forms";
@@ -8,7 +8,10 @@ import { fuseAnimations } from "@fuse/animations";
 import { MatTableDataSource } from "@angular/material/table";
 import { Permission } from "@feature/entitlement/models/config.model";
 import { camelToSentenceCase } from "@shared/helpers/global.helper";
-import { ErrorEmitterService } from '@core/services/error-emitter/error-emitter.service';
+import { MODULES } from '@shared/constants/app.constants';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { RoleService } from '../../services/role.service';
 
 @Component({
     selector: "app-role-form",
@@ -19,24 +22,31 @@ import { ErrorEmitterService } from '@core/services/error-emitter/error-emitter.
 })
 export class RoleFormComponent extends BaseComponent implements OnInit {
     roleForm: FormGroup;
-    displayedColumns = ["module", "view", "delete", "edit", "create"];
+    displayedColumns = ["module"];
     dataSource = new MatTableDataSource<Permission>();
     modulesMapped: any[] = [];
+    
+    
     @Output() sendResponse: EventEmitter<Role> = new EventEmitter<any>();
 
     constructor(
         public matDialogRef: MatDialogRef<RoleFormComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: any,
-       
-    ) {
-        super("Config");
+        @Inject(MAT_DIALOG_DATA) public data: any, private _roleService: RoleService
+        ,
+        injector: Injector
+        ) {
+            super(injector,MODULES.ROLE_MANAGEMENT);
     }
 
     ngOnInit(): void {
-        this._errorEmitService.currentMessage.subscribe(item=>{
-            this.errorType=item.type;
-            this.responseMessage=item.message;
-        })
+       
+        const totalPermissions=this.data.permissions.map((x)=>x.record_type)
+        this.displayedColumns= this.displayedColumns.concat(totalPermissions)
+
+        this._errorEmitService.currentMessage.pipe(takeUntil(this._unsubscribeAll)).subscribe((item) => {
+            this.errorType = item.type;
+            this.responseMessage = item.message;
+        });
         this.roleForm = new FormGroup({
             id: new FormControl(this.data.role.id),
             name: new FormControl(this.data.role.name, [Validators.required]),
@@ -56,8 +66,8 @@ export class RoleFormComponent extends BaseComponent implements OnInit {
         return this.roleForm.get("modules") as FormArray;
     }
 
-    createControl() {
-        return new FormControl(false);
+    createControl(value) {
+        return new FormControl(value ? value : false);
     }
     getFormControl(form, key) {
         return form.get(key);
@@ -67,7 +77,10 @@ export class RoleFormComponent extends BaseComponent implements OnInit {
             module: new FormControl(module),
         });
         module.permissions.forEach((permission) => {
-            form.addControl(permission.record_type, this.createControl());
+            form.addControl(
+                permission.record_type,
+                this.createControl(permission.value)
+            );
         });
         return form;
     }
@@ -75,29 +88,18 @@ export class RoleFormComponent extends BaseComponent implements OnInit {
         const model = { ...this.roleForm.value };
         let permissions = [];
         model.modules.forEach((element) => {
-            const module = element.module;
-            const data = this.getCheckedKey(element);
+            const data = this._roleService.getSelectedPermissions(this.data,element);
             if (data && data.length > 0) {
-                permissions= permissions.concat(data)
+                permissions = permissions.concat(data);
             }
         });
         model.permissions = permissions;
         this.sendResponse.emit(model);
     }
-    getCheckedKey(element) {
-        const checked = Object.keys(element).filter((key) => {
-            return element[key] == true;
-        });
-        const permissions = [];
-        checked.forEach((key) => {
-            const permission = element.module.permissions.find(
-                (item) => item.record_type == key
-            );
-            permissions.push({ id: permission.module_permission_id });
-        });
-        return permissions;
-    }
+    
     camelToSentenceCase(text) {
         return camelToSentenceCase(text);
     }
+  
+    
 }
