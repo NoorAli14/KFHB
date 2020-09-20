@@ -47,6 +47,7 @@ export const PAGINATION_PARAMS = {
 
 export const TEMP_ROLE = {
   ADMIN: 'ADMIN',
+  AGENT: 'AGENT',
   SYSTEM: 'SYSTEM',
   SUPER_ADMIN: 'SUPER ADMIN',
 };
@@ -112,6 +113,23 @@ export const MODULES = [
         permissions: [
           {
             name: 'view',
+          },
+        ],
+      },
+      {
+        name: 'Leaves',
+        permissions: [
+          {
+            name: 'view',
+          },
+          {
+            name: 'edit',
+          },
+          {
+            name: 'delete',
+          },
+          {
+            name: 'create',
           },
         ],
       },
