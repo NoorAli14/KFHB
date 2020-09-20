@@ -1,11 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
+import { GqlClientService, toGraphql, strToBase64 } from '@common/index';
 import { Template } from './compliance.entity';
-import { GqlClientService, toGraphql, IHEADER } from '@common/index';
-
+import { ITemplateResponse } from './compliance.interface';
 @Injectable()
 export class ComplianceService {
+  private readonly logger = new Logger(ComplianceService.name);
+
   constructor(private readonly gqlClient: GqlClientService) {}
-  private _output: string = `{
+
+  private _output = `{
     id
     name
     sections {
@@ -37,27 +40,29 @@ export class ComplianceService {
     updated_on
   }`;
 
-  async findOneByName(header: IHEADER, name: string): Promise<Template> {
-    const params: string = `query {
+  async findOneByName(name: string): Promise<Template> {
+    const query = `query {
       result: findTemplateByName(name: "${name}") ${this._output}
     }`;
-    return this.gqlClient.setHeaders(header).send(params);
+    return this.gqlClient.send(query);
   }
 
-  async submitResponse(
-    header: IHEADER,
-    input: { [key: string]: string },
-  ): Promise<any> {
-    const params: string = `mutation {
-      result: addTemplateResponse(input: ${toGraphql(input)}
-      ) {
+  async submitResponse(input: ITemplateResponse): Promise<any> {
+    const params: { [key: string]: string } = {
+      template_id: input.template_id,
+      user_id: input.user_id,
+      remarks: input.remarks,
+      results: `${strToBase64(JSON.stringify(input.results))}`,
+    };
+    const mutation = `mutation {
+      result: addTemplateResponse(input: ${toGraphql(params)}) {
         id
         remarks
+        results
         created_on
         updated_on
       }
-    }
-  }`;
-    return this.gqlClient.setHeaders(header).send(params);
+    }`;
+    return this.gqlClient.send(mutation);
   }
 }

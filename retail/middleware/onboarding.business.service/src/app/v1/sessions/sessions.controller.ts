@@ -6,7 +6,7 @@ import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
 } from '@nestjs/swagger';
-import { AuthGuard, Header, IHEADER } from '@common/index';
+import { AuthGuard } from '@common/index';
 import { SessionsService } from './sessions.service';
 import { Session } from './session.entity';
 
@@ -31,7 +31,7 @@ export class SessionsController {
     type: Error,
     description: 'Input Validation failed.',
   })
-  async create(@Header() header: IHEADER): Promise<Session> {
-    return this.sessionService.create(header);
+  async create(): Promise<Session> {
+    return this.sessionService.create();
   }
 }

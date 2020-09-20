@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsOptional, IsDate } from 'class-validator';
+import { IsEmail, IsOptional } from 'class-validator';
 import { USER_STATUSES, GENDER } from '@common/constants';
 
 export class User {

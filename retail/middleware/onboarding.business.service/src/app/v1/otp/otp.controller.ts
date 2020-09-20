@@ -15,8 +15,6 @@ import {
 } from '@nestjs/swagger';
 import {
   AuthGuard,
-  Header,
-  IHEADER,
   CurrentUser,
   SuccessDto,
   DELIVERY_MODES,
@@ -46,11 +44,8 @@ export class OtpController {
     description: 'Input Validation failed.',
   })
   @HttpCode(HttpStatus.OK)
-  async send_sms_otp(
-    @Header() header: IHEADER,
-    @CurrentUser() currentUser: User,
-  ): Promise<SuccessDto> {
-    return this.otpService.send(header, currentUser, DELIVERY_MODES.MOBILE);
+  async send_sms_otp(@CurrentUser() currentUser: User): Promise<SuccessDto> {
+    return this.otpService.send(currentUser, DELIVERY_MODES.MOBILE);
   }
 
   @Post('/email/send')
@@ -68,11 +63,8 @@ export class OtpController {
     description: 'Input Validation failed.',
   })
   @HttpCode(HttpStatus.OK)
-  async send_email_otp(
-    @Header() header: IHEADER,
-    @CurrentUser() currentUser: User,
-  ): Promise<SuccessDto> {
-    return this.otpService.send(header, currentUser, DELIVERY_MODES.EMAIL);
+  async send_email_otp(@CurrentUser() currentUser: User): Promise<SuccessDto> {
+    return this.otpService.send(currentUser, DELIVERY_MODES.EMAIL);
   }
 
   @Post('/verify')
@@ -91,10 +83,9 @@ export class OtpController {
   })
   @HttpCode(HttpStatus.OK)
   async verify_otp(
-    @Header() header: IHEADER,
     @CurrentUser() currentUser: User,
     @Body() input: VerifyOTPDto,
   ): Promise<SuccessDto> {
-    return this.otpService.verify(header, currentUser, input);
+    return this.otpService.verify(currentUser, input);
   }
 }

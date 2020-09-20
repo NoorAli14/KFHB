@@ -2,7 +2,6 @@ import { Injectable, Logger } from '@nestjs/common';
 import { IOTP_INPUT } from './otp.interface';
 import {
   GqlClientService,
-  IHEADER,
   toGraphql,
   SuccessDto,
   STATUSES,
@@ -24,15 +23,10 @@ export class OtpService {
 
   /**
    *
-   * @param header GQL request headers
    * @param currentUser Current LoggedIn User
    * @return The success object
    */
-  async send(
-    header: IHEADER,
-    currentUser: any,
-    mode: string,
-  ): Promise<SuccessDto> {
+  async send(currentUser: User, mode: string): Promise<SuccessDto> {
     const input: IOTP_INPUT = {
       user_id: currentUser.id,
       delivery_mode: mode,
@@ -41,10 +35,10 @@ export class OtpService {
     };
     this.logger.log(input);
     // Construct GraphQL request
-    const mutation: string = `mutation {
+    const mutation = `mutation {
       result: generateOtp(input: ${toGraphql(input)}) ${this.output}
     }`;
-    const otp: any = await this.gqlClient.setHeaders(header).send(mutation);
+    const otp: any = await this.gqlClient.send(mutation);
     if (otp?.id) {
       this.logger.log(otp);
       return {
@@ -63,12 +57,8 @@ export class OtpService {
    * @param header GQL request headers
    * @return {Promise<SuccessDto}
    */
-  async verify(
-    header: IHEADER,
-    currentUser: User,
-    input: VerifyOTPDto,
-  ): Promise<SuccessDto> {
-    const mutation: string = `mutation {
+  async verify(currentUser: User, input: VerifyOTPDto): Promise<SuccessDto> {
+    const mutation = `mutation {
       result: verifyOtp(
         input: {
           user_id: "${currentUser.id}"
@@ -79,7 +69,7 @@ export class OtpService {
         code
       }
     }`;
-    const result: any = await this.gqlClient.setHeaders(header).send(mutation);
+    const result: any = await this.gqlClient.send(mutation);
     return {
       status: result.code,
     };

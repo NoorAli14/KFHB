@@ -1,7 +1,9 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { Request } from 'express';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
+import { setContext } from '@core/index';
+
 import {
   X_ACCESS_TOKEN,
   RedisClientService,
@@ -43,10 +45,14 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
    * @param payload Payload info
    * @returns {Promise<any>}
    */
-  async validate(request: Request, payload: any): Promise<User> {
+  async validate(request: Request, payload: {[key: string]: any}): Promise<User> {
     this.logger.log(`Start authenticating customer with ID [${payload.id}]`);
     if (!(await this.redisService.getValue(payload.id))) return null;
     const header: IHEADER = formattedHeader(payload.id, request.headers);
-    return this.customerService.findOne(header, payload.id);
+    setContext('HttpHeaders', header);
+    const user: User = await this.customerService.findOne(payload.id);
+    if (!user) throw new UnauthorizedException();
+    setContext('currentUser', user);
+    return user;
   }
 }

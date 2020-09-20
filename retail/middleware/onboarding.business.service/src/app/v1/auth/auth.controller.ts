@@ -1,5 +1,4 @@
 import { Request } from 'express';
-import * as fs from 'fs';
 import {
   Controller,
   Post,
@@ -30,8 +29,6 @@ import {
   AuthGuard,
   CurrentUser,
   SuccessDto,
-  Header,
-  IHEADER,
 } from '@common/index';
 import { UserService } from '@app/v1/users/users.service';
 import { CurrentUserUpdateDto } from '@app/v1/users/user.dto';
@@ -107,9 +104,8 @@ export class AuthController {
   async register(
     @Req() request: Request,
     @Body() input: RegisterCustomerDto,
-    @Header() header: IHEADER,
   ): Promise<Customer> {
-    const customer: any = await this.customerService.create(header, input);
+    const customer: Customer = await this.customerService.create(input);
     const refreshToken: string = await this.authService.getRefreshToken(
       customer.id,
     );
@@ -160,9 +156,8 @@ export class AuthController {
   async update(
     @CurrentUser() customer: Customer,
     @Body() input: CurrentUserUpdateDto,
-    @Header() header: IHEADER,
   ): Promise<Customer> {
-    return this.customerService.update(header, customer.id, input);
+    return this.customerService.update(customer.id, input);
   }
 
   @Delete('logout')
@@ -174,7 +169,10 @@ export class AuthController {
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   @HttpCode(HttpStatus.NO_CONTENT)
-  async logOut(@Req() request: Request, @CurrentUser() customer: Customer) {
+  async logOut(
+    @Req() request: Request,
+    @CurrentUser() customer: Customer,
+  ): Promise<any> {
     request.res.setHeader(
       'Set-Cookie',
       await this.authService.getCookieForLogOut(customer.id),

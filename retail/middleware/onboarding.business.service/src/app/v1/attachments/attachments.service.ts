@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Attachment } from './attachment.entity';
-import { GqlClientService, toGraphql, IHEADER } from '@common/index';
+import { GqlClientService, toGraphql } from '@common/index';
 import {
   FaceUploadingInput,
   DocumentUploadingInput,
@@ -28,15 +28,12 @@ export class AttachmentsService {
    * @param input Upload face Input
    * @return The attachment object
    */
-  async uploadLiveness(
-    header: IHEADER,
-    input: FaceUploadingInput,
-  ): Promise<Attachment> {
+  async uploadLiveness(input: FaceUploadingInput): Promise<Attachment> {
     // Construct GraphQL request
-    const mutation: string = `mutation {
+    const mutation = `mutation {
       result: uploadLiveness(input: ${toGraphql(input)}) ${this.output}
     }`;
-    return this.gqlClient.setHeaders(header).send(mutation);
+    return this.gqlClient.send(mutation);
   }
 
   /**
@@ -45,15 +42,12 @@ export class AttachmentsService {
    * @param input Upload document Input
    * @return The attachment object
    */
-  async upload(
-    header: IHEADER,
-    input: DocumentUploadingInput,
-  ): Promise<Attachment> {
+  async upload(input: DocumentUploadingInput): Promise<Attachment> {
     // Construct GraphQL request
-    const mutation: string = `mutation {
+    const mutation = `mutation {
         result: addDocument(input: ${toGraphql(input)}) ${this.output}
       }`;
-    return this.gqlClient.setHeaders(header).send(mutation);
+    return this.gqlClient.send(mutation);
   }
 
   /**
@@ -62,27 +56,25 @@ export class AttachmentsService {
    * @param input Process document Input
    * @return The attachment object
    */
-  async process(header: IHEADER, input: IDocumentProcess): Promise<Attachment> {
+  async process(input: IDocumentProcess): Promise<Attachment> {
     // Construct GraphQL request
-    const mutation: string = `mutation {
+    const mutation = `mutation {
         result: processDocument(input: ${toGraphql(input)}) ${this.output}
       }`;
-    const document: any = await this.gqlClient
-      .setHeaders(header)
-      .send(mutation);
+    const document: any = await this.gqlClient.send(mutation);
     if (document?.processed_data)
       document.processed_data = JSON.parse(document.processed_data);
     return document;
   }
 
-  async preview(header: IHEADER, input: any): Promise<any> {
+  async preview(input: Record<string, string>): Promise<any> {
     // Construct GraphQL request
-    const query: string = `query {
+    const query = `query {
       result: previewAttachment(
           input: ${toGraphql(input)}) {
         image
       }
     }`;
-    return this.gqlClient.setHeaders(header).send(query);
+    return this.gqlClient.send(query);
   }
 }
