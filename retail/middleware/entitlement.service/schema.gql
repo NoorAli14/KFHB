@@ -361,9 +361,9 @@ type WorkingDay {
 
 input WorkingDayCreateInput {
   week_day: String!
-  start_time: String!
-  end_time: String!
-  full_day: Float!
+  start_time: String
+  end_time: String
+  full_day: Float
   remarks: String
   status: String
 }

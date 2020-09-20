@@ -168,6 +168,7 @@ export const MESSAGES = {
   LEAVE_TYPE_NOT_FOUND: 'No leave_type exists against this leave_type_id',
   BAD_REQUEST: 'Bad Request',
   BAD_TIME_FORMAT: 'Bad Time Format',
+  FD_ST_ET_REQUIRED: 'You need to fill full_day or start_time and end_time',
   INVALID_WEEKDAY: `Weekday should be one of ${Object.keys(WEEK_DAYS)}`,
   INVALID_STATUS: `Status should be one of ${Object.keys(STATUS)}`,
   INVALID_GENDER: `Gender should be one of ${Object.keys(GENDER)}`,

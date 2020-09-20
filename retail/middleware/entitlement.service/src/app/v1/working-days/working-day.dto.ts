@@ -47,18 +47,4 @@ export class WorkingDayCreateInput extends WorkingDayInput {
   @IsString()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   week_day: string;
-
-  @Field()
-  @IsString()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  start_time: string;
-
-  @Field()
-  @IsString()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  end_time: string;
-
-  @Field()
-  @IsNumber()
-  full_day: number;
 }
