@@ -31,8 +31,8 @@ import {
     ConfirmDialogComponent,
 } from "@shared/components/confirm-dialog/confirm-dialog.component";
 import { UserDetailComponent } from "../../components/user-detail/user-detail.component";
-import { takeUntil } from 'rxjs/operators';
-import { MESSAGES } from '@shared/constants/messages.constant';
+import { takeUntil } from "rxjs/operators";
+import { MESSAGES } from "@shared/constants/messages.constant";
 
 @Component({
     selector: "app-user",
@@ -68,15 +68,18 @@ export class UserComponent extends BaseComponent implements OnInit {
         this.getData();
         // super.ngOnInit();
     }
-   
+
     getData() {
-        this._service.forkUserData().pipe(takeUntil(this._unsubscribeAll)).subscribe(
-            (response) => {
-                [this.users, this.roles, this.nationalities] = response;
-                this.updateGrid(this.users)
-            },
-            (response) => super.onError(response)
-        );
+        this._service
+            .forkUserData()
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe(
+                (response) => {
+                    [this.users, this.roles, this.nationalities] = response;
+                    this.updateGrid(this.users);
+                },
+                (response) => super.onError(response)
+            );
     }
 
     camelToSnakeCase(text) {
@@ -87,7 +90,7 @@ export class UserComponent extends BaseComponent implements OnInit {
         this.dialogRef = this._matDialog
             .open(UserFormComponent, {
                 data: {
-                    nationalities:this.nationalities,
+                    nationalities: this.nationalities,
                     roles: this.roles,
                     user:
                         data && data.id ? snakeToCamelObject(data) : new User(),
@@ -103,12 +106,15 @@ export class UserComponent extends BaseComponent implements OnInit {
             });
     }
     onDetail(id): void {
-        this._service.getUserById(id).pipe(takeUntil(this._unsubscribeAll)).subscribe(
-            (response) => {
-                this.openUserDetailModal(response);
-            },
-            (response) => super.onError(response)
-        );
+        this._service
+            .getUserById(id)
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe(
+                (response) => {
+                    this.openUserDetailModal(response);
+                },
+                (response) => super.onError(response)
+            );
     }
     openUserDetailModal(response) {
         response.modules = this._service.mapModules(response.modules);
@@ -143,31 +149,41 @@ export class UserComponent extends BaseComponent implements OnInit {
         });
     }
     resendInvitation(id) {
-        this._service.resendInvite(id).pipe(takeUntil(this._unsubscribeAll)).subscribe(
-            (response) => {
-                this.errorType = "success";
-                this.responseMessage = MESSAGES.INVITE_RESENT();
-                this.hideMessage();
-            },
-            (response) => super.onError(response)
-        );
+        this._service
+            .resendInvite(id)
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe(
+                (response) => {
+                    this.errorType = "success";
+                    this.responseMessage = MESSAGES.INVITE_RESENT();
+                    this.hideMessage();
+                },
+                (response) => super.onError(response)
+            );
     }
     createUser(model: User) {
-        this._service.createUser(model).pipe(takeUntil(this._unsubscribeAll)).subscribe(
-            (response) => {
-                const data = this.dataSource.data;
-                data.unshift(response);
-                this.updateGrid(data);
-                this.errorType = "success";
-                this.responseMessage = MESSAGES.CREATED("User");
-                this._matDialog.closeAll();
-                this.hideMessage();
-                this._errorEmitService.emit("", "");
-            },
-            (response) => {
-                this._errorEmitService.emit(MESSAGES.UNKNOWN(), "error");
-            }
-        );
+        this._service
+            .createUser(model)
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe(
+                (response) => {
+                    const data = this.dataSource.data;
+                    data.unshift(response);
+                    this.updateGrid(data);
+                    this.errorType = "success";
+                    this.responseMessage = MESSAGES.CREATED("User");
+                    this._matDialog.closeAll();
+                    this.hideMessage();
+                    this._errorEmitService.emit("", "");
+                },
+                ({ error }) => {
+                    if (error.statusCode == 422) {
+                        this._errorEmitService.emit(MESSAGES.EXISTS("User with this email"), "warning");
+                    } else {
+                        this._errorEmitService.emit(MESSAGES.UNKNOWN(), "error");
+                    }
+                }
+            );
     }
     hideMessage() {
         setTimeout(() => {
@@ -175,36 +191,44 @@ export class UserComponent extends BaseComponent implements OnInit {
         }, 2000);
     }
     editUser(model: User) {
-        this._service.editUser(model.id, model).pipe(takeUntil(this._unsubscribeAll)).subscribe(
-            (response) => {
-                this.errorType = "success";
-                this.responseMessage = MESSAGES.UPDATED("User");
-                const index = this.dataSource.data.findIndex(
-                    (x) => x.id == model.id
-                );
-                this.hideMessage();
-                this.users[index] = response;
-                this.updateGrid(this.users);
-                this._matDialog.closeAll();
-                this._errorEmitService.emit("", "");
-            },
-            (response) => {
-                this._errorEmitService.emit(MESSAGES.UNKNOWN(), "error");
-            }
-        );
+        this._service
+            .editUser(model.id, model)
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe(
+                (response) => {
+                    this.errorType = "success";
+                    this.responseMessage = MESSAGES.UPDATED("User");
+                    const index = this.dataSource.data.findIndex(
+                        (x) => x.id == model.id
+                    );
+                    this.hideMessage();
+                    this.users[index] = response;
+                    this.updateGrid(this.users);
+                    this._matDialog.closeAll();
+                    this._errorEmitService.emit("", "");
+                },
+                (response) => {
+                    this._errorEmitService.emit(MESSAGES.UNKNOWN(), "error");
+                }
+            );
     }
     deleteUser(id: string) {
-        this._service.deleteUser(id).pipe(takeUntil(this._unsubscribeAll)).subscribe(
-            (response) => {
-                const index = this.dataSource.data.findIndex((x) => x.id == id);
-                this.users.splice(index, 1);
-                this.updateGrid(this.users);
-                this.errorType = "success";
-                // this.hideMessage();
-                this.responseMessage = MESSAGES.DELETED("User");
-            },
-            (response) => super.onError(response)
-        );
+        this._service
+            .deleteUser(id)
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe(
+                (response) => {
+                    const index = this.dataSource.data.findIndex(
+                        (x) => x.id == id
+                    );
+                    this.users.splice(index, 1);
+                    this.updateGrid(this.users);
+                    this.errorType = "success";
+                    // this.hideMessage();
+                    this.responseMessage = MESSAGES.DELETED("User");
+                },
+                (response) => super.onError(response)
+            );
     }
     updateGrid(data) {
         this.dataSource.data = data;

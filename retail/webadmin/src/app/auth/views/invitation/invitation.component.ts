@@ -123,9 +123,6 @@ export class InvitationComponent extends BaseComponent implements OnInit {
                     if (error.statusCode === 404) {
                         this.errorType = "warning";
                         this.responseMessage = MESSAGES.INVALID_INVITATION();
-                    }else if (error) {
-                        this.errorType = "info";
-                        this.responseMessage = MESSAGES.ALREADY_ONBOARD();
                     } else {
                         this.responseMessage = MESSAGES.UNKNOWN();
                     }
