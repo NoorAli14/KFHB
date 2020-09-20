@@ -1,10 +1,7 @@
 import { Component, OnInit, Injector } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { User } from "@feature/entitlement/models/user.model";
-import {
-    NATIONALITY_LIST,
-    GENDER_LIST,
-} from "@shared/constants/app.constants";
+import { NATIONALITY_LIST, GENDER_LIST } from "@shared/constants/app.constants";
 import { AuthenticationService } from "@shared/services/auth/authentication.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { FuseConfigService } from "@fuse/services/config.service";
@@ -15,8 +12,8 @@ import {
 } from "@shared/helpers/global.helper";
 import { ValidatorService } from "@shared/services/validator-service/validator.service";
 import { fuseAnimations } from "@fuse/animations";
-import { takeUntil } from 'rxjs/operators';
-import { MESSAGES } from '@shared/constants/messages.constant';
+import { takeUntil } from "rxjs/operators";
+import { MESSAGES } from "@shared/constants/messages.constant";
 
 @Component({
     selector: "app-invitation",
@@ -28,7 +25,7 @@ export class InvitationComponent extends BaseComponent implements OnInit {
     invitationForm: FormGroup;
 
     response: User;
-    nationalityList: any[] = NATIONALITY_LIST;
+    nationalityList: any[]=[];
     genderList: any[] = GENDER_LIST;
     token: string;
     constructor(
@@ -40,7 +37,6 @@ export class InvitationComponent extends BaseComponent implements OnInit {
         super(injector);
         this.token = this.activatedRoute.snapshot.paramMap.get("token");
 
-        
         // Configure the layout
         this._fuseConfigService.config = {
             layout: {
@@ -71,7 +67,7 @@ export class InvitationComponent extends BaseComponent implements OnInit {
             ]),
             gender: new FormControl("", [Validators.required]),
             status: new FormControl(""),
-            email: new FormControl({value:"",disabled: true}),
+            email: new FormControl({ value: "", disabled: true }),
             dateOfBirth: new FormControl("", [Validators.required]),
             nationalityId: new FormControl("", [Validators.required]),
             password: new FormControl("", Validators.required),
@@ -95,35 +91,45 @@ export class InvitationComponent extends BaseComponent implements OnInit {
         let model = { ...this.invitationForm.value };
         model.dateOfBirth = new Date(model.dateOfBirth).toLocaleDateString();
         model = camelToSnakeCase(model);
-        this._authService.updateInvitation(model, this.token).pipe(takeUntil(this._unsubscribeAll)).subscribe(
-            (response) => {
-                this.errorType = "success";
-                this.responseMessage = MESSAGES.UPDATED("Your Profile");
-                // setTimeout(() => {
-                //     this.router.navigateByUrl('/auth/login');
-                // }, 1000);
-            },
-            (error) => {
-                this.errorType = "error";
-                this.responseMessage = MESSAGES.UNKNOWN();
-            }
-        );
-    }
-    getUserByToken(token) {
-        this._authService.getUserByToken(token).pipe(takeUntil(this._unsubscribeAll)).subscribe(
-            (response) => {
-                const user = snakeToCamelObject(response[0]);
-                this.invitationForm.patchValue(user);
-            },
-            (response) => {
-                this.errorType = "error";
-                if (response.error) {
-                    this.errorType = "info";
-                    this.responseMessage = MESSAGES.ALREADY_ONBOARD();
-                } else {
+        this._authService
+            .updateInvitation(model, this.token)
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe(
+                (response) => {
+                    this.errorType = "success";
+                    this.responseMessage = MESSAGES.UPDATED("Your Profile");
+                    // setTimeout(() => {
+                    //     this.router.navigateByUrl('/auth/login');
+                    // }, 1000);
+                },
+                (error) => {
+                    this.errorType = "error";
                     this.responseMessage = MESSAGES.UNKNOWN();
                 }
-            }
-        );
+            );
+    }
+    getUserByToken(token) {
+        this._authService
+            .getUserByToken(token)
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe(
+                (response) => {
+                    const user = snakeToCamelObject(response[0]);
+                    this.invitationForm.patchValue(user);
+                    this.nationalityList= response[1];
+                },
+                ({ error }) => {
+                    this.errorType = "error";
+                    if (error.statusCode === 404) {
+                        this.errorType = "warning";
+                        this.responseMessage = MESSAGES.INVALID_INVITATION();
+                    }else if (error) {
+                        this.errorType = "info";
+                        this.responseMessage = MESSAGES.ALREADY_ONBOARD();
+                    } else {
+                        this.responseMessage = MESSAGES.UNKNOWN();
+                    }
+                }
+            );
     }
 }

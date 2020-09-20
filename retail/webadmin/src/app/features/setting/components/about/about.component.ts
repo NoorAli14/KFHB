@@ -12,12 +12,14 @@ import { NATIONALITY_LIST } from "@shared/constants/app.constants";
 })
 export class AboutComponent implements OnInit {
     @Input() user: any;
+    @Input() nationalities: any[];
+
     nationalityList: any[] = NATIONALITY_LIST;
     constructor() {}
 
     ngOnInit(): void {
     }
     getNationality(id) {
-        return getName(id, "name", this.nationalityList);
+        return getName(id, "nationality", this.nationalities);
     }
 }

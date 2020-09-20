@@ -5,6 +5,7 @@ import {Injector} from '@angular/core';
 import { MapperService } from '@shared/services/mappers/mapper.service';
 import { Subject } from 'rxjs';
 import { MESSAGES } from '@shared/constants/messages.constant';
+import { MatDialog } from '@angular/material/dialog';
 @Component({
     selector: "app-base",
     templateUrl: "./base.component.html",
@@ -19,6 +20,7 @@ export class BaseComponent implements OnInit {
     protected _authUserService: AuthUserService;
     protected   _errorEmitService:ErrorEmitterService;
     protected   _mapperService:MapperService;
+    protected _dialogRef: MatDialog
     constructor(
         private injector: Injector,
         private moduleType?: String, 
@@ -26,6 +28,7 @@ export class BaseComponent implements OnInit {
         this._authUserService= injector.get(AuthUserService)
         this._errorEmitService= injector.get(ErrorEmitterService)
         this._mapperService= injector.get(MapperService);
+        this._dialogRef= injector.get(MatDialog); 
         this._unsubscribeAll = new Subject();
     }
 
@@ -42,5 +45,6 @@ export class BaseComponent implements OnInit {
     ngOnDestroy(): void {
         this._unsubscribeAll.next();
         this._unsubscribeAll.complete();
+        this._dialogRef.closeAll();
     }
 }

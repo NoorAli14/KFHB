@@ -37,7 +37,7 @@ export class UserFormComponent extends BaseComponent implements OnInit {
     response: User;
     roles: Role[];
     permissions: any[];
-    nationalityList: any[] = NATIONALITY_LIST;
+    nationalityList: any[];
     genderList: any[] = GENDER_LIST;
     statusList: any[] = STATUS_LIST;
     @Output() sendResponse: EventEmitter<User> = new EventEmitter<any>();
@@ -114,6 +114,7 @@ export class UserFormComponent extends BaseComponent implements OnInit {
             ),
         });
         this.roles = this.data.roles;
+        this.nationalityList= this.data.nationalities;
     }
    
     isExist(roles, roleId) {

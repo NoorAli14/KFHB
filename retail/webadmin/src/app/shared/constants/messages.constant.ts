@@ -9,10 +9,12 @@ export const MESSAGES = {
     PASSWORD_UPDATED:()=> `Your password has been updated. ${getRandomNumber()}`,
     INVALID_RESET_TOKEN:()=> `Reset password token is invalid. ${getRandomNumber()}`,
     INVITATION_SENT:()=> `User created successfully. Invitation link has been sent to user email. ${getRandomNumber()}`,
+    INVALID_INVITATION:()=> `Invitation link has been expired or invalid. ${getRandomNumber()}`,
     ALREADY_ONBOARD:()=> `You have already been on boarded.`,
     CREATED: (name) => `${name} created successfully. ${getRandomNumber()}`,
     DELETED: (name) => `${name} deleted successfully. ${getRandomNumber()}`,
     UPDATED: (name) => `${name} updated successfully. ${getRandomNumber()}`,
+    CUSTOM: (message)=> `${message} ${getRandomNumber()}`,
 };
 const getRandomNumber = () => {
     return Math.floor(Math.random() * 11);

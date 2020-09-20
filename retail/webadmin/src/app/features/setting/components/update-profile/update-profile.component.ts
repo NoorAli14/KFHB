@@ -7,6 +7,7 @@ import { fuseAnimations } from '@fuse/animations';
 import { User } from '@feature/entitlement/models/user.model';
 import { BaseComponent } from '@shared/components/base/base.component';
 import { ValidatorService } from '@shared/services/validator-service/validator.service';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-update-profile',
@@ -20,7 +21,7 @@ export class UpdateProfileComponent extends BaseComponent implements OnInit {
     userForm: FormGroup;
     response: User;
     @Output() sendResponse: EventEmitter<User> = new EventEmitter<any>();
-    nationalityList: any[]=NATIONALITY_LIST;
+    nationalityList: any[];
     genderList: any[]=GENDER_LIST;
     constructor(
         public matDialogRef: MatDialogRef<UpdateProfileComponent>,
@@ -31,17 +32,24 @@ export class UpdateProfileComponent extends BaseComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.userForm = new FormGroup({
-            id: new FormControl(this.data.id),
-            firstName: new FormControl(this.data.firstName, [Validators.required]),
-            middleName: new FormControl(this.data.middleName, ),
-            lastName: new FormControl(this.data.lastName),
-            contactNo: new FormControl(this.data.contactNo,[Validators.required,ValidatorService.numbersOnly]),
-            gender: new FormControl(this.data.gender,[Validators.required]),
-            email: new FormControl({value:this.data.email, disabled:true}),
-            dateOfBirth: new FormControl(this.data.dateOfBirth ? new Date(this.data.dateOfBirth) : null, [Validators.required]),
-            nationalityId: new FormControl(this.data.nationalityId, [Validators.required] ),
+        this._errorEmitService.currentMessage
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((item) => {
+            this.errorType = item.type;
+            this.responseMessage = item.message;
         });
+        this.userForm = new FormGroup({
+            id: new FormControl(this.data.user.id),
+            firstName: new FormControl(this.data.user.firstName, [Validators.required]),
+            middleName: new FormControl(this.data.user.middleName, ),
+            lastName: new FormControl(this.data.user.lastName),
+            contactNo: new FormControl(this.data.user.contactNo,[Validators.required,ValidatorService.numbersOnly]),
+            gender: new FormControl(this.data.user.gender,[Validators.required]),
+            email: new FormControl({value:this.data.user.email, disabled:true}),
+            dateOfBirth: new FormControl(this.data.user.dateOfBirth ? new Date(this.data.user.dateOfBirth) : null, [Validators.required]),
+            nationalityId: new FormControl(this.data.user.nationalityId, [Validators.required] ),
+        });
+        this.nationalityList= this.data.nationalities
     }
    
     onSubmit() {
@@ -52,5 +60,4 @@ export class UpdateProfileComponent extends BaseComponent implements OnInit {
     onClose() {
         this.matDialogRef.close(this.response);
     }
-
 }

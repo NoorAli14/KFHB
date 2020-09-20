@@ -139,6 +139,7 @@ export class RoleComponent extends BaseComponent implements OnInit {
                 this.roles = clone;
                 this.hideMessage();
                 this._matDialog.closeAll();
+                this._errorEmitService.emit("", "");
             },
             (response) => {
                 this._errorEmitService.emit(MESSAGES.UNKNOWN(), "error");
@@ -163,7 +164,9 @@ export class RoleComponent extends BaseComponent implements OnInit {
                 this.hideMessage();
                 this._matDialog.closeAll();
             },
-            (response) => super.onError(response)
+            (response) => {
+                this._errorEmitService.emit(MESSAGES.UNKNOWN(), "error");
+            }
         );
     }
     onDelete(id: string) {

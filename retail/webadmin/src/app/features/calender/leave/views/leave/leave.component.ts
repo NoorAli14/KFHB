@@ -68,14 +68,14 @@ export class LeaveComponent extends BaseComponent implements OnInit {
             })
             .componentInstance.sendResponse.subscribe((response) => {
                 if (response.id) {
-                    _this.editWorkingDay(response);
+                    _this.editLeave(response);
                 } else {
-                    _this.createWorkingDay(response);
+                    _this.createLeave(response);
                 }
             });
     }
  
-    createWorkingDay(model: Leave) {
+    createLeave(model: Leave) {
         this._service.createLeave(model).subscribe(
             (response) => {
                 const data = this.dataSource.data;
@@ -96,7 +96,7 @@ export class LeaveComponent extends BaseComponent implements OnInit {
             this.responseMessage = "";
         }, 2000);
     }
-    editWorkingDay(model: Leave) {
+    editLeave(model: Leave) {
         this._service.editLeave(model.id, model).subscribe(
             (response) => {
                 this.errorType = "success";
@@ -126,11 +126,11 @@ export class LeaveComponent extends BaseComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe((status) => {
             if (status) {
-               this.deleteWorkingDay(id)
+               this.deleteLeave(id)
             }
         });
     }
-    deleteWorkingDay(id: string) {
+    deleteLeave(id: string) {
         this._service.deleteLeave(id).subscribe(
             (response) => {
                 const index = this.dataSource.data.findIndex((x) => x.id == id);

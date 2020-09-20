@@ -48,7 +48,7 @@ export class UserComponent extends BaseComponent implements OnInit {
     userPermissions: any[];
     pageSize: number = CONFIG.PAGE_SIZE;
     pageSizeOptions: Array<number> = CONFIG.PAGE_SIZE_OPTIONS;
-
+    nationalities: any[];
     displayedColumns = ["firstName", "lastName", "email", "status", "actions"];
 
     dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
@@ -72,7 +72,7 @@ export class UserComponent extends BaseComponent implements OnInit {
     getData() {
         this._service.forkUserData().pipe(takeUntil(this._unsubscribeAll)).subscribe(
             (response) => {
-                [this.users, this.roles] = response;
+                [this.users, this.roles, this.nationalities] = response;
                 this.updateGrid(this.users)
             },
             (response) => super.onError(response)
@@ -87,6 +87,7 @@ export class UserComponent extends BaseComponent implements OnInit {
         this.dialogRef = this._matDialog
             .open(UserFormComponent, {
                 data: {
+                    nationalities:this.nationalities,
                     roles: this.roles,
                     user:
                         data && data.id ? snakeToCamelObject(data) : new User(),
@@ -161,6 +162,7 @@ export class UserComponent extends BaseComponent implements OnInit {
                 this.responseMessage = MESSAGES.CREATED("User");
                 this._matDialog.closeAll();
                 this.hideMessage();
+                this._errorEmitService.emit("", "");
             },
             (response) => {
                 this._errorEmitService.emit(MESSAGES.UNKNOWN(), "error");
@@ -184,6 +186,7 @@ export class UserComponent extends BaseComponent implements OnInit {
                 this.users[index] = response;
                 this.updateGrid(this.users);
                 this._matDialog.closeAll();
+                this._errorEmitService.emit("", "");
             },
             (response) => {
                 this._errorEmitService.emit(MESSAGES.UNKNOWN(), "error");
