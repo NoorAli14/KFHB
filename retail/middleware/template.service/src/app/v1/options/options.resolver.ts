@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
-import { Resolver, Args, Query, Parent, ResolveField, Info } from '@nestjs/graphql';
+import { Resolver, Args, Query, Parent, ResolveField } from '@nestjs/graphql';
 import { OptionsService } from './options.service';
 import { OptionGQL } from './option.model';
 import { Fields } from '@common/decorators';
@@ -32,8 +32,7 @@ export class OptionsResolver {
 
   @Query(() => OptionGQL)
   async findOption(
-		@Args('id') id: string,
-		@Info() info,
+    @Args('id') id: string,
     @Fields(OptionGQL) columns: string[],
   ): Promise<OptionGQL> {
     return this.optionService.findById(id, columns);
