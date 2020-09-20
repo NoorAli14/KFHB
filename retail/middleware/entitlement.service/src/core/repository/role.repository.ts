@@ -60,6 +60,11 @@ export class RoleRepository extends BaseRepository {
           await trx(TABLE.MODULE_PERMISSION_ROLE).whereIn('module_permission_id', modulePermissionsToDelete)
           .where({role_id: response[0].id || response[0]})
           .del();
+        // fetching parent module_permission_ids
+        const parentModulePermissions = await this.getParentModules(newModulePermissions);
+        parentModulePermissions.map(parentModulePermission => {
+          newModulePermissions.push(parentModulePermission['id'])
+        });
         // checking which of Ids already exist
         const idsAlready = await trx(TABLE.MODULE_PERMISSION_ROLE).select(['module_permission_id'])
           .whereIn('module_permission_id', newModulePermissions)
@@ -89,20 +94,24 @@ export class RoleRepository extends BaseRepository {
     const trxProvider = this._connection.transactionProvider();
     const trx = await trxProvider();
     try {
-      const permissions = role.permissions;
+      const module_permissions: IdsInput[] = role.permissions;
       delete role.permissions;
       const response = await trx(TABLE.ROLE).insert(role, keys);
-      if (permissions) {
-        const module_permission_roles = permissions.map(module_permission => {
+      if (module_permissions) {
+        const module_permission_roles = module_permissions.map(module_permission => {
           return {
             role_id: response[0].id || response[0],
             module_permission_id: module_permission['id'],
           };
         });
-        await trx(TABLE.MODULE_PERMISSION_ROLE).insert(
-          module_permission_roles,
-          ['module_permission_id'],
-        );
+        const parentModulePermissions = await this.getParentModules(module_permissions.map(mp => mp.id));
+        parentModulePermissions.map(parentModulePermission => {
+          module_permission_roles.push({
+            role_id: response[0].id || response[0],
+            module_permission_id: parentModulePermission['id'],
+          })
+        });
+        await trx(TABLE.MODULE_PERMISSION_ROLE).insert(module_permission_roles, ['module_permission_id']);
       }
       await trx.commit();
       return response;
@@ -110,5 +119,28 @@ export class RoleRepository extends BaseRepository {
       await trx.rollback();
       throw e;
     }
+  }
+
+  async getViewPermission(): Promise<any> {
+    const permission = await this._connection(TABLE.PERMISSION)
+    .select(['id', 'record_type'])
+    .where({record_type: 'view'})
+    .first();
+    return permission['id'];
+  }
+
+  // this function returns the module_permission_ids of parent modules with view permission
+  async getParentModules(module_permission_ids: string[]): Promise<any> {
+    const subQuery = this._connection(TABLE.MODULE)
+    .distinct(['parent_id'])
+    .leftJoin(TABLE.MODULE_PERMISSION,`${TABLE.MODULE}.id`,`${TABLE.MODULE_PERMISSION}.module_id`)
+    .whereIn(`${TABLE.MODULE_PERMISSION}.id`, module_permission_ids);
+
+    const condition = {};
+    condition['permission_id'] = await this.getViewPermission();
+    return this._connection(TABLE.MODULE_PERMISSION)
+      .select(['id', 'permission_id'])
+      .where(condition)
+      .whereIn('module_id', subQuery)
   }
 }
