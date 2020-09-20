@@ -29,6 +29,7 @@ input CreateUserInput {
   middle_name: String
   last_name: String
   gender: String
+  password: String
   is_owner: Boolean
   date_of_birth: String
   nationality_id: String
@@ -39,7 +40,6 @@ input CreateUserInput {
   password_reset_token_expiry: String
   roles: [IdsInput!]
   email: String!
-  password: String
 }
 
 """
@@ -302,6 +302,7 @@ input UpdateUserInput {
   middle_name: String
   last_name: String
   gender: String
+  password: String
   is_owner: Boolean
   date_of_birth: String
   nationality_id: String
@@ -360,9 +361,9 @@ type WorkingDay {
 
 input WorkingDayCreateInput {
   week_day: String!
-  start_time: String!
-  end_time: String!
-  full_day: Float!
+  start_time: String
+  end_time: String
+  full_day: Float
   remarks: String
   status: String
 }

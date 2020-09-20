@@ -6,6 +6,32 @@ import {IdsInput} from "@common/inputs/ids.input";
 
 @Injectable()
 export class UserRepository extends BaseRepository {
+  private readonly __attributes: string[] = [
+    `${TABLE.USER}.id`,
+    `${TABLE.USER}.username`,
+    `${TABLE.USER}.email`,
+    `${TABLE.USER}.contact_no`,
+    `${TABLE.USER}.first_name`,
+    `${TABLE.USER}.middle_name`,
+    `${TABLE.USER}.last_name`,
+    `${TABLE.USER}.status`,
+    `${TABLE.USER}.gender`,
+    `${TABLE.USER}.is_owner`,
+    `${TABLE.USER}.date_of_birth`,
+    `${TABLE.USER}.nationality_id`,
+    `${TABLE.USER}.invitation_token`,
+    `${TABLE.USER}.invitation_token_expiry`,
+    `${TABLE.USER}.password_reset_token`,
+    `${TABLE.USER}.password_reset_token_expiry`,
+    `${TABLE.USER}.tenant_id`,
+    `${TABLE.USER}.updated_on`,
+    `${TABLE.USER}.updated_by`,
+    `${TABLE.USER}.deleted_on`,
+    `${TABLE.USER}.deleted_by`,
+    `${TABLE.USER}.created_by`,
+    `${TABLE.USER}.created_on`
+  ];
+
   constructor() {
     super(TABLE.USER);
   }
@@ -85,11 +111,13 @@ export class UserRepository extends BaseRepository {
     }
   }
 
-  async listExcludedUsers(userIds: string[], condition: Record<string, any>, keys: string[]): Promise<any>{
+  async listExcludedUsers(userIds: string[], conditions: Record<string, any>): Promise<any>{
     return this._connection(TABLE.USER)
-    .select(keys)
-    .whereNotIn('id', userIds)
-    .where(condition)
-    .orderBy('created_on', 'desc');
+    .select(this.__attributes)
+    .innerJoin(TABLE.USER_ROLE, `${TABLE.USER}.id`, `${TABLE.USER_ROLE}.user_id`)
+    .innerJoin(TABLE.ROLE, `${TABLE.USER_ROLE}.role_id`, `${TABLE.ROLE}.id`)
+    .whereNotIn(`${TABLE.USER}.id`, userIds)
+    .where(conditions)
+    .orderBy(`${TABLE.USER}.created_on`, 'desc');
   }
 }

@@ -92,7 +92,7 @@ export class WorkingDaysService {
     }
     if(newObj.full_day) {
       newObj.start_time = newObj.end_time = null
-    } else {
+    } else if (newObj.start_time && newObj.end_time){
       newObj.start_time = new Date(newObj.start_time);
       newObj.end_time = new Date(newObj.end_time);
       newObj.full_day = null;
@@ -102,6 +102,11 @@ export class WorkingDaysService {
           error: MESSAGES.BAD_TIME_FORMAT,
         }, HttpStatus.BAD_REQUEST);
       }
+    } else {
+      throw new HttpException({
+        status: HttpStatus.BAD_REQUEST,
+        error: MESSAGES.FD_ST_ET_REQUIRED,
+      }, HttpStatus.BAD_REQUEST);
     }
     if (await this.doesWeekdayExist(newObj)){
       throw new HttpException({

@@ -9,11 +9,11 @@ export class RoleService {
   constructor(private roleDB: RoleRepository) {}
 
   async list(keys: string[], paginationParams: Record<string, any>): Promise<any> {
-    return this.roleDB.listWithPagination(paginationParams, keys,{deleted_on : null});
+    return this.roleDB.listWithPagination(paginationParams, keys);
   }
 
   async findById(id: string, keys?: string[]): Promise<any> {
-    const result = await this.roleDB.findOne({ id: id, deleted_on : null }, keys);
+    const result = await this.roleDB.findOne({ id: id }, keys);
     if(!result){
       throw new HttpException({
         status: HttpStatus.NOT_FOUND,
@@ -28,7 +28,6 @@ export class RoleService {
     checks.forEach(check => {
       conditions[check.record_key] = check.record_value;
     });
-    conditions['deleted_on'] = null;
     const result = await this.roleDB.findBy(conditions, keys);
     if(!result){
       throw new HttpException({
@@ -50,8 +49,13 @@ export class RoleService {
         error: MESSAGES.INVALID_STATUS,
       }, HttpStatus.BAD_REQUEST);
     }
-    await this.isNameTaken(roleObj);
-    const result = await this.roleDB.update({ id: id, deleted_on : null }, roleObj, keys);
+    if (roleObj.name && await this.isNameTaken(roleObj)) {
+      throw new HttpException({
+        status: HttpStatus.BAD_REQUEST,
+        error: MESSAGES.ROLE_EXISTS,
+      }, HttpStatus.BAD_REQUEST);
+    }
+    const result = await this.roleDB.update({ id: id }, roleObj, keys);
     if(result?.length > 0) {
       return result[0]
     } else {
@@ -101,11 +105,6 @@ export class RoleService {
       })
     }
     const role_a = await this.findByProperty(checks, ['id', 'name']);
-    if (role_a?.length) {
-      throw new HttpException({
-        status: HttpStatus.BAD_REQUEST,
-        error: MESSAGES.ROLE_EXISTS,
-      }, HttpStatus.BAD_REQUEST);
-    }
+    return role_a.length && role_a.length > 0;
   }
 }
