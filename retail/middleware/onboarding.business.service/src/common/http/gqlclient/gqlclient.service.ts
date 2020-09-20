@@ -8,26 +8,35 @@ import {
 } from '@nestjs/common';
 import { map, timeout, catchError } from 'rxjs/operators';
 import { TimeoutError, throwError } from 'rxjs';
-import { IHEADER } from '@common/interfaces/';
+import { HttpHeaders } from '@core/context';
+
 @Injectable()
 export class GqlClientService {
   private readonly logger: Logger = new Logger(GqlClientService.name);
-  private __header: IHEADER;
   constructor(private readonly http: HttpService) {}
 
-  public setHeaders(header: IHEADER): GqlClientService {
-    this.__header = header;
-    return this;
-  }
   public async send(input: string): Promise<any> {
-    this.logger.log(this.__header);
+    this.logger.log(
+      `Current Context Headers: ${JSON.stringify(HttpHeaders(), null, 2)}`,
+    );
+
     return this.http
       .post(
         '/graphql',
         {
           query: input,
         },
-        { headers: this.__header || {} },
+        {
+          headers: HttpHeaders() || {},
+          //   transformRequest: [
+          //     function(data, headers) {
+          //       // Do whatever you want to transform the data
+          //       this.logger.log(headers);
+          //       this.logger.log(data);
+          //       return data;
+          //     },
+          //   ],
+        },
       )
       .pipe(
         map(response => {

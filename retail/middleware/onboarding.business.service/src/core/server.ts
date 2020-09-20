@@ -20,8 +20,8 @@ export default class Server {
   constructor(app: INestApplication) {
     this._app = app;
     this.mountConfig();
-    this.mountGlobals();
     this.mountMiddleware();
+    this.mountGlobals();
   }
   get app(): INestApplication {
     return this._app;

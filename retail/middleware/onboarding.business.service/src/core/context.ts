@@ -29,7 +29,7 @@ export const getNamespace = (): Namespace => {
  * Gets a value from the context by key.  Will return undefined if the context has not yet been initialized for this request or if a value is not found for the specified key.
  * @param {string} key
  */
-export const getContext = (key): any => {
+export const getContext = (key: string): any => {
   if (__ns && __ns.active) {
     return __ns.get(key);
   }
@@ -40,9 +40,12 @@ export const getContext = (key): any => {
  * @param {string} key
  * @param {*} value
  */
-export const setContext = (key, value): void => {
+export const setContext = (
+  key: string,
+  value: { [key: string]: any } | string,
+): void => {
   if (__ns && __ns.active) {
-    return __ns.set(key, value);
+    return __ns.set(key, value as any);
   }
 };
 

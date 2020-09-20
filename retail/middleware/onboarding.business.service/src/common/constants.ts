@@ -1,8 +1,8 @@
-export const X_CORRELATION_KEY: string = 'x-correlation-id';
-export const X_ACCESS_TOKEN: string = 'x-access-token';
-export const X_REFRESH_TOKEN: string = 'x-refresh-token';
-export const X_USER_ID: string = 'x-user-id';
-export const X_TENANT_ID: string = 'x-tenant-id';
+export const X_CORRELATION_KEY = 'x-correlation-id';
+export const X_ACCESS_TOKEN = 'x-access-token';
+export const X_REFRESH_TOKEN = 'x-refresh-token';
+export const X_USER_ID = 'x-user-id';
+export const X_TENANT_ID = 'x-tenant-id';
 export const MODULE_STATUSES: string[] = ['ACTIVE', 'INACTIVE'];
 export const ROLE_STATUSES: string[] = ['ACTIVE', 'INACTIVE'];
 export const USER_STATUSES: { [key: string]: string } = {
@@ -46,7 +46,7 @@ export const STATUSES: { [key: string]: string } = {
   FAILED: 'FAILED',
 };
 
-export const CONTEXT_NAMESPACE_ID: string =
+export const CONTEXT_NAMESPACE_ID =
   'a6a29a6f-6747-4b5f-b99f-07ee96e32f88';
 export const DAY_FORMAT = 'MM/DD/YYYY';
 export const HOUR_FORMAT = 'HH';
