@@ -8,7 +8,7 @@ import {
 import { KeyValInput } from "@common/inputs/key-val.input";
 import {WorkingDay, WorkingDayWithPagination} from "@app/v1/working-days/working-day.model";
 import { WorkingDaysService } from "@app/v1/working-days/working-days.service";
-import { WorkingDayInput } from "@app/v1/working-days/working-day.dto";
+import {WorkingDayCreateInput, WorkingDayInput} from "@app/v1/working-days/working-day.dto";
 import {Fields} from '@common/decorators';
 import {HttpException, HttpStatus} from '@nestjs/common';
 import {MESSAGES, STATUS} from '@common/constants';
@@ -42,7 +42,7 @@ export class WorkingDaysResolver {
   }
 
   @Mutation(() => WorkingDay)
-  async addWorkingDay(@Args('input') input: WorkingDayInput,
+  async addWorkingDay(@Args('input') input: WorkingDayCreateInput,
                       @Fields() columns: string[],
                       @Context() context: GraphQLExecutionContext): Promise<WorkingDay> {
     input = getMutateProps('created', context['req'].headers, input);
