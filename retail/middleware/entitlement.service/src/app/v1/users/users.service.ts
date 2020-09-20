@@ -2,13 +2,14 @@ import {HttpException, HttpStatus, Injectable} from "@nestjs/common";
 
 import { UserRepository } from "@core/repository/";
 import { Encrypter } from "@common/encrypter";
-import {MESSAGES, NUMBERS, STATUS} from "@common/constants";
+import {MESSAGES, NUMBERS, STATUS, WEEK_DAYS} from "@common/constants";
 import { KeyValInput } from "@common/inputs/key-val.input";
 import {addMinutes, generateRandomString} from "@common/utilities";
 import {ConfigurationService} from "@common/configuration/configuration.service";
 import {HolidaysService} from '@app/v1/holiday/holidays.service';
 import {LeavesService} from '@app/v1/leave/leaves.service';
 import {validateDate, validateGender} from '@common/validator';
+import {WorkingDaysService} from '@app/v1/working-days/working-days.service';
 
 @Injectable()
 export class UserService {
@@ -17,6 +18,7 @@ export class UserService {
               private configService: ConfigurationService,
               private holidaysService: HolidaysService,
               private leavesService: LeavesService,
+              private workingDaysService: WorkingDaysService,
               ) {}
 
   async list(keys: string[], paginationParams: Record<string, any>): Promise<any> {
@@ -112,10 +114,10 @@ export class UserService {
   }
 
   async check_availability(obj?: Record<string, any>, keys?: string[]): Promise<any> {
-    validateDate(obj.call_time);
+    const date = validateDate(obj.call_time);
     obj.gender && validateGender(obj.gender);
-    obj.call_time = obj.call_time.substring(0,10);
-    if(!await this.isHoliday(obj)){
+    obj.call_time = date.substring(0,10);
+    if(!await this.isHoliday(obj) && this.isWorkingDay(date)){
       return this.availableAgents(obj, keys)
     } else{
       return []
@@ -125,17 +127,39 @@ export class UserService {
   async isHoliday(obj: Record<string, any>): Promise<boolean> {
     const checks: KeyValInput[] = [
       {
-        record_key: 'calendar_day',
+        record_key: 'holiday_date',
         record_value: obj.call_time
       }];
     const holidays = await this.holidaysService.findByProperty(checks, ['id', 'created_on']);
     return !!holidays.length;
   }
 
+  async isWorkingDay(date: string): Promise<boolean> {
+    const weekDay = Object.keys(WEEK_DAYS)[new Date(date).getDay()];
+    const checks: KeyValInput[] = [
+      {
+        record_key: 'week_day',
+        record_value: weekDay
+      }];
+    const days = await this.workingDaysService.findByProperty(checks, ['start_time', 'end_time', 'full_day']);
+    if(days && days.length > 0) {
+      const day = days[0];
+      try {
+        if (day.full_day) return true;
+        if (Date.parse(date) > Date.parse(new Date(day.start_time).toISOString())
+          && Date.parse(date) < Date.parse(new Date(day.end_time).toISOString()))
+          return true;
+      } catch (e) {
+        return false;
+      }
+    }
+    return false;
+  }
+
   async availableAgents(obj: Record<string, any>, keys: string[]): Promise<any> {
     const checks: KeyValInput[] = [
       {
-        record_key: 'calendar_day',
+        record_key: 'leave_date',
         record_value: obj.call_time
       }];
     const leaves = await this.leavesService.findByProperty(checks, ['id', 'user_id', 'created_on']);
@@ -146,9 +170,4 @@ export class UserService {
     }
     return this.userDB.listExcludedUsers(userIds, condition, keys)
   }
-
-  // async isWorkingDay(obj: Record<string, any>): Promise<boolean> {
-  //   const weekDay = Object.keys(WEEK_DAYS)[new Date("2020-09-06").getDay()];
-  //   return true
-  // }
 }

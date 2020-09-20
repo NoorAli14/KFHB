@@ -5,29 +5,35 @@ import { NUMBERS } from "@common/constants";
 
 @InputType()
 export class LeaveInput {
-  @Field()
+  @Field({ nullable: true })
   @IsString()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsOptional()
   user_id?: string;
 
-  @Field()
+  @Field({ nullable: true })
   @IsString()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsOptional()
-  calendar_day?: string;
+  leave_date?: string;
 
   @Field({ nullable: true })
   @IsString()
+  @MaxLength(NUMBERS.LEAVE_DURATION_LENGTH)
   @IsOptional()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  holiday_type?: string;
+  leave_duration?: string;
 
   @Field({ nullable: true })
   @IsString()
-  @IsOptional()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  holiday_details?: string;
+  @IsOptional()
+  leave_type?: string;
+
+  @Field({ nullable: true })
+  @IsString()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  @IsOptional()
+  leave_type_id?: string;
 
   @Field({ nullable: true })
   @IsNumber()
@@ -57,5 +63,20 @@ export class LeaveCreateInput extends LeaveInput {
   @Field()
   @IsString()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  calendar_day: string;
+  leave_date: string;
+
+  @Field()
+  @IsString()
+  @MaxLength(NUMBERS.LEAVE_DURATION_LENGTH)
+  leave_duration: string;
+
+  @Field()
+  @IsString()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  leave_type: string;
+
+  @Field()
+  @IsString()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  leave_type_id: string;
 }

@@ -10,13 +10,16 @@ export class Leave {
   user_id?: string;
 
   @Field({ nullable: true })
-  calendar_day?: string;
+  leave_date?: string;
 
   @Field({ nullable: true })
-  holiday_type?: string;
+  leave_duration?: string;
 
   @Field({ nullable: true })
-  holiday_details?: string;
+  leave_type?: string;
+
+  @Field({ nullable: true })
+  leave_type_id?: string;
 
   @Field({ nullable: true })
   remarks?: string;

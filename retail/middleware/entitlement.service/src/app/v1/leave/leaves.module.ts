@@ -7,6 +7,7 @@ import {UserService} from '@app/v1/users/users.service';
 import {Encrypter} from '@common/encrypter';
 import {HolidaysService} from '@app/v1/holiday/holidays.service';
 import {WorkingDaysService} from '@app/v1/working-days/working-days.service';
+import {Leave_typeService} from '@app/v1/leave_type/leave_type.service';
 
 @Module({
   imports: [RepositoryModule],
@@ -17,7 +18,8 @@ import {WorkingDaysService} from '@app/v1/working-days/working-days.service';
     UserService,
     Encrypter,
     HolidaysService,
-    WorkingDaysService
+    WorkingDaysService,
+    Leave_typeService,
   ],
 })
 export class LeavesModule {}

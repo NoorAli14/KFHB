@@ -11,12 +11,14 @@ export const TABLE = {
   LEAVE: 'ENT_LEAVE',
   MODULE_PERMISSION: 'ENT_MODULE_PERMISSION',
   MODULE_PERMISSION_ROLE: 'ENT_MODULE_PERMISSION_ROLE',
+  LEAVE_TYPE: 'ENT_LEAVETYPE',
 };
 
 export const NUMBERS = {
   TOKEN_EXPIRY_IN_MINUTES: 240,
   TOKEN_LENGTH: 64,
   MAX_COLUMN_LENGTH: 255,
+  LEAVE_DURATION_LENGTH: 10,
   NATIONALITY_ID_LENGTH: 96,
   DEFAULT_PAGE_SIZE: 25,
 };
@@ -137,7 +139,6 @@ export const MESSAGES = {
   INVALID_EMAIL: 'Invalid Email Address',
   INVALID_ID: 'Invalid ID',
   INVALID_DATE: 'Invalid Date format',
-  INVALID_CALENDAR_DAY: 'calendar_day should be in YYYY-MM-DD format or an ISO string',
   INVALID_PASSWORD: 'Invalid Password.',
   INVALID_Email_OR_PASSWORD: 'Invalid Email or Password.',
   INTERNAL_ERROR: 'Internal Error',
@@ -146,6 +147,7 @@ export const MESSAGES = {
   PASSWORD_UPDATED: 'Password Updated.',
   NOT_FOUND: 'No Record Found',
   USER_NOT_FOUND: 'No user exists against this user_id',
+  LEAVE_TYPE_NOT_FOUND: 'No leave_type exists against this leave_type_id',
   BAD_REQUEST: 'Bad Request',
   BAD_TIME_FORMAT: 'Bad Time Format',
   INVALID_WEEKDAY: `Weekday should be one of ${Object.keys(WEEK_DAYS)}`,
