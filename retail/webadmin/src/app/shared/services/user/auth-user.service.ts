@@ -50,6 +50,12 @@ export class AuthUserService {
             url: "/calender/holidays",
             translate: "FEATURES.CALENDER.HOLIDAYS.TITLE",
         },
+        {
+            id: "Leaves",
+            icon: "calendar_today",
+            url: "/calender/leaves",
+            translate: "FEATURES.CALENDER.LEAVES.TITLE",
+        },
     ];
 
     constructor(

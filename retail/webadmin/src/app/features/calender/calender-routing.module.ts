@@ -17,7 +17,7 @@ const routes: Routes = [
             import("./holiday/holiday.module").then((m) => m.HolidayModule),
     },
     {
-        path: "leave",
+        path: "leaves",
         loadChildren: () =>
             import("./leave/leave.module").then((m) => m.LeaveModule),
     },
