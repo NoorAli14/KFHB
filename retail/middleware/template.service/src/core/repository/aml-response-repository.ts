@@ -3,8 +3,8 @@ import { BaseRepository } from './base.repository';
 import { TABLE } from '@common/constants';
 
 @Injectable()
-export class AmlRequestRepository extends BaseRepository {
+export class AmlResponseRepository extends BaseRepository {
   constructor() {
-    super(TABLE.AML_REQUEST);
+    super(TABLE.AML_RESPONSE);
   }
 }

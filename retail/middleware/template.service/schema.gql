@@ -30,7 +30,6 @@ type AmlRequest {
 
 type AmlResponse {
   id: String!
-  request_reference: String!
   response_status: String!
   response_on: DateTime!
   response_type: String!

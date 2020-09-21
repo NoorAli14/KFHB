@@ -16,6 +16,8 @@ export const FOREIGN_KEYS = {
   OptionGQL: ['question_id'],
   TemplateQuestionGQL: ['template_id', 'section_id', 'question_id'],
   TemplateResponseGQL: [],
+  AmlRequest: [],
+  AmlResponse: ['request_id'],
 };
 
 export const DATABASE_UUID_METHOD = 'NEWID()';

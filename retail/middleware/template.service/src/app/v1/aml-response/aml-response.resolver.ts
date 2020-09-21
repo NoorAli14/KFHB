@@ -13,6 +13,6 @@ export class AmlResponseResolver {
     @Args('user_id') user_id: string,
     @Fields(AmlResponse) columns: string[],
   ): Promise<AmlResponse> {
-    return this.amlResponseService.getAmlStatus(user_id, reference_no);
+    return this.amlResponseService.getAmlStatus(user_id, reference_no, columns);
   }
 }

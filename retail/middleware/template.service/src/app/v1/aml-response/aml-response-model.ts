@@ -6,9 +6,6 @@ export class AmlResponse {
   id: string;
 
   @Field()
-  request_reference: string;
-
-  @Field()
   response_status: string;
 
   @Field()
