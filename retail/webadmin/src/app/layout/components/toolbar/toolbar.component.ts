@@ -11,6 +11,9 @@ import { navigation } from 'app/navigation/navigation';
 import { AuthenticationService } from '@core/services/auth/authentication.service';
 import { Router } from '@angular/router';
 import { AuthUserService } from '@core/services/user/auth-user.service';
+import { UnsubscribeOnDestroyAdapter } from '@shared/models/unsubscribe-adapter.model';
+import { EventBusService } from '@core/services/event-bus/event-bus.service';
+import { Events } from '@shared/enums/events.enum';
 
 @Component({
     selector     : 'toolbar',
@@ -19,7 +22,7 @@ import { AuthUserService } from '@core/services/user/auth-user.service';
     encapsulation: ViewEncapsulation.None
 })
 
-export class ToolbarComponent implements OnInit, OnDestroy
+export class ToolbarComponent extends UnsubscribeOnDestroyAdapter  implements OnInit, OnDestroy
 {
     horizontalNavbar: boolean;
     rightNavbar: boolean;
@@ -45,9 +48,11 @@ export class ToolbarComponent implements OnInit, OnDestroy
         private _translateService: TranslateService,
         private _authService: AuthenticationService, 
         private _authUserService: AuthUserService, 
-        private router: Router
+        private router: Router, 
+           private eventService:EventBusService
     )
     {
+        super()
          this.user=this._authUserService.User;
         // Set the defaults
         this.userStatusOptions = [
@@ -106,6 +111,9 @@ export class ToolbarComponent implements OnInit, OnDestroy
      */
     ngOnInit(): void
     {
+        this.subs.sink = this.eventService.on(Events.USER_UPDATED, (user) => {
+            this.user=user;
+          })
         // Subscribe to the config changes
         this._fuseConfigService.config
             .pipe(takeUntil(this._unsubscribeAll))

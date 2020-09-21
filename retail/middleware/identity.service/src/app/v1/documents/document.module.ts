@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { IdentityModule, IdentityService } from '@rubix/common/http/';
+import { IdentityModule, IdentityService } from '@rubix/common/connectors';
 
 import {
   RepositoryModule,

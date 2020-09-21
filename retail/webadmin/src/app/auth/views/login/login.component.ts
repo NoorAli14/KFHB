@@ -55,20 +55,20 @@ export class LoginComponent extends BaseComponent implements OnInit {
     ngOnInit(): void {
         this.returnUrl = this.route.snapshot.queryParamMap.get("returnUrl");
         this.loginForm = new FormGroup({
-            email: new FormControl("r@g.com", [
+            email: new FormControl("", [
                 Validators.required,
                 Validators.email,
             ]),
-            password: new FormControl("Abcd@123", [Validators.required]),
-            rememberMe: new FormControl(""),
+            password: new FormControl("", [Validators.required]),
+            // rememberMe: new FormControl(""),
         });
 
-        const email = this.cookie.get("email");
-        const password = this.cookie.get("password");
-        if (email) {
-            this.loginForm.patchValue({ email });
-            this.loginForm.patchValue({ password });
-        }
+        // const email = this.cookie.get("email");
+        // const password = this.cookie.get("password");
+        // if (email) {
+        //     this.loginForm.patchValue({ email });
+        //     this.loginForm.patchValue({ password });
+        // }
     }
     onSubmit() {
         const model = this.loginForm.value;
@@ -76,22 +76,26 @@ export class LoginComponent extends BaseComponent implements OnInit {
             (response) => {
                 this.errorType = "success";
                 this.responseMessage = MESSAGES.LOGGED_IN;
-                if (model.rememberMe) {
-                    this.cookie.set("email", model.email);
-                    this.cookie.set("password", model.password);
-                } else {
-                    this.cookie.delete("email", model.email);
-                    this.cookie.delete("password", model.password);
-                }
+                // if (model.rememberMe) {
+                //     this.cookie.set("email", model.email);
+                //     this.cookie.set("password", model.password);
+                // } else {
+                //     this.cookie.delete("email", model.email);
+                //     this.cookie.delete("password", model.password);
+                // }
                 setTimeout(() => {
                     this.router.navigateByUrl(
                         this.returnUrl ? this.returnUrl : "/ent/user"
                     );
                 }, 1000);
             },
-            (error) => {
+            (response) => {
                 this.errorType = "error";
-                this.responseMessage = MESSAGES.UNKNOWN;
+                if(response.statusCode===401){
+                    this.responseMessage = MESSAGES.INVALID_CREDENTIAL;
+                }else{
+                    this.responseMessage = MESSAGES.UNKNOWN;
+                }
             }
         );
     }

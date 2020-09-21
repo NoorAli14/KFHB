@@ -34,20 +34,21 @@ export class User {
     required: false,
   })
   @IsOptional()
-  last_name?: string;
+  last_name: string;
 
   @ApiProperty({
-    title: 'Username',
-    description: 'username of the user.',
+    title: 'Date of birth',
+    description: 'Customer date of birth.',
+    example: '1968-11-16',
     required: false,
   })
   @IsOptional()
-  username?: string;
+  date_of_birth: string;
 
   @ApiProperty({
     title: 'Email',
     example: 'example@aiondigital.com',
-    description: 'Email of the user.',
+    description: 'Email of the customer.',
     required: true,
   })
   @IsEmail()
@@ -55,47 +56,65 @@ export class User {
 
   @ApiProperty({
     title: 'Contact No',
-    description: 'Contact No of the user.',
+    description: 'Contact No of the customer.',
     required: false,
   })
   @IsOptional()
-  contact_no?: string;
+  contact_no: string;
 
   @ApiProperty({
     enum: GENDER,
     title: 'Gender',
     example: GENDER[0],
-    description: 'Gender of the user.',
+    description: 'Gender of the customer.',
     required: false,
   })
   @IsOptional()
-  gender?: string;
-
-  @ApiProperty({
-    title: 'Date of Birth',
-    description: 'Date of Birth of user.',
-    required: false,
-  })
-  @IsOptional()
-  @IsDate()
-  date_of_birth?: string;
+  gender: string;
 
   @ApiProperty({
     title: 'Nationality ID',
-    description: 'Nationality Id of the user.',
+    description: 'Nationality ID of the customer.',
+    example: '268111605659',
     required: false,
   })
   @IsOptional()
-  nationality_id?: string;
+  national_id_no: string;
 
+  @ApiProperty({
+    title: 'Nationality ID Expiry',
+    description: 'Nationality id expiry of the customer.',
+    example: '2021-05-22',
+    required: false,
+  })
+  @IsOptional()
+  national_id_expiry: string;
+
+  @ApiProperty({
+    title: 'Nationality',
+    description: 'Nationality of the customer.',
+    example: 'Bahrain',
+    required: false,
+  })
+  @IsOptional()
+  nationality: string;
+
+  @ApiProperty({
+    title: 'Nationality Code',
+    description: 'Nationality code of the customer.',
+    example: 'BH',
+    required: false,
+  })
+  @IsOptional()
+  nationality_code: string;
   @ApiProperty({
     enum: USER_STATUSES,
     example: USER_STATUSES[0],
-    description: 'Status of the user.',
+    description: 'Onboarding status of the customer.',
     required: false,
   })
   @IsOptional()
-  status?: string;
+  status: string;
 
   @ApiProperty({
     required: false,

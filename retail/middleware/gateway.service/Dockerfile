@@ -8,4 +8,4 @@ RUN set -ex && \
 
 COPY ./nginx/domain.conf /etc/nginx/conf.d/vhost.template
 
-CMD ["/entrypoint-nginx.sh"]
+CMD [ "/bin/bash", "/entrypoint-nginx.sh"]

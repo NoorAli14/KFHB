@@ -7,11 +7,14 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { FuseConfigService } from "@fuse/services/config.service";
 import { BaseComponent } from "@shared/components/base/base.component";
 import { snakeToCamelObject, camelToSnakeCase } from '@shared/helpers/global.helper';
+import { ValidatorService } from '@core/services/validator-service/validator.service';
+import { fuseAnimations } from '@fuse/animations';
 
 @Component({
     selector: "app-invitation",
     templateUrl: "./invitation.component.html",
     styleUrls: ["./invitation.component.scss"],
+    animations: fuseAnimations,
 })
 export class InvitationComponent extends BaseComponent implements OnInit {
     userForm: FormGroup;
@@ -49,19 +52,17 @@ export class InvitationComponent extends BaseComponent implements OnInit {
         };
     }
     ngOnInit(): void {
-      this.errorType = "info";
-      this.responseMessage = MESSAGES.THANKS
         this.userForm = new FormGroup({
             id: new FormControl(),
-            firstName: new FormControl(),
+            firstName: new FormControl('',[Validators.required]),
             middleName: new FormControl(),
-            lastName: new FormControl(),
-            contactNo: new FormControl(),
-            gender: new FormControl(),
-            status: new FormControl(),
+            lastName: new FormControl('',[Validators.required]),
+            contactNo: new FormControl('',[Validators.required,ValidatorService.numbersOnly]),
+            gender: new FormControl('',[Validators.required]),
+            status: new FormControl('',[Validators.required]),
             email: new FormControl('',[Validators.email]),
-            dateOfBirth: new FormControl(),
-            nationalityId: new FormControl(),
+            dateOfBirth: new FormControl('',[Validators.required]),
+            nationalityId: new FormControl('',[Validators.required]),
             password: new FormControl('',Validators.required),
             confirmPassword: new FormControl("", [
               Validators.required,
@@ -87,11 +88,14 @@ export class InvitationComponent extends BaseComponent implements OnInit {
           (response) => {
             this.errorType = "success";
             this.responseMessage = MESSAGES.UPDATED('Your Profile');
-            setTimeout(() => {
-                this.router.navigateByUrl('/auth/login');
-            }, 1000);
+            // setTimeout(() => {
+            //     this.router.navigateByUrl('/auth/login');
+            // }, 1000);
           },
-          (response=>super.onError(response))
+          (error)=>{
+            this.errorType = "error";
+            this.responseMessage = MESSAGES.UNKNOWN;
+          }
       );
     }
     getData(token) {
@@ -100,7 +104,15 @@ export class InvitationComponent extends BaseComponent implements OnInit {
                 const user= snakeToCamelObject(response);
                 this.userForm.patchValue(user)
             },
-            (response=>super.onError(response))
+            (response)=>{
+                this.errorType = "error";
+                if(response.error){
+                    this.errorType = "info";
+                    this.responseMessage = MESSAGES.ALREADY_ONBOARD;
+                }else{
+                    this.responseMessage = MESSAGES.UNKNOWN;
+                }
+            }
         );
     }
 }

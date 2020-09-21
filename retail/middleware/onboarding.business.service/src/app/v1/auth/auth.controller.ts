@@ -1,4 +1,5 @@
 import { Request } from 'express';
+import * as fs from 'fs';
 import {
   Controller,
   Post,
@@ -13,6 +14,7 @@ import {
   Headers,
   UnauthorizedException,
   BadRequestException,
+  Res,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -29,6 +31,8 @@ import {
   AuthGuard,
   CurrentUser,
   SuccessDto,
+  Header,
+  IHEADER,
 } from '@common/index';
 import { UserService } from '@app/v1/users/users.service';
 import { CurrentUserUpdateDto } from '@app/v1/users/user.dto';
@@ -36,7 +40,7 @@ import { RegisterCustomerDto } from './auth.dto';
 import { User as Customer } from '@app/v1/users/user.entity';
 import { AuthService } from './auth.service';
 
-@ApiTags('Auth')
+@ApiTags('Authentication / Authorization Module')
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -104,8 +108,9 @@ export class AuthController {
   async register(
     @Req() request: Request,
     @Body() input: RegisterCustomerDto,
+    @Header() header: IHEADER,
   ): Promise<Customer> {
-    const customer: any = await this.customerService.create(input);
+    const customer: any = await this.customerService.create(header, input);
     const refreshToken: string = await this.authService.getRefreshToken(
       customer.id,
     );

@@ -42,12 +42,12 @@ export class UserComponent extends BaseComponent implements OnInit {
     pageSizeOptions: Array<number> = CONFIG.PAGE_SIZE_OPTIONS;
 
     displayedColumns = [
-        "username",
+        // "username",
         "firstName",
         "lastName",
-        "gender",
+        // "gender",
         "email",
-        "contactNo",
+        // "contactNo",
         "status",
         "actions",
     ];
@@ -157,14 +157,20 @@ export class UserComponent extends BaseComponent implements OnInit {
     createUser(model: User) {
         this._service.createUser(model).subscribe(
             (response) => {
-                 this.errorType = "success";
-                 this.responseMessage = MESSAGES.INVITATION_SENT;
                 // const data = this.dataSource.data;
                 // data.push(response);
                 // this.updateGrid(data);
-                this._matDialog.closeAll();
+                this._errorEmitService.emit(
+                    MESSAGES.INVITATION_SENT,
+                    "success"
+                );
             },
-            (response=>super.onError(response))
+            (response) => {
+                this._errorEmitService.emit(
+                    MESSAGES.UNKNOWN,
+                    "error"
+                );
+            }
         );
     }
     hideMessage() {
@@ -185,7 +191,9 @@ export class UserComponent extends BaseComponent implements OnInit {
                 this.hideMessage();
                 this._matDialog.closeAll();
             },
-            (response=>super.onError(response))
+            (response) => {
+                
+            }
         );
     }
     deleteUser(id: string) {

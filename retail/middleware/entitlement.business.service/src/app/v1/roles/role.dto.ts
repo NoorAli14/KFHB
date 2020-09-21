@@ -1,4 +1,10 @@
-import { IsNotEmpty, Length, IsString, ValidateNested } from 'class-validator';
+import {
+  IsNotEmpty,
+  Length,
+  IsString,
+  ValidateNested,
+  IsOptional,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { IdsDto } from '@common/dtos';
 import { Type } from 'class-transformer';
@@ -19,7 +25,8 @@ export class RoleDto {
     required: false,
     description: 'Description about the role.',
   })
-  description?: string;
+  @IsOptional()
+  description: string;
 
   @ApiProperty({
     type: [IdsDto],

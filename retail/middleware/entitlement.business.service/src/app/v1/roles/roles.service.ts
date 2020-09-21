@@ -11,6 +11,7 @@ export class RoleService {
   private output: string = `{
     id
     name
+    description
     modules {
       id
       name
@@ -71,6 +72,7 @@ export class RoleService {
     if (!role) {
       throw new NotFoundException('Role Not Found');
     }
+
     const params = `mutation {
       result: updateRole(id: "${id}", input: ${toGraphql(input)}) ${this.output}
     }`;
