@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { OptionsResolver } from './options.resolver';
 import { OptionsService } from './options.service';
-import { OptionGQL } from './option.model';
 
 describe('OptionsResolver', () => {
   let resolver: OptionsResolver;
@@ -13,12 +12,11 @@ describe('OptionsResolver', () => {
         {
           provide: OptionsService,
           useFactory: () => ({
-            findOption: jest.fn((id: { id: string }) => ({
-              age: 3,
+            findOption: jest.fn((id: string) => ({
               name: 'test option',
               name_ar: 'test ar name',
               question_id: '12-23',
-              ...id,
+              id,
             })),
           }),
         },
@@ -33,12 +31,14 @@ describe('OptionsResolver', () => {
   });
 
   describe('findOption', () => {
-    it('should get one cat', () => {
-      expect(resolver.findOption('500', [])).toEqual({
-        name: 'Test Cat',
-        breed: 'Test Breed',
-        age: 3,
-        id: '500',
+    it('should get one option', () => {
+      expect(
+        resolver.findOption('6D44CFC4-CDD1-445D-ACCF-2099ED4D347A', '', []),
+      ).toEqual({
+        name: 'test option',
+        name_ar: 'test ar name',
+        question_id: '12-23',
+        id: '6D44CFC4-CDD1-445D-ACCF-2099ED4D347A',
       });
     });
   });
