@@ -22,7 +22,6 @@ import { cloneDeep } from "lodash";
     animations: fuseAnimations,
 })
 export class PermissionComponent extends BaseComponent implements OnInit {
-    title = "";
     @Input() modules: Array<Modules>;
     @Input() permissions: Array<Permission>;
     displayedColumns = ["module"];

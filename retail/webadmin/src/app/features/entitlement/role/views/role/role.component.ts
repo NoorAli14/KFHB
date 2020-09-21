@@ -109,18 +109,17 @@ export class RoleComponent extends BaseComponent implements OnInit {
     }
 
     onEditHandler(data) {
+        const flatModules= this._mapperService.makeModulesFlat(cloneDeep(data.modules))
         let modules = cloneDeep(this.modules);
         modules = modules.map((el) => {
-            const exist = this._mapperService.findPermission(
-                data.modules,
-                el.id
-            );
+            const exist =flatModules.find(x=>x.id==el.id);
             if (!exist) return el;
-            el.permissions = exist.permissions.map((x) => {
+            el.permissions = el.permissions.map((x) => {
+                const item=exist.permissions.find((y) => y.id == x.id);
                 return {
                     ...x,
-                    value: true,
-                    ...el.permissions.find((y) => y.id == x.id),
+                    value: item?true : false,
+                    ...item
                 };
             });
             return el;

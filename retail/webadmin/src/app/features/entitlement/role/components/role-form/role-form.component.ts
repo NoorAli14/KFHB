@@ -39,7 +39,7 @@ export class RoleFormComponent extends BaseComponent implements OnInit {
     }
 
     ngOnInit(): void {
-       
+       debugger
         const totalPermissions=this.data.permissions.map((x)=>x.record_type)
         this.displayedColumns= this.displayedColumns.concat(totalPermissions)
 

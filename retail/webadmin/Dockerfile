@@ -24,7 +24,7 @@ RUN rm -rf node_modules package-lock.json
 RUN npm cache clean --force
 
 
-RUN npm install --silent
+RUN npm install 
 
 COPY . .
 
