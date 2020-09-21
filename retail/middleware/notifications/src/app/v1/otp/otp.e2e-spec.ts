@@ -2,7 +2,7 @@ import * as request from 'supertest';
 import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { ApplicationModule } from '@rubix/app';
-import { GenerateOTPInput, VerifyOTPInput } from './otp.dto';
+import { GenerateOTPInput } from './otp.dto';
 import { createQuery } from '@rubix/common';
 
 describe('Email', () => {
@@ -15,8 +15,7 @@ describe('Email', () => {
     app = moduleRef.createNestApplication();
     await app.init();
   });
-  var user_id: string;
-  var otp_code: string;
+
   const smsOTPInput: GenerateOTPInput = {
     user_id: '515032EB-5AF8-40F0-B3ED-6063000294FF',
     delivery_mode: 'mobile',
@@ -38,8 +37,7 @@ describe('Email', () => {
       .expect(({ body }) => {
         const data = body.data.generateOtp;
         expect(data.user_id).toBe(smsOTPInput.user_id);
-        user_id = body.data.user_id;
-        otp_code = body.data.otp_code;
+
       })
       .expect(200)
       .end(done);
@@ -83,8 +81,6 @@ describe('Email', () => {
       .expect(({ body }) => {
         const data = body.data.generateOtp;
         expect(data.user_id).toBe(emailOTPInput.user_id);
-        user_id = body.data.user_id;
-        otp_code = body.data.otp_code;
       })
       .expect(200)
       .end(done);
@@ -107,8 +103,6 @@ describe('Email', () => {
       .expect(({ body }) => {
         const data = body.data.generateOtp;
         expect(data.user_id).toBe(OTPInput.user_id);
-        user_id = body.data.user_id;
-        otp_code = body.data.otp_code;
       })
       .expect(200)
       .end(done);
