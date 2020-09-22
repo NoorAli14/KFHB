@@ -62,7 +62,7 @@ export const formattedHeader = (
   const _headers: { [key: string]: string } = {};
   _headers[X_CORRELATION_KEY] = req.headers[X_CORRELATION_KEY];
   if (user_id) _headers[X_USER_ID] = user_id;
-  if (req?.user) _headers[X_USER_ID] = req?.user?.id;
-  _headers[X_TENANT_ID] = req.headers[X_TENANT_ID] || req.query[X_TENANT_ID];
+  if (req?.user?.id) _headers[X_USER_ID] = req?.user?.id;
+  _headers[X_TENANT_ID] = req.headers?.[X_TENANT_ID] || req.query?.[X_TENANT_ID];
   return _headers;
 };
