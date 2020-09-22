@@ -121,11 +121,12 @@ export class UserService {
     const date = validateDate(obj.call_time);
     obj.gender && validateGender(obj.gender);
     obj.call_time = date.substring(0,10);
-    if(!await this.isHoliday(obj) && await this.isWorkingDay(date, obj.tenant_id)) {
-      return this.availableAgents(obj)
-    } else{
-      return []
-    }
+    // if(!await this.isHoliday(obj) && await this.isWorkingDay(date, obj.tenant_id)) {
+    //   return this.availableAgents(obj)
+    // } else{
+    //   return []
+    // }
+    return []
   }
 
   async isHoliday(obj: Record<string, any>): Promise<boolean> {
@@ -143,32 +144,32 @@ export class UserService {
     return !!holidays.length;
   }
 
-  async isWorkingDay(date: string, tenant_id: string): Promise<boolean> {
-    const weekDay = Object.keys(WEEK_DAYS)[new Date(date).getDay()];
-    const checks: KeyValInput[] = [
-      {
-        record_key: 'week_day',
-        record_value: weekDay
-      },
-      {
-        record_key: 'tenant_id',
-        record_value: tenant_id
-      }
-    ];
-    const days = await this.workingDaysService.findByProperty(checks, ['start_time', 'end_time', 'full_day']);
-    if(days && days.length > 0) {
-      const day = days[0];
-      try {
-        if (day.full_day) return true;
-        if (Date.parse(date) > Date.parse(new Date(day.start_time).toISOString())
-          && Date.parse(date) < Date.parse(new Date(day.end_time).toISOString()))
-          return true;
-      } catch (e) {
-        return false;
-      }
-    }
-    return false;
-  }
+  // async isWorkingDay(date: string, tenant_id: string): Promise<boolean> {
+  //   const weekDay = Object.keys(WEEK_DAYS)[new Date(date).getDay()];
+  //   const checks: KeyValInput[] = [
+  //     {
+  //       record_key: 'week_day',
+  //       record_value: weekDay
+  //     },
+  //     {
+  //       record_key: 'tenant_id',
+  //       record_value: tenant_id
+  //     }
+  //   ];
+  //   const days = await this.workingDaysService.findByProperty(checks, ['start_time', 'end_time', 'full_day']);
+  //   if(days && days.length > 0) {
+  //     const day = days[0];
+  //     try {
+  //       if (day.full_day) return true;
+  //       if (Date.parse(date) > Date.parse(new Date(day.start_time).toISOString())
+  //         && Date.parse(date) < Date.parse(new Date(day.end_time).toISOString()))
+  //         return true;
+  //     } catch (e) {
+  //       return false;
+  //     }
+  //   }
+  //   return false;
+  // }
 
   async availableAgents(obj: Record<string, any>): Promise<any> {
     const checks: KeyValInput[] = [
