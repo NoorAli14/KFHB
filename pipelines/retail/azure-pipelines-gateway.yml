@@ -15,6 +15,7 @@ variables:
   containerRegistry: 'testdaon.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/retail/middleware/gateway.service/Dockerfile'
   tag: '$(Build.BuildId)'
+  tagLatest: $(Build.SourceBranchName)_latest
   
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
@@ -37,4 +38,4 @@ stages:
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
-          
+          $(tagLatest)
