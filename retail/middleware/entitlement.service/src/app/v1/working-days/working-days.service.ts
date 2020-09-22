@@ -1,6 +1,6 @@
 import {HttpException, HttpStatus, Injectable} from "@nestjs/common";
 
-import {MESSAGES, STATUS, WEEK_DAYS} from "@common/constants";
+import {MESSAGES} from "@common/constants";
 import { KeyValInput } from "@common/inputs/key-val.input";
 import { WorkingDaysRepository } from "@core/repository";
 import {WorkingDayInput} from '@app/v1/working-days/working-day.dto';
@@ -17,15 +17,15 @@ import {WorkingDayStartEndTimeInvalidRange} from '@app/v1/working-days/exception
 export class WorkingDaysService {
   constructor(private workingDaysRepository: WorkingDaysRepository) {}
 
-  async list(current_user: ICurrentUser, keys: string[], paginationParams: Record<string, any>): Promise<any> {
+  async list(current_user: ICurrentUser, keys: string[], paginationParams: Record<string, any>): Promise<WorkingDay[]> {
     return this.workingDaysRepository.listWithPagination(paginationParams, keys,{deleted_on : null, tenant_id: current_user.tenant_id});
   }
 
-  async findById(current_user: ICurrentUser, id: string, keys?: string[]): Promise<any> {
+  async findById(current_user: ICurrentUser, id: string, keys?: string[]): Promise<WorkingDay> {
     return this.workingDaysRepository.findOne({ id: id, deleted_on : null, tenant_id: current_user.tenant_id }, keys);
   }
 
-  async findByProperty(current_user: ICurrentUser, checks: KeyValInput[], keys?: string[]): Promise<any> {
+  async findByProperty(current_user: ICurrentUser, checks: KeyValInput[], keys?: string[]): Promise<WorkingDay[]> {
     const conditions = {};
     checks.forEach(check => {
       conditions[check.record_key] = check.record_value;

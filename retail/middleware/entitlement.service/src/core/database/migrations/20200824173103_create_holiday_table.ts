@@ -5,7 +5,7 @@ export async function up(knex: Knex): Promise<any> {
   return knex.schema.createTable(TABLE.HOLIDAY, table => {
     table.uuid('id').primary().defaultTo(knex.raw(DATABASE_UUID_METHOD));
     table.uuid('tenant_id').notNullable();
-    table.timestamp('holiday_date').notNullable();
+    table.date('holiday_date').notNullable();
     table.string('description');
     table.string('remarks');
     table.string('status').defaultTo(STATUS.ACTIVE).notNullable();

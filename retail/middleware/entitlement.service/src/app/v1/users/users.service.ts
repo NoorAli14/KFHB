@@ -129,20 +129,20 @@ export class UserService {
     return []
   }
 
-  async isHoliday(obj: Record<string, any>): Promise<boolean> {
-    const checks: KeyValInput[] = [
-      {
-        record_key: 'holiday_date',
-        record_value: obj.call_time
-      },
-      {
-        record_key: 'tenant_id',
-        record_value: obj.tenant_id
-      }
-    ];
-    const holidays = await this.holidaysService.findByProperty(checks, ['id', 'created_on']);
-    return !!holidays.length;
-  }
+  // async isHoliday(obj: Record<string, any>): Promise<boolean> {
+  //   const checks: KeyValInput[] = [
+  //     {
+  //       record_key: 'holiday_date',
+  //       record_value: obj.call_time
+  //     },
+  //     {
+  //       record_key: 'tenant_id',
+  //       record_value: obj.tenant_id
+  //     }
+  //   ];
+  //   const holidays = await this.holidaysService.findByProperty(checks, ['id', 'created_on']);
+  //   return !!holidays.length;
+  // }
 
   // async isWorkingDay(date: string, tenant_id: string): Promise<boolean> {
   //   const weekDay = Object.keys(WEEK_DAYS)[new Date(date).getDay()];

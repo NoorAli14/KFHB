@@ -6,13 +6,10 @@ import {
   ResolveField, Parent, Context, GraphQLExecutionContext,
 } from "@nestjs/graphql";
 import { KeyValInput } from "@common/inputs/key-val.input";
-import {WorkingDay, WorkingDayWithPagination} from "@app/v1/working-days/working-day.model";
+import {WorkingDay} from "@app/v1/working-days/working-day.model";
 import { WorkingDaysService } from "@app/v1/working-days/working-days.service";
 import {WorkingDayCreateInput, WorkingDayInput} from "@app/v1/working-days/working-day.dto";
 import {CurrentUser, Fields} from '@common/decorators';
-import {HttpException, HttpStatus} from '@nestjs/common';
-import {MESSAGES, STATUS} from '@common/constants';
-import {getMutateProps} from '@common/utilities';
 import {ICurrentUser} from '@common/interfaces';
 import {WorkingDayNotFoundException} from '@app/v1/working-days/exceptions';
 
