@@ -27,14 +27,14 @@ import { AuthGuard, Header, IHEADER } from '@common/index';
 
 import { RoleService } from './roles.service';
 import { Role } from './role.entity';
-import { RoleDto } from './role.dto';
+import { RoleDto, UpdateRoleDto } from './role.dto';
 
 @ApiTags('Role')
 @Controller('roles')
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
 export class RolesController {
-  constructor(private readonly roleService: RoleService) {}
+  constructor(private readonly roleService: RoleService) { }
 
   @Post('/')
   @ApiBody({ description: 'Sets the role properties.', type: RoleDto })
@@ -95,7 +95,7 @@ export class RolesController {
   }
 
   @Put(':id')
-  @ApiBody({ description: 'Sets the role properties.', type: RoleDto })
+  @ApiBody({ description: 'Sets the role properties.', type: UpdateRoleDto })
   @ApiOperation({
     summary: 'Update a role by ID',
     description:
@@ -116,7 +116,7 @@ export class RolesController {
   async update(
     @Header() header: IHEADER,
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() roleDto: RoleDto,
+    @Body() roleDto: UpdateRoleDto,
   ): Promise<Role> {
     return this.roleService.update(header, id, roleDto);
   }
