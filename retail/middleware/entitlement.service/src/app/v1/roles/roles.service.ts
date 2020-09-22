@@ -9,11 +9,11 @@ export class RoleService {
   constructor(private roleDB: RoleRepository) {}
 
   async list(keys: string[], paginationParams: Record<string, any>): Promise<any> {
-    return this.roleDB.listWithPagination(paginationParams, keys);
+    return this.roleDB.listWithPagination(paginationParams, keys,{deleted_on : null});
   }
 
   async findById(id: string, keys?: string[]): Promise<any> {
-    const result = await this.roleDB.findOne({ id: id }, keys);
+    const result = await this.roleDB.findOne({ id: id, deleted_on : null }, keys);
     if(!result){
       throw new HttpException({
         status: HttpStatus.NOT_FOUND,
@@ -28,6 +28,7 @@ export class RoleService {
     checks.forEach(check => {
       conditions[check.record_key] = check.record_value;
     });
+    conditions['deleted_on'] = null;
     const result = await this.roleDB.findBy(conditions, keys);
     if(!result){
       throw new HttpException({
