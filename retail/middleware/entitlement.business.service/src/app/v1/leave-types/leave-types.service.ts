@@ -9,7 +9,7 @@ export class LeaveTypesService {
 
   private readonly __output: string = `{
     id
-    leave_type
+    name
     status
     created_by
     created_on
