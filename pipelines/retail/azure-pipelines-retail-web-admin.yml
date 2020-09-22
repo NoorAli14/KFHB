@@ -10,7 +10,7 @@ resources:
 
 variables:
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: '0b292ff3-4416-4f83-b71a-d271b659125a'
+  dockerRegistryServiceConnection: 'e11b76b8-024b-445d-b872-aaba976b9e8b'
   imageRepository: 'rubixretailwebadmin'
   containerRegistry: 'testdaon.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/retail/webadmin/Dockerfile'
@@ -37,3 +37,4 @@ stages:
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
+          latest
