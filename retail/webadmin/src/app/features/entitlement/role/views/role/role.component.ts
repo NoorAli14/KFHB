@@ -81,6 +81,8 @@ export class RoleComponent extends BaseComponent implements OnInit {
                     roles: this.roles,
                     permissions: this.permissions,
                 },
+                disableClose: true,
+                hasBackdrop: true,
                 panelClass: "app-role-form",
             })
             .componentInstance.sendResponse.subscribe((response) => {

@@ -65,6 +65,8 @@ export class LeaveComponent extends BaseComponent implements OnInit {
             .open(WorkingDayFormComponent, {
                 data: new Leave(),
                 panelClass: "app-working-day-form",
+                disableClose: true,
+                hasBackdrop: true,
             })
             .componentInstance.sendResponse.subscribe((response) => {
                 if (response.id) {

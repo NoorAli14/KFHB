@@ -95,6 +95,8 @@ export class UserComponent extends BaseComponent implements OnInit {
                     user:
                         data && data.id ? snakeToCamelObject(data) : new User(),
                 },
+                disableClose: true,
+                hasBackdrop: true,
                 panelClass: "app-user-form",
             })
             .componentInstance.sendResponse.subscribe((response) => {

@@ -75,6 +75,8 @@ export class HolidayComponent extends BaseComponent implements OnInit {
             .open(HolidayFormComponent, {
                 data: new Holiday(),
                 panelClass: "app-holiday-form",
+                disableClose: true,
+                hasBackdrop: true,
             })
             .componentInstance.sendResponse.subscribe((response) => {
                 if (response.id) {

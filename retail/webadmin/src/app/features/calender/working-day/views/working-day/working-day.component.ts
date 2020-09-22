@@ -77,6 +77,8 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
             .open(WorkingDayFormComponent, {
                 data: new WorkingDay(),
                 panelClass: "app-working-day-form",
+                disableClose: true,
+                hasBackdrop: true,
             })
             .componentInstance.sendResponse.subscribe((response) => {
                 if (response.id) {
