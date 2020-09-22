@@ -53,9 +53,10 @@ input ForgotPasswordInput {
 
 type Holiday {
   id: ID
-  holiday_date: String
-  holiday_description: String
+  holiday_date: DateTime
+  description: String
   remarks: String
+  tenant_id: String
   status: String
   created_on: String
   created_by: String
@@ -66,15 +67,15 @@ type Holiday {
 }
 
 input HolidayCreateInput {
-  holiday_date: String!
-  holiday_description: String
+  holiday_date: String
+  description: String
   remarks: String
   status: String
 }
 
 input HolidayInput {
   holiday_date: String
-  holiday_description: String
+  description: String
   remarks: String
   status: String
 }
