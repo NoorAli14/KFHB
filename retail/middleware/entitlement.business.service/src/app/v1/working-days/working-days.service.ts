@@ -1,5 +1,5 @@
-import { Injectable, NotFoundException, Logger } from '@nestjs/common';
-import { GqlClientService, toGraphql, IHEADER } from '@common/index';
+import { Injectable, Logger } from '@nestjs/common';
+import { GqlClientService, toGraphql } from '@common/index';
 import { WorkingDay } from './working-day.entity';
 import { WorkingDayDTO } from './working-day.dto';
 @Injectable()
@@ -9,39 +9,38 @@ export class WorkingDaysService {
   private readonly __output: string = `{
     id
     week_day
-    start_time
-    end_time
-    remarks
+    start_time_local
+    end_time_local
     full_day
+    remarks
     status
     created_on
-    created_on
+    created_by
     updated_on
     updated_by
   }`;
 
-  constructor(private readonly gqlClient: GqlClientService) {}
+  constructor(private readonly gqlClient: GqlClientService) { }
 
-  async create(header: IHEADER, input: WorkingDayDTO): Promise<WorkingDay> {
+  async create(input: WorkingDayDTO): Promise<WorkingDay> {
     this.logger.log(`Creating a new working day`);
 
     const mutation: string = `mutation {
       result: addWorkingDay(input: ${toGraphql(input)}) ${this.__output}
     }`;
-    return this.gqlClient.setHeaders(header).send(mutation);
+    return this.gqlClient.send(mutation);
   }
 
-  async list(header: IHEADER): Promise<WorkingDay[]> {
+  async list(): Promise<WorkingDay[]> {
     this.logger.log(`Start fetching list of all working days`);
 
     const query: string = `query {
       result: workingDaysList ${this.__output}
     }`;
-    return this.gqlClient.setHeaders(header).send(query);
+    return this.gqlClient.send(query);
   }
 
   async findOne(
-    header: IHEADER,
     id: string,
     output?: string,
   ): Promise<WorkingDay> {
@@ -51,38 +50,27 @@ export class WorkingDaysService {
     const query: string = `query {
       result: findWorkingDayById(id: "${id}") ${_output}
     }`;
-    return this.gqlClient.setHeaders(header).send(query);
+    return this.gqlClient.send(query);
   }
 
   async update(
-    header: IHEADER,
     id: string,
     input: WorkingDayDTO,
   ): Promise<WorkingDay> {
     this.logger.log(`Start Updating working day with ID [${id}]`);
-
-    const user: WorkingDay = await this.findOne(header, id, `{id}`);
-    if (!user) {
-      throw new NotFoundException('Working day not found');
-    }
     const mutation: string = `mutation {
-      result: updateWorkingDay(id: "${id}", input: ${toGraphql(input)}) ${
-      this.__output
-    }
+      result: updateWorkingDay(id: "${id}", input: ${toGraphql(input)}) ${this.__output
+      }
     }`;
-    return this.gqlClient.setHeaders(header).send(mutation);
+    return this.gqlClient.send(mutation);
   }
 
-  async delete(header: IHEADER, id: string): Promise<boolean> {
+  async delete(id: string): Promise<boolean> {
     this.logger.log(`Start Deleting working day with ID [${id}]`);
 
-    const workingDay: WorkingDay = await this.findOne(header, id, `{id}`);
-    if (!workingDay) {
-      throw new NotFoundException('Working day not found');
-    }
     const mutation: string = `mutation {
       result: deleteWorkingDay(id: "${id}") 
     }`;
-    return this.gqlClient.setHeaders(header).send(mutation);
+    return this.gqlClient.send(mutation);
   }
 }

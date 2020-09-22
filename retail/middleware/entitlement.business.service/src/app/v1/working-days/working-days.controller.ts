@@ -22,17 +22,17 @@ import {
   ApiNotFoundResponse,
   ApiNoContentResponse,
 } from '@nestjs/swagger';
-import { AuthGuard, Header, IHEADER } from '@common/index';
+import { AuthGuard } from '@common/index';
 import { WorkingDaysService } from './working-days.service';
 import { WorkingDay } from './working-day.entity';
 import { WorkingDayDTO } from './working-day.dto';
 
-@ApiTags('Working Days')
+@ApiTags('Working Days Module')
 @Controller('working-days')
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
 export class WorkingDaysController {
-  constructor(private readonly workingDayService: WorkingDaysService) {}
+  constructor(private readonly workingDayService: WorkingDaysService) { }
 
   @Get('/')
   @ApiOperation({
@@ -44,8 +44,8 @@ export class WorkingDaysController {
     type: [WorkingDay],
     description: 'List of all working days.',
   })
-  async list(@Header() header: IHEADER): Promise<WorkingDay[]> {
-    return this.workingDayService.list(header);
+  async list(): Promise<WorkingDay[]> {
+    return this.workingDayService.list();
   }
 
   @Post('/')
@@ -67,10 +67,9 @@ export class WorkingDaysController {
     description: 'Input Validation failed.',
   })
   async create(
-    @Header() header: IHEADER,
     @Body() input: WorkingDayDTO,
   ): Promise<WorkingDay> {
-    return this.workingDayService.create(header, input);
+    return this.workingDayService.create(input);
   }
 
   @Get(':id')
@@ -88,11 +87,9 @@ export class WorkingDaysController {
     description: 'Working day Not Found.',
   })
   async findOne(
-    @Header() header: IHEADER,
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<WorkingDay> {
     const working: WorkingDay = await this.workingDayService.findOne(
-      header,
       id,
     );
     if (!working) {
@@ -124,11 +121,10 @@ export class WorkingDaysController {
     description: 'Working day Not Found.',
   })
   async update(
-    @Header() header: IHEADER,
     @Param('id', ParseUUIDPipe) id: string,
     @Body() input: WorkingDayDTO,
   ): Promise<WorkingDay> {
-    return this.workingDayService.update(header, id, input);
+    return this.workingDayService.update(id, input);
   }
 
   @Delete(':id')
@@ -146,9 +142,8 @@ export class WorkingDaysController {
   })
   @HttpCode(HttpStatus.NO_CONTENT)
   async delete(
-    @Header() header: IHEADER,
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<any> {
-    return this.workingDayService.delete(header, id);
+    return this.workingDayService.delete(id);
   }
 }

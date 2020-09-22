@@ -3,7 +3,7 @@ import { USER_STATUSES } from '@common/constants';
 
 export class WorkingDay {
   @ApiProperty({
-    title: 'User ID',
+    title: 'Working Day ID',
     example: '3dfdecc1-a616-4817-a841-61d824d82a13',
     description: 'Unique Identifier',
   })
@@ -17,16 +17,22 @@ export class WorkingDay {
 
   @ApiProperty({
     required: false,
+    title: 'Start time',
+    example: '1100',
   })
-  end_time: string;
+  start_time_local: string;
 
   @ApiProperty({
     required: false,
+    title: 'End time',
+    example: '1700',
   })
-  start_time: string;
+  end_time_local: string;
 
   @ApiProperty({
     required: false,
+    enum: [0, 1],
+    example: 1,
   })
   full_day: number;
 
@@ -38,7 +44,7 @@ export class WorkingDay {
   @ApiProperty({
     enum: USER_STATUSES,
     example: USER_STATUSES[0],
-    description: 'Status of the user.',
+    description: 'Status of working day.',
     required: false,
   })
   status: string;

@@ -14,12 +14,12 @@ export class WorkingDayDTO {
   @ApiProperty({
     required: false,
   })
-  end_time: string;
+  end_time_local: string;
 
   @ApiProperty({
     required: false,
   })
-  start_time: string;
+  start_time_local: string;
 
   @ApiProperty({
     required: false,
