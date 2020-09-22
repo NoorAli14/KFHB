@@ -38,7 +38,7 @@ export class CustomersService {
     updated_by
   }`;
 
-  constructor(private readonly gqlClient: GqlClientService) {}
+  constructor(private readonly gqlClient: GqlClientService) { }
 
   async findOne(header: IHEADER, id: string): Promise<any> {
     this.logger.log(`Start finding customer360 with ID [${id}]`);

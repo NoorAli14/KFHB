@@ -3,8 +3,7 @@ import {
   HttpService,
   HttpException,
   RequestTimeoutException,
-  BadRequestException,
-  Logger,
+  Logger, HttpStatus
 } from '@nestjs/common';
 import { map, timeout, catchError } from 'rxjs/operators';
 import { TimeoutError, throwError } from 'rxjs';
@@ -13,7 +12,7 @@ import { IHEADER } from '@common/interfaces/';
 export class GqlClientService {
   private readonly logger: Logger = new Logger(GqlClientService.name);
   private __header: IHEADER;
-  constructor(private readonly http: HttpService) {}
+  constructor(private readonly http: HttpService) { }
 
   public setHeaders(header: IHEADER): GqlClientService {
     this.__header = header;
@@ -31,21 +30,26 @@ export class GqlClientService {
       .pipe(
         map(response => {
           if (response.data?.errors) {
-            const err: any = response.data?.errors[0].extensions;
-            if (err.exception?.response) {
-              return throwError(
-                new HttpException(
-                  err.exception?.error,
-                  err.exception?.response.status,
-                ),
-              );
-            }
             this.logger.log(
-              `GQL Response Error: ${JSON.stringify(err, null, 2)}`,
+              `GQL Error: ${JSON.stringify(response.data.errors, null, 2)}`,
             );
-            return throwError(err.exception);
+            const err: any = response.data?.errors[0].extensions;
+            let __err: any = { message: err.exception.message, stacktrace: err.exception?.stacktrace };
+            if (err.exception?.response) {
+              __err = { message: err.exception?.response.message || err.exception?.message, error: err.exception.response.error };
+              if (process.env.NODE_ENV != 'production') {
+                __err['context'] = {
+                  serviceName: err?.serviceName,
+                  developerMessage: err?.query
+                };
+              }
+            }
+            throw new HttpException(
+              __err,
+              err.exception?.response?.status || err.exception?.status || HttpStatus.INTERNAL_SERVER_ERROR,
+            );
+            // return throwError(err.exception);
           }
-          this.logger.log(response.data);
           return response.data?.data?.result || response.data?.data;
         }),
         timeout(5000),
@@ -54,7 +58,7 @@ export class GqlClientService {
           if (err instanceof TimeoutError) {
             return throwError(new RequestTimeoutException());
           }
-          return throwError(new BadRequestException(err));
+          return throwError(err);
         }),
       )
       .toPromise();

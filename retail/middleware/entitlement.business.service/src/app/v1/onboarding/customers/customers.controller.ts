@@ -22,7 +22,8 @@ import { Customer } from './customer.entity';
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
 export class CustomersController {
-  constructor(private readonly customerService: CustomersService) {}
+
+  constructor(private readonly customerService: CustomersService) { }
 
   @Get(':id')
   @ApiOperation({
