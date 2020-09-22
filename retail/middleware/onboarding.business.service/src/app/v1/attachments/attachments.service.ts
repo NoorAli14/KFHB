@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { Attachment } from './attachment.entity';
 import { GqlClientService, toGraphql } from '@common/index';
 import {
@@ -9,6 +9,7 @@ import {
 
 @Injectable()
 export class AttachmentsService {
+  private readonly logger = new Logger(AttachmentsService.name)
   private readonly output: string = `{
         id
         session_id
@@ -20,7 +21,7 @@ export class AttachmentsService {
         updated_by
     }`;
 
-  constructor(private readonly gqlClient: GqlClientService) {}
+  constructor(private readonly gqlClient: GqlClientService) { }
 
   /**
    *
@@ -57,11 +58,36 @@ export class AttachmentsService {
    * @return The attachment object
    */
   async process(input: IDocumentProcess): Promise<Attachment> {
+    const _output = `{
+      ... on Document {
+        id
+        session_id
+        processed_data
+        status
+        created_on
+        created_by
+        updated_on
+        updated_by
+      }
+      ... on CUSTOM_ERROR {
+        errors {
+          group
+          errorCode
+          field
+          message
+          stack
+          value
+        }
+      }
+    }`;
     // Construct GraphQL request
     const mutation = `mutation {
-        result: processDocument(input: ${toGraphql(input)}) ${this.output}
-      }`;
+      result: processDocument(input: ${toGraphql(input)}) ${_output}
+    }`;
+    this.logger.log(mutation)
     const document: any = await this.gqlClient.send(mutation);
+    if (document?.errors)
+      throw new BadRequestException({ errors: document.errors });
     if (document?.processed_data)
       document.processed_data = JSON.parse(document.processed_data);
     return document;
