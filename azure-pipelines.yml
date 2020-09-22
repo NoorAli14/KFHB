@@ -3,17 +3,17 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
 trigger:
-- APS-460
+- master
 
 resources:
 - repo: self
 
 variables:
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: '4235183d-8aa5-4944-8de6-78f2a6df5279'
-  imageRepository: 'aiondigitalengineeringrubixangular'
+  dockerRegistryServiceConnection: 'e11b76b8-024b-445d-b872-aaba976b9e8b'
+  imageRepository: 'rubixgateway'
   containerRegistry: 'testdaon.azurecr.io'
-  dockerfilePath: '$(Build.SourcesDirectory)/retail/webadmin/Dockerfile'
+  dockerfilePath: '$(Build.SourcesDirectory)/retail/middleware/gateway.service/Dockerfile'
   tag: '$(Build.BuildId)'
   
   # Agent VM image name

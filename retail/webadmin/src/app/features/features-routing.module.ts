@@ -1,15 +1,18 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-
+import { NgModule } from "@angular/core";
+import { Routes, RouterModule } from "@angular/router";
 
 const routes: Routes = [
   {
-    path: 'user',
-    loadChildren: () => import('./user/user.module').then(m => m.UserModule)
+    path: 'ent',
+    loadChildren: () => import('./entitlement/entitlement.module').then(m => m.EntitlementModule)
   },
   {
-    path: 'role',
-    loadChildren: () => import('./role/role.module').then(m => m.RoleModule)
+    path: 'calender',
+    loadChildren: () => import('./calender/calender.module').then(m => m.CalenderModule)
+  },
+  {
+     path: 'setting',
+    loadChildren: () => import('./setting/setting.module').then(m => m.SettingModule)
   },
   {
     path: 'error',
@@ -21,7 +24,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+    imports: [RouterModule.forChild(routes)],
+    exports: [RouterModule],
 })
-export class FeaturesRoutingModule { }
+export class FeaturesRoutingModule {}

@@ -1,0 +1,48 @@
+/** Faizan AH / 2020-07-29
+
+/**
+ * HTTP Method: POST
+ * URL: */api/v1/entitlements/modules
+ **/
+
+ /**
+ * HTTP-HEADER:
+ *    x-access-token : <JWT Token> [Mandatory]
+ *    content-type: application/json [Mandatory - Enumerator]
+ **/
+
+ /**
+  * Request Body
+  **/
+  {
+      "name": "",             // [Mandatory]  Min Length: 3 | Max Length: 96 
+      "parent_id": "",        // [Optional]   Valid UUID | Max Length: 36
+      "permissions": [{"id": ""}, {"id": ""}] // [Optional]   Array of Permissions IDs
+  }
+ 
+  /**
+  * HTTP STATUS CODE: 201 CREATED
+  * Response Headers:
+  *     x-correlation-id : <UUID> [Mandatory]
+  *     x-response-time : <Execution time in Milli seconds> [Mandatory]
+  *     date: : <Timestamp> [Mandatory]
+  **/
+
+
+ /**
+  * Response Body
+  */
+    {
+        "id": "",
+        "name": "",
+        "parent_id": "",
+        "permissions": [{
+            "id": "",
+            "name": ""
+        }],
+        "status": "",
+        "created_on": "",
+        "created_by": "",
+    }
+}
+

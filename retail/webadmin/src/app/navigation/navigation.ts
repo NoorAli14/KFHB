@@ -21,15 +21,40 @@ export const navigation: FuseNavigation[] = [
                         translate: 'FEATURES.ENTITLEMENT.USER.TITLE',
                         type     : 'item',
                         icon     : 'person',
-                        url      : '/user',
+                        url      : '/ent/user',
                     },
                     {
-                        id       : 'role',
-                        title    : 'Role',
-                        translate: 'FEATURES.ENTITLEMENT.ROLE.TITLE',
+                        id       : 'config',
+                        title    : 'Configuration',
+                        translate: 'FEATURES.ENTITLEMENT.CONFIG.TITLE',
                         type     : 'item',
-                        icon     : 'security',
-                        url      : '/role',
+                        icon     : 'settings_applications',
+                        url      : '/ent/config',
+                    }
+                ]
+            },
+            {
+                id       : 'calender',
+                title    : 'Calender',
+                translate: 'FEATURES.CALENDER.TITLE',
+                type     : 'collapsable',
+                icon     : 'calendar_today',
+                children : [
+                    {
+                        id       : 'working_days',
+                        title    : 'Working Days',
+                        translate: 'FEATURES.CALENDER.WORKING_DAYS.TITLE',
+                        type     : 'item',
+                        icon     : 'calendar_today',
+                        url      : '/calender/working-days',
+                    },
+                    {
+                        id       : 'config',
+                        title    : 'Configuration',
+                        translate: 'FEATURES.CALENDER.HOLIDAYS.TITLE',
+                        type     : 'item',
+                        icon     : 'calendar_today',
+                        url      : '/calender/holidays',
                     }
                 ]
             }]

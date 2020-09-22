@@ -1,0 +1,38 @@
+@import "src/@fuse/scss/fuse";
+
+.app-user-detail {
+    @include media-breakpoint("xs") {
+        width: 100%;
+    }
+
+    @include media-breakpoint("gt-xs") {
+        width: 70%;
+    }
+    .mat-form-field-appearance-outline .mat-form-field-prefix,
+    .mat-form-field-appearance-outline .mat-form-field-suffix {
+        top: 0em;
+    }
+    .mat-dialog-container {
+        padding: 0;
+    }
+
+    .dialog-content-wrapper {
+        max-height: 85vh;
+        display: flex;
+        flex-direction: column;
+    }
+    .item-container {
+        margin-left: 50px;
+        margin-top: 10px;
+       
+    }
+    .role-container {
+        border-bottom: 1px solid;
+        width: 100%;
+        padding:10px;
+       
+    }
+    .full-width{
+        width: 100%;
+    }
+}

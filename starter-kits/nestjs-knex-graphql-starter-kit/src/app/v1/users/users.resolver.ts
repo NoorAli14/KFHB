@@ -1,32 +1,72 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  ResolveField,
+  Parent
+} from '@nestjs/graphql';
+import { ParseUUIDPipe, NotFoundException } from '@nestjs/common';
+import * as DataLoader from 'dataloader';
+import { Loader } from 'nestjs-dataloader';
+import { Fields } from "@rubix/common/decorators";
+import { Post } from '@rubix/app/v1/posts/post.model';
+import { User } from './user.model';
 import { UserService } from './users.service';
-import { NewUserInput } from './user.dto';
-import { UserGQL } from './user.model';
+import { NewUserInput, UpdateUserInput } from './user.dto';
 
-@Resolver(of => UserGQL)
+@Resolver(User)
 export class UsersResolver {
   constructor(private readonly userService: UserService) {}
-  @Query(() => [UserGQL])
-  async usersList(): Promise<UserGQL[]> {
-    return this.userService.list();
+
+  @Query(() => [User])
+  users(@Fields() columns: string[]): Promise<User[]> {
+    return this.userService.list(columns);
   }
 
-  @Query(() => UserGQL)
-  async findUser(@Args('id') id: string) {
-    return this.userService.findById(id);
+  @ResolveField(() => [Post])
+  posts(
+    @Parent() user: User,
+    @Loader('PostLoader') postLoader: DataLoader<Post['id'], Post>,
+  ): Promise<any> {
+    return postLoader.load(user.id);
   }
 
-  @Mutation(() => UserGQL)
-  async addUser(@Args('input') input: NewUserInput) {
-    return this.userService.create(input);
+  @Query(() => User)
+  async findUser(
+    @Args('id', ParseUUIDPipe) id: string,
+    @Fields() columns: string[],
+  ): Promise<User> {
+    const user: User = await this.userService.findById(id, columns);
+    if(!user) {
+      throw new NotFoundException('User not found');
+    }
+    return user;
   }
-  @Mutation(() => UserGQL)
-  async updateUser(@Args('id') id: string, @Args('input') input: NewUserInput) {
-    return this.userService.update(id, input);
+
+  @Mutation(() => User)
+  addUser(
+    @Args('input') input: NewUserInput,
+    @Fields() columns: string[],
+  ): Promise<User> {
+    return this.userService.create(input, columns);
+  }
+
+  @Mutation(() => User)
+  updateUser(
+    @Args('id', ParseUUIDPipe) id: string,
+    @Args('input') input: UpdateUserInput,
+    @Fields() columns: string[],
+  ): Promise<User> {
+    return this.userService.update(id, input, columns);
   }
 
   @Mutation(() => Boolean)
-  async deleteUser(@Args('id') id: string) {
+  async deleteUser(@Args('id', ParseUUIDPipe) id: string): Promise<boolean> {
+    const user: User = await this.userService.findById(id, ['id']);
+    if(!user) {
+      throw new NotFoundException('User not found');
+    }
     return this.userService.delete(id);
   }
 }

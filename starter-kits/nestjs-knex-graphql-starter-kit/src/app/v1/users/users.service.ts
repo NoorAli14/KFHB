@@ -1,26 +1,35 @@
 import { Injectable } from '@nestjs/common';
-import { UserRepository } from '@core/repository/';
+import { UserRepository } from '@rubix/core/repository/';
+import { User } from './user.model';
 
 @Injectable()
 export class UserService {
   constructor(private userDB: UserRepository) {}
 
-  async list(): Promise<any> {
-    return this.userDB.list();
-  }
-  async findById(id: string): Promise<any> {
-    return this.userDB.findOne({ id: id });
+  async list(columns: string[]): Promise<User[]> {
+    return this.userDB.findAll(columns);
   }
 
-  async update(id: string, userObj: Object) {
-    const [user] = await this.userDB.update({ id: id }, userObj);
+  async findById(id: string, columns?: string[]): Promise<User> {
+    return this.userDB.findOne({ id }, columns);
+  }
+
+  async update(
+    id: string,
+    userOBJ: {[key: string]: any},
+    columns?: string[],
+  ): Promise<User> {
+    const [user] = await this.userDB.update({ id }, userOBJ, columns);
     return user;
   }
-  async create(newUser: Object): Promise<any> {
-    const [user] = await this.userDB.create(newUser);
+
+  async create(userOBJ: {[key: string]: any}, columns?: string[]): Promise<User> {
+    const [user] = await this.userDB.create(userOBJ, columns);
     return user;
   }
-  async delete(id: string): Promise<any> {
-    return await this.userDB.delete({ id: id });
+
+  async delete(id: string): Promise<boolean> {
+    return await this.userDB.delete({ id });
   }
+  
 }

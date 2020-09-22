@@ -1,0 +1,23 @@
+
+
+    <div fxLayout="row" fxLayoutAlign="start center" >
+
+        <div class="info" fxFlex fxFlexLayout="column">
+
+            <div class="title">
+                <strong>Module:</strong>    <span style="margin-left: 50px;">{{module.name}}</span>
+            </div>
+
+            <div class="tags" fxLayout="row wrap" fxLayoutAlign="start center" >
+                <div class="title" fxLayout="row" fxLayoutAlign="start center" style="padding-top: 5px;">
+                   <strong>Permissions:  &nbsp; &nbsp;</strong>
+                </div>
+                <ng-container *ngFor="let p of module.permissions">
+                    <div class="tag" fxLayout="row" fxLayoutAlign="start center" style="background-color: rgba(0, 0, 0, 0.08)">
+                        <div class="tag-color"  style="background-color: rgb(56, 142, 60);"></div>
+                        <div class="tag-label">{{p.record_type}}</div>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+    </div>

@@ -28,20 +28,20 @@
             <button mat-button [matMenuTriggerFor]="userMenu"
                     class="user-button">
                 <div fxLayout="row" fxLayoutAlign="center center">
-                    <img class="avatar mr-0 mr-sm-16" src="assets/images/avatars/Velazquez.jpg">
-                    <span class="username mr-12" fxHide fxShow.gt-sm>Charlie Adams</span>
+                    <img class="avatar mr-0 mr-sm-16" src="assets/images/avatars/user-male.png">
+                    <span class="username mr-12" fxHide fxShow.gt-sm>{{user?.firstName}}</span>
                     <mat-icon class="s-16" fxHide.xs>keyboard_arrow_down</mat-icon>
                 </div>
             </button>
 
             <mat-menu #userMenu="matMenu" [overlapTrigger]="false">
 
-                <button mat-menu-item>
+                <button mat-menu-item routerLink="/setting/profile">
                     <mat-icon>account_circle</mat-icon>
                     <span>My Profile</span>
                 </button>
 
-                <button mat-menu-item class="" routerLink="/auth/login">
+                <button (click)="logout()" mat-menu-item  >
                     <mat-icon>exit_to_app</mat-icon>
                     <span>Logout</span>
                 </button>

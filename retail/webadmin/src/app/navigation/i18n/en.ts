@@ -6,14 +6,26 @@ export const locale = {
             ENTITLEMENT: {
                 TITLE: "Entitlement",
                 USER: {
-                    TITLE: "User",
+                    TITLE: "User Management",
                     BADGE: "25",
                 },
                 ROLE: {
-                    TITLE: "Role",
+                    TITLE: "Role Management",
+                    BADGE: "25",
+                }
+            },
+            CALENDER:{
+                TITLE: "Calender",
+                WORKING_DAYS: {
+                    TITLE: "Working Days",
                     BADGE: "25",
                 },
-            },
-        },
+                HOLIDAYS: {
+                    TITLE: "Holidays",
+                    BADGE: "25",
+                }
+            }
+           
+        }
     },
 };
