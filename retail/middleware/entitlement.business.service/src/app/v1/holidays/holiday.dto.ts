@@ -1,24 +1,45 @@
-import { IsNumber, IsOptional, IsString, MaxLength } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString, Matches, MaxLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class HolidayDTO {
+export class UpdateHolidayDTO {
+  @ApiProperty({
+    title: 'Holiday Date',
+    example: '1947-08-14',
+    required: true
+  })
+  @IsString()
+  @MaxLength(255)
+  @IsOptional()
+  @Matches(/([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/)
+  holiday_date: string;
+
+  @ApiProperty({
+    required: false,
+    example: 'Pakistan Independence Day Holiday',
+  })
+  @IsString()
+  @MaxLength(255)
+  @IsOptional()
+  description: string;
+
   @ApiProperty({
     required: false,
   })
   @IsString()
   @MaxLength(255)
-  holiday_description: string;
-
-  @ApiProperty({
-    required: true,
-  })
-  @IsString()
-  holiday_date: string;
-
-  @ApiProperty({
-    required: false,
-  })
-  @IsString()
   @IsOptional()
   remarks: string;
+}
+
+export class CreateHolidayDto extends UpdateHolidayDTO {
+  @ApiProperty({
+    title: 'Holiday Date',
+    example: '1947-08-14',
+    required: true
+  })
+  @IsString()
+  @MaxLength(10)
+  @IsNotEmpty()
+  @Matches(/([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/)
+  holiday_date: string;
 }

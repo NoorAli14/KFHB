@@ -5,7 +5,6 @@ import {
   Param,
   Put,
   Delete,
-  NotFoundException,
   ParseUUIDPipe,
   UseGuards,
   HttpCode,
@@ -22,9 +21,9 @@ import {
   ApiNotFoundResponse,
   ApiNoContentResponse,
 } from '@nestjs/swagger';
-import { AuthGuard, Header, IHEADER } from '@common/index';
+import { AuthGuard } from '@common/index';
 import { Holiday } from './holiday.entity';
-import { HolidayDTO } from './holiday.dto';
+import { CreateHolidayDto, UpdateHolidayDTO } from './holiday.dto';
 import { HolidaysService } from './holidays.service';
 
 @ApiTags('Holidays')
@@ -32,7 +31,7 @@ import { HolidaysService } from './holidays.service';
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
 export class HolidaysController {
-  constructor(private readonly holidayService: HolidaysService) {}
+  constructor(private readonly holidayService: HolidaysService) { }
 
   @Get('/')
   @ApiOperation({
@@ -44,14 +43,14 @@ export class HolidaysController {
     type: [Holiday],
     description: 'List of all holidays.',
   })
-  async list(@Header() header: IHEADER): Promise<Holiday[]> {
-    return this.holidayService.list(header);
+  async list(): Promise<Holiday[]> {
+    return this.holidayService.list();
   }
 
   @Post('/')
   @ApiBody({
     description: 'Sets the holiday properties.',
-    type: HolidayDTO,
+    type: CreateHolidayDto,
   })
   @ApiOperation({
     summary: 'Create a holiday',
@@ -67,10 +66,9 @@ export class HolidaysController {
     description: 'Input Validation failed.',
   })
   async create(
-    @Header() header: IHEADER,
-    @Body() input: HolidayDTO,
+    @Body() input: CreateHolidayDto,
   ): Promise<Holiday> {
-    return this.holidayService.create(header, input);
+    return this.holidayService.create(input);
   }
 
   @Get(':id')
@@ -81,30 +79,22 @@ export class HolidaysController {
   })
   @ApiOkResponse({
     type: Holiday,
-    description: 'Working day has been successfully retrieved.',
+    description: 'Holiday information day has been successfully retrieved.',
   })
   @ApiNotFoundResponse({
     type: Error,
-    description: 'Working day Not Found.',
+    description: 'Holiday Not Found.',
   })
   async findOne(
-    @Header() header: IHEADER,
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<Holiday> {
-    const working: Holiday = await this.holidayService.findOne(
-      header,
-      id,
-    );
-    if (!working) {
-      throw new NotFoundException('Holiday not found');
-    }
-    return working;
+    return this.holidayService.findOne(id);
   }
 
   @Put(':id')
   @ApiBody({
     description: 'Sets the holiday properties.',
-    type: HolidayDTO,
+    type: UpdateHolidayDTO,
   })
   @ApiOperation({
     summary: 'Update a holiday by ID',
@@ -124,11 +114,10 @@ export class HolidaysController {
     description: 'Holiday Not Found.',
   })
   async update(
-    @Header() header: IHEADER,
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() input: HolidayDTO,
+    @Body() input: UpdateHolidayDTO,
   ): Promise<Holiday> {
-    return this.holidayService.update(header, id, input);
+    return this.holidayService.update(id, input);
   }
 
   @Delete(':id')
@@ -146,9 +135,8 @@ export class HolidaysController {
   })
   @HttpCode(HttpStatus.NO_CONTENT)
   async delete(
-    @Header() header: IHEADER,
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<any> {
-    return this.holidayService.delete(header, id);
+    return this.holidayService.delete(id);
   }
 }

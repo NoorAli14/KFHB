@@ -10,14 +10,17 @@ export class Holiday {
   readonly id: string;
 
   @ApiProperty({
-    required: false,
+    title: 'Holiday Date',
+    example: '1947-08-14',
+    required: true
   })
   holiday_date: string;
 
   @ApiProperty({
     required: false,
+    example: 'Pakistan Independence Day Holiday',
   })
-  holiday_description: string;
+  description: string;
 
   @ApiProperty({
     required: false,
@@ -25,9 +28,13 @@ export class Holiday {
   remarks: string;
 
   @ApiProperty({
+    enum: USER_STATUSES,
+    example: USER_STATUSES[0],
+    description: 'Holiday status',
     required: false,
   })
   status: string;
+
 
   @ApiProperty({
     required: false,
