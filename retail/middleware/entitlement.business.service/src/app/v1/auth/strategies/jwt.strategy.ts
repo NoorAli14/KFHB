@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { Request } from 'express';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
@@ -11,6 +11,7 @@ import {
 } from '@common/index';
 import { UserService } from '@app/v1/users/users.service';
 import { User } from '@app/v1/users/user.entity';
+import { setContext } from '@core/index';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -47,6 +48,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     this.logger.log(`Start authenticating with user ID with [${payload.id}]`);
     if (!(await this.redisService.getValue(payload.id))) return null;
     const header: IHEADER = formattedHeader(request, payload.id);
-    return this.userService.findOne(header, payload.id);
+    setContext('HttpHeaders', header);
+    const user: User = await this.userService.findOne(header, payload.id);
+    if (!user) throw new UnauthorizedException();
+    setContext('currentUser', user);
+    return user;
   }
 }

@@ -8,6 +8,8 @@ import {
 import { map, timeout, catchError } from 'rxjs/operators';
 import { TimeoutError, throwError } from 'rxjs';
 import { IHEADER } from '@common/interfaces/';
+import { HttpHeaders } from '@core/context';
+
 @Injectable()
 export class GqlClientService {
   private readonly logger: Logger = new Logger(GqlClientService.name);
@@ -19,13 +21,17 @@ export class GqlClientService {
     return this;
   }
   public async send(input: string): Promise<any> {
+    this.logger.log(
+      `Current Context Headers: ${JSON.stringify(HttpHeaders(), null, 2)}`,
+    );
+
     return this.http
       .post(
         '/graphql',
         {
           query: input,
         },
-        { headers: this.__header || {} },
+        { headers: HttpHeaders() || {} },
       )
       .pipe(
         map(response => {
