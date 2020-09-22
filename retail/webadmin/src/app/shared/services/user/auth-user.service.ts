@@ -51,9 +51,15 @@ export class AuthUserService {
             translate: "FEATURES.CALENDER.HOLIDAYS.TITLE",
         },
         {
-            id: "Referrals",
-            icon: "assignment_ind",
-            url: "referrals",
+            id: "Leaves",
+            icon: "calendar_today",
+            url: "/calender/leaves",
+            translate: "FEATURES.CALENDER.LEAVES.TITLE",
+        },
+        {
+            id: "referrals",
+            icon: "calendar_today",
+            url: "/referrals",
             translate: "FEATURES.REFERRALS.TITLE",
         },
     ];

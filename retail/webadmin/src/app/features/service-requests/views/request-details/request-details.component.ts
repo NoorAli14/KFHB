@@ -1,10 +1,10 @@
 import { BaseComponent } from '@shared/components/base/base.component';
 import { CONFIG } from '../../../../config';
-import { Component, OnInit, ViewEncapsulation, ViewChild ,Input} from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ViewChild ,Input, Injector} from '@angular/core';
 import { fuseAnimations } from '@fuse/animations';
 import { MatDialog } from '@angular/material/dialog';
 
-import { MESSAGES } from '@shared/constants/app.constants';
+import { MESSAGES } from '@shared/constants/messages.constant';
 
 import { FormControl } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
@@ -43,8 +43,8 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
 
-  constructor(public _matDialog: MatDialog) {
-    super('Referrals');
+  constructor(public _matDialog: MatDialog, injector: Injector) {
+    super(injector);
   }
 
   ngOnInit(): void {

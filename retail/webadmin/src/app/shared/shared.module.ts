@@ -14,6 +14,7 @@ import { WTimeDialogComponent } from "./components/time-control/w-time-dialog.co
 import { BaseComponent } from './components/base/base.component';
 import { DefaultTextComponent } from './components/default-text/default-text.component';
 import { MessageBoxComponent } from './components/message-box/message-box.component';
+import { RequiredIndicatorComponent } from './components/required-indicator/required-indicator.component';
 
 @NgModule({
     declarations: [
@@ -26,6 +27,7 @@ import { MessageBoxComponent } from './components/message-box/message-box.compon
         BaseComponent,
         DefaultTextComponent,
         MessageBoxComponent,
+        RequiredIndicatorComponent,
     ],
     imports: [
         ReactiveFormsModule,
@@ -44,6 +46,7 @@ import { MessageBoxComponent } from './components/message-box/message-box.compon
         MessageBoxComponent,
         BaseComponent,
         DefaultTextComponent,
+        RequiredIndicatorComponent
     ],
 })
 export class SharedModule {}

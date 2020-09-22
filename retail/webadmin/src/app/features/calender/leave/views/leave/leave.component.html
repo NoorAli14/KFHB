@@ -1,0 +1,78 @@
+<div class="page-container page-layout carded fullwidth inner-scroll">
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg accent"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header accent" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-between center">
+
+            <!-- APP TITLE -->
+            <div class="logo mb-24 mb-md-0" fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+                    calendar_today
+                </mat-icon>
+                <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                   Leaves
+                </span>
+            </div>
+            <!-- / APP TITLE -->
+
+            <!-- ADD BUTTON -->
+            <button mat-raised-button color="accent" (click)="openDialog()" class="add-product-button fuse-white mt-24 mt-md-0">
+                <span>ADD NEW</span>
+            </button>
+            <!-- / ADD BUTTON -->
+
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT CARD -->
+        <div class="content-card" fusePerfectScrollbar>
+            <!-- <div class="spinner-container" *ngIf="dataSource.loading$ | async">
+                <mat-spinner></mat-spinner>
+            </div> -->
+            <div *ngIf="responseMessage.length > 0" fxLayout="row" fxLayoutAlign="center" class="p-16  message-box {{ errorType }} ">
+                {{ responseMessage }}
+            </div>
+            <mat-table #table matSort matSortActive="username" matSortDirection="asc" matSortDisableClear [dataSource]="dataSource">
+                <!-- COLUMNS AND ROWS-->
+                <ng-container *ngFor="let key of displayedColumns" [matColumnDef]="key">
+                    <mat-header-cell *matHeaderCellDef>{{ key.includes('action') ? 'Action' : camelToSentenceCase(key) }}</mat-header-cell>
+            
+                    <mat-cell *matCellDef="let element; let i = dataIndex">
+                      <ng-container [ngSwitch]="key">
+                        <span *ngSwitchCase="'startTime'">
+                            {{element['fullDay']==1 ? 'N/A' : element[key]}}
+                        </span>
+                        <span *ngSwitchCase="'endTime'">
+                            {{element['fullDay']==1 ? 'N/A' : element[key]}}
+                        </span>
+                        <span *ngSwitchCase="'fullDay'">
+                            {{element[key]==1 ? 'Yes' : 'No'}}
+                        </span>
+                        <span *ngSwitchCase="'actions'">
+                            <mat-icon appPermission [permissions]="userPermissions" matTooltip="Delete working day" [type]="'delete'" color="warn" type="button" (click)=" confirmDialog('delete',element['id'])">delete</mat-icon> &nbsp;&nbsp;
+                            <mat-icon type="button" (click)="openDialog(element)" matTooltip="Edit working day">mode_edit</mat-icon> &nbsp;&nbsp;
+                        </span>
+                        <span *ngSwitchDefault >
+                            {{element[key]}}
+                        </span>
+                    </ng-container>
+                    </mat-cell>
+                </ng-container>
+                <!-- -->
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;" [@animate]="{value:'*',params:{y:'100%'}}">
+                </mat-row>
+            
+            </mat-table>
+            <mat-paginator #paginator [pageIndex]="0" [pageSize]="pageSize" showFirstLastButtons [pageSizeOptions]="pageSizeOptions"></mat-paginator>
+        </div>
+        <!-- / CONTENT CARD -->
+    </div>
+    <!-- / CENTER -->
+</div>

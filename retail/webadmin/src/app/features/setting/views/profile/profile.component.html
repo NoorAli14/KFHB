@@ -16,7 +16,7 @@
         >
             <img
                 class="profile-image avatar huge"
-                src="assets/images/avatars/user-circle.svg"
+                src="assets/images/avatars/user-male.png"
                 [@animate]="{
                     value: '*',
                     params: { delay: '50ms', scale: '0.2' }
@@ -49,9 +49,10 @@
             [@animate]="{ value: '*', params: { delay: '200ms' } }"
         >
             <button
-                (click)="openDialoge()"
+                (click)="openDialog()"
                 mat-raised-button
                 color="accent"
+                class="btn-update"
                 aria-label="Follow"
             >
                 <mat-icon class="nav-link-icon">edit</mat-icon>
@@ -65,10 +66,10 @@
 
         <mat-tab-group dynamicHeight="true">
             <mat-tab label="Profile">
-                <app-about [user]="currentUser"></app-about>
+                <app-about [nationalities]="nationalities" [user]="currentUser"></app-about>
             </mat-tab>
             <mat-tab label="Security">
-                <app-update-password></app-update-password>
+                <app-update-password [errorType]="errorType" [responseMessage]="responseMessage" (submit)="onUpdatePassword($event)"></app-update-password>
             </mat-tab>
         </mat-tab-group>
 

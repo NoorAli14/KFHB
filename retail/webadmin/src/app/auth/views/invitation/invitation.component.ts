@@ -1,14 +1,19 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Injector } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { User } from "@feature/entitlement/models/user.model";
-import { NATIONALITY_LIST, GENDER_LIST, MESSAGES } from "@shared/constants/app.constants";
+import { NATIONALITY_LIST, GENDER_LIST } from "@shared/constants/app.constants";
 import { AuthenticationService } from "@shared/services/auth/authentication.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { FuseConfigService } from "@fuse/services/config.service";
 import { BaseComponent } from "@shared/components/base/base.component";
-import { snakeToCamelObject, camelToSnakeCase } from '@shared/helpers/global.helper';
-import { ValidatorService } from '@shared/services/validator-service/validator.service';
-import { fuseAnimations } from '@fuse/animations';
+import {
+    snakeToCamelObject,
+    camelToSnakeCase,
+} from "@shared/helpers/global.helper";
+import { ValidatorService } from "@shared/services/validator-service/validator.service";
+import { fuseAnimations } from "@fuse/animations";
+import { takeUntil } from "rxjs/operators";
+import { MESSAGES } from "@shared/constants/messages.constant";
 
 @Component({
     selector: "app-invitation",
@@ -17,22 +22,21 @@ import { fuseAnimations } from '@fuse/animations';
     animations: fuseAnimations,
 })
 export class InvitationComponent extends BaseComponent implements OnInit {
-    userForm: FormGroup;
+    invitationForm: FormGroup;
 
     response: User;
-    nationalityList: any[] = NATIONALITY_LIST;
+    nationalityList: any[]=[];
     genderList: any[] = GENDER_LIST;
-    token:string;
+    token: string;
     constructor(
         private _authService: AuthenticationService,
         private _fuseConfigService: FuseConfigService,
         private activatedRoute: ActivatedRoute,
-        private router: Router
+        injector: Injector
     ) {
-        super();
-        this.token= this.activatedRoute.snapshot.paramMap.get("token");
+        super(injector);
+        this.token = this.activatedRoute.snapshot.paramMap.get("token");
 
-        this.getData( this.token);
         // Configure the layout
         this._fuseConfigService.config = {
             layout: {
@@ -52,67 +56,77 @@ export class InvitationComponent extends BaseComponent implements OnInit {
         };
     }
     ngOnInit(): void {
-        this.userForm = new FormGroup({
+        this.invitationForm = new FormGroup({
             id: new FormControl(),
-            firstName: new FormControl('',[Validators.required]),
+            firstName: new FormControl("", [Validators.required]),
             middleName: new FormControl(),
-            lastName: new FormControl('',[Validators.required]),
-            contactNo: new FormControl('',[Validators.required,ValidatorService.numbersOnly]),
-            gender: new FormControl('',[Validators.required]),
-            status: new FormControl('',[Validators.required]),
-            email: new FormControl('',[Validators.email]),
-            dateOfBirth: new FormControl('',[Validators.required]),
-            nationalityId: new FormControl('',[Validators.required]),
-            password: new FormControl('',Validators.required),
+            lastName: new FormControl("", [Validators.required]),
+            contactNo: new FormControl("", [
+                Validators.required,
+                ValidatorService.numbersOnly,
+            ]),
+            gender: new FormControl("", [Validators.required]),
+            status: new FormControl(""),
+            email: new FormControl({ value: "", disabled: true }),
+            dateOfBirth: new FormControl("", [Validators.required]),
+            nationalityId: new FormControl("", [Validators.required]),
+            password: new FormControl("", Validators.required),
             confirmPassword: new FormControl("", [
-              Validators.required,
-              this.confirmPasswordValidator.bind(this),
-          ]),
+                Validators.required,
+                this.confirmPasswordValidator.bind(this),
+            ]),
         });
-        this.userForm.get('email').disable()
+        this.getUserByToken(this.token);
     }
     confirmPasswordValidator(control: FormControl): { [s: string]: boolean } {
-      if (
-          this.userForm &&
-          control.value !== this.userForm.controls.password.value
-      ) {
-          return { passwordNotMatch: true };
-      }
-      return null;
-  }
-    onSubmit() {
-        let model = { ...this.userForm.value };
-        model.dateOfBirth = new Date(model.dateOfBirth).toLocaleDateString();
-        model= camelToSnakeCase(model);
-        this._authService.updateInvitation(model, this.token).subscribe(
-          (response) => {
-            this.errorType = "success";
-            this.responseMessage = MESSAGES.UPDATED('Your Profile');
-            // setTimeout(() => {
-            //     this.router.navigateByUrl('/auth/login');
-            // }, 1000);
-          },
-          (error)=>{
-            this.errorType = "error";
-            this.responseMessage = MESSAGES.UNKNOWN();
-          }
-      );
+        if (
+            this.invitationForm &&
+            control.value !== this.invitationForm.controls.password.value
+        ) {
+            return { passwordNotMatch: true };
+        }
+        return null;
     }
-    getData(token) {
-        this._authService.getUserByToken(token).subscribe(
-            (response) => {
-                const user= snakeToCamelObject(response);
-                this.userForm.patchValue(user)
-            },
-            (response)=>{
-                this.errorType = "error";
-                if(response.error){
-                    this.errorType = "info";
-                    this.responseMessage = MESSAGES.ALREADY_ONBOARD();
-                }else{
+    onSubmit() {
+        let model = { ...this.invitationForm.value };
+        model.dateOfBirth = new Date(model.dateOfBirth).toLocaleDateString();
+        model = camelToSnakeCase(model);
+        this._authService
+            .updateInvitation(model, this.token)
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe(
+                (response) => {
+                    this.errorType = "success";
+                    this.responseMessage = MESSAGES.UPDATED("Your Profile");
+                    // setTimeout(() => {
+                    //     this.router.navigateByUrl('/auth/login');
+                    // }, 1000);
+                },
+                (error) => {
+                    this.errorType = "error";
                     this.responseMessage = MESSAGES.UNKNOWN();
                 }
-            }
-        );
+            );
+    }
+    getUserByToken(token) {
+        this._authService
+            .getUserByToken(token)
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe(
+                (response) => {
+                    const user = snakeToCamelObject(response[0]);
+                    this.invitationForm.patchValue(user);
+                    this.nationalityList= response[1];
+                },
+                ({ error }) => {
+                    this.errorType = "error";
+                    if (error.statusCode === 404) {
+                        this.errorType = "warning";
+                        this.responseMessage = MESSAGES.INVALID_INVITATION();
+                    } else {
+                        this.responseMessage = MESSAGES.UNKNOWN();
+                    }
+                }
+            );
     }
 }
