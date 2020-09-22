@@ -15,7 +15,7 @@ variables:
   containerRegistry: 'testdaon.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/retail/webadmin/Dockerfile'
   tag: '$(Build.BuildId)'
-  tagLatest: $(SourceBranchName)_latest
+  tagLatest: $(Build.SourceBranchName)_latest
   
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
