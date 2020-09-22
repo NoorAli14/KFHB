@@ -56,13 +56,23 @@ export const requireDefaults = (pattern: string): any => {
  * graphqlFields string[]
  * @param info
  */
-export const graphqlFields = (info: { [key: string]: any }): string[] => {
+export const graphqlFields = (info: { [key: string]: any }, data: { [key: string]: any }): string[] => {
   const keys = [];
-  info.fieldNodes[0].selectionSet.selections.forEach(item => {
-    if (!item.selectionSet) {
-      keys.push(item.name.value);
-    }
-  });
+  if (data?.type) {
+    const node = info.fieldNodes[0].selectionSet.selections.find(item => item.typeCondition?.name?.value == data?.type)
+    node?.selectionSet.selections.forEach(item => {
+      if (!item.selectionSet) {
+        keys.push(item.name.value);
+      }
+    });
+  } else {
+    info.fieldNodes[0].selectionSet.selections.forEach(item => {
+      if (!item.selectionSet) {
+        keys.push(item.name.value);
+      }
+    });
+  }
+
   return keys;
 };
 
