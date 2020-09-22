@@ -1,11 +1,10 @@
 import {
   Injectable,
-  NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
 import { Module } from './module.entity';
 import { ModuleDto } from './module.dto';
-import { GqlClientService, toGraphql, IHEADER } from '@common/index';
+import { GqlClientService, toGraphql } from '@common/index';
 
 @Injectable()
 export class ModuleService {
@@ -39,17 +38,16 @@ export class ModuleService {
     created_on
     created_by
   }`;
-  constructor(private readonly gqlClient: GqlClientService) {}
+  constructor(private readonly gqlClient: GqlClientService) { }
 
-  async list(header: IHEADER): Promise<Module[]> {
+  async list(): Promise<Module[]> {
     const query: string = `query {
       result: modulesList ${this.output}
     }`;
-    return this.gqlClient.setHeaders(header).send(query);
+    return this.gqlClient.send(query);
   }
 
   async findBy(
-    header: IHEADER,
     condition: any,
     output?: string,
   ): Promise<Module[]> {
@@ -57,12 +55,11 @@ export class ModuleService {
     const query: string = `query {
       result: findModuleBy(checks: ${toGraphql(condition)}) ${_output}
     }`;
-    return this.gqlClient.setHeaders(header).send(query);
+    return this.gqlClient.send(query);
   }
 
-  async create(header: IHEADER, input: ModuleDto): Promise<Module> {
+  async create(input: ModuleDto): Promise<Module> {
     const [module] = await this.findBy(
-      header,
       [
         {
           record_key: 'name',
@@ -77,38 +74,29 @@ export class ModuleService {
     const mutation: string = `mutation {
       result: addModule(input: ${toGraphql(input)}) ${this.output}
     }`;
-    return this.gqlClient.setHeaders(header).send(mutation);
+    return this.gqlClient.send(mutation);
   }
 
-  async findOne(header: IHEADER, id: string, output?: string): Promise<Module> {
+  async findOne(id: string, output?: string): Promise<Module> {
     const _output: string = output || this.output;
     const query: string = `query {
       result: findModuleById(id: "${id}") ${_output}
     }`;
-    return this.gqlClient.setHeaders(header).send(query);
+    return this.gqlClient.send(query);
   }
 
-  async update(header: IHEADER, id: string, input: ModuleDto): Promise<Module> {
-    const module: Module = await this.findOne(header, id, `{id}`);
-    if (!module) {
-      throw new NotFoundException('Module Not Found');
-    }
+  async update(id: string, input: ModuleDto): Promise<Module> {
     const query: string = `mutation {
-      result: updateModule(id: "${id}", input: ${toGraphql(input)}) ${
-      this.output
-    }
+      result: updateModule(id: "${id}", input: ${toGraphql(input)}) ${this.output
+      }
     }`;
-    return this.gqlClient.setHeaders(header).send(query);
+    return this.gqlClient.send(query);
   }
 
-  async delete(header: IHEADER, id: string): Promise<any> {
-    const module: Module = await this.findOne(header, id, `{id}`);
-    if (!module) {
-      throw new NotFoundException('Module Not Found');
-    }
+  async delete(id: string): Promise<any> {
     const mutation: string = `mutation {
       result: deleteModule(id: "${id}") 
     }`;
-    return this.gqlClient.setHeaders(header).send(mutation);
+    return this.gqlClient.send(mutation);
   }
 }

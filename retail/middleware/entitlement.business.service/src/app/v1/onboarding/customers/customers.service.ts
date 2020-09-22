@@ -1,7 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Customer } from './customer.entity';
 import { GqlClientService } from '@common/index';
-import { IHEADER } from '@common/interfaces';
 
 @Injectable()
 export class CustomersService {
@@ -40,7 +39,7 @@ export class CustomersService {
 
   constructor(private readonly gqlClient: GqlClientService) { }
 
-  async findOne(header: IHEADER, id: string): Promise<any> {
+  async findOne(id: string): Promise<Customer> {
     this.logger.log(`Start finding customer360 with ID [${id}]`);
     const query: string = `query {
       result: findCustomerById(id: "${id}") ${this.output}
@@ -56,8 +55,8 @@ export class CustomersService {
       }
     }`;
     const [customer, templates] = await Promise.all([
-      this.gqlClient.setHeaders(header).send(query),
-      this.gqlClient.setHeaders(header).send(_query),
+      this.gqlClient.send(query),
+      this.gqlClient.send(_query),
     ]);
     customer.templates = templates?.[0] ? templates : [];
     return customer;

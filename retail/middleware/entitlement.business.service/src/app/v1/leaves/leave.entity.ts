@@ -10,24 +10,32 @@ export class Leave {
   readonly id: string;
 
   @ApiProperty({
+    title: 'User ID',
+    example: '3dfdecc1-a616-4817-a841-61d824d82a12',
+    description: 'Unique Identifier',
     required: false,
   })
   user_id: string;
 
   @ApiProperty({
+    title: 'Leave type ID',
+    example: '3dfdecc1-a616-4817-a841-61d824d82a11',
+    description: 'Unique Identifier',
     required: false,
   })
   leave_type_id: string;
 
   @ApiProperty({
-    required: false,
+    example: '1947-08-14',
+    required: true
   })
-  leave_date: string;
+  start_date: string
 
   @ApiProperty({
-    required: false,
+    example: '1947-08-14',
+    required: true
   })
-  leave_duration: string;
+  end_date: string
 
   @ApiProperty({
     required: false,
@@ -35,9 +43,13 @@ export class Leave {
   remarks: string;
 
   @ApiProperty({
+    enum: USER_STATUSES,
+    example: USER_STATUSES[0],
+    description: 'Leave status',
     required: false,
   })
   status: string;
+
 
   @ApiProperty({
     required: false,

@@ -5,7 +5,6 @@ import {
   Param,
   Put,
   Delete,
-  NotFoundException,
   ParseUUIDPipe,
   UseGuards,
   HttpCode,
@@ -22,18 +21,18 @@ import {
   ApiNotFoundResponse,
   ApiNoContentResponse,
 } from '@nestjs/swagger';
-import { AuthGuard, Header, IHEADER } from '@common/index';
+import { AuthGuard } from '@common/index';
 import { Leave } from './leave.entity';
-import { LeaveDTO } from './leave.dto';
+import { CreateLeaveDto, UpdateLeaveDto } from './leave.dto';
 import { LeavesService } from './leaves.service';
 
-@ApiTags('Leave')
+@ApiTags('Leave Module')
 @Controller('leaves')
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
 
 export class LeavesController {
-  constructor(private readonly leaveService: LeavesService) {}
+  constructor(private readonly leaveService: LeavesService) { }
 
   @Get('/')
   @ApiOperation({
@@ -45,14 +44,14 @@ export class LeavesController {
     type: [Leave],
     description: 'List of all leaves.',
   })
-  async list(@Header() header: IHEADER): Promise<Leave[]> {
-    return this.leaveService.list(header);
+  async list(): Promise<Leave[]> {
+    return this.leaveService.list();
   }
 
   @Post('/')
   @ApiBody({
     description: 'Sets the leave properties.',
-    type: LeaveDTO,
+    type: CreateLeaveDto,
   })
   @ApiOperation({
     summary: 'Create a leave',
@@ -68,10 +67,9 @@ export class LeavesController {
     description: 'Input Validation failed.',
   })
   async create(
-    @Header() header: IHEADER,
-    @Body() input: LeaveDTO,
+    @Body() input: CreateLeaveDto,
   ): Promise<Leave> {
-    return this.leaveService.create(header, input);
+    return this.leaveService.create(input);
   }
 
   @Get(':id')
@@ -82,30 +80,22 @@ export class LeavesController {
   })
   @ApiOkResponse({
     type: Leave,
-    description: 'Leave infomation has been successfully retrieved.',
+    description: 'Leave information has been successfully retrieved.',
   })
   @ApiNotFoundResponse({
     type: Error,
     description: 'Leave Not Found.',
   })
   async findOne(
-    @Header() header: IHEADER,
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<Leave> {
-    const leave: Leave = await this.leaveService.findOne(
-      header,
-      id,
-    );
-    if (!leave) {
-      throw new NotFoundException('Leave not found');
-    }
-    return leave;
+    return this.leaveService.findOne(id);
   }
 
   @Put(':id')
   @ApiBody({
     description: 'Sets the leave properties.',
-    type: LeaveDTO,
+    type: UpdateLeaveDto,
   })
   @ApiOperation({
     summary: 'Update a leave by ID',
@@ -125,11 +115,10 @@ export class LeavesController {
     description: 'Leave Not Found.',
   })
   async update(
-    @Header() header: IHEADER,
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() input: LeaveDTO,
+    @Body() input: UpdateLeaveDto,
   ): Promise<Leave> {
-    return this.leaveService.update(header, id, input);
+    return this.leaveService.update(id, input);
   }
 
   @Delete(':id')
@@ -147,9 +136,8 @@ export class LeavesController {
   })
   @HttpCode(HttpStatus.NO_CONTENT)
   async delete(
-    @Header() header: IHEADER,
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<any> {
-    return this.leaveService.delete(header, id);
+    return this.leaveService.delete(id);
   }
 }

@@ -14,7 +14,7 @@ import {
     ApiBearerAuth,
 } from '@nestjs/swagger';
 import { Request } from 'express';
-import { AuthGuard, Header as CustomHeader, IHEADER } from '@common/index';
+import { AuthGuard } from '@common/index';
 import { DocumentsService } from './documents.service';
 
 @ApiTags('Documents Module')
@@ -36,14 +36,13 @@ export class DocumentsController {
     async preview(
         @Param('id', ParseUUIDPipe) id: string,
         @Param('customer_id', ParseUUIDPipe) customer_id: string,
-        @CustomHeader() header: IHEADER,
         @Req() request: Request,
     ): Promise<any> {
         const params: any = {
             attachment_id: id,
             customer_id: customer_id,
         };
-        const result = await this.documentService.preview(header, params);
+        const result = await this.documentService.preview(params);
         const img: any = Buffer.from(result.image, 'base64');
         // request.res.writeHead(200, { 'Content-Type': 'image/jpeg' });
         request.res.end(img, 'binary');

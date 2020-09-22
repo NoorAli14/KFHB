@@ -5,7 +5,6 @@ import {
   Param,
   Put,
   Delete,
-  NotFoundException,
   ParseUUIDPipe,
   UseGuards,
   HttpCode,
@@ -22,7 +21,7 @@ import {
   ApiNotFoundResponse,
   ApiNoContentResponse,
 } from '@nestjs/swagger';
-import { AuthGuard, Header, IHEADER } from '@common/index';
+import { AuthGuard } from '@common/index';
 import { LeaveType } from './leave-type.entity';
 import { LeaveTypeDTO } from './leave-type.dto';
 import { LeaveTypesService } from './leave-types.service';
@@ -33,7 +32,7 @@ import { LeaveTypesService } from './leave-types.service';
 @UseGuards(AuthGuard)
 
 export class LeaveTypesController {
-  constructor(private readonly leaveService: LeaveTypesService) {}
+  constructor(private readonly leaveService: LeaveTypesService) { }
 
   @Get('/')
   @ApiOperation({
@@ -45,8 +44,8 @@ export class LeaveTypesController {
     type: [LeaveType],
     description: 'List of all leaves.',
   })
-  async list(@Header() header: IHEADER): Promise<LeaveType[]> {
-    return this.leaveService.list(header);
+  async list(): Promise<LeaveType[]> {
+    return this.leaveService.list();
   }
 
   @Post('/')
@@ -68,10 +67,9 @@ export class LeaveTypesController {
     description: 'Input Validation failed.',
   })
   async create(
-    @Header() header: IHEADER,
     @Body() input: LeaveTypeDTO,
   ): Promise<LeaveType> {
-    return this.leaveService.create(header, input);
+    return this.leaveService.create(input);
   }
 
   @Get(':id')
@@ -89,17 +87,9 @@ export class LeaveTypesController {
     description: 'Leave type Not Found.',
   })
   async findOne(
-    @Header() header: IHEADER,
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<LeaveType> {
-    const leave: LeaveType = await this.leaveService.findOne(
-      header,
-      id,
-    );
-    if (!leave) {
-      throw new NotFoundException('Leave type not found');
-    }
-    return leave;
+    return this.leaveService.findOne(id);
   }
 
   @Put(':id')
@@ -125,11 +115,10 @@ export class LeaveTypesController {
     description: 'Leave type Not Found.',
   })
   async update(
-    @Header() header: IHEADER,
     @Param('id', ParseUUIDPipe) id: string,
     @Body() input: LeaveTypeDTO,
   ): Promise<LeaveType> {
-    return this.leaveService.update(header, id, input);
+    return this.leaveService.update(id, input);
   }
 
   @Delete(':id')
@@ -147,9 +136,8 @@ export class LeaveTypesController {
   })
   @HttpCode(HttpStatus.NO_CONTENT)
   async delete(
-    @Header() header: IHEADER,
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<any> {
-    return this.leaveService.delete(header, id);
+    return this.leaveService.delete(id);
   }
 }

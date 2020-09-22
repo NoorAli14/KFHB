@@ -1,12 +1,12 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { toGraphql, GqlClientService, IHEADER } from '@common/index';
+import { Injectable } from '@nestjs/common';
+import { toGraphql, GqlClientService } from '@common/index';
 
 import { Role } from './role.entity';
 import { RoleDto } from './role.dto';
 
 @Injectable()
 export class RoleService {
-  constructor(private readonly gqlClient: GqlClientService) {}
+  constructor(private readonly gqlClient: GqlClientService) { }
 
   private output: string = `{
     id
@@ -46,48 +46,48 @@ export class RoleService {
     updated_on
     updated_by
   }`;
-  
-  async list(header: IHEADER): Promise<Role[]> {
+
+  async list(): Promise<Role[]> {
     const query: string = `query {
       result: rolesList ${this.output}
     }`;
-    return this.gqlClient.setHeaders(header).send(query);
+    return this.gqlClient.send(query);
   }
 
-  async create(header: IHEADER, input: RoleDto): Promise<Role> {
+  async create(input: RoleDto): Promise<Role> {
     const mutation: string = `mutation {
       result: addRole(input: ${toGraphql(input)}) ${this.output}
     }`;
-    return this.gqlClient.setHeaders(header).send(mutation);
+    return this.gqlClient.send(mutation);
   }
 
-  async findOne(header: IHEADER, id: string, output?: string): Promise<Role> {
+  async findOne(id: string, output?: string): Promise<Role> {
     const query: string = `query {
       result: findRoleById(id: "${id}") ${output || this.output}
     }`;
-    return this.gqlClient.setHeaders(header).send(query);
+    return this.gqlClient.send(query);
   }
 
-  async update(header: IHEADER, id: string, input: RoleDto): Promise<Role> {
-    const role: Role = await this.findOne(header, id, '{id}');
-    if (!role) {
-      throw new NotFoundException('Role Not Found');
-    }
+  async update(id: string, input: RoleDto): Promise<Role> {
+    // const role: Role = await this.findOne(header, id, '{id}');
+    // if (!role) {
+    //   throw new NotFoundException('Role Not Found');
+    // }
 
     const mutation: string = `mutation {
       result: updateRole(id: "${id}", input: ${toGraphql(input)}) ${this.output}
     }`;
-    return this.gqlClient.setHeaders(header).send(mutation);
+    return this.gqlClient.send(mutation);
   }
 
-  async delete(header: IHEADER, id: string): Promise<boolean> {
-    const role: Role = await this.findOne(header, id, '{id}');
-    if (!role) {
-      throw new NotFoundException('Role Not Found');
-    }
+  async delete(id: string): Promise<boolean> {
+    // const role: Role = await this.findOne(header, id, '{id}');
+    // if (!role) {
+    //   throw new NotFoundException('Role Not Found');
+    // }
     const mutation: string = `mutation {
       result: deleteRole(id: "${id}") 
     }`;
-    return this.gqlClient.setHeaders(header).send(mutation);
+    return this.gqlClient.send(mutation);
   }
 }

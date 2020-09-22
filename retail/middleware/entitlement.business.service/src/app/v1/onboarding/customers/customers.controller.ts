@@ -13,7 +13,7 @@ import {
   ApiBearerAuth,
   ApiNotFoundResponse,
 } from '@nestjs/swagger';
-import { AuthGuard, Header, IHEADER } from '@common/index';
+import { AuthGuard } from '@common/index';
 import { CustomersService } from './customers.service';
 import { Customer } from './customer.entity';
 
@@ -41,9 +41,8 @@ export class CustomersController {
   })
   async findOne(
     @Param('id', ParseUUIDPipe) id: string,
-    @Header() header: IHEADER,
   ): Promise<Customer> {
-    const customer: Customer = await this.customerService.findOne(header, id);
+    const customer: Customer = await this.customerService.findOne(id);
     if (!customer) {
       throw new NotFoundException('Customer Not Found');
     }

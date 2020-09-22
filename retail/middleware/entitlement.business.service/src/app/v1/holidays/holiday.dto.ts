@@ -5,7 +5,6 @@ export class UpdateHolidayDTO {
   @ApiProperty({
     title: 'Holiday Date',
     example: '1947-08-14',
-    required: true
   })
   @IsString()
   @MaxLength(255)
