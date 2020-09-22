@@ -171,26 +171,26 @@ export class UserService {
   //   return false;
   // }
 
-  async availableAgents(obj: Record<string, any>): Promise<any> {
-    const checks: KeyValInput[] = [
-      {
-        record_key: 'leave_date',
-        record_value: obj.call_time
-      },
-      {
-        record_key: 'tenant_id',
-        record_value: obj.tenant_id
-      }
-    ];
-    const leaves = await this.leavesService.findByProperty(checks, ['id', 'user_id', 'created_on']);
-    const userIds: [] = leaves.map(leave => leave.user_id);
-    const conditions = {};
-    conditions[`${TABLE.USER}.deleted_on`] = null;
-    conditions[`${TABLE.USER}.tenant_id`] = obj.tenant_id;
-    conditions[`${TABLE.ROLE}.name`] = TEMP_ROLE.AGENT;
-    if (obj.gender) {
-      conditions[`${TABLE.USER}.gender`] = obj.gender;
-    }
-    return this.userDB.listExcludedUsers(userIds, conditions)
-  }
+  // async availableAgents(obj: Record<string, any>): Promise<any> {
+  //   const checks: KeyValInput[] = [
+  //     {
+  //       record_key: 'leave_date',
+  //       record_value: obj.call_time
+  //     },
+  //     {
+  //       record_key: 'tenant_id',
+  //       record_value: obj.tenant_id
+  //     }
+  //   ];
+  //   const leaves = await this.leavesService.findByProperty(checks, ['id', 'user_id', 'created_on']);
+  //   const userIds: [] = leaves.map(leave => leave.user_id);
+  //   const conditions = {};
+  //   conditions[`${TABLE.USER}.deleted_on`] = null;
+  //   conditions[`${TABLE.USER}.tenant_id`] = obj.tenant_id;
+  //   conditions[`${TABLE.ROLE}.name`] = TEMP_ROLE.AGENT;
+  //   if (obj.gender) {
+  //     conditions[`${TABLE.USER}.gender`] = obj.gender;
+  //   }
+  //   return this.userDB.listExcludedUsers(userIds, conditions)
+  // }
 }

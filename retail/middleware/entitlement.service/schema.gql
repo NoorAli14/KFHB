@@ -67,7 +67,7 @@ type Holiday {
 }
 
 input HolidayCreateInput {
-  holiday_date: String
+  holiday_date: String!
   description: String
   remarks: String
   status: String
@@ -93,13 +93,12 @@ input KeyValInput {
 type Leave {
   id: ID
   user_id: String
-  leave_date: String
-  leave_duration: String
-  leave_type: String
   leave_type_id: String
+  start_date: String
+  end_date: String
   remarks: String
-  is_repetitive: Float
   status: String
+  tenant_id: String
   created_on: String
   created_by: String
   updated_on: String
@@ -110,22 +109,18 @@ type Leave {
 
 input LeaveCreateInput {
   user_id: String!
-  leave_date: String!
-  leave_duration: String!
-  leave_type: String!
   leave_type_id: String!
-  is_repetitive: Float
+  start_date: String!
+  end_date: String!
   remarks: String
   status: String
 }
 
 input LeaveInput {
   user_id: String
-  leave_date: String
-  leave_duration: String
-  leave_type: String
   leave_type_id: String
-  is_repetitive: Float
+  start_date: String
+  end_date: String
   remarks: String
   status: String
 }
@@ -367,7 +362,7 @@ input WorkingDayCreateInput {
   week_day: String!
   start_time_local: String
   end_time_local: String
-  full_day: Float
+  full_day: Float!
   remarks: String
   status: String
 }

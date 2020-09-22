@@ -54,7 +54,7 @@ export class WorkingDayCreateInput extends WorkingDayInput {
   @IsIn(Object.keys(WEEK_DAYS))
   week_day: string;
 
-  @Field({ nullable: true })
+  @Field()
   @IsNumber()
   @IsIn([0, 1])
   full_day: number;

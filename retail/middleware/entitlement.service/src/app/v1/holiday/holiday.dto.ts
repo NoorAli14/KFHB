@@ -40,7 +40,7 @@ export class HolidayInput {
 
 @InputType()
 export class HolidayCreateInput extends HolidayInput{
-  @Field({ nullable: true })
+  @Field()
   @IsString()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @Matches(/([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/)
