@@ -50,7 +50,7 @@ export class RoleService {
         error: MESSAGES.INVALID_STATUS,
       }, HttpStatus.BAD_REQUEST);
     }
-    if (roleObj.name && await this.isNameTaken(roleObj)) {
+    if (roleObj.name && await this.isNameTaken(roleObj, id)) {
       throw new HttpException({
         status: HttpStatus.BAD_REQUEST,
         error: MESSAGES.ROLE_EXISTS,
@@ -93,7 +93,7 @@ export class RoleService {
     return !!result;
   }
 
-  async isNameTaken(role: Record<any, any>): Promise<any> {
+  async isNameTaken(role: Record<any, any>, id?: string): Promise<any> {
     const checks: KeyValInput[] = [
       {
         record_key:"name",
@@ -103,9 +103,12 @@ export class RoleService {
       checks.push({
         record_key: "tenant_id",
         record_value: role.tenant_id
-      })
+      });
     }
     const role_a = await this.findByProperty(checks, ['id', 'name']);
-    return role_a.length && role_a.length > 0;
+    if (role_a?.length && role_a.length > 0) {
+      return !(id && role_a[0].id == id);
+    }
+    return false;
   }
 }
