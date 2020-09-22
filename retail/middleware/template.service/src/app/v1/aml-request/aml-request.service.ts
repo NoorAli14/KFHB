@@ -13,9 +13,9 @@ export class AmlRequestService {
     private readonly amlRequestDB: AmlRequestRepository,
   ) {}
   //Get customer details
-  async findUserById(user_id: string): Promise<any> {
+  async findById(customer_id: string): Promise<any> {
     const gqlQuery = `query {
-      result: findCustomerById(id: "${user_id}") {  
+      result: findCustomerById(id: "${customer_id}") {  
         id
         first_name
         last_name
@@ -52,20 +52,20 @@ export class AmlRequestService {
   }
 
   async checkAmlByUser(user: any, keys: string[]): Promise<any> {
-    const { result } = user?.data;
+    console.log(user, '-=-=-=-=-');
 
     // we will get this from aml integrator
     // MOC JSON object start
     const newAmlRequest: any = {
-      aml_text: 'get test from aml integrator',
-      tenant_id: result.tenant_id,
-      customer_id: result.id,
+      tenant_id: user.tenant_id,
+      customer_id: user.id,
       remarks: 'remarks from aml integrator',
       status: 'status from aml integrator',
       request_reference: 'aml integrator request reference',
-      created_by: result.email,
+      aml_text: JSON.stringify(user),
+      created_by: user.email,
       created_on: new Date(),
-      updated_by: result.email,
+      updated_by: user.email,
       updated_on: new Date(),
     };
     // MOC JSON object end

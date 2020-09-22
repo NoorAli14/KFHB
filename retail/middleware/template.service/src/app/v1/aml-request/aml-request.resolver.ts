@@ -10,16 +10,17 @@ export class AmlRequestResolver {
   constructor(private readonly almRequestService: AmlRequestService) {}
 
   @Query(() => AmlRequest)
-  async checkAmlByUserId(
-    @Args('user_id') user_id: string,
+  async checkAmlByCustomerId(
+    @Args('customer_id') customer_id: string,
     @Fields(AmlRequest) columns: string[],
   ): Promise<AmlRequest> {
-    const user = await this.almRequestService.findUserById(user_id);
-    console.log(user, 'user details');
-    if (!user) {
+    const user = await this.almRequestService.findById(customer_id);
+    const { result } = user?.data;
+    console.log(result, 'user details');
+    if (!result) {
       throw new NotFoundException('User Not Found');
     }
-    return this.almRequestService.checkAmlByUser(user, columns);
+    return this.almRequestService.checkAmlByUser(result, columns);
   }
 
   @Mutation(() => AmlRequest)

@@ -79,7 +79,7 @@ type Query {
   templatesList: [TemplateGQL!]!
   findTemplateByName(name: String!): TemplateGQL!
   findTemplate(id: String!): TemplateGQL!
-  checkAmlByUserId(user_id: String!): AmlRequest!
+  checkAmlByCustomerId(customer_id: String!): AmlRequest!
   getAmlStatueByRefNo(user_id: String!, reference_no: String!): AmlResponse!
 }
 
