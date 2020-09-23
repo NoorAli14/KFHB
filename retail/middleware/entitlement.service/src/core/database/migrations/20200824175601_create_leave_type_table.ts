@@ -2,12 +2,10 @@ import * as Knex from 'knex';
 import {TABLE, DATABASE_UUID_METHOD, STATUS} from '@common/constants';
 
 export async function up(knex: Knex): Promise<any> {
-  return knex.schema.createTable(TABLE.HOLIDAY, table => {
+  return knex.schema.createTable(TABLE.LEAVE_TYPE, table => {
     table.uuid('id').primary().defaultTo(knex.raw(DATABASE_UUID_METHOD));
     table.uuid('tenant_id').notNullable();
-    table.date('holiday_date').notNullable();
-    table.string('description');
-    table.string('remarks');
+    table.string('name').notNullable();
     table.string('status').defaultTo(STATUS.ACTIVE).notNullable();
     table.timestamp('created_on', {useTz: true}).defaultTo(knex.fn.now()).notNullable();
     table.string('created_by').notNullable();
@@ -17,13 +15,13 @@ export async function up(knex: Knex): Promise<any> {
     table.string('deleted_by');
 
     //index
-    table.index(['status'], `${TABLE.HOLIDAY}_STATUS_INDEX`);
-    table.index(['tenant_id'], `${TABLE.HOLIDAY}_TENANT_ID_INDEX`);
-    table.index(['holiday_date'], `${TABLE.HOLIDAY}_HOLIDAY_DATE_INDEX`);
-    table.index(['deleted_on'], `${TABLE.HOLIDAY}_DELETED_ON_INDEX`);
+    table.index(['name'], `${TABLE.LEAVE_TYPE}_NAME_INDEX`);
+    table.index(['tenant_id'], `${TABLE.LEAVE_TYPE}_TENANT_ID_INDEX`);
+    table.index(['status'], `${TABLE.LEAVE_TYPE}_STATUS_INDEX`);
+    table.index(['deleted_on'], `${TABLE.LEAVE_TYPE}_DELETED_ON_INDEX`);
   });
 }
 
 export async function down(knex: Knex): Promise<any> {
-  return knex.schema.dropTable(TABLE.HOLIDAY);
+  return knex.schema.dropTable(TABLE.LEAVE_TYPE);
 }
