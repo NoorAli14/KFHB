@@ -8,14 +8,14 @@ export async function up(knex: Knex): Promise<void> {
       .primary()
       .defaultTo(knex.raw(DATABASE_UUID_METHOD));
 
-    table.string('results').notNullable();
-    table.string('remarks').notNullable();
-
     table.uuid('template_id');
     table
       .foreign('template_id')
       .references('id')
       .inTable(TABLE.TEMPLATE);
+
+    table.string('results').notNullable();
+    table.string('remarks').notNullable();
 
     table.timestamp('created_on').defaultTo(knex.fn.now());
     table.string('created_by');

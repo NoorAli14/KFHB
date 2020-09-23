@@ -7,7 +7,9 @@ export async function up(knex: Knex): Promise<void> {
       .uuid('id')
       .primary()
       .defaultTo(knex.raw(DATABASE_UUID_METHOD));
+
     table.uuid('tenant_id').notNullable();
+
     table.string('name').notNullable();
     table.string('name_ar').notNullable();
 
@@ -18,7 +20,13 @@ export async function up(knex: Knex): Promise<void> {
       .inTable(TABLE.QUESTION);
 
     table.timestamp('created_on').defaultTo(knex.fn.now());
+    table.string('created_by');
+
     table.timestamp('updated_on').defaultTo(knex.fn.now());
+    table.string('updated_by');
+
+    table.timestamp('updated_on');
+    table.string('updated_on');
   });
 }
 
