@@ -39,6 +39,6 @@ export class LeaveTypeWithPagination {
   @Field({ nullable: true })
   pagination: PaginationModel;
 
-  @Field(type => [LeaveType], { nullable: true })
+  @Field(() => [LeaveType], { nullable: true })
   data: LeaveType[];
 }

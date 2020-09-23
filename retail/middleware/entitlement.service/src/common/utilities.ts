@@ -55,7 +55,7 @@ export const toPlainAttributes = (model, tableName) : any => {
   return keys.map(key => `${tableName}.${key}`)
 };
 
-export const loaderSerializer = (data: any, serializer:string[], key: string, serializerKey?: string): any => {
+export const loaderSerializer = (data: any, serializer: readonly string[] | any, key: string, serializerKey?: string): any => {
   const loaderLookups = {};
   data.forEach(loader => {
     if (!loaderLookups[loader[key]])

@@ -10,7 +10,7 @@ import {loaderSerializer} from '@common/utilities';
 export class LeavesLoader {
     constructor(private readonly leaveDB: LeaveRepository) {}
 
-    async findLeavesByUserID(keys): Promise<any> {
+    async findLeavesByUserID(keys: readonly string[]): Promise<any> {
         const leaves = await this.leaveDB.listLeavesByUserID(keys);
         return loaderSerializer(leaves, keys, 'user_id')
     }

@@ -51,6 +51,6 @@ export class WorkingDayWithPagination {
   @Field({ nullable: true })
   pagination: PaginationModel;
 
-  @Field(type => [WorkingDay], { nullable: true })
+  @Field(() => [WorkingDay], { nullable: true })
   data: WorkingDay[];
 }
