@@ -39,7 +39,6 @@ export class WorkingDayFormComponent extends BaseComponent implements OnInit {
     constructor(
         public matDialogRef: MatDialogRef<WorkingDayFormComponent>,
         @Inject(MAT_DIALOG_DATA) public data: WorkingDay,
-        private _service: CalendarService,
         private dialog: MatDialog,
         injector: Injector
     ) {
@@ -47,32 +46,33 @@ export class WorkingDayFormComponent extends BaseComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        debugger
         this.workingDayForm = new FormGroup({
             id: new FormControl(this.data.id),
-            startTimeLocal: new FormControl(this.data.startTimeLocal, [
+            startTimeLocal: new FormControl({value: this.data.startTimeLocal, disabled: this.data.fullDay ? true : false}, [
                 Validators.required,
             ]),
-            endTimeLocal: new FormControl(this.data.endTimeLocal, [Validators.required]),
+            endTimeLocal: new FormControl({value: this.data.endTimeLocal,disabled:this.data.fullDay ? true : false}, [Validators.required]),
             fullDay: new FormControl(this.data.fullDay),
             remarks: new FormControl(this.data.remarks, [Validators.required]),
-            weekDay: new FormControl(this.data.weekday, [Validators.required]),
+            weekDay: new FormControl(this.data.weekDay, [Validators.required]),
         });
         this.workingDayForm.get("fullDay").valueChanges.subscribe((value) => {
             if (value) {
-                this.workingDayForm.get("startTime").disable();
-                this.workingDayForm.get("endTime").disable();
+                this.workingDayForm.get("startTimeLocal").disable();
+                this.workingDayForm.get("endTimeLocal").disable();
                 this.workingDayForm.patchValue({
-                    startTime: null,
-                    endTime: null,
+                    startTimeLocal: null,
+                    endTimeLocal: null,
                 });
             } else {
-                this.workingDayForm.get("startTime").enable();
-                this.workingDayForm.get("endTime").enable();
+                this.workingDayForm.get("startTimeLocal").enable();
+                this.workingDayForm.get("endTimeLocal").enable();
                 this.workingDayForm
-                    .get("startTime")
+                    .get("startTimeLocal")
                     .setValidators(Validators.required);
                 this.workingDayForm
-                    .get("endTime")
+                    .get("endTimeLocal")
                     .setValidators(Validators.required);
             }
         });
@@ -120,8 +120,10 @@ export class WorkingDayFormComponent extends BaseComponent implements OnInit {
     }
     onSubmit() {
         let model = { ...this.workingDayForm.value };
-        model.endTimeLocal= model.endTimeLocal.replace(":", "")
-        model.startTimeLocal=model.startTimeLocal.replace(":", ""); 
+        if(!model.fullDay){
+            model.endTimeLocal= model.endTimeLocal.replace(":", "")
+            model.startTimeLocal=model.startTimeLocal.replace(":", ""); 
+        }
         model = camelToSnakeCase(model);
         model.full_day = model.full_day  ? 1: 0;
         this.sendResponse.emit(model);

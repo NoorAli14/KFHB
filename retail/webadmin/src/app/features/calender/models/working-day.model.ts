@@ -1,7 +1,7 @@
 import { BaseModel } from '@shared/models/base.model';
 
 export class WorkingDay extends BaseModel{
-    weekday:string;
+    weekDay:string;
     startTimeLocal:string;
     endTimeLocal:string;
     fullDay:boolean;

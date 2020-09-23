@@ -1,24 +1,31 @@
-import { Component, Injector, OnInit, ViewChild, ViewEncapsulation } from "@angular/core";
+import {
+    Component,
+    Injector,
+    OnInit,
+    ViewChild,
+    ViewEncapsulation,
+} from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
-import { CONFIG } from '@config/index';
+import { CONFIG } from "@config/index";
 import { WorkingDay } from "@feature/calender/models/working-day.model";
 import { CalendarService } from "@feature/calender/services/calendar.service";
-import { fuseAnimations } from '@fuse/animations';
+import { fuseAnimations } from "@fuse/animations";
 import { BaseComponent } from "@shared/components/base/base.component";
 import {
     ConfirmDialogComponent,
     ConfirmDialogModel,
 } from "@shared/components/confirm-dialog/confirm-dialog.component";
-import { MESSAGES } from '@shared/constants/messages.constant';
+import { MESSAGES } from "@shared/constants/messages.constant";
 import {
     camelToSentenceCase,
     camelToSnakeCase,
     snakeToCamelArray,
+    snakeToCamelObject,
 } from "@shared/helpers/global.helper";
-import { WorkingDayFormComponent } from '../../components/working-day-form/working-day-form.component';
+import { WorkingDayFormComponent } from "../../components/working-day-form/working-day-form.component";
 
 @Component({
     selector: "app-working-day",
@@ -32,8 +39,8 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
     workingDays: WorkingDay[];
     displayedColumns = [
         "weekDay",
-        "startTime",
-        "endTime",
+        "startTimeLocal",
+        "endTimeLocal",
         "fullDay",
         "remarks",
         "status",
@@ -60,9 +67,8 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
         this._service.getWorkingDays().subscribe(
             (response) => {
                 this.workingDays = snakeToCamelArray(response);
-                this.dataSource = new MatTableDataSource(
-                    snakeToCamelArray(response)
-                );
+                this.workingDays = this.workingDays.map((x) => this.convertData(x));
+                this.dataSource = new MatTableDataSource(this.workingDays);
                 this.dataSource.paginator = this.paginator;
                 this.dataSource.sort = this.sort;
             },
@@ -71,11 +77,18 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
             }
         );
     }
-    openDialog(): void {
+    convertData(item) {
+        return {
+            ...item,
+            startTimeLocal: this.tConvert(item.startTimeLocal),
+            endTimeLocal: this.tConvert(item.endTimeLocal),
+        };
+    }
+    openDialog(data): void {
         var _this = this;
         this.dialogRef = this._matDialog
             .open(WorkingDayFormComponent, {
-                data: new WorkingDay(),
+                data:data ? data:  new WorkingDay(),
                 panelClass: "app-working-day-form",
                 disableClose: true,
                 hasBackdrop: true,
@@ -88,13 +101,29 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
                 }
             });
     }
- 
+    insert(str, index, value) {
+        return str.substr(0, index) + value + str.substr(index);
+    }
+    tConvert(time) {
+        time = this.insert(time, 2, ":");
+        time = time
+            .toString()
+            .match(/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
+
+        if (time.length > 1) {
+            // If time format correct
+            time = time.slice(1); // Remove full string match value
+            time[5] = +time[0] < 12 ? " AM" : " PM"; // Set AM/PM
+            time[0] = +time[0] % 12 || 12; // Adjust hours
+        }
+        return time.join(""); // return adjusted time or original string
+    }
+
     createWorkingDay(model: WorkingDay) {
-        debugger
         this._service.createWorkingDay(model).subscribe(
             (response) => {
-                const data = this.dataSource.data;
-                data.unshift(response);
+                const data:any = this.dataSource.data;
+                data.unshift(this.convertData(snakeToCamelObject(response)));
                 this.updateGrid(data);
                 this.errorType = "success";
                 this.responseMessage = MESSAGES.CREATED("Working Day");
@@ -120,7 +149,8 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
                     (x) => x.id == model.id
                 );
                 this.hideMessage();
-                this.workingDays[index] = response;
+                const mapped:any=this.convertData(snakeToCamelObject(response))
+                this.workingDays[index] = mapped;
                 this.updateGrid(this.workingDays);
                 this._matDialog.closeAll();
             },
@@ -141,7 +171,7 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe((status) => {
             if (status) {
-               this.deleteWorkingDay(id)
+                this.deleteWorkingDay(id);
             }
         });
     }
