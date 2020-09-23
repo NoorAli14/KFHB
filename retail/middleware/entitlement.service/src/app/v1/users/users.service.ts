@@ -121,75 +121,76 @@ export class UserService {
     const date = validateDate(obj.call_time);
     obj.gender && validateGender(obj.gender);
     obj.call_time = date.substring(0,10);
-    if(!await this.isHoliday(obj) && await this.isWorkingDay(date, obj.tenant_id)) {
-      return this.availableAgents(obj)
-    } else{
-      return []
-    }
+    // if(!await this.isHoliday(obj) && await this.isWorkingDay(date, obj.tenant_id)) {
+    //   return this.availableAgents(obj)
+    // } else{
+    //   return []
+    // }
+    return []
   }
 
-  async isHoliday(obj: Record<string, any>): Promise<boolean> {
-    const checks: KeyValInput[] = [
-      {
-        record_key: 'holiday_date',
-        record_value: obj.call_time
-      },
-      {
-        record_key: 'tenant_id',
-        record_value: obj.tenant_id
-      }
-    ];
-    const holidays = await this.holidaysService.findByProperty(checks, ['id', 'created_on']);
-    return !!holidays.length;
-  }
+  // async isHoliday(obj: Record<string, any>): Promise<boolean> {
+  //   const checks: KeyValInput[] = [
+  //     {
+  //       record_key: 'holiday_date',
+  //       record_value: obj.call_time
+  //     },
+  //     {
+  //       record_key: 'tenant_id',
+  //       record_value: obj.tenant_id
+  //     }
+  //   ];
+  //   const holidays = await this.holidaysService.findByProperty(checks, ['id', 'created_on']);
+  //   return !!holidays.length;
+  // }
 
-  async isWorkingDay(date: string, tenant_id: string): Promise<boolean> {
-    const weekDay = Object.keys(WEEK_DAYS)[new Date(date).getDay()];
-    const checks: KeyValInput[] = [
-      {
-        record_key: 'week_day',
-        record_value: weekDay
-      },
-      {
-        record_key: 'tenant_id',
-        record_value: tenant_id
-      }
-    ];
-    const days = await this.workingDaysService.findByProperty(checks, ['start_time', 'end_time', 'full_day']);
-    if(days && days.length > 0) {
-      const day = days[0];
-      try {
-        if (day.full_day) return true;
-        if (Date.parse(date) > Date.parse(new Date(day.start_time).toISOString())
-          && Date.parse(date) < Date.parse(new Date(day.end_time).toISOString()))
-          return true;
-      } catch (e) {
-        return false;
-      }
-    }
-    return false;
-  }
+  // async isWorkingDay(date: string, tenant_id: string): Promise<boolean> {
+  //   const weekDay = Object.keys(WEEK_DAYS)[new Date(date).getDay()];
+  //   const checks: KeyValInput[] = [
+  //     {
+  //       record_key: 'week_day',
+  //       record_value: weekDay
+  //     },
+  //     {
+  //       record_key: 'tenant_id',
+  //       record_value: tenant_id
+  //     }
+  //   ];
+  //   const days = await this.workingDaysService.findByProperty(checks, ['start_time', 'end_time', 'full_day']);
+  //   if(days && days.length > 0) {
+  //     const day = days[0];
+  //     try {
+  //       if (day.full_day) return true;
+  //       if (Date.parse(date) > Date.parse(new Date(day.start_time).toISOString())
+  //         && Date.parse(date) < Date.parse(new Date(day.end_time).toISOString()))
+  //         return true;
+  //     } catch (e) {
+  //       return false;
+  //     }
+  //   }
+  //   return false;
+  // }
 
-  async availableAgents(obj: Record<string, any>): Promise<any> {
-    const checks: KeyValInput[] = [
-      {
-        record_key: 'leave_date',
-        record_value: obj.call_time
-      },
-      {
-        record_key: 'tenant_id',
-        record_value: obj.tenant_id
-      }
-    ];
-    const leaves = await this.leavesService.findByProperty(checks, ['id', 'user_id', 'created_on']);
-    const userIds: [] = leaves.map(leave => leave.user_id);
-    const conditions = {};
-    conditions[`${TABLE.USER}.deleted_on`] = null;
-    conditions[`${TABLE.USER}.tenant_id`] = obj.tenant_id;
-    conditions[`${TABLE.ROLE}.name`] = TEMP_ROLE.AGENT;
-    if (obj.gender) {
-      conditions[`${TABLE.USER}.gender`] = obj.gender;
-    }
-    return this.userDB.listExcludedUsers(userIds, conditions)
-  }
+  // async availableAgents(obj: Record<string, any>): Promise<any> {
+  //   const checks: KeyValInput[] = [
+  //     {
+  //       record_key: 'leave_date',
+  //       record_value: obj.call_time
+  //     },
+  //     {
+  //       record_key: 'tenant_id',
+  //       record_value: obj.tenant_id
+  //     }
+  //   ];
+  //   const leaves = await this.leavesService.findByProperty(checks, ['id', 'user_id', 'created_on']);
+  //   const userIds: [] = leaves.map(leave => leave.user_id);
+  //   const conditions = {};
+  //   conditions[`${TABLE.USER}.deleted_on`] = null;
+  //   conditions[`${TABLE.USER}.tenant_id`] = obj.tenant_id;
+  //   conditions[`${TABLE.ROLE}.name`] = TEMP_ROLE.AGENT;
+  //   if (obj.gender) {
+  //     conditions[`${TABLE.USER}.gender`] = obj.gender;
+  //   }
+  //   return this.userDB.listExcludedUsers(userIds, conditions)
+  // }
 }
