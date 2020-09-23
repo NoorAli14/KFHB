@@ -1,80 +1,70 @@
 import {Resolver, Query, Mutation, Args, Context, GraphQLExecutionContext} from '@nestjs/graphql';
 
 import { KeyValInput } from '@common/inputs/key-val.input';
-import {Fields} from '@common/decorators';
-import {HttpException, HttpStatus} from '@nestjs/common';
-import {MESSAGES, STATUS} from '@common/constants';
-import {getMutateProps} from '@common/utilities';
-import {LeaveType, LeaveTypeWithPagination} from '@app/v1/leave_type/leave_type.model';
-import {Leave_typeService} from '@app/v1/leave_type/leave_type.service';
+import {CurrentUser, Fields} from '@common/decorators';
+import {LeaveType} from '@app/v1/leave_type/leave_type.model';
+import {LeaveTypeService} from '@app/v1/leave_type/leave_type.service';
 import {LeaveTypeCreateInput, LeaveTypeInput} from '@app/v1/leave_type/leave_type.dto';
+import {ICurrentUser} from '@common/interfaces';
+import {LeaveTypeNotFoundException} from '@app/v1/leave_type/exceptions';
 
 @Resolver(LeaveType)
 export class Leave_typeResolver {
-  constructor(private readonly leave_typeService: Leave_typeService) {}
+  constructor(private readonly leave_typeService: LeaveTypeService) {}
 
   @Query(() => [LeaveType])
-  async leaveTypeList(@Fields() columns: string[], @Context() context: GraphQLExecutionContext): Promise<LeaveType[]> {
-    return this.leave_typeService.list(columns, context['req'].query);
+  async leaveTypeList(@Fields() output: string[],
+                      @CurrentUser() current_user: ICurrentUser,
+                      @Context() context: GraphQLExecutionContext): Promise<LeaveType[]> {
+    return this.leave_typeService.list(current_user, output, context['req'].query);
   }
 
   @Query(() => LeaveType)
   async findLeaveTypeById(
     @Args('id') id: string,
-    @Fields() columns: string[]
+    @CurrentUser() current_user: ICurrentUser,
+    @Fields() output: string[]
   ): Promise<LeaveType> {
-    const leaveType: LeaveType = await this.leave_typeService.findById(id,columns);
-    if(!leaveType) throw new HttpException({
-      status: HttpStatus.NOT_FOUND,
-      error: MESSAGES.NOT_FOUND,
-    }, HttpStatus.NOT_FOUND);
+    const leaveType: LeaveType = await this.leave_typeService.findById(current_user, id, output);
+    if(!leaveType) throw new LeaveTypeNotFoundException(id);
     return leaveType;
   }
 
   @Query(() => [LeaveType])
   async findLeaveTypeBy(
     @Args('checks', { type: () => [KeyValInput] }) checks: KeyValInput[],
-    @Fields() columns: string[]
+    @CurrentUser() current_user: ICurrentUser,
+    @Fields() output: string[]
   ): Promise<LeaveType[]> {
-    return this.leave_typeService.findByProperty(checks, columns);
+    return this.leave_typeService.findByProperty(current_user, checks, output);
   }
 
   @Mutation(() => LeaveType)
   async addLeaveType(
     @Args('input') input: LeaveTypeCreateInput,
-    @Fields() columns: string[],
-    @Context() context: GraphQLExecutionContext
+    @Fields() output: string[],
+    @CurrentUser() current_user: ICurrentUser,
   ): Promise<LeaveType> {
-    input = getMutateProps('created', context['req'].headers, input);
-    return this.leave_typeService.create(input, columns);
+    return this.leave_typeService.create(current_user, input, output);
   }
 
   @Mutation(() => LeaveType)
   async updateLeaveType(
     @Args('id') id: string,
     @Args('input') input: LeaveTypeInput,
-    @Fields() columns: string[],
-    @Context() context: GraphQLExecutionContext
+    @Fields() output: string[],
+    @CurrentUser() current_user: ICurrentUser,
   ): Promise<LeaveType> {
-    const leaveType: LeaveType = await this.leave_typeService.findById(id,['id']);
-    if(!leaveType) throw new HttpException({
-      status: HttpStatus.NOT_FOUND,
-      error: MESSAGES.NOT_FOUND,
-    }, HttpStatus.NOT_FOUND);
-    input = getMutateProps('updated', context['req'].headers, input);
-    return this.leave_typeService.update(id, input, columns);
+    const leaveType: LeaveType = await this.leave_typeService.findById(current_user, id,['id']);
+    if(!leaveType) throw new LeaveTypeNotFoundException(id);
+    return this.leave_typeService.update(current_user, id, input, output);
   }
 
   @Mutation(() => Boolean)
   async deleteLeaveType(@Args('id') id: string,
-                      @Context() context: GraphQLExecutionContext): Promise<boolean> {
-    const leaveType: LeaveType = await this.leave_typeService.findById(id,['id']);
-    if(!leaveType) throw new HttpException({
-      status: HttpStatus.NOT_FOUND,
-      error: MESSAGES.NOT_FOUND,
-    }, HttpStatus.NOT_FOUND);
-    let input = {status: STATUS.INACTIVE};
-    input = getMutateProps('deleted', context['req'].headers, input);
-    return this.leave_typeService.delete(id, input);
+                        @CurrentUser() current_user: ICurrentUser): Promise<boolean> {
+    const leaveType: LeaveType = await this.leave_typeService.findById(current_user, id, ['id']);
+    if(!leaveType) throw new LeaveTypeNotFoundException(id);
+    return this.leave_typeService.delete(current_user, id);
   }
 }

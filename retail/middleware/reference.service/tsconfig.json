@@ -18,6 +18,7 @@
       "@common/*": ["./src/common/*"],
       "@app/*": ["./src/app/*"],
       "@core/*": ["./src/core/*"]
-    }
+    },
+    "typeRoots": ["./node_modules/@types", "./typings"]
   }
 }

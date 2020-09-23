@@ -58,7 +58,7 @@ export class WorkingDaysService {
       throw new WorkingDayStartTimeLessThanEndTimeException(id, input.start_time_local, input.end_time_local)
     }
     if ((input.start_time_local < '0000' || input.start_time_local > '2359') || (input.end_time_local < '0000' || input.end_time_local > '2359')){
-      throw new WorkingDayStartEndTimeInvalidRange(null, input.start_time_local, input.end_time_local)
+      throw new WorkingDayStartEndTimeInvalidRange(id, input.start_time_local, input.end_time_local)
     }
     const [result] = await this.workingDaysRepository.update({
       id: id,
@@ -69,8 +69,8 @@ export class WorkingDaysService {
   }
 
   async create(current_user: ICurrentUser, newObj: WorkingDayInput, output?: string[]): Promise<WorkingDay> {
-    const workingDay = await this.findByWeekday(current_user, newObj.week_day);
-    if (workingDay?.length > 0) throw new WorkingDayAlreadyExistException(workingDay[0].id);
+    const [workingDay] = await this.findByWeekday(current_user, newObj.week_day);
+    if (workingDay) throw new WorkingDayAlreadyExistException(workingDay.id);
     if(newObj.full_day) {
       newObj.start_time_local = '0000';
       newObj.end_time_local = '2359';
@@ -86,12 +86,8 @@ export class WorkingDaysService {
         created_by: current_user.id,
         updated_by: current_user.id,
     }};
-    const result = await this.workingDaysRepository.create(input, output);
-    if(result?.length > 0) return result[0];
-    throw new HttpException({
-      status: HttpStatus.BAD_REQUEST,
-      error: MESSAGES.BAD_REQUEST,
-    }, HttpStatus.BAD_REQUEST);
+    const [result] = await this.workingDaysRepository.create(input, output);
+    return result;
   }
 
   async delete(current_user: ICurrentUser, id: string): Promise<boolean> {

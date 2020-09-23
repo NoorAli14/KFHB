@@ -1,6 +1,4 @@
 import { InjectKnex, Knex } from 'nestjs-knex';
-import {PaginationModel} from '@common/models';
-import {NUMBERS, PAGINATION_PARAMS} from '@common/constants';
 export abstract class BaseRepository {
   @InjectKnex() protected readonly _connection: Knex;
   protected _tableName: string;
