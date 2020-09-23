@@ -11,11 +11,11 @@ export async function up(knex: Knex): Promise<void> {
     table.uuid('tenant_id').notNullable();
     table.uuid('customer_id').notNullable();
 
-    table.string('aml_text');
-    table.string('remarks');
-
-    table.string('status');
+    table.text('aml_text');
     table.string('request_reference');
+
+    table.string('remarks');
+    table.string('status');
 
     table.timestamp('created_on').defaultTo(knex.fn.now());
     table.string('created_by');

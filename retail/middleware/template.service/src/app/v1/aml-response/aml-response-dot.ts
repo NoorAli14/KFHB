@@ -6,7 +6,7 @@ export class NewAlmResponseInput {
   response_status: string;
 
   @Field()
-  response_type: number;
+  response_type: string;
 
   @Field()
   created_by: string;

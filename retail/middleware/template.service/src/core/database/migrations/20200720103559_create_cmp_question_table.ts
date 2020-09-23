@@ -7,12 +7,15 @@ export async function up(knex: Knex): Promise<void> {
       .uuid('id')
       .primary()
       .defaultTo(knex.raw(DATABASE_UUID_METHOD));
-		table.string('title').notNullable();
-		table.string('title_ar').notNullable();
+
+    table.uuid('tenant_id').notNullable();
+    table.string('title').notNullable();
+
+    table.string('title_ar').notNullable();
     table.string('type').notNullable();
 
     table.string('rules').notNullable();
-    table.boolean('status').defaultTo(true);
+    table.boolean('status').defaultTo('ACTIVE');
 
     table.uuid('section_id');
     table
@@ -21,7 +24,13 @@ export async function up(knex: Knex): Promise<void> {
       .inTable(TABLE.SECTION);
 
     table.timestamp('created_on').defaultTo(knex.fn.now());
+    table.string('created_by');
+
     table.timestamp('updated_on').defaultTo(knex.fn.now());
+    table.string('updated_by');
+
+    table.timestamp('deleted_on');
+    table.string('deleted_by');
 
     // table.unique(['title']);
   });

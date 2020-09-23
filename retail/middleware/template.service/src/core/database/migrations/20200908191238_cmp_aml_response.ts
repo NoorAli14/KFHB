@@ -9,10 +9,10 @@ export async function up(knex: Knex): Promise<void> {
       .defaultTo(knex.raw(DATABASE_UUID_METHOD));
 
     table.uuid('request_id');
-    table.string('response_status');
+    table.string('response_status'); //(1.Clean, 2.Suspect, 3.Confirm-Clean and 4.Confirm-Block)
 
+    table.string('response_type'); // {Aml Response 1 or Aml Response 2}
     table.timestamp('response_on');
-    table.integer('response_type');
 
     table.timestamp('created_on').defaultTo(knex.fn.now());
     table.string('created_by');
