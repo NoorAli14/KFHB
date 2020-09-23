@@ -10,10 +10,10 @@ resources:
 
 variables:
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: 'ad859bb3-99bf-44db-9ef3-6ed7b89a25e5'
-  imageRepository: 'aiondigitalengineeringrubix'
+  dockerRegistryServiceConnection: 'e11b76b8-024b-445d-b872-aaba976b9e8b'
+  imageRepository: 'rubixusermgmt'
   containerRegistry: 'testdaon.azurecr.io'
-  dockerfilePath: '$(Build.SourcesDirectory)/retail/middleware/gateway.service/Dockerfile'
+  dockerfilePath: '$(Build.SourcesDirectory)/retail/middleware/entitlement.service/Dockerfile'
   tag: '$(Build.BuildId)'
   
   # Agent VM image name
