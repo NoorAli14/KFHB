@@ -355,8 +355,6 @@ type WorkingDay {
   updated_by: String
   deleted_on: String
   deleted_by: String
-  start_time: String!
-  end_time: String!
 }
 
 input WorkingDayCreateInput {
