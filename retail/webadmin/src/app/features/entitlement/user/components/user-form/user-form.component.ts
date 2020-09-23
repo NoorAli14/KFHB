@@ -33,7 +33,6 @@ import { takeUntil } from "rxjs/operators";
 })
 export class UserFormComponent extends BaseComponent implements OnInit {
     userForm: FormGroup;
-
     response: User;
     roles: Role[];
     permissions: any[];
@@ -42,7 +41,6 @@ export class UserFormComponent extends BaseComponent implements OnInit {
     statusList: any[] = STATUS_LIST;
     @Output() sendResponse: EventEmitter<User> = new EventEmitter<any>();
   
-
     constructor(
         public matDialogRef: MatDialogRef<UserFormComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
@@ -135,5 +133,13 @@ export class UserFormComponent extends BaseComponent implements OnInit {
 
         this.sendResponse.emit(model);
     }
-  
+    ngOnDestroy(): void {
+        this._unsubscribeAll.next();
+        this._unsubscribeAll.complete();
+        this._dialogRef.closeAll();
+    }
+    onClose(){
+        this.sendResponse.emit();
+        this.matDialogRef.close()
+    }
 }

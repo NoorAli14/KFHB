@@ -42,9 +42,5 @@ export class BaseComponent implements OnInit {
         this.errorType = "error";
         this.responseMessage = MESSAGES.UNKNOWN();
     }
-    ngOnDestroy(): void {
-        this._unsubscribeAll.next();
-        this._unsubscribeAll.complete();
-        this._dialogRef.closeAll();
-    }
+   
 }

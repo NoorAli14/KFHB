@@ -39,6 +39,7 @@ export class RoleComponent extends BaseComponent implements OnInit {
         "roleName",
         "description",
         "createdOn",
+        "status",
         "expandIcon",
         "action",
     ];
@@ -86,7 +87,9 @@ export class RoleComponent extends BaseComponent implements OnInit {
                 panelClass: "app-role-form",
             })
             .componentInstance.sendResponse.subscribe((response) => {
-                if (response.id) {
+                if (!response) {
+                    this._errorEmitService.emit("", "");
+                } else if (response.id) {
                     _this.editRole(response);
                 } else {
                     _this.createRole(response);

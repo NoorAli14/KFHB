@@ -31,7 +31,7 @@
             </div>
             <button
                 mat-icon-button
-                (click)="matDialogRef.close()"
+                (click)="onClose()"
                 aria-label="Close dialog"
             >
                 <mat-icon>close</mat-icon>
@@ -40,9 +40,10 @@
     </mat-toolbar>
 
     <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
-        <div *ngIf="responseMessage.length > 0" fxLayout="row" fxLayoutAlign="center" class="p-16  message-box {{ errorType }} ">
-            {{ responseMessage }}
-        </div>
+        <app-message-box
+        [type]="errorType"
+        [message]="responseMessage"
+    ></app-message-box>
         <div fxLayout="row">
             <form
                 
@@ -123,7 +124,7 @@
                     <button
                         type="button"
                         mat-raised-button
-                        (click)="matDialogRef.close()"
+                        (click)="onClose()"
                         color="secondary"
                         aria-label="Follow"
                     >

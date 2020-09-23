@@ -22,7 +22,7 @@
             <!-- / APP TITLE -->
 
             <!-- ADD BUTTON -->
-            <button mat-raised-button color="accent" (click)="openDialog()" class="add-product-button fuse-white mt-24 mt-md-0">
+            <button mat-raised-button color="accent" (click)="openDialog(null)" class="add-product-button fuse-white mt-24 mt-md-0">
                 <span>ADD NEW</span>
             </button>
             <!-- / ADD BUTTON -->
@@ -35,9 +35,10 @@
             <!-- <div class="spinner-container" *ngIf="dataSource.loading$ | async">
                 <mat-spinner></mat-spinner>
             </div> -->
-            <div *ngIf="responseMessage.length > 0" fxLayout="row" fxLayoutAlign="center" class="p-16  message-box {{ errorType }} ">
-                {{ responseMessage }}
-            </div>
+            <app-message-box
+            [type]="errorType"
+            [message]="responseMessage"
+        ></app-message-box>
             <mat-table #table matSort matSortActive="username" matSortDirection="asc" matSortDisableClear [dataSource]="dataSource">
                 <!-- COLUMNS AND ROWS-->
                 <ng-container *ngFor="let key of displayedColumns" [matColumnDef]="key">
@@ -45,16 +46,19 @@
             
                     <mat-cell *matCellDef="let element; let i = dataIndex">
                       <ng-container [ngSwitch]="key">
-                        <span *ngSwitchCase="'startTime'">
-                            {{element['fullDay']==1 ? 'N/A' : element[key]}}
+                        <span *ngSwitchCase="'startDate'">
+                            {{element[key] | date:'mediumDate'}}
                         </span>
-                        <span *ngSwitchCase="'endTime'">
-                            {{element['fullDay']==1 ? 'N/A' : element[key]}}
+                        <span *ngSwitchCase="'endDate'">
+                            {{element[key] | date:'mediumDate'}}
                         </span>
-                        <span *ngSwitchCase="'fullDay'">
-                            {{element[key]==1 ? 'Yes' : 'No'}}
+                        <span *ngSwitchCase="'leaveTypeId'">
+                            {{getLeaveType(element[key])}}
                         </span>
-                        <span *ngSwitchCase="'actions'">
+                        <span *ngSwitchCase="'status'">
+                            <app-status [status]="element[key]"></app-status>
+                        </span>
+                        <span *ngSwitchCase="'action'">
                             <mat-icon appPermission [permissions]="userPermissions" matTooltip="Delete working day" [type]="'delete'" color="warn" type="button" (click)=" confirmDialog('delete',element['id'])">delete</mat-icon> &nbsp;&nbsp;
                             <mat-icon type="button" (click)="openDialog(element)" matTooltip="Edit working day">mode_edit</mat-icon> &nbsp;&nbsp;
                         </span>

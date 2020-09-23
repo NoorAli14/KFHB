@@ -14,6 +14,7 @@ import { BaseComponent } from './components/base/base.component';
 import { DefaultTextComponent } from './components/default-text/default-text.component';
 import { MessageBoxComponent } from './components/message-box/message-box.component';
 import { RequiredIndicatorComponent } from './components/required-indicator/required-indicator.component';
+import { StatusComponent } from './components/status/status.component';
 
 @NgModule({
     declarations: [
@@ -26,6 +27,7 @@ import { RequiredIndicatorComponent } from './components/required-indicator/requ
         DefaultTextComponent,
         MessageBoxComponent,
         RequiredIndicatorComponent,
+        StatusComponent,
     ],
     imports: [
         ReactiveFormsModule,
@@ -43,7 +45,8 @@ import { RequiredIndicatorComponent } from './components/required-indicator/requ
         MessageBoxComponent,
         BaseComponent,
         DefaultTextComponent,
-        RequiredIndicatorComponent
+        RequiredIndicatorComponent,
+        StatusComponent
     ],
 })
 export class SharedModule {}

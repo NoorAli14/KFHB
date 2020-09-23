@@ -49,7 +49,7 @@ export class UserComponent extends BaseComponent implements OnInit {
     pageSize: number = CONFIG.PAGE_SIZE;
     pageSizeOptions: Array<number> = CONFIG.PAGE_SIZE_OPTIONS;
     nationalities: any[];
-    displayedColumns = ["firstName", "lastName", "email", "status", "actions"];
+    displayedColumns = ["firstName", "lastName", "email", "status", "action"];
 
     dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
 
@@ -100,7 +100,9 @@ export class UserComponent extends BaseComponent implements OnInit {
                 panelClass: "app-user-form",
             })
             .componentInstance.sendResponse.subscribe((response) => {
-                if (response.id) {
+                if (!response) {
+                    this._errorEmitService.emit("", "");
+                } else  if (response.id) {
                     _this.editUser(response);
                 } else {
                     _this.createUser(response);

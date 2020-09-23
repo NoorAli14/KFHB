@@ -4,6 +4,7 @@ import { NetworkService } from "@shared/services/network/network.service";
 import { WorkingDay } from '../models/working-day.model';
 import { Holiday } from '../models/holiday.model';
 import { Leave } from '../models/leave.model';
+import { forkJoin } from 'rxjs';
 
 @Injectable({
     providedIn: "root",
@@ -51,4 +52,15 @@ export class CalendarService {
     deleteLeave(id: string) {
         return this._networkService.onDelete(`${URI.LEAVES}/${id}`);
     }
+    forkLeaveData() {
+        return forkJoin([this._networkService.getAll(URI.LEAVES), this.getLeaveType(),this.getUsers()]);
+    }
+
+    getLeaveType() {
+        return this._networkService.getAll(URI.LEAVE_TYPE);
+    }
+    getUsers() {
+        return this._networkService.getAll(URI.USER);
+    }
+   
 }

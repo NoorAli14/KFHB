@@ -20,6 +20,8 @@ import { BaseComponent } from "@shared/components/base/base.component";
 import { WTimeDialogComponent } from "@shared/components/time-control/w-time-dialog.component";
 import { WORKING_DAYS } from "@shared/constants/app.constants";
 import { camelToSnakeCase } from "@shared/helpers/global.helper";
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: "app-working-day-form",
@@ -46,7 +48,13 @@ export class WorkingDayFormComponent extends BaseComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        debugger
+    
+        this._errorEmitService.currentMessage
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe((item) => {
+                this.errorType = item.type;
+                this.responseMessage = item.message;
+            });
         this.workingDayForm = new FormGroup({
             id: new FormControl(this.data.id),
             startTimeLocal: new FormControl({value: this.data.startTimeLocal, disabled: this.data.fullDay ? true : false}, [
@@ -127,5 +135,14 @@ export class WorkingDayFormComponent extends BaseComponent implements OnInit {
         model = camelToSnakeCase(model);
         model.full_day = model.full_day  ? 1: 0;
         this.sendResponse.emit(model);
+    }
+    ngOnDestroy(): void {
+        this._unsubscribeAll.next();
+        this._unsubscribeAll.complete();
+        this._dialogRef.closeAll();
+    }
+    onClose(){
+        this.sendResponse.emit();
+        this.matDialogRef.close()
     }
 }

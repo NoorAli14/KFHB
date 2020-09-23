@@ -16,7 +16,7 @@
             </div>
             <button
                 mat-icon-button
-                (click)="matDialogRef.close()"
+                (click)="onClose()"
                 aria-label="Close dialog"
             >
                 <mat-icon>close</mat-icon>
@@ -80,7 +80,6 @@
                         {{ camelToSentenceCase(key)  }}
                        </div>   
                    </mat-header-cell>
-                  
                    <mat-cell  *matCellDef="let control of modules.controls; let i = index;" >
                        <div *ngIf="key==='module'; else checkboxes" fxLayout="row" fxLayoutAlign="start start">
                         <span >{{modules.controls[i].get(key).value.name}}</span>
@@ -95,7 +94,6 @@
                         </ng-template>
                         </ng-template>
                        </div>
-                            
                    </mat-cell>
                </ng-container>
                <!-- -->
@@ -109,7 +107,7 @@
             <button
                 type="button"
                 mat-raised-button
-                (click)="matDialogRef.close()"
+                (click)="onClose()"
                 color="secondary"
                 aria-label="Follow"
             >

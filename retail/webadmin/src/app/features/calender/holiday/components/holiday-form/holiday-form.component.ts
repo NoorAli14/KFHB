@@ -10,9 +10,7 @@ import {
 } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { BaseComponent } from "@shared/components/base/base.component";
-import { CalendarService } from "@feature/calender/services/calendar.service";
 import {
-    MatDialog,
     MatDialogRef,
     MAT_DIALOG_DATA,
 } from "@angular/material/dialog";
@@ -35,28 +33,33 @@ export class HolidayFormComponent extends BaseComponent implements OnInit {
     constructor(
         public matDialogRef: MatDialogRef<HolidayFormComponent>,
         @Inject(MAT_DIALOG_DATA) public data: Holiday,
-        private _service: CalendarService,
-        private dialog: MatDialog,
         injector: Injector
     ) {
         super(injector);
     }
 
-    
+
     ngOnInit(): void {
         this.holidayForm = new FormGroup({
             id: new FormControl(this.data.id),
             holidayDate: new FormControl(this.data.holidayDate, [Validators.required]),
             remarks: new FormControl(this.data.remarks, [Validators.required]),
-            description: new FormControl(this.data.remarks, [Validators.required]),
+            description: new FormControl(this.data.description, [Validators.required]),
         });
     }
     onSubmit() {
-        debugger
-      let model = { ...this.holidayForm.value };
-      model.holidayDate= moment(model.holidayDate).format(DATE_FORMAT);
-      model = camelToSnakeCase(model);
-
-      this.sendResponse.emit(model);
-  }
+        let model = { ...this.holidayForm.value };
+        model.holidayDate = moment(model.holidayDate).format(DATE_FORMAT);
+        model = camelToSnakeCase(model);
+        this.sendResponse.emit(model);
+    }
+    ngOnDestroy(): void {
+        this._unsubscribeAll.next();
+        this._unsubscribeAll.complete();
+        this._dialogRef.closeAll();
+    }
+    onClose() {
+        this.sendResponse.emit();
+        this.matDialogRef.close()
+    }
 }

@@ -31,7 +31,7 @@
             </div>
             <button
                 mat-icon-button
-                (click)="matDialogRef.close()"
+                (click)="onClose()"
                 aria-label="Close dialog"
             >
                 <mat-icon>close</mat-icon>
@@ -269,7 +269,7 @@
                     <button
                         type="button"
                         mat-raised-button
-                        (click)="matDialogRef.close()"
+                        (click)="onClose()"
                         color="secondary"
                         aria-label="Follow"
                     >

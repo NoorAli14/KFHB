@@ -88,13 +88,15 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
         var _this = this;
         this.dialogRef = this._matDialog
             .open(WorkingDayFormComponent, {
-                data:data ? data:  new WorkingDay(),
+                data: data ? data : new WorkingDay(),
                 panelClass: "app-working-day-form",
                 disableClose: true,
                 hasBackdrop: true,
             })
             .componentInstance.sendResponse.subscribe((response) => {
-                if (response.id) {
+                if (!response) {
+                    this._errorEmitService.emit("", "");
+                } else if (response.id) {
                     _this.editWorkingDay(response);
                 } else {
                     _this.createWorkingDay(response);
@@ -122,7 +124,7 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
     createWorkingDay(model: WorkingDay) {
         this._service.createWorkingDay(model).subscribe(
             (response) => {
-                const data:any = this.dataSource.data;
+                const data: any = this.dataSource.data;
                 data.unshift(this.convertData(snakeToCamelObject(response)));
                 this.updateGrid(data);
                 this.errorType = "success";
@@ -131,7 +133,10 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
                 this.hideMessage();
             },
             (response) => {
-                this._errorEmitService.emit(MESSAGES.UNKNOWN(), "error");
+                if (response.error && response.error.statusCode == 409) {
+                    this._errorEmitService.emit(MESSAGES.EXISTS('Working day'), "error");
+                } else
+                    this._errorEmitService.emit(MESSAGES.UNKNOWN(), "error");
             }
         );
     }
@@ -149,7 +154,7 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
                     (x) => x.id == model.id
                 );
                 this.hideMessage();
-                const mapped:any=this.convertData(snakeToCamelObject(response))
+                const mapped: any = this.convertData(snakeToCamelObject(response))
                 this.workingDays[index] = mapped;
                 this.updateGrid(this.workingDays);
                 this._matDialog.closeAll();

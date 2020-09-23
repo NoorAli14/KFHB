@@ -57,7 +57,14 @@ export class UpdateProfileComponent extends BaseComponent implements OnInit {
         model.dateOfBirth= new Date(model.dateOfBirth).toLocaleDateString()
         this.sendResponse.emit(model);
     }
+ 
+    ngOnDestroy(): void {
+        this._unsubscribeAll.next();
+        this._unsubscribeAll.complete();
+        this._dialogRef.closeAll();
+    }
     onClose() {
-        this.matDialogRef.close(this.response);
+        this.sendResponse.emit();
+        this.matDialogRef.close(this.response)
     }
 }

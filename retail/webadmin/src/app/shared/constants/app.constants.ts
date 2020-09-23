@@ -16,7 +16,7 @@ export enum APP_CONST {
 
 export const STATUS_LIST: Array<Select> = [
     { id: "ACTIVE", name: "Active" },
-    { id: "IN_ACTIVE", name: "InActive" },
+    { id: "IN_ACTIVE", name: "In Active" },
     { id: "LOCKED", name: "Locked" },
     { id: "PENDING", name: "Pending" },
 ];
@@ -58,6 +58,7 @@ export const URI = {
     RESET_PASSWORD: `${ENTITLEMENT}`,
     WORKING_DAYS: `${ENTITLEMENT}working-days`,
     HOLIDAYS: `${ENTITLEMENT}holidays`,
-    LEAVES: `${ENTITLEMENT}leave-types`,
+    LEAVE_TYPE: `${ENTITLEMENT}leave-types`,
+    LEAVES: `${ENTITLEMENT}leaves`,
     COUNTRIES: `${REFERENCE}countries`,
 };

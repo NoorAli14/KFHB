@@ -23,7 +23,7 @@ import { MESSAGES } from '@shared/constants/messages.constant';
     encapsulation: ViewEncapsulation.None,
     animations: fuseAnimations,
 })
-export class ResetPasswordComponent extends BaseComponent implements OnInit, OnDestroy {
+export class ResetPasswordComponent extends BaseComponent implements OnInit {
     resetPasswordForm: FormGroup;
    token:string;
  

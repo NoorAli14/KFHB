@@ -39,7 +39,6 @@ export class RoleFormComponent extends BaseComponent implements OnInit {
     }
 
     ngOnInit(): void {
-       debugger
         const totalPermissions=this.data.permissions.map((x)=>x.record_type)
         this.displayedColumns= this.displayedColumns.concat(totalPermissions)
 
@@ -101,5 +100,13 @@ export class RoleFormComponent extends BaseComponent implements OnInit {
         return camelToSentenceCase(text);
     }
   
-    
+    ngOnDestroy(): void {
+        this._unsubscribeAll.next();
+        this._unsubscribeAll.complete();
+        this._dialogRef.closeAll();
+    }
+    onClose(){
+        this.sendResponse.emit();
+        this.matDialogRef.close()
+    }
 }

@@ -46,7 +46,11 @@ export class ProfileComponent extends BaseComponent implements OnInit {
                 hasBackdrop: true,
             })
             .componentInstance.sendResponse.subscribe((response) => {
-                _this.onUpdateProfile(response);
+                if (!response) {
+                    this._errorEmitService.emit("", "");
+                } else {
+                    _this.onUpdateProfile(response);
+                }
             })
     }
     getData() {

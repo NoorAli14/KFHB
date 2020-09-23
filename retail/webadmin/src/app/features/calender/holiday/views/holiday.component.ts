@@ -33,7 +33,7 @@ export class HolidayComponent extends BaseComponent implements OnInit {
         "description",
         "remarks",
         "status",
-        "actions",
+        "action",
     ];
 
     dataSource = new MatTableDataSource<Holiday>();
@@ -58,11 +58,8 @@ export class HolidayComponent extends BaseComponent implements OnInit {
     getData() {
         this._service.getHolidays().subscribe(
             (response) => {
-                const holidays= snakeToCamelArray(response).map(element => {
-                    return {...element, holidayDate: moment(element.holidayDate).format(DATE_FORMAT)}
-                });
-                this.holidays =holidays
-                this.dataSource = new MatTableDataSource(holidays);
+                this.holidays =snakeToCamelArray(response)
+                this.dataSource = new MatTableDataSource(    this.holidays);
                 this.dataSource.paginator = this.paginator;
                 this.dataSource.sort = this.sort;
             },
@@ -81,7 +78,9 @@ export class HolidayComponent extends BaseComponent implements OnInit {
                 hasBackdrop: true,
             })
             .componentInstance.sendResponse.subscribe((response) => {
-                if (response.id) {
+                if (!response) {
+                    this._errorEmitService.emit("", "");
+                } else if (response.id) {
                     _this.editHoliday(response);
                 } else {
                     _this.createHoliday(response);
@@ -92,7 +91,6 @@ export class HolidayComponent extends BaseComponent implements OnInit {
     createHoliday(model: Holiday) {
         this._service.createHoliday(model).subscribe(
             (response) => {
-                response.holiday_date=   moment(response.holiday_date).format(DATE_FORMAT)
                 const data:any = this.dataSource.data;
                 data.unshift(snakeToCamelObject(response));
                 this.updateGrid(data);
@@ -120,7 +118,6 @@ export class HolidayComponent extends BaseComponent implements OnInit {
                     (x) => x.id == model.id
                 );
                 this.hideMessage();
-                response.holiday_date=   moment(response.holiday_date).format(DATE_FORMAT)
                 const mapped:any= snakeToCamelObject(response);
                 this.holidays[index] = mapped
                 this.updateGrid(this.holidays);

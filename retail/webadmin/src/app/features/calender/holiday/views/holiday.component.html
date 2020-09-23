@@ -46,9 +46,12 @@
                             <span  *ngSwitchCase="'holidayDate'">
                                 {{element[key] | date:'mediumDate'}}
                             </span>
-                            <span  *ngSwitchCase="'actions'">
+                            <span  *ngSwitchCase="'action'">
                                 <mat-icon color="warn" type="button" (click)=" confirmDialog(element['id'])">delete</mat-icon> &nbsp;&nbsp;
                                 <mat-icon type="button" (click)="openDialog(element)">mode_edit</mat-icon>
+                            </span>
+                            <span *ngSwitchCase="'status'">
+                                <app-status [status]="element[key]"></app-status>
                             </span>
                             <span  *ngSwitchDefault>
                                 {{element[key] }}
