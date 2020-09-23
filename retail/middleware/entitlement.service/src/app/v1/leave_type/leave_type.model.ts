@@ -1,5 +1,6 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
 import {PaginationModel} from '@common/models';
+import {Type} from 'class-transformer';
 
 @ObjectType()
 export class LeaveType {
@@ -16,19 +17,22 @@ export class LeaveType {
   tenant_id: string;
 
   @Field({ nullable: true })
-  created_on: string;
+  @Type(() => Date)
+  created_on: Date;
 
   @Field({ nullable: true })
   created_by: string;
 
   @Field({ nullable: true })
-  updated_on: string;
+  @Type(() => Date)
+  updated_on: Date;
 
   @Field({ nullable: true })
   updated_by: string;
 
   @Field({ nullable: true })
-  deleted_on: string;
+  @Type(() => Date)
+  deleted_on: Date;
 
   @Field({ nullable: true })
   deleted_by: string;
