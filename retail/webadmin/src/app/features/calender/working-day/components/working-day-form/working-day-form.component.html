@@ -103,9 +103,9 @@
                         class="pr-4"
                     >
                         <mat-label>Start Time</mat-label>
-                        <input matInput formControlName="startTime" />
+                        <input matInput formControlName="startTimeLocal" />
                         <mat-icon
-                            (click)="showPicker('startTime')"
+                            (click)="showPicker('startTimeLocal')"
                             matSuffix
                             class="secondary-text hover"
                             style="cursor: pointer"
@@ -113,7 +113,7 @@
                         >
                         <mat-error>
                             <app-mat-error
-                                [control]="workingDayForm.get('startTime')"
+                                [control]="workingDayForm.get('startTimeLocal')"
                             ></app-mat-error>
                         </mat-error>
                     </mat-form-field>
@@ -123,9 +123,9 @@
                         class="pl-4"
                     >
                         <mat-label>End Time</mat-label>
-                        <input matInput formControlName="endTime" />
+                        <input matInput formControlName="endTimeLocal" />
                         <mat-icon
-                            (click)="showPicker('endTime')"
+                            (click)="showPicker('endTimeLocal')"
                             matSuffix
                             class="secondary-text hover"
                             style="cursor: pointer"
@@ -133,7 +133,7 @@
                         >
                         <mat-error>
                             <app-mat-error
-                                [control]="workingDayForm.get('endTime')"
+                                [control]="workingDayForm.get('endTimeLocal')"
                             ></app-mat-error>
                         </mat-error>
                     </mat-form-field>

@@ -1,7 +1,7 @@
 import { URI } from '@shared/constants/app.constants';
 import { Injectable } from "@angular/core";
 import { NetworkService } from "@shared/services/network/network.service";
-import { WorkingDay } from '../models/working-week.model';
+import { WorkingDay } from '../models/working-day.model';
 import { Holiday } from '../models/holiday.model';
 import { Leave } from '../models/leave.model';
 

@@ -4,7 +4,7 @@ import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
 import { CONFIG } from '@config/index';
-import { WorkingDay } from "@feature/calender/models/working-week.model";
+import { WorkingDay } from "@feature/calender/models/working-day.model";
 import { CalendarService } from "@feature/calender/services/calendar.service";
 import { fuseAnimations } from '@fuse/animations';
 import { BaseComponent } from "@shared/components/base/base.component";
@@ -90,6 +90,7 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
     }
  
     createWorkingDay(model: WorkingDay) {
+        debugger
         this._service.createWorkingDay(model).subscribe(
             (response) => {
                 const data = this.dataSource.data;

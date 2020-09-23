@@ -13,7 +13,7 @@ import {
     MatDialogRef,
     MAT_DIALOG_DATA,
 } from "@angular/material/dialog";
-import { WorkingDay } from "@feature/calender/models/working-week.model";
+import { WorkingDay } from "@feature/calender/models/working-day.model";
 import { CalendarService } from "@feature/calender/services/calendar.service";
 import { fuseAnimations } from "@fuse/animations";
 import { BaseComponent } from "@shared/components/base/base.component";
@@ -49,10 +49,10 @@ export class WorkingDayFormComponent extends BaseComponent implements OnInit {
     ngOnInit(): void {
         this.workingDayForm = new FormGroup({
             id: new FormControl(this.data.id),
-            startTime: new FormControl(this.data.startTime, [
+            startTimeLocal: new FormControl(this.data.startTimeLocal, [
                 Validators.required,
             ]),
-            endTime: new FormControl(this.data.endTime, [Validators.required]),
+            endTimeLocal: new FormControl(this.data.endTimeLocal, [Validators.required]),
             fullDay: new FormControl(this.data.fullDay),
             remarks: new FormControl(this.data.remarks, [Validators.required]),
             weekDay: new FormControl(this.data.weekday, [Validators.required]),
@@ -77,7 +77,22 @@ export class WorkingDayFormComponent extends BaseComponent implements OnInit {
             }
         });
     }
-
+     convertTime12to24 = (time12h) => {
+        const [time, modifier] = time12h.split(' ');
+      
+        let [hours, minutes] = time.split(':');
+      
+        if (hours === '12') {
+          hours = '00';
+        }
+      
+        if (modifier === 'PM') {
+          hours = parseInt(hours, 10) + 12;
+        }
+        minutes= minutes.length < 2 ? `0${minutes}`  : minutes;
+        hours= hours.length < 2 ? `0${hours}`  : hours;
+        return `${hours}:${minutes}`;
+      }
     public getTime(): string {
         return `${this.hour}:${this.minute} ${this.meridien}`;
     }
@@ -97,17 +112,19 @@ export class WorkingDayFormComponent extends BaseComponent implements OnInit {
                 this.hour = result.hour;
                 this.minute = result.minute;
                 this.meridien = result.meriden;
-                this.workingDayForm.get(control).patchValue(this.getTime());
+                debugger
+                const time=this.convertTime12to24(this.getTime());
+                this.workingDayForm.get(control).patchValue(time);
             }
         });
         return false;
     }
     onSubmit() {
         let model = { ...this.workingDayForm.value };
+        model.endTimeLocal= model.endTimeLocal.replace(":", "")
+        model.startTimeLocal=model.startTimeLocal.replace(":", ""); 
         model = camelToSnakeCase(model);
         model.full_day = model.full_day  ? 1: 0;
-        model.start_time ="Mon Sep 07 2020 15:10:10 GMT+0500 (Pakistan Standard Time)";
-        model.end_time ="Mon Sep 07 2020 15:10:10 GMT+0500 (Pakistan Standard Time)";
         this.sendResponse.emit(model);
     }
 }
