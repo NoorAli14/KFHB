@@ -26,7 +26,7 @@ export class LeavesService {
   async create(input: CreateLeaveDto): Promise<Leave> {
     this.logger.log(`Creating a new leave`);
 
-    const mutation: string = `mutation {
+    const mutation = `mutation {
       result: addLeave(input: ${toGraphql(input)}) ${this.__output}
     }`;
     return this.gqlClient.send(mutation);
@@ -34,7 +34,7 @@ export class LeavesService {
 
   async list(): Promise<Leave[]> {
     this.logger.log(`Start fetching list of all leaves`);
-    const query: string = `query {
+    const query = `query {
       result: leavesList ${this.__output}
     }`;
     return this.gqlClient.send(query);
@@ -44,7 +44,7 @@ export class LeavesService {
     id: string,
   ): Promise<Leave> {
     this.logger.log(`Find leave with ID [${id}]`);
-    const query: string = `query {
+    const query = `query {
       result: findLeaveById(id: "${id}") ${this.__output}
     }`;
     return this.gqlClient.send(query);
@@ -55,7 +55,7 @@ export class LeavesService {
     input: UpdateLeaveDto,
   ): Promise<Leave> {
     this.logger.log(`Start updating leave with ID [${id}]`);
-    const mutation: string = `mutation {
+    const mutation = `mutation {
       result: updateLeave(id: "${id}", input: ${toGraphql(input)}) ${this.__output
       }
     }`;
@@ -64,7 +64,7 @@ export class LeavesService {
 
   async delete(id: string): Promise<boolean> {
     this.logger.log(`Start deleting leave with ID [${id}]`);
-    const mutation: string = `mutation {
+    const mutation = `mutation {
       result: deleteLeave(id: "${id}") 
     }`;
     return this.gqlClient.send(mutation);

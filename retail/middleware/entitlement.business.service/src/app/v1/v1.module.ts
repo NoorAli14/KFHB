@@ -60,14 +60,14 @@ class AuthenticatedDataSource extends RemoteGraphQLDataSource {
     {
       provide: GATEWAY_BUILD_SERVICE,
       useFactory: AuthenticatedDataSource => {
-        return ({ name, url }) => new AuthenticatedDataSource({ url });
+        return ({ url }): AuthenticatedDataSource => new AuthenticatedDataSource({ url });
       },
       inject: [AuthenticatedDataSource],
     },
   ],
   exports: [GATEWAY_BUILD_SERVICE],
 })
-class BuildServiceModule {}
+class BuildServiceModule { }
 
 @RubixModule({
   imports: [
@@ -111,4 +111,4 @@ class BuildServiceModule {}
     }),
   ],
 })
-export class ModuleV1 {}
+export class ModuleV1 { }

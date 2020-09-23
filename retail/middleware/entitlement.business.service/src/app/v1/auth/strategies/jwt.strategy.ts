@@ -44,12 +44,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
    * @param payload Payload info
    * @returns {Promise<User>}
    */
-  async validate(request: Request, payload: any): Promise<User> {
+  async validate(request: Request, payload: Record<string, string>): Promise<User> {
     this.logger.log(`Start authenticating with user ID with [${payload.id}]`);
     if (!(await this.redisService.getValue(payload.id))) return null;
     const header: IHEADER = formattedHeader(request, payload.id);
     setContext('HttpHeaders', header);
-    const user: User = await this.userService.findOne(header, payload.id);
+    const user: User = await this.userService.findOne(payload.id);
     if (!user) throw new UnauthorizedException();
     setContext('currentUser', user);
     return user;

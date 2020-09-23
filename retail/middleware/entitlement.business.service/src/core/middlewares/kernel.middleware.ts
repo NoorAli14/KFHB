@@ -1,4 +1,5 @@
 import { INestApplication } from '@nestjs/common';
+import { Request, NextFunction } from 'express';
 import * as helmet from 'helmet';
 import * as hpp from 'hpp';
 import * as compression from 'compression';
@@ -9,7 +10,6 @@ import { CorrelationMiddleware } from './correlation.middleware';
 import { CorsMiddleware } from './cors.middleware';
 import { formattedHeader } from '@common/utilities';
 import { RequestContextMiddleware, setContext } from '@core/context';
-import { NextFunction } from 'express';
 export class KernelMiddleware {
   public static init(
     app: INestApplication,

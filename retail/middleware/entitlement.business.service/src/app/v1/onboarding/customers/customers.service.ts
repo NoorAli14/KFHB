@@ -41,10 +41,10 @@ export class CustomersService {
 
   async findOne(id: string): Promise<Customer> {
     this.logger.log(`Start finding customer360 with ID [${id}]`);
-    const query: string = `query {
+    const query = `query {
       result: findCustomerById(id: "${id}") ${this.output}
     }`;
-    const _query: string = `query {
+    const _query = `query {
       result:  findTemplateResponseByUserId(user_id: "${id}") {
         id
         user_id

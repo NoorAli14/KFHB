@@ -9,7 +9,7 @@ export class DocumentsService {
 
   async preview(input: Record<string, string>): Promise<any> {
     // Construct GraphQL request
-    const query: string = `query {
+    const query = `query {
           result: previewAttachment(
               input: ${toGraphql(input)}) {
             image

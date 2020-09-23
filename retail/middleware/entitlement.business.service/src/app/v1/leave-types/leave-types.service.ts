@@ -22,7 +22,7 @@ export class LeaveTypesService {
   async create(input: LeaveTypeDTO): Promise<LeaveType> {
     this.logger.log(`Creating a new leave type`);
 
-    const mutation: string = `mutation {
+    const mutation = `mutation {
       result: addLeaveType(input: ${toGraphql(input)}) ${this.__output}
     }`;
     return this.gqlClient.send(mutation);
@@ -31,7 +31,7 @@ export class LeaveTypesService {
   async list(): Promise<LeaveType[]> {
     this.logger.log(`Start fetching list of all leave types`);
 
-    const query: string = `query {
+    const query = `query {
       result: leaveTypeList ${this.__output}
     }`;
     return this.gqlClient.send(query);
@@ -42,7 +42,7 @@ export class LeaveTypesService {
   ): Promise<LeaveType> {
     this.logger.log(`Find leave type with ID [${id}]`);
 
-    const query: string = `query {
+    const query = `query {
       result: findLeaveTypeById(id: "${id}") ${this.__output}
     }`;
     return this.gqlClient.send(query);
@@ -53,7 +53,7 @@ export class LeaveTypesService {
     input: LeaveTypeDTO,
   ): Promise<LeaveType> {
     this.logger.log(`Start updating leave type with ID [${id}]`);
-    const mutation: string = `mutation {
+    const mutation = `mutation {
       result: updateLeaveType(id: "${id}", input: ${toGraphql(input)}) ${this.__output
       }
     }`;
@@ -62,7 +62,7 @@ export class LeaveTypesService {
 
   async delete(id: string): Promise<boolean> {
     this.logger.log(`Start deleting leave type with ID [${id}]`);
-    const mutation: string = `mutation {
+    const mutation = `mutation {
       result: deleteLeaveType(id: "${id}") 
     }`;
     return this.gqlClient.send(mutation);

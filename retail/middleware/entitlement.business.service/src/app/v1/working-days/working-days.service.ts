@@ -25,7 +25,7 @@ export class WorkingDaysService {
   async create(input: WorkingDayDTO): Promise<WorkingDay> {
     this.logger.log(`Creating a new working day`);
 
-    const mutation: string = `mutation {
+    const mutation = `mutation {
       result: addWorkingDay(input: ${toGraphql(input)}) ${this.__output}
     }`;
     this.logger.log(mutation);
@@ -35,7 +35,7 @@ export class WorkingDaysService {
   async list(): Promise<WorkingDay[]> {
     this.logger.log(`Start fetching list of all working days`);
 
-    const query: string = `query {
+    const query = `query {
       result: workingDaysList ${this.__output}
     }`;
     return this.gqlClient.send(query);
@@ -46,7 +46,7 @@ export class WorkingDaysService {
   ): Promise<WorkingDay> {
     this.logger.log(`Find working day with ID [${id}]`);
 
-    const query: string = `query {
+    const query = `query {
       result: findWorkingDayById(id: "${id}") ${this.__output}
     }`;
     return this.gqlClient.send(query);
@@ -57,7 +57,7 @@ export class WorkingDaysService {
     input: WorkingDayDTO,
   ): Promise<WorkingDay> {
     this.logger.log(`Start Updating working day with ID [${id}]`);
-    const mutation: string = `mutation {
+    const mutation = `mutation {
       result: updateWorkingDay(id: "${id}", input: ${toGraphql(input)}) ${this.__output
       }
     }`;
@@ -67,7 +67,7 @@ export class WorkingDaysService {
   async delete(id: string): Promise<boolean> {
     this.logger.log(`Start Deleting working day with ID [${id}]`);
 
-    const mutation: string = `mutation {
+    const mutation = `mutation {
       result: deleteWorkingDay(id: "${id}") 
     }`;
     return this.gqlClient.send(mutation);

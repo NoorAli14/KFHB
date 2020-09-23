@@ -22,14 +22,14 @@ export class PermissionService {
 
   async list(): Promise<Permission[]> {
     this.logger.log(`Start fetching list of all permissions`);
-    const query: string = `query {
+    const query = `query {
       result: permissionsList ${this._output}
     }`;
     return this.gqlClient.send(query);
   }
 
   async findBy(
-    condition: any,
+    condition: [Record<string, unknown>],
     output?: string,
   ): Promise<Permission[]> {
     this.logger.log(
@@ -37,7 +37,7 @@ export class PermissionService {
     );
 
     const _output: string = output ? output : this._output;
-    const query: string = `query {
+    const query = `query {
       result: findPermissionBy(checks: ${toGraphql(condition)}) ${_output}
     }`;
     return this.gqlClient.send(query);
@@ -56,7 +56,7 @@ export class PermissionService {
     if (permission) {
       throw new BadRequestException(`Permission Already Exist`);
     }
-    const query: string = `mutation{
+    const query = `mutation{
       result: addPermission(input: ${toGraphql(input)}) ${this._output}
     }`;
     return this.gqlClient.send(query);
@@ -64,7 +64,7 @@ export class PermissionService {
 
   async findOne(id: string): Promise<Permission> {
     this.logger.log(`Find One permission with ID [${id}]`);
-    const query: string = `query {
+    const query = `query {
       result: findPermissionById(id: "${id}") ${this._output}
     }`;
     return this.gqlClient.send(query);
@@ -72,7 +72,7 @@ export class PermissionService {
 
   async findById(id: string): Promise<Permission> {
     this.logger.log(`Find permission with ID [${id}]`);
-    const query: string = `query {
+    const query = `query {
       result: findPermissionById(id: "${id}") {
         id
       }
@@ -85,7 +85,7 @@ export class PermissionService {
     input: PermissionDto,
   ): Promise<Permission> {
     this.logger.log(`Start Updating permission with ID [${id}]`);
-    const query: string = `mutation {
+    const query = `mutation {
       result: updatePermission(id: "${id}", input: ${toGraphql(input)}) ${this._output
       }
     }`;
@@ -94,7 +94,7 @@ export class PermissionService {
 
   async delete(id: string): Promise<boolean> {
     this.logger.log(`Start Deleting permission with ID [${id}]`);
-    const query: string = `mutation {
+    const query = `mutation {
       result: deletePermission(id: "${id}") 
     }`;
     return this.gqlClient.send(query);

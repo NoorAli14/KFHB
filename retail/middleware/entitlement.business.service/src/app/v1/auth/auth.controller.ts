@@ -28,9 +28,7 @@ import {
   X_REFRESH_TOKEN,
   AuthGuard,
   CurrentUser,
-  SuccessDto,
-  IHEADER,
-  Header,
+  SuccessDto
 } from '@common/index';
 import { UserService } from '@app/v1/users/users.service';
 import {
@@ -47,7 +45,7 @@ export class AuthController {
   constructor(
     private readonly userService: UserService,
     private readonly authService: AuthService,
-  ) {}
+  ) { }
 
   @Post('refresh-token')
   @ApiOperation({
@@ -107,7 +105,7 @@ export class AuthController {
     type: Error,
     description: 'Input Validation failed.',
   })
-  async login(@Req() request: Request, @CurrentUser() user: User) {
+  async login(@Req() request: Request, @CurrentUser() user: User): Promise<User> {
     const refreshToken: string = await this.authService.getRefreshToken(
       user.id,
     );
@@ -153,11 +151,10 @@ export class AuthController {
   })
   @ApiBearerAuth()
   async update(
-    @Header() header: IHEADER,
     @CurrentUser() user: User,
     @Body() input: CurrentUserUpdateDto,
   ): Promise<User> {
-    return this.userService.update(header, user.id, input);
+    return this.userService.update(user.id, input);
   }
 
   @Put('password')
@@ -175,10 +172,9 @@ export class AuthController {
     description: 'User has been successfully updated their password.',
   })
   async update_password(
-    @Header() header: IHEADER,
     @Body() input: ChangePasswordDto,
   ): Promise<SuccessDto> {
-    const result: any = await this.userService.changePassword(header, input);
+    const result: any = await this.userService.changePassword(input);
     if (!result?.id) {
       return {
         status: 'FAILED',
@@ -200,7 +196,7 @@ export class AuthController {
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   @HttpCode(HttpStatus.NO_CONTENT)
-  async logOut(@Req() request: Request, @CurrentUser() user: User) {
+  async logOut(@Req() request: Request, @CurrentUser() user: User): Promise<any> {
     request.res.setHeader(
       'Set-Cookie',
       await this.authService.getCookieForLogOut(user.id),

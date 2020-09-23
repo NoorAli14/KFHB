@@ -21,7 +21,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     this.logger.log(`User login request with email [${email}]`);
     const header: IHEADER = formattedHeader(request);
     setContext('HttpHeaders', header);
-    const user = await this.userService.login(header, email, password);
+    const user = await this.userService.login(email, password);
     if (!user) {
       throw new UnauthorizedException('Wrong credentials provided');
     }
