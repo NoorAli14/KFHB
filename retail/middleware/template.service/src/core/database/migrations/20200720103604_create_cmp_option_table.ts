@@ -25,8 +25,8 @@ export async function up(knex: Knex): Promise<void> {
     table.timestamp('updated_on').defaultTo(knex.fn.now());
     table.string('updated_by');
 
-    table.timestamp('updated_on');
-    table.string('updated_on');
+    table.timestamp('deleted_on');
+    table.string('deleted_by');
   });
 }
 
