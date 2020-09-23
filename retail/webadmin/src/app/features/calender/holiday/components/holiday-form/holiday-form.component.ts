@@ -6,6 +6,7 @@ import {
     Injector,
     OnInit,
     Output,
+    ViewEncapsulation,
 } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { BaseComponent } from "@shared/components/base/base.component";
@@ -16,11 +17,16 @@ import {
     MAT_DIALOG_DATA,
 } from "@angular/material/dialog";
 import { camelToSnakeCase } from '@shared/helpers/global.helper';
+import { fuseAnimations } from '@fuse/animations';
+import * as moment from 'moment';
+import { DATE_FORMAT } from '@shared/constants/app.constants';
 
 @Component({
     selector: "app-holiday-form",
     templateUrl: "./holiday-form.component.html",
     styleUrls: ["./holiday-form.component.scss"],
+    animations: fuseAnimations,
+    encapsulation: ViewEncapsulation.None,
 })
 export class HolidayFormComponent extends BaseComponent implements OnInit {
     @Output() sendResponse: EventEmitter<Holiday> = new EventEmitter<any>();
@@ -40,20 +46,17 @@ export class HolidayFormComponent extends BaseComponent implements OnInit {
     ngOnInit(): void {
         this.holidayForm = new FormGroup({
             id: new FormControl(this.data.id),
-            date: new FormControl(this.data.date, [Validators.required]),
+            holidayDate: new FormControl(this.data.holidayDate, [Validators.required]),
             remarks: new FormControl(this.data.remarks, [Validators.required]),
             description: new FormControl(this.data.remarks, [Validators.required]),
-            isRepititive: new FormControl(this.data.isRepititive, [
-                Validators.required,
-            ]),
         });
     }
     onSubmit() {
+        debugger
       let model = { ...this.holidayForm.value };
+      model.holidayDate= moment(model.holidayDate).format(DATE_FORMAT);
       model = camelToSnakeCase(model);
-      model.full_day = model.full_day  ? 1: 0;
-      model.start_time ="Mon Sep 07 2020 15:10:10 GMT+0500 (Pakistan Standard Time)";
-      model.end_time ="Mon Sep 07 2020 15:10:10 GMT+0500 (Pakistan Standard Time)";
+
       this.sendResponse.emit(model);
   }
 }

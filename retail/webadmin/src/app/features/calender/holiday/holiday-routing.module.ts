@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { HolidayComponent } from './holiday/holiday.component';
+import { HolidayComponent } from './views/holiday.component';
 
 
 const routes: Routes = [

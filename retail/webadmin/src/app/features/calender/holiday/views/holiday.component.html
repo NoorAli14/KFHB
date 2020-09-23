@@ -22,7 +22,7 @@
             <!-- / APP TITLE -->
 
             <!-- ADD BUTTON -->
-            <button mat-raised-button color="accent" (click)="openDialog()" class="add-product-button fuse-white mt-24 mt-md-0">
+            <button mat-raised-button color="accent" (click)="openDialog(null)" class="add-product-button fuse-white mt-24 mt-md-0">
                 <span>ADD NEW</span>
             </button>
             <!-- / ADD BUTTON -->
@@ -35,20 +35,25 @@
             <!-- <div class="spinner-container" *ngIf="dataSource.loading$ | async">
                 <mat-spinner></mat-spinner>
             </div> -->
-            <div *ngIf="responseMessage.length > 0" fxLayout="row" fxLayoutAlign="center" class="p-16  message-box {{ errorType }} ">
-                {{ responseMessage }}
-            </div>
+            <app-message-box [type]="errorType" [message]="responseMessage"></app-message-box>
             <mat-table #table matSort matSortActive="username" matSortDirection="asc" matSortDisableClear [dataSource]="dataSource">
                 <!-- COLUMNS AND ROWS-->
                 <ng-container *ngFor="let key of displayedColumns" [matColumnDef]="key">
                     <mat-header-cell *matHeaderCellDef>{{ key.includes('action') ? 'Action' : camelToSentenceCase(key) }}</mat-header-cell>
             
                     <mat-cell *matCellDef="let element; let i = dataIndex">
-                        <span *ngIf="!key.includes('action'); else action">{{element[key] }}</span>
-                        <ng-template #action>
-                            <mat-icon color="warn" type="button" (click)=" confirmDialog(element['id'])">delete</mat-icon> &nbsp;&nbsp;
-                            <mat-icon type="button" (click)="onEditDialog(element)">mode_edit</mat-icon>
-                        </ng-template>
+                        <ng-container  [ngSwitch]="key">
+                            <span  *ngSwitchCase="'holidayDate'">
+                                {{element[key] | date:'mediumDate'}}
+                            </span>
+                            <span  *ngSwitchCase="'actions'">
+                                <mat-icon color="warn" type="button" (click)=" confirmDialog(element['id'])">delete</mat-icon> &nbsp;&nbsp;
+                                <mat-icon type="button" (click)="openDialog(element)">mode_edit</mat-icon>
+                            </span>
+                            <span  *ngSwitchDefault>
+                                {{element[key] }}
+                            </span>
+                        </ng-container>
                     </mat-cell>
                 </ng-container>
                 <!-- -->

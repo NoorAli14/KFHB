@@ -5,6 +5,7 @@ export function createUrl(actionName: string): string {
     return `${environment.API_BASE_URL}${actionName}${VERSION}`;
 }
 
+export const DATE_FORMAT = "YYYY-MM-DD";
 export enum APP_CONST {
     CURRENT_USER = "_currentUser",
     SIDEBAR = "_sidebar",

@@ -112,7 +112,6 @@ export class WorkingDayFormComponent extends BaseComponent implements OnInit {
                 this.hour = result.hour;
                 this.minute = result.minute;
                 this.meridien = result.meriden;
-                debugger
                 const time=this.convertTime12to24(this.getTime());
                 this.workingDayForm.get(control).patchValue(time);
             }

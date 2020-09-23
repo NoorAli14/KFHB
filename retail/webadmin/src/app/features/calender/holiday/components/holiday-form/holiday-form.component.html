@@ -45,7 +45,7 @@
         </div>
         <div fxLayout="row">
             <form
-                class="p-24 mr-24"
+                
                 fxLayout="column"
                 fxLayoutAlign="start"
                 fxFlex="1 0"
@@ -64,13 +64,13 @@
                     <mat-form-field
                         appearance="outline"
                         fxFlex="48"
-                        class="pr-4"
+                        
                     >
                         <mat-label>Date</mat-label>
                         <input
                             matInput
                             [matDatepicker]="picker"
-                            formControlName="date"
+                            formControlName="holidayDate"
                         />
                         <mat-datepicker-toggle
                             matSuffix
@@ -80,7 +80,7 @@
                        
                         <mat-error>
                             <app-mat-error
-                                [control]="holidayForm.get('date')"
+                                [control]="holidayForm.get('holidayDate')"
                             ></app-mat-error>
                         </mat-error>
                     </mat-form-field>
@@ -88,7 +88,7 @@
                     <mat-form-field
                         appearance="outline"
                         fxFlex="100"
-                        class="pl-4"
+                        
                     >
                         <mat-label>Description</mat-label>
                         <textarea matInput formControlName="description"></textarea>
@@ -102,7 +102,6 @@
                     <mat-form-field
                         appearance="outline"
                         fxFlex="100"
-                        class="pl-4"
                     >
                         <mat-label>Remarks</mat-label>
                         <textarea matInput formControlName="remarks"></textarea>
@@ -113,13 +112,6 @@
                             ></app-mat-error>
                         </mat-error>
                     </mat-form-field>
-                    <div fxFlex="48" class="pr-4 margin">
-                        <mat-checkbox
-                            formControlName="isRepititive"
-                            class="example-margin"
-                            >Is Repititive</mat-checkbox
-                        >
-                    </div>
                 </div>
 
                 <div

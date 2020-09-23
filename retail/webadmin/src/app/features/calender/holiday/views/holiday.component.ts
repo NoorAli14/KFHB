@@ -1,8 +1,9 @@
+import { map } from 'rxjs/operators';
 import { Component, OnInit, ViewEncapsulation, ViewChild, Injector } from '@angular/core';
 import {  MatDialog } from '@angular/material/dialog';
 
 import { fuseAnimations } from '@fuse/animations';
-import { camelToSentenceCase, camelToSnakeCase, snakeToCamelArray } from '@shared/helpers/global.helper';
+import { camelToSentenceCase, camelToSnakeCase, snakeToCamelArray, snakeToCamelObject } from '@shared/helpers/global.helper';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -13,6 +14,8 @@ import { BaseComponent } from '@shared/components/base/base.component';
 import { HolidayFormComponent } from '../components/holiday-form/holiday-form.component';
 import { CONFIG } from '@config/index';
 import { MESSAGES } from '@shared/constants/messages.constant';
+import * as moment from 'moment';
+import { DATE_FORMAT } from '@shared/constants/app.constants';
 
 
 @Component({
@@ -26,10 +29,8 @@ export class HolidayComponent extends BaseComponent implements OnInit {
     dialogRef: any;
     holidays: Holiday[];
     displayedColumns = [
-        "date",
-        "type",
-        "detail",
-        "isRepititive",
+        "holidayDate",
+        "description",
         "remarks",
         "status",
         "actions",
@@ -57,10 +58,11 @@ export class HolidayComponent extends BaseComponent implements OnInit {
     getData() {
         this._service.getHolidays().subscribe(
             (response) => {
-                this.holidays = snakeToCamelArray(response);
-                this.dataSource = new MatTableDataSource(
-                    snakeToCamelArray(response)
-                );
+                const holidays= snakeToCamelArray(response).map(element => {
+                    return {...element, holidayDate: moment(element.holidayDate).format(DATE_FORMAT)}
+                });
+                this.holidays =holidays
+                this.dataSource = new MatTableDataSource(holidays);
                 this.dataSource.paginator = this.paginator;
                 this.dataSource.sort = this.sort;
             },
@@ -69,29 +71,30 @@ export class HolidayComponent extends BaseComponent implements OnInit {
             }
         );
     }
-    openDialog(): void {
+    openDialog(data): void {
         var _this = this;
         this.dialogRef = this._matDialog
             .open(HolidayFormComponent, {
-                data: new Holiday(),
+                data: data ? data : new Holiday(),
                 panelClass: "app-holiday-form",
                 disableClose: true,
                 hasBackdrop: true,
             })
             .componentInstance.sendResponse.subscribe((response) => {
                 if (response.id) {
-                    _this.editWorkingDay(response);
+                    _this.editHoliday(response);
                 } else {
-                    _this.createWorkingDay(response);
+                    _this.createHoliday(response);
                 }
             });
     }
  
-    createWorkingDay(model: Holiday) {
+    createHoliday(model: Holiday) {
         this._service.createHoliday(model).subscribe(
             (response) => {
-                const data = this.dataSource.data;
-                data.unshift(response);
+                response.holiday_date=   moment(response.holiday_date).format(DATE_FORMAT)
+                const data:any = this.dataSource.data;
+                data.unshift(snakeToCamelObject(response));
                 this.updateGrid(data);
                 this.errorType = "success";
                 this.responseMessage = MESSAGES.CREATED("Holiday");
@@ -108,7 +111,7 @@ export class HolidayComponent extends BaseComponent implements OnInit {
             this.responseMessage = "";
         }, 2000);
     }
-    editWorkingDay(model: Holiday) {
+    editHoliday(model: Holiday) {
         this._service.editHoliday(model.id, model).subscribe(
             (response) => {
                 this.errorType = "success";
@@ -117,7 +120,9 @@ export class HolidayComponent extends BaseComponent implements OnInit {
                     (x) => x.id == model.id
                 );
                 this.hideMessage();
-                this.holidays[index] = response;
+                response.holiday_date=   moment(response.holiday_date).format(DATE_FORMAT)
+                const mapped:any= snakeToCamelObject(response);
+                this.holidays[index] = mapped
                 this.updateGrid(this.holidays);
                 this._matDialog.closeAll();
             },
@@ -126,7 +131,7 @@ export class HolidayComponent extends BaseComponent implements OnInit {
             }
         );
     }
-    confirmDialog(type, id): void {
+    confirmDialog( id): void {
         const message = MESSAGES.REMOVE_CONFIRMATION();
         const dialogData = new ConfirmDialogModel("Confirm Action", message);
         const dialogRef = this._matDialog.open(ConfirmDialogComponent, {
@@ -138,12 +143,12 @@ export class HolidayComponent extends BaseComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe((status) => {
             if (status) {
-               this.deleteWorkingDay(id)
+               this.deleteHoliday(id)
             }
         });
     }
-    deleteWorkingDay(id: string) {
-        this._service.deleteWorkingDay(id).subscribe(
+    deleteHoliday(id: string) {
+        this._service.deleteHoliday(id).subscribe(
             (response) => {
                 const index = this.dataSource.data.findIndex((x) => x.id == id);
                 this.holidays.splice(index, 1);
