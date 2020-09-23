@@ -8,8 +8,8 @@ export async function up(knex: Knex): Promise<void> {
       .uuid('id')
       .primary()
       .defaultTo(knex.raw(DATABASE_UUID_METHOD));
-
     table.uuid('tenant_id').notNullable();
+
     table.string('name').notNullable();
     table.string('name_ar').notNullable();
 
