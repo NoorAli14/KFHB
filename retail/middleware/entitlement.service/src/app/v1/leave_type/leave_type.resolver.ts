@@ -3,14 +3,14 @@ import {Resolver, Query, Mutation, Args, Context, GraphQLExecutionContext} from 
 import { KeyValInput } from '@common/inputs/key-val.input';
 import {CurrentUser, Fields} from '@common/decorators';
 import {LeaveType} from '@app/v1/leave_type/leave_type.model';
-import {Leave_typeService} from '@app/v1/leave_type/leave_type.service';
+import {LeaveTypeService} from '@app/v1/leave_type/leave_type.service';
 import {LeaveTypeCreateInput, LeaveTypeInput} from '@app/v1/leave_type/leave_type.dto';
 import {ICurrentUser} from '@common/interfaces';
 import {LeaveTypeNotFoundException} from '@app/v1/leave_type/exceptions';
 
 @Resolver(LeaveType)
 export class Leave_typeResolver {
-  constructor(private readonly leave_typeService: Leave_typeService) {}
+  constructor(private readonly leave_typeService: LeaveTypeService) {}
 
   @Query(() => [LeaveType])
   async leaveTypeList(@Fields() output: string[],

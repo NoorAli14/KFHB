@@ -8,7 +8,7 @@ import {LeaveType} from '@app/v1/leave_type/leave_type.model';
 import {LeaveTypeAlreadyExistException} from '@app/v1/leave_type/exceptions';
 
 @Injectable()
-export class Leave_typeService {
+export class LeaveTypeService {
   constructor(private leaveTypeRepository: LeaveTypeRepository) {}
 
   async list(current_user: ICurrentUser, output: string[], paginationParams: Record<string, any>): Promise<LeaveType[]> {
@@ -36,7 +36,7 @@ export class Leave_typeService {
     output?: string[],
   ): Promise<LeaveType> {
     if (input.name) {
-      const [leaveType] = await this.findByLeaveType(current_user, input.name);
+      const [leaveType] = await this.findByName(current_user, input.name);
       if (leaveType && leaveType.id != id) throw new LeaveTypeAlreadyExistException(leaveType[0].id);
     }
     const [result] = await this.leaveTypeRepository.update(
@@ -46,7 +46,7 @@ export class Leave_typeService {
   }
 
   async create(current_user: ICurrentUser, input: LeaveTypeInput, output?: string[]): Promise<LeaveType> {
-    const [leaveType] = await this.findByLeaveType(current_user, input.name);
+    const [leaveType] = await this.findByName(current_user, input.name);
     if (leaveType) throw new LeaveTypeAlreadyExistException(leaveType.id);
     const [result] = await this.leaveTypeRepository.create(
       {...input, ...{tenant_id: current_user.tenant_id, created_by: current_user.id, updated_by: current_user.id}}, output);
@@ -58,11 +58,11 @@ export class Leave_typeService {
     return !!result;
   }
 
-  async findByLeaveType(current_user: ICurrentUser, leave_type: string): Promise<LeaveType[]> {
+  async findByName(current_user: ICurrentUser, name: string): Promise<LeaveType[]> {
     const checks: KeyValInput[] = [
       {
         record_key: "name",
-        record_value: leave_type
+        record_value: name
       }
     ];
     return this.findByProperty(current_user, checks, ['id', 'name']);

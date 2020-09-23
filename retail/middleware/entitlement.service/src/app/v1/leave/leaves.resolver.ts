@@ -13,7 +13,7 @@ import {MESSAGES} from '@common/constants';
 import {CurrentUser, Fields} from '@common/decorators';
 import {User} from '@app/v1/users/user.model';
 import {UserService} from '@app/v1/users/users.service';
-import {Leave_typeService} from '@app/v1/leave_type/leave_type.service';
+import {LeaveTypeService} from '@app/v1/leave_type/leave_type.service';
 import {LeaveType} from '@app/v1/leave_type/leave_type.model';
 import {ICurrentUser} from '@common/interfaces';
 import {LeaveNotFoundException} from '@app/v1/leave/exceptions';
@@ -23,7 +23,7 @@ import {LeaveTypeNotFoundException} from '@app/v1/leave_type/exceptions';
 export class LeavesResolver {
   constructor(private readonly leavesService: LeavesService,
               private readonly userService: UserService,
-              private readonly leave_typeService: Leave_typeService) {}
+              private readonly leave_typeService: LeaveTypeService) {}
 
   @Query(() => [Leave])
   async leavesList(@Fields() columns: string[],
