@@ -28,6 +28,7 @@ export class WorkingDaysService {
     const mutation: string = `mutation {
       result: addWorkingDay(input: ${toGraphql(input)}) ${this.__output}
     }`;
+    this.logger.log(mutation);
     return this.gqlClient.send(mutation);
   }
 
@@ -42,13 +43,11 @@ export class WorkingDaysService {
 
   async findOne(
     id: string,
-    output?: string,
   ): Promise<WorkingDay> {
     this.logger.log(`Find working day with ID [${id}]`);
 
-    const _output: string = output ? output : this.__output;
     const query: string = `query {
-      result: findWorkingDayById(id: "${id}") ${_output}
+      result: findWorkingDayById(id: "${id}") ${this.__output}
     }`;
     return this.gqlClient.send(query);
   }
