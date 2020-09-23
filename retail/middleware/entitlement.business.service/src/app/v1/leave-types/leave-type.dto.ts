@@ -2,16 +2,14 @@ import { IsString, MaxLength, IsNotEmpty } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class LeaveTypeDTO {
-    
+
   @ApiProperty({
     title: 'Name of leave type',
-    example: 'Sick Leave',
-    description: 'Type of the leave',
+    example: 'Sick',
     required: true,
   })
   @IsNotEmpty()
   @IsString()
   @MaxLength(100)
-  leave_type: string;
-
+  name: string;
 }
