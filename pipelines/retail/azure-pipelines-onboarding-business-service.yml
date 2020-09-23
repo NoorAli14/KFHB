@@ -11,11 +11,12 @@ resources:
 variables:
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: 'e11b76b8-024b-445d-b872-aaba976b9e8b'
-  imageRepository: 'rubixretailwebadmin'
+  imageRepository: 'rubixretailonboarding'
   containerRegistry: 'testdaon.azurecr.io'
-  dockerfilePath: '$(Build.SourcesDirectory)/retail/webadmin/Dockerfile'
+  dockerfilePath: '$(Build.SourcesDirectory)/retail/middleware/onboarding.business.service/Dockerfile'
   tag: '$(Build.BuildId)'
   tagLatest: $(Build.SourceBranchName)_latest
+  
   
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
