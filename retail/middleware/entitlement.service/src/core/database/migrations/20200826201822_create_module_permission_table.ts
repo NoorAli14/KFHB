@@ -13,8 +13,8 @@ export async function up(knex: Knex): Promise<any> {
     .references('id')
     .inTable(TABLE.PERMISSION)
     .onDelete('cascade');
-    table.string('created_by');
-    table.timestamp('created_on').defaultTo(knex.fn.now());
+    table.timestamp('created_on', {useTz: true}).defaultTo(knex.fn.now());
+    table.string('created_by').notNullable();
 
     //composite unique
     table.unique(['module_id', 'permission_id'])

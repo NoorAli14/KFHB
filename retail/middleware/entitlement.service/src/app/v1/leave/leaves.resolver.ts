@@ -5,17 +5,18 @@ import {
   Args, Context, GraphQLExecutionContext,
 } from "@nestjs/graphql";
 import { KeyValInput } from "@common/inputs/key-val.input";
-import {Leave, LeaveWithPagination} from "@app/v1/leave/leave.model";
+import {Leave} from "@app/v1/leave/leave.model";
 import {LeavesService} from "@app/v1/leave/leaves.service";
 import {LeaveCreateInput, LeaveInput} from "@app/v1/leave/leave.dto";
 import {HttpException, HttpStatus} from '@nestjs/common';
-import {MESSAGES, STATUS} from '@common/constants';
-import {Fields} from '@common/decorators';
-import {getMutateProps} from '@common/utilities';
+import {MESSAGES} from '@common/constants';
+import {CurrentUser, Fields} from '@common/decorators';
 import {User} from '@app/v1/users/user.model';
 import {UserService} from '@app/v1/users/users.service';
 import {Leave_typeService} from '@app/v1/leave_type/leave_type.service';
 import {LeaveType} from '@app/v1/leave_type/leave_type.model';
+import {ICurrentUser} from '@common/interfaces';
+import {LeaveNotFoundException} from '@app/v1/leave/exceptions';
 
 @Resolver(Leave)
 export class LeavesResolver {
@@ -24,32 +25,34 @@ export class LeavesResolver {
               private readonly leave_typeService: Leave_typeService) {}
 
   @Query(() => [Leave])
-  async leavesList(@Fields() columns: string[], @Context() context: GraphQLExecutionContext): Promise<Leave[]> {
-    return this.leavesService.list(columns, context['req'].query);
+  async leavesList(@Fields() columns: string[],
+                   @CurrentUser() current_user: ICurrentUser,
+                   @Context() context: GraphQLExecutionContext): Promise<Leave[]> {
+    return this.leavesService.list(current_user, columns, context['req'].query);
   }
 
   @Query(() => Leave)
-  async findLeaveById(@Args('id') id: string, @Fields() columns: string[]): Promise<Leave> {
-    const leave: Leave = await this.leavesService.findById(id,columns);
-    if(!leave) throw new HttpException({
-      status: HttpStatus.NOT_FOUND,
-      error: MESSAGES.NOT_FOUND,
-    }, HttpStatus.NOT_FOUND);
+  async findLeaveById(@Args('id') id: string,
+                      @CurrentUser() current_user: ICurrentUser,
+                      @Fields() columns: string[]): Promise<Leave> {
+    const leave: Leave = await this.leavesService.findById(current_user, id,columns);
+    if(!leave) throw new LeaveNotFoundException(id);
     return leave;
   }
 
   @Query(() => [Leave])
   async findLeaveBy(
       @Args('checks', { type: () => [KeyValInput] }) checks: KeyValInput[],
-      @Fields() columns: string[]
+      @Fields() columns: string[],
+      @CurrentUser() current_user: ICurrentUser,
   ): Promise<Leave[]> {
-    return this.leavesService.findByProperty(checks, columns);
+    return this.leavesService.findByProperty(current_user, checks, columns);
   }
 
   @Mutation(() => Leave)
   async addLeave(@Args('input') input: LeaveCreateInput,
                  @Fields() columns: string[],
-                 @Context() context: GraphQLExecutionContext): Promise<Leave> {
+                 @CurrentUser() current_user: ICurrentUser): Promise<Leave> {
     const user: User = await this.userService.findById(input.user_id,['id']);
     if(!user) throw new HttpException({
       status: HttpStatus.NOT_FOUND,
@@ -60,8 +63,7 @@ export class LeavesResolver {
       status: HttpStatus.NOT_FOUND,
       error: MESSAGES.LEAVE_TYPE_NOT_FOUND,
     }, HttpStatus.NOT_FOUND);
-    input = getMutateProps('created', context['req'].headers, input);
-    return this.leavesService.create(input, columns);
+    return this.leavesService.create(current_user, input, columns);
   }
 
   @Mutation(() => Leave)
@@ -69,13 +71,8 @@ export class LeavesResolver {
     @Args('id') id: string,
     @Args('input') input: LeaveInput,
     @Fields() columns: string[],
-    @Context() context: GraphQLExecutionContext
+    @CurrentUser() current_user: ICurrentUser,
   ): Promise<Leave> {
-    const leave: Leave = await this.leavesService.findById(id,['id']);
-    if(!leave) throw new HttpException({
-      status: HttpStatus.NOT_FOUND,
-      error: MESSAGES.NOT_FOUND,
-    }, HttpStatus.NOT_FOUND);
     if(input.user_id) {
       const user: User = await this.userService.findById(input.user_id,['id']);
       if(!user) throw new HttpException({
@@ -90,20 +87,14 @@ export class LeavesResolver {
         error: MESSAGES.LEAVE_TYPE_NOT_FOUND,
       }, HttpStatus.NOT_FOUND);
     }
-    input = getMutateProps('updated', context['req'].headers, input);
-    return this.leavesService.update(id, input, columns);
+    return this.leavesService.update(current_user, id, input, columns);
   }
 
   @Mutation(() => Boolean)
   async deleteLeave(@Args('id') id: string,
-                    @Context() context: GraphQLExecutionContext): Promise<boolean> {
-    const leave: Leave = await this.leavesService.findById(id,['id']);
-    if(!leave) throw new HttpException({
-      status: HttpStatus.NOT_FOUND,
-      error: MESSAGES.NOT_FOUND,
-    }, HttpStatus.NOT_FOUND);
-    let input = {status: STATUS.INACTIVE};
-    input = getMutateProps('deleted', context['req'].headers, input);
-    return this.leavesService.delete(id, input);
+                    @CurrentUser() current_user: ICurrentUser): Promise<boolean> {
+    const leave: Leave = await this.leavesService.findById(current_user, id,['id']);
+    if(!leave) throw new LeaveNotFoundException(id);
+    return this.leavesService.delete(current_user, id);
   }
 }
