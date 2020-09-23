@@ -26,7 +26,7 @@ export class LeaveRepository extends BaseRepository {
     super(TABLE.LEAVE);
   }
 
-  async listLeavesByUserID(userIds): Promise<any>{
+  async listLeavesByUserID(userIds: readonly string[]): Promise<any>{
     return this._connection(TABLE.LEAVE)
     .select(this.__attributes)
     .whereIn('user_id', userIds)

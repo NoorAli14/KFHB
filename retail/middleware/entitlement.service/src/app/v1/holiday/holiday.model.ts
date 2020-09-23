@@ -47,6 +47,6 @@ export class HolidayWithPagination {
   @Field({ nullable: true })
   pagination: PaginationModel;
 
-  @Field(type => [Holiday], { nullable: true })
+  @Field(() => [Holiday], { nullable: true })
   data: Holiday[];
 }
