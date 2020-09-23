@@ -5,8 +5,7 @@ import {LeaveRepository} from "@core/repository/leave.repository";
 import {ICurrentUser} from '@common/interfaces';
 import {LeaveInput} from '@app/v1/leave/leave.dto';
 import {Leave} from '@app/v1/leave/leave.model';
-import {LeaveStartDateLessThanEndDateException} from '@app/v1/leave/exceptions/leave-start-date-less-than-end-date.exception';
-import {LeaveNotFoundException} from '@app/v1/leave/exceptions';
+import {LeaveNotFoundException, LeaveStartDateLessThanEndDateException} from '@app/v1/leave/exceptions';
 
 @Injectable()
 export class LeavesService {
@@ -41,7 +40,7 @@ export class LeavesService {
     input.start_date = input.start_date || leave.start_date;
     input.end_date = input.end_date || leave.end_date;
     if (Date.parse(new Date(input.start_date).toISOString()) > Date.parse(new Date(input.end_date).toISOString()))
-      throw new LeaveStartDateLessThanEndDateException(null, input.start_date, input.end_date);
+      throw new LeaveStartDateLessThanEndDateException(id, input.start_date, input.end_date);
     const [result] = await this.leaveRepository.update({ id: id, deleted_on : null, tenant_id: current_user.tenant_id }, {...input, ...{updated_by: current_user.id}}, output);
     return result;
   }

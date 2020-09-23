@@ -127,8 +127,9 @@ input LeaveInput {
 
 type LeaveType {
   id: ID
-  leave_type: String
+  name: String
   status: String
+  tenant_id: String
   created_on: String
   created_by: String
   updated_on: String
@@ -138,12 +139,12 @@ type LeaveType {
 }
 
 input LeaveTypeCreateInput {
-  leave_type: String!
+  name: String!
   status: String
 }
 
 input LeaveTypeInput {
-  leave_type: String
+  name: String
   status: String
 }
 

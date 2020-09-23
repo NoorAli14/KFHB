@@ -17,6 +17,7 @@ import {Leave_typeService} from '@app/v1/leave_type/leave_type.service';
 import {LeaveType} from '@app/v1/leave_type/leave_type.model';
 import {ICurrentUser} from '@common/interfaces';
 import {LeaveNotFoundException} from '@app/v1/leave/exceptions';
+import {LeaveTypeNotFoundException} from '@app/v1/leave_type/exceptions';
 
 @Resolver(Leave)
 export class LeavesResolver {
@@ -58,11 +59,8 @@ export class LeavesResolver {
       status: HttpStatus.NOT_FOUND,
       error: MESSAGES.USER_NOT_FOUND,
     }, HttpStatus.NOT_FOUND);
-    const leaveType: LeaveType = await this.leave_typeService.findById(input.leave_type_id,['id']);
-    if(!leaveType) throw new HttpException({
-      status: HttpStatus.NOT_FOUND,
-      error: MESSAGES.LEAVE_TYPE_NOT_FOUND,
-    }, HttpStatus.NOT_FOUND);
+    const leaveType: LeaveType = await this.leave_typeService.findById(current_user, input.leave_type_id,['id']);
+    if(!leaveType) throw new LeaveTypeNotFoundException(input.leave_type_id);
     return this.leavesService.create(current_user, input, columns);
   }
 
@@ -81,11 +79,8 @@ export class LeavesResolver {
       }, HttpStatus.NOT_FOUND);
     }
     if(input.leave_type_id){
-      const leaveType: LeaveType = await this.leave_typeService.findById(input.leave_type_id,['id']);
-      if(!leaveType) throw new HttpException({
-        status: HttpStatus.NOT_FOUND,
-        error: MESSAGES.LEAVE_TYPE_NOT_FOUND,
-      }, HttpStatus.NOT_FOUND);
+      const leaveType: LeaveType = await this.leave_typeService.findById(current_user, input.leave_type_id,['id']);
+      if(!leaveType) throw new LeaveTypeNotFoundException(input.leave_type_id);
     }
     return this.leavesService.update(current_user, id, input, columns);
   }
