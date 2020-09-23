@@ -89,7 +89,7 @@ type QuestionGQL {
   title_ar: String!
   type: String!
   rules: String!
-  status: Boolean!
+  status: String!
   options: [OptionGQL!]!
   section: SectionGQL!
   created_on: DateTime!

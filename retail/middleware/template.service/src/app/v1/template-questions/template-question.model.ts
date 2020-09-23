@@ -13,7 +13,7 @@ export class TemplateQuestion {
     example: 'Status',
     description: 'Status of the Template',
   })
-  status: boolean;
+  status: string;
 
   @ApiProperty({
     example: 'Template ID',
@@ -49,7 +49,7 @@ export class TemplateQuestionGQL {
   rules: string;
 
   @Field()
-  status: boolean;
+  status: string;
 
   template_id?: string;
   section_id?: string;

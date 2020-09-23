@@ -12,9 +12,21 @@ export async function seed(knex: Knex): Promise<void> {
   await knex(TABLE.TEMPLATE).del();
 
   const templates: Template[] = [
-    { id: uuidV4(), name: 'FATCA', name_ar: 'FATCA AR' },
-    { id: uuidV4(), name: 'CRS', name_ar: 'CRS AR' },
-    { id: uuidV4(), name: 'KYC', name_ar: 'KYC AR' },
+    {
+      id: uuidV4(),
+      name: 'FATCA',
+      name_ar: 'FATCA AR',
+    },
+    {
+      id: uuidV4(),
+      name: 'CRS',
+      name_ar: 'CRS AR',
+    },
+    {
+      id: uuidV4(),
+      name: 'KYC',
+      name_ar: 'KYC AR',
+    },
   ];
   const sections: Section[] = [
     {
@@ -66,6 +78,13 @@ export async function seed(knex: Knex): Promise<void> {
       level: 'level 2',
       template_id: templates[2].id,
     },
+    {
+      id: uuidV4(),
+      name: 'What are the anticipated banking transactions on your account',
+      name_ar: 'What are the anticipated banking transactions on your account',
+      level: 'level 3',
+      template_id: templates[1].id,
+    },
   ];
   const questions: Question[] = [
     {
@@ -74,7 +93,7 @@ export async function seed(knex: Knex): Promise<void> {
       title_ar: 'Question 1',
       type: 'checkbox',
       rules: '{required: true}',
-      status: true,
+      status: 'Active',
       section_id: sections[0].id,
     },
     {
@@ -83,7 +102,7 @@ export async function seed(knex: Knex): Promise<void> {
       title_ar: 'Question 2',
       type: 'text',
       rules: '{required: true}',
-      status: true,
+      status: 'Active',
       section_id: sections[1].id,
     },
     {
@@ -92,7 +111,7 @@ export async function seed(knex: Knex): Promise<void> {
       title_ar: 'Question 3',
       type: 'text',
       rules: '{required: true}',
-      status: true,
+      status: 'Active',
       section_id: sections[2].id,
     },
     {
@@ -101,7 +120,7 @@ export async function seed(knex: Knex): Promise<void> {
       title_ar: 'Question 4',
       type: 'text',
       rules: '{required: true}',
-      status: true,
+      status: 'Active',
       section_id: sections[3].id,
     },
     {
@@ -110,7 +129,7 @@ export async function seed(knex: Knex): Promise<void> {
       title_ar: 'Question 5',
       type: 'text',
       rules: '{required: true}',
-      status: true,
+      status: 'Active',
       section_id: sections[4].id,
     },
     {
@@ -119,7 +138,7 @@ export async function seed(knex: Knex): Promise<void> {
       title_ar: 'Question 6',
       type: 'text',
       rules: '{required: true}',
-      status: true,
+      status: 'Active',
       section_id: sections[5].id,
     },
     {
@@ -128,8 +147,72 @@ export async function seed(knex: Knex): Promise<void> {
       title_ar: 'Question 7',
       type: 'text',
       rules: '{required: true}',
-      status: true,
+      status: 'Active',
       section_id: sections[6].id,
+    },
+    {
+      id: uuidV4(),
+      title: 'Cash Deposit',
+      title_ar: 'Cash Deposit',
+      type: 'radio button',
+      rules: '{required: true}',
+      status: 'Active',
+      section_id: sections[7].id,
+    },
+    {
+      id: uuidV4(),
+      title: 'Cash Withdrawl',
+      title_ar: 'Cash Withdrawl',
+      type: 'radio button',
+      rules: '{required: true}',
+      status: 'Active',
+      section_id: sections[7].id,
+    },
+    {
+      id: uuidV4(),
+      title: 'Cheque Deposit',
+      title_ar: 'Cash Withdrawl',
+      type: 'radio button',
+      rules: '{required: true}',
+      status: 'Active',
+      section_id: sections[7].id,
+    },
+
+    {
+      id: uuidV4(),
+      title: 'Internal Transfers to KFHB Accounts',
+      title_ar: 'Internal Transfers to KFHB Accounts',
+      type: 'radio button',
+      rules: '{required: true}',
+      status: 'Active',
+      section_id: sections[7].id,
+    },
+    {
+      id: uuidV4(),
+      title: 'Transfers to other banks in Bahrain',
+      title_ar: 'Transfers to other banks in Bahrain',
+      type: 'radio button',
+      rules: '{required: true}',
+      status: 'Active',
+      section_id: sections[7].id,
+    },
+    {
+      id: uuidV4(),
+      title: 'Incoming International Transfers',
+      title_ar: 'Incoming International Transfers',
+      type: 'radio button',
+      rules: '{required: true}',
+      status: 'Active',
+      section_id: sections[7].id,
+    },
+    {
+      id: uuidV4(),
+      title: 'Outgoing International Transfers',
+      title_ar: 'Outgoing International Transfers',
+      type: 'radio button',
+      rules: '{required: true}',
+      status: 'Active',
+      section_id: sections[7].id,
     },
   ];
   const options: Option[] = [
@@ -181,6 +264,91 @@ export async function seed(knex: Knex): Promise<void> {
       name_ar: 'TEXT',
       question_id: questions[6].id,
     },
+    {
+      id: uuidV4(),
+      name: 'High',
+      name_ar: 'High',
+      question_id: questions[7].id,
+    },
+    {
+      id: uuidV4(),
+      name: 'Low',
+      name_ar: 'Low',
+      question_id: questions[7].id,
+    },
+    {
+      id: uuidV4(),
+      name: 'High',
+      name_ar: 'High',
+      question_id: questions[8].id,
+    },
+    {
+      id: uuidV4(),
+      name: 'Low',
+      name_ar: 'Low',
+      question_id: questions[8].id,
+    },
+    {
+      id: uuidV4(),
+      name: 'High',
+      name_ar: 'High',
+      question_id: questions[9].id,
+    },
+    {
+      id: uuidV4(),
+      name: 'Low',
+      name_ar: 'Low',
+      question_id: questions[9].id,
+    },
+
+    {
+      id: uuidV4(),
+      name: 'High',
+      name_ar: 'High',
+      question_id: questions[10].id,
+    },
+    {
+      id: uuidV4(),
+      name: 'Low',
+      name_ar: 'Low',
+      question_id: questions[10].id,
+    },
+    {
+      id: uuidV4(),
+      name: 'High',
+      name_ar: 'High',
+      question_id: questions[11].id,
+    },
+    {
+      id: uuidV4(),
+      name: 'Low',
+      name_ar: 'Low',
+      question_id: questions[11].id,
+    },
+    {
+      id: uuidV4(),
+      name: 'High',
+      name_ar: 'High',
+      question_id: questions[12].id,
+    },
+    {
+      id: uuidV4(),
+      name: 'Low',
+      name_ar: 'Low',
+      question_id: questions[12].id,
+    },
+    {
+      id: uuidV4(),
+      name: 'High',
+      name_ar: 'High',
+      question_id: questions[13].id,
+    },
+    {
+      id: uuidV4(),
+      name: 'Low',
+      name_ar: 'Low',
+      question_id: questions[13].id,
+    },
   ];
 
   // Inserts seed entries
@@ -192,7 +360,7 @@ export async function seed(knex: Knex): Promise<void> {
 
   await knex(TABLE.OPTION).insert(options);
 
-	/*********** DEPRECATED CODE: Not Using this Database Table *************/
+  /*********** DEPRECATED CODE: Not Using this Database Table *************/
   // const template_questions: TemplateQuestion[] = [
   //   {
   //     id: uuidV4(),

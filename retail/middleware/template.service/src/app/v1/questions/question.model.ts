@@ -15,7 +15,7 @@ export class Question {
   })
   title_ar: string;
 
-	@ApiProperty({
+  @ApiProperty({
     example: 'Question Type',
     description: 'Question Type',
   })
@@ -31,7 +31,7 @@ export class Question {
     example: 'Status',
     description: 'Status of the Template',
   })
-  status: boolean;
+  status: string;
 
   @ApiProperty({
     example: 'Section ID',
@@ -63,7 +63,7 @@ export class QuestionGQL {
   rules: string;
 
   @Field()
-  status: boolean;
+  status: string;
 
   @Field(() => [OptionGQL])
   options?: OptionGQL[];

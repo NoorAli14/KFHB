@@ -19,7 +19,7 @@ export class CreateTemplateQuestionDto {
 
   @ApiProperty()
   @IsBoolean()
-  status: boolean;
+  status: string;
 
   @ApiProperty()
   @IsUUID()
@@ -44,7 +44,7 @@ export class NewTemplateQuestionInput {
   rules: string;
 
   @Field()
-  status: boolean;
+  status: string;
 
   @Field()
   template_id: string;

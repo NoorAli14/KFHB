@@ -34,7 +34,7 @@ export class CreateQuestionDto {
 
   @ApiProperty()
   @IsBoolean()
-  status: boolean;
+  status: string;
 
   @ApiProperty()
   @IsUUID()
@@ -63,7 +63,7 @@ export class NewQuestionInput {
   rules: string;
 
   @Field()
-  status: boolean;
+  status: string;
 
   @Field()
   section_id: string;
