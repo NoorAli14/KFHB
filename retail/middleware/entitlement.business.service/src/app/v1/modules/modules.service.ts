@@ -48,7 +48,7 @@ export class ModuleService {
   }
 
   async findBy(
-    condition: any,
+    condition: [Record<string, unknown>],
     output?: string,
   ): Promise<Module[]> {
     const _output: string = output || this.output;
@@ -86,11 +86,11 @@ export class ModuleService {
   }
 
   async update(id: string, input: ModuleDto): Promise<Module> {
-    const query: string = `mutation {
+    const mutation: string = `mutation {
       result: updateModule(id: "${id}", input: ${toGraphql(input)}) ${this.output
       }
     }`;
-    return this.gqlClient.send(query);
+    return this.gqlClient.send(mutation);
   }
 
   async delete(id: string): Promise<any> {
