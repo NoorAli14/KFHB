@@ -3,6 +3,7 @@ import {Injectable} from "@nestjs/common";
 import { BaseRepository } from "./base.repository";
 import {STATUS, TABLE} from "@common/constants";
 import {IdsInput} from "@common/inputs/ids.input";
+import { User } from "@app/v1/users/user.model";
 
 @Injectable()
 export class UserRepository extends BaseRepository {
@@ -38,7 +39,7 @@ export class UserRepository extends BaseRepository {
 
   async update(condition: Record<string, any>,
                user: Record<string, any>,
-               keys: string[]): Promise<any> {
+               keys: string[]): Promise<User[]> {
     const trxProvider = this._connection.transactionProvider();
     const trx = await trxProvider();
     try{
@@ -81,7 +82,7 @@ export class UserRepository extends BaseRepository {
     }
   }
 
-  async create(user: Record<string, any>, keys: string[]): Promise<any> {
+  async create(user: Record<string, any>, keys: string[]): Promise<User[]> {
     const trxProvider = this._connection.transactionProvider();
     const trx = await trxProvider();
     try{
@@ -105,7 +106,7 @@ export class UserRepository extends BaseRepository {
     }
   }
 
-  async listExcludedUsers(userIds: string[], conditions: Record<string, any>): Promise<any>{
+  async listExcludedUsers(userIds: string[], conditions: Record<string, any>): Promise<User[]>{
     return this._connection(TABLE.USER)
     .select(this.__attributes)
     .innerJoin(TABLE.USER_ROLE, `${TABLE.USER}.id`, `${TABLE.USER_ROLE}.user_id`)
@@ -113,5 +114,15 @@ export class UserRepository extends BaseRepository {
     .whereNotIn(`${TABLE.USER}.id`, userIds)
     .where(conditions)
     .orderBy(`${TABLE.USER}.created_on`, 'desc');
+  }
+
+  async findByTenantIdAndEmail(tenantId: string, email: string, output?: string[]): Promise<any> {
+    const conditions = {
+      email: email,
+      tenant_id: tenantId,
+      status: STATUS.ACTIVE,
+      deleted_on: null,
+    };
+    return this.findOne(conditions, output);
   }
 }
