@@ -15,14 +15,14 @@ export class WorkingDayInput {
   @Field({ nullable: true })
   @IsString()
   @ValidateIf(o => o.full_day==0)
-  @Length(4)
+  @Length(4,4)
   @Matches(/^[0-9]*$/)
   start_time_local: string;
 
   @Field({ nullable: true })
   @IsString()
   @ValidateIf(o => o.full_day==0)
-  @Length(4)
+  @Length(4,4)
   @Matches(/^[0-9]*$/)
   end_time_local: string;
 

@@ -1,73 +1,70 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
-import { MESSAGES, STATUS } from '@common/constants';
 import { KeyValInput } from '@common/inputs/key-val.input';
 import {LeaveTypeRepository} from '@core/repository/leave_type.repository';
+import {ICurrentUser} from '@common/interfaces';
+import {LeaveTypeInput} from '@app/v1/leave_type/leave_type.dto';
+import {LeaveType} from '@app/v1/leave_type/leave_type.model';
+import {LeaveTypeAlreadyExistException} from '@app/v1/leave_type/exceptions';
 
 @Injectable()
-export class Leave_typeService {
+export class LeaveTypeService {
   constructor(private leaveTypeRepository: LeaveTypeRepository) {}
 
-  async list(keys: string[], paginationParams: Record<string, any>): Promise<any> {
-    return this.leaveTypeRepository.listWithPagination(paginationParams, keys, {deleted_on : null});
+  async list(current_user: ICurrentUser, output: string[], paginationParams: Record<string, any>): Promise<LeaveType[]> {
+    return this.leaveTypeRepository.listWithPagination(paginationParams, output, {deleted_on : null, tenant_id: current_user.tenant_id});
   }
 
-  async findById(id: string, keys?: string[]): Promise<any> {
-    return this.leaveTypeRepository.findOne({ id: id, deleted_on : null }, keys);
+  async findById(current_user: ICurrentUser, id: string, output?: string[]): Promise<LeaveType> {
+    return this.leaveTypeRepository.findOne({ id: id, deleted_on : null, tenant_id: current_user.tenant_id}, output);
   }
 
-  async findByProperty(checks: KeyValInput[], keys?: string[]): Promise<any> {
+  async findByProperty(current_user: ICurrentUser, checks: KeyValInput[], output?: string[]): Promise<LeaveType[]> {
     const conditions = {};
     checks.forEach(check => {
       conditions[check.record_key] = check.record_value;
     });
+    conditions['tenant_id'] = current_user.tenant_id;
     conditions['deleted_on'] = null;
-    return this.leaveTypeRepository.findBy(conditions, keys);
+    return this.leaveTypeRepository.findBy(conditions, output);
   }
 
   async update(
+    current_user: ICurrentUser,
     id: string,
-    newObj: Record<string, any>,
-    keys?: string[],
-  ): Promise<any> {
-    if(newObj.status && !STATUS[newObj.status]){
-      throw new HttpException({
-        status: HttpStatus.BAD_REQUEST,
-        error: MESSAGES.INVALID_STATUS,
-      }, HttpStatus.BAD_REQUEST);
+    input: LeaveTypeInput,
+    output?: string[],
+  ): Promise<LeaveType> {
+    if (input.name) {
+      const [leaveType] = await this.findByName(current_user, input.name);
+      if (leaveType && leaveType.id != id) throw new LeaveTypeAlreadyExistException(leaveType[0].id);
     }
-    const [result] = await this.leaveTypeRepository.update({ id: id, deleted_on : null }, newObj, keys);
-    if(!result) {
-      throw new HttpException({
-        status: HttpStatus.BAD_REQUEST,
-        error: MESSAGES.BAD_REQUEST,
-      }, HttpStatus.BAD_REQUEST);
-    }
+    const [result] = await this.leaveTypeRepository.update(
+      { id: id, deleted_on : null, tenant_id: current_user.tenant_id},
+      {...input, ...{updated_by: current_user.id}}, output);
     return result;
   }
 
-  async create(newObj: Record<string, any>, keys?: string[]): Promise<any> {
-    if (!newObj.status) {
-      newObj.status = STATUS.ACTIVE;
-    } else if(!STATUS[newObj.status]){
-      throw new HttpException({
-        status: HttpStatus.BAD_REQUEST,
-        error: MESSAGES.INVALID_STATUS,
-      }, HttpStatus.BAD_REQUEST);
-    }
-    const result = await this.leaveTypeRepository.create(newObj, keys);
-    if(result?.length > 0) {
-      return result[0]
-    } else {
-      throw new HttpException({
-        status: HttpStatus.BAD_REQUEST,
-        error: MESSAGES.BAD_REQUEST,
-      }, HttpStatus.BAD_REQUEST);
-    }
+  async create(current_user: ICurrentUser, input: LeaveTypeInput, output?: string[]): Promise<LeaveType> {
+    const [leaveType] = await this.findByName(current_user, input.name);
+    if (leaveType) throw new LeaveTypeAlreadyExistException(leaveType.id);
+    const [result] = await this.leaveTypeRepository.create(
+      {...input, ...{tenant_id: current_user.tenant_id, created_by: current_user.id, updated_by: current_user.id}}, output);
+    return result;
   }
 
-  async delete(id: string, input: Record<any, any>): Promise<any> {
-    const result = await this.update(id, input, ['id']);
+  async delete(current_user: ICurrentUser, id: string): Promise<boolean> {
+    const result = await this.leaveTypeRepository.markAsDelete(current_user.tenant_id, current_user.id, id);
     return !!result;
+  }
+
+  async findByName(current_user: ICurrentUser, name: string): Promise<LeaveType[]> {
+    const checks: KeyValInput[] = [
+      {
+        record_key: "name",
+        record_value: name
+      }
+    ];
+    return this.findByProperty(current_user, checks, ['id', 'name']);
   }
 }

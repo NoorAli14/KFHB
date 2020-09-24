@@ -2,14 +2,16 @@ import {HttpException, HttpStatus, Injectable} from "@nestjs/common";
 
 import { UserRepository } from "@core/repository/";
 import { Encrypter } from "@common/encrypter";
-import {MESSAGES, NUMBERS, STATUS, TABLE, TEMP_ROLE, WEEK_DAYS} from "@common/constants";
+import {MESSAGES, NUMBERS, STATUS, TABLE} from "@common/constants";
 import { KeyValInput } from "@common/inputs/key-val.input";
-import {addMinutes, generateRandomString} from "@common/utilities";
+import {addMinutes, dateFormat, generateRandomString} from "@common/utilities";
 import {ConfigurationService} from "@common/configuration/configuration.service";
 import {HolidaysService} from '@app/v1/holiday/holidays.service';
 import {LeavesService} from '@app/v1/leave/leaves.service';
-import {validateDate, validateGender} from '@common/validator';
 import {WorkingDaysService} from '@app/v1/working-days/working-days.service';
+import {ICurrentUser} from '@common/interfaces';
+import {CheckAvailabilityInput} from '@app/v1/users/user.dto';
+import {User} from '@app/v1/users/user.model';
 
 @Injectable()
 export class UserService {
@@ -117,80 +119,22 @@ export class UserService {
     return this.update(user.id, userObj, keys);
   }
 
-  async check_availability(obj: Record<string, any>): Promise<any> {
-    const date = validateDate(obj.call_time);
-    obj.gender && validateGender(obj.gender);
-    obj.call_time = date.substring(0,10);
-    // if(!await this.isHoliday(obj) && await this.isWorkingDay(date, obj.tenant_id)) {
-    //   return this.availableAgents(obj)
-    // } else{
-    //   return []
-    // }
-    return []
+  async availableAgents(current_user: ICurrentUser, input: CheckAvailabilityInput): Promise<User[]> {
+    const date_string = input.call_time;
+    input.call_time = dateFormat(input.call_time, true);
+    if(!await this.holidaysService.isHoliday(current_user.tenant_id, input.call_time) && await this.workingDaysService.isWorkingDay(current_user.tenant_id, date_string)) {
+      const leaves = await this.leavesService.findByDate(current_user, input.call_time, ['id', 'user_id']);
+      const userIds: string[] = leaves.map(leave => leave.user_id);
+      const conditions = {};
+      conditions[`${TABLE.USER}.deleted_on`] = null;
+      conditions[`${TABLE.USER}.tenant_id`] = current_user.tenant_id;
+      conditions[`${TABLE.PERMISSION}.record_type`] = "attend";
+      if (input.gender) {
+        conditions[`${TABLE.USER}.gender`] = input.gender;
+      }
+      return this.userDB.listExcludedUsers(userIds, conditions);
+    } else{
+      return []
+    }
   }
-
-  // async isHoliday(obj: Record<string, any>): Promise<boolean> {
-  //   const checks: KeyValInput[] = [
-  //     {
-  //       record_key: 'holiday_date',
-  //       record_value: obj.call_time
-  //     },
-  //     {
-  //       record_key: 'tenant_id',
-  //       record_value: obj.tenant_id
-  //     }
-  //   ];
-  //   const holidays = await this.holidaysService.findByProperty(checks, ['id', 'created_on']);
-  //   return !!holidays.length;
-  // }
-
-  // async isWorkingDay(date: string, tenant_id: string): Promise<boolean> {
-  //   const weekDay = Object.keys(WEEK_DAYS)[new Date(date).getDay()];
-  //   const checks: KeyValInput[] = [
-  //     {
-  //       record_key: 'week_day',
-  //       record_value: weekDay
-  //     },
-  //     {
-  //       record_key: 'tenant_id',
-  //       record_value: tenant_id
-  //     }
-  //   ];
-  //   const days = await this.workingDaysService.findByProperty(checks, ['start_time', 'end_time', 'full_day']);
-  //   if(days && days.length > 0) {
-  //     const day = days[0];
-  //     try {
-  //       if (day.full_day) return true;
-  //       if (Date.parse(date) > Date.parse(new Date(day.start_time).toISOString())
-  //         && Date.parse(date) < Date.parse(new Date(day.end_time).toISOString()))
-  //         return true;
-  //     } catch (e) {
-  //       return false;
-  //     }
-  //   }
-  //   return false;
-  // }
-
-  // async availableAgents(obj: Record<string, any>): Promise<any> {
-  //   const checks: KeyValInput[] = [
-  //     {
-  //       record_key: 'leave_date',
-  //       record_value: obj.call_time
-  //     },
-  //     {
-  //       record_key: 'tenant_id',
-  //       record_value: obj.tenant_id
-  //     }
-  //   ];
-  //   const leaves = await this.leavesService.findByProperty(checks, ['id', 'user_id', 'created_on']);
-  //   const userIds: [] = leaves.map(leave => leave.user_id);
-  //   const conditions = {};
-  //   conditions[`${TABLE.USER}.deleted_on`] = null;
-  //   conditions[`${TABLE.USER}.tenant_id`] = obj.tenant_id;
-  //   conditions[`${TABLE.ROLE}.name`] = TEMP_ROLE.AGENT;
-  //   if (obj.gender) {
-  //     conditions[`${TABLE.USER}.gender`] = obj.gender;
-  //   }
-  //   return this.userDB.listExcludedUsers(userIds, conditions)
-  // }
 }
