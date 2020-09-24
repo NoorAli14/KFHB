@@ -7,15 +7,13 @@
 
             <mat-cell *matCellDef="let element; let i = dataIndex">
                 <ng-container  [ngSwitch]="key">
+                    <span  *ngSwitchCase="'expandIcon'">
+                        <mat-icon class="hover" *ngIf="key === 'expandIcon' " matTooltip="Explore" (click)="toggleExpandableSymbol(element['id'])"> {{expandedId==element['id'] ? 'keyboard_arrow_up' : ' keyboard_arrow_down'}} </mat-icon>
+                        <mat-icon class="hover" *ngIf="key === 'expandIcon' " matTooltip="Close" (click)="toggleExpandableSymbol(element['id'])"></mat-icon>
+                        </span>
                     <span  *ngSwitchCase="'action'">
-                        <ng-container *ngIf="key.includes('Icon')">
-                            <mat-icon *ngIf="key === 'expandIcon' " matTooltip="Explore" (click)="toggleExpandableSymbol(element['id'])"> {{expandedId==element['id'] ? 'keyboard_arrow_up' : ' keyboard_arrow_down'}} </mat-icon>
-                            <mat-icon *ngIf="key === 'expandIcon' " matTooltip="Close" (click)="toggleExpandableSymbol(element['id'])"></mat-icon>
-                        </ng-container>
-                        <ng-container *ngIf="key.includes('action')">
-                            <mat-icon appPermission [permissions]="userPermissions"  matTooltip="Delete user" [type]="'delete'" color="warn" type="button" (click)="onDelete(element['id'])">delete</mat-icon> &nbsp;&nbsp;
-                            <mat-icon type="button" matTooltip="Edit user" (click)="onEdit(element)">mode_edit</mat-icon>
-                        </ng-container>
+                        <mat-icon class="hover" appPermission [permissions]="userPermissions"  matTooltip="Delete user" [type]="'delete'" color="warn" type="button" (click)="onDelete(element['id'])">delete</mat-icon> &nbsp;&nbsp;
+                        <mat-icon class="hover" type="button" matTooltip="Edit user" (click)="onEdit(element)">mode_edit</mat-icon>
                         </span>
                     <span *ngSwitchCase="'status'">
                         <app-status [status]="element[key]"></app-status>

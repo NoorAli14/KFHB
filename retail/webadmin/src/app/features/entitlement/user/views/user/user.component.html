@@ -52,10 +52,10 @@
                     <mat-cell *matCellDef="let element; let i = dataIndex" >
                         <ng-container  [ngSwitch]="key">
                             <span  *ngSwitchCase="'action'">
-                                <mat-icon appPermission [permissions]="userPermissions" matTooltip="Delete user" [type]="'delete'" color="warn" type="button" (click)=" confirmDialog('delete',element['id'])">delete</mat-icon> &nbsp;&nbsp;
-                                <mat-icon type="button" (click)="openDialog(element)" matTooltip="Delete user">mode_edit</mat-icon> &nbsp;&nbsp;
-                                <mat-icon type="button" (click)="onDetail(element['id'])" matTooltip="Explore">explore</mat-icon>
-                                <mat-icon  *ngIf="element['status']==='PENDING'"  color="success"  matTooltip="Resend Invitation" type="button" (click)=" confirmDialog('invite',element['id'])">near_me</mat-icon> &nbsp;&nbsp;
+                                <mat-icon class="hover" appPermission [permissions]="userPermissions" matTooltip="Delete user" [type]="'delete'" color="warn" type="button" (click)=" confirmDialog('delete',element['id'])">delete</mat-icon> &nbsp;&nbsp;
+                                <mat-icon class="hover" type="button" (click)="openDialog(element)" matTooltip="Delete user">mode_edit</mat-icon> &nbsp;&nbsp;
+                                <mat-icon class="hover" type="button" (click)="onDetail(element['id'])" matTooltip="Explore">explore</mat-icon>
+                                <mat-icon class="hover"  *ngIf="element['status']==='PENDING'"  color="success"  matTooltip="Resend Invitation" type="button" (click)=" confirmDialog('invite',element['id'])">near_me</mat-icon> &nbsp;&nbsp;
                                 </span>
                             <span *ngSwitchCase="'status'">
                                 <app-status [status]="element[key]"></app-status>
