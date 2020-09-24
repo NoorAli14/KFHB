@@ -24,19 +24,22 @@ export class Holiday {
   status: string;
 
   @Field({ nullable: true })
-  created_on: string;
+  @Type(() => Date)
+  created_on: Date;
 
   @Field({ nullable: true })
   created_by: string;
 
   @Field({ nullable: true })
-  updated_on: string;
+  @Type(() => Date)
+  updated_on: Date;
 
   @Field({ nullable: true })
   updated_by: string;
 
   @Field({ nullable: true })
-  deleted_on: string;
+  @Type(() => Date)
+  deleted_on: Date;
 
   @Field({ nullable: true })
   deleted_by: string;

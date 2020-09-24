@@ -29,6 +29,13 @@ export class LeavesService {
     return this.leaveRepository.findBy(conditions, output);
   }
 
+  async findByDate(current_user: ICurrentUser, date: string, output: string[]): Promise<Leave[]> {
+    const conditions = {};
+    conditions['tenant_id'] = current_user.tenant_id;
+    conditions['deleted_on'] = null;
+    return this.leaveRepository.findByDate(date, conditions, output);
+  }
+
   async update(
     current_user: ICurrentUser,
     id: string,
@@ -37,8 +44,8 @@ export class LeavesService {
   ): Promise<Leave> {
     const leave: Leave = await this.findById(current_user, id,['id', 'start_date', 'end_date']);
     if(!leave) throw new LeaveNotFoundException(id);
-    input.start_date = input.start_date || leave.start_date;
-    input.end_date = input.end_date || leave.end_date;
+    input.start_date = input.start_date || leave.start_date.toISOString();
+    input.end_date = input.end_date || leave.end_date.toISOString();
     if (Date.parse(new Date(input.start_date).toISOString()) > Date.parse(new Date(input.end_date).toISOString()))
       throw new LeaveStartDateLessThanEndDateException(id, input.start_date, input.end_date);
     const [result] = await this.leaveRepository.update({ id: id, deleted_on : null, tenant_id: current_user.tenant_id }, {...input, ...{updated_by: current_user.id}}, output);

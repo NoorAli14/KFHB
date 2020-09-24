@@ -11,6 +11,8 @@ import {
   WorkingDayStartTimeLessThanEndTimeException
 } from '@app/v1/working-days/exceptions';
 import {WorkingDayStartEndTimeInvalidRange} from '@app/v1/working-days/exceptions/working-day-start-end-time-invalid-range';
+import * as moment from 'moment';
+import {STATUS, WEEK_DAYS} from '@common/constants';
 
 @Injectable()
 export class WorkingDaysService {
@@ -32,10 +34,6 @@ export class WorkingDaysService {
     conditions['tenant_id'] = current_user.tenant_id;
     conditions['deleted_on'] = null;
     return this.workingDaysRepository.findBy(conditions, keys);
-  }
-
-  async findByDuration(obj: Record<string, any>, keys?: string[]): Promise<WorkingDay[]> {
-    return this.workingDaysRepository.findByDuration(obj, keys);
   }
 
   async update(
@@ -102,5 +100,20 @@ export class WorkingDaysService {
       }
     ];
     return this.findByProperty(current_user, checks, ['id', 'week_day', 'start_time_local', 'end_time_local']);
+  }
+
+  async isWorkingDay(tenant_id: string, date_string: string): Promise<boolean> {
+    const date = moment(date_string).utc();
+    const hours: string = date.hour() < 10? '0' + date.hour() : date.hour().toString();
+    const minutes: string = date.minute() < 10? '0' + date.minute(): date.minutes().toString();
+    const weekDay: string = Object.keys(WEEK_DAYS)[date.day()];
+    const conditions = {
+      week_day: weekDay,
+      tenant_id: tenant_id,
+      status: STATUS.ACTIVE,
+      deleted_on: null
+    };
+    const working_days: WorkingDay[] = await this.workingDaysRepository.findByDayAndTime(`${hours}${minutes}`, conditions, ['id', 'start_time_local', 'end_time_local', 'full_day']);
+    return !!working_days?.length;
   }
 }

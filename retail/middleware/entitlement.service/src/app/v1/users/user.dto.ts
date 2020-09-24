@@ -1,7 +1,7 @@
 import { Field, InputType } from "@nestjs/graphql";
-import {IsBoolean, IsEmail, IsOptional, IsString, MaxLength} from "class-validator";
+import {IsBoolean, IsEmail, IsIn, IsISO8601, IsOptional, IsString, MaxLength} from "class-validator";
 
-import { NUMBERS } from "@common/constants";
+import {GENDER, NUMBERS} from "@common/constants";
 import {IdsInput} from "@common/inputs/ids.input";
 
 @InputType()
@@ -94,7 +94,7 @@ export class UpdateUserInput {
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   password_reset_token_expiry?: string;
 
-  @Field(type => [IdsInput], { nullable: true })
+  @Field(() => [IdsInput], { nullable: true })
   roles?: IdsInput[];
 }
 
@@ -125,11 +125,13 @@ export class CheckAvailabilityInput {
   @Field()
   @IsString()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  @IsISO8601({strict: true})
   call_time: string;
 
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  @IsIn(Object.keys(GENDER))
   gender?: string;
 }

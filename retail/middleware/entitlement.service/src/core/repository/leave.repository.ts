@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 
 import { BaseRepository } from "./base.repository";
 import { TABLE } from "@common/constants";
+import {Leave} from '@app/v1/leave/leave.model';
 
 @Injectable()
 export class LeaveRepository extends BaseRepository {
@@ -26,11 +27,19 @@ export class LeaveRepository extends BaseRepository {
     super(TABLE.LEAVE);
   }
 
-  async listLeavesByUserID(userIds: readonly string[]): Promise<any>{
+  async listLeavesByUserID(userIds: readonly string[]): Promise<Leave[]>{
     return this._connection(TABLE.LEAVE)
     .select(this.__attributes)
     .whereIn('user_id', userIds)
     .where({deleted_on : null})
     .orderBy('created_on', 'desc');
+  }
+
+  async findByDate(date: string, conditions: Record<string, any>, keys: string[]): Promise<Leave[]> {
+    return this._connection(this._tableName)
+    .select(keys)
+    .where('start_date', '>=', date)
+    .where('end_date', '<', date)
+    .where(conditions);
   }
 }

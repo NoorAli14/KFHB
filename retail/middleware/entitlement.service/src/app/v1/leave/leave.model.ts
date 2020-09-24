@@ -15,11 +15,11 @@ export class Leave {
 
   @Field({ nullable: true })
   @Type(() => Date)
-  start_date: string;
+  start_date: Date;
 
   @Field({ nullable: true })
   @Type(() => Date)
-  end_date: string;
+  end_date: Date;
 
   @Field({ nullable: true })
   remarks: string;
@@ -31,19 +31,22 @@ export class Leave {
   tenant_id: string;
 
   @Field({ nullable: true })
-  created_on: string;
+  @Type(() => Date)
+  created_on: Date;
 
   @Field({ nullable: true })
   created_by: string;
 
   @Field({ nullable: true })
-  updated_on: string;
+  @Type(() => Date)
+  updated_on: Date;
 
   @Field({ nullable: true })
   updated_by: string;
 
   @Field({ nullable: true })
-  deleted_on: string;
+  @Type(() => Date)
+  deleted_on: Date;
 
   @Field({ nullable: true })
   deleted_by: string;

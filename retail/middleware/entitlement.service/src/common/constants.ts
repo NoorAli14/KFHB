@@ -28,6 +28,8 @@ export const HEADER_NAMES = {
   X_TENANT_ID: "x-tenant-id",
 };
 
+export const DATE_FORMAT = 'YYYY-MM-DD';
+
 export const STATUS = {
   ACTIVE: 'ACTIVE',
   INACTIVE: 'INACTIVE',
@@ -137,6 +139,15 @@ export const MODULES = [
     permissions: [
       {
         name: 'view',
+      },
+    ],
+  },
+  {
+    name: 'Video Call',
+    sub_modules: [],
+    permissions: [
+      {
+        name: 'attend',
       },
     ],
   },
