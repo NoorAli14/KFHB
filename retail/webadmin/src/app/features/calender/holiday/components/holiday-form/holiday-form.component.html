@@ -133,6 +133,9 @@
                     &nbsp;&nbsp;&nbsp;
                     <button
                         type="submit"
+                        appPermission
+                        [permissions]="userPermissions"
+                        [type]="data.id ? 'edit' : 'create'"
                         mat-raised-button
                         [disabled]="holidayForm.invalid"
                         color="accent"

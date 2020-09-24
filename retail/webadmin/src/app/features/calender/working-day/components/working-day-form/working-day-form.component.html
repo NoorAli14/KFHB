@@ -163,6 +163,9 @@
                     </button>
                     &nbsp;&nbsp;&nbsp;
                     <button
+                    appPermission
+                    [permissions]="userPermissions"
+                    [type]="data.id ? 'edit' : 'create'"
                         type="submit"
                         mat-raised-button
                         [disabled]="workingDayForm.invalid"

@@ -135,6 +135,7 @@
                     appearance="outline"
                     fxFlex="48"
                     class="pr-4"
+                    *ngIf="isAdmin"
                 >
                     <mat-label>User <app-required-indicator></app-required-indicator></mat-label>
                     <mat-select formControlName="userId" >
@@ -185,6 +186,9 @@
                     </button>
                     &nbsp;&nbsp;&nbsp;
                     <button
+                    appPermission
+                    [permissions]="userPermissions"
+                    [type]="data.leave.id ? 'edit' : 'create'"
                         type="submit"
                         [disabled]="leaveForm.invalid"
                         class="submit-button"

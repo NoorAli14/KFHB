@@ -47,7 +47,8 @@
                                 {{element[key] | date:'mediumDate'}}
                             </span>
                             <span  *ngSwitchCase="'action'">
-                                <mat-icon color="warn" type="button" (click)=" confirmDialog(element['id'])">delete</mat-icon> &nbsp;&nbsp;
+                                <mat-icon color="warn"  appPermission   [permissions]="userPermissions"
+                                [type]="'delete'" type="button" (click)=" confirmDialog(element['id'])">delete</mat-icon> &nbsp;&nbsp;
                                 <mat-icon type="button" (click)="openDialog(element)">mode_edit</mat-icon>
                             </span>
                             <span *ngSwitchCase="'status'">

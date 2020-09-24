@@ -14,7 +14,7 @@ export class MessageBoxComponent implements OnInit {
     constructor() {}
 
     ngOnChanges(changes: SimpleChanges){
-        if(changes.message.currentValue!=changes.message.previousValue){
+        if(changes.message?.currentValue!=changes.message?.previousValue){
             this.isVisible=true;
             this.responseMessage=removeRandom(this.message)
         }

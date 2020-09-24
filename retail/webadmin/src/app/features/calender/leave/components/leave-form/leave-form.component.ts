@@ -22,6 +22,7 @@ export class LeaveFormComponent extends BaseComponent implements OnInit {
   leaveForm: FormGroup;
   leaveTypes: Array<any>;
   users: Array<any>;
+  isAdmin=false;
   constructor(
     public matDialogRef: MatDialogRef<LeaveFormComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -33,6 +34,7 @@ export class LeaveFormComponent extends BaseComponent implements OnInit {
   ngOnInit(): void {
     this.leaveTypes = this.data.leaveTypes;
     this.users = this.data.users;
+  
     this._errorEmitService.currentMessage
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((item) => {
@@ -54,6 +56,10 @@ export class LeaveFormComponent extends BaseComponent implements OnInit {
       remarks: new FormControl(this.data.leave.remarks, [Validators.required]),
       userId: new FormControl(this.data.leave.userId, [Validators.required]),
     });
+     this.isAdmin= this._authUserService.User.roles.find(x=>x.name==='SUPER ADMIN');
+    if(!this.isAdmin){
+      this.leaveForm.get('userId').setValue(this._authUserService.User.id);
+    }
   }
   confirmPasswordValidator(control: FormControl): { [s: string]: boolean } {
     if (
