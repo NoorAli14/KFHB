@@ -113,9 +113,12 @@ export class UserRepository extends BaseRepository {
 
   async listExcludedUsers(userIds: string[], conditions: Record<string, any>): Promise<any>{
     return this._connection(TABLE.USER)
-    .select(this.__attributes)
+    .distinct(this.__attributes)
     .innerJoin(TABLE.USER_ROLE, `${TABLE.USER}.id`, `${TABLE.USER_ROLE}.user_id`)
     .innerJoin(TABLE.ROLE, `${TABLE.USER_ROLE}.role_id`, `${TABLE.ROLE}.id`)
+    .innerJoin(TABLE.MODULE_PERMISSION_ROLE, `${TABLE.ROLE}.id`, `${TABLE.MODULE_PERMISSION_ROLE}.role_id`)
+    .innerJoin(TABLE.MODULE_PERMISSION, `${TABLE.MODULE_PERMISSION_ROLE}.module_permission_id`, `${TABLE.MODULE_PERMISSION}.id`)
+    .innerJoin(TABLE.PERMISSION, `${TABLE.MODULE_PERMISSION}.permission_id`, `${TABLE.PERMISSION}.id`)
     .whereNotIn(`${TABLE.USER}.id`, userIds)
     .where(conditions)
     .orderBy(`${TABLE.USER}.created_on`, 'desc');

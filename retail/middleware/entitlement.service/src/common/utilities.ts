@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as Crypto from 'crypto';
-import {HEADER_NAMES} from '@common/constants';
+import {DATE_FORMAT, HEADER_NAMES} from '@common/constants';
 import * as moment from 'moment';
 
 /**
@@ -83,6 +83,12 @@ export const getTenantID = (headers: any): any => {
 
 export const getXUserID = (headers: any): any => {
   return headers[HEADER_NAMES.X_USER_ID];
+};
+
+export const dateFormat = (date_string: string, utc?: boolean): string => {
+  let date = moment(date_string);
+  if (utc) date = date.utc();
+  return date.format(DATE_FORMAT)
 };
 
 /**

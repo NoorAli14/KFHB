@@ -9,17 +9,18 @@ import {
 import * as DataLoader from 'dataloader';
 import { Loader } from 'nestjs-dataloader';
 
-import {User, UserWithPagination} from "@app/v1/users/user.model";
+import {User} from "@app/v1/users/user.model";
 import { UserService } from "@app/v1/users/users.service";
 import {CreateUserInput, UpdateUserInput, UpdatePasswordInput, CheckAvailabilityInput} from "@app/v1/users/user.dto";
 import { Role } from "@app/v1/roles/role.model";
 import {KeyValInput} from "@common/inputs/key-val.input";
 import {Module} from "@app/v1/modules/module.model";
 import {Leave} from "@app/v1/leave/leave.model";
-import {Fields} from "@common/decorators";
+import {CurrentUser, Fields} from "@common/decorators";
 import {HttpException, HttpStatus} from '@nestjs/common';
 import {MESSAGES, STATUS} from '@common/constants';
 import {getMutateProps, getTenantID, getXUserID} from '@common/utilities';
+import {ICurrentUser} from '@common/interfaces';
 
 @Resolver(User)
 export class UsersResolver {
@@ -42,9 +43,8 @@ export class UsersResolver {
 
   @Query(() => [User])
   async findAvailableUsers(@Args('input') input: CheckAvailabilityInput,
-                           @Context() context: GraphQLExecutionContext): Promise<User[]> {
-    input['tenant_id'] = getTenantID(context['req'].headers);
-    return this.userService.check_availability(input);
+                           @CurrentUser() current_user: ICurrentUser): Promise<User[]> {
+    return this.userService.availableAgents(current_user, input);
   }
 
   @Mutation(() => User)
@@ -115,21 +115,21 @@ export class UsersResolver {
     return this.userService.delete(id, input);
   }
 
-  @ResolveField('roles', returns => [Role])
+  @ResolveField('roles', () => [Role])
   async getRoles(@Parent() user: User,
                  @Loader('RolesDataLoader') rolesLoader: DataLoader<Role['id'], Role>) {
     if(!user.id) return [];
     return rolesLoader.load(user.id);
   }
 
-  @ResolveField('modules', returns => [Module])
+  @ResolveField('modules', () => [Module])
   async getModules(@Parent() user: User,
                  @Loader('ModulesDataLoaderByUser') modulesLoader: DataLoader<Module['id'], Module>) {
     if(!user.id) return [];
     return modulesLoader.load(user.id);
   }
 
-  @ResolveField('leaves', returns => [Leave])
+  @ResolveField('leaves', () => [Leave])
   async getLeaves(@Parent() user: User,
                    @Loader('LeavesDataLoader') leavesLoader: DataLoader<Leave['id'], Leave>) {
     if(!user.id) return [];

@@ -29,6 +29,13 @@ export class LeavesService {
     return this.leaveRepository.findBy(conditions, output);
   }
 
+  async findByDate(current_user: ICurrentUser, date: string, output: string[]): Promise<Leave[]> {
+    const conditions = {};
+    conditions['tenant_id'] = current_user.tenant_id;
+    conditions['deleted_on'] = null;
+    return this.leaveRepository.findByDate(date, conditions, output);
+  }
+
   async update(
     current_user: ICurrentUser,
     id: string,
