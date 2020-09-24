@@ -21,6 +21,11 @@ export async function up(knex: Knex): Promise<void> {
 
     table.timestamp('deleted_on');
     table.string('deleted_by');
+
+    table.index('tenant_id', `${TABLE.TEMPLATE}_TENDANT_ID_INDEX`);
+    table.index('name', `${TABLE.TEMPLATE}_NAME_INDEX`);
+    table.index('name_ar', `${TABLE.TEMPLATE}_NAME_AR_INDEX`);
+    table.index('deleted_on', `${TABLE.TEMPLATE}_DELETED_ON_INDEX`);
   });
 }
 

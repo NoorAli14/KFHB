@@ -8,11 +8,11 @@ export async function up(knex: Knex): Promise<void> {
       .primary()
       .defaultTo(knex.raw(DATABASE_UUID_METHOD));
 
-    table.uuid('template_id');
     table
-      .foreign('template_id')
+      .uuid('template_id')
       .references('id')
-      .inTable(TABLE.TEMPLATE);
+      .inTable(TABLE.TEMPLATE)
+      .onDelete('cascade');
 
     table.string('results').notNullable();
     table.string('remarks').notNullable();
@@ -25,6 +25,8 @@ export async function up(knex: Knex): Promise<void> {
 
     table.timestamp('deleted_on');
     table.string('deleted_by');
+
+    table.index('deleted_on', `${TABLE.TEMPLATE}_DELETED_ON_INDEX`);
   });
 }
 

@@ -8,12 +8,16 @@ export async function up(knex: Knex): Promise<void> {
       .primary()
       .defaultTo(knex.raw(DATABASE_UUID_METHOD));
 
-    table.uuid('request_id');
+    table
+      .uuid('request_id')
+      .references('id')
+      .inTable(TABLE.AML_REQUEST)
+      .onDelete('cascade');
+
     table.string('response_status'); //(1.Clean, 2.Suspect, 3.Confirm-Clean and 4.Confirm-Block)
-
     table.string('response_type'); // {Aml Response 1 or Aml Response 2}
-    table.timestamp('response_on');
 
+    table.timestamp('response_on');
     table.timestamp('created_on').defaultTo(knex.fn.now());
     table.string('created_by');
 
@@ -23,10 +27,7 @@ export async function up(knex: Knex): Promise<void> {
     table.timestamp('deleted_on');
     table.string('deleted_by');
 
-    table
-      .foreign('request_id')
-      .references('id')
-      .inTable(TABLE.AML_REQUEST);
+    table.index('deleted_on', `${TABLE.TEMPLATE}_DELETED_ON_INDEX`);
   });
 }
 

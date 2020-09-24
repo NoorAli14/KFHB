@@ -7,15 +7,16 @@ export async function up(knex: Knex): Promise<void> {
       .uuid('id')
       .primary()
       .defaultTo(knex.raw(DATABASE_UUID_METHOD));
+    table.uuid('tenant_id').notNullable();
 
-    table.string('name').notNullable();
-    table.string('name_ar').notNullable();
+    table.string('name');
+    table.string('name_ar');
 
-    table.uuid('question_id');
     table
-      .foreign('question_id')
+      .uuid('question_id')
       .references('id')
-      .inTable(TABLE.QUESTION);
+      .inTable(TABLE.QUESTION)
+      .onDelete('cascade');
 
     table.timestamp('created_on').defaultTo(knex.fn.now());
     table.string('created_by');
@@ -25,6 +26,11 @@ export async function up(knex: Knex): Promise<void> {
 
     table.timestamp('deleted_on');
     table.string('deleted_by');
+
+    table.index('tenant_id', `${TABLE.TEMPLATE}_TENDANT_ID_INDEX`);
+    table.index('name', `${TABLE.TEMPLATE}_NAME_INDEX`);
+    table.index('name_ar', `${TABLE.TEMPLATE}_NAME_AR_INDEX`);
+    table.index('deleted_on', `${TABLE.TEMPLATE}_DELETED_ON_INDEX`);
   });
 }
 

@@ -17,11 +17,11 @@ export async function up(knex: Knex): Promise<void> {
     table.string('rules').notNullable();
     table.string('status').defaultTo('ACTIVE');
 
-    table.uuid('section_id');
     table
-      .foreign('section_id')
+      .uuid('section_id')
       .references('id')
-      .inTable(TABLE.SECTION);
+      .inTable(TABLE.SECTION)
+      .onDelete('cascade');
 
     table.timestamp('created_on').defaultTo(knex.fn.now());
     table.string('created_by');
@@ -32,7 +32,10 @@ export async function up(knex: Knex): Promise<void> {
     table.timestamp('deleted_on');
     table.string('deleted_by');
 
-    // table.unique(['title']);
+    table.index('tenant_id', `${TABLE.TEMPLATE}_TENDANT_ID_INDEX`);
+    table.index('title', `${TABLE.TEMPLATE}_TITLE_INDEX`);
+    table.index('title_ar', `${TABLE.TEMPLATE}_TITLE_AR_INDEX`);
+    table.index('deleted_on', `${TABLE.TEMPLATE}_DELETED_ON_INDEX`);
   });
 }
 
