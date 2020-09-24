@@ -14,6 +14,12 @@ export class Template {
     description: 'Name of the Template',
   })
   name_ar: string;
+
+  @ApiProperty({
+    example: 'Tendant ID',
+    description: 'Tendant ID',
+  })
+  tenant_id: string;
 }
 
 // Graphql Model

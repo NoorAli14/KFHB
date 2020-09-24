@@ -16,18 +16,22 @@ export async function seed(knex: Knex): Promise<void> {
       id: uuidV4(),
       name: 'FATCA',
       name_ar: 'FATCA AR',
+      tenant_id: '9013C327-1190-4875-A92A-83ACA9029160',
     },
     {
       id: uuidV4(),
       name: 'CRS',
       name_ar: 'CRS AR',
+      tenant_id: '9013C327-1190-4875-A92A-83ACA9029160',
     },
     {
       id: uuidV4(),
       name: 'KYC',
       name_ar: 'KYC AR',
+      tenant_id: '9013C327-1190-4875-A92A-83ACA9029160',
     },
   ];
+
   const sections: Section[] = [
     {
       id: uuidV4(),
@@ -86,6 +90,7 @@ export async function seed(knex: Knex): Promise<void> {
       template_id: templates[1].id,
     },
   ];
+
   const questions: Question[] = [
     {
       id: uuidV4(),
@@ -95,6 +100,7 @@ export async function seed(knex: Knex): Promise<void> {
       rules: '{required: true}',
       status: 'Active',
       section_id: sections[0].id,
+      tenant_id: '9013C327-1190-4875-A92A-83ACA9029160',
     },
     {
       id: uuidV4(),
@@ -104,6 +110,7 @@ export async function seed(knex: Knex): Promise<void> {
       rules: '{required: true}',
       status: 'Active',
       section_id: sections[1].id,
+      tenant_id: '9013C327-1190-4875-A92A-83ACA9029160',
     },
     {
       id: uuidV4(),
@@ -113,6 +120,7 @@ export async function seed(knex: Knex): Promise<void> {
       rules: '{required: true}',
       status: 'Active',
       section_id: sections[2].id,
+      tenant_id: '9013C327-1190-4875-A92A-83ACA9029160',
     },
     {
       id: uuidV4(),
@@ -122,6 +130,7 @@ export async function seed(knex: Knex): Promise<void> {
       rules: '{required: true}',
       status: 'Active',
       section_id: sections[3].id,
+      tenant_id: '9013C327-1190-4875-A92A-83ACA9029160',
     },
     {
       id: uuidV4(),
@@ -131,6 +140,7 @@ export async function seed(knex: Knex): Promise<void> {
       rules: '{required: true}',
       status: 'Active',
       section_id: sections[4].id,
+      tenant_id: '9013C327-1190-4875-A92A-83ACA9029160',
     },
     {
       id: uuidV4(),
@@ -140,6 +150,7 @@ export async function seed(knex: Knex): Promise<void> {
       rules: '{required: true}',
       status: 'Active',
       section_id: sections[5].id,
+      tenant_id: '9013C327-1190-4875-A92A-83ACA9029160',
     },
     {
       id: uuidV4(),
@@ -149,6 +160,7 @@ export async function seed(knex: Knex): Promise<void> {
       rules: '{required: true}',
       status: 'Active',
       section_id: sections[6].id,
+      tenant_id: '9013C327-1190-4875-A92A-83ACA9029160',
     },
     {
       id: uuidV4(),
@@ -158,6 +170,7 @@ export async function seed(knex: Knex): Promise<void> {
       rules: '{required: true}',
       status: 'Active',
       section_id: sections[7].id,
+      tenant_id: '9013C327-1190-4875-A92A-83ACA9029160',
     },
     {
       id: uuidV4(),
@@ -167,6 +180,7 @@ export async function seed(knex: Knex): Promise<void> {
       rules: '{required: true}',
       status: 'Active',
       section_id: sections[7].id,
+      tenant_id: '9013C327-1190-4875-A92A-83ACA9029160',
     },
     {
       id: uuidV4(),
@@ -176,6 +190,7 @@ export async function seed(knex: Knex): Promise<void> {
       rules: '{required: true}',
       status: 'Active',
       section_id: sections[7].id,
+      tenant_id: '9013C327-1190-4875-A92A-83ACA9029160',
     },
 
     {
@@ -186,6 +201,7 @@ export async function seed(knex: Knex): Promise<void> {
       rules: '{required: true}',
       status: 'Active',
       section_id: sections[7].id,
+      tenant_id: '9013C327-1190-4875-A92A-83ACA9029160',
     },
     {
       id: uuidV4(),
@@ -195,6 +211,7 @@ export async function seed(knex: Knex): Promise<void> {
       rules: '{required: true}',
       status: 'Active',
       section_id: sections[7].id,
+      tenant_id: '9013C327-1190-4875-A92A-83ACA9029160',
     },
     {
       id: uuidV4(),
@@ -204,6 +221,7 @@ export async function seed(knex: Knex): Promise<void> {
       rules: '{required: true}',
       status: 'Active',
       section_id: sections[7].id,
+      tenant_id: '9013C327-1190-4875-A92A-83ACA9029160',
     },
     {
       id: uuidV4(),
@@ -213,8 +231,10 @@ export async function seed(knex: Knex): Promise<void> {
       rules: '{required: true}',
       status: 'Active',
       section_id: sections[7].id,
+      tenant_id: '9013C327-1190-4875-A92A-83ACA9029160',
     },
   ];
+
   const options: Option[] = [
     {
       id: uuidV4(),

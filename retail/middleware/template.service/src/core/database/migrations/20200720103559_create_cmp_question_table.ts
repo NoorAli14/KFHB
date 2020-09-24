@@ -15,7 +15,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string('type').notNullable();
 
     table.string('rules').notNullable();
-    table.boolean('status').defaultTo('ACTIVE');
+    table.string('status').defaultTo('ACTIVE');
 
     table.uuid('section_id');
     table

@@ -38,6 +38,12 @@ export class Question {
     description: 'Section ID',
   })
   section_id: string;
+
+  @ApiProperty({
+    example: 'Tendant ID',
+    description: 'Tendant ID',
+  })
+  tenant_id: string;
 }
 
 // Graphql Model
