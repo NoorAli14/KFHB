@@ -2,6 +2,7 @@ import {
   Controller,
   Post,
   Get,
+  Put,
   Body,
   Param,
   HttpCode,
@@ -16,7 +17,7 @@ import {
   ApiBadRequestResponse,
 } from '@nestjs/swagger';
 import { ForgotPasswordService } from './forgot_password.service';
-import { SuccessDto } from '@common/dtos/';
+import { SuccessDto } from '@common/index';
 
 @ApiTags('Forgot Password')
 @Controller('users/password')
@@ -59,7 +60,7 @@ export class ForgotPasswordController {
     return this.forgotPasswordService.checkStatus(token);
   }
 
-  @Post(':token')
+  @Put(':token')
   @ApiBody({ description: 'Sets new password properties.' })
   @ApiOperation({
     summary: 'Update a user password by Reset Token',
@@ -73,7 +74,6 @@ export class ForgotPasswordController {
     type: Error,
     description: 'Input Validation failed.',
   })
-  @HttpCode(HttpStatus.OK)
   async changePassword(
     @Param('token') token: string,
     @Body() input: { password: string },

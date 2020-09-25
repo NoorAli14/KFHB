@@ -5,7 +5,7 @@ import { Field, ObjectType } from '@nestjs/graphql';
 export class EmailGQL {
   @Field()
   to: string;
-  
+
   @Field()
   template: string;
 
@@ -15,7 +15,7 @@ export class EmailGQL {
   @Field({ nullable: true })
   body: string;
 
-  @Field(type => [Contexts], { nullable: true })
+  @Field(() => [Contexts], { nullable: true })
   context: Contexts[];
 }
 
@@ -23,7 +23,7 @@ export class EmailGQL {
 class Contexts {
   @Field({ nullable: true })
   key: string;
-  
+
   @Field({ nullable: true })
   value: string;
 }

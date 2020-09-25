@@ -1,211 +1,92 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { toGraphql, GqlClientService } from '@common/index';
+
 import { Role } from './role.entity';
 import { RoleDto } from './role.dto';
-import { toGraphql } from '@common/utilities';
-import { GqlClientService } from '@common/libs/gqlclient/gqlclient.service';
 
 @Injectable()
 export class RoleService {
   constructor(private readonly gqlClient: GqlClientService) {}
 
-  async list(): Promise<Role[]> {
-    const params = `query {
-      roles: rolesList {
+  private output: string = `{
+    id
+    name
+    description
+    modules {
+      id
+      name
+      parent_id
+      sub_modules {
         id
         name
-        modules {
+        parent_id
+        permissions {
           id
-          name
-          parent_id
-          sub_modules {
-            id
-            name
-            parent_id
-            permissions {
-              id
-              record_type
-              created_on
-              created_by
-            }
-            status
-            created_on
-            created_by
-          }
-          permissions {
-            id
-            record_type
-            created_on
-            created_by
-          }
+          record_type
           created_on
           created_by
         }
         status
         created_on
         created_by
-        updated_on
-        updated_by
       }
+      permissions {
+        id
+        record_type
+        created_on
+        created_by
+      }
+      status
+      created_on
+      created_by
+    }
+    status
+    created_on
+    created_by
+    updated_on
+    updated_by
+  }`;
+  async list(): Promise<Role[]> {
+    const params = `query {
+      result: rolesList ${this.output}
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.roles;
+    return this.gqlClient.send(params);
   }
 
   async create(input: RoleDto): Promise<Role> {
     const params = `mutation {
-      role: addRole(input: ${toGraphql(input)}) {
-        id
-        name
-        modules {
-          id
-          name
-          parent_id
-          sub_modules {
-            id
-            name
-            parent_id
-            permissions {
-              id
-              record_type
-              created_on
-              created_by
-            }
-            status
-            created_on
-            created_by
-          }
-          permissions {
-            id
-            record_type
-            created_on
-            created_by
-          }
-          status
-          created_on
-          created_by
-        }
-        status
-        created_on
-        created_by
-        updated_on
-        updated_by
-      } 
+      result: addRole(input: ${toGraphql(input)}) ${this.output}
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.role;
+    return this.gqlClient.send(params);
   }
 
-  async findOne(id: string): Promise<Role> {
+  async findOne(id: string, output?: string): Promise<Role> {
     const params = `query {
-      role: findRole(id: "${id}") {
-        id
-        name
-        modules {
-          id
-          name
-          parent_id
-          sub_modules {
-            id
-            name
-            parent_id
-            permissions {
-              id
-              record_type
-              created_on
-              created_by
-            }
-            status
-            created_on
-            created_by
-          }
-          permissions {
-            id
-            record_type
-            created_on
-            created_by
-          }
-          status
-          created_on
-          created_by
-        }
-        status
-        created_on
-        created_by
-        updated_on
-        updated_by
-      }
+      result: findRoleById(id: "${id}") ${output || this.output}
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.role;
-  }
-
-  async findById(id: string): Promise<Role> {
-    const params = `query {
-      role: findRole(id: "${id}") {
-        id
-      }
-    }`;
-    const result = await this.gqlClient.send(params);
-    return result?.role;
+    return this.gqlClient.send(params);
   }
 
   async update(id: string, input: RoleDto): Promise<Role> {
-    const role: Role = await this.findById(id);
+    const role: Role = await this.findOne(id, '{id}');
     if (!role) {
       throw new NotFoundException('Role Not Found');
     }
+
     const params = `mutation {
-      role: updateRole(id: "${id}", input: ${toGraphql(input)}) {
-        id
-        name
-        modules {
-          id
-          name
-          parent_id
-          sub_modules {
-            id
-            name
-            parent_id
-            permissions {
-              id
-              record_type
-              created_on
-              created_by
-            }
-            status
-            created_on
-            created_by
-          }
-          permissions {
-            id
-            record_type
-            created_on
-            created_by
-          }
-          status
-          created_on
-          created_by
-        }
-        status
-        created_on
-        created_by
-        updated_on
-        updated_by
-      } 
+      result: updateRole(id: "${id}", input: ${toGraphql(input)}) ${this.output}
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.role;
+    return this.gqlClient.send(params);
   }
 
   async delete(id: string): Promise<boolean> {
-    const role: Role = await this.findById(id);
+    const role: Role = await this.findOne(id, '{id}');
     if (!role) {
       throw new NotFoundException('Role Not Found');
     }
     const params = `mutation {
-      role: deleteRole(id: "${id}") 
+      result: deleteRole(id: "${id}") 
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.role;
+    return this.gqlClient.send(params);
   }
 }

@@ -8,7 +8,7 @@ import {
 import { Controller, Get } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
-@ApiTags('Health')
+@ApiTags('Health Checking')
 @Controller('health')
 export class HealthController {
   constructor(

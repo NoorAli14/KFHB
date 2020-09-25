@@ -1,39 +1,82 @@
 import {
   IsString,
-  IsInt,
-  IsOptional,
   Length,
-  MaxLength,
   IsEmail,
+  IsOptional,
+  IsNotEmpty,
+  MaxLength,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+const DEVICES: string[] = ['ios', 'andriod'];
 
-export class RegisterDTO {
-  @IsString()
+export class RegisterCustomerDto {
+  @ApiProperty({
+    title: 'First Name',
+    example: 'Faizan',
+    description: 'First Name of the customer.',
+    required: false,
+  })
   @IsOptional()
-  @MaxLength(30)
-  readonly first_name?: string;
+  @MaxLength(255)
+  first_name: string;
 
-  @IsString()
+  @ApiProperty({
+    title: 'Middle Name',
+    description: 'Middle Name of the customer.',
+    required: false,
+  })
   @IsOptional()
-  @MaxLength(30)
-  readonly last_name?: string;
+  @MaxLength(255)
+  middle_name: string;
 
-  @IsString()
+  @ApiProperty({
+    title: 'Last Name',
+    example: 'Ahmad',
+    description: 'Last Name of the customer.',
+    required: false,
+  })
+  @IsOptional()
+  @MaxLength(255)
+  last_name: string;
+
+  @ApiProperty({
+    required: true,
+    example: 'faizan@aiondigital.com',
+    description: 'Customer email address.',
+  })
+  @Length(3, 96, {
+    message: 'Email must be between 3 to 30 characters',
+  })
   @IsEmail()
-  readonly email: string;
+  email: string;
 
-  @IsString()
-  readonly password: string;
-}
+  @ApiProperty({
+    title: 'Contact No',
+    description: 'Contact No of the customer.',
+    required: false,
+  })
+  @IsOptional()
+  @MaxLength(20)
+  contact_no: string;
 
-export class LoginDTO {
+  @ApiProperty({
+    title: 'Device ID',
+    description: 'Device ID of the customer.',
+    required: true,
+  })
+  @IsNotEmpty()
   @IsString()
-  @IsEmail()
-  @ApiProperty({ required: true, minLength: 6, example: 'faizan@aiondigital.com', description: 'Email of the customer' })
-  readonly email: string;
+  @MaxLength(255)
+  device_id: string;
 
+  @ApiProperty({
+    enum: DEVICES,
+    title: 'Platform',
+    example: DEVICES[0],
+    required: true,
+  })
   @IsString()
-  @ApiProperty({ required: true, minLength: 6, type: String, format: 'password' })
-  readonly password: string;
+  @IsNotEmpty()
+  @MaxLength(10)
+  platform: string;
 }

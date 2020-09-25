@@ -4,8 +4,12 @@ export const environment = {
     test: false,
     develop: false,
     isMockEnabled: false, // You have to switch this, when your real back-end is done
-    authTokenKey: "authce9d77b308c149d5992a80073637e4d5",
-    APP_SECRETE: "abfFGHIepqrstuvwadkalekd",
-    API_BASE_URL: "",
     hmr: false,
-};
+    APP_SECRETE: window["env"]["ENV_RBX_APP_SECRETE"],
+    API_BASE_URL: window["env"]["ENV_RBX_API_BASE_URL"],
+  };
+  
+  setTimeout(() => {
+    window["env"] = null;
+  }, 5000);
+  

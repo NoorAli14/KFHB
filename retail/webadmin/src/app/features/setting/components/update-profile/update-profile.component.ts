@@ -1,12 +1,13 @@
 import { SettingService } from './../../setting.service';
 import { Component, OnInit, ViewEncapsulation, Inject, Output, EventEmitter } from "@angular/core";
-import { FormGroup, Validators, FormControl } from "@angular/forms";
+import { FormGroup,  FormControl, Validators } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { MESSAGES, GENDER_LIST, NATIONALITY_LIST } from "@shared/constants/app.constants";
 import { fuseAnimations } from '@fuse/animations';
 import { User } from '@feature/entitlement/models/user.model';
 import { UserService } from '@feature/entitlement/user/services/user.service';
 import { BaseComponent } from '@shared/components/base/base.component';
+import { ValidatorService } from '@core/services/validator-service/validator.service';
 
 @Component({
   selector: 'app-update-profile',
@@ -35,18 +36,18 @@ export class UpdateProfileComponent extends BaseComponent implements OnInit {
     ngOnInit(): void {
         this.userForm = new FormGroup({
             id: new FormControl(this.data.id),
-            firstName: new FormControl(this.data.firstName, ),
+            firstName: new FormControl(this.data.firstName, [Validators.required]),
             middleName: new FormControl(this.data.middleName, ),
             lastName: new FormControl(this.data.lastName),
-            contactNo: new FormControl(this.data.contactNo,),
-            gender: new FormControl(this.data.gender),
-            status: new FormControl(this.data.status),
+            contactNo: new FormControl(this.data.contactNo,[Validators.required,ValidatorService.numbersOnly]),
+            gender: new FormControl(this.data.gender,[Validators.required]),
             email: new FormControl(this.data.email, [
                 Validators.email,
             ]),
-            dateOfBirth: new FormControl(new Date(this.data.dateOfBirth),),
-            nationalityId: new FormControl(Number(this.data.nationalityId), ),
+            dateOfBirth: new FormControl(this.data.dateOfBirth ? new Date(this.data.dateOfBirth) : null, [Validators.required]),
+            nationalityId: new FormControl(Number(this.data.nationalityId), [Validators.required] ),
         });
+        this.userForm.get('email').disable();
     }
    
     onSubmit() {

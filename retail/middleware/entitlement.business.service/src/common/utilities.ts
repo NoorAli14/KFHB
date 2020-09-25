@@ -1,5 +1,6 @@
 import * as path from 'path';
 import { v4 as uuidV4 } from 'uuid';
+import * as Crypto from 'crypto';
 
 export const toGraphql = (input: { [key: string]: any }): string => {
   return JSON.stringify(input).replace(/\"([^(\")"]+)\":/g, '$1:');
@@ -47,9 +48,8 @@ export const normalizePort = (param: number | string): number | string => {
  * generate random string
  * @param length
  */
-export const generateRandomString = (length: number): string => {
-  return Math.random()
-    .toString(36)
-    .replace(/[^a-zA-Z0-9]+/g, '')
-    .substr(0, length);
+export const generateRandomString = (length = 36): string => {
+  return Crypto.randomBytes(length)
+    .toString('hex')
+    .slice(0, length);
 };

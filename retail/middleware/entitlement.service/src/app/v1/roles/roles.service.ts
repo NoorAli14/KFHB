@@ -1,4 +1,5 @@
 import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
+
 import {RoleRepository} from "@core/repository/role.repository";
 import {MESSAGES, STATUS} from "@common/constants";
 import { KeyValInput } from "@common/inputs/key-val.input";
@@ -7,12 +8,12 @@ import { KeyValInput } from "@common/inputs/key-val.input";
 export class RoleService {
   constructor(private roleDB: RoleRepository) {}
 
-  async list(keys: string[]): Promise<any> {
-    return this.roleDB.list(keys,{"status" : STATUS.ACTIVE});
+  async list(keys: string[], paginationParams: Record<string, any>): Promise<any> {
+    return this.roleDB.listWithPagination(paginationParams, keys,{deleted_on : null});
   }
 
   async findById(id: string, keys?: string[]): Promise<any> {
-    const result = await this.roleDB.findOne({ id: id }, keys);
+    const result = await this.roleDB.findOne({ id: id, deleted_on : null }, keys);
     if(!result){
       throw new HttpException({
         status: HttpStatus.NOT_FOUND,
@@ -27,6 +28,7 @@ export class RoleService {
     checks.forEach(check => {
       conditions[check.record_key] = check.record_value;
     });
+    conditions['deleted_on'] = null;
     const result = await this.roleDB.findBy(conditions, keys);
     if(!result){
       throw new HttpException({
@@ -37,37 +39,25 @@ export class RoleService {
     return result;
   }
 
-  async findRolesByUserID(userIds): Promise<any>{
-    const roles = await this.roleDB.listRolesByUserID(userIds);
-    const rolesLookups = {};
-    roles.forEach(role => {
-      if (!rolesLookups[role.user_id]) {
-        rolesLookups[role.user_id] = role || {};
-      }else{
-        const prev = rolesLookups[role.user_id];
-        if(Array.isArray(prev)) {
-          rolesLookups[role.user_id] = [...prev, role]
-        } else {
-          rolesLookups[role.user_id] = [prev, role]
-        }
-      }
-    });
-    return userIds.map(id => {
-      if(rolesLookups[id]){
-        return rolesLookups[id];
-      } else {
-        return null
-      }
-    });
-  }
-
   async update(
     id: string,
     roleObj: Record<string, any>,
     keys?: string[],
   ): Promise<any> {
+    if(roleObj.status && !STATUS[roleObj.status]){
+      throw new HttpException({
+        status: HttpStatus.BAD_REQUEST,
+        error: MESSAGES.INVALID_STATUS,
+      }, HttpStatus.BAD_REQUEST);
+    }
+    if (roleObj.name && await this.isNameTaken(roleObj, id)) {
+      throw new HttpException({
+        status: HttpStatus.BAD_REQUEST,
+        error: MESSAGES.ROLE_EXISTS,
+      }, HttpStatus.BAD_REQUEST);
+    }
     const result = await this.roleDB.update({ id: id }, roleObj, keys);
-    if(result && result.length) {
+    if(result?.length > 0) {
       return result[0]
     } else {
       throw new HttpException({
@@ -79,10 +69,16 @@ export class RoleService {
 
   async create(newRole: Record<string, any>, keys?: string[]): Promise<any> {
     if(!newRole.status){
-      newRole.status = STATUS.PENDING;
+      newRole.status = STATUS.ACTIVE;
+    } else if(!STATUS[newRole.status]){
+      throw new HttpException({
+        status: HttpStatus.BAD_REQUEST,
+        error: MESSAGES.INVALID_STATUS,
+      }, HttpStatus.BAD_REQUEST);
     }
+    await this.isNameTaken(newRole);
     const result = await this.roleDB.create(newRole, keys);
-    if(result && result.length) {
+    if(result?.length > 0) {
       return result[0]
     } else {
       throw new HttpException({
@@ -92,8 +88,27 @@ export class RoleService {
     }
   }
 
-  async delete(id: string): Promise<any> {
-    const result = await this.update(id, {status: STATUS.INACTIVE});
+  async delete(id: string, input: Record<any, any>): Promise<any> {
+    const result = await this.update(id, input, ['id']);
     return !!result;
+  }
+
+  async isNameTaken(role: Record<any, any>, id?: string): Promise<any> {
+    const checks: KeyValInput[] = [
+      {
+        record_key:"name",
+        record_value: role.name
+      }];
+    if (role.tenant_id){
+      checks.push({
+        record_key: "tenant_id",
+        record_value: role.tenant_id
+      });
+    }
+    const role_a = await this.findByProperty(checks, ['id', 'name']);
+    if (role_a?.length && role_a.length > 0) {
+      return !(id && role_a[0].id == id);
+    }
+    return false;
   }
 }

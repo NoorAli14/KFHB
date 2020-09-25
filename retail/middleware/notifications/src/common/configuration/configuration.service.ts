@@ -8,8 +8,27 @@ import {
   iSWAGGER,
   iGRAPHQL,
   iConfig,
-  iSMTP
+  iSMTP,
+  iOTP,
+  iSMS,
+  iEMAILSENDER,
+  iFIREBASE,
+  iHTTP,
 } from '@common/interfaces/configuration.interface';
+import {
+  DEFAULT_OTP_STATUS,
+  DEFAULT_OTP_PATTERN,
+  DEFAULT_OTP_LENGTH,
+  DEFAULT_OTP_DURATION,
+  DEFAULT_SMS_SENDER,
+  DEFAULT_SMS_API_URL,
+  DEFAULT_RUBIX_OTP_BY_API,
+  DEFAULT_SENDING_NAME,
+  DEFAULT_SENDING_EMAIL,
+  DEFAULT_HTTP_TIMEOUT,
+  DEFAULT_HTTP_MAX_REDIRECTS,
+} from '@rubix/common/constants';
+
 export const DEFAULT_ENV: iConfig = {
   APP: {
     NAME: 'Rubix | Boilerplate',
@@ -40,7 +59,7 @@ export const DEFAULT_ENV: iConfig = {
     DEBUG: true,
   },
   logLevel: 'info',
-  
+
   SMTP: {
     host: '',
     port: 465,
@@ -49,7 +68,34 @@ export const DEFAULT_ENV: iConfig = {
     auth: {
       user: '',
       pass: '',
-    }
+    },
+  },
+  OTP: {
+    otp_length: DEFAULT_OTP_LENGTH,
+    pattern: DEFAULT_OTP_PATTERN,
+    status: DEFAULT_OTP_STATUS,
+    duration: DEFAULT_OTP_DURATION,
+    OTP_BY_API: DEFAULT_RUBIX_OTP_BY_API,
+    API_URL: '',
+  },
+  SMS: {
+    from: DEFAULT_SMS_SENDER,
+    api_url: DEFAULT_SMS_API_URL,
+  },
+  EMAILSENDER: {
+    NAME: DEFAULT_SENDING_NAME,
+    EMAIL: DEFAULT_SENDING_EMAIL
+  },
+
+  FIREBASE: {
+    CLIENT_EMAIL: '',
+    PRIVATE_KEY: '',
+    PROJECT_ID:''
+  },
+  
+  HTTP: {
+    TIMEOUT: DEFAULT_HTTP_TIMEOUT,
+    MAXDIRECTS: DEFAULT_HTTP_MAX_REDIRECTS
   }
 };
 @Injectable()
@@ -98,26 +144,80 @@ export class ConfigurationService {
     };
   }
 
-    // Parse iSMTP Environment Variables
-    public get SMTP(): iSMTP {
-      return {
-        host: this.get('ENV_RBX_SMTP_HOST', DEFAULT_ENV.SMTP.host),
-        port: parseInt(
-          this.get('ENV_RBX_SMTP_PORT', DEFAULT_ENV.SMTP.port),
-          10
-        ),
-        ignoreTLS: isTruthy(
-          this.get('ENV_RBX_SMTP_IGNORETLS', DEFAULT_ENV.SMTP.ignoreTLS)
-        ),
-        secure: isTruthy(
-          this.get('ENV_RBX_SMTP_SECURE', DEFAULT_ENV.SMTP.secure)
-        ),
-        auth: {
-          user: this.get('ENV_RBX_SMTP_USER', DEFAULT_ENV.SMTP.auth.user),
-          pass: this.get('ENV_RBX_SMTP_PASS', DEFAULT_ENV.SMTP.auth.pass),
-        }
-      };
-    }
+  // Parse iSMTP Environment Variables
+  public get SMTP(): iSMTP {
+    return {
+      host: this.get('ENV_RBX_SMTP_HOST', DEFAULT_ENV.SMTP.host),
+      port: parseInt(this.get('ENV_RBX_SMTP_PORT', DEFAULT_ENV.SMTP.port), 10),
+      ignoreTLS: isTruthy(
+        this.get('ENV_RBX_SMTP_IGNORETLS', DEFAULT_ENV.SMTP.ignoreTLS),
+      ),
+      secure: isTruthy(
+        this.get('ENV_RBX_SMTP_SECURE', DEFAULT_ENV.SMTP.secure),
+      ),
+      auth: {
+        user: this.get('ENV_RBX_SMTP_USER', DEFAULT_ENV.SMTP.auth.user),
+        pass: this.get('ENV_RBX_SMTP_PASS', DEFAULT_ENV.SMTP.auth.pass),
+      },
+    };
+  }
+
+  public get OTP(): iOTP {
+    return {
+      pattern: this.get('ENV_RBX_OTP_PATTERN', DEFAULT_ENV.OTP.pattern),
+      otp_length: parseInt(
+        this.get('ENV_RBX_OTP_LENGTH', DEFAULT_ENV.OTP.otp_length),
+        10,
+      ),
+      status: this.get('ENV_RBX_OTP_STATUS', DEFAULT_ENV.OTP.status),
+      duration: parseInt(
+        this.get('ENV_RBX_OTP_DURATION', DEFAULT_ENV.OTP.duration),
+        10,
+      ),
+      OTP_BY_API: isTruthy(
+        this.get('ENV_RBX_OTP_BY_API', DEFAULT_ENV.OTP.OTP_BY_API),
+      ),
+      API_URL: this.get('ENV_RBX_OTP_GENERATOR_API', DEFAULT_ENV.OTP.API_URL),
+    };
+  }
+
+  public get SMS(): iSMS {
+    return {
+      from: this.get('ENV_RBX_SMS_SENDER', DEFAULT_ENV.SMS.from),
+      api_url: this.get('ENV_RBX_SMS_API_URL', DEFAULT_ENV.SMS.api_url),
+    };
+  }
+
+  public get EMAILSENDER(): iEMAILSENDER {
+    return {
+      NAME: this.get('ENV_RBX_SMTP_SENDING_NAME', DEFAULT_ENV.EMAILSENDER.NAME),
+      EMAIL: this.get(
+        'ENV_RBX_SMTP_SENDING_EMAIL',
+        DEFAULT_ENV.EMAILSENDER.EMAIL,
+      ),
+    };
+  }
+
+  public get HTTP(): iHTTP{
+    return {
+      TIMEOUT: parseInt(
+        this.get('ENV_RBX_HTTP_TIMEOUT', DEFAULT_ENV.HTTP.TIMEOUT),
+        10,
+      ),
+      MAXDIRECTS: parseInt(
+        this.get('ENV_RBX_HTTP_MAX_REDIRECTS', DEFAULT_ENV.HTTP.MAXDIRECTS),
+        10,
+      ),
+    };
+  }
+
+  public get FIREBASE(): iFIREBASE {
+    return {
+      CLIENT_EMAIL: this.get('ENV_RBX_FIREBASE_CLINET_EMAIL', DEFAULT_ENV.FIREBASE.CLIENT_EMAIL),
+      PRIVATE_KEY: this.get('ENV_RBX_FIREBASE_PRIVATE_KEY', DEFAULT_ENV.FIREBASE.PRIVATE_KEY),
+      PROJECT_ID: this.get('ENV_RBX_FIREBASE_PROJECT_ID', DEFAULT_ENV.FIREBASE.PROJECT_ID),
+    };
+  }
 
   get SWAGGER(): iSWAGGER {
     return {

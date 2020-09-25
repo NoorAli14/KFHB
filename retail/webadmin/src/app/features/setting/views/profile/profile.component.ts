@@ -5,8 +5,8 @@ import { MatDialog } from "@angular/material/dialog";
 import { UpdateProfileComponent } from "@feature/setting/components/update-profile/update-profile.component";
 import { User } from "@feature/entitlement/models/user.model";
 import { MESSAGES } from "@shared/constants/app.constants";
-import { camelToSnakeCase } from '@shared/helpers/global.helper';
-import { BaseComponent } from '@shared/components/base/base.component';
+import { camelToSnakeCase } from "@shared/helpers/global.helper";
+import { BaseComponent } from "@shared/components/base/base.component";
 
 @Component({
     selector: "app-profile",
@@ -17,14 +17,13 @@ import { BaseComponent } from '@shared/components/base/base.component';
 })
 export class ProfileComponent extends BaseComponent implements OnInit {
     dialogRef: any;
-    
-    
+
     currentUser: any;
     constructor(
         public _matDialog: MatDialog,
-        private _settingService: SettingService,
+        private _settingService: SettingService
     ) {
-        super()
+        super();
     }
 
     ngOnInit(): void {
@@ -35,27 +34,28 @@ export class ProfileComponent extends BaseComponent implements OnInit {
         const user = new User();
         this.dialogRef = this._matDialog
             .open(UpdateProfileComponent, {
-                data:  this.currentUser ,
+                data: this.currentUser,
                 panelClass: "app-update-profile",
                 disableClose: true,
                 hasBackdrop: true,
             })
             .componentInstance.sendResponse.subscribe((response) => {
-                _this.onUpdatProfile(response);
+                _this.onUpdateProfile(response);
             });
     }
 
-    onUpdatProfile(data) {
-        data= camelToSnakeCase(data);
+    onUpdateProfile(data) {
+        
+        data = camelToSnakeCase(data);
         this._settingService.updateProfile(data).subscribe(
             (response: User) => {
-                this._authUserService.User=response;
-                this.currentUser=this._authUserService.User;
-                 this.errorType = "success";
-                 this.responseMessage = MESSAGES.UPDATED("Profile");
+                this._authUserService.User = response;
+                this.currentUser = this._authUserService.User;
+                this.errorType = "success";
+                this.responseMessage = MESSAGES.UPDATED("Profile");
                 this._matDialog.closeAll();
             },
-           (response=>super.onError(response))
+            (response) => super.onError(response)
         );
     }
 }

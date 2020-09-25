@@ -38,19 +38,16 @@ export class UserComponent extends BaseComponent implements OnInit {
     roles: Role[];
     userPermissions: any[];
     username: FormControl;
-    
-    
-
     pageSize: number = CONFIG.PAGE_SIZE;
     pageSizeOptions: Array<number> = CONFIG.PAGE_SIZE_OPTIONS;
 
     displayedColumns = [
-        "username",
+        // "username",
         "firstName",
         "lastName",
-        "gender",
+        // "gender",
         "email",
-        "contactNo",
+        // "contactNo",
         "status",
         "actions",
     ];
@@ -65,10 +62,11 @@ export class UserComponent extends BaseComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.getData();
         super.ngOnInit();
         this.username = new FormControl("");
         this.initSearch();
-        this.getData();
+        
     }
 
     loadAllUsers() {
@@ -77,10 +75,7 @@ export class UserComponent extends BaseComponent implements OnInit {
                  this.responseMessage = "";
                 this.users = users;
             },
-            (error) => {
-                 this.errorType = "error";
-                 this.responseMessage = MESSAGES.UNKNOWN;
-            }
+            (response=>super.onError(response))
         );
     }
     getData() {
@@ -91,9 +86,7 @@ export class UserComponent extends BaseComponent implements OnInit {
                 this.dataSource.paginator = this.paginator;
                 this.dataSource.sort = this.sort;
             },
-            (error) => {
-                console.log(error);
-            }
+            (response=>super.onError(response))
         );
     }
     initSearch() {
@@ -164,14 +157,20 @@ export class UserComponent extends BaseComponent implements OnInit {
     createUser(model: User) {
         this._service.createUser(model).subscribe(
             (response) => {
-                 this.errorType = "success";
-                 this.responseMessage = MESSAGES.CREATED("User");
-                const data = this.dataSource.data;
-                data.push(response);
-                this.updateGrid(data);
-                this._matDialog.closeAll();
+                // const data = this.dataSource.data;
+                // data.push(response);
+                // this.updateGrid(data);
+                this._errorEmitService.emit(
+                    MESSAGES.INVITATION_SENT,
+                    "success"
+                );
             },
-            (response=>super.onError(response))
+            (response) => {
+                this._errorEmitService.emit(
+                    MESSAGES.UNKNOWN,
+                    "error"
+                );
+            }
         );
     }
     hideMessage() {
@@ -192,7 +191,9 @@ export class UserComponent extends BaseComponent implements OnInit {
                 this.hideMessage();
                 this._matDialog.closeAll();
             },
-            (response=>super.onError(response))
+            (response) => {
+                
+            }
         );
     }
     deleteUser(id: string) {

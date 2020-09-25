@@ -1,4 +1,3 @@
-import { AuthUserService } from '@core/services/user/auth-user.service';
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -9,6 +8,12 @@ import { FuseConfigService } from '@fuse/services/config.service';
 import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
 
 import { navigation } from 'app/navigation/navigation';
+import { AuthenticationService } from '@core/services/auth/authentication.service';
+import { Router } from '@angular/router';
+import { AuthUserService } from '@core/services/user/auth-user.service';
+import { UnsubscribeOnDestroyAdapter } from '@shared/models/unsubscribe-adapter.model';
+import { EventBusService } from '@core/services/event-bus/event-bus.service';
+import { Events } from '@shared/enums/events.enum';
 
 @Component({
     selector     : 'toolbar',
@@ -17,7 +22,7 @@ import { navigation } from 'app/navigation/navigation';
     encapsulation: ViewEncapsulation.None
 })
 
-export class ToolbarComponent implements OnInit, OnDestroy
+export class ToolbarComponent extends UnsubscribeOnDestroyAdapter  implements OnInit, OnDestroy
 {
     horizontalNavbar: boolean;
     rightNavbar: boolean;
@@ -26,7 +31,7 @@ export class ToolbarComponent implements OnInit, OnDestroy
     navigation: any;
     selectedLanguage: any;
     userStatusOptions: any[];
-    // currentUser:any;
+    user:any;
     // Private
     private _unsubscribeAll: Subject<any>;
 
@@ -41,10 +46,14 @@ export class ToolbarComponent implements OnInit, OnDestroy
         private _fuseConfigService: FuseConfigService,
         private _fuseSidebarService: FuseSidebarService,
         private _translateService: TranslateService,
-        private _authUserService:AuthUserService
+        private _authService: AuthenticationService, 
+        private _authUserService: AuthUserService, 
+        private router: Router, 
+           private eventService:EventBusService
     )
     {
-        // this.currentUser=this._authUserService.User;
+        super()
+         this.user=this._authUserService.User;
         // Set the defaults
         this.userStatusOptions = [
             {
@@ -102,6 +111,9 @@ export class ToolbarComponent implements OnInit, OnDestroy
      */
     ngOnInit(): void
     {
+        this.subs.sink = this.eventService.on(Events.USER_UPDATED, (user) => {
+            this.user=user;
+          })
         // Subscribe to the config changes
         this._fuseConfigService.config
             .pipe(takeUntil(this._unsubscribeAll))
@@ -162,5 +174,13 @@ export class ToolbarComponent implements OnInit, OnDestroy
 
         // Use the selected language for translations
         this._translateService.use(lang.id);
+    }
+
+    logout(){
+        this._authService.logout().subscribe(
+            (response)=>{
+                    this.router.navigateByUrl('/auth/login')
+            }
+        )
     }
 }

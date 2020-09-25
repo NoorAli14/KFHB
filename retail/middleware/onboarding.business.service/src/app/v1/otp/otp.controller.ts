@@ -1,15 +1,9 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import {
-  ApiTags,
-  ApiCreatedResponse,
-  ApiOkResponse,
-  ApiUnprocessableEntityResponse,
-} from '@nestjs/swagger';
+import { ApiTags, ApiOkResponse } from '@nestjs/swagger';
 
-@ApiTags('OTP')
+@ApiTags('OTP Module')
 @Controller('otp')
 export class OtpController {
-  
   @Post('/sms/send')
   @ApiOkResponse()
   async send_sms_otp(): Promise<any> {}

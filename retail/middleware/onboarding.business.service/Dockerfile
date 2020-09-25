@@ -83,7 +83,7 @@ RUN rm -rf src test
 # These variables will be different from application to application
 ENV ENV_RBX_HOST=${PORT} \
     NODE_ENV=${NODE_ENV} \
-    ENV_RBX_APP_NAME="Onboarding Business service"  \
+    ENV_RBX_APP_NAME="Rubix | Onboarding Business service"  \
     ENV_RBX_API_URL_PREFIX="/api/v1/onboarding" \
     ENV_RBX_HOST="http://localhost" \
     TZ=${TZ} \

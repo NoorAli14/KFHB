@@ -1,6 +1,13 @@
-import { IsNotEmpty, Length, IsString } from 'class-validator';
+import {
+  IsNotEmpty,
+  Length,
+  IsString,
+  ValidateNested,
+  IsOptional,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { IdsDto } from '@common/dtos';
+import { Type } from 'class-transformer';
 
 export class RoleDto {
   @ApiProperty({
@@ -18,8 +25,14 @@ export class RoleDto {
     required: false,
     description: 'Description about the role.',
   })
-  description?: string;
+  @IsOptional()
+  description: string;
 
-  @ApiProperty({ type: [IdsDto], description: 'List of module IDs.' })
-  modules?: IdsDto[];
+  @ApiProperty({
+    type: [IdsDto],
+    description: 'List of Module Permission IDs.',
+  })
+  @ValidateNested({ each: true })
+  @Type(() => IdsDto)
+  permissions: IdsDto[];
 }

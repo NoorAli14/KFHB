@@ -12,6 +12,8 @@ import { MatTableComponent } from "./components/mat-table/mat-table.component";
 import { WClockComponent } from "./components/time-control/w-clock.component";
 import { WTimeDialogComponent } from "./components/time-control/w-time-dialog.component";
 import { BaseComponent } from './components/base/base.component';
+import { DefaultTextComponent } from './components/default-text/default-text.component';
+import { MessageBoxComponent } from './components/message-box/message-box.component';
 
 @NgModule({
     declarations: [
@@ -21,7 +23,9 @@ import { BaseComponent } from './components/base/base.component';
         WClockComponent,
         WTimeDialogComponent,
         PermissionDirective,
-        BaseComponent
+        BaseComponent,
+        DefaultTextComponent,
+        MessageBoxComponent,
     ],
     imports: [
         ReactiveFormsModule,
@@ -37,7 +41,9 @@ import { BaseComponent } from './components/base/base.component';
         MatTableComponent,
         WTimeDialogComponent,
         PermissionDirective,
-        BaseComponent
+        MessageBoxComponent,
+        BaseComponent,
+        DefaultTextComponent,
     ],
 })
 export class SharedModule {}

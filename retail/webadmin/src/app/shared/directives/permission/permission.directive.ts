@@ -20,10 +20,11 @@ export class PermissionDirective implements OnInit {
     constructor(private elRef: ElementRef, private renderer: Renderer2) {}
     ngOnInit() {
         const el = this.elRef.nativeElement;
-        this.isView = this.permissions.find((x) => x.name == "view");
-        this.isEdit = this.permissions.find((x) => x.name == "edit");
-        this.isCreate = this.permissions.find((x) => x.name == "create");
-        this.isDelete = this.permissions.find((x) => x.name == "delete");
+        if(!this.permissions)return;
+        this.isView = this.permissions.find((x) => x.record_type == "view");
+        this.isEdit = this.permissions.find((x) => x.record_type == "edit");
+        this.isCreate = this.permissions.find((x) => x.record_type == "create");
+        this.isDelete = this.permissions.find((x) => x.record_type == "delete");
         if (!this.isView) {
             this.renderer.setStyle(el, "display", "none");
         }
@@ -39,7 +40,5 @@ export class PermissionDirective implements OnInit {
           this.renderer.setStyle(el, "display", "none");
       }
     }
-    @HostListener("click") onClick() {
-     
-    }
+    
 }
