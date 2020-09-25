@@ -11,8 +11,8 @@ import {
   IHEADER,
   formattedHeader,
 } from '@common/index';
-import { UserService } from '@app/v1/users/users.service';
-import { User } from '@app/v1/users/user.entity';
+import { CustomersService } from '@app/v1/customers/customers.service';
+import { Customer } from '@app/v1/customers/customer.entity';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -20,7 +20,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
     private readonly redisService: RedisClientService,
     private readonly configService: ConfigurationService,
-    private readonly customerService: UserService,
+    private readonly customerService: CustomersService,
   ) {
     // passReqToCallback allows to have the request in the validate() function
     super({
@@ -45,14 +45,14 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
    * @param payload Payload info
    * @returns {Promise<any>}
    */
-  async validate(request: Request, payload: {[key: string]: any}): Promise<User> {
+  async validate(request: Request, payload: { [key: string]: any }): Promise<Customer> {
     this.logger.log(`Start authenticating customer with ID [${payload.id}]`);
     if (!(await this.redisService.getValue(payload.id))) return null;
     const header: IHEADER = formattedHeader(payload.id, request.headers);
     setContext('HttpHeaders', header);
-    const user: User = await this.customerService.findOne(payload.id);
-    if (!user) throw new UnauthorizedException();
-    setContext('currentUser', user);
-    return user;
+    const customer: Customer = await this.customerService.findOne(payload.id);
+    if (!customer) throw new UnauthorizedException();
+    setContext('currentUser', customer);
+    return customer;
   }
 }

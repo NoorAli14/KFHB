@@ -30,19 +30,19 @@ import {
   CurrentUser,
   SuccessDto,
 } from '@common/index';
-import { UserService } from '@app/v1/users/users.service';
+import { CustomersService } from '@app/v1/customers/customers.service';
 import { CurrentUserUpdateDto } from '@app/v1/users/user.dto';
 import { RegisterCustomerDto } from './auth.dto';
-import { User as Customer } from '@app/v1/users/user.entity';
+import { Customer } from '@app/v1/customers/customer.entity';
 import { AuthService } from './auth.service';
 
 @ApiTags('Authentication / Authorization Module')
 @Controller('auth')
 export class AuthController {
   constructor(
-    private readonly customerService: UserService,
+    private readonly customerService: CustomersService,
     private readonly authService: AuthService,
-  ) {}
+  ) { }
 
   @Post('refresh-token')
   @ApiOperation({
