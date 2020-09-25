@@ -319,6 +319,7 @@ type User {
   first_name: String
   middle_name: String
   last_name: String
+  password_digest: String
   gender: String
   is_owner: String
   tenant_id: String
