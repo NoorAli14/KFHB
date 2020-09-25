@@ -1,13 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
-import {
-  Resolver,
-  Args,
-  Query,
-  Parent,
-  ResolveField,
-  Info,
-} from '@nestjs/graphql';
+import { Resolver, Args, Query, Parent, ResolveField } from '@nestjs/graphql';
 import { OptionsService } from './options.service';
 import { Option } from './option.model';
 import { Fields } from '@common/decorators';
@@ -15,6 +8,7 @@ import { Question } from '../questions/question.model';
 import { Loader } from 'nestjs-dataloader';
 import { QuestionLoaderForOption } from '@core/dataloaders';
 import DataLoader from '../../../lib/dataloader';
+import { result } from 'lodash';
 
 @Resolver(Option)
 export class OptionsResolver {
@@ -38,9 +32,8 @@ export class OptionsResolver {
   @Query(() => Option)
   async findOption(
     @Args('id') id: string,
-    @Info() info,
-    @Fields(Option) columns: string[],
+    @Fields(Option) output: string[],
   ): Promise<Option> {
-    return this.optionService.findById(id, columns);
+    return this.optionService.findById(id, output);
   }
 }
