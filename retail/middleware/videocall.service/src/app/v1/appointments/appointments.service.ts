@@ -89,6 +89,10 @@ export class AppointmentsService {
 
   async findById(id: string, keys?: string[]): Promise<any> {
     return this.appointmentDB.findOne({ id: id }, keys);
+	}
+	
+	async findByUserId(user_id: string, keys?: string[]): Promise<any> {
+    return this.appointmentDB.findOne({ user_id: user_id }, keys);
   }
 
   async findByIds(ids: readonly string[]): Promise<any> {
