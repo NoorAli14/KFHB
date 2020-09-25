@@ -130,3 +130,7 @@ export const generateRandomString = (length=36): string => {
 export const addMinutes = (minutes: number): Date => {
   return new Date(new Date().getTime() + minutes*60000);
 };
+
+export const getCurrentTimeStamp = () => {
+  return moment().format();
+}
