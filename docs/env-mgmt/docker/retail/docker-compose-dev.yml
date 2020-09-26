@@ -12,12 +12,12 @@ services:
   #=================================================================
   # Gateway Service
   #=================================================================
-  gateway-servcie:
+  retail-gateway:
     build:
       context: ../../../../retail/middleware/gateway.service
       dockerfile: Dockerfile
-    image: gateway-service:v1
-    container_name: gateway_service
+    image: retail-gateway:v1
+    container_name: retail_gateway
     environment:
       - ENV_RBX_NGINX_SERVER_NAME=$ENV_RBX_NGINX_SERVER_NAME
       - ENV_RBX_PORTAL_HOST=$ENV_RBX_PORTAL_HOST
@@ -38,12 +38,12 @@ services:
   #=================================================================
   # Admin Web Portal Service
   #=================================================================
-  webportal-service:
+  retail-webportal:
     build:
       context: ../../../../retail/webadmin/
       dockerfile: Dockerfile
-    image: "webportal:v1"
-    container_name: "webportal_service"
+    image: "retail-webportal:v1"
+    container_name: "retail_webportal"
     environment:
       - ENV_RBX_API_BASE_URL=$ENV_RBX_API_BASE_URL
       - ENV_RBX_APP_SECRET=$ENV_RBX_APP_SECRET
@@ -55,12 +55,12 @@ services:
   #=================================================================
   # Entitlement Business Service
   #=================================================================
-  entitlement-business-service:
+  retail-entitlement:
     build:
       context: ../../../../retail/middleware/entitlement.business.service
       dockerfile: Dockerfile
-    image: "entitlement-business-service:v1"
-    container_name: "entitlement_business_service"
+    image: "retail-entitlement:v1"
+    container_name: "retail_entitlement"
     environment:
       - ENV_RBX_PORT=5000
       - ENV_RBX_APP_NAME=Rubix | Entitlement Business Service
@@ -83,12 +83,12 @@ services:
   #=================================================================
   # Onboarding Business Service
   #=================================================================
-  onboarding-business-service:
+  retail-onboarding:
     build:
       context: ../../../../retail/middleware/onboarding.business.service
       dockerfile: Dockerfile
-    image: "onboarding-business-service:v1"
-    container_name: "onboarding_business_service"
+    image: "retail-onboarding:v1"
+    container_name: "retail_onboarding"
     environment:
       - ENV_RBX_PORT=4000
       - ENV_RBX_APP_NAME=Rubix | Onboarding Business Service
@@ -109,12 +109,12 @@ services:
   #=================================================================
   # Identity Service
   #=================================================================
-  identity-service:
+  retail-identity:
     build:
       context: ../../../../retail/middleware/identity.service
       dockerfile: Dockerfile
-    image: "identity-service:v1"
-    container_name: "identity_service"
+    image: "retail-identity:v1"
+    container_name: "retail_identity"
     environment:
       - ENV_RBX_PORT=4010
       - ENV_RBX_DB_USERNAME=$ENV_RBX_DB_USERNAME
@@ -143,12 +143,12 @@ services:
   #=================================================================
   # Compliance Service
   #=================================================================
-  compliance-service:
+  retail-compliance:
     build:
-      context: ../../../../retail/middleware/template.service
+      context: ../../../../retail/middleware/compliance.service
       dockerfile: Dockerfile
-    image: "compliance-service:v1"
-    container_name: "compliance_service"
+    image: "retail-compliance:v1"
+    container_name: "retail_compliance"
     environment:
       - ENV_RBX_PORT=5010
       - ENV_RBX_DB_USERNAME=$ENV_RBX_DB_USERNAME
@@ -168,12 +168,12 @@ services:
   # #=================================================================
   # # User Management Service
   # #=================================================================
-  user-management-service:
+  retail-user-management:
     build:
       context: ../../../../retail/middleware/entitlement.service
       dockerfile: Dockerfile
-    image: "user-management-service:v1"
-    container_name: "user_management_service"
+    image: "retail-user-management:v1"
+    container_name: "retail_user_management"
     environment:
       - ENV_RBX_PORT=5020
       - ENV_RBX_DB_USERNAME=$ENV_RBX_DB_USERNAME
@@ -193,12 +193,12 @@ services:
   # #=================================================================
   # # Notification Service
   # #=================================================================
-  notification-service:
+  retail-notification:
     build:
       context: ../../../../retail/middleware/notifications
       dockerfile: Dockerfile
-    image: "notification-service:v1"
-    container_name: "notification_service"
+    image: "retail-notification:v1"
+    container_name: "retail_notification"
     environment:
       - ENV_RBX_PORT=5030
       - ENV_RBX_DB_USERNAME=$ENV_RBX_DB_USERNAME
@@ -231,12 +231,12 @@ services:
   #=================================================================
   # Reference Service
   #=================================================================
-  reference-service:
+  retail-reference:
     build:
       context: ../../../../retail/middleware/reference.service
       dockerfile: Dockerfile
-    image: "reference-service:v1"
-    container_name: "reference_service"
+    image: "retail-reference:v1"
+    container_name: "retail_reference"
     environment:
       - ENV_RBX_PORT=2000
       - ENV_RBX_APP_NAME=Rubix | References Service
