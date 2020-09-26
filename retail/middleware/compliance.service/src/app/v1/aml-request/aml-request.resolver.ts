@@ -10,64 +10,31 @@ import { ICurrentUser, IHEADER } from '@common/interfaces';
 export class AmlRequestResolver {
   constructor(private readonly almRequestService: AmlRequestService) {}
 
-  @Query(() => AmlRequest)
-  async checkAmlByUserId(
+  @Mutation(() => AmlRequest)
+  async amlScreening(
     @CurrentUser() currentUser: ICurrentUser,
     @Args('user_id') user_id: string,
     @Fields(AmlRequest) output: string[],
   ): Promise<AmlRequest> {
-    // const amlRequest = await this.almRequestService.getAmlRequestByUserId(
-    //   currentUser,
-    //   user_id,
-    //   output,
-    // );
-    // console.log(amlRequest, 'aml Request');
-    const user = await this.almRequestService.findById(currentUser, user_id);
-    const { result } = user?.data;
-    if (!result) {
-      throw new NotFoundException('User Not Found');
-    }
-    const response = await this.almRequestService.checkAmlByUser(
+    const amlRequest = await this.almRequestService.getAmlRequestByUserId(
       currentUser,
-      result,
+      user_id,
       output,
     );
 
-    console.log(response.status, '0-0-0-0-0');
-
-    if (response && response.status === 'SUSPECT') {
-      throw new HttpException(
-        {
-          status: HttpStatus.NOT_FOUND,
-          error: 'Your aml request is under review.',
-        },
-        HttpStatus.FAILED_DEPENDENCY,
+    if (!amlRequest) {
+      const user = await this.almRequestService.findById(currentUser, user_id);
+      const amlRequest = await this.almRequestService.create(
+        currentUser,
+        user,
+        output,
       );
-    } else if (response && response.status === 'BLOCK') {
-      throw new HttpException(
-        {
-          status: HttpStatus.NOT_FOUND,
-          error: 'Your aml request is blocked.',
-        },
-        HttpStatus.FAILED_DEPENDENCY,
-      );
+      return this.almRequestService.triggerAml(amlRequest, output);
     }
-    return response;
-  }
 
-  @Mutation(() => AmlRequest)
-  async addAmlRequest(
-    @Args('id') user_id: string,
-    @Fields(AmlRequest) columns: string[],
-  ): Promise<AmlRequest> {
-    const amlRequest: NewAlmRequestInput = {
-      aml_text: 'Some',
-      user_id: user_id,
-      remarks: 'Testing',
-      request_reference: 'some ref',
-      status: 'SUCCESS',
-      tenant_id: '9013C327-1190-4875-A92A-83ACA9029160',
-    };
-    return this.almRequestService.create(amlRequest, columns);
+    if (amlRequest.status === 'SUSPECT') {
+      return this.almRequestService.triggerAml(amlRequest, output);
+    }
+    return amlRequest;
   }
 }

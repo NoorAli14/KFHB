@@ -10,6 +10,7 @@ import {
   TemplateQuestionsRepository,
   TemplateResponsesRepository,
   AmlRequestRepository,
+  AmlResponseRepository,
 } from '.';
 
 const repositories = [
@@ -20,6 +21,7 @@ const repositories = [
   TemplateQuestionsRepository,
   TemplateResponsesRepository,
   AmlRequestRepository,
+  AmlResponseRepository,
 ];
 
 @Module({

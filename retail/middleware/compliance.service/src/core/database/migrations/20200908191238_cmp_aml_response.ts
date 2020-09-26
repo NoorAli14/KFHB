@@ -14,10 +14,9 @@ export async function up(knex: Knex): Promise<void> {
       .inTable(TABLE.AML_REQUEST)
       .onDelete('cascade');
 
-    table.string('response_status'); //(1.Clean, 2.Suspect, 3.Confirm-Clean and 4.Confirm-Block)
-    table.string('response_type'); // {Aml Response 1 or Aml Response 2}
+    table.string('status'); //(1.Clean, 2.Suspect, 3.Confirm-Clean and 4.Confirm-Block)
+    table.text('response_text'); // {Aml Response 1 or Aml Response 2}
 
-    table.timestamp('response_on');
     table.timestamp('created_on', { useTz: true }).defaultTo(knex.fn.now());
     table.string('created_by');
 
@@ -27,11 +26,7 @@ export async function up(knex: Knex): Promise<void> {
     table.timestamp('deleted_on', { useTz: true });
     table.string('deleted_by');
 
-    table.index(
-      'response_status',
-      `${TABLE.AML_RESPONSE}_RESPONSE_STATUS_INDEX`,
-    );
-    table.index('response_type', `${TABLE.AML_RESPONSE}_RESPONSE_TYPE_INDEX`);
+    table.index('status', `${TABLE.AML_RESPONSE}_STATUS_INDEX`);
     table.index('deleted_on', `${TABLE.AML_RESPONSE}_DELETED_ON_INDEX`);
   });
 }

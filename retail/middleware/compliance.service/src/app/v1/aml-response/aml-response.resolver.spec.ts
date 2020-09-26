@@ -16,7 +16,7 @@ describe('AmlResponseResolver', () => {
               id: 5,
               response_on: reference_no,
               request_reference: 'Alm Request Ref',
-              response_status: 'Aml Status',
+              status: 'Aml Status',
             })),
           }),
         },
@@ -42,7 +42,7 @@ describe('AmlResponseResolver', () => {
         id: 5,
         response_on: '6D44CFC4-CDD1-445D-ACCF-2099ED4D347A',
         request_reference: 'Alm Request Ref',
-        response_status: 'Aml Status',
+        status: 'Aml Status',
       });
     });
   });

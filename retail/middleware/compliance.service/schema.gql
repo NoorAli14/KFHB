@@ -30,9 +30,9 @@ type AmlRequest {
 
 type AmlResponse {
   id: String!
-  response_status: String!
+  status: String!
   response_on: DateTime!
-  response_type: String!
+  response_text: String!
   created_on: DateTime!
   created_by: String!
   updated_on: DateTime!
@@ -49,7 +49,7 @@ scalar DateTime
 
 type Mutation {
   addTemplateResponse(input: NewTemplateResponseInput!): TemplateResponse!
-  addAmlRequest(id: String!): AmlRequest!
+  amlScreening(user_id: String!): AmlRequest!
 }
 
 input NewTemplateResponseInput {
@@ -83,7 +83,6 @@ type Query {
   templatesList: [Template!]!
   findTemplateByName(name: String!): Template!
   findTemplate(id: String!): Template!
-  checkAmlByUserId(user_id: String!): AmlRequest!
   getAmlStatueByRefNo(user_id: String!, reference_no: String!): AmlResponse!
 }
 
