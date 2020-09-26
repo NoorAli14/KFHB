@@ -42,7 +42,7 @@
                 <ng-container *ngFor="let key of displayedColumns" [matColumnDef]="key">
                     <mat-header-cell *matHeaderCellDef>{{ key.includes('action') ? 'Action' : camelToSentenceCase(key) }}</mat-header-cell>
             
-                    <mat-cell *matCellDef="let element; let i = dataIndex">
+                    <mat-cell *matCellDef="let element; let i = dataIndex" class="text-elipsis">
                       <ng-container [ngSwitch]="key">
                         <span *ngSwitchCase="'fullDay'">
                             <span class="status text-truncate h6 p-4 green-800 full-day" *ngIf="element[key]==1; else noTemplate">Yes</span>

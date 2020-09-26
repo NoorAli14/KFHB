@@ -141,3 +141,11 @@ mat-form-field.mat-form-field.mat-form-field-appearance-outline>div.mat-form-fie
 .hover{
     cursor: pointer;
 }
+
+.text-elipsis{
+    padding-top: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
+    text-overflow: ellipsis;
+}

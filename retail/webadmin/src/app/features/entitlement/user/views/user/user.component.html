@@ -49,7 +49,7 @@
                 <!-- COLUMNS AND ROWS-->
                 <ng-container *ngFor="let key of displayedColumns" [matColumnDef]="key">
                     <mat-header-cell *matHeaderCellDef>{{ key.includes('action') ? 'Action' : camelToSentenceCase(key) }}</mat-header-cell>
-                    <mat-cell *matCellDef="let element; let i = dataIndex" >
+                    <mat-cell *matCellDef="let element; let i = dataIndex" class="text-elipsis" >
                         <ng-container  [ngSwitch]="key">
                             <span  *ngSwitchCase="'action'">
                                 <mat-icon class="hover" appPermission [permissions]="userPermissions" matTooltip="Delete user" [type]="'delete'" color="warn" type="button" (click)=" confirmDialog('delete',element['id'])">delete</mat-icon> &nbsp;&nbsp;

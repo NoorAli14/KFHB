@@ -41,7 +41,7 @@
                 <ng-container *ngFor="let key of displayedColumns" [matColumnDef]="key">
                     <mat-header-cell *matHeaderCellDef>{{ key.includes('action') ? 'Action' : camelToSentenceCase(key) }}</mat-header-cell>
             
-                    <mat-cell *matCellDef="let element; let i = dataIndex">
+                    <mat-cell *matCellDef="let element; let i = dataIndex" class="text-elipsis">
                         <ng-container  [ngSwitch]="key">
                             <span  *ngSwitchCase="'holidayDate'">
                                 {{element[key] | date:'mediumDate'}}

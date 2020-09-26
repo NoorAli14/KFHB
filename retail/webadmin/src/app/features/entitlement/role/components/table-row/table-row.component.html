@@ -5,7 +5,7 @@
         <ng-container *ngFor="let key of displayedColumns" [matColumnDef]="key">
             <mat-header-cell *matHeaderCellDef>{{ key.includes('Icon') ? 'Modules' : camelToSentenceCase(key) }}</mat-header-cell>
 
-            <mat-cell *matCellDef="let element; let i = dataIndex">
+            <mat-cell *matCellDef="let element; let i = dataIndex" class="text-elipsis">
                 <ng-container  [ngSwitch]="key">
                     <span  *ngSwitchCase="'expandIcon'">
                         <mat-icon class="hover" *ngIf="key === 'expandIcon' " matTooltip="Explore" (click)="toggleExpandableSymbol(element['id'])"> {{expandedId==element['id'] ? 'keyboard_arrow_up' : ' keyboard_arrow_down'}} </mat-icon>
