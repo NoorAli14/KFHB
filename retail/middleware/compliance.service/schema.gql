@@ -14,7 +14,7 @@ directive @provides(fields: String!) on FIELD_DEFINITION
 
 type AmlRequest {
   id: String!
-  customer_id: String!
+  user_id: String!
   tenant_id: String!
   request_reference: String!
   aml_text: String!

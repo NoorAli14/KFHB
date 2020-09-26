@@ -32,7 +32,7 @@ export class AmlRequestResolver {
   ): Promise<AmlRequest> {
     const amlRequest: NewAlmRequestInput = {
       aml_text: 'Some',
-      customer_id: user_id,
+      user_id: user_id,
       remarks: 'Testing',
       request_reference: 'some ref',
       status: 'SUCCESS',

@@ -12,7 +12,7 @@ describe('AmlResponseResolver', () => {
         {
           provide: AmlResponseService,
           useFactory: () => ({
-            getAmlStatus: jest.fn((customer_id, reference_no) => ({
+            getAmlStatus: jest.fn((user_id, reference_no) => ({
               id: 5,
               response_on: reference_no,
               request_reference: 'Alm Request Ref',

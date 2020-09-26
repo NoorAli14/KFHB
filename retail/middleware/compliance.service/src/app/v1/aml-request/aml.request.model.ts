@@ -6,7 +6,7 @@ export class AmlRequest {
   id: string;
 
   @Field()
-  customer_id: string;
+  user_id: string;
 
   @Field()
   tenant_id: string;
