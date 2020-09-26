@@ -11,25 +11,29 @@ export async function up(knex: Knex): Promise<void> {
     table
       .uuid('id')
       .primary()
-      .defaultTo(knex.raw(DATABASE_UUID_METHOD));
-    table.dateTime('call_time').notNullable();
-    table
-      .enum('gender', Object.values(GENDER), {
-        useNative: true,
-        enumName: 'GENDER',
-      })
-      .notNullable();
-    table
-      .enum('status', Object.values(APPOINTMENT_STATUS), {
-        useNative: true,
-        enumName: 'APPOINTMENT_STATUS',
-      })
-      .notNullable();
+      .defaultTo(knex.raw(DATABASE_UUID_METHOD()));
 
-    table.uuid('user_id');
+    table.uuid('tenant_id').notNullable();
+    table.uuid('user_id').notNullable();
 
-    table.timestamp('created_on').defaultTo(knex.fn.now());
-    table.timestamp('updated_on').defaultTo(knex.fn.now());
+    table.timestamp('call_time', { useTz: true }).notNullable();
+    table.string('gender');
+    table.string('status');
+
+    table.timestamp('created_on', { useTz: true }).defaultTo(knex.fn.now());
+    table.string('created_by');
+
+    table.timestamp('updated_on', { useTz: true }).defaultTo(knex.fn.now());
+    table.string('updated_by');
+
+    table.timestamp('deleted_on', { useTz: true });
+    table.string('deleted_by');
+
+    table.index('tenant_id', `${TABLE.APPOINTMENT}_TENANT_ID_INDEX`);
+    table.index('user_id', `${TABLE.APPOINTMENT}_USER_ID_INDEX`);
+    table.index('gender', `${TABLE.APPOINTMENT}_GENDER_INDEX`);
+    table.index('status', `${TABLE.APPOINTMENT}_STATUS_INDEX`);
+    table.index('deleted_on', `${TABLE.APPOINTMENT}_DELETED_ON_INDEX`);
   });
 }
 

@@ -1,10 +1,9 @@
-import { ApiProperty } from '@nestjs/swagger';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { GENDER, APPOINTMENT_STATUS, PLATFORMS } from '@common/constants';
 import { IsDate, IsEnum } from 'class-validator';
 
 @ObjectType()
-export class UserGQL {
+export class User {
   @Field()
   id?: string;
 
@@ -52,39 +51,8 @@ export class UserGQL {
   updated_on?: Date;
 }
 
-export class Appointment {
-  readonly id: string;
-
-  @ApiProperty({
-    example: 'Call Time',
-    type: Date,
-    description: 'Scheduled time of the Call',
-  })
-  call_time: Date;
-
-  @ApiProperty({
-    example: 'male',
-    enum: GENDER,
-    description: 'Gender of the Agent',
-  })
-  gender: GENDER;
-
-  @ApiProperty({
-    example: 'male',
-    enum: APPOINTMENT_STATUS,
-    description: 'Gender of the Agent',
-  })
-  status: APPOINTMENT_STATUS;
-
-  @ApiProperty({
-    example: 'e2fad381-d8b0-4531-a9f5-9c908dc9b54a',
-    description: 'UUID of the Customer.',
-  })
-  user_id: string;
-}
-
 @ObjectType()
-export class AppointmentGQL {
+export class Appointment {
   @Field()
   id: string;
 
@@ -102,8 +70,8 @@ export class AppointmentGQL {
 
   user_id?: string;
 
-  @Field(() => UserGQL) // Will get this field from another service using ResolveField function.
-  user?: UserGQL;
+  @Field(() => User) // Will get this field from another service using ResolveField function.
+  user?: User;
 
   @Field()
   created_on: Date;

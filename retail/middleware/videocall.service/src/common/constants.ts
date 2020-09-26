@@ -31,7 +31,7 @@ export enum PLATFORMS {
 }
 registerEnumType(PLATFORMS, { name: 'MOBILE_PLATFORMS' });
 
-export const DATABASE_UUID_METHOD = 'NEWID()';
+export const DATABASE_UUID_METHOD = (): string => 'NEWID()';
 
 export const DATABASE_MIGRATION_TABLE_NAME =
   process.env.DATABASE_MIGRATION_TABLE_NAME || 'RUBIX_VIDEO_MIGRATION';

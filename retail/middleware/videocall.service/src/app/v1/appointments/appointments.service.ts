@@ -5,7 +5,7 @@ import { NewAppointmentInput } from './appointment.dto';
 import { AppointmentRepository } from '@core/repository';
 
 import { ConfigurationService } from '@common/configuration/configuration.service';
-import { AppointmentGQL } from './appointment.model';
+import { Appointment } from './appointment.model';
 import * as moment from 'moment';
 import { APPOINTMENT_STATUS, GENDER } from '@common/constants';
 import { GqlClientService } from '@common/libs/gqlclient/gqlclient.service';
@@ -89,9 +89,9 @@ export class AppointmentsService {
 
   async findById(id: string, keys?: string[]): Promise<any> {
     return this.appointmentDB.findOne({ id: id }, keys);
-	}
-	
-	async findByUserId(user_id: string, keys?: string[]): Promise<any> {
+  }
+
+  async findByUserId(user_id: string, keys?: string[]): Promise<any> {
     return this.appointmentDB.findOne({ user_id: user_id }, keys);
   }
 
@@ -113,7 +113,7 @@ export class AppointmentsService {
     const start_date = start_date_time.toISOString().split('T')[0];
     const end_date = end_date_time.toISOString().split('T')[0];
 
-    const appointments: AppointmentGQL[] = await this.appointmentDB.between(
+    const appointments: Appointment[] = await this.appointmentDB.between(
       'call_time',
       start_date,
       end_date,
@@ -167,7 +167,7 @@ export class AppointmentsService {
       return;
     }
 
-    const appointments: AppointmentGQL[] = JSON.parse(key_result);
+    const appointments: Appointment[] = JSON.parse(key_result);
 
     // Filter the appointments under 15 minutes from Date.now()
     const appointments_coming = appointments.filter(appointment => {

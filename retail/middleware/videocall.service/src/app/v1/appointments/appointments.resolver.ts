@@ -7,20 +7,20 @@ import {
   Parent,
 } from '@nestjs/graphql';
 import { AppointmentsService } from './appointments.service';
-import { AppointmentGQL, UserGQL } from './appointment.model';
+import { Appointment, User } from './appointment.model';
 import { NewAppointmentInput } from './appointment.dto';
 import { Fields } from '@common/decorators';
 import { PLATFORMS } from '@common/constants';
 
-@Resolver(AppointmentGQL)
+@Resolver(Appointment)
 export class AppointmentsResolver {
   constructor(private readonly appointmentsService: AppointmentsService) {}
 
-  @ResolveField(() => UserGQL)
+  @ResolveField(() => User)
   async user(
-    @Fields(UserGQL) columns: string[],
-    @Parent() appointment: AppointmentGQL,
-  ): Promise<UserGQL> {
+    @Fields(User) columns: string[],
+    @Parent() appointment: Appointment,
+  ): Promise<User> {
     // Query API call to get the User data from another Service.
     const user = this.appointmentsService.get_user_by_id_from_service(
       appointment.user_id,
@@ -44,27 +44,27 @@ export class AppointmentsResolver {
     );
   }
 
-  @Mutation(() => AppointmentGQL)
+  @Mutation(() => Appointment)
   async addAppointment(
     @Args('appointment') appointment: NewAppointmentInput,
-    @Fields(AppointmentGQL) columns: string[],
-  ): Promise<AppointmentGQL> {
+    @Fields(Appointment) columns: string[],
+  ): Promise<Appointment> {
     return this.appointmentsService.create(appointment, columns);
   }
 
-  @Query(() => AppointmentGQL)
+  @Query(() => Appointment)
   async findAppointment(
     @Args('appointment_id') appointment_id: string,
-    @Fields(AppointmentGQL) columns: string[],
-  ): Promise<AppointmentGQL> {
+    @Fields(Appointment) columns: string[],
+  ): Promise<Appointment> {
     return this.appointmentsService.findById(appointment_id, columns);
   }
 
-  @Query(() => AppointmentGQL)
+  @Query(() => Appointment)
   async findAppointmentByUserId(
     @Args('user_id') user_id: string,
-    @Fields(AppointmentGQL) columns: string[],
-  ): Promise<AppointmentGQL> {
+    @Fields(Appointment) columns: string[],
+  ): Promise<Appointment> {
     return this.appointmentsService.findByUserId(user_id, columns);
   }
 }

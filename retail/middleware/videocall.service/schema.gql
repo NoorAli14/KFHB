@@ -12,6 +12,16 @@ directive @requires(fields: String!) on FIELD_DEFINITION
 
 directive @provides(fields: String!) on FIELD_DEFINITION
 
+type Appointment {
+  id: String!
+  call_time: DateTime!
+  gender: GENDER!
+  status: APPOINTMENT_STATUS!
+  user: User!
+  created_on: DateTime!
+  updated_on: DateTime!
+}
+
 enum APPOINTMENT_STATUS {
   SCHEDULED
   RESCHEDULED
@@ -19,16 +29,6 @@ enum APPOINTMENT_STATUS {
   NOTIFICATION
   ATTENDED
   CANCELLED
-}
-
-type AppointmentGQL {
-  id: String!
-  call_time: DateTime!
-  gender: GENDER!
-  status: APPOINTMENT_STATUS!
-  user: UserGQL!
-  created_on: DateTime!
-  updated_on: DateTime!
 }
 
 """
@@ -42,7 +42,7 @@ enum GENDER {
 }
 
 type Mutation {
-  addAppointment(appointment: NewAppointmentInput!): AppointmentGQL!
+  addAppointment(appointment: NewAppointmentInput!): Appointment!
 }
 
 input NewAppointmentInput {
@@ -53,10 +53,11 @@ input NewAppointmentInput {
 }
 
 type Query {
-  findAppointment(appointment_id: String!): AppointmentGQL!
+  findAppointment(appointment_id: String!): Appointment!
+  findAppointmentByUserId(user_id: String!): Appointment!
 }
 
-type UserGQL {
+type User {
   id: String!
   first_name: String!
   middle_name: String!
