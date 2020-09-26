@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import {
   GqlClientService,
   USER_STATUSES,
-  IHEADER,
   SuccessDto,
 } from '@common/index';
 import { NotificationsService } from '@app/v1/notifications/notifications.service';
@@ -16,18 +15,16 @@ export class InvitationsService {
     private readonly gqlClient: GqlClientService,
     private readonly userService: UserService,
     private readonly notificationService: NotificationsService,
-  ) {}
+  ) { }
 
-  async invite(header: IHEADER, input: UpdateUserDto): Promise<User> {
-    const user: User = await this.userService.create(header, input);
+  async invite(input: UpdateUserDto): Promise<User> {
+    const user: User = await this.userService.create(input);
     const invitation: any = await this.userService.findOne(
-      header,
       user.id,
       `{id invitation_token}`,
     );
 
     await this.notificationService.sendInvitationLink(
-      header,
       user.email,
       invitation.invitation_token,
     );
@@ -35,21 +32,19 @@ export class InvitationsService {
   }
 
   async acceptInvitation(
-    header: IHEADER,
     id: string,
-    input: any,
+    input: Record<string, any>,
   ): Promise<User> {
     input.status = USER_STATUSES.ACTIVE;
     input.invitation_token = null;
     input.invitation_token_expiry = null;
-    return this.userService.update(header, id, input);
+    return this.userService.update(id, input);
   }
 
   async resendInvitationLink(
-    header: IHEADER,
     userId: string,
   ): Promise<SuccessDto> {
-    const mutation: string = `mutation {
+    const mutation = `mutation {
       result: resetInvitationToken(id: "${userId}"){
         id
         email
@@ -57,9 +52,8 @@ export class InvitationsService {
         invitation_token_expiry
       }
     }`;
-    const invitation = await this.gqlClient.setHeaders(header).send(mutation);
+    const invitation = await this.gqlClient.send(mutation);
     await this.notificationService.sendInvitationLink(
-      header,
       invitation.email,
       invitation.invitation_token,
     );

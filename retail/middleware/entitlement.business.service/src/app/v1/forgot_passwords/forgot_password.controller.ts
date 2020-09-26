@@ -17,13 +17,13 @@ import {
   ApiBadRequestResponse,
 } from '@nestjs/swagger';
 import { ForgotPasswordService } from './forgot_password.service';
-import { Header, IHEADER, SuccessDto } from '@common/index';
+import { SuccessDto } from '@common/index';
 
 @ApiTags('Forgot Password')
 @Controller('users/password')
 @ApiBearerAuth()
 export class ForgotPasswordController {
-  constructor(private readonly forgotPasswordService: ForgotPasswordService) {}
+  constructor(private readonly forgotPasswordService: ForgotPasswordService) { }
 
   @Post('/')
   @ApiBody({ description: 'Sets the user properties.' })
@@ -41,10 +41,9 @@ export class ForgotPasswordController {
   })
   @HttpCode(HttpStatus.OK)
   async sendResetPasswordLink(
-    @Header() header: IHEADER,
     @Body() userDto: { email: string },
   ): Promise<SuccessDto> {
-    return this.forgotPasswordService.sendResetPasswordLink(header, userDto);
+    return this.forgotPasswordService.sendResetPasswordLink(userDto);
   }
 
   @Get(':token')
@@ -58,10 +57,9 @@ export class ForgotPasswordController {
     description: 'Check reset password token status.',
   })
   async checkStatus(
-    @Header() header: IHEADER,
     @Param('token') token: string,
   ): Promise<SuccessDto> {
-    return this.forgotPasswordService.checkStatus(header, token);
+    return this.forgotPasswordService.checkStatus(token);
   }
 
   @Put(':token')
@@ -79,10 +77,9 @@ export class ForgotPasswordController {
     description: 'Input Validation failed.',
   })
   async changePassword(
-    @Header() header: IHEADER,
     @Param('token') token: string,
     @Body() input: { password: string },
   ): Promise<SuccessDto> {
-    return this.forgotPasswordService.changePassword(header, token, input);
+    return this.forgotPasswordService.changePassword(token, input);
   }
 }

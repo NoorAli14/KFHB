@@ -5,7 +5,6 @@ import {
 } from '@nestjs/common';
 import {
   GqlClientService,
-  IHEADER,
   SuccessDto,
   USER_STATUSES,
 } from '@common/index';
@@ -19,30 +18,28 @@ export class ForgotPasswordService {
     private readonly gqlClient: GqlClientService,
     private readonly userService: UserService,
     private readonly notificationService: NotificationsService,
-  ) {}
+  ) { }
 
   async sendResetPasswordLink(
-    header: IHEADER,
     input: {
       [key: string]: string;
     },
   ): Promise<SuccessDto> {
-    const user: User = await this.userService.findByEmail(header, input.email);
+    const user: User = await this.userService.findByEmail(input.email);
     if (!user) {
       throw new NotFoundException('User Not Found');
     } else if (user.status !== USER_STATUSES.ACTIVE) {
       throw new BadRequestException(`Invalid Request`);
     }
-    const query: string = `query {
+    const query = `query {
       result: forgotPassword(input: {email: "${user.email}"}) {
         password_reset_token
         password_reset_token_expiry
       }
     }`;
 
-    const result: any = await this.gqlClient.setHeaders(header).send(query);
+    const result: any = await this.gqlClient.send(query);
     await this.notificationService.sendResetPasswordLink(
-      header,
       user.email,
       result.password_reset_token,
     );
@@ -54,12 +51,10 @@ export class ForgotPasswordService {
   }
 
   async changePassword(
-    header: IHEADER,
     token: string,
     input: { [key: string]: string },
   ): Promise<SuccessDto> {
     const user: any = await this.userService.findByPasswordResetToken(
-      header,
       token,
     );
     if (!user) {
@@ -67,13 +62,13 @@ export class ForgotPasswordService {
     } else if (user.status !== USER_STATUSES.ACTIVE) {
       throw new BadRequestException(`Invalid Request`);
     }
-    const mutation: string = `mutation {
+    const mutation = `mutation {
       changePassword(input: { 
         password_reset_token: "${token}", 
         password: "${input.password}"
       }){ id email status }
     }`;
-    const result: any = await this.gqlClient.setHeaders(header).send(mutation);
+    const result: any = await this.gqlClient.send(mutation);
     if (result?.errors) {
       throw new BadRequestException('Invalid Password Reset Token');
     }
@@ -83,9 +78,8 @@ export class ForgotPasswordService {
     };
   }
 
-  async checkStatus(header: IHEADER, token: string): Promise<SuccessDto> {
+  async checkStatus(token: string): Promise<SuccessDto> {
     const user: any = await this.userService.findByPasswordResetToken(
-      header,
       token,
     );
     if (!user) {

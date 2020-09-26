@@ -5,7 +5,6 @@ import {
   Param,
   Put,
   Delete,
-  NotFoundException,
   ParseUUIDPipe,
   UseGuards,
   HttpCode,
@@ -21,17 +20,17 @@ import {
   ApiNotFoundResponse,
   ApiNoContentResponse,
 } from '@nestjs/swagger';
-import { AuthGuard, Header, IHEADER } from '@common/index';
+import { AuthGuard, } from '@common/index';
 import { UserService } from './users.service';
 import { User } from './user.entity';
-import { ChangePasswordDto, UpdateUserDto } from './user.dto';
+import { UpdateUserDto } from './user.dto';
 
 @ApiTags('User')
 @Controller('users')
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
 export class UsersController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
 
   @Get('/')
   @ApiOperation({
@@ -40,8 +39,8 @@ export class UsersController {
     summary: 'List of all users.',
   })
   @ApiOkResponse({ type: [User], description: 'List of all users.' })
-  async list(@Header() header: IHEADER): Promise<User[]> {
-    return this.userService.list(header);
+  async list(): Promise<User[]> {
+    return this.userService.list();
   }
 
   @Get(':id')
@@ -59,14 +58,9 @@ export class UsersController {
     description: 'User Not Found.',
   })
   async findOne(
-    @Header() header: IHEADER,
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<User> {
-    const user = await this.userService.findOne(header, id);
-    if (!user) {
-      throw new NotFoundException('User Not Found');
-    }
-    return user;
+    return this.userService.findOne(id);
   }
 
   @Put(':id')
@@ -89,11 +83,10 @@ export class UsersController {
     description: 'User Not Found.',
   })
   async update(
-    @Header() header: IHEADER,
     @Param('id', ParseUUIDPipe) id: string,
     @Body() input: UpdateUserDto,
   ): Promise<User> {
-    return this.userService.update(header, id, input);
+    return this.userService.update(id, input);
   }
 
   @Delete(':id')
@@ -111,9 +104,8 @@ export class UsersController {
   })
   @HttpCode(HttpStatus.NO_CONTENT)
   async delete(
-    @Header() header: IHEADER,
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<any> {
-    return this.userService.delete(header, id);
+    return this.userService.delete(id);
   }
 }

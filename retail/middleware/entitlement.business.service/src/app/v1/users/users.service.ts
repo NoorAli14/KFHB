@@ -1,11 +1,10 @@
 import {
   Injectable,
-  NotFoundException,
   UnprocessableEntityException,
   Logger,
 } from '@nestjs/common';
 import { User } from './user.entity';
-import { GqlClientService, IHEADER, toGraphql } from '@common/index';
+import { GqlClientService, toGraphql } from '@common/index';
 import { ChangePasswordDto, UpdateUserDto } from './user.dto';
 
 @Injectable()
@@ -65,10 +64,10 @@ export class UserService {
     updated_by
   }`;
 
-  constructor(private readonly gqlClient: GqlClientService) {}
+  constructor(private readonly gqlClient: GqlClientService) { }
 
-  async list(header: IHEADER): Promise<User[]> {
-    const query: string = `query {
+  async list(): Promise<User[]> {
+    const query = `query {
       result: usersList {
         id
         first_name
@@ -95,52 +94,50 @@ export class UserService {
         updated_by
       }
     }`;
-    return this.gqlClient.setHeaders(header).send(query);
+    return this.gqlClient.send(query);
   }
 
-  async create(header: IHEADER, input: any): Promise<User> {
-    const user: User = await this.findByEmail(header, input.email);
+  async create(input: any): Promise<User> {
+    const user: User = await this.findByEmail(input.email);
     if (user) {
       throw new UnprocessableEntityException(
         `User Already Exist with email ${input.email}`,
       );
     }
-    const mutation: string = `mutation {
+    const mutation = `mutation {
       result: addUser(input: ${toGraphql(input)}) ${this.output}
     }`;
-    return this.gqlClient.setHeaders(header).send(mutation);
+    return this.gqlClient.send(mutation);
   }
 
-  async findOne(header: IHEADER, id: string, output?: string): Promise<User> {
+  async findOne(id: string, output?: string): Promise<User> {
     const _output: string = output ? output : this.output;
-    const query: string = `query {
+    const query = `query {
       result: findUserById(id: "${id}") ${_output}
     }`;
-    return this.gqlClient.setHeaders(header).send(query);
+    return this.gqlClient.send(query);
   }
 
-  async login(header: IHEADER, email: string, password: string): Promise<any> {
-    const query: string = `query {
+  async login(email: string, password: string): Promise<any> {
+    const query = `query {
         result: login(input: ${toGraphql({ email, password })}) ${this.output}
       }`;
-    return this.gqlClient.setHeaders(header).send(query);
+    return this.gqlClient.send(query);
   }
 
   async findBy(
-    header: IHEADER,
-    condition: any,
+    condition: [Record<string, unknown>],
     output?: string,
   ): Promise<User[]> {
     const _output: string = output ? output : this.output;
     const params = `query {
       result: findUserBy(checks: ${toGraphql(condition)}) ${_output}
     }`;
-    return this.gqlClient.setHeaders(header).send(params);
+    return this.gqlClient.send(params);
   }
 
-  async findByEmail(header: IHEADER, email: string) {
+  async findByEmail(email: string): Promise<User> {
     const [user] = await this.findBy(
-      header,
       [
         {
           record_key: 'email',
@@ -152,9 +149,8 @@ export class UserService {
     return user;
   }
 
-  async findByInvitationToken(header: IHEADER, token: string): Promise<any> {
+  async findByInvitationToken(token: string): Promise<any> {
     const [user] = await this.findBy(
-      header,
       [
         {
           record_key: 'invitation_token',
@@ -166,9 +162,8 @@ export class UserService {
     return user;
   }
 
-  async findByPasswordResetToken(header: IHEADER, token: string) {
+  async findByPasswordResetToken(token: string): Promise<any> {
     const [user] = await this.findBy(
-      header,
       [
         {
           record_key: 'password_reset_token',
@@ -181,42 +176,41 @@ export class UserService {
   }
 
   async update(
-    header: IHEADER,
     id: string,
     input: UpdateUserDto,
   ): Promise<User> {
     this.logger.log(`Start updating user with ID [${id}]`);
-    const user: User = await this.findOne(header, id, `{id}`);
-    if (!user) {
-      throw new NotFoundException('User Not Found');
-    }
-    const mutation: string = `mutation {
+    // const user: User = await this.findOne(id, `{id}`);
+    // if (!user) {
+    //   throw new NotFoundException('User Not Found');
+    // }
+    const mutation = `mutation {
       result: updateUser(id: "${id}", input: ${toGraphql(input)}) ${this.output}
     }`;
-    return this.gqlClient.setHeaders(header).send(mutation);
+    return this.gqlClient.send(mutation);
   }
 
-  async delete(header: IHEADER, id: string): Promise<boolean> {
+  async delete(id: string): Promise<boolean> {
     this.logger.log(`Start deleting user with ID [${id}]`);
 
-    const user: User = await this.findOne(header, id, `{id}`);
-    if (!user) {
-      throw new NotFoundException('User Not Found');
-    }
-    const mutation: string = `mutation {
+    // const user: User = await this.findOne(header, id, `{id}`);
+    // if (!user) {
+    //   throw new NotFoundException('User Not Found');
+    // }
+    const mutation = `mutation {
       result: deleteUser(id: "${id}") 
     }`;
-    return this.gqlClient.setHeaders(header).send(mutation);
+    return this.gqlClient.send(mutation);
   }
 
-  async changePassword(header: IHEADER, input: ChangePasswordDto) {
+  async changePassword(input: ChangePasswordDto): Promise<User> {
     this.logger.log(`Init Change Password request`);
-    const mutation: string = `mutation{
+    const mutation = `mutation{
       result: updatePassword(input: ${toGraphql(input)}){
           id
           email
       }
     }`;
-    return this.gqlClient.setHeaders(header).send(mutation);
+    return this.gqlClient.send(mutation);
   }
 }

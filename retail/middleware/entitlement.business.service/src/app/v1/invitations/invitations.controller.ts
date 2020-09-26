@@ -25,8 +25,6 @@ import {
   AuthGuard,
   SuccessDto,
   USER_STATUSES,
-  Header,
-  IHEADER,
 } from '@common/index';
 import { UserService } from '@app/v1/users/users.service';
 import { NewUserDto } from '@app/v1/users/user.dto';
@@ -40,7 +38,7 @@ export class InvitationsController {
   constructor(
     private readonly userService: UserService,
     private readonly invitationService: InvitationsService,
-  ) {}
+  ) { }
 
   @Post('/')
   @UseGuards(AuthGuard)
@@ -60,10 +58,9 @@ export class InvitationsController {
     description: 'Input Validation failed.',
   })
   async create(
-    @Header() header: IHEADER,
     @Body() input: NewUserDto,
   ): Promise<User> {
-    return this.invitationService.invite(header, input);
+    return this.invitationService.invite(input);
   }
 
   @Get(':token')
@@ -85,11 +82,9 @@ export class InvitationsController {
     description: 'Input Validation failed.',
   })
   async findOne(
-    @Header() header: IHEADER,
     @Param('token') token: string,
   ): Promise<User> {
     const invitation = await this.userService.findByInvitationToken(
-      header,
       token,
     );
     console.log(invitation);
@@ -100,7 +95,7 @@ export class InvitationsController {
     } else if (new Date() > new Date(invitation.invitation_token_expiry)) {
       throw new BadRequestException('Token is expired');
     }
-    return this.userService.findOne(header, invitation.id);
+    return this.userService.findOne(invitation.id);
   }
 
   @Put(':token')
@@ -126,12 +121,10 @@ export class InvitationsController {
     description: 'User Not Found.',
   })
   async update(
-    @Header() header: IHEADER,
     @Param('token') token: string,
     @Body() input: UpdateInvitationDto,
   ): Promise<User> {
     const invitation = await this.userService.findByInvitationToken(
-      header,
       token,
     );
     if (!invitation) {
@@ -143,7 +136,6 @@ export class InvitationsController {
     // throw new BadRequestException('Token is expired');
     // }
     return this.invitationService.acceptInvitation(
-      header,
       invitation.id,
       input,
     );
@@ -167,11 +159,9 @@ export class InvitationsController {
     description: 'User has been already onboard.',
   })
   async invitationTokenStatus(
-    @Header() header: IHEADER,
-
     @Param('token') token: string,
   ): Promise<SuccessDto> {
-    const user = await this.userService.findByInvitationToken(header, token);
+    const user = await this.userService.findByInvitationToken(token);
     if (!user) {
       throw new NotFoundException('User Not Found');
     } else if (user.status != USER_STATUSES.PENDING) {
@@ -208,11 +198,9 @@ export class InvitationsController {
   })
   @HttpCode(HttpStatus.OK)
   async resendInvitationLink(
-    @Header() header: IHEADER,
     @Param('user_id') user_id: string,
   ): Promise<SuccessDto> {
     const user = await this.userService.findOne(
-      header,
       user_id,
       `{id email status}`,
     );
@@ -221,6 +209,6 @@ export class InvitationsController {
     } else if (user.status != USER_STATUSES.PENDING) {
       throw new BadRequestException('User has been already onboard.');
     }
-    return this.invitationService.resendInvitationLink(header, user.id);
+    return this.invitationService.resendInvitationLink(user.id);
   }
 }

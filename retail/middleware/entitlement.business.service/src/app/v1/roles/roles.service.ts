@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { toGraphql, GqlClientService } from '@common/index';
-
 import { Role } from './role.entity';
 import { RoleDto } from './role.dto';
 
@@ -69,11 +68,6 @@ export class RoleService {
   }
 
   async update(id: string, input: RoleDto): Promise<Role> {
-    // const role: Role = await this.findOne(header, id, '{id}');
-    // if (!role) {
-    //   throw new NotFoundException('Role Not Found');
-    // }
-
     const mutation: string = `mutation {
       result: updateRole(id: "${id}", input: ${toGraphql(input)}) ${this.output}
     }`;
@@ -81,10 +75,6 @@ export class RoleService {
   }
 
   async delete(id: string): Promise<boolean> {
-    // const role: Role = await this.findOne(header, id, '{id}');
-    // if (!role) {
-    //   throw new NotFoundException('Role Not Found');
-    // }
     const mutation: string = `mutation {
       result: deleteRole(id: "${id}") 
     }`;
