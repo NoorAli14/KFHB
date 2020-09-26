@@ -40,19 +40,19 @@ export class AuthUserService {
         },
         {
             id: "Working Week",
-            icon: "calendar_today",
+            icon: "av_timer",
             url: "/calender/working-days",
             translate: "FEATURES.CALENDER.WORKING_DAYS.TITLE",
         },
         {
             id: "Holidays",
-            icon: "calendar_today",
+            icon: "history",
             url: "/calender/holidays",
             translate: "FEATURES.CALENDER.HOLIDAYS.TITLE",
         },
         {
             id: "Leaves",
-            icon: "calendar_today",
+            icon: "update",
             url: "/calender/leaves",
             translate: "FEATURES.CALENDER.LEAVES.TITLE",
         },

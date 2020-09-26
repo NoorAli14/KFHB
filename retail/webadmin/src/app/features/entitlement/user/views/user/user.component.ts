@@ -114,7 +114,6 @@ export class UserComponent extends BaseComponent implements OnInit {
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe(
                 (response) => {
-                    debugger
                     this.openUserDetailModal(response);
                 },
                 (response) => super.onError(response)

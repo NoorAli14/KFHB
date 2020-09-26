@@ -38,11 +38,12 @@ export class UpdateProfileComponent extends BaseComponent implements OnInit {
             this.errorType = item.type;
             this.responseMessage = item.message;
         });
+        
         this.userForm = new FormGroup({
             id: new FormControl(this.data.user.id),
             firstName: new FormControl(this.data.user.firstName, [Validators.required]),
-            middleName: new FormControl(this.data.user.middleName, ),
-            lastName: new FormControl(this.data.user.lastName),
+            middleName: new FormControl(this.data.user.middleName,),
+            lastName: new FormControl(this.data.user.lastName, [Validators.required]),
             contactNo: new FormControl(this.data.user.contactNo,[Validators.required,ValidatorService.numbersOnly]),
             gender: new FormControl(this.data.user.gender,[Validators.required]),
             email: new FormControl({value:this.data.user.email, disabled:true}),
