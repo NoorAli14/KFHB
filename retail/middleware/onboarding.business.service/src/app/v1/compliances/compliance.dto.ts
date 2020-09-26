@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsObject } from 'class-validator';
+import { IsString, IsNotEmpty, IsObject, IsOptional, MaxLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class ComplianceDto {
@@ -15,6 +15,7 @@ export class ComplianceDto {
     description: 'Template Remarks',
   })
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
+  @MaxLength(255)
   remarks: string;
 }

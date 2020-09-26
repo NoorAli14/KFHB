@@ -29,10 +29,10 @@ import { LeaveTypeModule } from './leave-types/leave-type.module';
 let services: iSERVICE[];
 if (process.env.NODE_ENV === 'production') {
   services = [
-    { name: 'identity', url: 'http://identity_service:4010/graphql' },
-    { name: 'compliance', url: 'http://compliance_service:5010/graphql' },
-    { name: 'users', url: 'http://user_management_service:5020/graphql' },
-    { name: 'notifications', url: 'http://notification_service:5030/graphql' },
+    { name: 'identity', url: 'http://retail_identity:4010/graphql' },
+    { name: 'compliance', url: 'http://retail_compliance:5010/graphql' },
+    { name: 'users', url: 'http://retail_user_management:5020/graphql' },
+    { name: 'notifications', url: 'http://retail_notification:5030/graphql' },
   ];
 } else {
   services = [
