@@ -1,8 +1,8 @@
-import {Injectable} from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 
 import { BaseRepository } from "./base.repository";
-import {STATUS, TABLE} from "@common/constants";
-import {IdsInput} from "@common/inputs/ids.input";
+import { STATUS, TABLE } from "@common/constants";
+import { IdsInput } from "@common/inputs/ids.input";
 
 @Injectable()
 export class UserRepository extends BaseRepository {
@@ -37,15 +37,15 @@ export class UserRepository extends BaseRepository {
   }
 
   async update(condition: Record<string, any>,
-               user: Record<string, any>,
-               keys: string[]): Promise<any> {
+    user: Record<string, any>,
+    keys: string[]): Promise<any> {
     const trxProvider = this._connection.transactionProvider();
     const trx = await trxProvider();
-    try{
+    try {
       const roles: IdsInput[] = user.roles;
       delete user.roles;
       const response = await trx(TABLE.USER).where(condition).update(user, keys);
-      if(roles?.length > 0) {
+      if (roles?.length > 0) {
         const rolesToDelete = [];
         const newUserRoles = [];
         for (const role of roles) {
@@ -54,12 +54,12 @@ export class UserRepository extends BaseRepository {
         // deleting user-roles
         if (rolesToDelete.length > 0)
           await trx(TABLE.USER_ROLE).whereIn('role_id', rolesToDelete)
-          .where({user_id: response[0].id || response[0]})
-          .del();
+            .where({ user_id: response[0].id || response[0] })
+            .del();
         // checking which of Ids already exist
         const idsAlready = await trx(TABLE.USER_ROLE).select(['role_id'])
-        .whereIn('role_id', newUserRoles)
-        .where({user_id: response[0].id || response[0]});
+          .whereIn('role_id', newUserRoles)
+          .where({ user_id: response[0].id || response[0] });
         // removing already existing Ids
         idsAlready.forEach(idObj => {
           newUserRoles.splice(newUserRoles.indexOf(idObj.role_id || idObj), 1)
@@ -67,14 +67,14 @@ export class UserRepository extends BaseRepository {
         // creating new user-roles
         const user_roles = newUserRoles.map(role_id => {
           return {
-            user_id : response[0].id || response[0],
-            role_id : role_id,
-            status : STATUS.ACTIVE,
-            created_by : user.updated_by,
-            created_on : user.updated_on,
+            user_id: response[0].id || response[0],
+            role_id: role_id,
+            status: STATUS.ACTIVE,
+            created_by: user.updated_by,
+            created_on: user.updated_on,
           };
         });
-        if(user_roles.length > 0) await trx(TABLE.USER_ROLE).insert(user_roles, ['id']);
+        if (user_roles.length > 0) await trx(TABLE.USER_ROLE).insert(user_roles, ['id']);
       }
       await trx.commit();
       return response
@@ -87,18 +87,18 @@ export class UserRepository extends BaseRepository {
   async create(user: Record<string, any>, keys: string[]): Promise<any> {
     const trxProvider = this._connection.transactionProvider();
     const trx = await trxProvider();
-    try{
+    try {
       const roles = user.roles;
       delete user.roles;
       const response = await trx(TABLE.USER).insert(user, keys);
-      if(roles) {
+      if (roles) {
         const user_roles = roles.map(role => {
           return {
-            user_id : response[0].id || response[0],
-            role_id : role['id'],
-            status : STATUS.ACTIVE,
-            created_by : user.created_by,
-            created_on : user.created_on,
+            user_id: response[0].id || response[0],
+            role_id: role['id'],
+            status: STATUS.ACTIVE,
+            created_by: user.created_by,
+            created_on: user.created_on,
           };
         });
         await trx(TABLE.USER_ROLE).insert(user_roles, ['id']);
@@ -111,16 +111,20 @@ export class UserRepository extends BaseRepository {
     }
   }
 
-  async listExcludedUsers(userIds: string[], conditions: Record<string, any>): Promise<any>{
+  async listExcludedUsers(userIds: string[], conditions: Record<string, any>): Promise<any> {
+    conditions[`${TABLE.USER}.deleted_on`] = null;
+    conditions[`${TABLE.ROLE}.deleted_on`] = null;
+    conditions[`${TABLE.USER}.status`] = STATUS.ACTIVE;
+    conditions[`${TABLE.ROLE}.status`] = STATUS.ACTIVE;
     return this._connection(TABLE.USER)
-    .distinct(this.__attributes)
-    .innerJoin(TABLE.USER_ROLE, `${TABLE.USER}.id`, `${TABLE.USER_ROLE}.user_id`)
-    .innerJoin(TABLE.ROLE, `${TABLE.USER_ROLE}.role_id`, `${TABLE.ROLE}.id`)
-    .innerJoin(TABLE.MODULE_PERMISSION_ROLE, `${TABLE.ROLE}.id`, `${TABLE.MODULE_PERMISSION_ROLE}.role_id`)
-    .innerJoin(TABLE.MODULE_PERMISSION, `${TABLE.MODULE_PERMISSION_ROLE}.module_permission_id`, `${TABLE.MODULE_PERMISSION}.id`)
-    .innerJoin(TABLE.PERMISSION, `${TABLE.MODULE_PERMISSION}.permission_id`, `${TABLE.PERMISSION}.id`)
-    .whereNotIn(`${TABLE.USER}.id`, userIds)
-    .where(conditions)
-    .orderBy(`${TABLE.USER}.created_on`, 'desc');
+      .distinct(this.__attributes)
+      .innerJoin(TABLE.USER_ROLE, `${TABLE.USER}.id`, `${TABLE.USER_ROLE}.user_id`)
+      .innerJoin(TABLE.ROLE, `${TABLE.USER_ROLE}.role_id`, `${TABLE.ROLE}.id`)
+      .innerJoin(TABLE.MODULE_PERMISSION_ROLE, `${TABLE.ROLE}.id`, `${TABLE.MODULE_PERMISSION_ROLE}.role_id`)
+      .innerJoin(TABLE.MODULE_PERMISSION, `${TABLE.MODULE_PERMISSION_ROLE}.module_permission_id`, `${TABLE.MODULE_PERMISSION}.id`)
+      .innerJoin(TABLE.PERMISSION, `${TABLE.MODULE_PERMISSION}.permission_id`, `${TABLE.PERMISSION}.id`)
+      .whereNotIn(`${TABLE.USER}.id`, userIds)
+      .where(conditions)
+      .orderBy(`${TABLE.USER}.created_on`, 'desc');
   }
 }
