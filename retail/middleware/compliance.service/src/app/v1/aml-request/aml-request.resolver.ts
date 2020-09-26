@@ -1,4 +1,4 @@
-import { Header, NotFoundException } from '@nestjs/common';
+import { HttpStatus, NotFoundException, HttpException } from '@nestjs/common';
 import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 import { CurrentUser, Fields } from '@common/decorators';
 import { AmlRequest } from './aml.request.model';
@@ -16,13 +16,43 @@ export class AmlRequestResolver {
     @Args('user_id') user_id: string,
     @Fields(AmlRequest) output: string[],
   ): Promise<AmlRequest> {
+    // const amlRequest = await this.almRequestService.getAmlRequestByUserId(
+    //   currentUser,
+    //   user_id,
+    //   output,
+    // );
+    // console.log(amlRequest, 'aml Request');
     const user = await this.almRequestService.findById(currentUser, user_id);
     const { result } = user?.data;
-    console.log(result, 'user details');
     if (!result) {
       throw new NotFoundException('User Not Found');
     }
-    return this.almRequestService.checkAmlByUser(result, output);
+    const response = await this.almRequestService.checkAmlByUser(
+      currentUser,
+      result,
+      output,
+    );
+
+    console.log(response.status, '0-0-0-0-0');
+
+    if (response && response.status === 'SUSPECT') {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: 'Your aml request is under review.',
+        },
+        HttpStatus.FAILED_DEPENDENCY,
+      );
+    } else if (response && response.status === 'BLOCK') {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: 'Your aml request is blocked.',
+        },
+        HttpStatus.FAILED_DEPENDENCY,
+      );
+    }
+    return response;
   }
 
   @Mutation(() => AmlRequest)
