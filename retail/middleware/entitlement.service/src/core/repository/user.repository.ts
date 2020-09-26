@@ -3,6 +3,7 @@ import { Injectable } from "@nestjs/common";
 import { BaseRepository } from "./base.repository";
 import { STATUS, TABLE } from "@common/constants";
 import { IdsInput } from "@common/inputs/ids.input";
+import { User } from "@app/v1/users/user.model";
 
 @Injectable()
 export class UserRepository extends BaseRepository {
@@ -38,7 +39,7 @@ export class UserRepository extends BaseRepository {
 
   async update(condition: Record<string, any>,
     user: Record<string, any>,
-    keys: string[]): Promise<any> {
+    keys: string[]): Promise<User[]> {
     const trxProvider = this._connection.transactionProvider();
     const trx = await trxProvider();
     try {
@@ -69,9 +70,6 @@ export class UserRepository extends BaseRepository {
           return {
             user_id: response[0].id || response[0],
             role_id: role_id,
-            status: STATUS.ACTIVE,
-            created_by: user.updated_by,
-            created_on: user.updated_on,
           };
         });
         if (user_roles.length > 0) await trx(TABLE.USER_ROLE).insert(user_roles, ['id']);
@@ -84,7 +82,7 @@ export class UserRepository extends BaseRepository {
     }
   }
 
-  async create(user: Record<string, any>, keys: string[]): Promise<any> {
+  async create(user: Record<string, any>, keys: string[]): Promise<User[]> {
     const trxProvider = this._connection.transactionProvider();
     const trx = await trxProvider();
     try {
@@ -96,9 +94,6 @@ export class UserRepository extends BaseRepository {
           return {
             user_id: response[0].id || response[0],
             role_id: role['id'],
-            status: STATUS.ACTIVE,
-            created_by: user.created_by,
-            created_on: user.created_on,
           };
         });
         await trx(TABLE.USER_ROLE).insert(user_roles, ['id']);
@@ -111,7 +106,7 @@ export class UserRepository extends BaseRepository {
     }
   }
 
-  async listExcludedUsers(userIds: string[], conditions: Record<string, any>): Promise<any> {
+  async listExcludedUsers(userIds: string[], conditions: Record<string, any>): Promise<User[]> {
     conditions[`${TABLE.USER}.deleted_on`] = null;
     conditions[`${TABLE.ROLE}.deleted_on`] = null;
     conditions[`${TABLE.USER}.status`] = STATUS.ACTIVE;
@@ -126,5 +121,15 @@ export class UserRepository extends BaseRepository {
       .whereNotIn(`${TABLE.USER}.id`, userIds)
       .where(conditions)
       .orderBy(`${TABLE.USER}.created_on`, 'desc');
+  }
+
+  async findByTenantIdAndEmail(tenantId: string, email: string, output?: string[]): Promise<any> {
+    const conditions = {
+      email: email,
+      tenant_id: tenantId,
+      status: STATUS.ACTIVE,
+      deleted_on: null,
+    };
+    return this.findOne(conditions, output);
   }
 }

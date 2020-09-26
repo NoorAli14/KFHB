@@ -18,6 +18,7 @@ import {LeaveType} from '@app/v1/leave_type/leave_type.model';
 import {ICurrentUser} from '@common/interfaces';
 import {LeaveNotFoundException} from '@app/v1/leave/exceptions';
 import {LeaveTypeNotFoundException} from '@app/v1/leave_type/exceptions';
+import { UserNotFoundException } from "../users/exceptions";
 
 @Resolver(Leave)
 export class LeavesResolver {
@@ -54,11 +55,8 @@ export class LeavesResolver {
   async addLeave(@Args('input') input: LeaveCreateInput,
                  @Fields() columns: string[],
                  @CurrentUser() current_user: ICurrentUser): Promise<Leave> {
-    const user: User = await this.userService.findById(input.user_id,['id']);
-    if(!user) throw new HttpException({
-      status: HttpStatus.NOT_FOUND,
-      error: MESSAGES.USER_NOT_FOUND,
-    }, HttpStatus.NOT_FOUND);
+    const user: User = await this.userService.findById(current_user, input.user_id,['id']);
+    if(!user) throw new UserNotFoundException(current_user.id);
     const leaveType: LeaveType = await this.leave_typeService.findById(current_user, input.leave_type_id,['id']);
     if(!leaveType) throw new LeaveTypeNotFoundException(input.leave_type_id);
     return this.leavesService.create(current_user, input, columns);
@@ -72,11 +70,8 @@ export class LeavesResolver {
     @CurrentUser() current_user: ICurrentUser,
   ): Promise<Leave> {
     if(input.user_id) {
-      const user: User = await this.userService.findById(input.user_id,['id']);
-      if(!user) throw new HttpException({
-        status: HttpStatus.NOT_FOUND,
-        error: MESSAGES.USER_NOT_FOUND,
-      }, HttpStatus.NOT_FOUND);
+      const user: User = await this.userService.findById(current_user, input.user_id, ['id']);
+      if(!user) throw new UserNotFoundException(current_user.id);
     }
     if(input.leave_type_id){
       const leaveType: LeaveType = await this.leave_typeService.findById(current_user, input.leave_type_id,['id']);
