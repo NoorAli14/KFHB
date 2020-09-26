@@ -3,6 +3,8 @@ import { NewAlmRequestInput } from './aml-request-dot';
 import { AmlRequest } from './aml.request.model';
 import { AmlRequestRepository } from '@core/repository/aml-request-repository';
 import { map } from 'rxjs/operators';
+import { ICurrentUser } from '@common/interfaces';
+import { HttpHeaders } from '@core/context';
 
 // import { GqlClientService, toGraphql } from '@common/index';
 
@@ -13,7 +15,7 @@ export class AmlRequestService {
     private readonly amlRequestDB: AmlRequestRepository,
   ) {}
   //Get customer details
-  async findById(customer_id: string): Promise<any> {
+  async findById(currentUser: ICurrentUser, customer_id: string): Promise<any> {
     const gqlQuery = `query {
       result: findCustomerById(id: "${customer_id}") {  
         id
@@ -37,13 +39,11 @@ export class AmlRequestService {
     }`;
 
     const params = { query: gqlQuery };
+    console.log(params, '\n', process.env.ENV_RBX_IDX_BASE_URL);
 
     const response = await this.http
-      .post('http://localhost:4010/graphql', params, {
-        headers: {
-          'x-tenant-id': '9013C327-1190-4875-A92A-83ACA9029160',
-          'x-user-id': '828605C2-7E50-40BC-AA88-C064CE63C155',
-        },
+      .post(process.env.ENV_RBX_IDX_BASE_URL, params, {
+        headers: HttpHeaders(),
       })
       .pipe(map(res => res.data))
       .toPromise();

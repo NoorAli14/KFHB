@@ -83,7 +83,7 @@ type Query {
   templatesList: [Template!]!
   findTemplateByName(name: String!): Template!
   findTemplate(id: String!): Template!
-  checkAmlByCustomerId(customer_id: String!): AmlRequest!
+  checkAmlByUserId(user_id: String!): AmlRequest!
   getAmlStatueByRefNo(user_id: String!, reference_no: String!): AmlResponse!
 }
 

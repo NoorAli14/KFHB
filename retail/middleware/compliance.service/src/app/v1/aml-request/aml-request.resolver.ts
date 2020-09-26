@@ -1,26 +1,28 @@
-import { NotFoundException } from '@nestjs/common';
+import { Header, NotFoundException } from '@nestjs/common';
 import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
-import { Fields } from '@common/decorators';
+import { CurrentUser, Fields } from '@common/decorators';
 import { AmlRequest } from './aml.request.model';
 import { AmlRequestService } from './aml-request.service';
 import { NewAlmRequestInput } from './aml-request-dot';
+import { ICurrentUser, IHEADER } from '@common/interfaces';
 
 @Resolver(AmlRequest)
 export class AmlRequestResolver {
   constructor(private readonly almRequestService: AmlRequestService) {}
 
   @Query(() => AmlRequest)
-  async checkAmlByCustomerId(
-    @Args('customer_id') customer_id: string,
-    @Fields(AmlRequest) columns: string[],
+  async checkAmlByUserId(
+    @CurrentUser() currentUser: ICurrentUser,
+    @Args('user_id') user_id: string,
+    @Fields(AmlRequest) output: string[],
   ): Promise<AmlRequest> {
-    const user = await this.almRequestService.findById(customer_id);
+    const user = await this.almRequestService.findById(currentUser, user_id);
     const { result } = user?.data;
     console.log(result, 'user details');
     if (!result) {
       throw new NotFoundException('User Not Found');
     }
-    return this.almRequestService.checkAmlByUser(result, columns);
+    return this.almRequestService.checkAmlByUser(result, output);
   }
 
   @Mutation(() => AmlRequest)
