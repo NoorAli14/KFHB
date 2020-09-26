@@ -20,6 +20,7 @@ type AmlRequest {
   aml_text: String!
   remarks: String!
   status: String!
+  responses: [AmlResponse!]
   created_on: DateTime!
   created_by: String!
   updated_on: DateTime!
@@ -83,6 +84,7 @@ type Query {
   templatesList: [Template!]!
   findTemplateByName(name: String!): Template!
   findTemplate(id: String!): Template!
+  amlListByUserId(user_id: String!): [AmlRequest!]!
   getAmlStatueByRefNo(user_id: String!, reference_no: String!): AmlResponse!
 }
 

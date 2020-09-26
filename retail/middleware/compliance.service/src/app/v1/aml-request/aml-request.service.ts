@@ -1,6 +1,4 @@
 import { Injectable, HttpService } from '@nestjs/common';
-import { NewAlmRequestInput } from './aml-request-dot';
-import { AmlRequest } from './aml.request.model';
 import { AmlRequestRepository } from '@core/repository/aml-request-repository';
 import { AmlResponseRepository } from '@core/repository/aml-response-repository';
 import { map } from 'rxjs/operators';
@@ -16,6 +14,17 @@ export class AmlRequestService {
     private readonly amlRequestDB: AmlRequestRepository,
     private readonly amlResponseDB: AmlResponseRepository,
   ) {}
+
+  async list(currentUser: ICurrentUser, user_id: string, output: string[]) {
+    return this.amlRequestDB.findBy(
+      {
+        user_id: user_id,
+        tenant_id: currentUser.tenant_id,
+        deleted_on: null,
+      },
+      output,
+    );
+  }
 
   // Check if aml request against user already exist or not
   async getAmlRequestByUserId(
@@ -40,19 +49,13 @@ export class AmlRequestService {
         id
         first_name
         last_name
-        tenant_id
-        session_id
+        middle_name
         email
         national_id_no
         gender
         nationality
         contact_no
-        created_on
-        created_by
-        updated_on
-        updated_by
-        deleted_on
-        deleted_by
+        national_id_expiry
         date_of_birth
       }
     }`;
@@ -90,7 +93,7 @@ export class AmlRequestService {
   async triggerAml(amlRequest: any, output: string[]): Promise<any> {
     const user = JSON.parse(amlRequest.aml_text);
     const amlScreening = await this.http
-      .post('http://localhost:3001/api/v1/aml/screening', {
+      .post(process.env.ENV_RBX_AML_BASE_URL, {
         user: user,
         reference_no: amlRequest.request_reference,
       })

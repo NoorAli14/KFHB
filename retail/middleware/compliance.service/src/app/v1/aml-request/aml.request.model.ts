@@ -1,4 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { AmlResponse } from '../aml-response/aml-response-model';
 
 @ObjectType()
 export class AmlRequest {
@@ -22,6 +23,9 @@ export class AmlRequest {
 
   @Field()
   status: string;
+
+  @Field(() => [AmlResponse], { nullable: true })
+  responses?: AmlResponse[];
 
   @Field()
   created_on: Date;
