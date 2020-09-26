@@ -59,13 +59,18 @@
                             <app-status [status]="element[key]"></app-status>
                         </span>
                         <span *ngSwitchCase="'action'">
-                            <mat-icon class="hover" appPermission [permissions]="userPermissions" matTooltip="Delete working day" [type]="'delete'" color="warn" type="button" (click)=" confirmDialog('delete',element['id'])">delete</mat-icon> &nbsp;&nbsp;
-                            <mat-icon class="hover" type="button" (click)="openDialog(element)" matTooltip="Edit working day">mode_edit</mat-icon> &nbsp;&nbsp;
+                            <mat-icon class="hover" matTooltip="Delete leave" appPermission [permissions]="userPermissions"  [type]="'delete'" color="warn" type="button" (click)=" confirmDialog('delete',element['id'])">delete</mat-icon> &nbsp;&nbsp;
+                            <mat-icon class="hover" type="button" matTooltip="Edit leave" (click)="openDialog(element)" >mode_edit</mat-icon> &nbsp;&nbsp;
                         </span>
-                        <span *ngSwitchDefault >
-                            {{element[key]}}
+                        <span  *ngSwitchDefault>
+                            <span *ngIf="element[key]; else defaultText">
+                                {{element[key] }}
+                            </span>
                         </span>
                     </ng-container>
+                    <ng-template #defaultText>
+                        <app-default-text></app-default-text>
+                    </ng-template>
                     </mat-cell>
                 </ng-container>
                 <!-- -->

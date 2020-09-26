@@ -66,7 +66,6 @@ export class UserComponent extends BaseComponent implements OnInit {
 
     ngOnInit(): void {
         this.getData();
-        // super.ngOnInit();
     }
 
     getData() {
@@ -115,13 +114,14 @@ export class UserComponent extends BaseComponent implements OnInit {
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe(
                 (response) => {
+                    debugger
                     this.openUserDetailModal(response);
                 },
                 (response) => super.onError(response)
             );
     }
     openUserDetailModal(response) {
-        response.modules = this._service.mapModules(response.modules);
+        response.modules = this._mapperService.makeModulesFlat(response.modules);
         response = snakeToCamelObject(response);
         this.dialogRef = this._matDialog.open(UserDetailComponent, {
             data: response,
@@ -228,7 +228,7 @@ export class UserComponent extends BaseComponent implements OnInit {
                     this.users.splice(index, 1);
                     this.updateGrid(this.users);
                     this.errorType = "success";
-                    // this.hideMessage();
+                    this.hideMessage();
                     this.responseMessage = MESSAGES.DELETED("User");
                 },
                 (response) => super.onError(response)

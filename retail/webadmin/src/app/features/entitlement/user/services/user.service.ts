@@ -35,18 +35,4 @@ export class UserService {
     forkUserData() {
         return forkJoin([this.getUsers(), this.getRoles(),this._refService.getCountries()]);
     }
-    mapModules(modules) {
-        this.modules = [];
-        this.makeFlat(modules, "");
-        return this.modules;
-    }
-    makeFlat(modules: any[], parent) {
-        modules.forEach((item) => {
-            item.parent = parent;
-            this.modules.push(item);
-            if (item.sub_modules) {
-                this.makeFlat(item.sub_modules, item.name);
-            }
-        });
-    }
 }

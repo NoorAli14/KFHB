@@ -7,7 +7,7 @@ import { BaseComponent } from '@shared/components/base/base.component';
 import { DATE_FORMAT } from '@shared/constants/app.constants';
 import { camelToSnakeCase } from '@shared/helpers/global.helper';
 import * as moment from 'moment';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-leave-form',
@@ -33,8 +33,9 @@ export class LeaveFormComponent extends BaseComponent implements OnInit {
 
   ngOnInit(): void {
     this.leaveTypes = this.data.leaveTypes;
-    this.users = this.data.users;
-  
+    debugger
+    this.users = this.data.users.filter(x=>x.roles.find(x=>x.name!='SUPER ADMIN'));
+    
     this._errorEmitService.currentMessage
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((item) => {
