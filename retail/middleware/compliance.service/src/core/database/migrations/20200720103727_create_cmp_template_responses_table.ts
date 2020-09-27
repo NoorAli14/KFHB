@@ -15,7 +15,7 @@ export async function up(knex: Knex): Promise<void> {
       .inTable(TABLE.TEMPLATE)
       .onDelete('cascade');
 
-    table.string('results').notNullable();
+    table.text('results').notNullable();
     table.string('remarks').notNullable();
 
     table.string('status').defaultTo(STATUSES.ACTIVE);

@@ -33,6 +33,9 @@ export const STATUSES = {
   INACTIVE: 'INACTIVE',
 };
 
+export const CONTEXT_NAMESPACE_ID = 'a6a29a6f-6747-4b5f-b99f-07ee96e32f00';
+export const X_CORRELATION_KEY = 'x-correlation-id';
+
 export const DATABASE_UUID_METHOD = (): string => 'NEWID()';
 
 export const DATABASE_MIGRATION_TABLE_NAME = 'RUBIX_COMPLIANCE_MIGRATIONS';

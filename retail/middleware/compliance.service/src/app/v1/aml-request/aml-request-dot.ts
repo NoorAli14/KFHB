@@ -3,7 +3,7 @@ import { Field, InputType } from '@nestjs/graphql';
 @InputType()
 export class NewAlmRequestInput {
   @Field()
-  customer_id: string;
+  user_id: string;
 
   @Field()
   tenant_id: string;
