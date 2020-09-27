@@ -16,7 +16,7 @@ export class ForgotPasswordService {
               private readonly encrypter: Encrypter,
               private readonly configService: ConfigurationService) {}
 
-  async verifyAndGetToken(currentUser: ICurrentUser, forgetPasswordInput: ForgotPasswordInput, keys?: string[]): Promise<any> {
+  async verifyAndGetToken(currentUser: ICurrentUser, forgetPasswordInput: ForgotPasswordInput, output?: string[]): Promise<any> {
     const check: KeyValInput[] = [
       {
         record_key: 'email',
@@ -35,10 +35,10 @@ export class ForgotPasswordService {
       password_reset_token : hash,
       password_reset_token_expiry : addMinutes(this.configService.APP.INVITATION_TOKEN_EXPIRY)
     };
-    return this.userService.update(currentUser, user.id, fp_output, keys);
+    return this.userService.update(currentUser, user.id, fp_output, output);
   }
 
-  async changePassword(currentUser: ICurrentUser, changePasswordInput: ChangePasswordInput, keys?: string[]): Promise<any> {
+  async changePassword(currentUser: ICurrentUser, changePasswordInput: ChangePasswordInput, output?: string[]): Promise<any> {
     const check: KeyValInput[] = [
       {
         record_key: 'password_reset_token',
@@ -61,7 +61,7 @@ export class ForgotPasswordService {
         password_reset_token_expiry : null,
         password_reset_token: null
       };
-      return this.userService.update(currentUser, user.id, input, keys);
+      return this.userService.update(currentUser, user.id, input, output);
     }else{
       throw new HttpException({
         status: HttpStatus.UNAUTHORIZED,

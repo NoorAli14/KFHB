@@ -8,28 +8,28 @@ import {MESSAGES} from "@common/constants";
 export class PermissionService {
   constructor(private permissionDB: PermissionRepository) {}
 
-  async list(keys: string[], paginationParams: Record<string, any>): Promise<any> {
-    return this.permissionDB.listWithPagination(paginationParams,keys);
+  async list(output: string[], paginationParams: Record<string, any>): Promise<any> {
+    return this.permissionDB.listWithPagination(paginationParams,output);
   }
 
-  async findById(id: string, keys?: string[]): Promise<any> {
-    return this.permissionDB.findOne({ id: id }, keys);
+  async findById(id: string, output?: string[]): Promise<any> {
+    return this.permissionDB.findOne({ id: id }, output);
   }
 
-  async findByProperty(checks: KeyValInput[], keys?: string[]): Promise<any> {
+  async findByProperty(checks: KeyValInput[], output?: string[]): Promise<any> {
     const conditions = {};
     checks.forEach(check => {
       conditions[check.record_key] = check.record_value;
     });
-    return this.permissionDB.findBy(conditions, keys);
+    return this.permissionDB.findBy(conditions, output);
   }
 
   async update(
     id: string,
     permissionObj: Record<string, any>,
-    keys?: string[],
+    output?: string[],
   ): Promise<any> {
-    const [result] = await this.permissionDB.update({ id: id }, permissionObj, keys);
+    const [result] = await this.permissionDB.update({ id: id }, permissionObj, output);
     if(!result) {
       throw new HttpException({
         status: HttpStatus.BAD_REQUEST,
@@ -39,8 +39,8 @@ export class PermissionService {
     return result;
   }
 
-  async create(permissionObj: Record<string, any>, keys?: string[]): Promise<any> {
-    const result = await this.permissionDB.create(permissionObj, keys);
+  async create(permissionObj: Record<string, any>, output?: string[]): Promise<any> {
+    const result = await this.permissionDB.create(permissionObj, output);
     if(result?.length > 0) {
       return result[0]
     } else {

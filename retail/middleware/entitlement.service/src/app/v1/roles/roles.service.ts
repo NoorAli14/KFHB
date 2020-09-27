@@ -13,10 +13,10 @@ export class RoleService {
   constructor(private roleDB: RoleRepository) {}
 
   async list(
-    keys: string[],
+    output: string[],
     paginationParams: Record<string, any>,
   ): Promise<any> {
-    return this.roleDB.listWithPagination(paginationParams, keys, {
+    return this.roleDB.listWithPagination(paginationParams, output, {
       deleted_on: null,
     });
   }

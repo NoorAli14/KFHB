@@ -87,7 +87,7 @@ export class RolesResolver {
   ): Promise<boolean> {
     const role: Role = await this.roleService.findById(currentUser, id, ['id']);
     if (!role) throw new RoleNotFoundException(id);
-    let input = { status: STATUS.INACTIVE };
+    const input = { status: STATUS.INACTIVE };
     return this.roleService.delete(currentUser, id, input);
   }
 
