@@ -4,8 +4,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { environment } from '@env/environment';
 import { LOGIN, FORGET_PASSWORD, VALIDATE_PASSWORD_TOKEN, UPDATE_PASSWORD, REFRESH_URL } from 'app/auth/auth.constant';
-import { StorageService } from '@core/services/storage/storage.service';
-import { UserService } from '@core/services/user.service';
+import { StorageService } from '@shared/services/storage/storage.service';
+import { UserService } from '@shared/services/user.service';
 
 @Injectable()
 export class AuthenticationService {

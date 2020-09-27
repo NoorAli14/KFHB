@@ -9,8 +9,7 @@ import { NotificationsService } from './notifications.service';
 
 @Module({
   imports: [GqlClientModule, CommonModule],
-  controllers: [],
   providers: [NotificationsService, GqlClientService, ConfigurationService],
   exports: [NotificationsService],
 })
-export class NotificationModule {}
+export class NotificationModule { }

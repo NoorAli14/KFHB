@@ -7,6 +7,8 @@ import {MESSAGES, NUMBERS} from "@common/constants";
 import {ChangePasswordInput, ForgotPasswordInput} from "@app/v1/forgot-password/forgot-password.dto";
 import {addMinutes, generateRandomString} from "@common/utilities";
 import {ConfigurationService} from "@common/configuration/configuration.service";
+import { ICurrentUser } from '@common/interfaces';
+import { UserNotFoundException } from '../users/exceptions';
 
 @Injectable()
 export class ForgotPasswordService {
@@ -14,7 +16,7 @@ export class ForgotPasswordService {
               private readonly encrypter: Encrypter,
               private readonly configService: ConfigurationService) {}
 
-  async verifyAndGetToken(forgetPasswordInput: ForgotPasswordInput, keys?: string[]): Promise<any> {
+  async verifyAndGetToken(currentUser: ICurrentUser, forgetPasswordInput: ForgotPasswordInput, keys?: string[]): Promise<any> {
     const check: KeyValInput[] = [
       {
         record_key: 'email',
@@ -25,21 +27,18 @@ export class ForgotPasswordService {
         record_value: null
       }
     ];
-    const [user] = await this.userService.findByProperty(check, ['id']);
-    if(!user) throw new HttpException({
-      status: HttpStatus.NOT_FOUND,
-      error: MESSAGES.INVALID_EMAIL,
-    }, HttpStatus.NOT_FOUND);
+    const [user] = await this.userService.findByProperty(currentUser, check, ['id']);
+    if(!user) throw new UserNotFoundException(currentUser.id);
 
     const hash = generateRandomString(NUMBERS.TOKEN_LENGTH);
     const fp_output = {
       password_reset_token : hash,
       password_reset_token_expiry : addMinutes(this.configService.APP.INVITATION_TOKEN_EXPIRY)
     };
-    return this.userService.update(user.id, fp_output, keys);
+    return this.userService.update(currentUser, user.id, fp_output, keys);
   }
 
-  async changePassword(changePasswordInput: ChangePasswordInput, keys?: string[]): Promise<any> {
+  async changePassword(currentUser: ICurrentUser, changePasswordInput: ChangePasswordInput, keys?: string[]): Promise<any> {
     const check: KeyValInput[] = [
       {
         record_key: 'password_reset_token',
@@ -49,7 +48,7 @@ export class ForgotPasswordService {
         record_key: 'deleted_on',
         record_value: null
       }];
-    const [user] = await this.userService.findByProperty(check, ['id', 'password_reset_token_expiry']);
+    const [user] = await this.userService.findByProperty(currentUser, check, ['id', 'password_reset_token_expiry']);
     if(!user) throw new HttpException({
       status: HttpStatus.UNAUTHORIZED,
       error: MESSAGES.INVALID_TOKEN,
@@ -62,7 +61,7 @@ export class ForgotPasswordService {
         password_reset_token_expiry : null,
         password_reset_token: null
       };
-      return this.userService.update(user.id, input, keys);
+      return this.userService.update(currentUser, user.id, input, keys);
     }else{
       throw new HttpException({
         status: HttpStatus.UNAUTHORIZED,

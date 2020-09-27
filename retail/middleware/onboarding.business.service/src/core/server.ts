@@ -2,6 +2,7 @@ import { Transport } from '@nestjs/microservices';
 import { INestApplication, ValidationPipe, Logger } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
 import * as bodyParser from 'body-parser';
+
 import {
   CommonModule,
   ConfigurationService,
@@ -19,8 +20,8 @@ export default class Server {
   constructor(app: INestApplication) {
     this._app = app;
     this.mountConfig();
+    this.mountMiddleware();
     this.mountGlobals();
-    this.mountMiddlewares();
   }
   get app(): INestApplication {
     return this._app;
@@ -38,7 +39,7 @@ export default class Server {
   /**
    * Mounts all the defined middlewares
    */
-  private mountMiddlewares(): void {
+  private mountMiddleware(): void {
     this._app = KernelMiddleware.init(this.app, this.Config);
   }
 

@@ -18,17 +18,23 @@ import { ComplianceModule } from './compliances/compliances.module';
 import { OtpModule } from './otp/otp.module';
 import { SessionModule } from './sessions/session.module';
 import { AttachmentModule } from './attachments/attachment.module';
+import { UserModule } from './users/user.module';
 
 let services: iSERVICE[];
 if (process.env.NODE_ENV === 'production') {
   services = [
-    { name: 'identity', url: 'http://identity_service:4010/graphql' },
-    { name: 'compliance', url: 'http://compliance_service:5010/graphql' },
+    { name: 'identity', url: 'http://retail_identity:4010/graphql' },
+    { name: 'compliance', url: 'http://retail_compliance:5010/graphql' },
+    { name: 'notifications', url: 'http://retail_notification:5030/graphql' },
+    { name: 'users', url: 'http://retail_user_management:5020/graphql' }
   ];
 } else {
   services = [
+    { name: 'notification', url: 'http://localhost:5030/graphql' },
     { name: 'identity', url: 'http://localhost:4010/graphql' },
     { name: 'compliance', url: 'http://localhost:5010/graphql' },
+    { name: 'users', url: 'http://localhost:5020/graphql' },
+
   ];
 }
 class AuthenticatedDataSource extends RemoteGraphQLDataSource {
@@ -56,7 +62,7 @@ class AuthenticatedDataSource extends RemoteGraphQLDataSource {
   ],
   exports: [GATEWAY_BUILD_SERVICE],
 })
-class BuildServiceModule {}
+class BuildServiceModule { }
 
 @RubixModule({
   imports: [
@@ -66,6 +72,7 @@ class BuildServiceModule {}
     SessionModule,
     AttachmentModule,
     OtpModule,
+    UserModule,
     ComplianceModule,
     GraphQLGatewayModule.forRootAsync({
       imports: [BuildServiceModule],
@@ -93,4 +100,4 @@ class BuildServiceModule {}
     }),
   ],
 })
-export class ModuleV1 {}
+export class ModuleV1 { }

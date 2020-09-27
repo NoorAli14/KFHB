@@ -1,18 +1,13 @@
 import { Router, ActivatedRoute } from "@angular/router";
-import { Component, OnInit, ViewEncapsulation } from "@angular/core";
-import {
-    FormBuilder,
-    FormGroup,
-    Validators,
-    FormControl,
-} from "@angular/forms";
+import { Component, OnInit, ViewEncapsulation, Injector } from "@angular/core";
+import { FormGroup, Validators, FormControl } from "@angular/forms";
 
 import { FuseConfigService } from "@fuse/services/config.service";
 import { fuseAnimations } from "@fuse/animations";
-import { AuthenticationService } from "@core/services/auth/authentication.service";
-import { MESSAGES } from "@shared/constants/app.constants";
+import { AuthenticationService } from "@shared/services/auth/authentication.service";
 import { BaseComponent } from "@shared/components/base/base.component";
-import { CookieService } from "ngx-cookie-service";
+import { takeUntil } from 'rxjs/operators';
+import { MESSAGES } from '@shared/constants/messages.constant';
 
 @Component({
     selector: "app-login",
@@ -23,17 +18,16 @@ import { CookieService } from "ngx-cookie-service";
 })
 export class LoginComponent extends BaseComponent implements OnInit {
     loginForm: FormGroup;
-
     returnUrl: string;
+
     constructor(
         private _fuseConfigService: FuseConfigService,
         private _authService: AuthenticationService,
         private route: ActivatedRoute,
         private router: Router,
-        private cookie: CookieService
+        injector: Injector
     ) {
-        super();
-        // Configure the layout
+        super(injector);
         this._fuseConfigService.config = {
             layout: {
                 navbar: {
@@ -55,34 +49,16 @@ export class LoginComponent extends BaseComponent implements OnInit {
     ngOnInit(): void {
         this.returnUrl = this.route.snapshot.queryParamMap.get("returnUrl");
         this.loginForm = new FormGroup({
-            email: new FormControl("", [
-                Validators.required,
-                Validators.email,
-            ]),
+            email: new FormControl("", [Validators.required, Validators.email]),
             password: new FormControl("", [Validators.required]),
-            // rememberMe: new FormControl(""),
         });
-
-        // const email = this.cookie.get("email");
-        // const password = this.cookie.get("password");
-        // if (email) {
-        //     this.loginForm.patchValue({ email });
-        //     this.loginForm.patchValue({ password });
-        // }
     }
     onSubmit() {
         const model = this.loginForm.value;
-        this._authService.login(model).subscribe(
+        this._authService.login(model).pipe(takeUntil(this._unsubscribeAll)).subscribe(
             (response) => {
                 this.errorType = "success";
-                this.responseMessage = MESSAGES.LOGGED_IN;
-                // if (model.rememberMe) {
-                //     this.cookie.set("email", model.email);
-                //     this.cookie.set("password", model.password);
-                // } else {
-                //     this.cookie.delete("email", model.email);
-                //     this.cookie.delete("password", model.password);
-                // }
+                this.responseMessage = MESSAGES.LOGGED_IN();
                 setTimeout(() => {
                     this.router.navigateByUrl(
                         this.returnUrl ? this.returnUrl : "/ent/user"
@@ -91,10 +67,10 @@ export class LoginComponent extends BaseComponent implements OnInit {
             },
             (response) => {
                 this.errorType = "error";
-                if(response.statusCode===401){
-                    this.responseMessage = MESSAGES.INVALID_CREDENTIAL;
-                }else{
-                    this.responseMessage = MESSAGES.UNKNOWN;
+                if (response.statusCode === 401) {
+                    this.responseMessage = MESSAGES.INVALID_CREDENTIAL();
+                } else {
+                    this.responseMessage = MESSAGES.UNKNOWN();
                 }
             }
         );

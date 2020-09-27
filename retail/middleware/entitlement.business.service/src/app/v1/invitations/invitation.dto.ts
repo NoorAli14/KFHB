@@ -3,12 +3,12 @@ import {
   IsOptional,
   Length,
   MaxLength,
-  MinLength,
   IsIn,
   IsNotEmpty,
+  Matches,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { GENDER } from '@common/constants';
+import { GENDER, PASSWORD_REGEX } from '@common/constants';
 
 export class UpdateInvitationDto {
   @ApiProperty({
@@ -97,7 +97,9 @@ export class UpdateInvitationDto {
     required: true,
   })
   @IsString()
-  @MinLength(6)
   @IsNotEmpty()
-  password: string;
+  @Matches(PASSWORD_REGEX, {
+    message: 'password too weak',
+  })
+  readonly password: string;
 }

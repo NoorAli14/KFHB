@@ -20,3 +20,8 @@ export const ngxUiLoaderConfig: NgxUiLoaderConfig = {
     PAGE_SIZE:5,
     PAGE_SIZE_OPTIONS:[5,10,15]
   }
+
+
+  export const REGEX={
+    PASSWORD:/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/
+  }

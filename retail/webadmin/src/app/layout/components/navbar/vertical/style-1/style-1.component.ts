@@ -1,5 +1,5 @@
-import { EventBusService } from './../../../../../core/services/event-bus/event-bus.service';
-import { AuthUserService } from '@core/services/user/auth-user.service';
+import { EventBusService } from '@shared/services/event-bus/event-bus.service';
+import { AuthUserService } from '@shared/services/user/auth-user.service';
 import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subject } from 'rxjs';

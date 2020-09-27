@@ -1,29 +1,29 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { TranslateService } from '@ngx-translate/core';
-import * as _ from 'lodash';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from "@angular/core";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
+import { TranslateService } from "@ngx-translate/core";
+import * as _ from "lodash";
 
-import { FuseConfigService } from '@fuse/services/config.service';
-import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
+import { FuseConfigService } from "@fuse/services/config.service";
+import { FuseSidebarService } from "@fuse/components/sidebar/sidebar.service";
 
-import { navigation } from 'app/navigation/navigation';
-import { AuthenticationService } from '@core/services/auth/authentication.service';
-import { Router } from '@angular/router';
-import { AuthUserService } from '@core/services/user/auth-user.service';
-import { UnsubscribeOnDestroyAdapter } from '@shared/models/unsubscribe-adapter.model';
-import { EventBusService } from '@core/services/event-bus/event-bus.service';
-import { Events } from '@shared/enums/events.enum';
+import { navigation } from "app/navigation/navigation";
+import { AuthenticationService } from "@shared/services/auth/authentication.service";
+import { Router } from "@angular/router";
+import { AuthUserService } from "@shared/services/user/auth-user.service";
+import { UnsubscribeOnDestroyAdapter } from "@shared/models/unsubscribe-adapter.model";
+import { EventBusService } from "@shared/services/event-bus/event-bus.service";
+import { Events } from "@shared/enums/events.enum";
 
 @Component({
-    selector     : 'toolbar',
-    templateUrl  : './toolbar.component.html',
-    styleUrls    : ['./toolbar.component.scss'],
-    encapsulation: ViewEncapsulation.None
+    selector: "toolbar",
+    templateUrl: "./toolbar.component.html",
+    styleUrls: ["./toolbar.component.scss"],
+    encapsulation: ViewEncapsulation.None,
 })
-
-export class ToolbarComponent extends UnsubscribeOnDestroyAdapter  implements OnInit, OnDestroy
-{
+export class ToolbarComponent
+    extends UnsubscribeOnDestroyAdapter
+    implements OnInit, OnDestroy {
     horizontalNavbar: boolean;
     rightNavbar: boolean;
     hiddenNavbar: boolean;
@@ -31,7 +31,7 @@ export class ToolbarComponent extends UnsubscribeOnDestroyAdapter  implements On
     navigation: any;
     selectedLanguage: any;
     userStatusOptions: any[];
-    user:any;
+    user: any;
     // Private
     private _unsubscribeAll: Subject<any>;
 
@@ -46,54 +46,53 @@ export class ToolbarComponent extends UnsubscribeOnDestroyAdapter  implements On
         private _fuseConfigService: FuseConfigService,
         private _fuseSidebarService: FuseSidebarService,
         private _translateService: TranslateService,
-        private _authService: AuthenticationService, 
-        private _authUserService: AuthUserService, 
-        private router: Router, 
-           private eventService:EventBusService
-    )
-    {
-        super()
-         this.user=this._authUserService.User;
+        private _authService: AuthenticationService,
+        private _authUserService: AuthUserService,
+        private router: Router,
+        private eventService: EventBusService
+    ) {
+        super();
+        this.user = this._authUserService.User;
         // Set the defaults
         this.userStatusOptions = [
             {
-                title: 'Online',
-                icon : 'icon-checkbox-marked-circle',
-                color: '#4CAF50'
+                title: "Online",
+                icon: "icon-checkbox-marked-circle",
+                color: "#4CAF50",
             },
             {
-                title: 'Away',
-                icon : 'icon-clock',
-                color: '#FFC107'
+                title: "Away",
+                icon: "icon-clock",
+                color: "#FFC107",
             },
             {
-                title: 'Do not Disturb',
-                icon : 'icon-minus-circle',
-                color: '#F44336'
+                title: "Do not Disturb",
+                icon: "icon-minus-circle",
+                color: "#F44336",
             },
             {
-                title: 'Invisible',
-                icon : 'icon-checkbox-blank-circle-outline',
-                color: '#BDBDBD'
+                title: "Invisible",
+                icon: "icon-checkbox-blank-circle-outline",
+                color: "#BDBDBD",
             },
             {
-                title: 'Offline',
-                icon : 'icon-checkbox-blank-circle-outline',
-                color: '#616161'
-            }
+                title: "Offline",
+                icon: "icon-checkbox-blank-circle-outline",
+                color: "#616161",
+            },
         ];
 
         this.languages = [
             {
-                id   : 'en',
-                title: 'English',
-                flag : 'us'
+                id: "en",
+                title: "English",
+                flag: "us",
             },
             {
-                id   : 'tr',
-                title: 'Turkish',
-                flag : 'tr'
-            }
+                id: "tr",
+                title: "Turkish",
+                flag: "tr",
+            },
         ];
 
         this.navigation = navigation;
@@ -109,29 +108,30 @@ export class ToolbarComponent extends UnsubscribeOnDestroyAdapter  implements On
     /**
      * On init
      */
-    ngOnInit(): void
-    {
+    ngOnInit(): void {
         this.subs.sink = this.eventService.on(Events.USER_UPDATED, (user) => {
-            this.user=user;
-          })
+            this.user = user;
+        });
         // Subscribe to the config changes
         this._fuseConfigService.config
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((settings) => {
-                this.horizontalNavbar = settings.layout.navbar.position === 'top';
-                this.rightNavbar = settings.layout.navbar.position === 'right';
+                this.horizontalNavbar =
+                    settings.layout.navbar.position === "top";
+                this.rightNavbar = settings.layout.navbar.position === "right";
                 this.hiddenNavbar = settings.layout.navbar.hidden === true;
             });
 
         // Set the selected language from default languages
-        this.selectedLanguage = _.find(this.languages, {id: this._translateService.currentLang});
+        this.selectedLanguage = _.find(this.languages, {
+            id: this._translateService.currentLang,
+        });
     }
 
     /**
      * On destroy
      */
-    ngOnDestroy(): void
-    {
+    ngOnDestroy(): void {
         // Unsubscribe from all subscriptions
         this._unsubscribeAll.next();
         this._unsubscribeAll.complete();
@@ -146,8 +146,7 @@ export class ToolbarComponent extends UnsubscribeOnDestroyAdapter  implements On
      *
      * @param key
      */
-    toggleSidebarOpen(key): void
-    {
+    toggleSidebarOpen(key): void {
         this._fuseSidebarService.getSidebar(key).toggleOpen();
     }
 
@@ -156,8 +155,7 @@ export class ToolbarComponent extends UnsubscribeOnDestroyAdapter  implements On
      *
      * @param value
      */
-    search(value): void
-    {
+    search(value): void {
         // Do your search here...
         console.log(value);
     }
@@ -167,8 +165,7 @@ export class ToolbarComponent extends UnsubscribeOnDestroyAdapter  implements On
      *
      * @param lang
      */
-    setLanguage(lang): void
-    {
+    setLanguage(lang): void {
         // Set the selected language for the toolbar
         this.selectedLanguage = lang;
 
@@ -176,11 +173,16 @@ export class ToolbarComponent extends UnsubscribeOnDestroyAdapter  implements On
         this._translateService.use(lang.id);
     }
 
-    logout(){
+    logout() {
         this._authService.logout().subscribe(
-            (response)=>{
-                    this.router.navigateByUrl('/auth/login')
+            (response) => {
+                this._authService.flushAll();
+                this.router.navigateByUrl("/auth/login");
+            },
+            () => {
+                this._authService.flushAll();
+                this.router.navigateByUrl("/auth/login");
             }
-        )
+        );
     }
 }

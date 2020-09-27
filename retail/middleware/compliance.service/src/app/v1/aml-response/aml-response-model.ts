@@ -6,13 +6,13 @@ export class AmlResponse {
   id: string;
 
   @Field()
-  response_status: string;
+  status: string;
 
   @Field()
   response_on: Date;
 
   @Field()
-  response_type: string;
+  response_text: string;
 
   @Field()
   created_on: Date;

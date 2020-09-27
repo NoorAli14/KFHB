@@ -6,7 +6,7 @@ import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
 } from '@nestjs/swagger';
-import { AuthGuard, Header, IHEADER } from '@common/index';
+import { AuthGuard } from '@common/index';
 import { AttachmentsService } from './attachments.service';
 import { Attachment } from './attachment.entity';
 import { UploadDocumentDTO, UploadSelfieDTO } from './document.dto';
@@ -38,14 +38,11 @@ export class FacesController {
     type: Error,
     description: 'Input Validation failed.',
   })
-  async uploadSelfie(
-    @Body() input: UploadSelfieDTO,
-    @Header() header: IHEADER,
-  ): Promise<Session> {
+  async uploadSelfie(@Body() input: UploadSelfieDTO): Promise<Session> {
     const params: FaceUploadingInput = {
       file: input.file,
     };
-    return this.sessionService.update(header, params);
+    return this.sessionService.update(params);
   }
 
   @Post('liveness/upload')
@@ -62,13 +59,10 @@ export class FacesController {
     type: Error,
     description: 'Input Validation failed.',
   })
-  async uploadLiveness(
-    @Body() input: UploadDocumentDTO,
-    @Header() header: IHEADER,
-  ): Promise<Attachment> {
+  async uploadLiveness(@Body() input: UploadDocumentDTO): Promise<Attachment> {
     const params: FaceUploadingInput = {
       file: input.file,
     };
-    return this.attachmentService.uploadLiveness(header, params);
+    return this.attachmentService.uploadLiveness(params);
   }
 }

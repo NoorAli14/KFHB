@@ -1,120 +1,26 @@
-import {
-  Controller,
-  Get,
-  Body,
-  Param,
-  Put,
-  Delete,
-  NotFoundException,
-  ParseUUIDPipe,
-  UseGuards,
-  HttpCode,
-  HttpStatus,
-} from '@nestjs/common';
-import {
-  ApiTags,
-  ApiOkResponse,
-  ApiOperation,
-  ApiBody,
-  ApiBearerAuth,
-  ApiBadRequestResponse,
-  ApiNotFoundResponse,
-  ApiNoContentResponse,
-} from '@nestjs/swagger';
-import { AuthGuard, SuccessDto } from '@common/index';
+import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import { ApiTags, ApiBearerAuth, ApiOkResponse, ApiOperation } from '@nestjs/swagger';
 import { UserService } from './users.service';
+import { AuthGuard } from '@common/index';
 import { User } from './user.entity';
-import { ChangePasswordDto, UpdateUserDto } from './user.dto';
+import { CheckAvailabilityInput } from './user.dto';
 
-@ApiTags('Customer')
-@Controller('customers')
+@ApiTags('Agent Module')
+@Controller('agents')
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
 export class UsersController {
-  constructor(private readonly userService: UserService) {}
-
-  @Get(':id')
-  @ApiOperation({
-    summary: 'Find a user by ID',
-    description:
-      'A successful request returns the HTTP 200 OK status code and a JSON response body that shows user information.',
-  })
-  @ApiOkResponse({
-    type: User,
-    description: 'User has been successfully retrieved.',
-  })
-  @ApiNotFoundResponse({
-    type: Error,
-    description: 'User Not Found.',
-  })
-  async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<User> {
-    const user = await this.userService.findOne(id);
-    if (!user) {
-      throw new NotFoundException('User Not Found');
+    constructor(private readonly userService: UserService) {
     }
-    return user;
-  }
 
-  @Put(':id')
-  @ApiBody({ description: 'Sets the user properties.', type: UpdateUserDto })
-  @ApiOperation({
-    summary: 'Update a user by ID',
-    description:
-      'A successful request returns the HTTP 200 OK status code and a JSON response body that shows user information.',
-  })
-  @ApiOkResponse({
-    type: User,
-    description: 'User has been successfully updated.',
-  })
-  @ApiBadRequestResponse({
-    type: Error,
-    description: 'Input Validation failed.',
-  })
-  @ApiNotFoundResponse({
-    type: Error,
-    description: 'User Not Found.',
-  })
-  async update(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Body() input: UpdateUserDto,
-  ): Promise<User> {
-    return this.userService.update(id, input);
-  }
-
-  @Put('/password')
-  @ApiBody({
-    description: 'Sets the user properties.',
-    type: ChangePasswordDto,
-  })
-  @ApiOperation({
-    summary: 'Update user password',
-    description: 'A successful request returns the HTTP 200 OK status code.',
-  })
-  @ApiOkResponse({
-    type: SuccessDto,
-    description: 'User has been successfully updated their password.',
-  })
-  async update_password(
-    @Body() changePasswordDto: ChangePasswordDto,
-  ): Promise<any> {
-    // this.userService.create(userDto);
-  }
-
-  @Delete(':id')
-  @ApiOperation({
-    summary: 'Delete a User by ID',
-    description:
-      'A successful request returns the HTTP 204 No Content status code with empty response body.',
-  })
-  @ApiNoContentResponse({
-    description: 'User has been successfully deleted.',
-  })
-  @ApiNotFoundResponse({
-    type: Error,
-    description: 'User Not Found.',
-  })
-  @HttpCode(HttpStatus.NO_CONTENT)
-  async delete(@Param('id', ParseUUIDPipe) id: string): Promise<any> {
-    return this.userService.delete(id);
-  }
+    @Get('/available')
+    @ApiOperation({
+        description:
+            'A successful request returns the HTTP 200 OK status code and a JSON response body that shows list of agents information.',
+        summary: 'List of all available agents.',
+    })
+    @ApiOkResponse({ type: [User], description: 'List of available agents' })
+    async availableAgents(@Query() input: CheckAvailabilityInput): Promise<User[]> {
+        return this.userService.availableAgents(input);
+    }
 }

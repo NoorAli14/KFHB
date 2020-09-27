@@ -3,12 +3,35 @@ import {
   IsOptional,
   IsEmail,
   IsNotEmpty,
-  ValidateNested,
+  ValidateNested, MaxLength, IsISO8601, IsIn
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, PartialType, OmitType } from '@nestjs/swagger';
 import { IdsDto } from '@common/dtos';
 import { GENDER } from '@common/constants';
+
+
+export class CheckAvailabilityInput {
+  @ApiProperty({
+    title: 'Call Time',
+    description: 'Current Date and time',
+    example: "2020-10-07T14:48:00.000Z",
+    required: true,
+  })
+  @IsString()
+  @IsISO8601({ strict: true })
+  call_time: string;
+
+  @ApiProperty({
+    title: 'Gender',
+    example: "F",
+  })
+  @IsString()
+  @IsOptional()
+  @MaxLength(1)
+  @IsIn(GENDER)
+  gender: string;
+}
 
 export class ChangePasswordDto {
   @ApiProperty({
@@ -92,7 +115,7 @@ export class NewUserDto {
 
 export class UpdateUserDto extends PartialType(
   OmitType(NewUserDto, ['email'] as const),
-) {}
+) { }
 
 export class CurrentUserUpdateDto extends PartialType(
   OmitType(NewUserDto, ['email', 'roles'] as const),

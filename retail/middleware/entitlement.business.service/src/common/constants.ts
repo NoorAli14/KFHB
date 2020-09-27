@@ -10,4 +10,7 @@ export const USER_STATUSES = {
   ACTIVE: 'ACTIVE',
   INACTIVE: 'INACTIVE',
 };
+export const CONTEXT_NAMESPACE_ID =
+  'a6a29a6f-6747-4b5f-b99f-07ee96e32f00';
 export const GENDER = ['M', 'F'];
+export const PASSWORD_REGEX = /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;

@@ -1,5 +1,4 @@
-import { Field, ObjectType, ID } from '@nestjs/graphql';
-
+import { Field, ObjectType, ID, createUnionType } from '@nestjs/graphql';
 @ObjectType()
 export class Document {
   @Field(() => ID)
@@ -50,3 +49,39 @@ export class PreviewDocument {
   @Field()
   image: string;
 }
+
+@ObjectType()
+export class SCHEMA_ERROR {
+
+  @Field()
+  group: string;
+  @Field({ nullable: true })
+  errorCode: string;
+  @Field()
+  message: string;
+  @Field({ nullable: true })
+  field?: string;
+  @Field({ nullable: true })
+  stack: string;
+  @Field({ nullable: true })
+  value?: string;
+}
+
+@ObjectType()
+export class CUSTOM_ERROR {
+  @Field()
+  valid: boolean
+  @Field(() => [SCHEMA_ERROR], { nullable: true })
+  errors: SCHEMA_ERROR[];
+}
+
+export const ResultUnion = createUnionType({
+  name: 'Result',
+  types: () => [Document, CUSTOM_ERROR],
+  resolveType(value) {
+    if (value.id) {
+      return Document;
+    }
+    return CUSTOM_ERROR;
+  },
+});

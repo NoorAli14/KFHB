@@ -1,11 +1,10 @@
 import {
   IsOptional,
-  Length,
   MaxLength,
   IsString,
-  IsNotEmpty,
   IsIn,
 } from 'class-validator';
+
 import { Field, InputType } from '@nestjs/graphql';
 const DEVICES: string[] = ['ios', 'andriod'];
 @InputType('CreateCustomerInput')

@@ -15,9 +15,9 @@ export class AmlResponseService {
     const newAmlResponse: NewAlmResponseInput = {
       created_by: 'Test User',
       updated_by: 'Test User',
-      response_type: 'Test Aml Response',
+      response_text: 'Test Aml Response',
       request_id: 'E8A8C575-DAC7-4326-A0A2-61D2D1E3476D',
-      response_status: 'Status here',
+      status: 'Status here',
     };
 
     const [response] = await this.amlResponseDB.create(newAmlResponse, keys);
