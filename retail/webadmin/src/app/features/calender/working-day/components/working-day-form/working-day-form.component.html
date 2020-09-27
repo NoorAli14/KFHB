@@ -17,7 +17,7 @@
                         params: { delay: '50ms', scale: '0.2' }
                     }"
                 >
-                    perm_contact_calendar
+                av_timer
                 </mat-icon>
                 <span
                     class="logo-text"
@@ -75,7 +75,7 @@
                         fxFlex="48"
                         class="pr-4"
                     >
-                        <mat-label>Week Day</mat-label>
+                        <mat-label>Week Day <app-required-indicator></app-required-indicator></mat-label>
                         <mat-select formControlName="weekDay">
                             <mat-option
                                 *ngFor="let item of workingDaysList"
@@ -95,7 +95,7 @@
                         fxFlex="48"
                         class="pr-4"
                     >
-                        <mat-label>Start Time</mat-label>
+                        <mat-label>Start Time </mat-label>
                         <input matInput formControlName="startTimeLocal" />
                         <mat-icon
                             (click)="showPicker('startTimeLocal')"
@@ -115,7 +115,7 @@
                         fxFlex="48"
                         class="pl-4"
                     >
-                        <mat-label>End Time</mat-label>
+                        <mat-label>End Time </mat-label>
                         <input matInput formControlName="endTimeLocal" />
                         <mat-icon
                             (click)="showPicker('endTimeLocal')"
@@ -136,7 +136,7 @@
                         fxFlex="100"
                         class="pr-16"
                     >
-                        <mat-label>Remarks</mat-label>
+                        <mat-label>Remarks <app-required-indicator></app-required-indicator></mat-label>
                         <textarea matInput formControlName="remarks"></textarea>
                         <mat-error>
                             <app-mat-error

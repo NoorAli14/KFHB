@@ -17,7 +17,7 @@
                         params: { delay: '50ms', scale: '0.2' }
                     }"
                 >
-                    people
+                update
                 </mat-icon>
                 <span
                     class="logo-text"
@@ -160,7 +160,7 @@
                 fxFlex="100"
                 class="pr-24"
             >
-                <mat-label>Remarks</mat-label>
+                <mat-label>Remarks <app-required-indicator></app-required-indicator></mat-label>
                 <textarea matInput formControlName="remarks"></textarea>
                 <mat-error>
                     <app-mat-error

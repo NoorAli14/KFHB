@@ -17,7 +17,7 @@
                         params: { delay: '50ms', scale: '0.2' }
                     }"
                 >
-                    perm_contact_calendar
+                history
                 </mat-icon>
                 <span
                     class="logo-text"
@@ -67,7 +67,7 @@
                         fxFlex="48"
                         
                     >
-                        <mat-label>Date</mat-label>
+                        <mat-label>Date <app-required-indicator></app-required-indicator></mat-label>
                         <input
                             matInput
                             [matDatepicker]="picker"
@@ -91,7 +91,7 @@
                         fxFlex="100"
                         
                     >
-                        <mat-label>Description</mat-label>
+                        <mat-label>Description <app-required-indicator></app-required-indicator></mat-label>
                         <textarea matInput formControlName="description"></textarea>
                         
                         <mat-error>
@@ -104,7 +104,7 @@
                         appearance="outline"
                         fxFlex="100"
                     >
-                        <mat-label>Remarks</mat-label>
+                        <mat-label>Remarks <app-required-indicator></app-required-indicator></mat-label>
                         <textarea matInput formControlName="remarks"></textarea>
                     
                         <mat-error>
