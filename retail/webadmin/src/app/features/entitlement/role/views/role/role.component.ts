@@ -50,6 +50,7 @@ export class RoleComponent extends BaseComponent implements OnInit {
         injector: Injector
     ) {
         super(injector, MODULES.ROLE_MANAGEMENT);
+        super.ngOnInit();
     }
     ngOnInit(): void {
         this.getData();

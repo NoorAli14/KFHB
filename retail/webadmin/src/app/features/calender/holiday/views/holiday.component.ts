@@ -15,7 +15,7 @@ import { HolidayFormComponent } from '../components/holiday-form/holiday-form.co
 import { CONFIG } from '@config/index';
 import { MESSAGES } from '@shared/constants/messages.constant';
 import * as moment from 'moment';
-import { DATE_FORMAT } from '@shared/constants/app.constants';
+import { DATE_FORMAT, MODULES } from '@shared/constants/app.constants';
 
 
 @Component({
@@ -48,7 +48,8 @@ export class HolidayComponent extends BaseComponent implements OnInit {
         ,
         injector: Injector
         ) {
-            super(injector);
+            super(injector,MODULES.HOLIDAYS);
+            super.ngOnInit();
     }
 
     ngOnInit(): void {

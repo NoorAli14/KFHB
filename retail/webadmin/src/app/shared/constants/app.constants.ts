@@ -35,6 +35,9 @@ export const WORKING_DAYS: Array<Select> = [
 export const MODULES = {
     USER_MANAGEMENT: "User Management",
     ROLE_MANAGEMENT: "Role Management",
+    WORKING_WEEK: "Working Week",
+    LEAVES: "Leaves",
+    HOLIDAYS: "Holidays",
 };
 export const NATIONALITY_LIST: Array<Select> = [
     { id: "1", name: "Pakistan" },

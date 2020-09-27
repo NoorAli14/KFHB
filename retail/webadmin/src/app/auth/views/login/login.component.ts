@@ -57,6 +57,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
         const model = this.loginForm.value;
         this._authService.login(model).pipe(takeUntil(this._unsubscribeAll)).subscribe(
             (response) => {
+                debugger
                 this.errorType = "success";
                 this.responseMessage = MESSAGES.LOGGED_IN();
                 setTimeout(() => {

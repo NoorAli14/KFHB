@@ -1,3 +1,4 @@
+import { MODULES } from './../../../../../shared/constants/app.constants';
 import {
     Component,
     Injector,
@@ -56,7 +57,8 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
         private _service: CalendarService,
         injector: Injector
     ) {
-        super(injector);
+        super(injector,MODULES.WORKING_WEEK);
+        super.ngOnInit();
     }
 
     ngOnInit(): void {

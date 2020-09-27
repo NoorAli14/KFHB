@@ -4,7 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Leave } from '@feature/calender/models/leave.model';
 import { fuseAnimations } from '@fuse/animations';
 import { BaseComponent } from '@shared/components/base/base.component';
-import { DATE_FORMAT } from '@shared/constants/app.constants';
+import { DATE_FORMAT, MODULES } from '@shared/constants/app.constants';
 import { camelToSnakeCase } from '@shared/helpers/global.helper';
 import * as moment from 'moment';
 import { takeUntil, filter } from 'rxjs/operators';
@@ -28,7 +28,8 @@ export class LeaveFormComponent extends BaseComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     injector: Injector
   ) {
-    super(injector);
+    super(injector,MODULES.LEAVES);
+    super.ngOnInit();
   }
 
   ngOnInit(): void {

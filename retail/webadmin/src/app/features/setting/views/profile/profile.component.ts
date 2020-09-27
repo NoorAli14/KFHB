@@ -73,8 +73,6 @@ export class ProfileComponent extends BaseComponent implements OnInit {
                 (response: User) => {
                     this._authUserService.User = response;
                     this.currentUser = this._authUserService.User;
-                    this.errorType = "success";
-                    this.responseMessage = MESSAGES.UPDATED("Profile");
                     this._matDialog.closeAll();
                     this._errorEmitService.emit("", "");
                 },
@@ -84,7 +82,6 @@ export class ProfileComponent extends BaseComponent implements OnInit {
             );
     }
     onUpdatePassword(data) {
-        debugger
         this._settingService
             .updatePassword(data)
             .pipe(takeUntil(this._unsubscribeAll))
@@ -98,9 +95,7 @@ export class ProfileComponent extends BaseComponent implements OnInit {
                         this.responseMessage = MESSAGES.UPDATED("Password");
                     }
                 },
-                (response) => {
-                    
-                }
+                (response) => super.onError(response)
             );
     }
 }

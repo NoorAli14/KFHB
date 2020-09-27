@@ -17,7 +17,7 @@ import {
 import { camelToSnakeCase } from '@shared/helpers/global.helper';
 import { fuseAnimations } from '@fuse/animations';
 import * as moment from 'moment';
-import { DATE_FORMAT } from '@shared/constants/app.constants';
+import { DATE_FORMAT, MODULES } from '@shared/constants/app.constants';
 
 @Component({
     selector: "app-holiday-form",
@@ -35,7 +35,8 @@ export class HolidayFormComponent extends BaseComponent implements OnInit {
         @Inject(MAT_DIALOG_DATA) public data: Holiday,
         injector: Injector
     ) {
-        super(injector);
+        super(injector,MODULES.HOLIDAYS);
+        super.ngOnInit();
     }
 
 

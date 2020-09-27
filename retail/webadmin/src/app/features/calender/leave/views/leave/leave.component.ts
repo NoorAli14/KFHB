@@ -12,6 +12,7 @@ import { snakeToCamelArray, camelToSentenceCase, camelToSnakeCase, snakeToCamelO
 import { MESSAGES } from '@shared/constants/messages.constant';
 import { LeaveFormComponent } from '../../components/leave-form/leave-form.component';
 import { fuseAnimations } from '@fuse/animations';
+import { MODULES } from '@shared/constants/app.constants';
 
 @Component({
     selector: 'app-leave',
@@ -43,7 +44,8 @@ export class LeaveComponent extends BaseComponent implements OnInit {
         private _service: CalendarService,
         injector: Injector
     ) {
-        super(injector);
+        super(injector,MODULES.LEAVES);
+        super.ngOnInit();
     }
 
     ngOnInit(): void {

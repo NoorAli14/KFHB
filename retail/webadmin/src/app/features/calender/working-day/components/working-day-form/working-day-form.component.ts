@@ -18,7 +18,7 @@ import { CalendarService } from "@feature/calender/services/calendar.service";
 import { fuseAnimations } from "@fuse/animations";
 import { BaseComponent } from "@shared/components/base/base.component";
 import { WTimeDialogComponent } from "@shared/components/time-control/w-time-dialog.component";
-import { WORKING_DAYS } from "@shared/constants/app.constants";
+import { MODULES, WORKING_DAYS } from "@shared/constants/app.constants";
 import { camelToSnakeCase } from "@shared/helpers/global.helper";
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -44,7 +44,8 @@ export class WorkingDayFormComponent extends BaseComponent implements OnInit {
         private dialog: MatDialog,
         injector: Injector
     ) {
-        super(injector);
+        super(injector,MODULES.WORKING_WEEK);
+        super.ngOnInit();
     }
 
     ngOnInit(): void {

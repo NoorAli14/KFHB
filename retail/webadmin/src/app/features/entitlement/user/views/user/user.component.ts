@@ -62,6 +62,7 @@ export class UserComponent extends BaseComponent implements OnInit {
         injector: Injector
     ) {
         super(injector, MODULES.USER_MANAGEMENT);
+        super.ngOnInit();
     }
 
     ngOnInit(): void {
