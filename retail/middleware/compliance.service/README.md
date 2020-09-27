@@ -1,4 +1,4 @@
-# Template Service
+# Compliance Service
 
 [travis-image]: https://api.travis-ci.org/nestjs/nest.svg?branch=master
 [travis-url]: https://travis-ci.org/nestjs/nest
@@ -24,7 +24,7 @@
 
 ## ❯ Table of Contents
 
-- [Template Service](#template-service)
+- [Compliance Service](#compliance-service)
   - [❯ Table of Contents](#-table-of-contents)
   - [❯ How to Run](#-how-to-run)
     - [Pre-requisites](#pre-requisites)
