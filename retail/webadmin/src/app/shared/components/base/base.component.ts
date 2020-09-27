@@ -33,7 +33,6 @@ export class BaseComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        debugger
         this.randomNo= Math.random();
         this.userPermissions = this._authUserService.getPermissionsByModule(
             this.moduleType

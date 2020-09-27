@@ -48,7 +48,6 @@ export class UserFormComponent extends BaseComponent implements OnInit {
     ) {
         super(injector, MODULES.USER_MANAGEMENT);
         super.ngOnInit();
-        debugger
     }
     requiredIfUpdating(predicate) {
         return (formControl) => {

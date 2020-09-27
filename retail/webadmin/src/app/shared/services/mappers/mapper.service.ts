@@ -5,11 +5,17 @@ import { Injectable } from "@angular/core";
 })
 export class MapperService {
     result: Array<any>;
+    sidebar: Array<any>;
     constructor() {}
     makeModulesFlat(modules) {
         this.result = [];
         this.makeFlat(modules, null);
         return this.result;
+    }
+    makeSiderFlat(modules) {
+        this.sidebar = [];
+        this.makeSidebarModuleFlat(modules, null);
+        return this.sidebar;
     }
     private makeFlat(modules: any[], parent_id) {
         modules.forEach((item) => {
@@ -23,7 +29,17 @@ export class MapperService {
             }
         });
     }
-
+    private makeSidebarModuleFlat(modules: any[], parent_id) {
+        modules.forEach((item) => {
+            item.module = item.name;
+            if (item.parent_id) {
+                this.sidebar.push(item);
+            }
+            if (item.children && item.children.length > 0) {
+                this.makeSidebarModuleFlat(item.children, item.module);
+            }
+        });
+    }
     findPermission(modules, id) {
         let module, flag;
         modules.forEach((element) => {

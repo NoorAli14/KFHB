@@ -1,3 +1,4 @@
+import { MapperService } from './../mappers/mapper.service';
 import { StorageService } from "./../storage/storage.service";
 import { Injectable } from "@angular/core";
 import { APP_CONST } from "@shared/constants/app.constants";
@@ -60,7 +61,8 @@ export class AuthUserService {
 
     constructor(
         private storage: StorageService,
-        private eventService: EventBusService
+        private eventService: EventBusService,
+        private mapperService:MapperService
     ) {
         const data = this.storage.getItem(APP_CONST.SIDEBAR);
         if (data) {
@@ -109,24 +111,9 @@ export class AuthUserService {
         let modules;
         if (this._sidebarModules) modules = this._sidebarModules;
         else modules = this.storage.getItem(APP_CONST.SIDEBAR);
-
-        const module = this.findPermission(modules, name);
+        const flatModule= this.mapperService.makeSiderFlat(modules)
+        const module = flatModule.find(x=>x.name==name);
         return module ? module.permissions : [];
-    }
-    private findPermission(modules, name) {
-        let module, flag;
-        modules.forEach((element) => {
-            if (flag) return;
-            if (element.name !== name) {
-                if (!element.children) return;
-                const returned = this.findPermission(element.children, name);
-                module = returned;
-            } else {
-                flag = true;
-                module = element;
-            }
-        });
-        return module;
     }
     private configureModules(modules: any[]) {
         return modules.map((item) => {

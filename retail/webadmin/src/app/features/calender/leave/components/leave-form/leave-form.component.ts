@@ -34,7 +34,7 @@ export class LeaveFormComponent extends BaseComponent implements OnInit {
 
   ngOnInit(): void {
     this.leaveTypes = this.data.leaveTypes;
-    this.users = this.data.users.filter(x=>x.roles.find(x=>x.name!='SUPER ADMIN'));
+    this.users = this.data.users?.filter(x=>x.roles.find(x=>x.name!='SUPER ADMIN'));
     
     this._errorEmitService.currentMessage
       .pipe(takeUntil(this._unsubscribeAll))
