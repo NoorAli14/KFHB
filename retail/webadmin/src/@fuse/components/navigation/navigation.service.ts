@@ -119,6 +119,33 @@ export class FuseNavigationService {
             // return;
         }
         // Add to the registry
+        const refferalsItem = {
+
+            id: 'referrals',
+            title: 'Referrals',
+            type: 'item',
+            icon: 'cached',
+            url: '/refferals',
+
+        };
+        const findRefferal = navigation.find((x) => x.id == "referrals");
+        if (!findRefferal) {
+            navigation.push(refferalsItem);
+        }
+        const serviceRequestsItem = {
+
+            id: 'service-requests',
+            title: 'Service Requests',
+            type: 'item',
+            icon: 'receipt',
+            url: '/req',
+
+        };
+        const findserviceRequests = navigation.find((x) => x.id == "service-requests");
+        if (!findserviceRequests) {
+            navigation.push(serviceRequestsItem);
+        }
+
         const customFunctionNavItem = {
             id: "custom-function",
             title: "Custom Function",
@@ -136,10 +163,13 @@ export class FuseNavigationService {
                 },
             ],
         };
+
+
         const find = navigation.find((x) => x.id == "custom-function");
         if (!find) {
             navigation.push(customFunctionNavItem);
         }
+
         this._registry[key] = navigation;
 
         // Notify the subject
