@@ -1,4 +1,7 @@
+import { Request } from 'express';
 import * as path from 'path';
+import { IHEADER } from './interfaces';
+import { X_CORRELATION_KEY, X_TENANT_ID, X_USER_ID } from './constants';
 
 /**
  * graphqlKeys string[]
@@ -66,4 +69,13 @@ export const generateRandomString = (length: number): string => {
     .toString(36)
     .replace(/[^a-zA-Z0-9]+/g, '')
     .substr(0, length);
+};
+
+export const formattedHeader = (req: Request, user_id?: string): IHEADER => {
+  let headers: any = {};
+  headers[X_CORRELATION_KEY] = req.get(X_CORRELATION_KEY);
+  headers[X_USER_ID] = req.get(X_USER_ID);
+  headers[X_TENANT_ID] = (req.headers?.[X_TENANT_ID] ||
+    req.query?.[X_TENANT_ID]) as string;
+  return headers;
 };

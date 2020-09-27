@@ -1,8 +1,9 @@
 import { Injectable, HttpService } from '@nestjs/common';
-import { NewAlmRequestInput } from './aml-request-dot';
-import { AmlRequest } from './aml.request.model';
 import { AmlRequestRepository } from '@core/repository/aml-request-repository';
+import { AmlResponseRepository } from '@core/repository/aml-response-repository';
 import { map } from 'rxjs/operators';
+import { ICurrentUser } from '@common/interfaces';
+import { HttpHeaders } from '@core/context';
 
 // import { GqlClientService, toGraphql } from '@common/index';
 
@@ -11,27 +12,50 @@ export class AmlRequestService {
   constructor(
     private readonly http: HttpService,
     private readonly amlRequestDB: AmlRequestRepository,
+    private readonly amlResponseDB: AmlResponseRepository,
   ) {}
+
+  async list(currentUser: ICurrentUser, user_id: string, output: string[]) {
+    return this.amlRequestDB.findBy(
+      {
+        user_id: user_id,
+        tenant_id: currentUser.tenant_id,
+        deleted_on: null,
+      },
+      output,
+    );
+  }
+
+  // Check if aml request against user already exist or not
+  async getAmlRequestByUserId(
+    currentUser: ICurrentUser,
+    user_id: string,
+    output: string[],
+  ): Promise<any> {
+    return this.amlRequestDB.findOne(
+      {
+        user_id: user_id,
+        tenant_id: currentUser.tenant_id,
+        deleted_on: null,
+      },
+      output,
+    );
+  }
+
   //Get customer details
-  async findById(customer_id: string): Promise<any> {
+  async findById(currentUser: ICurrentUser, user_id: string): Promise<any> {
     const gqlQuery = `query {
-      result: findCustomerById(id: "${customer_id}") {  
+      result: findCustomerById(id: "${user_id}") {  
         id
         first_name
         last_name
-        tenant_id
-        session_id
+        middle_name
         email
         national_id_no
         gender
         nationality
         contact_no
-        created_on
-        created_by
-        updated_on
-        updated_by
-        deleted_on
-        deleted_by
+        national_id_expiry
         date_of_birth
       }
     }`;
@@ -39,46 +63,60 @@ export class AmlRequestService {
     const params = { query: gqlQuery };
 
     const response = await this.http
-      .post('http://localhost:4010/graphql', params, {
-        headers: {
-          'x-tenant-id': '9013C327-1190-4875-A92A-83ACA9029160',
-          'x-user-id': '828605C2-7E50-40BC-AA88-C064CE63C155',
-        },
+      .post(process.env.ENV_RBX_IDX_BASE_URL, params, {
+        headers: HttpHeaders(),
       })
-      .pipe(map(res => res.data))
+      .pipe(map(res => res.data?.data?.result))
       .toPromise();
 
     return response;
   }
 
-  async checkAmlByUser(user: any, keys: string[]): Promise<any> {
-    console.log(user, '-=-=-=-=-');
-
-    // we will get this from aml integrator
+  async create(currentUser: ICurrentUser, input: any, output: string[]) {
     // MOC JSON object start
     const newAmlRequest: any = {
-      tenant_id: user.tenant_id,
-      customer_id: user.id,
-      remarks: 'remarks from aml integrator',
-      status: 'status from aml integrator',
-      request_reference: 'aml integrator request reference',
-      aml_text: JSON.stringify(user),
-      created_by: user.email,
-      created_on: new Date(),
-      updated_by: user.email,
-      updated_on: new Date(),
+      status: null,
+      remarks: null,
+      user_id: input.id,
+      created_by: currentUser.id,
+      updated_by: currentUser.id,
+      aml_text: JSON.stringify(input),
+      tenant_id: currentUser.tenant_id,
+      request_reference: new Date().getTime(),
     };
     // MOC JSON object end
 
-    const [response] = await this.amlRequestDB.create(newAmlRequest, keys);
+    const [response] = await this.amlRequestDB.create(newAmlRequest, output);
     return response;
   }
 
-  async create(
-    newAmlRequest: NewAlmRequestInput,
-    keys?: string[],
-  ): Promise<AmlRequest> {
-    const [response] = await this.amlRequestDB.create(newAmlRequest, keys);
+  async triggerAml(amlRequest: any, output: string[]): Promise<any> {
+    const user = JSON.parse(amlRequest.aml_text);
+    const amlScreening = await this.http
+      .post(process.env.ENV_RBX_AML_BASE_URL, {
+        user: user,
+        reference_no: amlRequest.request_reference,
+      })
+      .pipe(map(res => res.data))
+      .toPromise();
+
+    const [response] = await this.amlRequestDB.update(
+      { id: amlRequest.id },
+      { status: amlScreening.status },
+      output,
+    );
+
+    const [result] = await this.amlResponseDB.create(
+      {
+        request_id: response.id,
+        status: amlScreening.status,
+        created_by: response.created_by,
+        updated_by: response.updated_by,
+        response_text: JSON.stringify(amlScreening),
+      },
+      ['id'],
+    );
+
     return response;
   }
 }

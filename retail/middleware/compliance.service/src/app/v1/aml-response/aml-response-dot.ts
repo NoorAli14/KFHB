@@ -3,10 +3,10 @@ import { Field, InputType } from '@nestjs/graphql';
 @InputType()
 export class NewAlmResponseInput {
   @Field()
-  response_status: string;
+  status: string;
 
   @Field()
-  response_type: string;
+  response_text: string;
 
   @Field()
   created_by: string;

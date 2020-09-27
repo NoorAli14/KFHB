@@ -14,12 +14,13 @@ directive @provides(fields: String!) on FIELD_DEFINITION
 
 type AmlRequest {
   id: String!
-  customer_id: String!
+  user_id: String!
   tenant_id: String!
   request_reference: String!
   aml_text: String!
   remarks: String!
   status: String!
+  responses: [AmlResponse!]
   created_on: DateTime!
   created_by: String!
   updated_on: DateTime!
@@ -30,9 +31,9 @@ type AmlRequest {
 
 type AmlResponse {
   id: String!
-  response_status: String!
+  status: String!
   response_on: DateTime!
-  response_type: String!
+  response_text: String!
   created_on: DateTime!
   created_by: String!
   updated_on: DateTime!
@@ -49,7 +50,7 @@ scalar DateTime
 
 type Mutation {
   addTemplateResponse(input: NewTemplateResponseInput!): TemplateResponse!
-  addAmlRequest(id: String!): AmlRequest!
+  amlScreening(user_id: String!): AmlRequest!
 }
 
 input NewTemplateResponseInput {
@@ -83,7 +84,7 @@ type Query {
   templatesList: [Template!]!
   findTemplateByName(name: String!): Template!
   findTemplate(id: String!): Template!
-  checkAmlByCustomerId(customer_id: String!): AmlRequest!
+  amlListByUserId(user_id: String!): [AmlRequest!]!
   getAmlStatueByRefNo(user_id: String!, reference_no: String!): AmlResponse!
 }
 
