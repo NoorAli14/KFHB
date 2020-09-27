@@ -19,6 +19,7 @@ import { OtpModule } from './otp/otp.module';
 import { SessionModule } from './sessions/session.module';
 import { AttachmentModule } from './attachments/attachment.module';
 import { UserModule } from './users/user.module';
+import { AmlModule } from './aml/aml.module';
 
 let services: iSERVICE[];
 if (process.env.NODE_ENV === 'production') {
@@ -74,6 +75,7 @@ class BuildServiceModule { }
     OtpModule,
     UserModule,
     ComplianceModule,
+    AmlModule,
     GraphQLGatewayModule.forRootAsync({
       imports: [BuildServiceModule],
       useFactory: async () => ({

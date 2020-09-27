@@ -25,7 +25,7 @@ import { Template } from './compliance.entity';
 import { ComplianceService } from './compliances.service';
 import { ComplianceDto } from './compliance.dto';
 import { ITemplateResponse } from './compliance.interface';
-import { User } from '../users/user.entity';
+import { Customer } from '../customers/customer.entity';
 @ApiTags('Compliance Module')
 @Controller('compliances')
 @ApiBearerAuth()
@@ -37,7 +37,7 @@ export class CompliancesController {
     KYC: 'KYC',
     FATCA: 'FATCA',
   };
-  constructor(private readonly complianceService: ComplianceService) {}
+  constructor(private readonly complianceService: ComplianceService) { }
 
   @Get('crs')
   @ApiOperation({
@@ -125,7 +125,7 @@ export class CompliancesController {
   @HttpCode(HttpStatus.OK)
   async submit(
     @Param('template_id', ParseUUIDPipe) template_id: string,
-    @CurrentUser() customer: User,
+    @CurrentUser() customer: Customer,
     @Body() input: ComplianceDto,
   ): Promise<Template> {
     const params: ITemplateResponse = {
