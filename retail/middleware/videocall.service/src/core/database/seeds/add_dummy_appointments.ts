@@ -39,5 +39,10 @@ export async function seed(knex: Knex): Promise<void> {
     },
   ];
   // Inserts seed entries
-  await knex(TABLE.APPOINTMENT).insert(appointments);
+  await knex(TABLE.APPOINTMENT).insert(
+    appointments.map(appointment => ({
+      ...appointment,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    })),
+  );
 }

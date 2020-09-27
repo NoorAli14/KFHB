@@ -9,8 +9,9 @@ import {
 import { AppointmentsService } from './appointments.service';
 import { Appointment, User } from './appointment.model';
 import { NewAppointmentInput } from './appointment.dto';
-import { Fields } from '@common/decorators';
+import { CurrentUser, Fields } from '@common/decorators';
 import { PLATFORMS } from '@common/constants';
+import { ICurrentUser } from '@common/interfaces';
 
 @Resolver(Appointment)
 export class AppointmentsResolver {
@@ -54,6 +55,7 @@ export class AppointmentsResolver {
 
   @Query(() => Appointment)
   async findAppointment(
+    @CurrentUser() currentUser: ICurrentUser,
     @Args('appointment_id') appointment_id: string,
     @Fields(Appointment) columns: string[],
   ): Promise<Appointment> {
@@ -62,9 +64,15 @@ export class AppointmentsResolver {
 
   @Query(() => Appointment)
   async findAppointmentByUserId(
+    @CurrentUser() currentUser: ICurrentUser,
     @Args('user_id') user_id: string,
-    @Fields(Appointment) columns: string[],
+    @Fields(Appointment) output: string[],
   ): Promise<Appointment> {
-    return this.appointmentsService.findByUserId(user_id, columns);
+    console.log(currentUser, '0000000000000');
+    return await this.appointmentsService.findByUserId(
+      currentUser,
+      user_id,
+      output,
+    );
   }
 }

@@ -11,6 +11,8 @@ import { APPOINTMENT_STATUS, GENDER } from '@common/constants';
 import { GqlClientService } from '@common/libs/gqlclient/gqlclient.service';
 import { PushNotificationModel } from './push_notification.model';
 import { stringifyForGQL } from '@common/utilities';
+import { ICurrentUser } from '@common/interfaces';
+import { HttpHeaders } from '@core/context';
 
 @Injectable()
 export class AppointmentsService {
@@ -88,11 +90,23 @@ export class AppointmentsService {
   }
 
   async findById(id: string, keys?: string[]): Promise<any> {
+    console.log(id, 'curent user 1111111', keys);
     return this.appointmentDB.findOne({ id: id }, keys);
   }
 
-  async findByUserId(user_id: string, keys?: string[]): Promise<any> {
-    return this.appointmentDB.findOne({ user_id: user_id }, keys);
+  async findByUserId(
+    currentUser: ICurrentUser,
+    user_id: string,
+    output?: string[],
+  ): Promise<any> {
+    return this.appointmentDB.findOne(
+      {
+        user_id: user_id,
+        // tenant_id: currentUser.tenant_id,
+        // deleted_on: null,
+      },
+      output,
+    );
   }
 
   async findByIds(ids: readonly string[]): Promise<any> {
@@ -246,14 +260,9 @@ export class AppointmentsService {
       }
     }`;
 
-    const headers = {
-      'x-user-id': user_id,
-      'x-tenant-id': user_id,
-    };
-
     const result = await this.gqlClient.send(
       params,
-      headers,
+      { headers: HttpHeaders() || {} },
       this.configService.get('ENV_RBX_IDENTITY_SERVER'),
     );
     return result;

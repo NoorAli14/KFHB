@@ -33,6 +33,12 @@ registerEnumType(PLATFORMS, { name: 'MOBILE_PLATFORMS' });
 
 export const DATABASE_UUID_METHOD = (): string => 'NEWID()';
 
+export declare const X_USER_ID = 'x-user-id';
+export declare const X_TENANT_ID = 'x-tenant-id';
+export declare const X_CORRELATION_KEY = 'x-correlation-id';
+export const CONTEXT_NAMESPACE_ID = 'a6a29a6f-6747-4b5f-b99f-07ee96e32f00';
+export const SEED_USER_ID = '7D55A5DB-739A-4B80-BD37-D3D30358D655';
+
 export const DATABASE_MIGRATION_TABLE_NAME =
   process.env.DATABASE_MIGRATION_TABLE_NAME || 'RUBIX_VIDEO_MIGRATION';
 export const DATABASE_MIGRATION_DIRECTORY = 'src/core/database/migrations';
