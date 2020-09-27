@@ -14,6 +14,7 @@ import { ValidatorService } from "@shared/services/validator-service/validator.s
 import { fuseAnimations } from "@fuse/animations";
 import { takeUntil } from "rxjs/operators";
 import { MESSAGES } from "@shared/constants/messages.constant";
+import { REGEX } from '@config/index';
 
 @Component({
     selector: "app-invitation",
@@ -70,7 +71,7 @@ export class InvitationComponent extends BaseComponent implements OnInit {
             email: new FormControl({ value: "", disabled: true }),
             dateOfBirth: new FormControl("", [Validators.required]),
             nationalityId: new FormControl("", [Validators.required]),
-            password: new FormControl("", Validators.required),
+            password: new FormControl("", [Validators.required,Validators.pattern(REGEX.PASSWORD)]),
             confirmPassword: new FormControl("", [
                 Validators.required,
                 this.confirmPasswordValidator.bind(this),
@@ -97,10 +98,7 @@ export class InvitationComponent extends BaseComponent implements OnInit {
             .subscribe(
                 (response) => {
                     this.errorType = "success";
-                    this.responseMessage = MESSAGES.UPDATED("Your Profile");
-                    // setTimeout(() => {
-                    //     this.router.navigateByUrl('/auth/login');
-                    // }, 1000);
+                    this.responseMessage = MESSAGES.INVITATION_ACCEPTED();
                 },
                 (error) => {
                     this.errorType = "error";

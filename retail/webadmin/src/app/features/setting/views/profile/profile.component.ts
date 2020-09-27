@@ -84,6 +84,7 @@ export class ProfileComponent extends BaseComponent implements OnInit {
             );
     }
     onUpdatePassword(data) {
+        debugger
         this._settingService
             .updatePassword(data)
             .pipe(takeUntil(this._unsubscribeAll))
@@ -97,7 +98,9 @@ export class ProfileComponent extends BaseComponent implements OnInit {
                         this.responseMessage = MESSAGES.UPDATED("Password");
                     }
                 },
-                (response) => super.onError(response)
+                (response) => {
+                    
+                }
             );
     }
 }

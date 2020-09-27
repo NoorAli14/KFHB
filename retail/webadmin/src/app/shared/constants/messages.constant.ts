@@ -14,6 +14,7 @@ export const MESSAGES = {
     CREATED: (name) => `${name} created successfully. ${getRandomNumber()}`,
     DELETED: (name) => `${name} deleted successfully. ${getRandomNumber()}`,
     UPDATED: (name) => `${name} updated successfully. ${getRandomNumber()}`,
+    INVITATION_ACCEPTED: () => `Your profile updated successfully. Login to continue. ${getRandomNumber()}`,
     CUSTOM: (message)=> `${message} ${getRandomNumber()}`,
     EXISTS: (type)=> `${type} already exists. ${getRandomNumber()}`,
 };

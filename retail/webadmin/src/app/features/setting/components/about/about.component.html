@@ -35,7 +35,7 @@
                 <div fxLayout="column" fxFlex="48">
                     <div class="info-line">
                         <div class="title">Gender</div>
-                        <div class="info" *ngIf="user.gender ; else defaultText">{{user.gender}}</div>
+                        <div class="info" *ngIf="user.gender ; else defaultText">{{user.gender=='M' ? 'Male' : 'Female'}}</div>
                     </div>
 
                     <div class="info-line">
