@@ -3,6 +3,8 @@ import {Injectable} from '@nestjs/common';
 import { BaseRepository } from './base.repository';
 import {STATUS, TABLE} from '@common/constants';
 import {IdsInput} from '@common/inputs/ids.input';
+import { Role } from '@app/v1/roles/role.model';
+import { getCurrentTimeStamp } from '@common/utilities';
 
 @Injectable()
 export class RoleRepository extends BaseRepository {
@@ -42,12 +44,13 @@ export class RoleRepository extends BaseRepository {
 
   async update(condition: Record<string, any>,
                role: Record<string, any>,
-               keys: string[]): Promise<any> {
+               keys: string[]): Promise<Role[]> {
     const trxProvider = this._connection.transactionProvider();
     const trx = await trxProvider();
     try{
       const module_permission_ids: IdsInput[] = role.permissions;
       delete role.permissions;
+      role.updated_on = getCurrentTimeStamp();
       const response = await trx(TABLE.ROLE).where(condition).update(role, keys);
       if(module_permission_ids?.length > 0) {
         const modulePermissionsToDelete = [];
@@ -90,12 +93,14 @@ export class RoleRepository extends BaseRepository {
     }
   }
 
-  async create(role: Record<string, any>, keys: string[]): Promise<any> {
+  async create(role: Record<string, any>, keys: string[]): Promise<Role[]> {
     const trxProvider = this._connection.transactionProvider();
     const trx = await trxProvider();
     try {
       const module_permissions: IdsInput[] = role.permissions;
       delete role.permissions;
+      role.created_on = getCurrentTimeStamp();
+      role.updated_on = getCurrentTimeStamp();
       const response = await trx(TABLE.ROLE).insert(role, keys);
       if (module_permissions) {
         const module_permission_roles = module_permissions.map(module_permission => {

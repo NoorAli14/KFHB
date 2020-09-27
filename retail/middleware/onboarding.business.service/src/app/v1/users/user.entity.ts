@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsOptional, IsDate } from 'class-validator';
+import { IsEmail, IsOptional } from 'class-validator';
 import { USER_STATUSES, GENDER } from '@common/constants';
 
 export class User {
@@ -34,21 +34,20 @@ export class User {
     required: false,
   })
   @IsOptional()
-  last_name: string;
+  last_name?: string;
 
   @ApiProperty({
-    title: 'Date of birth',
-    description: 'Customer date of birth.',
-    example: '1968-11-16',
+    title: 'Username',
+    description: 'username of the user.',
     required: false,
   })
   @IsOptional()
-  date_of_birth: string;
+  username?: string;
 
   @ApiProperty({
     title: 'Email',
     example: 'example@aiondigital.com',
-    description: 'Email of the customer.',
+    description: 'Email of the user.',
     required: true,
   })
   @IsEmail()
@@ -56,61 +55,26 @@ export class User {
 
   @ApiProperty({
     title: 'Contact No',
-    description: 'Contact No of the customer.',
+    description: 'Contact No of the user.',
     required: false,
   })
   @IsOptional()
-  contact_no: string;
+  contact_no?: string;
 
   @ApiProperty({
     enum: GENDER,
     title: 'Gender',
     example: GENDER[0],
-    description: 'Gender of the customer.',
+    description: 'Gender of the user',
     required: false,
   })
   @IsOptional()
   gender: string;
 
   @ApiProperty({
-    title: 'Nationality ID',
-    description: 'Nationality ID of the customer.',
-    example: '268111605659',
-    required: false,
-  })
-  @IsOptional()
-  national_id_no: string;
-
-  @ApiProperty({
-    title: 'Nationality ID Expiry',
-    description: 'Nationality id expiry of the customer.',
-    example: '2021-05-22',
-    required: false,
-  })
-  @IsOptional()
-  national_id_expiry: string;
-
-  @ApiProperty({
-    title: 'Nationality',
-    description: 'Nationality of the customer.',
-    example: 'Bahrain',
-    required: false,
-  })
-  @IsOptional()
-  nationality: string;
-
-  @ApiProperty({
-    title: 'Nationality Code',
-    description: 'Nationality code of the customer.',
-    example: 'BH',
-    required: false,
-  })
-  @IsOptional()
-  nationality_code: string;
-  @ApiProperty({
     enum: USER_STATUSES,
     example: USER_STATUSES[0],
-    description: 'Onboarding status of the customer.',
+    description: 'Status of the user.',
     required: false,
   })
   @IsOptional()
@@ -123,23 +87,17 @@ export class User {
   created_on?: Date;
 
   @ApiProperty({ required: false })
-  created_by?: string;
+  @IsOptional()
+  created_by: string;
 
   @ApiProperty({
     required: false,
     description: 'timestamp without time zone',
   })
-  updated_on?: Date;
+  @IsOptional()
+  updated_on: Date;
 
   @ApiProperty({ required: false })
-  updated_by?: string;
-
-  @ApiProperty({
-    required: false,
-    description: 'timestamp without time zone',
-  })
-  deleted_on?: Date;
-
-  @ApiProperty({ required: false })
-  deleted_by?: string;
+  @IsOptional()
+  updated_by: string;
 }

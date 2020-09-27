@@ -1,12 +1,12 @@
 import { InjectKnex, Knex } from 'nestjs-knex';
-import {PaginationModel} from '@common/models';
-import {NUMBERS, PAGINATION_PARAMS} from '@common/constants';
 export abstract class BaseRepository {
   @InjectKnex() protected readonly _connection: Knex;
   protected _tableName: string;
+  protected _timestamps: boolean;
 
-  constructor(tableName: string) {
+  constructor(tableName: string, timestamps?:boolean) {
     this._tableName = tableName;
+    this._timestamps = timestamps || true;
   }
 
   get connection(): Knex {
@@ -49,12 +49,13 @@ export abstract class BaseRepository {
 
   async update(
     condition: Record<string, any>,
-    newObj: Record<string, any>,
-    keys: string[],
+    input: Record<string, any>,
+    output: string[],
   ): Promise<any> {
+    if (this._timestamps) input.updated_on = this._connection.fn.now();
     return this._connection(this._tableName)
         .where(condition)
-        .update(newObj, keys);
+        .update(input, output);
   }
 
   async delete(condition: Record<string, any>): Promise<any> {
@@ -74,5 +75,19 @@ export abstract class BaseRepository {
       .select(keys)
       .where(condition)
       .first();
+  }
+
+  async markAsDelete(tenant_id: string, current_user_id: string, record_id: string): Promise<any> {
+    const condition = {
+      id: record_id,
+      tenant_id: tenant_id
+    };
+    const input = {
+      deleted_on: this._connection.fn.now(),
+      deleted_by: current_user_id,
+      updated_on: this._connection.fn.now(),
+      updated_by: current_user_id,
+    };
+    return this.update(condition, input, ['id']);
   }
 }

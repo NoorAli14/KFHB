@@ -8,24 +8,24 @@ import { MatErrorComponent } from "./components/mat-error/mat-error.component";
 import { ConfirmDialogComponent } from "./components/confirm-dialog/confirm-dialog.component";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { MatToolbarModule } from "@angular/material/toolbar";
-import { MatTableComponent } from "./components/mat-table/mat-table.component";
 import { WClockComponent } from "./components/time-control/w-clock.component";
 import { WTimeDialogComponent } from "./components/time-control/w-time-dialog.component";
 import { BaseComponent } from './components/base/base.component';
 import { DefaultTextComponent } from './components/default-text/default-text.component';
 import { MessageBoxComponent } from './components/message-box/message-box.component';
+import { RequiredIndicatorComponent } from './components/required-indicator/required-indicator.component';
 
 @NgModule({
     declarations: [
         MatErrorComponent,
         ConfirmDialogComponent,
-        MatTableComponent,
         WClockComponent,
         WTimeDialogComponent,
         PermissionDirective,
         BaseComponent,
         DefaultTextComponent,
         MessageBoxComponent,
+        RequiredIndicatorComponent,
     ],
     imports: [
         ReactiveFormsModule,
@@ -38,12 +38,12 @@ import { MessageBoxComponent } from './components/message-box/message-box.compon
     entryComponents: [WTimeDialogComponent],
     exports: [
         MatErrorComponent,
-        MatTableComponent,
         WTimeDialogComponent,
         PermissionDirective,
         MessageBoxComponent,
         BaseComponent,
         DefaultTextComponent,
+        RequiredIndicatorComponent
     ],
 })
 export class SharedModule {}

@@ -1,5 +1,6 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
 import {PaginationModel} from '@common/models';
+import {Type} from 'class-transformer';
 
 @ObjectType()
 export class Leave {
@@ -7,53 +8,55 @@ export class Leave {
   id: string;
 
   @Field({ nullable: true })
-  user_id?: string;
+  user_id: string;
 
   @Field({ nullable: true })
-  leave_date?: string;
+  leave_type_id: string;
 
   @Field({ nullable: true })
-  leave_duration?: string;
+  @Type(() => Date)
+  start_date: Date;
 
   @Field({ nullable: true })
-  leave_type?: string;
+  @Type(() => Date)
+  end_date: Date;
 
   @Field({ nullable: true })
-  leave_type_id?: string;
+  remarks: string;
 
   @Field({ nullable: true })
-  remarks?: string;
+  status: string;
 
   @Field({ nullable: true })
-  is_repetitive?: number;
+  tenant_id: string;
 
   @Field({ nullable: true })
-  status?: string;
+  @Type(() => Date)
+  created_on: Date;
 
   @Field({ nullable: true })
-  created_on?: string;
+  created_by: string;
 
   @Field({ nullable: true })
-  created_by?: string;
+  @Type(() => Date)
+  updated_on: Date;
 
   @Field({ nullable: true })
-  updated_on?: string;
+  updated_by: string;
 
   @Field({ nullable: true })
-  updated_by?: string;
+  @Type(() => Date)
+  deleted_on: Date;
 
   @Field({ nullable: true })
-  deleted_on?: string;
-
-  @Field({ nullable: true })
-  deleted_by?: string;
+  deleted_by: string;
 }
 
 @ObjectType()
 export class LeaveWithPagination {
   @Field({ nullable: true })
-  pagination?: PaginationModel;
+  pagination: PaginationModel;
 
-  @Field(type => [Leave], { nullable: true })
-  data?: Leave[];
+  @Field(() => [Leave], { nullable: true })
+  data: Leave[];
 }

@@ -1,8 +1,8 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
-import { uuid, ICurrentUser } from '@rubix/common';
+import { Resolver, Query, Mutation, Args, Info } from '@nestjs/graphql';
+import { ICurrentUser } from '@rubix/common';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard, Fields, CurrentUser } from '@rubix/common';
-import { Document, PreviewDocument } from './document.model';
+import { Document, PreviewDocument, ResultUnion, CUSTOM_ERROR } from './document.model';
 import { DocumentsService } from './documents.service';
 import {
   NewDocumentInput,
@@ -13,7 +13,7 @@ import {
 @Resolver(Document)
 @UseGuards(AuthGuard)
 export class DocumentsResolver {
-  constructor(private readonly documentService: DocumentsService) {}
+  constructor(private readonly documentService: DocumentsService) { }
 
   @Mutation(() => Document)
   addDocument(
@@ -24,12 +24,14 @@ export class DocumentsResolver {
     return this.documentService.create(currentUser, input, output);
   }
 
-  @Mutation(() => Document)
+  @Mutation(() => ResultUnion)
   processDocument(
     @Args('input') input: ProcessDocumentInput,
     @CurrentUser() currentUser: ICurrentUser,
-    @Fields() output: string[],
-  ): Promise<Document | Error> {
+    @Info() info: any,
+    @Fields({ type: 'Document' }) output: string[],
+  ): Promise<Document | CUSTOM_ERROR> {
+    console.log('Document: ' + JSON.stringify(output, null, 2))
     return this.documentService.process(currentUser, input, output);
   }
 

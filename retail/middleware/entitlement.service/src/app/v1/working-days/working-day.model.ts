@@ -1,5 +1,6 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
 import {PaginationModel} from '@common/models';
+import {Type} from 'class-transformer';
 
 @ObjectType()
 export class WorkingDay {
@@ -7,47 +8,53 @@ export class WorkingDay {
   id: string;
 
   @Field({ nullable: true })
-  week_day?: string;
+  week_day: string;
 
   @Field({ nullable: true })
-  start_time?: string;
+  start_time_local: string;
 
   @Field({ nullable: true })
-  end_time?: string;
+  end_time_local: string;
 
   @Field({ nullable: true })
-  remarks?: string;
+  remarks: string;
 
   @Field({ nullable: true })
-  full_day?: number;
+  full_day: number;
 
   @Field({ nullable: true })
-  status?: string;
+  tenant_id: string;
 
   @Field({ nullable: true })
-  created_on?: string;
+  status: string;
 
   @Field({ nullable: true })
-  created_by?: string;
+  @Type(() => Date)
+  created_on: Date;
 
   @Field({ nullable: true })
-  updated_on?: string;
+  created_by: string;
 
   @Field({ nullable: true })
-  updated_by?: string;
+  @Type(() => Date)
+  updated_on: Date;
 
   @Field({ nullable: true })
-  deleted_on?: string;
+  updated_by: string;
 
   @Field({ nullable: true })
-  deleted_by?: string;
+  @Type(() => Date)
+  deleted_on: Date;
+
+  @Field({ nullable: true })
+  deleted_by: string;
 }
 
 @ObjectType()
 export class WorkingDayWithPagination {
   @Field({ nullable: true })
-  pagination?: PaginationModel;
+  pagination: PaginationModel;
 
-  @Field(type => [WorkingDay], { nullable: true })
-  data?: WorkingDay[];
+  @Field(() => [WorkingDay], { nullable: true })
+  data: WorkingDay[];
 }

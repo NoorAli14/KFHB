@@ -10,7 +10,7 @@ import {
 } from '@rubix/core';
 import { DocumentsResolver } from './documents.resolver';
 import { DocumentsService } from './documents.service';
-
+import { SchemaService } from './schema.service';
 @Module({
   imports: [RepositoryModule, IdentityModule],
   providers: [
@@ -21,6 +21,7 @@ import { DocumentsService } from './documents.service';
     IdentityService,
     DocumentTypeRepository,
     SessionReferenceRepository,
+    SchemaService
   ],
 })
-export class DocumentModule {}
+export class DocumentModule { }

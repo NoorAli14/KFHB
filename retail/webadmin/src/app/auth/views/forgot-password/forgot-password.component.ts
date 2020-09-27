@@ -1,11 +1,12 @@
-import { AuthenticationService } from "@core/services/auth/authentication.service";
-import { Component, OnInit, ViewEncapsulation } from "@angular/core";
+import { AuthenticationService } from "@shared/services/auth/authentication.service";
+import { Component, OnInit, ViewEncapsulation, Injector } from "@angular/core";
 import { FormGroup, Validators, FormControl } from "@angular/forms";
 
 import { FuseConfigService } from "@fuse/services/config.service";
 import { fuseAnimations } from "@fuse/animations";
-import { MESSAGES } from "@shared/constants/app.constants";
 import { BaseComponent } from '@shared/components/base/base.component';
+import { takeUntil } from 'rxjs/operators';
+import { MESSAGES } from '@shared/constants/messages.constant';
 
 @Component({
     selector: "forgot-password",
@@ -20,9 +21,10 @@ export class ForgotPasswordComponent extends BaseComponent implements OnInit {
     forgotPasswordForm: FormGroup;
     constructor(
         private _fuseConfigService: FuseConfigService,
-        private _authService: AuthenticationService
-    ) {
-        super()
+        private _authService: AuthenticationService,
+        injector: Injector
+        ) {
+            super(injector);
         // Configure the layout
         this._fuseConfigService.config = {
             layout: {
@@ -49,11 +51,11 @@ export class ForgotPasswordComponent extends BaseComponent implements OnInit {
     }
     onSubmit() {
         this._authService
-            .forgotPassword(this.forgotPasswordForm.value)
+            .forgotPassword(this.forgotPasswordForm.value).pipe(takeUntil(this._unsubscribeAll))
             .subscribe(
                 (response) => {
                      this.errorType = "success";
-                     this.responseMessage = MESSAGES.PASSWORD_RESET_SENT;
+                     this.responseMessage = MESSAGES.PASSWORD_RESET_SENT();
                 },
                (response=>super.onError(response))
             );

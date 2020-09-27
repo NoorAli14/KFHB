@@ -9,6 +9,7 @@ import {
   HttpCode,
   HttpStatus,
   Body,
+  Logger,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -18,16 +19,19 @@ import {
   ApiNotFoundResponse,
   ApiBody,
 } from '@nestjs/swagger';
-import { AuthGuard, CurrentUser, Header, IHEADER } from '@common/index';
+import { AuthGuard, CurrentUser } from '@common/index';
 
 import { Template } from './compliance.entity';
 import { ComplianceService } from './compliances.service';
 import { ComplianceDto } from './compliance.dto';
+import { ITemplateResponse } from './compliance.interface';
+import { User } from '../users/user.entity';
 @ApiTags('Compliance Module')
 @Controller('compliances')
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
 export class CompliancesController {
+  private readonly logger = new Logger(CompliancesController.name);
   private readonly __template: any = {
     CRS: 'CRS',
     KYC: 'KYC',
@@ -49,9 +53,8 @@ export class CompliancesController {
     type: Error,
     description: 'Template Not Found.',
   })
-  async crs(@Header() header: IHEADER): Promise<Template> {
-    const compliance = await this.complianceService.findOneByName(
-      header,
+  async crs(): Promise<Template> {
+    const compliance: Template = await this.complianceService.findOneByName(
       this.__template.CRS,
     );
     if (!compliance) throw new NotFoundException(`Template not found.`);
@@ -72,9 +75,8 @@ export class CompliancesController {
     type: Error,
     description: 'Template Not Found.',
   })
-  async kyc(@Header() header: IHEADER): Promise<Template> {
-    const compliance = await this.complianceService.findOneByName(
-      header,
+  async kyc(): Promise<Template> {
+    const compliance: Template = await this.complianceService.findOneByName(
       this.__template.KYC,
     );
     if (!compliance) throw new NotFoundException(`Template not found.`);
@@ -95,16 +97,15 @@ export class CompliancesController {
     type: Error,
     description: 'Template Not Found.',
   })
-  async fatca(@Header() header: IHEADER): Promise<Template> {
-    const compliance = await this.complianceService.findOneByName(
-      header,
+  async fatca(): Promise<Template> {
+    const compliance: Template = await this.complianceService.findOneByName(
       this.__template.FATCA,
     );
     if (!compliance) throw new NotFoundException(`Template not found.`);
     return compliance;
   }
 
-  @Post(':template_id/submit')
+  @Post(':template_id')
   @ApiBody({
     description: 'Sets the template properties.',
     type: ComplianceDto,
@@ -124,16 +125,15 @@ export class CompliancesController {
   @HttpCode(HttpStatus.OK)
   async submit(
     @Param('template_id', ParseUUIDPipe) template_id: string,
-    @CurrentUser() customer: any,
-    @Header() header: IHEADER,
+    @CurrentUser() customer: User,
     @Body() input: ComplianceDto,
   ): Promise<Template> {
-    const params: { [key: string]: any } = {
+    const params: ITemplateResponse = {
       template_id: template_id,
       user_id: customer.id,
-      results: JSON.stringify(input.results),
+      results: input.results,
       remarks: input.remarks,
     };
-    return this.complianceService.submitResponse(header, params);
+    return this.complianceService.submitResponse(params);
   }
 }

@@ -6,12 +6,12 @@ export const TABLE = {
   ROLE_MODULE: 'ENT_ROLE_MODULE',
   PERMISSION: 'ENT_PERMISSION',
   ROLE_MODULE_PERMISSION: 'ENT_ROLE_MODULE_PERMISSION',
-  WORKING_WEEK: 'ENT_WORKINGWEEK',
+  WORKING_WEEK: 'ENT_WORKING_WEEK',
   HOLIDAY: 'ENT_HOLIDAY',
   LEAVE: 'ENT_LEAVE',
   MODULE_PERMISSION: 'ENT_MODULE_PERMISSION',
   MODULE_PERMISSION_ROLE: 'ENT_MODULE_PERMISSION_ROLE',
-  LEAVE_TYPE: 'ENT_LEAVETYPE',
+  LEAVE_TYPE: 'ENT_LEAVE_TYPE',
 };
 
 export const NUMBERS = {
@@ -27,6 +27,8 @@ export const HEADER_NAMES = {
   X_USER_ID: "x-user-id",
   X_TENANT_ID: "x-tenant-id",
 };
+
+export const DATE_FORMAT = 'YYYY-MM-DD';
 
 export const STATUS = {
   ACTIVE: 'ACTIVE',
@@ -137,6 +139,15 @@ export const MODULES = [
     permissions: [
       {
         name: 'view',
+      },
+    ],
+  },
+  {
+    name: 'Video Call',
+    sub_modules: [],
+    permissions: [
+      {
+        name: 'attend',
       },
     ],
   },

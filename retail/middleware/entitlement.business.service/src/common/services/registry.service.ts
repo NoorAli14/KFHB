@@ -6,15 +6,12 @@ export interface iSERVICE_CONNECTION {
 }
 
 export interface iSERVICE {
-  name:string,
+  name: string,
   url: string
 }
 
 @Injectable()
 export class RegistryService {
-  constructor() {
-    
-  }
   // Default values just for testing, These values comes through service registry
   get(service: string): iSERVICE_CONNECTION {
     return {
@@ -30,7 +27,7 @@ export class RegistryService {
         { name: 'users', url: 'http://user_management_service:5020/graphql' },
         { name: 'notifications', url: 'http://notification_service:5030/graphql' },
       ];
-    } 
+    }
     return [
       { name: 'users', url: 'http://localhost:5020/graphql' },
       { name: 'notifications', url: 'http://localhost:5030/graphql' },

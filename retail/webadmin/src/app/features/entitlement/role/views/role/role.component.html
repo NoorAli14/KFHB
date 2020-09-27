@@ -25,13 +25,13 @@
             <div class="search-wrapper mx-32 mx-md-0" >
                 <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
                     <mat-icon>search</mat-icon>
-                    <input [formControl]="roleName" name="roleName" placeholder="Search for a role">
+                    <input  name="roleName" placeholder="Search for a role">
                 </div>
             </div>
             <!-- / SEARCH -->
 
             <!-- ADD BUTTON -->
-            <button  mat-raised-button color="accent" (click)="openDialog(null)" class="add-product-button fuse-white mt-24 mt-md-0">
+            <button  mat-raised-button color="accent" (click)="openDialog(null,null)" class="add-product-button fuse-white mt-24 mt-md-0">
                 <span>ADD NEW ROLE</span>
             </button>
             <!-- / ADD BUTTON -->
@@ -42,7 +42,7 @@
         <!-- CONTENT CARD -->
         <div class="content-card" fusePerfectScrollbar>
             <app-message-box [type]="errorType" [message]="responseMessage"></app-message-box>
-            <app-table-row (delete)="confirmDialog($event)"  [roles]="roles" [displayedColumns]="displayedColumns"  >
+            <app-table-row (delete)="confirmDialog($event)"  (edit)="onEditHandler($event)" [roles]="roles" [permissions]="permissions" [displayedColumns]="displayedColumns"  >
             </app-table-row>
         </div>
         <!-- / CONTENT CARD -->

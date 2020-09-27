@@ -15,7 +15,7 @@ import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
 } from '@nestjs/swagger';
-import { AuthGuard, DOCUMENT_TYPES, Header, IHEADER } from '@common/index';
+import { AuthGuard, DOCUMENT_TYPES } from '@common/index';
 import { AttachmentsService } from './attachments.service';
 import { Attachment } from './attachment.entity';
 import { UploadDocumentDTO } from './document.dto';
@@ -48,7 +48,6 @@ export class DocumentsController {
     description: 'Input Validation failed.',
   })
   async uploadNationIdFront(
-    @Header() header: IHEADER,
     @Body() input: UploadDocumentDTO,
   ): Promise<Attachment> {
     this.logger.log(
@@ -58,7 +57,7 @@ export class DocumentsController {
       file: input.file,
       type: DOCUMENT_TYPES.NATIONAL_ID_FRONT_SIDE,
     };
-    return this.documentService.upload(header, params);
+    return this.documentService.upload(params);
   }
 
   @Post('nationality-id-front/process')
@@ -76,11 +75,11 @@ export class DocumentsController {
     description: 'Input Validation failed.',
   })
   @HttpCode(HttpStatus.OK)
-  async processNationIdFront(@Header() header: IHEADER): Promise<Attachment> {
+  async processNationIdFront(): Promise<Attachment> {
     const params: IDocumentProcess = {
       type: DOCUMENT_TYPES.NATIONAL_ID_FRONT_SIDE,
     };
-    return this.documentService.process(header, params);
+    return this.documentService.process(params);
   }
 
   @Post('nationality-id-back/upload')
@@ -98,14 +97,13 @@ export class DocumentsController {
     description: 'Input Validation failed.',
   })
   async uploadNationIdBack(
-    @Header() header: IHEADER,
     @Body() input: UploadDocumentDTO,
   ): Promise<Attachment> {
     const params: DocumentUploadingInput = {
       file: input.file,
       type: DOCUMENT_TYPES.NATIONAL_ID_BACK_SIDE,
     };
-    return this.documentService.upload(header, params);
+    return this.documentService.upload(params);
   }
 
   @Post('nationality-id-back/process')
@@ -123,11 +121,11 @@ export class DocumentsController {
     description: 'Input Validation failed.',
   })
   @HttpCode(HttpStatus.OK)
-  async processNationIdBack(@Header() header: IHEADER): Promise<Attachment> {
+  async processNationIdBack(): Promise<Attachment> {
     const params: IDocumentProcess = {
       type: DOCUMENT_TYPES.NATIONAL_ID_BACK_SIDE,
     };
-    return this.documentService.process(header, params);
+    return this.documentService.process(params);
   }
 
   @Post('passport/upload')
@@ -144,15 +142,12 @@ export class DocumentsController {
     type: Error,
     description: 'Input Validation failed.',
   })
-  async uploadPassport(
-    @Body() input: UploadDocumentDTO,
-    @Header() header: IHEADER,
-  ): Promise<Attachment> {
+  async uploadPassport(@Body() input: UploadDocumentDTO): Promise<Attachment> {
     const params: DocumentUploadingInput = {
       file: input.file,
       type: DOCUMENT_TYPES.PASSPORT,
     };
-    return this.documentService.upload(header, params);
+    return this.documentService.upload(params);
   }
 
   @Post('passport/process')
@@ -170,11 +165,11 @@ export class DocumentsController {
     description: 'Input Validation failed.',
   })
   @HttpCode(HttpStatus.OK)
-  async processPassport(@Header() header: IHEADER): Promise<Attachment> {
+  async processPassport(): Promise<Attachment> {
     const params: IDocumentProcess = {
       type: DOCUMENT_TYPES.PASSPORT,
     };
-    return this.documentService.process(header, params);
+    return this.documentService.process(params);
   }
 
   @Post('driving-license/upload')
@@ -193,13 +188,12 @@ export class DocumentsController {
   })
   async uploadDrivingLicense(
     @Body() input: UploadDocumentDTO,
-    @Header() header: IHEADER,
   ): Promise<Attachment> {
     const params: DocumentUploadingInput = {
       file: input.file,
       type: DOCUMENT_TYPES.DRIVING_LICENSE,
     };
-    return this.documentService.upload(header, params);
+    return this.documentService.upload(params);
   }
 
   @Post('driving-license/process')
@@ -217,10 +211,10 @@ export class DocumentsController {
     description: 'Input Validation failed.',
   })
   @HttpCode(HttpStatus.OK)
-  async processDrivingLicense(@Header() header: IHEADER): Promise<Attachment> {
+  async processDrivingLicense(): Promise<Attachment> {
     const params: IDocumentProcess = {
       type: DOCUMENT_TYPES.DRIVING_LICENSE,
     };
-    return this.documentService.process(header, params);
+    return this.documentService.process(params);
   }
 }

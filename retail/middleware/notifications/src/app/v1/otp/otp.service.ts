@@ -134,7 +134,7 @@ export class OtpService {
         subject: DEFAULT_OTP_EMAIL_SUBJECT,
         template: DEFAULT_OTP_EMAIL_TEMPLATE,
         context: {
-          otp_code: otpOBJ.otp_code,
+          otp_code: input.otp_code,
         },
       };
       promises.push(this.emailService.sendEmail(emailObj));
@@ -147,7 +147,7 @@ export class OtpService {
     ) {
       const smsObj = {
         to: otpOBJ.mobile_no,
-        body: OTP_SMS_CONTENT.replace('<otp_code>', otpOBJ.otp_code).replace(
+        body: OTP_SMS_CONTENT.replace('<otp_code>', input.otp_code).replace(
           '<user_id>',
           otpOBJ.user_id,
         ),

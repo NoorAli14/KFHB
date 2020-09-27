@@ -1,5 +1,14 @@
 import * as path from 'path';
 import * as glob from 'glob';
+import { v4 as uuidV4 } from 'uuid';
+
+/**
+ * Generate v4 uuid string
+ * @return uuid string
+ */
+export const uuid = (): string => {
+  return uuidV4();
+};
 
 // requires all the files which conform to the given pattern and returns the list of defaults exports
 export const requireDefaults = (pattern: string): any => {

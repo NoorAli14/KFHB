@@ -1,86 +1,103 @@
-import {Resolver, Query, Mutation, Args, ResolveField, Parent, Context, GraphQLExecutionContext} from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  ResolveField,
+  Parent,
+  Context,
+  GraphQLExecutionContext,
+} from '@nestjs/graphql';
 import * as DataLoader from 'dataloader';
 import { Loader } from 'nestjs-dataloader';
 
-import { RoleService } from "@app/v1/roles/roles.service";
-import {Role, RoleWithPagination} from "@app/v1/roles/role.model";
-import {RoleCreateInput, RoleInput} from "@app/v1/roles/role.dto";
-import { KeyValInput } from "@common/inputs/key-val.input";
-import { Module } from "@app/v1/modules/module.model";
-import {Fields} from '@common/decorators';
-import {HttpException, HttpStatus} from '@nestjs/common';
-import {MESSAGES, STATUS} from '@common/constants';
-import {getMutateProps, getTenantID} from '@common/utilities';
+import { RoleService } from '@app/v1/roles/roles.service';
+import { Role } from '@app/v1/roles/role.model';
+import { RoleCreateInput, RoleInput } from '@app/v1/roles/role.dto';
+import { KeyValInput } from '@common/inputs/key-val.input';
+import { Module } from '@app/v1/modules/module.model';
+import { STATUS } from '@common/constants';
+import { CurrentUser, Fields } from '@common/decorators';
+import { ICurrentUser } from '@common/interfaces';
+import { RoleNotFoundException } from './exceptions';
 
 @Resolver(Role)
 export class RolesResolver {
   constructor(private readonly roleService: RoleService) {}
 
   @Query(() => [Role])
-  async rolesList(@Fields() columns: string[], @Context() context: GraphQLExecutionContext): Promise<Role[]> {
+  async rolesList(
+    @Fields() columns: string[],
+    @Context() context: GraphQLExecutionContext,
+  ): Promise<Role[]> {
     return this.roleService.list(columns, context['req'].query);
   }
 
   @Query(() => Role)
-  async findRoleById(@Args('id') id: string, @Fields() columns: string[]): Promise<Role> {
-    const role: Role = await this.roleService.findById(id,columns);
-    if(!role) throw new HttpException({
-      status: HttpStatus.NOT_FOUND,
-      error: MESSAGES.NOT_FOUND,
-    }, HttpStatus.NOT_FOUND);
+  async findRoleById(
+    @Args('id') id: string,
+    @Fields() columns: string[],
+    @CurrentUser() currentUser: ICurrentUser,
+  ): Promise<Role> {
+    const role: Role = await this.roleService.findById(
+      currentUser,
+      id,
+      columns,
+    );
+    if (!role) throw new RoleNotFoundException();
     return role;
   }
 
   @Query(() => [Role])
   async findRoleBy(
-      @Args('checks', { type: () => [KeyValInput] }) checks: KeyValInput[],
-      @Fields() columns: string[]
+    @Args('checks', { type: () => [KeyValInput] }) checks: KeyValInput[],
+    @Fields() output: string[],
+    @CurrentUser() currentUser: ICurrentUser,
   ): Promise<Role[]> {
-    return this.roleService.findByProperty(checks, columns);
+    const roles = this.roleService.findByProperty(currentUser, checks, output);
+    if (!roles) throw new RoleNotFoundException();
+    return roles;
   }
 
   @Mutation(() => Role)
-  async addRole(@Args('input') input: RoleCreateInput,
-                @Fields() columns: string[],
-                @Context() context: GraphQLExecutionContext): Promise<Role> {
-    input = getMutateProps('created', context['req'].headers, input);
-    input['tenant_id'] = getTenantID(context['req'].headers);
-    return this.roleService.create(input, columns);
+  async addRole(
+    @Args('input') input: RoleCreateInput,
+    @Fields() output: string[],
+    @CurrentUser() currentUser: ICurrentUser,
+  ): Promise<Role> {
+    return this.roleService.create(currentUser, input, output);
   }
 
   @Mutation(() => Role)
   async updateRole(
     @Args('id') id: string,
     @Args('input') input: RoleInput,
-    @Fields() columns: string[],
-    @Context() context: GraphQLExecutionContext
+    @Fields() output: string[],
+    @CurrentUser() currentUser: ICurrentUser,
   ): Promise<Role> {
-    const role: Role = await this.roleService.findById(id,columns);
-    if(!role) throw new HttpException({
-      status: HttpStatus.NOT_FOUND,
-      error: MESSAGES.NOT_FOUND,
-    }, HttpStatus.NOT_FOUND);
-    input = getMutateProps('updated', context['req'].headers, input);
-    return this.roleService.update(id, input, columns);
+    const role: Role = await this.roleService.findById(currentUser, id, output);
+    if (!role) throw new RoleNotFoundException(id);
+    return this.roleService.update(currentUser, id, input, output);
   }
 
   @Mutation(() => Boolean)
-  async deleteRole(@Args('id') id: string,
-                   @Context() context: GraphQLExecutionContext): Promise<boolean> {
-    const role: Role = await this.roleService.findById(id, ['id']);
-    if(!role) throw new HttpException({
-      status: HttpStatus.NOT_FOUND,
-      error: MESSAGES.NOT_FOUND,
-    }, HttpStatus.NOT_FOUND);
-    let input = {status: STATUS.INACTIVE};
-    input = getMutateProps('deleted', context['req'].headers, input);
-    return this.roleService.delete(id, input);
+  async deleteRole(
+    @Args('id') id: string,
+    @CurrentUser() currentUser: ICurrentUser,
+  ): Promise<boolean> {
+    const role: Role = await this.roleService.findById(currentUser, id, ['id']);
+    if (!role) throw new RoleNotFoundException(id);
+    let input = { status: STATUS.INACTIVE };
+    return this.roleService.delete(currentUser, id, input);
   }
 
   @ResolveField('modules', returns => [Module])
-  async getModules(@Parent() role: Role,
-                 @Loader('ModulesDataLoader') modulesLoader: DataLoader<Module['id'], Module>) {
-    if(!role.id) return [];
+  async getModules(
+    @Parent() role: Role,
+    @Loader('ModulesDataLoader')
+    modulesLoader: DataLoader<Module['id'], Module>,
+  ) {
+    if (!role.id) return [];
     return modulesLoader.load(role.id);
   }
 }

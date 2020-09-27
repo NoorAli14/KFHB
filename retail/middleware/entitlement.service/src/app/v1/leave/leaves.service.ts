@@ -1,76 +1,69 @@
-import {HttpException, HttpStatus, Injectable} from "@nestjs/common";
+import {Injectable} from "@nestjs/common";
 
-import {MESSAGES, STATUS} from "@common/constants";
 import { KeyValInput } from "@common/inputs/key-val.input";
 import {LeaveRepository} from "@core/repository/leave.repository";
-import {validateDate} from '@common/validator';
+import {ICurrentUser} from '@common/interfaces';
+import {LeaveInput} from '@app/v1/leave/leave.dto';
+import {Leave} from '@app/v1/leave/leave.model';
+import {LeaveNotFoundException, LeaveStartDateLessThanEndDateException} from '@app/v1/leave/exceptions';
 
 @Injectable()
 export class LeavesService {
   constructor(private leaveRepository: LeaveRepository) {}
 
-  async list(keys: string[], paginationParams: Record<string, any>): Promise<any> {
-    return this.leaveRepository.listWithPagination(paginationParams, keys,{deleted_on : null});
+  async list(current_user: ICurrentUser, output: string[], paginationParams: Record<string, any>): Promise<Leave[]> {
+    return this.leaveRepository.listWithPagination(paginationParams, output,{deleted_on : null, tenant_id: current_user.tenant_id});
   }
 
-  async findById(id: string, keys?: string[]): Promise<any> {
-    return this.leaveRepository.findOne({ id: id, deleted_on : null }, keys);
+  async findById(current_user: ICurrentUser, id: string, output?: string[]): Promise<Leave> {
+    return this.leaveRepository.findOne({ id: id, deleted_on : null, tenant_id: current_user.tenant_id }, output);
   }
 
-  async findByProperty(checks: KeyValInput[], keys?: string[]): Promise<any> {
+  async findByProperty(current_user: ICurrentUser, checks: KeyValInput[], output?: string[]): Promise<Leave[]> {
     const conditions = {};
     checks.forEach(check => {
       conditions[check.record_key] = check.record_value;
     });
+    conditions['tenant_id'] = current_user.tenant_id;
     conditions['deleted_on'] = null;
-    return this.leaveRepository.findBy(conditions, keys);
+    return this.leaveRepository.findBy(conditions, output);
+  }
+
+  async findByDate(current_user: ICurrentUser, date: string, output: string[]): Promise<Leave[]> {
+    const conditions = {};
+    conditions['tenant_id'] = current_user.tenant_id;
+    conditions['deleted_on'] = null;
+    return this.leaveRepository.findByDate(date, conditions, output);
   }
 
   async update(
+    current_user: ICurrentUser,
     id: string,
-    newObj: Record<string, any>,
-    keys?: string[],
-  ): Promise<any> {
-    if (newObj.leave_date) newObj.leave_date = validateDate(newObj.leave_date).substring(0,10);
-    if(newObj.status && !STATUS[newObj.status]){
-      throw new HttpException({
-        status: HttpStatus.BAD_REQUEST,
-        error: MESSAGES.INVALID_STATUS,
-      }, HttpStatus.BAD_REQUEST);
-    }
-    const [result] = await this.leaveRepository.update({ id: id, deleted_on : null }, newObj, keys);
-    if(!result) {
-      throw new HttpException({
-        status: HttpStatus.BAD_REQUEST,
-        error: MESSAGES.BAD_REQUEST,
-      }, HttpStatus.BAD_REQUEST);
-    }
+    input: LeaveInput,
+    output?: string[],
+  ): Promise<Leave> {
+    const leave: Leave = await this.findById(current_user, id,['id', 'start_date', 'end_date']);
+    if(!leave) throw new LeaveNotFoundException(id);
+    input.start_date = input.start_date || leave.start_date.toISOString();
+    input.end_date = input.end_date || leave.end_date.toISOString();
+    if (Date.parse(new Date(input.start_date).toISOString()) > Date.parse(new Date(input.end_date).toISOString()))
+      throw new LeaveStartDateLessThanEndDateException(id, input.start_date, input.end_date);
+    const [result] = await this.leaveRepository.update({ id: id, deleted_on : null, tenant_id: current_user.tenant_id }, {...input, ...{updated_by: current_user.id}}, output);
     return result;
   }
 
-  async create(newObj: Record<string, any>, keys?: string[]): Promise<any> {
-    newObj.leave_date = validateDate(newObj.leave_date).substring(0,10);
-    if(!newObj.status){
-      newObj.status = STATUS.ACTIVE;
-    } else if(!STATUS[newObj.status]){
-      throw new HttpException({
-        status: HttpStatus.BAD_REQUEST,
-        error: MESSAGES.INVALID_STATUS,
-      }, HttpStatus.BAD_REQUEST);
-    }
-    const result = await this.leaveRepository.create(newObj, keys);
-    if(result?.length > 0) {
-      return result[0]
-    } else {
-      throw new HttpException({
-        status: HttpStatus.BAD_REQUEST,
-        error: MESSAGES.BAD_REQUEST,
-      }, HttpStatus.BAD_REQUEST);
-    }
+  async create(current_user: ICurrentUser, input: LeaveInput, output?: string[]): Promise<Leave> {
+    if (Date.parse(new Date(input.start_date).toISOString()) > Date.parse(new Date(input.end_date).toISOString()))
+      throw new LeaveStartDateLessThanEndDateException(null, input.start_date, input.end_date);
+    const [result] = await this.leaveRepository.create({
+        ...input,
+        ...{ tenant_id: current_user.tenant_id, created_by: current_user.id, updated_by: current_user.id}},
+      output);
+    return result;
   }
 
-  async delete(id: string, input: Record<any, any>): Promise<any> {
-    const result = await this.update(id, input, ['id']);
+  async delete(current_user: ICurrentUser, id: string): Promise<boolean> {
+    const result = await this.leaveRepository.markAsDelete(current_user.tenant_id, current_user.id, id);
     return !!result;
   }
 }

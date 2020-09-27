@@ -1,7 +1,12 @@
 import { Field, InputType } from "@nestjs/graphql";
-import {IsOptional, IsString, MaxLength} from "class-validator";
+import {
+  IsIn, IsISO8601,
+  IsOptional,
+  IsString,
+  MaxLength
+} from "class-validator";
 
-import { NUMBERS } from "@common/constants";
+import {NUMBERS, STATUS} from "@common/constants";
 
 @InputType()
 export class HolidayInput {
@@ -9,25 +14,27 @@ export class HolidayInput {
   @IsString()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsOptional()
-  holiday_date?: string;
+  @IsISO8601({strict: true})
+  holiday_date: string;
 
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  holiday_description?: string;
+  description: string;
 
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  remarks?: string;
+  remarks: string;
 
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  status?: string;
+  @IsIn(Object.keys(STATUS))
+  status: string;
 }
 
 @InputType()
@@ -35,5 +42,6 @@ export class HolidayCreateInput extends HolidayInput{
   @Field()
   @IsString()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  @IsISO8601({strict: true})
   holiday_date: string;
 }

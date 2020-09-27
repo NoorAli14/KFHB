@@ -53,28 +53,29 @@ input ForgotPasswordInput {
 
 type Holiday {
   id: ID
-  holiday_date: String
-  holiday_description: String
+  holiday_date: DateTime
+  description: String
   remarks: String
+  tenant_id: String
   status: String
-  created_on: String
+  created_on: DateTime
   created_by: String
-  updated_on: String
+  updated_on: DateTime
   updated_by: String
-  deleted_on: String
+  deleted_on: DateTime
   deleted_by: String
 }
 
 input HolidayCreateInput {
   holiday_date: String!
-  holiday_description: String
+  description: String
   remarks: String
   status: String
 }
 
 input HolidayInput {
   holiday_date: String
-  holiday_description: String
+  description: String
   remarks: String
   status: String
 }
@@ -92,62 +93,58 @@ input KeyValInput {
 type Leave {
   id: ID
   user_id: String
-  leave_date: String
-  leave_duration: String
-  leave_type: String
   leave_type_id: String
+  start_date: DateTime
+  end_date: DateTime
   remarks: String
-  is_repetitive: Float
   status: String
-  created_on: String
+  tenant_id: String
+  created_on: DateTime
   created_by: String
-  updated_on: String
+  updated_on: DateTime
   updated_by: String
-  deleted_on: String
+  deleted_on: DateTime
   deleted_by: String
 }
 
 input LeaveCreateInput {
   user_id: String!
-  leave_date: String!
-  leave_duration: String!
-  leave_type: String!
   leave_type_id: String!
-  is_repetitive: Float
+  start_date: String!
+  end_date: String!
   remarks: String
   status: String
 }
 
 input LeaveInput {
   user_id: String
-  leave_date: String
-  leave_duration: String
-  leave_type: String
   leave_type_id: String
-  is_repetitive: Float
+  start_date: String
+  end_date: String
   remarks: String
   status: String
 }
 
 type LeaveType {
   id: ID
-  leave_type: String
+  name: String
   status: String
-  created_on: String
+  tenant_id: String
+  created_on: DateTime
   created_by: String
-  updated_on: String
+  updated_on: DateTime
   updated_by: String
-  deleted_on: String
+  deleted_on: DateTime
   deleted_by: String
 }
 
 input LeaveTypeCreateInput {
-  leave_type: String!
+  name: String!
   status: String
 }
 
 input LeaveTypeInput {
-  leave_type: String
+  name: String
   status: String
 }
 
@@ -322,6 +319,7 @@ type User {
   first_name: String
   middle_name: String
   last_name: String
+  password_digest: String
   gender: String
   is_owner: String
   tenant_id: String
@@ -346,32 +344,33 @@ type User {
 type WorkingDay {
   id: ID
   week_day: String
-  start_time: String!
-  end_time: String!
+  start_time_local: String
+  end_time_local: String
   remarks: String
   full_day: Float
+  tenant_id: String
   status: String
-  created_on: String
+  created_on: DateTime
   created_by: String
-  updated_on: String
+  updated_on: DateTime
   updated_by: String
-  deleted_on: String
+  deleted_on: DateTime
   deleted_by: String
 }
 
 input WorkingDayCreateInput {
   week_day: String!
-  start_time: String
-  end_time: String
-  full_day: Float
+  start_time_local: String
+  end_time_local: String
+  full_day: Float!
   remarks: String
   status: String
 }
 
 input WorkingDayInput {
   week_day: String
-  start_time: String
-  end_time: String
+  start_time_local: String
+  end_time_local: String
   full_day: Float
   remarks: String
   status: String

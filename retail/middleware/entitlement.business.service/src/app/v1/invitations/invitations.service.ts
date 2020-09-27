@@ -1,5 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { GqlClientService, USER_STATUSES } from '@common/index';
+import {
+  GqlClientService,
+  USER_STATUSES,
+  SuccessDto,
+} from '@common/index';
 import { NotificationsService } from '@app/v1/notifications/notifications.service';
 import { UserService } from '@app/v1/users/users.service';
 import { UpdateUserDto } from '@app/v1/users/user.dto';
@@ -11,7 +15,7 @@ export class InvitationsService {
     private readonly gqlClient: GqlClientService,
     private readonly userService: UserService,
     private readonly notificationService: NotificationsService,
-  ) {}
+  ) { }
 
   async invite(input: UpdateUserDto): Promise<User> {
     const user: User = await this.userService.create(input);
@@ -27,15 +31,20 @@ export class InvitationsService {
     return user;
   }
 
-  async acceptInvitation(id: string, input: any): Promise<User> {
+  async acceptInvitation(
+    id: string,
+    input: Record<string, any>,
+  ): Promise<User> {
     input.status = USER_STATUSES.ACTIVE;
     input.invitation_token = null;
     input.invitation_token_expiry = null;
     return this.userService.update(id, input);
   }
 
-  async resendInvitationLink(userId: string): Promise<any> {
-    const params: string = `mutation {
+  async resendInvitationLink(
+    userId: string,
+  ): Promise<SuccessDto> {
+    const mutation = `mutation {
       result: resetInvitationToken(id: "${userId}"){
         id
         email
@@ -43,7 +52,7 @@ export class InvitationsService {
         invitation_token_expiry
       }
     }`;
-    const invitation = await this.gqlClient.send(params);
+    const invitation = await this.gqlClient.send(mutation);
     await this.notificationService.sendInvitationLink(
       invitation.email,
       invitation.invitation_token,

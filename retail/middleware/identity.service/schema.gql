@@ -21,6 +21,11 @@ input CreateCustomerInput {
   platform: String
 }
 
+type CUSTOM_ERROR {
+  valid: Boolean!
+  errors: [SCHEMA_ERROR!]
+}
+
 type Customer {
   id: ID
   first_name: String
@@ -38,6 +43,11 @@ type Customer {
   nationality_code: String
   device_id: String
   platform: String
+  next_step: String
+  is_aml_verified: Boolean
+  is_email_verified: Boolean
+  is_contact_no_verified: Boolean
+  is_evaluation_verified: Boolean
   status: String
   created_on: String
   created_by: String
@@ -99,7 +109,7 @@ type Mutation {
   addCustomer(input: CreateCustomerInput!): Customer!
   uploadLiveness(input: UploadFaceInput!): Face!
   addDocument(input: UploadDocumentInput!): Document!
-  processDocument(input: ProcessDocumentInput!): Document!
+  processDocument(input: ProcessDocumentInput!): Result!
 }
 
 type PreviewDocument {
@@ -118,6 +128,17 @@ input ProcessDocumentInput {
 type Query {
   findCustomerById(id: String!): Customer!
   previewAttachment(input: PreviewDocumentInput!): PreviewDocument!
+}
+
+union Result = Document | CUSTOM_ERROR
+
+type SCHEMA_ERROR {
+  group: String!
+  errorCode: String
+  message: String!
+  field: String
+  stack: String
+  value: String
 }
 
 type Session {
