@@ -45,6 +45,7 @@
     "glob": "^7.1.6",
     "graphql": "^14.7.0",
     "graphql-tools": "^6.0.12",
+    "jsonschema": "^1.2.6",
     "knex": "^0.21.1",
     "mssql": "^6.2.0",
     "nestjs-dataloader": "^7.0.1",

@@ -23,7 +23,7 @@ import { SuccessDto } from '@common/index';
 @Controller('users/password')
 @ApiBearerAuth()
 export class ForgotPasswordController {
-  constructor(private readonly forgotPasswordService: ForgotPasswordService) {}
+  constructor(private readonly forgotPasswordService: ForgotPasswordService) { }
 
   @Post('/')
   @ApiBody({ description: 'Sets the user properties.' })
@@ -56,7 +56,9 @@ export class ForgotPasswordController {
     type: SuccessDto,
     description: 'Check reset password token status.',
   })
-  async checkStatus(@Param('token') token: string): Promise<SuccessDto> {
+  async checkStatus(
+    @Param('token') token: string,
+  ): Promise<SuccessDto> {
     return this.forgotPasswordService.checkStatus(token);
   }
 

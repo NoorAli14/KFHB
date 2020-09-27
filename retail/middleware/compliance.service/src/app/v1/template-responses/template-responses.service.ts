@@ -8,7 +8,7 @@ import { ICurrentUser } from '@common/interfaces';
 export class TemplateResponsesService {
   constructor(
     private readonly templateResponsesDB: TemplateResponsesRepository,
-  ) {}
+  ) { }
 
   async list(keys: string[]): Promise<TemplateResponse[]> {
     return this.templateResponsesDB.list(keys);

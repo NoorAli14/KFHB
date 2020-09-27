@@ -51,6 +51,21 @@ export class Customer {
   platform: string;
 
   @Field({ nullable: true })
+  next_step: string;
+
+  @Field({ nullable: true })
+  is_aml_verified: boolean;
+
+  @Field({ nullable: true })
+  is_email_verified: boolean;
+
+  @Field({ nullable: true })
+  is_contact_no_verified: boolean;
+
+  @Field({ nullable: true })
+  is_evaluation_verified: boolean;
+
+  @Field({ nullable: true })
   status?: string;
 
   @Field({ nullable: true })

@@ -1,4 +1,4 @@
-import { AuthUserService } from "@core/services/user/auth-user.service";
+import { AuthUserService } from "@shared/services/user/auth-user.service";
 import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { DOCUMENT } from "@angular/common";
 import { Platform } from "@angular/cdk/platform";
@@ -16,7 +16,7 @@ import { navigation } from "app/navigation/navigation";
 import { locale as navigationEnglish } from "app/navigation/i18n/en";
 import { locale as navigationTurkish } from "app/navigation/i18n/tr";
 import { UnsubscribeOnDestroyAdapter } from '@shared/models/unsubscribe-adapter.model';
-import { EventBusService } from '@core/services/event-bus/event-bus.service';
+import { EventBusService } from '@shared/services/event-bus/event-bus.service';
 import { Events } from '@shared/enums/events.enum';
 
 @Component({

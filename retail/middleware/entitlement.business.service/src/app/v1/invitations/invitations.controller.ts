@@ -21,7 +21,11 @@ import {
   ApiBadRequestResponse,
   ApiNotFoundResponse,
 } from '@nestjs/swagger';
-import { AuthGuard, SuccessDto, USER_STATUSES } from '@common/index';
+import {
+  AuthGuard,
+  SuccessDto,
+  USER_STATUSES,
+} from '@common/index';
 import { UserService } from '@app/v1/users/users.service';
 import { NewUserDto } from '@app/v1/users/user.dto';
 import { User } from '@app/v1/users/user.entity';
@@ -34,7 +38,7 @@ export class InvitationsController {
   constructor(
     private readonly userService: UserService,
     private readonly invitationService: InvitationsService,
-  ) {}
+  ) { }
 
   @Post('/')
   @UseGuards(AuthGuard)
@@ -53,7 +57,9 @@ export class InvitationsController {
     type: Error,
     description: 'Input Validation failed.',
   })
-  async create(@Body() input: NewUserDto): Promise<User> {
+  async create(
+    @Body() input: NewUserDto,
+  ): Promise<User> {
     return this.invitationService.invite(input);
   }
 
@@ -75,8 +81,12 @@ export class InvitationsController {
     type: Error,
     description: 'Input Validation failed.',
   })
-  async findOne(@Param('token') token: string): Promise<User> {
-    const invitation = await this.userService.findByInvitationToken(token);
+  async findOne(
+    @Param('token') token: string,
+  ): Promise<User> {
+    const invitation = await this.userService.findByInvitationToken(
+      token,
+    );
     console.log(invitation);
     if (!invitation) {
       throw new NotFoundException('User Not Found');
@@ -114,7 +124,9 @@ export class InvitationsController {
     @Param('token') token: string,
     @Body() input: UpdateInvitationDto,
   ): Promise<User> {
-    const invitation = await this.userService.findByInvitationToken(token);
+    const invitation = await this.userService.findByInvitationToken(
+      token,
+    );
     if (!invitation) {
       throw new NotFoundException('User Not Found');
     } else if (invitation.status != USER_STATUSES.PENDING) {
@@ -123,7 +135,10 @@ export class InvitationsController {
     // } else if (new Date() > new Date(invitation.invitation_token_expiry)) {
     // throw new BadRequestException('Token is expired');
     // }
-    return this.invitationService.acceptInvitation(invitation.id, input);
+    return this.invitationService.acceptInvitation(
+      invitation.id,
+      input,
+    );
   }
 
   @Get(':token/status')
@@ -185,7 +200,10 @@ export class InvitationsController {
   async resendInvitationLink(
     @Param('user_id') user_id: string,
   ): Promise<SuccessDto> {
-    const user = await this.userService.findOne(user_id, `{id email status}`);
+    const user = await this.userService.findOne(
+      user_id,
+      `{id email status}`,
+    );
     if (!user) {
       throw new NotFoundException('User Not Found');
     } else if (user.status != USER_STATUSES.PENDING) {

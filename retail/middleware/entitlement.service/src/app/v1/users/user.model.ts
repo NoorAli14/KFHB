@@ -11,86 +11,89 @@ export class User {
   id: string;
 
   @Field({ nullable: true })
-  username?: string;
+  username: string;
 
   @Field({ nullable: true })
-  email?: string;
+  email: string;
 
   @Field({ nullable: true })
-  contact_no?: string;
+  contact_no: string;
 
   @Field({ nullable: true })
-  first_name?: string;
+  first_name: string;
 
   @Field({ nullable: true })
-  middle_name?: string;
+  middle_name: string;
 
   @Field({ nullable: true })
-  last_name?: string;
+  last_name: string;
 
   @Field({ nullable: true })
-  gender?: string;
+  password_digest: string;
 
   @Field({ nullable: true })
-  is_owner?: string;
+  gender: string;
 
   @Field({ nullable: true })
-  tenant_id?: string;
+  is_owner: string;
 
   @Field({ nullable: true })
-  date_of_birth?: string;
+  tenant_id: string;
 
   @Field({ nullable: true })
-  nationality_id?: string;
+  date_of_birth: string;
 
   @Field({ nullable: true })
-  status?: string;
+  nationality_id: string;
 
   @Field({ nullable: true })
-  created_on?: string;
+  status: string;
 
   @Field({ nullable: true })
-  created_by?: string;
+  created_on: string;
 
   @Field({ nullable: true })
-  updated_on?: string;
+  created_by: string;
 
   @Field({ nullable: true })
-  updated_by?: string;
+  updated_on: string;
 
   @Field({ nullable: true })
-  deleted_on?: string;
+  updated_by: string;
 
   @Field({ nullable: true })
-  deleted_by?: string;
+  deleted_on: string;
+
+  @Field({ nullable: true })
+  deleted_by: string;
 
   @Field(type => [Role], { nullable: true })
-  roles?: Role[];
+  roles: Role[];
 
   @Field(type => [Module], { nullable: true })
-  modules?: Module[];
+  modules: Module[];
 
   @Field({ nullable: true })
-  invitation_token?: string;
+  invitation_token: string;
 
   @Field({ nullable: true })
-  invitation_token_expiry?: Date;
+  invitation_token_expiry: Date;
 
   @Field({ nullable: true })
-  password_reset_token?: string;
+  password_reset_token: string;
 
   @Field({ nullable: true })
-  password_reset_token_expiry?: Date;
+  password_reset_token_expiry: Date;
 
   @Field(type => [Leave], { nullable: true })
-  leaves?: Leave[];
+  leaves: Leave[];
 }
 
 @ObjectType()
 export class UserWithPagination {
   @Field({ nullable: true })
-  pagination?: PaginationModel;
+  pagination: PaginationModel;
 
   @Field(type => [User], { nullable: true })
-  data?: User[];
+  data: User[];
 }

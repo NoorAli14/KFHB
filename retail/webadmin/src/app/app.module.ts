@@ -13,21 +13,16 @@ import {
     FuseSidebarModule,
     FuseThemeOptionsModule,
 } from "@fuse/components";
-import { CoreModule } from "@core/core.module";
 import { fuseConfig } from "app/fuse-config";
 import { AppComponent } from "app/app.component";
 import { LayoutModule } from "app/layout/layout.module";
 import { AppRoutingModule } from "./app-routing.module";
 import { NgxUiLoaderModule, NgxUiLoaderHttpModule } from "ngx-ui-loader";
 import { ngxUiLoaderConfig } from "@config/index";
-import { EventBusService } from "@core/services/event-bus/event-bus.service";
-import { AuthUserService } from "@core/services/user/auth-user.service";
-import { AppInjector } from "@shared/app.injector";
-import { TreeviewModule } from "ngx-treeview";
-import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
-import { AuthInterceptorService } from "@core/services/auth-interceptor/auth-interceptor.service";
-import { ErrorInterceptorService } from "@core/services/error-interceptor/error-interceptor.service";
-import { GlobalErrorService } from "@core/services/global-error/global-error.service";
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptorService } from '@shared/services/auth-interceptor/auth-interceptor.service';
+import { AppInjector } from '@shared/app.injector';
+
 
 @NgModule({
     declarations: [AppComponent],
@@ -47,9 +42,7 @@ import { GlobalErrorService } from "@core/services/global-error/global-error.ser
         FuseProgressBarModule,
         FuseSharedModule,
         FuseSidebarModule,
-        HttpClientModule,
         FuseThemeOptionsModule,
-        TreeviewModule.forRoot(),
         // App modules
         LayoutModule,
     ],

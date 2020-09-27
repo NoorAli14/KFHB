@@ -13,6 +13,7 @@ export const DATABASE_MIGRATION_DIRECTORY: string =
 export const DATABASE_SEED_DIRECTORY: string = 'src/core/database/seeds';
 export const X_USER_ID: string = 'x-user-id';
 export const X_TENANT_ID: string = 'x-tenant-id';
+export const X_CORRELATION_KEY: string = 'x-correlation-id';
 
 export const DOCUMENT_TYPES = {
   SELFIE: 'SELFIE',
@@ -22,6 +23,32 @@ export const DOCUMENT_TYPES = {
   NATIONAL_ID_FRONT_SIDE: 'NATIONAL_ID_FRONT_SIDE',
   NATIONAL_ID_BACK_SIDE: 'NATIONAL_ID_BACK_SIDE',
 };
+
+export const SEED_DOCUMENTS_lIST = [{
+  name: DOCUMENT_TYPES.SELFIE,
+  record_type: 'FACE',
+  is_required: true
+}, {
+  name: DOCUMENT_TYPES.LIVENESS,
+  record_type: 'FACE',
+  is_required: true
+}, {
+  name: DOCUMENT_TYPES.PASSPORT,
+  record_type: 'DOCUMENT',
+  is_required: true
+}, {
+  name: DOCUMENT_TYPES.NATIONAL_ID_BACK_SIDE,
+  record_type: 'DOCUMENT',
+  is_required: true
+}, {
+  name: DOCUMENT_TYPES.DRIVING_LICENSE,
+  record_type: 'DOCUMENT',
+  is_required: true
+}, {
+  name: DOCUMENT_TYPES.NATIONAL_ID_FRONT_SIDE,
+  record_type: 'DOCUMENT',
+  is_required: false
+}];
 
 export const DOCUMENT_TYPE_STATUSES: { [key: string]: string } = {
   ACTIVE: 'ACTIVE',

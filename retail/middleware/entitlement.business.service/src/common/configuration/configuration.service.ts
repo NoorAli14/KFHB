@@ -51,12 +51,12 @@ export class ConfigurationService {
     };
   }
 
-  get REDIS_CONNECTION() {
+  get REDIS_CONNECTION(): Record<string, any> {
     return {
       url: this.get('ENV_RBX_REDIS_URL', ''),
     };
   }
-  get JWT() {
+  get JWT(): Record<string, any> {
     return {
       EXPIRY_SECONDS: parseInt(this.get('ENV_RBX_JWT_EXPIRY_MINUTES', 0), 10) *
         60,
@@ -124,8 +124,8 @@ export class ConfigurationService {
     return this.IS_DEVELOPMENT
       ? true
       : isTruthy(
-          this.get('ENV_RBX_SWAGGER_ENABLED', DEFAULT_ENV.SWAGGER.ENABLE),
-        );
+        this.get('ENV_RBX_SWAGGER_ENABLED', DEFAULT_ENV.SWAGGER.ENABLE),
+      );
   }
 
   get APPLICATION_HOST(): string {

@@ -22,19 +22,25 @@ export async function up(knex: Knex): Promise<any> {
     table.string('device_id');
     table.string('platform');
 
-    // table.string('target_user_id');
     table.uuid('tenant_id').notNullable();
     table.uuid('session_id');
 
+    table.string('next_step');
+
+    table.boolean('is_aml_verified').defaultTo(false);
+    table.boolean('is_email_verified').defaultTo(false);
+    table.boolean('is_contact_no_verified').defaultTo(false);
+    table.boolean('is_evaluation_verified');
+
     table.string('status');
 
-    table.timestamp('created_on').defaultTo(knex.fn.now());
+    table.timestamp('created_on', { useTz: true }).defaultTo(knex.fn.now());
     table.string('created_by').notNullable();
 
-    table.timestamp('updated_on').defaultTo(knex.fn.now());
+    table.timestamp('updated_on', { useTz: true }).defaultTo(knex.fn.now());
     table.string('updated_by').notNullable();
 
-    table.timestamp('deleted_on');
+    table.timestamp('deleted_on', { useTz: true });
     table.string('deleted_by');
 
     table.index('session_id', 'IDT_CUSTOMER_SESSION_ID_INDEX');

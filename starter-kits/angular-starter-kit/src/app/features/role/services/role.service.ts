@@ -7,7 +7,7 @@ import {
 } from "@angular/router";
 import { Observable, BehaviorSubject } from "rxjs";
 import { Role } from "../role.model";
-import { NetworkService } from "@core/services/network/network.service";
+import { NetworkService } from "@shared/services/network/network.service";
 
 @Injectable({
   providedIn: 'root'

@@ -21,9 +21,13 @@ import { DocumentModule } from './documents/document.module';
         debug: configService.GRAPHQL.DEBUG,
         autoSchemaFile: join(`${process.cwd()}/schema.gql`),
         playground: configService.GRAPHQL.PLAYGROUND,
+        formatError: (err) => {
+          console.error(`Error: ${JSON.stringify(err, null, 2)}`);
+          return err;
+        }
       }),
       inject: [ConfigurationService],
     }),
   ],
 })
-export class V1Module {}
+export class V1Module { }

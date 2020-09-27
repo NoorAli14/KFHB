@@ -1,2 +1,2 @@
-export const WORKING_WEEK='/api/v1/getWorkingWeek'
+export const WORKING_DAYS='/working-days/'
 export const HOLIDAYS='/api/v1/getHolidays'

@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { Attachment } from './attachment.entity';
-import { GqlClientService, toGraphql, IHEADER } from '@common/index';
+import { GqlClientService, toGraphql } from '@common/index';
 import {
   FaceUploadingInput,
   DocumentUploadingInput,
@@ -9,6 +9,7 @@ import {
 
 @Injectable()
 export class AttachmentsService {
+  private readonly logger = new Logger(AttachmentsService.name)
   private readonly output: string = `{
         id
         session_id
@@ -20,7 +21,7 @@ export class AttachmentsService {
         updated_by
     }`;
 
-  constructor(private readonly gqlClient: GqlClientService) {}
+  constructor(private readonly gqlClient: GqlClientService) { }
 
   /**
    *
@@ -28,15 +29,12 @@ export class AttachmentsService {
    * @param input Upload face Input
    * @return The attachment object
    */
-  async uploadLiveness(
-    header: IHEADER,
-    input: FaceUploadingInput,
-  ): Promise<Attachment> {
+  async uploadLiveness(input: FaceUploadingInput): Promise<Attachment> {
     // Construct GraphQL request
-    const params: string = `mutation {
+    const mutation = `mutation {
       result: uploadLiveness(input: ${toGraphql(input)}) ${this.output}
     }`;
-    return this.gqlClient.setHeaders(header).send(params);
+    return this.gqlClient.send(mutation);
   }
 
   /**
@@ -45,15 +43,12 @@ export class AttachmentsService {
    * @param input Upload document Input
    * @return The attachment object
    */
-  async upload(
-    header: IHEADER,
-    input: DocumentUploadingInput,
-  ): Promise<Attachment> {
+  async upload(input: DocumentUploadingInput): Promise<Attachment> {
     // Construct GraphQL request
-    const params: string = `mutation {
+    const mutation = `mutation {
         result: addDocument(input: ${toGraphql(input)}) ${this.output}
       }`;
-    return this.gqlClient.setHeaders(header).send(params);
+    return this.gqlClient.send(mutation);
   }
 
   /**
@@ -62,25 +57,50 @@ export class AttachmentsService {
    * @param input Process document Input
    * @return The attachment object
    */
-  async process(header: IHEADER, input: IDocumentProcess): Promise<Attachment> {
+  async process(input: IDocumentProcess): Promise<Attachment> {
+    const _output = `{
+      ... on Document {
+        id
+        session_id
+        processed_data
+        status
+        created_on
+        created_by
+        updated_on
+        updated_by
+      }
+      ... on CUSTOM_ERROR {
+        errors {
+          group
+          errorCode
+          field
+          message
+          stack
+          value
+        }
+      }
+    }`;
     // Construct GraphQL request
-    const params: string = `mutation {
-        result: processDocument(input: ${toGraphql(input)}) ${this.output}
-      }`;
-    const document: any = await this.gqlClient.setHeaders(header).send(params);
+    const mutation = `mutation {
+      result: processDocument(input: ${toGraphql(input)}) ${_output}
+    }`;
+    this.logger.log(mutation)
+    const document: any = await this.gqlClient.send(mutation);
+    if (document?.errors)
+      throw new BadRequestException({ errors: document.errors });
     if (document?.processed_data)
       document.processed_data = JSON.parse(document.processed_data);
     return document;
   }
 
-  async preview(header: IHEADER, input: any): Promise<any> {
+  async preview(input: Record<string, string>): Promise<any> {
     // Construct GraphQL request
-    const params: string = `query {
+    const query = `query {
       result: previewAttachment(
           input: ${toGraphql(input)}) {
         image
       }
     }`;
-    return this.gqlClient.setHeaders(header).send(params);
+    return this.gqlClient.send(query);
   }
 }

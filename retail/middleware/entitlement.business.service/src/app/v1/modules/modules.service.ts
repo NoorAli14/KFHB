@@ -1,6 +1,5 @@
 import {
   Injectable,
-  NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
 import { Module } from './module.entity';
@@ -39,21 +38,24 @@ export class ModuleService {
     created_on
     created_by
   }`;
-  constructor(private readonly gqlClient: GqlClientService) {}
+  constructor(private readonly gqlClient: GqlClientService) { }
 
   async list(): Promise<Module[]> {
-    const params = `query {
+    const query: string = `query {
       result: modulesList ${this.output}
     }`;
-    return this.gqlClient.send(params);
+    return this.gqlClient.send(query);
   }
 
-  async findBy(condition: any, output?: string): Promise<Module[]> {
-    const _output: string = output ? output : this.output;
-    const params = `query {
+  async findBy(
+    condition: [Record<string, unknown>],
+    output?: string,
+  ): Promise<Module[]> {
+    const _output: string = output || this.output;
+    const query: string = `query {
       result: findModuleBy(checks: ${toGraphql(condition)}) ${_output}
     }`;
-    return this.gqlClient.send(params);
+    return this.gqlClient.send(query);
   }
 
   async create(input: ModuleDto): Promise<Module> {
@@ -69,49 +71,32 @@ export class ModuleService {
     if (module) {
       throw new BadRequestException(`Module '${input.name}' Already Exist`);
     }
-    const params = `mutation{
+    const mutation: string = `mutation {
       result: addModule(input: ${toGraphql(input)}) ${this.output}
     }`;
-    return this.gqlClient.send(params);
+    return this.gqlClient.send(mutation);
   }
 
-  async findOne(id: string): Promise<Module> {
-    const params = `query {
-      result: findModule(id: "${id}") ${this.output}
+  async findOne(id: string, output?: string): Promise<Module> {
+    const _output: string = output || this.output;
+    const query: string = `query {
+      result: findModuleById(id: "${id}") ${_output}
     }`;
-    return this.gqlClient.send(params);
+    return this.gqlClient.send(query);
   }
 
-  async findById(id: string): Promise<Module> {
-    const params = `query {
-      result: findModule(id: "${id}") {
-        id
+  async update(id: string, input: ModuleDto): Promise<Module> {
+    const mutation: string = `mutation {
+      result: updateModule(id: "${id}", input: ${toGraphql(input)}) ${this.output
       }
     }`;
-    return this.gqlClient.send(params);
-  }
-
-  async update(id: string, input: ModuleDto): Promise<any> {
-    const module: Module = await this.findById(id);
-    if (!module) {
-      throw new NotFoundException('Module Not Found');
-    }
-    const params = `mutation {
-      result: updateModule(id: "${id}", input: ${toGraphql(input)}) ${
-      this.output
-    }
-    }`;
-    return this.gqlClient.send(params);
+    return this.gqlClient.send(mutation);
   }
 
   async delete(id: string): Promise<any> {
-    const module: Module = await this.findById(id);
-    if (!module) {
-      throw new NotFoundException('Module Not Found');
-    }
-    const params = `mutation {
+    const mutation: string = `mutation {
       result: deleteModule(id: "${id}") 
     }`;
-    return this.gqlClient.send(params);
+    return this.gqlClient.send(mutation);
   }
 }
