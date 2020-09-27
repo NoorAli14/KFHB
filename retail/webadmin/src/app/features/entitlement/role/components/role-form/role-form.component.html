@@ -60,8 +60,6 @@
             <mat-form-field appearance="outline" fxFlex="100" class="pr-4">
                 <mat-label>Description <app-required-indicator></app-required-indicator></mat-label>
                 <textarea matInput placeholder="Description" formControlName="description"></textarea>
-                <mat-icon matSuffix class="secondary-text"
-                    >account_circle</mat-icon>
                 <mat-error>
                     <app-mat-error [control]="roleForm.get('description')"></app-mat-error>
                 </mat-error>
