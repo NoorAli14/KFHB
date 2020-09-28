@@ -1,6 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { GENDER, APPOINTMENT_STATUS, PLATFORMS } from '@common/constants';
-import { IsDate, IsEnum } from 'class-validator';
+import { PLATFORMS } from '@common/constants';
 
 @ObjectType()
 export class User {
@@ -32,7 +31,6 @@ export class User {
   gender?: string;
 
   @Field()
-  @IsDate()
   date_of_birth?: Date;
 
   @Field()
@@ -56,17 +54,14 @@ export class Appointment {
   @Field()
   id: string;
 
-  @Field()
-  @IsDate()
+  @Field({ nullable: true })
   call_time: Date;
 
-  @Field(() => GENDER)
-  @IsEnum(GENDER)
-  gender: GENDER;
+  @Field({ nullable: true })
+  gender: string;
 
-  @Field(() => APPOINTMENT_STATUS)
-  @IsEnum(APPOINTMENT_STATUS)
-  status: APPOINTMENT_STATUS;
+  @Field({ nullable: true })
+  status: string;
 
   user_id?: string;
 

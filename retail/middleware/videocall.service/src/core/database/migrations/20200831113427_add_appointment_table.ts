@@ -1,10 +1,5 @@
 import * as Knex from 'knex';
-import {
-  TABLE,
-  DATABASE_UUID_METHOD,
-  GENDER,
-  APPOINTMENT_STATUS,
-} from '@common/constants';
+import { TABLE, DATABASE_UUID_METHOD } from '@common/constants';
 
 export async function up(knex: Knex): Promise<void> {
   return knex.schema.createTable(TABLE.APPOINTMENT, table => {

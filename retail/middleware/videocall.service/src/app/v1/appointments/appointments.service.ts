@@ -7,7 +7,7 @@ import { AppointmentRepository } from '@core/repository';
 import { ConfigurationService } from '@common/configuration/configuration.service';
 import { Appointment } from './appointment.model';
 import * as moment from 'moment';
-import { APPOINTMENT_STATUS, GENDER } from '@common/constants';
+import { APPOINTMENT_STATUS } from '@common/constants';
 import { GqlClientService } from '@common/libs/gqlclient/gqlclient.service';
 import { PushNotificationModel } from './push_notification.model';
 import { stringifyForGQL } from '@common/utilities';
@@ -274,7 +274,7 @@ export class AppointmentsService {
     return this.gqlClient.client('ENV_RBX_IDX_BASE_URL').send(params);
   }
 
-  private async check_agent_availability(call_time: Date, gender: GENDER) {
+  private async check_agent_availability(call_time: Date, gender: string) {
     const params = `query{
         result: findAvailableUsers(input:{call_time: ${call_time}, gender: ${gender}}){
         id

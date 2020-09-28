@@ -1,20 +1,17 @@
 import { IsUUID, IsEnum } from 'class-validator';
 
 import { Field, InputType } from '@nestjs/graphql';
-import { GENDER, APPOINTMENT_STATUS } from '@common/constants';
 
 @InputType()
 export class NewAppointmentInput {
   @Field()
   call_time: Date;
 
-  @Field(() => GENDER)
-  @IsEnum(GENDER)
-  gender: GENDER;
+  @Field({ nullable: true })
+  gender: string;
 
-  @Field(() => APPOINTMENT_STATUS)
-  @IsEnum(APPOINTMENT_STATUS)
-  status: APPOINTMENT_STATUS;
+  @Field({ nullable: true })
+  status: string;
 
   @Field()
   @IsUUID('all', { message: 'user_id is not a valid UUID', always: true })
