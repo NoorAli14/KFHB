@@ -69,7 +69,7 @@ export class AppointmentsService {
     }
 
     // Query the other service to check the available slots in the Holidays and working days.
-    this.check_agent_availability(
+    const agents = await this.check_agent_availability(
       newAppointment.call_time,
       newAppointment.gender,
     );
@@ -95,7 +95,6 @@ export class AppointmentsService {
     id: string,
     output?: string[],
   ): Promise<any> {
-    this.logger.log(`start finding appointment by [${id}]`);
     return this.appointmentDB.findOne(
       {
         id: id,
@@ -261,7 +260,7 @@ export class AppointmentsService {
 
   async get_user_by_id_from_service(user_id: string) {
     const params = `query{
-        findCustomerById(id: ${user_id}) {
+        result: findCustomerById(id: "${user_id}") {
         id
         email
         contact_no
@@ -272,28 +271,18 @@ export class AppointmentsService {
       }
     }`;
 
-    const result = await this.gqlClient.send(
-      params,
-      { headers: HttpHeaders() || {} },
-      this.configService.get('ENV_RBX_IDX_BASE_URL'),
-    );
-    return result;
+    return this.gqlClient.client('ENV_RBX_IDX_BASE_URL').send(params);
   }
 
   private async check_agent_availability(call_time: Date, gender: GENDER) {
     const params = `query{
-        findAvailableUsers(input:{call_time: ${call_time}, gender: ${gender}}){
+        result: findAvailableUsers(input:{call_time: ${call_time}, gender: ${gender}}){
         id
         email
       }
     }`;
 
-    const result = await this.gqlClient.send(
-      params,
-      { headers: HttpHeaders() },
-      this.configService.get('ENV_RBX_ENTITLEMENT_SERVER'),
-    );
-    return result;
+    return this.gqlClient.client('ENV_RBX_ENTITLEMENT_SERVER').send(params);
   }
 
   private async send_push_notification(
@@ -302,8 +291,8 @@ export class AppointmentsService {
   ) {
     const keys = stringifyForGQL(input);
 
-    const params = `mutation {
-      sendPushNotification(input: ${keys}) {
+    const mutation: string = `mutation {
+      result: sendPushNotification(input: ${keys}) {
         id
         platform
         device_id
@@ -316,16 +305,6 @@ export class AppointmentsService {
       }
     }`;
 
-    const headers = {
-      'x-user-id': user_id,
-      'x-tenant-id': user_id,
-    };
-
-    const result = await this.gqlClient.send(
-      params,
-      headers,
-      this.configService.get('ENV_RBX_NOTIFICATION_SERVER'),
-    );
-    return result;
+    return this.gqlClient.client('ENV_RBX_NOTIFICATION_SERVER').send(mutation);
   }
 }

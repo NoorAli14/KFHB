@@ -18,10 +18,7 @@ export class AppointmentsResolver {
   constructor(private readonly appointmentsService: AppointmentsService) {}
 
   @ResolveField(() => User)
-  async user(
-    @Fields(User) columns: string[],
-    @Parent() appointment: Appointment,
-  ): Promise<User> {
+  async user(@Parent() appointment: Appointment): Promise<User> {
     // Query API call to get the User data from another Service.
     const user = await this.appointmentsService.get_user_by_id_from_service(
       appointment.user_id,
