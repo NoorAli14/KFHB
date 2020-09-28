@@ -24,32 +24,24 @@ export const SERVICES = {
 
 export const GQL_SERVICES = [
   {
-    name: 'notification_service',
-    host_name: 'notification_service',
+    name: 'Notification Service',
+    host_name: 'retail_notification',
     port: 5030,
     version: '1.0',
     context: '/graphql',
     is_secure: false,
   },
   {
-    name: 'user_management_service',
-    host_name: 'user_management_service',
+    name: 'User Management Service',
+    host_name: 'retail_user_management',
     port: 5020,
     version: '1.0',
     context: '/graphql',
     is_secure: false,
   },
   {
-    name: 'identity_service',
-    host_name: 'identity_service',
-    port: 4010,
-    version: '1.0',
-    context: '/graphql',
-    is_secure: false,
-  },
-  {
-    name: 'compliance_service',
-    host_name: 'compliance_service',
+    name: 'Complaince Service',
+    host_name: 'retail_complaince',
     port: 5010,
     version: '1.0',
     context: '/graphql',

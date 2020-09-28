@@ -24,22 +24,8 @@ import { WorkingDayModule } from './working-days/working-day.module';
 import { HolidayModule } from './holidays/holiday.module';
 import { LeaveModule } from './leaves/leave.module';
 import { LeaveTypeModule } from './leave-types/leave-type.module';
-
 import { RegistryService } from '@common/services'
 
-
-// let services: iSERVICE[];
-//   if (process.env.NODE_ENV === 'production') {
-//     services = [
-//       { name: 'users', url: 'http://user_management_service:5020/graphql' },
-//       { name: 'notifications', url: 'http://notification_service:5030/graphql' },
-//     ];
-//   }  else{
-//    services = [
-//     { name: 'users', url: 'http://localhost:5020/graphql' },
-//     { name: 'notifications', url: 'http://localhost:5030/graphql' },
-//   ];
-// }
 class AuthenticatedDataSource extends RemoteGraphQLDataSource {
   async willSendRequest({ request, context }) {
     const { userId, tenantId, correlationId } = context;
@@ -88,7 +74,7 @@ class BuildServiceModule { }
       useFactory: async (schema: RegistryService) => ({
         gateway: {
           // Note: All these values comes through service registry. For Demo purposes we hardcode service list
-          serviceList: schema.list().map(({ name, url }) => ({ name, url })),
+          serviceList: schema.services.map(({ name, url }) => ({ name, url })),
         },
         server: {
           context: ({ req }) => ({
