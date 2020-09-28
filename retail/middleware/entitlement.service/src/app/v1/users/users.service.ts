@@ -34,7 +34,7 @@ export class UserService {
     return this.userDB.findOne({ id: id, deleted_on: null, tenant_id: currentUser.tenant_id }, output);
   }
 
-  async resetInvitationToken(currentUser: ICurrentUser, id: string, output?: string[]): Promise<any> {
+  async resetInvitationToken(currentUser: ICurrentUser, id: string, output?: string[]): Promise<User> {
     const input: any = {
       invitation_token: generateRandomString(NUMBERS.TOKEN_LENGTH),
       invitation_token_expiry: addMinutes(this.configService.APP.INVITATION_TOKEN_EXPIRY)
@@ -42,7 +42,7 @@ export class UserService {
     return this.update(currentUser, id, input, output);
   }
 
-  async findByProperty(currentUser: ICurrentUser, checks: KeyValInput[], output?: string[]): Promise<any> {
+  async findByProperty(currentUser: ICurrentUser, checks: KeyValInput[], output?: string[]): Promise<User[]> {
     const conditions = {};
     checks.forEach(check => {
       conditions[check.record_key] = check.record_value;
@@ -72,12 +72,6 @@ export class UserService {
       tenant_id: currentUser.tenant_id,
     }
     const [result] = await this.userDB.update(whereCondition, userObj, output);
-    if (!result) {
-      throw new HttpException({
-        status: HttpStatus.BAD_REQUEST,
-        error: MESSAGES.BAD_REQUEST,
-      }, HttpStatus.BAD_REQUEST);
-    }
     return result;
   }
 
