@@ -58,8 +58,9 @@ export class AppointmentsService {
   }
 
   async create(
+    currentUser: ICurrentUser,
     newAppointment: NewAppointmentInput,
-    keys?: string[],
+    output?: string[],
   ): Promise<any> {
     // Section: Validating Input
     // Validate the input and Time of the appointment
@@ -86,7 +87,15 @@ export class AppointmentsService {
     );
     // End Section: Check the Duplicate
 
-    const [response] = await this.appointmentDB.create(newAppointment, keys);
+    const [response] = await this.appointmentDB.create(
+      {
+        ...newAppointment,
+        created_by: currentUser.id,
+        updated_by: currentUser.id,
+        tenant_id: currentUser.tenant_id,
+      },
+      output,
+    );
     return response;
   }
 

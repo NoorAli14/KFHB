@@ -44,22 +44,23 @@ export class AppointmentsResolver {
 
   @Mutation(() => Appointment)
   async addAppointment(
+    @CurrentUser() currentUser: ICurrentUser,
     @Args('appointment') appointment: NewAppointmentInput,
-    @Fields(Appointment) columns: string[],
+    @Fields(Appointment) output: string[],
   ): Promise<Appointment> {
-    return this.appointmentsService.create(appointment, columns);
+    return this.appointmentsService.create(currentUser, appointment, output);
   }
 
   @Query(() => Appointment)
   async findAppointment(
     @CurrentUser() currentUser: ICurrentUser,
     @Args('appointment_id') appointment_id: string,
-    @Fields(Appointment) columns: string[],
+    @Fields(Appointment) output: string[],
   ): Promise<Appointment> {
     return this.appointmentsService.findById(
       currentUser,
       appointment_id,
-      columns,
+      output,
     );
   }
 
