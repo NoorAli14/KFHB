@@ -3,6 +3,10 @@ import { Routes, RouterModule } from "@angular/router";
 
 const routes: Routes = [
   {
+    path: "",
+    redirectTo:'ent', pathMatch:'full'
+  },
+  {
     path: 'ent',
     loadChildren: () => import('./entitlement/entitlement.module').then(m => m.EntitlementModule)
   },

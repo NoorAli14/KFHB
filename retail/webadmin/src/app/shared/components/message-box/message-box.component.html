@@ -1,5 +1,5 @@
 <div
-*ngIf="isVisible && message.length>0"
+*ngIf="isVisible && responseMessage.length>0"
     fxFlex
     fxLayout="row"
     class="message-box {{ type }} "
@@ -9,7 +9,7 @@
         fxLayout="column"
         fxLayoutAlign="start start"
     >
-        <p>{{message}}</p>
+        <p>{{responseMessage}}</p>
     </div>
     <button mat-icon-button aria-label="Close dialog" (click)="onClose()">
         <mat-icon>close</mat-icon>

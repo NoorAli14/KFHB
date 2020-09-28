@@ -8,12 +8,12 @@
             <mat-cell *matCellDef="let element; let i = dataIndex">
                 <span *ngIf="key.includes('Icon') || key.includes('action') ; else columns">
                     <ng-container *ngIf="key.includes('Icon')">
-                        <mat-icon *ngIf="key === 'expandIcon' " (click)="toggleExpandableSymbol(element['id'])"> {{expandedId==element['id'] ? 'keyboard_arrow_up' : ' keyboard_arrow_down'}} </mat-icon>
-                        <mat-icon *ngIf="key === 'expandIcon' " (click)="toggleExpandableSymbol(element['id'])"></mat-icon>
+                        <mat-icon *ngIf="key === 'expandIcon' " matTooltip="Explore" (click)="toggleExpandableSymbol(element['id'])"> {{expandedId==element['id'] ? 'keyboard_arrow_up' : ' keyboard_arrow_down'}} </mat-icon>
+                        <mat-icon *ngIf="key === 'expandIcon' " matTooltip="Close" (click)="toggleExpandableSymbol(element['id'])"></mat-icon>
                     </ng-container>
                     <ng-container *ngIf="key.includes('action')">
-                        <mat-icon appPermission [permissions]="userPermissions"  [type]="'delete'" color="warn" type="button" (click)="onDelete(element['id'])">delete</mat-icon> &nbsp;&nbsp;
-                        <mat-icon type="button" (click)="openDialog(element)">mode_edit</mat-icon>
+                        <mat-icon appPermission [permissions]="userPermissions"  matTooltip="Delete user" [type]="'delete'" color="warn" type="button" (click)="onDelete(element['id'])">delete</mat-icon> &nbsp;&nbsp;
+                        <mat-icon type="button" matTooltip="Edit user" (click)="onEdit(element)">mode_edit</mat-icon>
                     </ng-container>
                 </span>
                 <ng-template #columns>
@@ -34,7 +34,7 @@
 
         <ng-container matColumnDef="expandedDetail">
             <mat-cell *matCellDef="let element" [@expandableRow]="element['id'] === expandedId ? 'expanded' : 'collapsed'">
-                <app-permission *ngIf="expandedId==element['id']" [modules]="element['modules']"></app-permission>
+                <app-permission *ngIf="expandedId==element['id']" [permissions]="permissions" [modules]="element['modules']"></app-permission>
             </mat-cell>
         </ng-container>
 

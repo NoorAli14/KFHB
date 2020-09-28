@@ -4,6 +4,12 @@ export const TABLE = {
   CURRENCY: 'REF_CURRENCY',
 };
 
+export const X_CORRELATION_KEY: string = 'x-correlation-id';
+export const X_ACCESS_TOKEN: string = 'x-access-token';
+export const X_REFRESH_TOKEN: string = 'x-refresh-token';
+export const X_USER_ID: string = 'x-user-id';
+export const X_TENANT_ID: string = 'x-tenant-id';
+
 export const STATUS = {
   ACTIVE: 'ACTIVE',
   INACTIVE: 'INACTIVE',

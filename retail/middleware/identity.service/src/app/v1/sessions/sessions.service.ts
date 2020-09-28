@@ -10,12 +10,17 @@ import {
   SessionRepository,
   CustomerRepository,
   SessionReferenceRepository,
+  DocumentTypeRepository
 } from '@rubix/core';
 import { Session } from './session.model';
 import { IdentityService } from '@rubix/common/connectors';
 import { NewFaceInput } from '../faces/face.dto';
 import { NewSessionInput } from './session.dto';
 import { EVALUATION_RESPONSE, MISMATCHED_DOCUMENT } from './session.interface';
+import { SessionNotFoundException } from './exceptions';
+import { SchemaService } from '../documents/schema.service';
+
+
 @Injectable()
 export class SessionsService {
   private readonly logger: Logger = new Logger(SessionsService.name);
@@ -23,9 +28,12 @@ export class SessionsService {
   constructor(
     private readonly identityService: IdentityService,
     private readonly sessionDB: SessionRepository,
+    private readonly documentTypeDB: DocumentTypeRepository,
     private readonly customerDB: CustomerRepository,
     private readonly sessionReferenceDB: SessionReferenceRepository,
-  ) {}
+    private readonly schema: SchemaService
+
+  ) { }
 
   /**
    *
@@ -39,50 +47,42 @@ export class SessionsService {
     input: NewSessionInput,
     columns?: string[],
   ): Promise<Session> {
+    // Creating Identity User
+    const targetUser: any = await this.identityService.createUser(
+      input.reference_id,
+    );
+
+    // Creating Identity Check ID and Registration Challenge
+    const [checkId, challenge] = await Promise.all([
+      this.identityService.createCheckId(targetUser.id, input.reference_id),
+      this.identityService.createRegistrationChallenge(input.reference_id),
+    ]);
+
+    // Session Input Params
+    const params: any = {
+      customer_id: currentUser.id,
+      tenant_id: currentUser.tenant_id,
+      target_user_id: targetUser.id,
+      check_id: checkId.id,
+      reference_id: input.reference_id,
+      fido_reg_req_id: challenge.id,
+      fido_reg_req: challenge.fidoRegistrationRequest,
+      status: SESSION_STATUSES.ACTIVE,
+      created_by: currentUser.id,
+      updated_by: currentUser.id,
+    };
+
     const trx: any = await this.customerDB.transaction();
     try {
-      // Creating Identity User
-      const targetUser: any = await this.identityService.createUser(
-        input.reference_id,
-      );
-
-      // Creating Identity Check ID and Registration Challenge
-      const promises = await Promise.all([
-        this.identityService.createCheckId(targetUser.id, input.reference_id),
-        this.identityService.createRegistrationChallenge(input.reference_id),
-        this.sessionDB.update(
-          { customer_id: currentUser.id },
-          { status: SESSION_STATUSES.ARCHIVED },
-          ['id'],
-          trx,
-        ),
-      ]);
-
-      // Session Input Params
-      const params: any = {
-        customer_id: currentUser.id,
-        tenant_id: currentUser.tenant_id,
-        target_user_id: targetUser.id,
-        check_id: promises[0].id,
-        reference_id: input.reference_id,
-        fido_reg_req_id: promises[1].id,
-        fido_reg_req: promises[1].fidoRegistrationRequest,
-        status: SESSION_STATUSES.ACTIVE,
-        created_by: currentUser.id,
-        updated_by: currentUser.id,
-      };
-
       // Creating Session
       const [session] = await this.sessionDB.create(params, columns, trx);
-
-      // Update Customer with active session id
       await this.customerDB.update(
         { id: currentUser.id },
-        { session_id: session.id },
+        { session_id: session.id, is_evaluation_verified: null },
         ['id'],
         trx,
-      ),
-        await trx.commit();
+      );
+      await trx.commit();
       return session;
     } catch (error) {
       await trx.rollback();
@@ -137,125 +137,113 @@ export class SessionsService {
    * @param columns Graphql Fields, that need to be returned
    * @return The EVALUATION_RESPONSE object
    */
+
   async evaluation(currentUser: ICurrentUser): Promise<EVALUATION_RESPONSE> {
-    const __requiredDocuments: string[] = [
-      DOCUMENT_TYPES.LIVENESS,
-      DOCUMENT_TYPES.NATIONAL_ID_FRONT_SIDE,
-      DOCUMENT_TYPES.NATIONAL_ID_BACK_SIDE,
-      DOCUMENT_TYPES.PASSPORT,
-      DOCUMENT_TYPES.DRIVING_LICENSE,
-    ];
 
     //  Fetch customer recent active session
-    const customerSession = await this.customerDB.getRecentSession(
+    const [customerSession, types] = await Promise.all([this.customerDB.getRecentSession(
       currentUser.tenant_id,
       currentUser.id,
-    );
+    ), this.documentTypeDB.findByTenantId(currentUser.tenant_id)]);
 
+    if (!customerSession)
+      throw new SessionNotFoundException()
     // Find Target User from Document Processing Server
-    const targetUser: any = customerSession
-      ? await this.identityService.findUserById(customerSession.target_user_id)
-      : null;
+    // const targetUser: any = await this.identityService.findUserById(customerSession.target_user_id);
 
-    this.logger.log(targetUser);
-    // Checking user has uploaded his selfie or not.
-    if (!targetUser?.faceEnrolled) {
-      return {
-        success: false,
-        status: `CUSTOMER_${DOCUMENT_TYPES.SELFIE}_MISSING`,
-      };
-    }
+    // this.logger.log(targetUser);
+    // // Checking user has uploaded his selfie or not.
+    // if (!targetUser?.faceEnrolled) {
+    //   return {
+    //     success: false,
+    //     status: `CUSTOMER_${DOCUMENT_TYPES.SELFIE}_MISSING`,
+    //   };
+    // }
 
-    // Fetch all required uploaded Documents
+    const DOCUMENTS = types.filter(type => type.record_type === 'DOCUMENT');
+
+    // Fetch all uploaded Documents
     const documents: any = await this.sessionReferenceDB.recentDocumentByType(
       customerSession.session_id,
-      __requiredDocuments,
+      DOCUMENTS.map(record => record.name),
     );
 
+    this.logger.log(`Uploaded Documents: [${documents.map(record => record.name)}]`)
+
+    this.logger.log(`Required Documents: [${DOCUMENTS.filter(record => record.is_required).map(record => record.name)}]`)
     // Check if any required document is missing
     const missingDocument: string | boolean = this.findMissingDocument(
-      __requiredDocuments,
+      DOCUMENTS.filter(record => record.is_required).map(record => record.name),
       documents || [],
     );
     if (missingDocument) {
+      this.logger.log(`Missing Document: [${missingDocument}]`)
       return {
         success: false,
         status: `CUSTOMER_${missingDocument}_MISSING`,
       };
     }
 
-    // Check if any document processing failed.
-    const failedDocument = documents.find(
-      document => document.status === DOCUMENT_STATUSES.FAILED,
-    );
-
-    if (failedDocument) {
+    // Check if any documents is in processing or in failed state
+    const processingOrFailedDocument = documents.find(
+      document => (document.status === DOCUMENT_STATUSES.PROCESSING || document.status === DOCUMENT_STATUSES.FAILED),
+    )
+    if (processingOrFailedDocument) {
+      this.logger.log(`[${processingOrFailedDocument.status}] Document: [${processingOrFailedDocument.name}]`)
       return {
         success: false,
-        status: `CUSTOMER_${missingDocument}_PROCESSING_FAILED`,
-      };
-    } else {
-      // Fetch evaluation result from Document Processing server
-      const evaluation: any = await this.identityService.createEvaluation(
-        customerSession.target_user_id,
-        customerSession.check_id,
-      );
-      // Updating evaluation_id of current active session
-      await this.sessionDB.update(
-        { id: customerSession.session_id },
-        { evaluation_id: evaluation.id },
-        ['id'],
-      );
-
-      // Find any mismatched document in evaluation result.
-      const mismatchedDocument:
-        | boolean
-        | MISMATCHED_DOCUMENT = this.findMismatchedDocument(
-        evaluation,
-        documents,
-      );
-
-      // If any mismatched Document found then throw exception
-      if (mismatchedDocument) {
-        return {
-          success: false,
-          status: `EVALUATION_MISMATCHED_${mismatchedDocument['name']}`,
-          message: `Evaluation failed due to ${mismatchedDocument['name']} mismatched.`,
-        };
-      }
-
-      // Find national id back
-      const nationalID: any = documents.find(
-        document => document.name === DOCUMENT_TYPES.NATIONAL_ID_BACK_SIDE,
-      );
-
-      // Prase processed_data to JSON
-      const processed_data: { [key: string]: any } = JSON.parse(
-        nationalID.processed_data,
-      );
-
-      // Save information in customer table
-      await this.customerDB.update(
-        { id: customerSession.id },
-        {
-          first_name: processed_data.mrz['Given Names'],
-          last_name: processed_data.mrz['Surname'],
-          date_of_birth: processed_data.mrz['Date Of Birth'],
-          national_id_no: processed_data.mrz['Optional Data'],
-          national_id_expiry: processed_data.mrz['Date Of Expiry'],
-          nationality: processed_data.mrz['Nationality'],
-          nationality_code: processed_data.mrz['Nationality Code'],
-          gender: processed_data.mrz['Sex'],
-        },
-        ['id'],
-      );
-      // Return success response
-      return {
-        success: true,
-        status: 'MATCH',
-        message: 'Evaluation operation has been successfully passed.',
+        status: processingOrFailedDocument.status === DOCUMENT_STATUSES.PROCESSING ? `CUSTOMER_${processingOrFailedDocument.name}_PROCESSING` : `CUSTOMER_${processingOrFailedDocument.name}_PROCESSING_FAILED`,
       };
     }
+
+    // // Fetch evaluation result from Document Processing server
+    // const evaluation: any = await this.identityService.createEvaluation(
+    //   customerSession.target_user_id,
+    //   customerSession.check_id,
+    // );
+
+    // // Updating evaluation_id of current active session
+    // await this.sessionDB.update(
+    //   { id: customerSession.session_id },
+    //   { evaluation_id: evaluation.id },
+    //   ['id'],
+    // );
+
+    // // Find any mismatched document in evaluation result.
+    // const mismatchedDocument:
+    //   | boolean
+    //   | MISMATCHED_DOCUMENT = this.findMismatchedDocument(
+    //     evaluation,
+    //     documents,
+    //   );
+
+
+    // // If any mismatched Document found then throw exception
+    // if (mismatchedDocument) {
+    //   return {
+    //     success: false,
+    //     status: `EVALUATION_MISMATCHED_${mismatchedDocument['name']}`,
+    //     message: `Evaluation failed due to ${mismatchedDocument['name']} mismatched.`,
+    //   };
+    // }
+
+    const attributes: any = this.schema.mapAttributes(documents) || {};
+
+    this.logger.log(`Customer Schema on Evaluation Success: ${JSON.stringify(attributes, null, 2)}`);
+
+    // Save information in customer table
+    await this.customerDB.update(
+      { id: customerSession.id },
+      { ...attributes, is_evaluation_verified: true, updated_by: customerSession.id },
+      ['id'],
+    );
+
+    // Return success response
+    return {
+      success: true,
+      status: 'MATCH',
+      message: 'Evaluation operation has been successfully passed.',
+    };
   }
 
   findMismatchedDocument(evaluation, documents): MISMATCHED_DOCUMENT | boolean {

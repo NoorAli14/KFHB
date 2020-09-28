@@ -1,11 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Session, Evaluation } from './session.entity';
-import {
-  GqlClientService,
-  IHEADER,
-  toGraphql,
-  strToBase64,
-} from '@common/index';
+import { GqlClientService, strToBase64 } from '@common/index';
 import { FaceUploadingInput } from '../attachments/attachment.interface';
 
 @Injectable()
@@ -27,11 +22,11 @@ export class SessionsService {
 
   constructor(private readonly gqlClient: GqlClientService) {}
 
-  async create(header: IHEADER): Promise<Session> {
-    const params: string = `mutation {
+  async create(): Promise<Session> {
+    const mutation = `mutation {
       result: addSession ${this.output}
     }`;
-    return this.gqlClient.setHeaders(header).send(params);
+    return this.gqlClient.send(mutation);
   }
 
   /**
@@ -40,14 +35,14 @@ export class SessionsService {
    * @param input Fido Request Input
    * @return The session object
    */
-  async update(header: IHEADER, input: FaceUploadingInput): Promise<Session> {
+  async update(input: FaceUploadingInput): Promise<Session> {
     // Construct GraphQL request
-    const params = `mutation {
+    const mutation = `mutation {
       result: updateSession(input: {
           file: "${strToBase64(input.file)}"
         }) ${this.output}
     }`;
-    return this.gqlClient.setHeaders(header).send(params);
+    return this.gqlClient.send(mutation);
   }
 
   /**
@@ -55,14 +50,14 @@ export class SessionsService {
    * @param header GQL request headers
    * @return The Evaluation object
    */
-  async evaluation(header: IHEADER): Promise<Evaluation> {
-    const params: string = `mutation {
+  async evaluation(): Promise<Evaluation> {
+    const mutation = `mutation {
       result: evaluation {
         success
         status
         message
       }
     }`;
-    return this.gqlClient.setHeaders(header).send(params);
+    return this.gqlClient.send(mutation);
   }
 }

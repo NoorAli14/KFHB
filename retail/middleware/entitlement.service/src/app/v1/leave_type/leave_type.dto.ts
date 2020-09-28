@@ -1,7 +1,7 @@
 import { Field, InputType } from "@nestjs/graphql";
-import {IsOptional, IsString, MaxLength} from "class-validator";
+import {IsIn, IsOptional, IsString, MaxLength} from "class-validator";
 
-import { NUMBERS } from "@common/constants";
+import {NUMBERS, STATUS} from "@common/constants";
 
 @InputType()
 export class LeaveTypeInput {
@@ -9,13 +9,14 @@ export class LeaveTypeInput {
   @IsString()
   @IsOptional()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  leave_type?: string;
+  name: string;
 
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  status?: string;
+  @IsIn(Object.keys(STATUS))
+  status: string;
 }
 
 @InputType()
@@ -23,5 +24,5 @@ export class LeaveTypeCreateInput extends LeaveTypeInput {
   @Field()
   @IsString()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  leave_type: string;
+  name: string;
 }

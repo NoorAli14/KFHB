@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as Crypto from 'crypto';
-import {HEADER_NAMES} from '@common/constants';
+import {DATE_FORMAT, HEADER_NAMES} from '@common/constants';
 import * as moment from 'moment';
 
 /**
@@ -55,7 +55,7 @@ export const toPlainAttributes = (model, tableName) : any => {
   return keys.map(key => `${tableName}.${key}`)
 };
 
-export const loaderSerializer = (data: any, serializer:string[], key: string, serializerKey?: string): any => {
+export const loaderSerializer = (data: any, serializer: readonly string[] | any, key: string, serializerKey?: string): any => {
   const loaderLookups = {};
   data.forEach(loader => {
     if (!loaderLookups[loader[key]])
@@ -83,6 +83,12 @@ export const getTenantID = (headers: any): any => {
 
 export const getXUserID = (headers: any): any => {
   return headers[HEADER_NAMES.X_USER_ID];
+};
+
+export const dateFormat = (date_string: string, utc?: boolean): string => {
+  let date = moment(date_string);
+  if (utc) date = date.utc();
+  return date.format(DATE_FORMAT)
 };
 
 /**
@@ -130,3 +136,7 @@ export const generateRandomString = (length=36): string => {
 export const addMinutes = (minutes: number): Date => {
   return new Date(new Date().getTime() + minutes*60000);
 };
+
+export const getCurrentTimeStamp = () => {
+  return moment().format();
+}

@@ -1,5 +1,5 @@
 import { Field, InputType } from "@nestjs/graphql";
-import {IsOptional, IsString, IsUUID, Matches, MaxLength} from "class-validator";
+import {IsISO8601, IsOptional, IsString, IsUUID, MaxLength} from "class-validator";
 
 import { NUMBERS } from "@common/constants";
 
@@ -23,14 +23,14 @@ export class LeaveInput {
   @IsString()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsOptional()
-  @Matches(/([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/, {message: 'start_date must be a valid date format'})
+  @IsISO8601({strict: true})
   start_date: string;
 
   @Field({ nullable: true })
   @IsString()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsOptional()
-  @Matches(/([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/, {message: 'end_date must be a valid date format'})
+  @IsISO8601({strict: true})
   end_date: string;
 
   @Field({ nullable: true })
@@ -63,12 +63,12 @@ export class LeaveCreateInput extends LeaveInput {
   @Field()
   @IsString()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  @Matches(/([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/, {message: 'start_date must be a valid date format'})
+  @IsISO8601({strict: true})
   start_date: string;
 
   @Field()
   @IsString()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  @Matches(/([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/, {message: 'end_date must be a valid date format'})
+  @IsISO8601({strict: true})
   end_date: string;
 }

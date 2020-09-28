@@ -3,7 +3,7 @@ import {
   Query,
   Mutation,
   Args,
-  ResolveField, Parent, Context, GraphQLExecutionContext,
+  Context, GraphQLExecutionContext,
 } from "@nestjs/graphql";
 import { KeyValInput } from "@common/inputs/key-val.input";
 import {WorkingDay} from "@app/v1/working-days/working-day.model";
@@ -67,15 +67,5 @@ export class WorkingDaysResolver {
     const workingDay: WorkingDay = await this.workingDaysService.findById(current_user, id,['id']);
     if(!workingDay) throw new WorkingDayNotFoundException(id);
     return this.workingDaysService.delete(current_user, id);
-  }
-
-  @ResolveField('start_time', returns => String)
-  async getStartTime(@Parent() workingDay: WorkingDay) {
-    return new Date(workingDay.start_time_local).toISOString()
-  }
-
-  @ResolveField('end_time', returns => String)
-  async getEndTime(@Parent() workingDay: WorkingDay) {
-    return new Date(workingDay.end_time_local).toISOString()
   }
 }

@@ -1,9 +1,9 @@
 import {
   Controller,
   UseGuards,
-  Logger,
   ParseUUIDPipe,
   Param,
+  Header,
   Get,
   Req,
 } from '@nestjs/common';
@@ -11,19 +11,18 @@ import {
   ApiTags,
   ApiOperation,
   ApiBearerAuth,
-  ApiBadRequestResponse,
   ApiOkResponse,
 } from '@nestjs/swagger';
-import { AuthGuard, Header, IHEADER, CurrentUser } from '@common/index';
+import { Request } from 'express';
+import { AuthGuard, CurrentUser } from '@common/index';
 import { AttachmentsService } from './attachments.service';
+import { User } from '../users/user.entity';
 
 @ApiTags('Attachment')
 @Controller('attachments')
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
 export class AttachmentsController {
-  private readonly logger: Logger = new Logger(AttachmentsController.name);
-
   constructor(private readonly documentService: AttachmentsService) {}
 
   @Get(':id/preview')
@@ -33,19 +32,19 @@ export class AttachmentsController {
       'A successful request returns the HTTP 20O OK status code and a response return a multipart buffer stream.',
   })
   @ApiOkResponse({})
+  @Header('Content-Type', 'image/jpeg')
   async preview(
     @Param('id', ParseUUIDPipe) id: string,
-    @CurrentUser() currentUser: any,
-    @Header() header: IHEADER,
-    @Req() request: any,
+    @CurrentUser() currentUser: User,
+    @Req() request: Request,
   ): Promise<any> {
     const params: any = {
       attachment_id: id,
       customer_id: currentUser.id,
     };
-    const result = await this.documentService.preview(header, params);
+    const result = await this.documentService.preview(params);
     const img: any = Buffer.from(result.image, 'base64');
-    request.res.writeHead(200, { 'Content-Type': 'image/jpeg' });
+    // request.res.writeHead(200, { 'Content-Type': 'image/jpeg' });
     request.res.end(img, 'binary');
     // request.res.setHeader(
     //   'Content-disposition',

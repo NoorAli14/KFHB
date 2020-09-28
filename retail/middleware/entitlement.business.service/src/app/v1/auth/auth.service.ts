@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Request } from 'express';
+import { Response } from 'express';
 import {
   X_ACCESS_TOKEN,
   X_REFRESH_TOKEN,
@@ -14,7 +14,7 @@ export class AuthService {
     private readonly redisService: RedisClientService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigurationService,
-  ) {}
+  ) { }
 
   async validateRefreshToken(jwt: string): Promise<boolean | any> {
     try {
@@ -33,11 +33,16 @@ export class AuthService {
       secret: this.configService.JWT.REFRESH_SECRET,
       expiresIn: `${this.configService.JWT.REFRESH_EXPIRY_SECONDS}s`,
     });
-    await this.redisService.setValue(userId, token, 'EX', this.configService.JWT.REFRESH_EXPIRY_SECONDS);
+    await this.redisService.setValue(
+      userId,
+      token,
+      'EX',
+      this.configService.JWT.REFRESH_EXPIRY_SECONDS,
+    );
     return token;
   }
 
-  getToken(userId): string {
+  getToken(userId: string): string {
     const payload = { id: userId, type: 'user' };
     return this.jwtService.sign(payload, {
       secret: this.configService.JWT.SECRET,
@@ -49,19 +54,16 @@ export class AuthService {
     return `${X_ACCESS_TOKEN}=${token}; HttpOnly; Path=/; Max-Age=${this.configService.JWT.EXPIRY_SECONDS}`;
   }
 
-  async getCookieForLogOut(userId: string) {
+  async getCookieForLogOut(userId: string): Promise<string> {
     await this.redisService.delValue(userId);
     return `${X_ACCESS_TOKEN}=; HttpOnly; Path=/; Max-Age=0`;
   }
 
-  setHeaders(res: any, refresh_token: string, userId: string): any {
+  setHeaders(res: Response, refresh_token: string, userId: string): Response {
     const token: string = this.getToken(userId);
     res.setHeader(X_REFRESH_TOKEN, refresh_token);
     res.setHeader(X_ACCESS_TOKEN, token);
-    res.setHeader(
-      'Set-Cookie',
-      this.getCookieWithJwtToken(token),
-    );
+    res.setHeader('Set-Cookie', this.getCookieWithJwtToken(token));
     return res;
-  } 
+  }
 }

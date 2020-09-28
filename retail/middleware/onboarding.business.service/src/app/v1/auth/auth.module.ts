@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 
-import { UserService } from '@app/v1/users/users.service';
-import { UserModule } from '@app/v1/users/users.module';
+import { CustomerModule } from '@app/v1/customers/customer.module';
+import { CustomersService } from '@app/v1/customers/customers.service';
 
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
@@ -20,7 +20,7 @@ import {
 @Module({
   imports: [
     CommonModule,
-    UserModule,
+    CustomerModule,
     GqlClientModule,
     PassportModule.register({
       defaultStrategy: 'jwt',
@@ -38,7 +38,7 @@ import {
   ],
   controllers: [AuthController],
   providers: [
-    UserService,
+    CustomersService,
     AuthService,
     GqlClientService,
     LocalStrategy,
@@ -48,4 +48,4 @@ import {
   ],
   exports: [PassportModule, LocalStrategy, AuthService],
 })
-export class AuthModule {}
+export class AuthModule { }

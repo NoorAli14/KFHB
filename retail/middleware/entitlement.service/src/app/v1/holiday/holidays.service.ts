@@ -5,6 +5,7 @@ import { HolidayRepository } from '@core/repository/holiday.repository';
 import {ICurrentUser} from '@common/interfaces';
 import {HolidayInput} from '@app/v1/holiday/holiday.dto';
 import {Holiday} from '@app/v1/holiday/holiday.model';
+import {STATUS} from '@common/constants';
 
 @Injectable()
 export class HolidaysService {
@@ -50,5 +51,16 @@ export class HolidaysService {
   async delete(current_user: ICurrentUser, id: string): Promise<any> {
     const result = await this.holidayRepository.markAsDelete(current_user.tenant_id, current_user.id, id);
     return !!result;
+  }
+
+  async isHoliday(tenant_id: string, date: string): Promise<boolean> {
+    const conditions = {
+      tenant_id: tenant_id,
+      holiday_date: date,
+      status: STATUS.ACTIVE,
+      deleted_on: null,
+    };
+    const holidays: Holiday[] = await this.holidayRepository.findBy(conditions, ['id', 'holiday_date']);
+    return !!holidays?.length;
   }
 }

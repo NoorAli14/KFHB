@@ -25,7 +25,7 @@
             <div class="search-wrapper mx-32 mx-md-0" >
                 <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
                     <mat-icon>search</mat-icon>
-                    <input [formControl]="username" placeholder="Search for a user">
+                    <input  placeholder="Search for a user">
                 </div>
             </div>
             <!-- / SEARCH -->
@@ -66,9 +66,10 @@
                         </ng-template>
                         
                         <ng-template #action>
-                            <mat-icon appPermission [permissions]="userPermissions" [type]="'delete'" color="warn" type="button" (click)=" confirmDialog(element['id'])">delete</mat-icon> &nbsp;&nbsp;
-                            <mat-icon type="button" (click)="openDialog(element)">mode_edit</mat-icon> &nbsp;&nbsp;
-                            <mat-icon type="button" (click)="onDetail(element['id'])">explore</mat-icon>
+                            <mat-icon appPermission [permissions]="userPermissions" matTooltip="Delete user" [type]="'delete'" color="warn" type="button" (click)=" confirmDialog('delete',element['id'])">delete</mat-icon> &nbsp;&nbsp;
+                            <mat-icon type="button" (click)="openDialog(element)" matTooltip="Delete user">mode_edit</mat-icon> &nbsp;&nbsp;
+                            <mat-icon type="button" (click)="onDetail(element['id'])" matTooltip="Explore">explore</mat-icon>
+                            <mat-icon  *ngIf="element['status']==='PENDING'"  color="success"  matTooltip="Resend Invitation" type="button" (click)=" confirmDialog('invite',element['id'])">near_me</mat-icon> &nbsp;&nbsp;
                         </ng-template>
                         <ng-template #date>
                             {{element[camelToSnakeCase(key)] | date:'mediumDate'}}

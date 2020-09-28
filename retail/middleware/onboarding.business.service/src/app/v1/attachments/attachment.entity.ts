@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { SESSION_STATUSES, DOCUMENT_STATUSES } from '@common/index';
+import { DOCUMENT_STATUSES } from '@common/index';
 
 export class Attachment {
   @ApiProperty({
@@ -19,7 +19,7 @@ export class Attachment {
   @ApiProperty({
     title: 'Processed Data',
   })
-  readonly processed_data: object;
+  readonly processed_data: Record<string, unknown>;
 
   @ApiProperty({
     enum: DOCUMENT_STATUSES,

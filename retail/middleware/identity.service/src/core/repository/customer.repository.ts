@@ -23,12 +23,13 @@ export class CustomerRepository extends BaseRepository {
       .first();
   }
 
-  async getRecentSession(tenant_id: string, id: string): Promise<any> {
+  async getRecentSession(tenant_id: string, customer_id: string): Promise<any> {
     const condition: { [key: string]: any } = {};
+    condition[`${TABLE.SESSION}.customer_id`] = customer_id;
+    condition[`${TABLE.CUSTOMER}.tenant_id`] = tenant_id;
     condition[`${TABLE.SESSION}.status`] = SESSION_STATUSES.ACTIVE;
     condition[`${TABLE.SESSION}.deleted_on`] = null;
     condition[`${TABLE.CUSTOMER}.deleted_on`] = null;
-    condition[`${TABLE.CUSTOMER}.tenant_id`] = tenant_id;
 
     return this.connection(this.tableName)
       .select([

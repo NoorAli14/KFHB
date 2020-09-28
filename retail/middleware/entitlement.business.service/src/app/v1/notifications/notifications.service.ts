@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import {
   GqlClientService,
   ConfigurationService,
@@ -7,33 +7,13 @@ import {
 
 @Injectable()
 export class NotificationsService {
+  private readonly logger: Logger = new Logger(NotificationsService.name);
   constructor(
     private readonly gqlClient: GqlClientService,
     private readonly configService: ConfigurationService,
-  ) {}
+  ) { }
 
-  async sendGenericEmail() {
-    const params: string = `mutation {
-        result: sendEmail(
-          input: {
-            to: "faizan@aiondigital.com"
-            template: "default"
-            subject: "Congratulations for new Role."
-            body: "Hi Faizan, This is a testing email.",
-            context: [
-              { key: "title", value: "SAMPLETITLE" }
-              {key: "name", value: "Ahmad"}
-              {key: "body", value: "Hello Ahmad, hope this mail will find you in a good health"}
-            ]
-          }
-        ) {
-          to
-        }
-      }`;
-    return this.gqlClient.send(params);
-  }
-
-  async sendInvitationLink(to: string, token: string) {
+  async sendInvitationLink(to: string, token: string): Promise<any> {
     const input: any = {
       to: to,
       subject: 'Congratulations! You have been invited on Rubix',
@@ -41,17 +21,10 @@ export class NotificationsService {
       body: `Hi ${to}, </br></br> Please click on the <a href="${this.configService.APP.WEB_ONBOARDING_LINK}/${token}">link</a> to complete your onboarding process. </br></br> Best Regards,</br> <strong>Aion Rubix</strong>`,
       context: [],
     };
-    const params: string = `mutation {
-        result: sendEmail(
-          input: ${toGraphql(input)}
-        ) {
-          to
-        }
-      }`;
-    return this.gqlClient.send(params);
+    return this.triggerEmail(input);
   }
 
-  async sendResetPasswordLink(to: string, token: string) {
+  async sendResetPasswordLink(to: string, token: string): Promise<any> {
     const input: any = {
       to: to,
       subject: 'Password Reset Instructions',
@@ -59,13 +32,18 @@ export class NotificationsService {
       body: `Hi ${to}, </br></br> Please click on the <a href="${this.configService.APP.WEB_RESET_PASSWORD_LINK}/${token}">link</a> to reset your password. </br></br> Best Regards,</br> <strong>Aion Rubix</strong>`,
       context: [],
     };
-    const params: string = `mutation {
-        result: sendEmail(
-          input: ${toGraphql(input)}
-        ) {
-          to
-        }
-      }`;
-    return this.gqlClient.send(params);
+    return this.triggerEmail(input);
+  }
+
+  async triggerEmail(input: Record<string, any>): Promise<any> {
+    this.logger.log(`Email:: Send email to [${input.email}]`)
+    const mutation: string = `mutation {
+      result: sendEmail(
+        input: ${toGraphql(input)}
+      ) {
+        to
+      }
+    }`;
+    return this.gqlClient.send(mutation);
   }
 }

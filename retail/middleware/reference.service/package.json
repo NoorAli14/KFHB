@@ -39,11 +39,14 @@
     "apollo-server-express": "^2.17.0",
     "class-transformer": "^0.2.3",
     "class-validator": "^0.12.2",
+    "compression": "^1.7.4",
     "dataloader": "^2.0.0",
     "dotenv": "^8.2.0",
     "glob": "^7.1.6",
     "graphql": "^14.7.0",
     "graphql-tools": "^6.2.0",
+    "helmet": "^4.1.1",
+    "hpp": "^0.2.3",
     "knex": "^0.21.5",
     "mssql": "^6.2.1",
     "nestjs-dataloader": "^7.0.1",
@@ -53,7 +56,8 @@
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.6.2",
     "swagger-ui-express": "^4.1.4",
-    "tedious": "^8.3.1"
+    "tedious": "^8.3.1",
+    "uuid": "^8.3.0"
   },
   "devDependencies": {
     "@compodoc/compodoc": "^1.1.11",

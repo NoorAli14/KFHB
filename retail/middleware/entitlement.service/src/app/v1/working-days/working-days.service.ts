@@ -1,6 +1,5 @@
-import {HttpException, HttpStatus, Injectable} from "@nestjs/common";
+import {Injectable} from "@nestjs/common";
 
-import {MESSAGES} from "@common/constants";
 import { KeyValInput } from "@common/inputs/key-val.input";
 import { WorkingDaysRepository } from "@core/repository";
 import {WorkingDayInput} from '@app/v1/working-days/working-day.dto';
@@ -12,6 +11,8 @@ import {
   WorkingDayStartTimeLessThanEndTimeException
 } from '@app/v1/working-days/exceptions';
 import {WorkingDayStartEndTimeInvalidRange} from '@app/v1/working-days/exceptions/working-day-start-end-time-invalid-range';
+import * as moment from 'moment';
+import {STATUS, WEEK_DAYS} from '@common/constants';
 
 @Injectable()
 export class WorkingDaysService {
@@ -35,10 +36,6 @@ export class WorkingDaysService {
     return this.workingDaysRepository.findBy(conditions, keys);
   }
 
-  async findByDuration(obj: Record<string, any>, keys?: string[]): Promise<WorkingDay[]> {
-    return this.workingDaysRepository.findByDuration(obj, keys);
-  }
-
   async update(
     current_user: ICurrentUser,
     id: string,
@@ -58,7 +55,7 @@ export class WorkingDaysService {
       throw new WorkingDayStartTimeLessThanEndTimeException(id, input.start_time_local, input.end_time_local)
     }
     if ((input.start_time_local < '0000' || input.start_time_local > '2359') || (input.end_time_local < '0000' || input.end_time_local > '2359')){
-      throw new WorkingDayStartEndTimeInvalidRange(null, input.start_time_local, input.end_time_local)
+      throw new WorkingDayStartEndTimeInvalidRange(id, input.start_time_local, input.end_time_local)
     }
     const [result] = await this.workingDaysRepository.update({
       id: id,
@@ -69,8 +66,8 @@ export class WorkingDaysService {
   }
 
   async create(current_user: ICurrentUser, newObj: WorkingDayInput, output?: string[]): Promise<WorkingDay> {
-    const workingDay = await this.findByWeekday(current_user, newObj.week_day);
-    if (workingDay?.length > 0) throw new WorkingDayAlreadyExistException(workingDay[0].id);
+    const [workingDay] = await this.findByWeekday(current_user, newObj.week_day);
+    if (workingDay) throw new WorkingDayAlreadyExistException(workingDay.id);
     if(newObj.full_day) {
       newObj.start_time_local = '0000';
       newObj.end_time_local = '2359';
@@ -86,12 +83,8 @@ export class WorkingDaysService {
         created_by: current_user.id,
         updated_by: current_user.id,
     }};
-    const result = await this.workingDaysRepository.create(input, output);
-    if(result?.length > 0) return result[0];
-    throw new HttpException({
-      status: HttpStatus.BAD_REQUEST,
-      error: MESSAGES.BAD_REQUEST,
-    }, HttpStatus.BAD_REQUEST);
+    const [result] = await this.workingDaysRepository.create(input, output);
+    return result;
   }
 
   async delete(current_user: ICurrentUser, id: string): Promise<boolean> {
@@ -107,5 +100,20 @@ export class WorkingDaysService {
       }
     ];
     return this.findByProperty(current_user, checks, ['id', 'week_day', 'start_time_local', 'end_time_local']);
+  }
+
+  async isWorkingDay(tenant_id: string, date_string: string): Promise<boolean> {
+    const date = moment(date_string).utc();
+    const hours: string = date.hour() < 10? '0' + date.hour() : date.hour().toString();
+    const minutes: string = date.minute() < 10? '0' + date.minute(): date.minutes().toString();
+    const weekDay: string = Object.keys(WEEK_DAYS)[date.day()];
+    const conditions = {
+      week_day: weekDay,
+      tenant_id: tenant_id,
+      status: STATUS.ACTIVE,
+      deleted_on: null
+    };
+    const working_days: WorkingDay[] = await this.workingDaysRepository.findByDayAndTime(`${hours}${minutes}`, conditions, ['id', 'start_time_local', 'end_time_local', 'full_day']);
+    return !!working_days?.length;
   }
 }

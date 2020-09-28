@@ -7,7 +7,7 @@ export interface iSERVICE_CONNECTION {
 }
 
 export interface iSERVICE {
-  name:string,
+  name: string,
   url: string
 }
 
@@ -43,10 +43,21 @@ export class RegistryService {
     console.log("RegistryService -> list -> this.__services", this.__services)
     return this.__services;
   }
-  
+
   formatUrl(service) {
-    return `${service.is_secure ? 'https' : 'http'}://${service.host_name}:${
-      service.port
-    }${service.context}`;
+    return `${service.is_secure ? 'https' : 'http'}://${service.host_name}:${service.port
+      }${service.context}`;
   }
+  // services(service: string): iSERVICE[] {
+  //   if (process.env.NODE_ENV === 'production') {
+  //     return [
+  //       { name: 'users', url: 'http://user_management_service:5020/graphql' },
+  //       { name: 'notifications', url: 'http://notification_service:5030/graphql' },
+  //     ];
+  //   }
+  //   return [
+  //     { name: 'users', url: 'http://localhost:5020/graphql' },
+  //     { name: 'notifications', url: 'http://localhost:5030/graphql' },
+  //   ];
+  // }
 }

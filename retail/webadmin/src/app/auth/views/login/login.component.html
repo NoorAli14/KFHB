@@ -25,7 +25,7 @@
                 novalidate
             >
                 <mat-form-field appearance="outline">
-                    <mat-label>Email</mat-label>
+                    <mat-label>Email <app-required-indicator></app-required-indicator></mat-label>
                     <input matInput formControlName="email" />
                     <mat-icon matSuffix class="secondary-text">mail</mat-icon>
                     <mat-error>
@@ -36,7 +36,7 @@
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
-                    <mat-label>Password</mat-label>
+                    <mat-label>Password <app-required-indicator></app-required-indicator></mat-label>
                     <input
                         matInput
                         type="password"
@@ -58,10 +58,6 @@
                     fxLayout.xs="column"
                     fxLayoutAlign="space-between center"
                 >
-                    <mat-checkbox class="remember-me" aria-label="Remember Me">
-                        Remember Me
-                    </mat-checkbox>
-
                     <a
                         class="forgot-password"
                         mat-button

@@ -12,7 +12,7 @@ import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
 } from '@nestjs/swagger';
-import { AuthGuard, Header, IHEADER } from '@common/index';
+import { AuthGuard } from '@common/index';
 import { SessionsService } from './sessions.service';
 import { Evaluation } from './session.entity';
 
@@ -38,7 +38,7 @@ export class EvaluationsController {
     description: 'Input Validation failed.',
   })
   @HttpCode(HttpStatus.OK)
-  async evaluation(@Header() header: IHEADER): Promise<Evaluation> {
-    return this.sessionService.evaluation(header);
+  async evaluation(): Promise<Evaluation> {
+    return this.sessionService.evaluation();
   }
 }

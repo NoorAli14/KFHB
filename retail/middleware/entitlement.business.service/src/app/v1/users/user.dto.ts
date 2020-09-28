@@ -4,11 +4,12 @@ import {
   IsEmail,
   IsNotEmpty,
   ValidateNested,
+  Matches,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, PartialType, OmitType } from '@nestjs/swagger';
 import { IdsDto } from '@common/dtos';
-import { GENDER } from '@common/constants';
+import { GENDER, PASSWORD_REGEX } from '@common/constants';
 
 export class ChangePasswordDto {
   @ApiProperty({
@@ -27,6 +28,9 @@ export class ChangePasswordDto {
   })
   @IsString()
   @IsNotEmpty()
+  @Matches(PASSWORD_REGEX, {
+    message: 'password too weak',
+  })
   readonly new_password: string;
 }
 
