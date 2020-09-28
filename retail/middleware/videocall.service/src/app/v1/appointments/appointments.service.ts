@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { HttpService, Injectable, Logger } from '@nestjs/common';
 import { RedisService } from 'nestjs-redis';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { NewAppointmentInput } from './appointment.dto';
@@ -72,7 +72,6 @@ export class AppointmentsService {
     this.check_agent_availability(
       newAppointment.call_time,
       newAppointment.gender,
-      newAppointment.user_id,
     );
 
     // End Section: Validating Input
@@ -95,7 +94,7 @@ export class AppointmentsService {
     currentUser: ICurrentUser,
     id: string,
     output?: string[],
-  ): Promise<Appointment> {
+  ): Promise<any> {
     this.logger.log(`start finding appointment by [${id}]`);
     return this.appointmentDB.findOne(
       {
@@ -111,7 +110,7 @@ export class AppointmentsService {
     currentUser: ICurrentUser,
     user_id: string,
     output?: string[],
-  ): Promise<Appointment> {
+  ): Promise<any> {
     return this.appointmentDB.findOne(
       {
         user_id: user_id,
@@ -276,16 +275,12 @@ export class AppointmentsService {
     const result = await this.gqlClient.send(
       params,
       { headers: HttpHeaders() || {} },
-      this.configService.get('ENV_RBX_IDENTITY_SERVER'),
+      this.configService.get('ENV_RBX_IDX_BASE_URL'),
     );
     return result;
   }
 
-  private async check_agent_availability(
-    call_time: Date,
-    gender: GENDER,
-    user_id: string,
-  ) {
+  private async check_agent_availability(call_time: Date, gender: GENDER) {
     const params = `query{
         findAvailableUsers(input:{call_time: ${call_time}, gender: ${gender}}){
         id

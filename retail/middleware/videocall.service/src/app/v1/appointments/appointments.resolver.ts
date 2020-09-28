@@ -23,7 +23,7 @@ export class AppointmentsResolver {
     @Parent() appointment: Appointment,
   ): Promise<User> {
     // Query API call to get the User data from another Service.
-    const user = this.appointmentsService.get_user_by_id_from_service(
+    const user = await this.appointmentsService.get_user_by_id_from_service(
       appointment.user_id,
     );
 

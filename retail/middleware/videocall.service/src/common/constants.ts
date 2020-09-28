@@ -5,7 +5,7 @@ export enum TABLE {
 }
 
 export const FOREIGN_KEYS = {
-  AppointmentGQL: ['user_id'],
+  Appointment: ['user_id'],
 };
 
 export enum GENDER {
