@@ -93,7 +93,7 @@ export const generateRandomString = (length: number): string => {
 };
 
 export const formattedHeader = (req: Request): IHEADER => {
-  let headers: any = {};
+  const headers: any = {};
   headers[X_CORRELATION_KEY] = req.get(X_CORRELATION_KEY);
   headers[X_USER_ID] = req.get(X_USER_ID);
   headers[X_TENANT_ID] = (req.headers?.[X_TENANT_ID] ||

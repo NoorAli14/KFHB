@@ -1,4 +1,4 @@
-import { HttpService, Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { RedisService } from 'nestjs-redis';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { NewAppointmentInput } from './appointment.dto';
@@ -12,12 +12,9 @@ import { GqlClientService } from '@common/libs/gqlclient/gqlclient.service';
 import { PushNotificationModel } from './push_notification.model';
 import { stringifyForGQL } from '@common/utilities';
 import { ICurrentUser } from '@common/interfaces';
-import { HttpHeaders } from '@core/context';
 
 @Injectable()
 export class AppointmentsService {
-  private readonly logger: Logger = new Logger(AppointmentsService.name);
-
   private REDIS_KEY = 'rbx_call_appointments';
 
   constructor(
@@ -70,7 +67,7 @@ export class AppointmentsService {
     }
 
     // Query the other service to check the available slots in the Holidays and working days.
-    const agents = await this.check_agent_availability(
+    const available_agents = await this.check_agent_availability(
       newAppointment.call_time,
       newAppointment.gender,
     );
@@ -267,7 +264,7 @@ export class AppointmentsService {
     }
   }
 
-  async get_user_by_id_from_service(user_id: string) {
+  async get_user_by_id_from_service(user_id: string): Promise<any> {
     const params = `query{
         result: findCustomerById(id: "${user_id}") {
         id
@@ -300,7 +297,7 @@ export class AppointmentsService {
   ) {
     const keys = stringifyForGQL(input);
 
-    const mutation: string = `mutation {
+    const mutation = `mutation {
       result: sendPushNotification(input: ${keys}) {
         id
         platform

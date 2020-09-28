@@ -1,4 +1,4 @@
-import { IsUUID, IsEnum } from 'class-validator';
+import { IsUUID } from 'class-validator';
 
 import { Field, InputType } from '@nestjs/graphql';
 
