@@ -9,7 +9,6 @@ import {
   ConfigurationService,
   X_USER_ID,
   X_TENANT_ID,
-  iSERVICE,
   X_CORRELATION_KEY,
 } from '@common/index';
 
@@ -25,23 +24,8 @@ import { WorkingDayModule } from './working-days/working-day.module';
 import { HolidayModule } from './holidays/holiday.module';
 import { LeaveModule } from './leaves/leave.module';
 import { LeaveTypeModule } from './leave-types/leave-type.module';
+import { RegistryService } from '@common/services'
 
-let services: iSERVICE[];
-if (process.env.NODE_ENV === 'production') {
-  services = [
-    { name: 'identity', url: 'http://retail_identity:4010/graphql' },
-    { name: 'compliance', url: 'http://retail_compliance:5010/graphql' },
-    { name: 'users', url: 'http://retail_user_management:5020/graphql' },
-    { name: 'notifications', url: 'http://retail_notification:5030/graphql' },
-  ];
-} else {
-  services = [
-    { name: 'identity', url: 'http://localhost:4010/graphql' },
-    { name: 'users', url: 'http://localhost:5020/graphql' },
-    { name: 'notifications', url: 'http://localhost:5030/graphql' },
-    { name: 'compliance', url: 'http://localhost:5010/graphql' },
-  ];
-}
 class AuthenticatedDataSource extends RemoteGraphQLDataSource {
   async willSendRequest({ request, context }) {
     const { userId, tenantId, correlationId } = context;
@@ -86,11 +70,11 @@ class BuildServiceModule { }
     LeaveTypeModule,
     LeaveModule,
     GraphQLGatewayModule.forRootAsync({
-      imports: [BuildServiceModule],
-      useFactory: async () => ({
+      imports: [CommonModule, BuildServiceModule],
+      useFactory: async (schema: RegistryService) => ({
         gateway: {
-          // Note: All these values comes through service registry. For Demo purposes we hardcoded service list.
-          serviceList: services,
+          // Note: All these values comes through service registry. For Demo purposes we hardcode service list
+          serviceList: schema.services.map(({ name, url }) => ({ name, url })),
         },
         server: {
           context: ({ req }) => ({
@@ -102,7 +86,7 @@ class BuildServiceModule { }
           cors: true,
         },
       }),
-      inject: [GATEWAY_BUILD_SERVICE],
+      inject: [RegistryService, GATEWAY_BUILD_SERVICE],
     }),
     RedisModule.forRootAsync({
       imports: [CommonModule],
