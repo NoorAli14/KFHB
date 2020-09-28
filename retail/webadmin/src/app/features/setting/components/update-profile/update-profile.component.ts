@@ -8,6 +8,8 @@ import { User } from '@feature/entitlement/models/user.model';
 import { BaseComponent } from '@shared/components/base/base.component';
 import { ValidatorService } from '@shared/services/validator-service/validator.service';
 import { takeUntil } from 'rxjs/operators';
+import { getName } from '@shared/helpers/global.helper';
+import { cloneDeep } from 'lodash';
 
 @Component({
   selector: 'app-update-profile',
@@ -22,6 +24,7 @@ export class UpdateProfileComponent extends BaseComponent implements OnInit {
     response: User;
     @Output() sendResponse: EventEmitter<User> = new EventEmitter<any>();
     nationalityList: any[];
+    filteredNationalities: any[];
     genderList: any[]=GENDER_LIST;
     constructor(
         public matDialogRef: MatDialogRef<UpdateProfileComponent>,
@@ -32,6 +35,7 @@ export class UpdateProfileComponent extends BaseComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        var _this=this;
         this._errorEmitService.currentMessage
         .pipe(takeUntil(this._unsubscribeAll))
         .subscribe((item) => {
@@ -50,9 +54,15 @@ export class UpdateProfileComponent extends BaseComponent implements OnInit {
             dateOfBirth: new FormControl(this.data.user.dateOfBirth ? new Date(this.data.user.dateOfBirth) : null, [Validators.required]),
             nationalityId: new FormControl(this.data.user.nationalityId, [Validators.required] ),
         });
-        this.nationalityList= this.data.nationalities
+        this.nationalityList= this.data.nationalities;
+        this.filteredNationalities=this.data.nationalities
+        this.userForm.get('nationalityId').valueChanges.subscribe((value=>{
+            this.filteredNationalities=  this._mapperService.filterData(this.nationalityList,'nationality',value)
+          }));
     }
-   
+    displayFn=(id: string): string=> {
+        return getName(id,'nationality',cloneDeep(this.nationalityList))
+    }
     onSubmit() {
         const model = { ...this.userForm.value };
         model.dateOfBirth= new Date(model.dateOfBirth).toLocaleDateString()

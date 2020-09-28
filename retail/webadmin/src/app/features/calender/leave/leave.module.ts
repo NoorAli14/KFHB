@@ -8,6 +8,7 @@ import { FuseSharedModule } from '@fuse/shared.module';
 import { MaterialModule } from '@shared/modules/material/material.module';
 import { SharedModule } from '@shared/shared.module';
 import { LeaveFormComponent } from './components/leave-form/leave-form.component';
+import { MaterialFormsModule } from '@shared/modules/material-forms/material-forms.module';
 
 
 @NgModule({
@@ -18,6 +19,7 @@ import { LeaveFormComponent } from './components/leave-form/leave-form.component
     SharedModule,
     FuseSidebarModule,
     FuseSharedModule,
+    MaterialFormsModule,
     MaterialModule,
   ]
 })

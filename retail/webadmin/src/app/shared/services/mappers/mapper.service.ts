@@ -55,4 +55,11 @@ export class MapperService {
         });
         return module;
     }
+ filterData(array,field,value: string): string[] {
+        const filterValue = value.toLowerCase();
+        return array.filter(option => {
+            if(!option[field])return;
+            return option[field].toLowerCase().indexOf(filterValue) === 0
+        });
+      }
 }

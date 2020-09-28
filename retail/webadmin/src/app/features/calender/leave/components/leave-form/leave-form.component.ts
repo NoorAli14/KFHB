@@ -5,7 +5,7 @@ import { Leave } from '@feature/calender/models/leave.model';
 import { fuseAnimations } from '@fuse/animations';
 import { BaseComponent } from '@shared/components/base/base.component';
 import { DATE_FORMAT, MODULES } from '@shared/constants/app.constants';
-import { camelToSnakeCase } from '@shared/helpers/global.helper';
+import { camelToSnakeCase, cloneDeep, getName } from '@shared/helpers/global.helper';
 import * as moment from 'moment';
 import { takeUntil, filter } from 'rxjs/operators';
 
@@ -22,6 +22,7 @@ export class LeaveFormComponent extends BaseComponent implements OnInit {
   leaveForm: FormGroup;
   leaveTypes: Array<any>;
   users: Array<any>;
+  filteredUser: Array<any>;
   isAdmin=false;
   constructor(
     public matDialogRef: MatDialogRef<LeaveFormComponent>,
@@ -35,6 +36,7 @@ export class LeaveFormComponent extends BaseComponent implements OnInit {
   ngOnInit(): void {
     this.leaveTypes = this.data.leaveTypes;
     this.users = this.data.users?.filter(x=>x.roles.find(x=>x.name!='SUPER ADMIN'));
+    this.filteredUser = this.data.users?.filter(x=>x.roles.find(x=>x.name!='SUPER ADMIN'));
     
     this._errorEmitService.currentMessage
       .pipe(takeUntil(this._unsubscribeAll))
@@ -57,11 +59,17 @@ export class LeaveFormComponent extends BaseComponent implements OnInit {
       remarks: new FormControl(this.data.leave.remarks, [Validators.required]),
       userId: new FormControl(this.data.leave.userId, [Validators.required]),
     });
-     this.isAdmin= this._authUserService.User.roles.find(x=>x.name==='SUPER ADMIN');
+     this.isAdmin= this._authUserService.User.roles.find(x=>x.name==='SUPER ADMIN')?true: false;
     if(!this.isAdmin){
       this.leaveForm.get('userId').setValue(this._authUserService.User.id);
     }
+    this.leaveForm.get('userId').valueChanges.subscribe((value=>{
+      this.filteredUser=  this._mapperService.filterData(this.users,'firstName',value)
+    }));
   }
+  displayFn=(id: string): string=> {
+    return getName(id,'firstName',cloneDeep(this.users))
+}
   confirmPasswordValidator(control: FormControl): { [s: string]: boolean } {
     if (
       this.leaveForm &&

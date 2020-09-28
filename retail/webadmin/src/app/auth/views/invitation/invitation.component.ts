@@ -1,18 +1,18 @@
 import { Component, OnInit, Injector } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { User } from "@feature/entitlement/models/user.model";
-import { NATIONALITY_LIST, GENDER_LIST } from "@shared/constants/app.constants";
+import {  GENDER_LIST } from "@shared/constants/app.constants";
 import { AuthenticationService } from "@shared/services/auth/authentication.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { FuseConfigService } from "@fuse/services/config.service";
 import { BaseComponent } from "@shared/components/base/base.component";
 import {
     snakeToCamelObject,
-    camelToSnakeCase,
+    camelToSnakeCase, getName, cloneDeep
 } from "@shared/helpers/global.helper";
 import { ValidatorService } from "@shared/services/validator-service/validator.service";
 import { fuseAnimations } from "@fuse/animations";
-import { takeUntil } from "rxjs/operators";
+import {  takeUntil } from "rxjs/operators";
 import { MESSAGES } from "@shared/constants/messages.constant";
 import { REGEX } from '@config/index';
 
@@ -24,15 +24,17 @@ import { REGEX } from '@config/index';
 })
 export class InvitationComponent extends BaseComponent implements OnInit {
     invitationForm: FormGroup;
-
+    myControl = new FormControl();
     response: User;
     nationalityList: any[]=[];
+    filteredNationalities: any[]=[];
     genderList: any[] = GENDER_LIST;
     token: string;
     constructor(
         private _authService: AuthenticationService,
         private _fuseConfigService: FuseConfigService,
         private activatedRoute: ActivatedRoute,
+        private router:Router,
         injector: Injector
     ) {
         super(injector);
@@ -55,7 +57,9 @@ export class InvitationComponent extends BaseComponent implements OnInit {
                 },
             },
         };
+    
     }
+ 
     ngOnInit(): void {
         this.invitationForm = new FormGroup({
             id: new FormControl(),
@@ -78,6 +82,12 @@ export class InvitationComponent extends BaseComponent implements OnInit {
             ]),
         });
         this.getUserByToken(this.token);
+        this.invitationForm.get('nationalityId').valueChanges.subscribe((value=>{
+            this.filteredNationalities=  this._mapperService.filterData(this.nationalityList,'nationality',value)
+          }));
+    }
+    displayFn=(id: string): string=> {
+        return getName(id,'nationality',cloneDeep(this.nationalityList))
     }
     confirmPasswordValidator(control: FormControl): { [s: string]: boolean } {
         if (
@@ -99,6 +109,9 @@ export class InvitationComponent extends BaseComponent implements OnInit {
                 (response) => {
                     this.errorType = "success";
                     this.responseMessage = MESSAGES.INVITATION_ACCEPTED();
+                    setTimeout(() => {
+                        this.router.navigateByUrl('/auth/login');
+                    }, 1000);
                 },
                 (error) => {
                     this.errorType = "error";
@@ -115,6 +128,7 @@ export class InvitationComponent extends BaseComponent implements OnInit {
                     const user = snakeToCamelObject(response[0]);
                     this.invitationForm.patchValue(user);
                     this.nationalityList= response[1];
+                    this.filteredNationalities= response[1];
                 },
                 ({ error }) => {
                     this.errorType = "error";

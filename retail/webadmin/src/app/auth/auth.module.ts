@@ -11,7 +11,6 @@ import { MaterialFormsModule } from '@shared/modules/material-forms/material-for
 import { PhoneVerificationComponent } from './views/phone-verification/phone-verification.component';
 import { SharedModule } from '@shared/shared.module';
 import { InvitationComponent } from './views/invitation/invitation.component';
-
 @NgModule({
     declarations: [LoginComponent,  ForgotPasswordComponent, ResetPasswordComponent, PhoneVerificationComponent, InvitationComponent],
     imports: [
