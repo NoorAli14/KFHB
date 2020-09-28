@@ -9,12 +9,12 @@ import { map, timeout, catchError } from 'rxjs/operators';
 import { TimeoutError, throwError } from 'rxjs';
 import { IHEADER } from '@common/interfaces/';
 import { HttpHeaders } from '@core/context';
-
+import { ConfigurationService } from '@common/configuration/configuration.service';
 @Injectable()
 export class GqlClientService {
   private readonly logger: Logger = new Logger(GqlClientService.name);
   private __header: IHEADER;
-  constructor(private readonly http: HttpService) { }
+  constructor(private readonly http: HttpService, private readonly config: ConfigurationService) { }
 
   public setHeaders(header: IHEADER): GqlClientService {
     this.__header = header;
@@ -27,7 +27,7 @@ export class GqlClientService {
 
     return this.http
       .post(
-        '/graphql',
+        `http://127.0.0.1:${this.config.APP.PORT}/graphql`,
         {
           query: input,
         },
