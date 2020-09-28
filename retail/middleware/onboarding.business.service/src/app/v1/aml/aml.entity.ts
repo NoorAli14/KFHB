@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional } from 'class-validator';
 
-export class Aml {
+export class AML {
   @ApiProperty({
     title: 'Aml Request ID',
     example: '3dfdecc1-a616-4817-a841-61d824d82a13',

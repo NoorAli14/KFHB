@@ -27,7 +27,7 @@ import { ComplianceDto } from './compliance.dto';
 import { ITemplateResponse } from './compliance.interface';
 import { Customer } from '../customers/customer.entity';
 @ApiTags('Compliance Module')
-@Controller('compliances')
+@Controller('compliance')
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
 export class CompliancesController {

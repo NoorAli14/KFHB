@@ -2,10 +2,10 @@ import { Controller, Post, UseGuards, HttpStatus, HttpCode } from '@nestjs/commo
 import { ApiTags, ApiBearerAuth, ApiOkResponse, ApiOperation } from '@nestjs/swagger';
 import { AmlService } from './aml.service';
 import { AuthGuard, CurrentUser } from '@common/index';
-import { Aml } from './aml.entity';
+import { AML } from './aml.entity';
 import { Customer } from '../customers/customer.entity';
 
-@ApiTags('Aml Module')
+@ApiTags('AML Module')
 @Controller('aml')
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
@@ -19,9 +19,9 @@ export class AmlController {
             'A successful request returns the HTTP 200 OK status code and a JSON response body that shows aml status.',
         summary: 'Aml screening status',
     })
-    @ApiOkResponse({ type: Aml, description: 'Aml request Info' })
+    @ApiOkResponse({ type: AML, description: 'Aml request Info' })
     @HttpCode(HttpStatus.OK)
-    async screening(@CurrentUser() customer: Customer): Promise<Aml> {
+    async screening(@CurrentUser() customer: Customer): Promise<AML> {
         return this.amlService.screening(customer.id);
     }
 }
