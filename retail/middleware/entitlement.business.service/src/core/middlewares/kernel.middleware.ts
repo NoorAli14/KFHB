@@ -8,6 +8,7 @@ import { Swagger } from '@core/providers/swagger.provider';
 import { RateLimiterMiddleware } from './rate-limiter.middleware';
 import { CorrelationMiddleware } from './correlation.middleware';
 import { CorsMiddleware } from './cors.middleware';
+import { RegistryMiddleware } from "./registry.middleware";
 import { formattedHeader } from '@common/utilities';
 import { RequestContextMiddleware, setContext } from '@core/context';
 export class KernelMiddleware {
@@ -56,6 +57,10 @@ export class KernelMiddleware {
       app = RateLimiterMiddleware.init(app, config);
     }
 
+    /*
+     * Middleware: Authorize requests based on channels and services
+     */
+    app.use(RegistryMiddleware());
     /** Express.js middleware that is responsible for initializing the context for each request. */
     app.use(RequestContextMiddleware());
 
