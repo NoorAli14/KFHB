@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { RedisService } from 'nestjs-redis';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { NewAppointmentInput } from './appointment.dto';
@@ -16,6 +16,8 @@ import { HttpHeaders } from '@core/context';
 
 @Injectable()
 export class AppointmentsService {
+  private readonly logger: Logger = new Logger(AppointmentsService.name);
+
   private REDIS_KEY = 'rbx_call_appointments';
 
   constructor(
@@ -89,21 +91,32 @@ export class AppointmentsService {
     return response;
   }
 
-  async findById(id: string, keys?: string[]): Promise<any> {
-    console.log(id, 'curent user 1111111', keys);
-    return this.appointmentDB.findOne({ id: id }, keys);
+  async findById(
+    currentUser: ICurrentUser,
+    id: string,
+    output?: string[],
+  ): Promise<Appointment> {
+    this.logger.log(`start finding appointment by [${id}]`);
+    return this.appointmentDB.findOne(
+      {
+        id: id,
+        deleted_on: null,
+        tenant_id: currentUser.tenant_id,
+      },
+      output,
+    );
   }
 
   async findByUserId(
     currentUser: ICurrentUser,
     user_id: string,
     output?: string[],
-  ): Promise<any> {
+  ): Promise<Appointment> {
     return this.appointmentDB.findOne(
       {
         user_id: user_id,
-        // tenant_id: currentUser.tenant_id,
-        // deleted_on: null,
+        tenant_id: currentUser.tenant_id,
+        deleted_on: null,
       },
       output,
     );
@@ -280,14 +293,9 @@ export class AppointmentsService {
       }
     }`;
 
-    const headers = {
-      'x-user-id': user_id,
-      'x-tenant-id': user_id,
-    };
-
     const result = await this.gqlClient.send(
       params,
-      headers,
+      { headers: HttpHeaders() },
       this.configService.get('ENV_RBX_ENTITLEMENT_SERVER'),
     );
     return result;

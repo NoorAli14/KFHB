@@ -59,7 +59,11 @@ export class AppointmentsResolver {
     @Args('appointment_id') appointment_id: string,
     @Fields(Appointment) columns: string[],
   ): Promise<Appointment> {
-    return this.appointmentsService.findById(appointment_id, columns);
+    return this.appointmentsService.findById(
+      currentUser,
+      appointment_id,
+      columns,
+    );
   }
 
   @Query(() => Appointment)
@@ -68,7 +72,6 @@ export class AppointmentsResolver {
     @Args('user_id') user_id: string,
     @Fields(Appointment) output: string[],
   ): Promise<Appointment> {
-    console.log(currentUser, '0000000000000');
     return await this.appointmentsService.findByUserId(
       currentUser,
       user_id,
