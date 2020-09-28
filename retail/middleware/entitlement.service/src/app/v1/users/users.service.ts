@@ -82,11 +82,6 @@ export class UserService {
     }
     if (!newUser.status) {
       newUser.status = STATUS.PENDING;
-    } else if (!STATUS[newUser.status]) {
-      throw new HttpException({
-        status: HttpStatus.BAD_REQUEST,
-        error: MESSAGES.INVALID_STATUS,
-      }, HttpStatus.BAD_REQUEST);
     }
     newUser = {
       ...newUser,
@@ -96,15 +91,8 @@ export class UserService {
       created_by: currentUser.id,
       updated_by: currentUser.id,
     };
-    const result = await this.userDB.create(newUser, output);
-    if (result?.length > 0) {
-      return result[0]
-    } else {
-      throw new HttpException({
-        status: HttpStatus.BAD_REQUEST,
-        error: MESSAGES.BAD_REQUEST,
-      }, HttpStatus.BAD_REQUEST);
-    }
+    const [result] = await this.userDB.create(newUser, output);
+    return result;
   }
 
   async delete(currentUser: ICurrentUser, id: string): Promise<boolean> {
