@@ -1,4 +1,4 @@
-import { Injectable, HttpService } from '@nestjs/common';
+import { Injectable, HttpService, Logger } from '@nestjs/common';
 import { AmlRequestRepository } from '@core/repository/aml-request-repository';
 import { AmlResponseRepository } from '@core/repository/aml-response-repository';
 import { map } from 'rxjs/operators';
@@ -9,11 +9,12 @@ import { HttpHeaders } from '@core/context';
 
 @Injectable()
 export class AmlRequestService {
+  private readonly logger: Logger = new Logger(AmlRequestService.name);
   constructor(
     private readonly http: HttpService,
     private readonly amlRequestDB: AmlRequestRepository,
     private readonly amlResponseDB: AmlResponseRepository,
-  ) {}
+  ) { }
 
   async list(currentUser: ICurrentUser, user_id: string, output: string[]) {
     return this.amlRequestDB.findBy(
@@ -99,14 +100,14 @@ export class AmlRequestService {
       })
       .pipe(map(res => res.data))
       .toPromise();
-
+    this.logger.log(amlScreening)
     const [response] = await this.amlRequestDB.update(
       { id: amlRequest.id },
       { status: amlScreening.status },
       output,
     );
 
-    const [result] = await this.amlResponseDB.create(
+    await this.amlResponseDB.create(
       {
         request_id: response.id,
         status: amlScreening.status,
