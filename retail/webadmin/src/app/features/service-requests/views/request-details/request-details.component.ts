@@ -63,6 +63,7 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
     this.initSearch();
   }
   getData() {
+    
     this._serviceRequestsService.getServiceRequestsById(this.id).subscribe(
         (response) => {
             this.serviceRequests = response.data;
@@ -84,7 +85,7 @@ updateStatus(status) {
   });
   
   this._serviceRequestsService
-      .updateStatus(this.id, data)
+      .updateStatus( data)
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe(
           (response) => {
