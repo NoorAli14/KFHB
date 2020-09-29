@@ -8,7 +8,7 @@ import { IHEADER } from './interfaces';
  * In Futuer we can add this to the JSON Prototype to extend the functionality of JSON library instead of calling a custom function
  * @param object Object to Stringify
  */
-export const goGraphQL = (input: { [key: string]: any }): string => {
+export const toGraphQL = (input: { [key: string]: any }): string => {
   return JSON.stringify(input).replace(/\"([^(\")"]+)\":/g, '$1:');
 };
 

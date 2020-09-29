@@ -10,7 +10,7 @@ import * as moment from 'moment';
 import { APPOINTMENT_STATUS } from '@common/constants';
 import { GqlClientService } from '@common/libs/gqlclient/gqlclient.service';
 import { PushNotificationModel } from './push_notification.model';
-import { goGraphQL } from '@common/utilities';
+import { toGraphQL } from '@common/utilities';
 import { ICurrentUser } from '@common/interfaces';
 
 @Injectable()
@@ -62,18 +62,6 @@ export class AppointmentsService {
   ): Promise<Appointment> {
     // Section: Validating Input
     // Validate the input and Time of the appointment
-    // Check the Past date and time
-    if (newAppointment.call_time <= new Date()) {
-      throw new Error('Selected call time is in the Past.');
-    }
-
-    // Query the other service to check the available slots in the Holidays and working days.
-    const available_agents = await this.check_agent_availability(
-      newAppointment.call_time,
-      newAppointment.gender,
-    );
-
-    // End Section: Validating Input
 
     // Section: Check the Duplicate
     // TODO: Only if we want to allow limited number of appointment on a specific time.
@@ -84,6 +72,27 @@ export class AppointmentsService {
       newAppointment.user_id,
     );
     // End Section: Check the Duplicate
+
+    // Check the Past date and time
+    if (newAppointment.call_time <= new Date()) {
+      throw new Error('Selected call time is in the Past.');
+    }
+    newAppointment.gender =
+      (newAppointment.gender &&
+        (newAppointment.gender === 'male' || newAppointment.gender === 'Male'
+          ? 'M'
+          : 'F')) ||
+      null;
+
+    // Query the other service to check the available slots in the Holidays and working days.
+    const available_agents = await this.check_agent_availability(
+      newAppointment.call_time,
+      newAppointment.gender,
+    );
+
+    if (available_agents && available_agents.length <= 0)
+      throw new Error('Agents not available, please select other time');
+    // End Section: Validating Input
 
     const [response] = await this.appointmentDB.create(
       {
@@ -286,12 +295,15 @@ export class AppointmentsService {
     gender: string,
   ): Promise<any> {
     const query: string = `query{
-        result: findAvailableUsers(input: ${goGraphQL({
+        result: findAvailableUsers(input: ${toGraphQL({
           call_time,
           gender,
         })}){
         id
         email
+        contact_no
+        created_on
+        updated_on
       }
     }`;
 
@@ -303,7 +315,7 @@ export class AppointmentsService {
     user_id: string,
   ) {
     const mutation = `mutation {
-      result: sendPushNotification(input: ${goGraphQL(input)}) {
+      result: sendPushNotification(input: ${toGraphQL(input)}) {
         id
         platform
         device_id
