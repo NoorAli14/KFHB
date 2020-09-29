@@ -47,4 +47,12 @@ export const GQL_SERVICES = [
     context: '/graphql',
     is_secure: false,
   },
+  {
+    name: 'Identity Service',
+    host_name: 'retail_identity',
+    port: 5010,
+    version: '1.0',
+    context: '/graphql',
+    is_secure: false,
+  },
 ];
