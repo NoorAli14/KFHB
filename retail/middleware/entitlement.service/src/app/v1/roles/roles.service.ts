@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { RoleRepository } from '@core/repository/role.repository';
 import { STATUS } from '@common/constants';
 import { KeyValInput } from '@common/inputs/key-val.input';
-import { ICurrentUser, ITenant } from '@common/interfaces';
+import { ICurrentUser } from '@common/interfaces';
 import { Role } from './role.model';
 import { BadRequestException, RoleAlreadyExistsException } from './exceptions';
 import { getCurrentTimeStamp } from '@common/utilities';
@@ -54,10 +54,6 @@ export class RoleService {
     roleObj: Record<string, any>,
     output?: string[],
   ): Promise<any> {
-    if (roleObj.status && !STATUS[roleObj.status]) {
-      throw new BadRequestException();
-    }
-    // Why this condition in update?
     if (roleObj.name && (await this.isNameTaken(currentUser, roleObj, id))) {
       throw new RoleAlreadyExistsException(roleObj.name);
     }
@@ -80,8 +76,6 @@ export class RoleService {
   ): Promise<Role> {
     if (!newRole.status) {
       newRole.status = STATUS.ACTIVE;
-    } else if (!STATUS[newRole.status]) {
-      throw new BadRequestException();
     }
     newRole = {
       ...newRole,
@@ -89,7 +83,9 @@ export class RoleService {
       created_by: currentUser.id,
       updated_by: currentUser.id,
     };
-    await this.isNameTaken(currentUser, newRole); // What to to if name is taken?
+    if (newRole.name && (await this.isNameTaken(currentUser, newRole))) {
+      throw new RoleAlreadyExistsException(newRole.name);
+    }
     const [result] = await this.roleDB.create(newRole, output);
     return result;
   }
