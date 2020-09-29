@@ -10,7 +10,7 @@ import * as moment from 'moment';
 import { APPOINTMENT_STATUS } from '@common/constants';
 import { GqlClientService } from '@common/libs/gqlclient/gqlclient.service';
 import { PushNotificationModel } from './push_notification.model';
-import { stringifyForGQL } from '@common/utilities';
+import { goGraphQL } from '@common/utilities';
 import { ICurrentUser } from '@common/interfaces';
 
 @Injectable()
@@ -25,10 +25,11 @@ export class AppointmentsService {
   ) {}
 
   private async throw_if_appointment_exist(call_time: Date, user_id: string) {
-    const record = this.appointmentDB.findOne(
+    const record = await this.appointmentDB.findOne(
       {
         call_time: call_time,
         user_id: user_id,
+        deleted_on: null,
       },
       ['id'],
     );
@@ -58,7 +59,7 @@ export class AppointmentsService {
     currentUser: ICurrentUser,
     newAppointment: NewAppointmentInput,
     output?: string[],
-  ): Promise<any> {
+  ): Promise<Appointment> {
     // Section: Validating Input
     // Validate the input and Time of the appointment
     // Check the Past date and time
@@ -78,7 +79,7 @@ export class AppointmentsService {
     // TODO: Only if we want to allow limited number of appointment on a specific time.
     // this.throw_if_appointment_limit_exceed(newAppointment.call_time)
 
-    this.throw_if_appointment_exist(
+    await this.throw_if_appointment_exist(
       newAppointment.call_time,
       newAppointment.user_id,
     );
@@ -280,25 +281,29 @@ export class AppointmentsService {
     return this.gqlClient.client('ENV_RBX_IDX_BASE_URL').send(params);
   }
 
-  private async check_agent_availability(call_time: Date, gender: string) {
-    const params = `query{
-        result: findAvailableUsers(input:{call_time: "${call_time}", gender: "${gender}"}){
+  private async check_agent_availability(
+    call_time: Date,
+    gender: string,
+  ): Promise<any> {
+    const query: string = `query{
+        result: findAvailableUsers(input: ${goGraphQL({
+          call_time,
+          gender,
+        })}){
         id
         email
       }
     }`;
 
-    return this.gqlClient.client('ENV_RBX_ENTITLEMENT_SERVER').send(params);
+    return this.gqlClient.client('ENV_RBX_ENTITLEMENT_SERVER').send(query);
   }
 
   private async send_push_notification(
     input: PushNotificationModel,
     user_id: string,
   ) {
-    const keys = stringifyForGQL(input);
-
     const mutation = `mutation {
-      result: sendPushNotification(input: ${keys}) {
+      result: sendPushNotification(input: ${goGraphQL(input)}) {
         id
         platform
         device_id
