@@ -15,8 +15,6 @@ import { ICurrentUser } from '@common/interfaces';
 
 @Injectable()
 export class AppointmentsService {
-  private REDIS_KEY = 'rbx_call_appointments';
-
   constructor(
     private readonly appointmentDB: AppointmentRepository,
     private readonly configService: ConfigurationService,
@@ -165,7 +163,7 @@ export class AppointmentsService {
       this.configService.REDIS.name,
     );
     const redis_response = redis_client.set(
-      this.REDIS_KEY,
+      process.env.ENV_RBX_REDIS_KEY,
       JSON.stringify(appointments),
     );
 
@@ -203,7 +201,7 @@ export class AppointmentsService {
       this.configService.REDIS.name,
     );
 
-    const key_result = await redis_client.get(this.REDIS_KEY);
+    const key_result = await redis_client.get(process.env.ENV_RBX_REDIS_KEY);
     if (!key_result) {
       return;
     }
@@ -268,7 +266,7 @@ export class AppointmentsService {
     // Update only if there is any Notification Sent.
     if (appointments_coming.length > 0) {
       const redis_response = redis_client.set(
-        this.REDIS_KEY,
+        process.env.ENV_RBX_REDIS_KEY,
         JSON.stringify(appointments),
       );
     }
