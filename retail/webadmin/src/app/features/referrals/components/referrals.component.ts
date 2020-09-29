@@ -3,9 +3,6 @@ import { CONFIG } from '../../../config';
 import { Component, OnInit, ViewEncapsulation, ViewChild, Injector } from '@angular/core';
 import { fuseAnimations } from '@fuse/animations';
 import { MatDialog } from '@angular/material/dialog';
-
-import { MESSAGES } from '@shared/constants/messages.constant';
-
 import { FormControl } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
@@ -16,10 +13,9 @@ import {
   snakeToCamelObject,
   removeRandom,
 } from '@shared/helpers/global.helper';
-import {
-  ConfirmDialogModel,
-  ConfirmDialogComponent,
-} from '@shared/components/confirm-dialog/confirm-dialog.component';
+import { Referral } from '../model/referral.model';
+import { ReferralService } from '../services/referral.service';
+
 
 @Component({
   selector: 'app-referrals',
@@ -30,34 +26,34 @@ import {
 })
 export class ReferralsComponent extends BaseComponent implements OnInit {
   dialogRef: any;
-  userPermissions: any[];
+  referrals: Referral[];
   username: FormControl;
   pageSize: number = CONFIG.PAGE_SIZE;
   pageSizeOptions: Array<number> = CONFIG.PAGE_SIZE_OPTIONS;
 
   displayedColumns = [
-    'RIM No. of Referred Customer',
-    'Name of Referred Custome',
-    'RIM of Referring Customer',
-    'Name of Referring Customer',
-    'Date of Jazeel Registration',
-    'Customer opened account',
-    'Date of account opening',
-    'Referred Customer Email',
-    'Referred Customer Mobile No.',
-    'Referring Customer email',
-    'Referring customer mobile no.'
+    'requestType',
+    'nameOfReferringCustomer',
+    'referringCustomerEmail',
+    'referringCustomerMobileNo​',
+    'rimOfReferringCustomer​',
+    'dateOfAccountOpening​',
+    'referredCustomerEmail',
+    'referredCustomerMobileNo​',
+    'rimOfReferredCustomer​',
   ];
+
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
-  constructor(public _matDialog: MatDialog, injector: Injector) {
+  constructor(public _matDialog: MatDialog, private _service: ReferralService, injector: Injector) {
     super(injector);
   }
   ngOnInit(): void {
     super.ngOnInit();
     this.username = new FormControl('');
     this.initSearch();
+    this.getData();
   }
   initSearch(): void {
     this.username.valueChanges.subscribe((text: string) => {
@@ -74,4 +70,35 @@ export class ReferralsComponent extends BaseComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
+  getData(): void {
+    this._service
+      .getTransactions().pipe().subscribe(
+        (response) => {
+          this.referrals = response.data;
+          this.updateGrid(this.referrals);
+        },
+        (response) => super.onError(response)
+      );
+  }
+
+  downloadReport(): void {
+    this._service
+      .getTransactionsReport().pipe().subscribe(
+        (response) => {
+          this.downlaodReport(response.data);
+        },
+        (response) => super.onError(response)
+      );
+  }
+  downlaodReport(data) {
+    const date = new Date();
+    const linkSource = 'data:application/excel;base64,' + data;
+    const downloadLink = document.createElement("a");
+    const fileName = 'REPORT' + date.getDate() + '.' + date.getMonth() + 1 + '.' + date.getFullYear() + ".xlsx";
+
+    downloadLink.href = linkSource;
+    downloadLink.download = fileName;
+    downloadLink.click();
+  }
+
 }

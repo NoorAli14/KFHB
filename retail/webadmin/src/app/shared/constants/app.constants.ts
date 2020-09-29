@@ -44,6 +44,8 @@ export const NATIONALITY_LIST: Array<Select> = [
 const ENTITLEMENT = "/api/v1/entitlements/";
 const REFERENCE = "/api/v1/references/";
 const SERVICEREQUEST ="/requests/api/v1/service/request/";
+const CUSTOMERS = 'customers/api/v1/';
+const REFERRALREQUEST = 'customers/api/v1/customers/';
 
 export const URI = {
     USER_INVITATION: `${ENTITLEMENT}invitations`,
@@ -51,9 +53,9 @@ export const URI = {
     ROLE: `${ENTITLEMENT}roles`,
     PERMISSION: `${ENTITLEMENT}permissions`,
     MODULE: `${ENTITLEMENT}modules`,
-    LOGIN: `${ENTITLEMENT}auth/login`,
-    REFRESH: `${ENTITLEMENT}auth/refresh-token`,
-    LOGOUT: `${ENTITLEMENT}auth/logout`,
+    LOGIN: `${CUSTOMERS}auth/login`,
+    REFRESH: `${CUSTOMERS}auth/refresh-token`,
+    LOGOUT: `${CUSTOMERS}auth/logout`,
     FORGOT_PASSWORD: `${ENTITLEMENT}users/password`,
     RESET_PASSWORD: `${ENTITLEMENT}`,
     WORKING_DAYS: `${ENTITLEMENT}working-days`,
@@ -63,4 +65,9 @@ export const URI = {
     SERVICEREQUESTLIST: `${SERVICEREQUEST}user/all`,
     SERVICEREQUESTDETAILS: `${SERVICEREQUEST}`,
     SERVICEREQUESTUBDATESTATUS: `${SERVICEREQUEST}status/update`,
+    REFERRAL: `${REFERRALREQUEST}referral`,
+    REFERRALTRANSACTIONS: `${REFERRALREQUEST}referral/transactions`,
+    TRANSACTIONSREPORT: `${REFERRALREQUEST}referral/transactions/excel/report`
+
+
 };
