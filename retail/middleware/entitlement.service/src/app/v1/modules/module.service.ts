@@ -1,23 +1,31 @@
-import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
-import {ModuleRepository} from "@core/repository/module.repository";
-import {MESSAGES, STATUS} from "@common/constants";
-import { KeyValInput } from "@common/inputs/key-val.input";
+import { ModuleRepository } from '@core/repository/module.repository';
+import { STATUS } from '@common/constants';
+import { KeyValInput } from '@common/inputs/key-val.input';
 import { Module } from './module.model';
 
 @Injectable()
 export class ModuleService {
   constructor(private moduleDB: ModuleRepository) {}
 
-  async list(output: string[], paginationParams: Record<string, any>): Promise<any> {
-    return this.moduleDB.listWithPagination(paginationParams, output, {parent_id: null});
+  async list(
+    output: string[],
+    paginationParams: Record<string, any>,
+  ): Promise<any> {
+    return this.moduleDB.listWithPagination(paginationParams, output, {
+      parent_id: null,
+    });
   }
 
   async findById(id: string, output?: string[]): Promise<Module> {
     return await this.moduleDB.findOne({ id: id }, output);
   }
 
-  async findByProperty(checks: KeyValInput[], output?: string[]): Promise<Module[]> {
+  async findByProperty(
+    checks: KeyValInput[],
+    output?: string[],
+  ): Promise<Module[]> {
     const conditions = {};
     checks.forEach(check => {
       conditions[check.record_key] = check.record_value;
@@ -34,8 +42,11 @@ export class ModuleService {
     return result;
   }
 
-  async create(newModule: Record<string, any>, output?: string[]): Promise<Module> {
-    if(!newModule.status){
+  async create(
+    newModule: Record<string, any>,
+    output?: string[],
+  ): Promise<Module> {
+    if (!newModule.status) {
       newModule.status = STATUS.ACTIVE;
     }
     const [result] = await this.moduleDB.create(newModule, output);
