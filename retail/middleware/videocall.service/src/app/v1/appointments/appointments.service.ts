@@ -282,7 +282,7 @@ export class AppointmentsService {
 
   private async check_agent_availability(call_time: Date, gender: string) {
     const params = `query{
-        result: findAvailableUsers(input:{call_time: ${call_time}, gender: ${gender}}){
+        result: findAvailableUsers(input:{call_time: "${call_time}", gender: "${gender}"}){
         id
         email
       }
