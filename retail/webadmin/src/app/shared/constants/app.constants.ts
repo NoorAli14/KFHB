@@ -43,6 +43,7 @@ export const NATIONALITY_LIST: Array<Select> = [
 
 const ENTITLEMENT = "/api/v1/entitlements/";
 const REFERENCE = "/api/v1/references/";
+const SERVICEREQUEST ="/requests/api/v1/service/request/";
 
 export const URI = {
     USER_INVITATION: `${ENTITLEMENT}invitations`,
@@ -59,4 +60,7 @@ export const URI = {
     HOLIDAYS: `${ENTITLEMENT}holidays`,
     LEAVES: `${ENTITLEMENT}leave-types`,
     COUNTRIES: `${REFERENCE}countries`,
+    SERVICEREQUESTLIST: `${SERVICEREQUEST}user/all`,
+    SERVICEREQUESTDETAILS: `${SERVICEREQUEST}`,
+    SERVICEREQUESTUBDATESTATUS: `${SERVICEREQUEST}status/update`,
 };

@@ -3,13 +3,14 @@ import { CONFIG } from '../../../../config';
 import { Component, OnInit, ViewEncapsulation, ViewChild ,Input, Injector} from '@angular/core';
 import { fuseAnimations } from '@fuse/animations';
 import { MatDialog } from '@angular/material/dialog';
-
+import {  ServiceRequests } from '@feature/service-requests/models/service-requests.model';
 import { MESSAGES } from '@shared/constants/messages.constant';
-
 import { FormControl } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { ActivatedRoute } from '@angular/router';
+import { takeUntil } from "rxjs/operators";
 import {
   camelToSentenceCase,
   camelToSnakeCaseText,
@@ -20,6 +21,7 @@ import {
   ConfirmDialogModel,
   ConfirmDialogComponent,
 } from '@shared/components/confirm-dialog/confirm-dialog.component';
+import { ServiceRequestsService } from '@feature/service-requests/services/sercice-reuests.service';
 @Component({
   selector: 'app-request-details',
   templateUrl: './request-details.component.html',
@@ -29,10 +31,12 @@ import {
 })
 export class RequestDetailsComponent extends BaseComponent implements OnInit {
   dialogRef: any;
+  id: string;
   userPermissions: any[];
   username: FormControl;
   pageSize: number = CONFIG.PAGE_SIZE;
   pageSizeOptions: Array<number> = CONFIG.PAGE_SIZE_OPTIONS;
+  serviceRequests : ServiceRequests[];
   displayedColumns = [
     'Document Name',
     'View Upload & Download PDF',
@@ -43,16 +47,55 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
 
-  constructor(public _matDialog: MatDialog, injector: Injector) {
+  constructor(public _matDialog: MatDialog, injector: Injector,
+    private _serviceRequestsService: ServiceRequestsService, 
+    private activatedRoute: ActivatedRoute) {
     super(injector);
   }
 
   ngOnInit(): void {
     super.ngOnInit();
+    this.activatedRoute.params.subscribe(paramsId => {
+      this.id = paramsId.id;
+    });
+    this.getData();
     this.username = new FormControl('');
     this.initSearch();
   }
+  getData() {
+    this._serviceRequestsService.getServiceRequestsById(this.id).subscribe(
+        (response) => {
+            this.serviceRequests = response.data;
+            console.log(response);
+        },
+        (error) => {
+            console.log(error);
+        }
+    );
+}
 
+updateStatus(status) {
+  const data = JSON.stringify({
+    
+      id: this.id,
+      status: status,
+      comments: null,
+    
+  });
+  
+  this._serviceRequestsService
+      .updateStatus(this.id, data)
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(
+          (response) => {
+              this.errorType = "success";
+              console.log(response);
+          },
+          (response) => {
+              this._errorEmitService.emit(MESSAGES.UNKNOWN(), "error");
+          }
+      );
+}
 
   initSearch(): void {
     this.username.valueChanges.subscribe((text: string) => {

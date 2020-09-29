@@ -44,9 +44,9 @@
                     <mat-cell *matCellDef="let element; let i = dataIndex" >
                        
                         <span *ngIf="!key.includes('action'); else action">
-                            <span *ngIf="element[camelToSnakeCase(key)]; else defaultText">
-                                <ng-container  *ngIf="camelToSnakeCase(key).indexOf('created')<0; else date "  >
-                                    {{element[camelToSnakeCase(key)]}}
+                            <span *ngIf="element[key]; else defaultText">
+                                <ng-container *ngIf="camelToSnakeCase(key).indexOf('created')<0; else date "  >
+                                    {{element[key]}}
                                 </ng-container>
                             
                             </span>
@@ -57,8 +57,6 @@
                         </ng-template>
                         
                         <ng-template #action>
-                            <mat-icon appPermission [permissions]="userPermissions" matTooltip="Delete user" [type]="'delete'" color="warn" type="button" (click)=" confirmDialog('delete',element['id'])">delete</mat-icon> &nbsp;&nbsp;
-                            <mat-icon type="button" (click)="openDialog(element)" matTooltip="Delete user">mode_edit</mat-icon> &nbsp;&nbsp;
                             <mat-icon type="button" (click)="onDetail(element['id'])" matTooltip="Explore">explore</mat-icon>
                             <mat-icon  *ngIf="element['status']==='PENDING'"  color="success"  matTooltip="Resend Invitation" type="button" (click)=" confirmDialog('invite',element['id'])">near_me</mat-icon> &nbsp;&nbsp;
                         </ng-template>
