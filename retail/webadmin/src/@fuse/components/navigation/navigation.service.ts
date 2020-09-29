@@ -119,18 +119,18 @@ export class FuseNavigationService {
             // return;
         }
         // Add to the registry
-        const refferalsItem = {
+        const referralsItem = {
 
             id: 'referrals',
             title: 'Referrals',
             type: 'item',
             icon: 'cached',
-            url: '/refferals',
+            url: '/referrals',
 
         };
         const findRefferal = navigation.find((x) => x.id == "referrals");
         if (!findRefferal) {
-            navigation.push(refferalsItem);
+            navigation.push(referralsItem);
         }
         const serviceRequestsItem = {
 

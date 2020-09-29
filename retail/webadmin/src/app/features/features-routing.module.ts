@@ -23,7 +23,7 @@ const routes: Routes = [
     loadChildren: () => import('./error/error.module').then(m => m.ErrorModule)
   },
   {
-    path: 'refferals',
+    path: 'referrals',
     loadChildren: () => import('./referrals/referrals.module').then(m => m.ReferralsModule)
   },
   {

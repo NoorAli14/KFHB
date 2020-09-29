@@ -4,15 +4,14 @@
 
 export const environment = {
   production: false,
-	staging: false,
-	test: false,
-  develop:false,
+  staging: false,
+  test: false,
+  develop: false,
   isMockEnabled: true, // You have to switch this, when your real back-end is done
   authTokenKey: 'authce9d77b308c149d5992a80073637e4d5',
   APP_SECRETE: "abfFGHIepqrstuvwSTUCDEXYZ",
-  // API_BASE_URL:"http://localhost:3000",
-  API_BASE_URL:"http://52.183.133.141",
-  hmr:false
+  API_BASE_URL: "https://aionj2middlewaredev.westindia.cloudapp.azure.com:8080/",
+  hmr: false
 };
 
 /*
