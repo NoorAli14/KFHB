@@ -108,7 +108,7 @@ export class AppointmentsService {
     currentUser: ICurrentUser,
     id: string,
     output?: string[],
-  ): Promise<any> {
+  ): Promise<Appointment> {
     return this.appointmentDB.findOne(
       {
         id: id,
@@ -123,7 +123,7 @@ export class AppointmentsService {
     currentUser: ICurrentUser,
     user_id: string,
     output?: string[],
-  ): Promise<any> {
+  ): Promise<Appointment> {
     return this.appointmentDB.findOne(
       {
         user_id: user_id,
@@ -134,7 +134,7 @@ export class AppointmentsService {
     );
   }
 
-  async findByIds(ids: readonly string[]): Promise<any> {
+  async findByIds(ids: readonly string[]): Promise<Appointment> {
     return this.appointmentDB.findByIds(ids);
   }
 
@@ -176,7 +176,7 @@ export class AppointmentsService {
         return appointment.id;
       });
 
-      this.appointmentDB.updateByIds(
+      await this.appointmentDB.updateByIds(
         appointment_ids,
         {
           status: APPOINTMENT_STATUS.QUEUED,
@@ -229,7 +229,7 @@ export class AppointmentsService {
     });
 
     // Send Push Notification through the Notification Service.
-    appointments_coming.forEach(appointment => {
+    appointments_coming.forEach(async appointment => {
       console.log('Appointment Coming At:', appointment.call_time);
 
       // Send Push Notification
@@ -242,9 +242,7 @@ export class AppointmentsService {
         image_url: 'http://lorempixel.com/400/200',
       };
 
-      const user_id = appointment.user_id;
-
-      this.send_push_notification(notification, user_id);
+      await this.send_push_notification(notification);
 
       // If success then
       if (true) {
@@ -253,7 +251,7 @@ export class AppointmentsService {
         appointment.status = APPOINTMENT_STATUS.NOTIFICATION;
 
         // Updating in DB
-        this.appointmentDB.update(
+        await this.appointmentDB.update(
           { id: appointment.id },
           {
             status: APPOINTMENT_STATUS.NOTIFICATION,
@@ -308,10 +306,7 @@ export class AppointmentsService {
     return this.gqlClient.client('ENV_RBX_ENTITLEMENT_SERVER').send(query);
   }
 
-  private async send_push_notification(
-    input: PushNotificationModel,
-    user_id: string,
-  ) {
+  private async send_push_notification(input: PushNotificationModel) {
     const mutation = `mutation {
       result: sendPushNotification(input: ${toGraphQL(input)}) {
         id
@@ -326,6 +321,8 @@ export class AppointmentsService {
       }
     }`;
 
-    return this.gqlClient.client('ENV_RBX_NOTIFICATION_SERVER').send(mutation);
+    return await this.gqlClient
+      .client('ENV_RBX_NOTIFICATION_SERVER')
+      .send(mutation);
   }
 }
