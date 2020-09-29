@@ -6,6 +6,7 @@ import { FuseSharedModule } from '@fuse/shared.module';
 import { SharedModule } from '@shared/shared.module';
 import { MaterialModule } from '@shared/modules/material/material.module';
 import { RequestsListComponent } from './requests-list.component';
+import {MatSortModule} from '@angular/material/sort';
 
 @NgModule({
     declarations: [RequestsListComponent],
@@ -14,7 +15,8 @@ import { RequestsListComponent } from './requests-list.component';
         SharedModule,
         FuseSharedModule,
         RequestListRoutingModule,
-        MaterialModule
+        MaterialModule,
+        MatSortModule
     ],
 })
 export class RequestsListModule {}

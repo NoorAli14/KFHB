@@ -6,6 +6,7 @@ import { FuseSharedModule } from '@fuse/shared.module';
 import { SharedModule } from '@shared/shared.module';
 import { MaterialModule } from '@shared/modules/material/material.module';
 import { ReferralsComponent } from './components/referrals.component';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
     declarations: [ReferralsComponent],
@@ -13,6 +14,8 @@ import { ReferralsComponent } from './components/referrals.component';
         ReferralsRoutingModule,
         SharedModule,
         FuseSharedModule,
-        MaterialModule
+        MaterialModule,
+        MatSortModule
+
     ]})
 export class ReferralsModule {}
