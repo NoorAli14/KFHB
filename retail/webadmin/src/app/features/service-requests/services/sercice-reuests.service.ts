@@ -18,9 +18,9 @@ export class ServiceRequestsService {
         return this._networkService.getById(`${URI.SERVICEREQUESTDETAILS}${id}`);
     }
 
-    updateStatus(id: string, data:any)
+    updateStatus( data:any)
     {
-        return this._networkService.post(`${URI.SERVICEREQUESTUBDATESTATUS}/${id}`, data);
+        return this._networkService.post(`${URI.SERVICEREQUESTUBDATESTATUS}`, data);
     }
  
 
