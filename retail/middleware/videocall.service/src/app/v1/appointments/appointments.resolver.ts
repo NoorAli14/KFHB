@@ -52,10 +52,6 @@ export class AppointmentsResolver {
     @Args('user_id') user_id: string,
     @Fields(Appointment) output: string[],
   ): Promise<Appointment> {
-    return await this.appointmentsService.findByUserId(
-      currentUser,
-      user_id,
-      output,
-    );
+    return this.appointmentsService.findByUserId(currentUser, user_id, output);
   }
 }
