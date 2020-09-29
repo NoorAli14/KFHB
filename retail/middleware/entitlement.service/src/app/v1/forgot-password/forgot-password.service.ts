@@ -1,18 +1,22 @@
 import { Injectable } from '@nestjs/common';
 
 import { Encrypter } from '@common/encrypter';
-import { NUMBERS } from '@common/constants';
+import { NUMBERS, STATUS } from '@common/constants';
 import {
   ChangePasswordInput,
   ForgotPasswordInput,
 } from '@app/v1/forgot-password/forgot-password.dto';
-import { addMinutes, generateRandomString } from '@common/utilities';
+import {
+  addMinutes,
+  generateRandomString,
+  getCurrentTimeStamp,
+} from '@common/utilities';
 import { ConfigurationService } from '@common/configuration/configuration.service';
 import { ITenant } from '@common/interfaces';
 import { UserRepository } from '@core/repository';
+import { TokenInvalidOrExpiredException } from './exceptions';
 import { User } from '../users/user.model';
-import { UserNotFoundException } from './exceptions';
-import { TokenInvalidOrExpiredException } from './exceptions/token-invalid-or-expired';
+import { UserNotFoundException } from '../users/exceptions';
 
 @Injectable()
 export class ForgotPasswordService {
@@ -32,7 +36,6 @@ export class ForgotPasswordService {
       input.email,
       ['id', 'tenant_id'],
     );
-    console.log("ForgotPasswordService -> user", user)
     if (!user) throw new UserNotFoundException(input.email);
     const hash = generateRandomString(NUMBERS.TOKEN_LENGTH);
     const updateParams = {
@@ -41,11 +44,12 @@ export class ForgotPasswordService {
         this.configService.APP.INVITATION_TOKEN_EXPIRY,
       ),
       updated_by: user.id,
-      updated_on: new Date(), // TODO: use knex timestamps
+      updated_on: getCurrentTimeStamp(), // TODO: use knex timestamps
     };
     const whereCondition = {
       id: user.id,
       tenant_id: tenant.id,
+      status: STATUS.ACTIVE,
       deleted_on: null,
     };
     const [result] = await this.userDB.update(
@@ -66,15 +70,11 @@ export class ForgotPasswordService {
       input.password_reset_token,
       ['id', 'password_reset_token_expiry'],
     );
-    console.log("ForgotPasswordService -> user", user)
     if (!user)
       throw new TokenInvalidOrExpiredException(input.password_reset_token);
 
     // todo  - user momentjs and write util methods
-    console.log("ForgotPasswordService -> user?.password_reset_token_expiry?.getTime()", user?.password_reset_token_expiry?.getTime())
-    console.log("ForgotPasswordService -> new Date().getTime()", new Date().getTime())
     if (user?.password_reset_token_expiry?.getTime() > new Date().getTime()) {
-      console.log("ForgotPasswordService -> user?.password_reset_token_expiry?.getTime() > new Date().getTime()", user?.password_reset_token_expiry?.getTime() > new Date().getTime())
       const updateParams = {
         password_digest: this.encrypter.encryptPassword(input.password),
         password_reset_token_expiry: null,
