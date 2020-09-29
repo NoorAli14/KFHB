@@ -73,7 +73,8 @@ export class LeaveFormComponent extends BaseComponent implements OnInit {
   confirmPasswordValidator(control: FormControl): { [s: string]: boolean } {
     if (
       this.leaveForm &&
-      this.leaveForm.controls.endDate.value && this.leaveForm.controls.startDate.value
+      this.leaveForm.controls.endDate.value && 
+      this.leaveForm.controls.startDate.value
     ) {
       const start = moment(this.leaveForm.controls.startDate.value).format(DATE_FORMAT);
       const end = moment(this.leaveForm.controls.endDate.value).format(DATE_FORMAT);
