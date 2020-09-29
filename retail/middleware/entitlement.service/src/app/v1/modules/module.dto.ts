@@ -1,6 +1,6 @@
 import {Field, InputType} from "@nestjs/graphql";
-import {IsOptional, IsString, MaxLength} from "class-validator";
-import {NUMBERS} from "@common/constants";
+import {IsIn, IsOptional, IsString, MaxLength} from "class-validator";
+import {NUMBERS, STATUS} from "@common/constants";
 
 @InputType()
 export class ModuleInput {
@@ -20,6 +20,7 @@ export class ModuleInput {
   @IsString()
   @IsOptional()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  @IsIn(Object.values(STATUS))
   status?: string;
 }
 
