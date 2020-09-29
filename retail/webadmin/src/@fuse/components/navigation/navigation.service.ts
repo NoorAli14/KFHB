@@ -125,7 +125,7 @@ export class FuseNavigationService {
             title: 'Referrals',
             type: 'item',
             icon: 'cached',
-            url: '/refferals',
+            url: '/referrals',
 
         };
         const findRefferal = navigation.find((x) => x.id == "referrals");
