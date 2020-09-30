@@ -12,6 +12,12 @@ import { GqlClientService } from '@common/libs/gqlclient/gqlclient.service';
 import { PushNotificationModel } from './push_notification.model';
 import { toGraphQL } from '@common/utilities';
 import { ICurrentUser } from '@common/interfaces';
+import {
+  AppointmentAlreadyExistException,
+  InvalidCallTimeException,
+  AgentNotAvailableException,
+  AppointmentNotFoundException,
+} from './exceptions';
 
 @Injectable()
 export class AppointmentsService {
@@ -32,7 +38,7 @@ export class AppointmentsService {
       ['id'],
     );
 
-    if (record) throw new Error('Appointment for this user already exist.');
+    if (record) throw new AppointmentAlreadyExistException(user_id);
   }
 
   private async throw_if_appointment_limit_exceed(call_time: Date) {
@@ -73,7 +79,7 @@ export class AppointmentsService {
 
     // Check the Past date and time
     if (newAppointment.call_time <= new Date()) {
-      throw new Error('Selected call time is in the Past.');
+      throw new InvalidCallTimeException(newAppointment.user_id);
     }
     newAppointment.gender =
       (newAppointment.gender &&
@@ -89,7 +95,7 @@ export class AppointmentsService {
     );
 
     if (available_agents && available_agents.length <= 0)
-      throw new Error('Agents not available, please select other time');
+      throw new AgentNotAvailableException(newAppointment.user_id);
     // End Section: Validating Input
 
     const [response] = await this.appointmentDB.create(
@@ -98,6 +104,7 @@ export class AppointmentsService {
         created_by: currentUser.id,
         updated_by: currentUser.id,
         tenant_id: currentUser.tenant_id,
+        status: APPOINTMENT_STATUS.SCHEDULED,
       },
       output,
     );
@@ -109,7 +116,7 @@ export class AppointmentsService {
     id: string,
     output?: string[],
   ): Promise<Appointment> {
-    return this.appointmentDB.findOne(
+    const response = await this.appointmentDB.findOne(
       {
         id: id,
         deleted_on: null,
@@ -117,6 +124,9 @@ export class AppointmentsService {
       },
       output,
     );
+    if (!response) throw new AppointmentNotFoundException(id);
+
+    return response;
   }
 
   async findByUserId(
@@ -124,7 +134,7 @@ export class AppointmentsService {
     user_id: string,
     output?: string[],
   ): Promise<Appointment> {
-    return this.appointmentDB.findOne(
+    const response = await this.appointmentDB.findOne(
       {
         user_id: user_id,
         tenant_id: currentUser.tenant_id,
@@ -132,6 +142,9 @@ export class AppointmentsService {
       },
       output,
     );
+    if (!response) throw new AppointmentNotFoundException(user_id);
+
+    return response;
   }
 
   async findByIds(ids: readonly string[]): Promise<Appointment> {
