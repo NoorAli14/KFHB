@@ -3,7 +3,7 @@ import { CONFIG } from '../../../../config';
 import { Component, OnInit, ViewEncapsulation, ViewChild, Injector } from '@angular/core';
 import { fuseAnimations } from '@fuse/animations';
 import { MatDialog } from '@angular/material/dialog';
-import {  ServiceRequests } from '@feature/service-requests/models/service-requests.model';
+import { ServiceRequests } from '@feature/service-requests/models/service-requests.model';
 import { MESSAGES } from '@shared/constants/messages.constant';
 import { ServiceRequestsService } from '@feature/service-requests/services/sercice-reuests.service';
 import { FormControl } from '@angular/forms';
@@ -36,7 +36,7 @@ export class RequestsListComponent extends BaseComponent implements OnInit {
   username: FormControl;
   pageSize: number = CONFIG.PAGE_SIZE;
   pageSizeOptions: Array<number> = CONFIG.PAGE_SIZE_OPTIONS;
-  serviceRequests : ServiceRequests[];
+  serviceRequests: ServiceRequests[];
   returnUrl: string;
   displayedColumns = [
     'requestType',
@@ -55,11 +55,11 @@ export class RequestsListComponent extends BaseComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
 
-  constructor(public _matDialog: MatDialog, injector: Injector ,
-    private _serviceRequestsService: ServiceRequestsService, 
-   private route: ActivatedRoute,private router: Router,
+  constructor(public _matDialog: MatDialog, injector: Injector,
+    private _serviceRequestsService: ServiceRequestsService,
+    private route: ActivatedRoute, private router: Router,
 
-    ) {
+  ) {
     super(injector);
   }
 
@@ -72,27 +72,27 @@ export class RequestsListComponent extends BaseComponent implements OnInit {
 
   getData() {
     this._serviceRequestsService.getServiceRequests().subscribe(
-        (response) => {
-            this.serviceRequests = response;
-            this.updateGrid(this.serviceRequests);
-        },
-        (error) => {
-            console.log(error);
-        }
+      (response) => {
+        this.serviceRequests = response;
+        this.updateGrid(this.serviceRequests);
+      },
+      (error) => {
+        console.log(error);
+      }
     );
-}
-onDetail(id): void {
-  this._serviceRequestsService.getServiceRequestsById(id)
+  }
+  onDetail(id): void {
+    this._serviceRequestsService.getServiceRequestsById(id)
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe(
-          (response) => {
-            this.router.navigateByUrl(
-              this.returnUrl ? this.returnUrl : "/req/details/"+id
+        (response) => {
+          this.router.navigateByUrl(
+            this.returnUrl ? this.returnUrl : "/req/details/" + id
           );
-          },
-          (response) => super.onError(response)
+        },
+        (response) => super.onError(response)
       );
-}
+  }
 
 
   initSearch(): void {
@@ -127,5 +127,8 @@ onDetail(id): void {
     this.dataSource.data = data.data;
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+  }
+  public doFilter = (value: string) => {
+    this.dataSource.filter = value.trim().toLocaleLowerCase();
   }
 }

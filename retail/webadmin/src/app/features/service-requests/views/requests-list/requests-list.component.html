@@ -20,6 +20,15 @@
                 </span>
             </div>
             <!-- / APP TITLE -->
+              <!-- SEARCH -->
+              <div class="search-wrapper mx-32 mx-md-0" >
+                <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
+                    <mat-icon>search</mat-icon>
+                    <input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Search .. ">
+                </div>
+            </div>
+            <!-- / SEARCH -->
+          
             <!-- ADD BUTTON -->
             <button  mat-raised-button color="accent"  class="add-product-button fuse-white mt-24 mt-md-0">
                 <span>DOWNLOAD REPORT</span>

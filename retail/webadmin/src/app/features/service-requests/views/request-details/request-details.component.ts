@@ -1,9 +1,9 @@
 import { BaseComponent } from '@shared/components/base/base.component';
 import { CONFIG } from '../../../../config';
-import { Component, OnInit, ViewEncapsulation, ViewChild ,Input, Injector} from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ViewChild, Input, Injector } from '@angular/core';
 import { fuseAnimations } from '@fuse/animations';
 import { MatDialog } from '@angular/material/dialog';
-import {  ServiceRequests } from '@feature/service-requests/models/service-requests.model';
+import { ServiceRequests } from '@feature/service-requests/models/service-requests.model';
 import { MESSAGES } from '@shared/constants/messages.constant';
 import { FormControl } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
@@ -36,7 +36,7 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
   username: FormControl;
   pageSize: number = CONFIG.PAGE_SIZE;
   pageSizeOptions: Array<number> = CONFIG.PAGE_SIZE_OPTIONS;
-  serviceRequests : ServiceRequests[];
+  serviceRequests: ServiceRequests[];
   displayedColumns = [
     'Document Name',
     'View Upload & Download PDF',
@@ -46,9 +46,10 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
+  status: any;
 
   constructor(public _matDialog: MatDialog, injector: Injector,
-    private _serviceRequestsService: ServiceRequestsService, 
+    private _serviceRequestsService: ServiceRequestsService,
     private activatedRoute: ActivatedRoute) {
     super(injector);
   }
@@ -62,41 +63,37 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
     this.username = new FormControl('');
     this.initSearch();
   }
-  getData() {
-    
-    this._serviceRequestsService.getServiceRequestsById(this.id).subscribe(
-        (response) => {
-            this.serviceRequests = response.data;
-            console.log(response);
-        },
-        (error) => {
-            console.log(error);
-        }
-    );
-}
+  getData = () => {
 
-updateStatus(status) {
-  const data = JSON.stringify({
-    
+    this._serviceRequestsService.getServiceRequestsById(this.id).subscribe(
+      (response) => {
+        this.serviceRequests = response.data;
+        console.log(response);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
+
+  updateStatus = (status) => {
+    const data = JSON.stringify({
       id: this.id,
       status: status,
       comments: null,
-    
-  });
-  
-  this._serviceRequestsService
-      .updateStatus( data)
-      .pipe(takeUntil(this._unsubscribeAll))
+      type: null
+
+    });
+    this._serviceRequestsService
+      .updateStatus(data)
+      .pipe()
       .subscribe(
-          (response) => {
-              this.errorType = "success";
-              console.log(response);
-          },
-          (response) => {
-              this._errorEmitService.emit(MESSAGES.UNKNOWN(), "error");
-          }
+        (response) => {
+          this.status = status;
+        },
+        (response) => super.onError(response)
       );
-}
+  }
 
   initSearch(): void {
     this.username.valueChanges.subscribe((text: string) => {

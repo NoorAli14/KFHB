@@ -7,15 +7,21 @@ import { SharedModule } from '@shared/shared.module';
 import { MaterialModule } from '@shared/modules/material/material.module';
 import { ReferralsComponent } from './components/referrals.component';
 import { MatSortModule } from '@angular/material/sort';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
     declarations: [ReferralsComponent],
-    imports: [CommonModule, 
+    imports: [CommonModule,
         ReferralsRoutingModule,
         SharedModule,
         FuseSharedModule,
         MaterialModule,
-        MatSortModule
-
-    ]})
-export class ReferralsModule {}
+        MatSortModule,
+        MatFormFieldModule,
+        MatInputModule,
+    ],
+    exports: [
+        MatFormFieldModule,
+        MatInputModule]})
+export class ReferralsModule { }

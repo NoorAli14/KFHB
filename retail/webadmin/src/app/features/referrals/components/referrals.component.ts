@@ -70,7 +70,7 @@ export class ReferralsComponent extends BaseComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
-  getData(): void {
+  getData = () => {
     this._service
       .getTransactions().pipe().subscribe(
         (response) => {
@@ -80,25 +80,25 @@ export class ReferralsComponent extends BaseComponent implements OnInit {
         (response) => super.onError(response)
       );
   }
-
-  downloadReport(): void {
+  downloadReport = () => {
     this._service
       .getTransactionsReport().pipe().subscribe(
         (response) => {
-          this.downlaodReport(response.data);
+          this.convertBase64ToExcel(response.data);
         },
         (response) => super.onError(response)
       );
   }
-  downlaodReport(data) {
+  convertBase64ToExcel = (data) => {
     const date = new Date();
     const linkSource = 'data:application/excel;base64,' + data;
     const downloadLink = document.createElement("a");
     const fileName = 'REPORT' + date.getDate() + '.' + date.getMonth() + 1 + '.' + date.getFullYear() + ".xlsx";
-
     downloadLink.href = linkSource;
     downloadLink.download = fileName;
     downloadLink.click();
   }
-
+  public doFilter = (value: string) => {
+    this.dataSource.filter = value.trim().toLocaleLowerCase();
+  }
 }
