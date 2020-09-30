@@ -47,7 +47,7 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   status: any;
-
+  btnDisable = false;
   constructor(public _matDialog: MatDialog, injector: Injector,
     private _serviceRequestsService: ServiceRequestsService,
     private activatedRoute: ActivatedRoute) {
@@ -90,6 +90,7 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
       .subscribe(
         (response) => {
           this.status = status;
+          this.btnDisable = true;
         },
         (response) => super.onError(response)
       );
