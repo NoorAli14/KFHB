@@ -1,9 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Validator } from 'jsonschema';
 import { join } from 'path';
+// import { SCHEMA } from '@volume/validators/schema.validator';
+import { Validator } from 'jsonschema';
 
 import { CUSTOM_ERROR } from './document.model';
-const { SCHEMA, CUSTOMER_EVALUATION_RESULT } = require(join(`${process.cwd()}/volume/schema.js`));
+const { SCHEMA } = require(join(`${process.cwd()}/volumes/validators/schema.validator.js`));
+const { mapper } = require(join(`${process.cwd()}/volumes/mappers/customer.mapper.js`));
 
 export interface ISCHEMA_ERROR {
     message: string,
@@ -107,16 +109,8 @@ export class SchemaService {
         return _errors;
     }
 
-    mapAttributes(documents: any[]): Record<string, any> {
-        const PROCESSED_MRZ = {};
-        documents.forEach(document => {
-            PROCESSED_MRZ[document.name] = JSON.parse(document.processed_data)?.mrz
-        })
-        const attributes = {};
-        CUSTOMER_EVALUATION_RESULT.map(item => {
-            attributes[item.attribute] = PROCESSED_MRZ[item.from.group]?.[item.from.key] || null;
-        })
-        return attributes
+    mapAttributes(documents: any): Record<string, any> {
+        return mapper(documents);
     }
 
 }
