@@ -40,8 +40,8 @@ export const GQL_SERVICES = [
     is_secure: false,
   },
   {
-    name: 'Complaince Service',
-    host_name: 'retail_complaince',
+    name: 'Compliance Service',
+    host_name: 'retail_compliance',
     port: 5010,
     version: '1.0',
     context: '/graphql',
@@ -50,7 +50,7 @@ export const GQL_SERVICES = [
   {
     name: 'Identity Service',
     host_name: 'retail_identity',
-    port: 5010,
+    port: 4010,
     version: '1.0',
     context: '/graphql',
     is_secure: false,
