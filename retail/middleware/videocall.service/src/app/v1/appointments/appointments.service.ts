@@ -17,6 +17,7 @@ import {
   InvalidCallTimeException,
   AgentNotAvailableException,
   AppointmentNotFoundException,
+  NoAppointmentTodayException,
 } from './exceptions';
 
 @Injectable()
@@ -183,6 +184,7 @@ export class AppointmentsService {
     // Update Appointment status to QUEUED when saved in Redis
     if (redis_response == null) {
       // Send Priority Exception Message
+      throw new NoAppointmentTodayException(start_date, end_date);
     } else {
       const appointment_ids: string[] = appointments.map(appointment => {
         // Update DB status to Queued
