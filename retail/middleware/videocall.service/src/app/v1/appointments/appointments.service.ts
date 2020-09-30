@@ -143,10 +143,10 @@ export class AppointmentsService {
     console.log('Cron is running at Midnight.');
 
     // Get all Appointments for today.
-    const start_date_time = new Date();
-    const end_date_time = new Date(start_date_time);
+    const start_date_time = moment();
+    const end_date_time = moment(start_date_time).add(1, 'days');
     // Add a day to filter only 1 day appointments
-    end_date_time.setDate(end_date_time.getDate() + 1);
+    // end_date_time.setDate(end_date_time.getDate() + 1);
 
     // Take only dates to put filter on start of the day
     const start_date = start_date_time.toISOString().split('T')[0];
