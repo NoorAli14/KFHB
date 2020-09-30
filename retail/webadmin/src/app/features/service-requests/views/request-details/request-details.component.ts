@@ -5,7 +5,7 @@ import { fuseAnimations } from '@fuse/animations';
 import { MatDialog } from '@angular/material/dialog';
 import { ServiceRequests } from '@feature/service-requests/models/service-requests.model';
 import { MESSAGES } from '@shared/constants/messages.constant';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -47,7 +47,11 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   status: any;
+  serviceRequestForm: FormGroup;
   btnDisable = false;
+  comments: any;
+  letterType: any;
+  requestType: any;
   constructor(public _matDialog: MatDialog, injector: Injector,
     private _serviceRequestsService: ServiceRequestsService,
     private activatedRoute: ActivatedRoute) {
@@ -60,35 +64,41 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
       this.id = paramsId.id;
     });
     this.getData();
+    this.serviceRequestForm = new FormGroup({
+      comments: new FormControl('', []),
+    });
     this.username = new FormControl('');
     this.initSearch();
   }
   getData = () => {
-
     this._serviceRequestsService.getServiceRequestsById(this.id).subscribe(
       (response) => {
         this.serviceRequests = response.data;
-        console.log(response);
+        this.status = response.data.status;
+        this.letterType = response.data.letterType;
+        this.requestType = response.data.requestType;
+        if (response.data.status != 'Pending') {
+          this.btnDisable = true;
+        }
       },
       (error) => {
         console.log(error);
       }
     );
   }
-
   updateStatus = (status) => {
     const data = JSON.stringify({
       id: this.id,
       status: status,
-      comments: null,
+      comments: this.serviceRequestForm.value.comments,
       type: null
-
     });
     this._serviceRequestsService
       .updateStatus(data)
       .pipe()
       .subscribe(
         (response) => {
+
           this.status = status;
           this.btnDisable = true;
         },

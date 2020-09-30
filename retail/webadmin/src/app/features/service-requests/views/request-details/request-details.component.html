@@ -22,22 +22,6 @@
                 </span>
             </div>
             <!-- / APP TITLE -->
-            <!-- ADD BUTTON -->
-
-
-            <div class="d-flex justify-content-end ">
-                <button mat-raised-button color="accent" (click)="updateStatus('Approved')"
-                    [ngClass]='status=="Approved"?"light-green":"fuse-white"' [disabled]='btnDisable' class="add-product-button  mt-24  mt-md-0" >
-                    <span>COMPELETED</span>
-                </button>
-                <!-- ADD BUTTON -->
-                &nbsp;
-                <button mat-raised-button color="accent" (click)="updateStatus('Rejected')"
-                [ngClass]='status=="Rejected"?"red":"fuse-white"' [disabled]='btnDisable'   class="add-product-button  mt-24 mt-md-0" >
-                    <span>REJECTED</span>
-                </button>
-                <!-- / ADD BUTTON -->
-            </div>
         </div>
         <!-- / HEADER -->
 
@@ -47,13 +31,13 @@
                 <div fxLayout="column" fxFlex="32">
                     <div class="info-line p-24">
                         <div class="title text-bold">Request Type</div>
-                        <div class="info">Letter Request</div>
+                        <div class="info">{{requestType}}</div>
                     </div>
                 </div>
                 <div fxLayout="column" fxFlex="32">
                     <div class="info-line p-24">
                         <div class="title text-bold">Letter Type</div>
-                        <div class="info"> Details</div>
+                        <div class="info"> {{letterType}}</div>
                     </div>
                 </div>
                 <div fxLayout="column" fxFlex="32">
@@ -116,6 +100,41 @@
             </mat-table>
             <mat-paginator #paginator [pageIndex]="0" [pageSize]="pageSize" showFirstLastButtons
                 [pageSizeOptions]="pageSizeOptions"></mat-paginator>
+            <form class="p-24 mx-24" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0" name="modulesForm" novalidate
+                [formGroup]="serviceRequestForm">
+                <mat-form-field  class="mt-24" appearance="outline" fxFlex="48">
+                    <mat-label>Comment</mat-label>
+                    <input matInput formControlName="comments" [attr.disabled]='btnDisable'  />
+                    <mat-icon matSuffix class="secondary-text">comment</mat-icon>
+                    <mat-error>
+                        <app-mat-error [control]="serviceRequestForm.get('comments')"></app-mat-error>
+                    </mat-error>
+                </mat-form-field>
+                <div fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row"
+                    fxLayoutAlign.gt-sm="space-between right">
+                    <!-- APP TITLE -->
+                    <div class="logo  mb-md-0" fxLayout="row" fxLayoutAlign="start center">
+                    </div>
+                    <!-- / APP TITLE -->
+                    <!-- ADD BUTTON -->
+                    <div class="d-flex justify-content-end ">
+                        <button mat-raised-button color="accent" (click)="updateStatus('Approved')"
+                            [ngClass]='status=="Approved"?"light-green":"fuse-white"' [disabled]='btnDisable'
+                            class="add-product-button    mt-md-0">
+                            <span>COMPELETED</span>
+                        </button>
+                        <!-- ADD BUTTON -->
+                        &nbsp;
+                        <button mat-raised-button color="accent" (click)="updateStatus('Rejected')"
+                            [ngClass]='status=="Rejected"?"red":"fuse-white"' [disabled]='btnDisable'
+                            class="add-product-button   mt-md-0">
+                            <span>REJECTED</span>
+                        </button>
+                        <!-- / ADD BUTTON -->
+                    </div>
+                </div>
+            </form>
+
         </div>
         <!-- / CONTENT CARD -->
     </div>
