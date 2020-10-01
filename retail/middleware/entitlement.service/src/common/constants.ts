@@ -108,6 +108,15 @@ export const MODULES = [
           {
             name: 'view',
           },
+          {
+            name: 'edit',
+          },
+          {
+            name: 'delete',
+          },
+          {
+            name: 'create',
+          },
         ],
       },
       {
@@ -115,6 +124,15 @@ export const MODULES = [
         permissions: [
           {
             name: 'view',
+          },
+          {
+            name: 'edit',
+          },
+          {
+            name: 'delete',
+          },
+          {
+            name: 'create',
           },
         ],
       },

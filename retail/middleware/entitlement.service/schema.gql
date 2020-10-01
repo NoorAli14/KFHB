@@ -231,7 +231,7 @@ input PermissionInput {
 type Query {
   usersList: [User!]!
   findUserById(id: String!): User!
-  findAvailableUsers(input: CheckAvailabilityInput!): [User!]!
+  findAvailableAgents(input: CheckAvailabilityInput!): [User!]!
   findUserBy(checks: [KeyValInput!]!): [User!]!
   rolesList: [Role!]!
   findRoleById(id: String!): Role!
