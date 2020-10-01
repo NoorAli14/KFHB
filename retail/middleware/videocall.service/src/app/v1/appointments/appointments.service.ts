@@ -81,12 +81,6 @@ export class AppointmentsService {
     if (newAppointment.call_time <= new Date()) {
       throw new InvalidCallTimeException(newAppointment.user_id);
     }
-    newAppointment.gender =
-      (newAppointment.gender &&
-        (newAppointment.gender === 'male' || newAppointment.gender === 'Male'
-          ? 'M'
-          : 'F')) ||
-      null;
 
     // Query the other service to check the available slots in the Holidays and working days.
     const available_agents = await this.check_agent_availability(
@@ -332,7 +326,8 @@ export class AppointmentsService {
       );
 
       if (
-        appointment.status === APPOINTMENT_STATUS.QUEUED &&
+        (appointment.status === APPOINTMENT_STATUS.QUEUED ||
+          appointment.status === APPOINTMENT_STATUS.SCHEDULED) &&
         diff_in_minutes >= 0 &&
         diff_in_minutes <=
           Number(this.configService.VCALL.ENV_RBX_CRON_JOB_TIME)
