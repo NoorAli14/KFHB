@@ -218,19 +218,112 @@ export class AppointmentsService {
   // |   |   hour
   // |   minute
   // second (optional)
-  @Cron('0 */1 * * * *')
+  // @Cron('0 */1 * * * *')
+  // async cron_to_send_push_notification(): Promise<void> {
+  //   console.log('Cron job is running every 15 minute.');
+  //   const redis_client = await this.redisService.getClient(
+  //     this.configService.REDIS.name,
+  //   );
+
+  //   const key_result = await redis_client.get(process.env.ENV_RBX_REDIS_KEY);
+  //   if (!key_result) {
+  //     return;
+  //   }
+
+  //   const appointments: Appointment[] = JSON.parse(key_result);
+
+  //   // Filter the appointments under 15 minutes from Date.now()
+  //   const appointments_coming = appointments.filter(appointment => {
+  //     const diff_in_minutes = Math.round(
+  //       moment.utc(appointment.call_time).diff(moment.utc(), 'minutes', true),
+  //     );
+
+  //     if (
+  //       appointment.status === APPOINTMENT_STATUS.QUEUED &&
+  //       diff_in_minutes >= 0 &&
+  //       diff_in_minutes <=
+  //         Number(
+  //           this.configService.get(
+  //             'ENV_RBX_MINUTES_BEFORE_CALL_TO_SEND_NOTIFICATION',
+  //           ),
+  //         )
+  //     ) {
+  //       return true;
+  //     }
+  //   });
+
+  //   // Send Push Notification through the Notification Service.
+  //   appointments_coming.forEach(async appointment => {
+  //     console.log('Appointment Coming At:', appointment.call_time);
+
+  //     // Send Push Notification
+  //     const notification: PushNotificationModel = {
+  //       platform: appointment.user.platform,
+  //       device_id: appointment.user.device_id,
+  //       token: appointment.user.firebase_token,
+  //       message_title: 'Dummy: until get from Business Team.',
+  //       message_body: 'Dummy: until get from Business Team.',
+  //       image_url: 'http://lorempixel.com/400/200',
+  //     };
+
+  //     await this.send_push_notification(notification);
+
+  //     // If success then
+  //     if (true) {
+  //       // Update Entry in Redis and Database with Status=Notification.
+  //       // This is a Reference Object, So changing this item will update the List object as well.
+  //       appointment.status = APPOINTMENT_STATUS.NOTIFICATION;
+
+  //       // Updating in DB
+  //       await this.appointmentDB.update(
+  //         { id: appointment.id },
+  //         {
+  //           status: APPOINTMENT_STATUS.NOTIFICATION,
+  //         },
+  //         ['id'],
+  //       );
+  //     }
+  //   });
+
+  //   // Update only if there is any Notification Sent.
+  //   if (appointments_coming.length > 0) {
+  //     const redis_response = redis_client.set(
+  //       process.env.ENV_RBX_REDIS_KEY,
+  //       JSON.stringify(appointments),
+  //     );
+  //   }
+  // }
+
+  // *   *   *   *   *   *
+  // |   |   |   |   |   |
+  // |   |   |   |   |   day of week
+  // |   |   |   |   month
+  // |   |   |   day of month
+  // |   |   hour
+  // |   minute
+  // second (optional)
+  @Cron('0 */15 * * * *')
   async cron_to_send_push_notification(): Promise<void> {
-    console.log('Cron job is running every 1 minute.');
-    const redis_client = await this.redisService.getClient(
-      this.configService.REDIS.name,
+    console.log('Cron job is running every 15 minute.');
+    // Get all Appointments of next 15 minutes.
+    const start_date_time = moment();
+    const end_date_time = moment(start_date_time).add(
+      this.configService.VCALL.ENV_RBX_CRON_JOB_TIME,
+      'minutes',
     );
 
-    const key_result = await redis_client.get(process.env.ENV_RBX_REDIS_KEY);
-    if (!key_result) {
-      return;
-    }
+    // Take only dates to put filter on start of the day
+    // const start_date = start_date_time.toISOString().split('T')[0];
+    // const end_date = end_date_time.toISOString().split('T')[0];
 
-    const appointments: Appointment[] = JSON.parse(key_result);
+    const appointments: Appointment[] = await this.appointmentDB.between(
+      'call_time',
+      start_date_time,
+      end_date_time,
+    );
+
+    if (appointments && appointments.length <= 0)
+      throw new AppointmentNotFoundException(start_date_time, end_date_time);
 
     // Filter the appointments under 15 minutes from Date.now()
     const appointments_coming = appointments.filter(appointment => {
@@ -242,11 +335,7 @@ export class AppointmentsService {
         appointment.status === APPOINTMENT_STATUS.QUEUED &&
         diff_in_minutes >= 0 &&
         diff_in_minutes <=
-          Number(
-            this.configService.get(
-              'ENV_RBX_MINUTES_BEFORE_CALL_TO_SEND_NOTIFICATION',
-            ),
-          )
+          Number(this.configService.VCALL.ENV_RBX_CRON_JOB_TIME)
       ) {
         return true;
       }
@@ -276,7 +365,9 @@ export class AppointmentsService {
 
         // Updating in DB
         await this.appointmentDB.update(
-          { id: appointment.id },
+          {
+            id: appointment.id,
+          },
           {
             status: APPOINTMENT_STATUS.NOTIFICATION,
           },
@@ -284,14 +375,6 @@ export class AppointmentsService {
         );
       }
     });
-
-    // Update only if there is any Notification Sent.
-    if (appointments_coming.length > 0) {
-      const redis_response = redis_client.set(
-        process.env.ENV_RBX_REDIS_KEY,
-        JSON.stringify(appointments),
-      );
-    }
   }
 
   async get_user_by_id_from_service(user_id: string): Promise<any> {
