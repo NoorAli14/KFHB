@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { UnauthorizedException } from '@nestjs/common';
 import { X_CHANNEL_KEY } from '@common/constants';
-import { SERVICES } from '@volume/registry.service';
+import { SERVICES } from '@root/volumes/registry.service';
 
 const isAuthorizedChannel = (url: string, channelName: string): boolean => {
   const service = SERVICES[url];

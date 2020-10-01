@@ -5,7 +5,7 @@ import {
   Param,
   Header,
   Get,
-  Req,
+  Req, Query, Res
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -13,7 +13,7 @@ import {
   ApiBearerAuth,
   ApiOkResponse,
 } from '@nestjs/swagger';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { AuthGuard, CurrentUser } from '@common/index';
 import { AttachmentsService } from './attachments.service';
 import { Customer as User } from '../customers/customer.entity';
@@ -36,16 +36,18 @@ export class AttachmentsController {
   async preview(
     @Param('id', ParseUUIDPipe) id: string,
     @CurrentUser() currentUser: User,
-    @Req() request: Request,
+    @Res() res: Response,
+    @Query('extracted-image') extracted_image?: boolean,
   ): Promise<any> {
+    console.log(extracted_image);
     const params: any = {
       attachment_id: id,
       customer_id: currentUser.id,
+      extracted_image: extracted_image || false
     };
     const result = await this.documentService.preview(params);
     const img: any = Buffer.from(result.image, 'base64');
-    // request.res.writeHead(200, { 'Content-Type': 'image/jpeg' });
-    request.res.end(img, 'binary');
+    //res.end(img, 'binary');
     // request.res.setHeader(
     //   'Content-disposition',
     //   `inline; filename=${currentUser.id}.jpg`,
@@ -53,9 +55,12 @@ export class AttachmentsController {
     // request.res.setHeader('Content-type', 'image/jpeg');
     // request.res.set('Content-Type', 'image/jpeg');
 
-    // request.res.contentType('image/jpeg');
-    // request.res.write(buf);
-    // request.res.end();
-    // request.res;
+    res.writeHead(200, {
+      'Content-Type': 'image/png',
+      'Content-Length': img.length
+    });
+
+    res.end(img);
+    return res;
   }
 }

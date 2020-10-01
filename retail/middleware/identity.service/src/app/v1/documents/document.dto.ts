@@ -1,4 +1,4 @@
-import { MaxLength, IsString, IsNotEmpty } from 'class-validator';
+import { MaxLength, IsString, IsNotEmpty, IsOptional, IsBoolean } from 'class-validator';
 import { Field, InputType } from '@nestjs/graphql';
 
 @InputType('UploadDocumentInput')
@@ -34,4 +34,9 @@ export class PreviewDocumentInput {
   @IsString()
   @IsNotEmpty()
   attachment_id: string;
+
+  @Field({ nullable: true })
+  @IsBoolean()
+  @IsOptional()
+  extracted_image: boolean;
 }
