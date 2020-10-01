@@ -5,7 +5,7 @@ export class AppointmentNotFoundException extends BaseException {
     console.log(`Id -0-0-0-0-0 [${from_time}]`);
     super(HttpStatus.NOT_FOUND, {
       message: `Appointment not found`,
-      errorCode: 'ENT-1063',
+      errorCode: 'VC-1063',
       name: 'APPOINTMENT_NOT_FOUND',
       developerMessage: `Appointment not found during [${from_time}] to [${to_time}]`,
     });
