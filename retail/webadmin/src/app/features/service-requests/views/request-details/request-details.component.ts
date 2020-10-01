@@ -52,6 +52,7 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
   comments: any;
   letterType: any;
   requestType: any;
+  customerRIM:any;
   constructor(public _matDialog: MatDialog, injector: Injector,
     private _serviceRequestsService: ServiceRequestsService,
     private activatedRoute: ActivatedRoute) {
@@ -74,9 +75,11 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
     this._serviceRequestsService.getServiceRequestsById(this.id).subscribe(
       (response) => {
         this.serviceRequests = response.data;
+        console.log(response);
         this.status = response.data.status;
         this.letterType = response.data.letterType;
         this.requestType = response.data.requestType;
+        this.customerRIM = response.data.customerRim;
         if (response.data.status != 'Pending') {
           this.btnDisable = true;
         }
@@ -138,5 +141,29 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
     this.dataSource.data = data;
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+  }
+
+  downlaodReport() {
+    const date = new Date();
+    const linkSource = 'data:application/pdf;base64,' + "64BASE DATA"
+    const downloadLink = document.createElement("a");
+    const fileName = 'ServiceRequest' + date.getDate() + '.' + date.getMonth() + 1 + '.' + date.getFullYear() + ".pdf";
+ 
+    downloadLink.href = linkSource;
+    downloadLink.download = fileName;
+    downloadLink.click();
+  }
+  
+
+  viewDocument() {
+    var byteCharacters = atob("64BASE DATA");
+    var byteNumbers = new Array(byteCharacters.length);
+    for (var i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    var byteArray = new Uint8Array(byteNumbers);
+    var file = new Blob([byteArray], { type: 'application/pdf;base64' });
+    var fileURL = URL.createObjectURL(file);
+    window.open(fileURL);
   }
 }

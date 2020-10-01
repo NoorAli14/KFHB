@@ -43,65 +43,32 @@
                 <div fxLayout="column" fxFlex="32">
                     <div class="info-line p-24">
                         <div class="title text-bold">Customer RIM</div>
-                        <div class="info">Request Details</div>
+                        <div class="info">{{customerRIM}}</div>
                     </div>
                 </div>
             </div>
+     
             <!-- <div class="spinner-container" *ngIf="dataSource.loading$ | async">
                 <mat-spinner></mat-spinner>
             </div> -->
             <app-message-box [type]="errorType" [message]="responseMessage"></app-message-box>
-            <mat-table #table matSort matSortActive="username" matSortDirection="asc" matSortDisableClear
-                [dataSource]="dataSource">
-                <!-- COLUMNS AND ROWS-->
-                <ng-container *ngFor="let key of displayedColumns" [matColumnDef]="key">
-                    }
-                    <mat-header-cell class="text-center" *matHeaderCellDef>
-                        {{ key.includes('action') ? 'Action' : camelToSentenceCase(key) }}</mat-header-cell>
+          
 
-                    <mat-cell *matCellDef="let element; let i = dataIndex">
-
-                        <span *ngIf="!key.includes('action'); else action">
-                            <span *ngIf="element[camelToSnakeCase(key)]; else defaultText">
-                                <ng-container *ngIf="camelToSnakeCase(key).indexOf('created')<0; else date ">
-                                    {{element[camelToSnakeCase(key)]}}
-                                </ng-container>
-
-                            </span>
-                        </span>
-
-                        <ng-template #defaultText>
-                            <app-default-text></app-default-text>
-                        </ng-template>
-
-                        <ng-template #action>
-                            <mat-icon appPermission [permissions]="userPermissions" matTooltip="Delete user"
-                                [type]="'delete'" color="warn" type="button"
-                                (click)=" confirmDialog('delete',element['id'])">delete</mat-icon> &nbsp;&nbsp;
-                            <mat-icon type="button" (click)="openDialog(element)" matTooltip="Delete user">mode_edit
-                            </mat-icon> &nbsp;&nbsp;
-                            <mat-icon type="button" (click)="onDetail(element['id'])" matTooltip="Explore">explore
-                            </mat-icon>
-                            <mat-icon *ngIf="element['status']==='PENDING'" color="success"
-                                matTooltip="Resend Invitation" type="button"
-                                (click)=" confirmDialog('invite',element['id'])">near_me</mat-icon> &nbsp;&nbsp;
-                        </ng-template>
-                        <ng-template #date>
-                            {{element[camelToSnakeCase(key)] | date:'mediumDate'}}
-                        </ng-template>
-
-                    </mat-cell>
-                </ng-container>
-                <!-- -->
-                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                <mat-row *matRowDef="let row; columns: displayedColumns;" [@animate]="{value:'*',params:{y:'100%'}}">
-                </mat-row>
-
-            </mat-table>
-            <mat-paginator #paginator [pageIndex]="0" [pageSize]="pageSize" showFirstLastButtons
-                [pageSizeOptions]="pageSizeOptions"></mat-paginator>
+            
+            
             <form class="p-24 mx-24" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0" name="modulesForm" novalidate
                 [formGroup]="serviceRequestForm">
+                <div class="d-flex justify-content-end ">
+                    <button mat-raised-button color="accent" (click)='downlaodReport()' class="add-product-button fuse-white mt-24 mt-md-0">
+                        Download Document
+                        </button>
+                    <!-- ADD BUTTON -->
+                    &nbsp;
+                    <button mat-raised-button color="accent" (click)='viewDocument()' class="add-product-button fuse-white mt-24 mt-md-0">
+                        <span>View Document</span>
+                    </button>
+                    <!-- / ADD BUTTON -->
+                </div>
                 <mat-form-field  class="mt-24" appearance="outline" fxFlex="48">
                     <mat-label>Comment</mat-label>
                     <input matInput formControlName="comments" [attr.disabled]='btnDisable'  />
