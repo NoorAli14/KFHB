@@ -294,7 +294,7 @@ export class AppointmentsService {
   // |   |   hour
   // |   minute
   // second (optional)
-  @Cron('0 */15 * * * *')
+  @Cron(`0 */${process.env.ENV_RBX_CRON_JOB_TIME} * * * *`)
   async cron_to_send_push_notification(): Promise<void> {
     console.log('Cron job is running every 15 minute.');
     // Get all Appointments of next 15 minutes.

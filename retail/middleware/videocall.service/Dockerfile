@@ -96,7 +96,8 @@ ENV ENV_RBX_HOST=${PORT} \
     ENV_RBX_DB_TIMEZONE= \
     ENV_RBX_DB_DEBUG= \
     ENV_RBX_SWAGGER_ENABLED= \
-    ENV_RBX_SWAGGER_ROUTE=
+    ENV_RBX_SWAGGER_ROUTE= \
+    ENV_RBX_CRON_JOB_TIME= 
 
 # Set user node for future commands
 USER $USER
