@@ -12,7 +12,6 @@ import { WorkingDaysService } from '@app/v1/working-days/working-days.service';
 import { ICurrentUser } from '@common/interfaces';
 import { CheckAvailabilityInput } from '@app/v1/users/user.dto';
 import { User } from '@app/v1/users/user.model';
-import { validateDate, validateGender } from '@common/validator';
 import { PasswordMismatchException } from "./exceptions/password-mismatch.exception";
 import { UpdatePasswordInput } from "./user.dto";
 
@@ -65,12 +64,12 @@ export class UserService {
     userObj = {
       ...userObj,
       updated_by: currentUser.id,
-    }
+    };
     const whereCondition = {
       id: id,
       deleted_on: null,
       tenant_id: currentUser.tenant_id,
-    }
+    };
     const [result] = await this.userDB.update(whereCondition, userObj, keys);
     if (!result) {
       throw new HttpException({
@@ -133,7 +132,7 @@ export class UserService {
     return this.update(currentUser, user.id, userObj, output);
   }
 
-  async availableAgents(current_user: ICurrentUser, input: CheckAvailabilityInput): Promise<User[]> {
+  async findAvailableAgents(current_user: ICurrentUser, input: CheckAvailabilityInput): Promise<User[]> {
     const date_string = input.call_time;
     input.call_time = dateFormat(input.call_time, true);
     if (!await this.holidaysService.isHoliday(current_user.tenant_id, input.call_time) && await this.workingDaysService.isWorkingDay(current_user.tenant_id, date_string)) {
