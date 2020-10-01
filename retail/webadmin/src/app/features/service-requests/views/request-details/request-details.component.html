@@ -46,32 +46,42 @@
                         <div class="info">{{customerRIM}}</div>
                     </div>
                 </div>
+                <div fxLayout="column" fxFlex="32">
+                    <div class="info-line p-24">
+                        <div class="title text-bold">Status</div>
+                        <div class="info"
+                            [ngClass]='status=="Approved"?"green-fg":status=="Rejected"?"red-fg":"yellow-800-fg"'>{{status}}
+                        </div>
+                    </div>
+                </div>
             </div>
-     
+
             <!-- <div class="spinner-container" *ngIf="dataSource.loading$ | async">
                 <mat-spinner></mat-spinner>
             </div> -->
             <app-message-box [type]="errorType" [message]="responseMessage"></app-message-box>
-          
 
-            
-            
+
+
+
             <form class="p-24 mx-24" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0" name="modulesForm" novalidate
                 [formGroup]="serviceRequestForm">
                 <div class="d-flex justify-content-end ">
-                    <button mat-raised-button color="accent" (click)='downlaodReport()' class="add-product-button fuse-white mt-24 mt-md-0">
+                    <button mat-raised-button color="accent" (click)='downlaodReport()'
+                        class="add-product-button fuse-white mt-24 mt-md-0">
                         Download Document
-                        </button>
+                    </button>
                     <!-- ADD BUTTON -->
                     &nbsp;
-                    <button mat-raised-button color="accent" (click)='viewDocument()' class="add-product-button fuse-white mt-24 mt-md-0">
+                    <button mat-raised-button color="accent" (click)='viewDocument()'
+                        class="add-product-button fuse-white mt-24 mt-md-0">
                         <span>View Document</span>
                     </button>
                     <!-- / ADD BUTTON -->
                 </div>
-                <mat-form-field  class="mt-24" appearance="outline" fxFlex="48">
+                <mat-form-field class="mt-24" appearance="outline" fxFlex="48">
                     <mat-label>Comment</mat-label>
-                    <input matInput formControlName="comments" [attr.disabled]='btnDisable'  />
+                    <input matInput formControlName="comments" [attr.disabled]='btnDisable' />
                     <mat-icon matSuffix class="secondary-text">comment</mat-icon>
                     <mat-error>
                         <app-mat-error [control]="serviceRequestForm.get('comments')"></app-mat-error>
@@ -86,14 +96,14 @@
                     <!-- ADD BUTTON -->
                     <div class="d-flex justify-content-end ">
                         <button mat-raised-button color="accent" (click)="updateStatus('Approved')"
-                            [ngClass]='status=="Approved"?"light-green":"fuse-white"' [disabled]='btnDisable'
-                            class="add-product-button    mt-md-0">
+                            [ngClass]='status=="Approved"?!btnDisable?"light-green":"green-500-bg green-50-fg":"fuse-white"'
+                            [disabled]='btnDisable' class="add-product-button    mt-md-0">
                             <span>COMPELETED</span>
                         </button>
                         <!-- ADD BUTTON -->
                         &nbsp;
                         <button mat-raised-button color="accent" (click)="updateStatus('Rejected')"
-                            [ngClass]='status=="Rejected"?"red":"fuse-white"' [disabled]='btnDisable'
+                            [ngClass]='status=="Rejected"?!btnDisable?"red":"red-500-bg red-50-fg":"fuse-white"' [disabled]='btnDisable'
                             class="add-product-button   mt-md-0">
                             <span>REJECTED</span>
                         </button>

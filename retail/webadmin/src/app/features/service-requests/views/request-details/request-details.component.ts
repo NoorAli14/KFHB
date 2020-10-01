@@ -52,7 +52,7 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
   comments: any;
   letterType: any;
   requestType: any;
-  customerRIM:any;
+  customerRIM: any;
   constructor(public _matDialog: MatDialog, injector: Injector,
     private _serviceRequestsService: ServiceRequestsService,
     private activatedRoute: ActivatedRoute) {
@@ -148,12 +148,12 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
     const linkSource = 'data:application/pdf;base64,' + "64BASE DATA"
     const downloadLink = document.createElement("a");
     const fileName = 'ServiceRequest' + date.getDate() + '.' + date.getMonth() + 1 + '.' + date.getFullYear() + ".pdf";
- 
+
     downloadLink.href = linkSource;
     downloadLink.download = fileName;
     downloadLink.click();
   }
-  
+
 
   viewDocument() {
     var byteCharacters = atob("64BASE DATA");
