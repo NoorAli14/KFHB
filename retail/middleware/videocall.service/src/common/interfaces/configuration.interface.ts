@@ -35,6 +35,9 @@ export interface iDATABASE {
 }
 export interface iVCALL {
   ENV_RBX_CRON_JOB_TIME: number;
+  ENV_RBX_NOTIFICATION_MESSAGE_TITLE: string;
+  ENV_RBX_NOTIFICATION_MESSAGE_BODY: string;
+  ENV_RBX_NOTIFICATION_IMAGE_URL: string;
 }
 
 export interface iConfig {

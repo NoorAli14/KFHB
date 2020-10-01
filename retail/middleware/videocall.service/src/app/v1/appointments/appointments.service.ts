@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { RedisService } from 'nestjs-redis';
-import { Cron, CronExpression } from '@nestjs/schedule';
+import { Cron } from '@nestjs/schedule';
 import { NewAppointmentInput } from './appointment.dto';
 import { AppointmentRepository } from '@core/repository';
 
@@ -13,12 +12,12 @@ import { PushNotificationModel } from './push_notification.model';
 import { toGraphQL } from '@common/utilities';
 import { ICurrentUser } from '@common/interfaces';
 import {
-  AppointmentAlreadyExistException,
   InvalidCallTimeException,
   AgentNotAvailableException,
   AppointmentNotFoundException,
-  NoAppointmentTodayException,
   MaxAppointLimitReachException,
+  SentNotificationFailedException,
+  AppointmentAlreadyExistException,
 } from './exceptions';
 
 @Injectable()
@@ -26,7 +25,6 @@ export class AppointmentsService {
   constructor(
     private readonly appointmentDB: AppointmentRepository,
     private readonly configService: ConfigurationService,
-    private readonly redisService: RedisService,
     private readonly gqlClient: GqlClientService,
   ) {}
 
@@ -345,19 +343,20 @@ export class AppointmentsService {
         platform: appointment.user.platform,
         device_id: appointment.user.device_id,
         token: appointment.user.firebase_token,
-        message_title: 'Dummy: until get from Business Team.',
-        message_body: 'Dummy: until get from Business Team.',
-        image_url: 'http://lorempixel.com/400/200',
+        message_title: this.configService.VCALL
+          .ENV_RBX_NOTIFICATION_MESSAGE_TITLE,
+        message_body: this.configService.VCALL
+          .ENV_RBX_NOTIFICATION_MESSAGE_BODY,
+        image_url: this.configService.VCALL.ENV_RBX_NOTIFICATION_IMAGE_URL,
       };
 
-      await this.send_push_notification(notification);
+      const send_notification = await this.send_push_notification(notification);
 
       // If success then
-      if (true) {
+      if (send_notification) {
         // Update Entry in Redis and Database with Status=Notification.
         // This is a Reference Object, So changing this item will update the List object as well.
         appointment.status = APPOINTMENT_STATUS.NOTIFICATION;
-
         // Updating in DB
         await this.appointmentDB.update(
           {
@@ -368,6 +367,8 @@ export class AppointmentsService {
           },
           ['id'],
         );
+      } else {
+        throw new SentNotificationFailedException(appointment.user.id);
       }
     });
   }

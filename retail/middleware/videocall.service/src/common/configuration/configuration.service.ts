@@ -47,6 +47,10 @@ export const DEFAULT_ENV: iConfig = {
   },
   VCALL: {
     ENV_RBX_CRON_JOB_TIME: 30,
+    ENV_RBX_NOTIFICATION_MESSAGE_TITLE: 'Dummy: until get from Business Team.',
+    ENV_RBX_NOTIFICATION_MESSAGE_BODY: 'Dummy: until get from Business Team.',
+    ENV_RBX_NOTIFICATION_IMAGE_URL:
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTZELk_VnIIulq0wOTiIXsyhXh0GNXfMInuJg&usqp=CAU',
   },
   logLevel: 'info',
 };
@@ -131,6 +135,18 @@ export class ConfigurationService {
           DEFAULT_ENV.VCALL.ENV_RBX_CRON_JOB_TIME,
         ),
         10,
+      ),
+      ENV_RBX_NOTIFICATION_MESSAGE_TITLE: this.get(
+        'ENV_RBX_NOTIFICATION_MESSAGE_TITLE',
+        DEFAULT_ENV.VCALL.ENV_RBX_NOTIFICATION_MESSAGE_TITLE,
+      ),
+      ENV_RBX_NOTIFICATION_MESSAGE_BODY: this.get(
+        'ENV_RBX_NOTIFICATION_MESSAGE_BODY',
+        DEFAULT_ENV.VCALL.ENV_RBX_NOTIFICATION_MESSAGE_BODY,
+      ),
+      ENV_RBX_NOTIFICATION_IMAGE_URL: this.get(
+        'ENV_RBX_NOTIFICATION_IMAGE_URL',
+        DEFAULT_ENV.VCALL.ENV_RBX_NOTIFICATION_IMAGE_URL,
       ),
     };
   }
