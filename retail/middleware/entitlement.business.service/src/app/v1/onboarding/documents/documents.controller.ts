@@ -5,7 +5,7 @@ import {
     Param,
     Header,
     Get,
-    Req,, Query
+    Req, Query
 } from '@nestjs/common';
 import {
     ApiTags,
