@@ -18,6 +18,7 @@ import {
   AgentNotAvailableException,
   AppointmentNotFoundException,
   NoAppointmentTodayException,
+  MaxAppointLimitReachException,
 } from './exceptions';
 
 @Injectable()
@@ -54,9 +55,7 @@ export class AppointmentsService {
       appointments_at_this_time.length >=
       parseInt(this.configService.get('ENV_RBX_MAX_APPOINTMENTS_AT_A_TIME'))
     ) {
-      throw new Error(
-        'Appointment cannot be saved at this time, Please choose another time.',
-      );
+      throw new MaxAppointLimitReachException('');
     }
   }
 
@@ -172,11 +171,15 @@ export class AppointmentsService {
       end_date,
     );
 
+    if (appointments && appointments.length <= 0)
+      throw new NoAppointmentTodayException(start_date, end_date);
+
     // Save all these in Redis instance
     const redis_client = await this.redisService.getClient(
       this.configService.REDIS.name,
     );
-    const redis_response = redis_client.set(
+
+    const redis_response = await redis_client.set(
       process.env.ENV_RBX_REDIS_KEY,
       JSON.stringify(appointments),
     );
