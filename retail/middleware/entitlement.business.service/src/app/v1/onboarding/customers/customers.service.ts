@@ -41,10 +41,10 @@ export class CustomersService {
 
   async findOne(id: string): Promise<Customer> {
     this.logger.log(`Start finding customer360 with ID [${id}]`);
-    const query = `query {
+    const customerQuery: string = `query {
       result: findCustomerById(id: "${id}") ${this.output}
     }`;
-    const _query = `query {
+    const templateQuery: string = `query {
       result:  findTemplateResponseByUserId(user_id: "${id}") {
         id
         user_id
@@ -54,11 +54,33 @@ export class CustomersService {
         updated_on
       }
     }`;
-    const [customer, templates] = await Promise.all([
-      this.gqlClient.send(query),
-      this.gqlClient.send(_query),
+    const amlQuery: string = `query {
+      result: amlListByUserId(user_id: "${id}") {
+      id
+      request_reference
+      responses {
+          id
+          response_text
+          status
+          created_on
+          created_by
+          updated_on
+          updated_by
+      }
+      status
+      created_on
+      created_by
+      updated_on
+      updated_by
+    }
+  }`;
+    const [customer, templates, amlResponses] = await Promise.all([
+      this.gqlClient.send(customerQuery),
+      this.gqlClient.send(templateQuery),
+      this.gqlClient.send(amlQuery)
     ]);
     customer.templates = templates?.[0] ? templates : [];
+    customer.amlResponses = amlResponses?.[0] ? amlResponses : [];
     return customer;
   }
 }

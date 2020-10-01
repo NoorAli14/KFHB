@@ -16,14 +16,14 @@ import {
 import { Request } from 'express';
 import { AuthGuard, CurrentUser } from '@common/index';
 import { AttachmentsService } from './attachments.service';
-import { User } from '../users/user.entity';
+import { Customer as User } from '../customers/customer.entity';
 
 @ApiTags('Attachment')
 @Controller('attachments')
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
 export class AttachmentsController {
-  constructor(private readonly documentService: AttachmentsService) {}
+  constructor(private readonly documentService: AttachmentsService) { }
 
   @Get(':id/preview')
   @ApiOperation({
