@@ -150,7 +150,12 @@ export class AppointmentsService {
   async findByIds(ids: readonly string[]): Promise<Appointment> {
     return this.appointmentDB.findByIds(ids);
   }
-
+  /** 
+   * 
+   * 
+   * Commented the day end cron job, as we are doing on demand base  
+   * 
+   * 
   @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async every_midnight_cron(): Promise<void> {
     console.log('Cron is running at Midnight.');
@@ -203,6 +208,7 @@ export class AppointmentsService {
       );
     }
   }
+  */
 
   // *   *   *   *   *   *
   // |   |   |   |   |   |
