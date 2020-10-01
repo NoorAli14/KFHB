@@ -8,6 +8,7 @@ import {
   iSWAGGER,
   iGRAPHQL,
   iConfig,
+  iVCALL,
 } from '@common/interfaces/configuration.interface';
 import { RedisModuleOptions } from 'nestjs-redis';
 
@@ -43,6 +44,9 @@ export const DEFAULT_ENV: iConfig = {
   REDIS: {
     name: 'development',
     url: 'redis://127.0.0.1:6379/4',
+  },
+  VCALL: {
+    ENV_RBX_CRON_JOB_TIME: 30,
   },
   logLevel: 'info',
 };
@@ -115,6 +119,19 @@ export class ConfigurationService {
       name: this.get('NODE_ENV', DEFAULT_ENV.REDIS.name),
       url: this.get('ENV_RBX_REDIS_URL', DEFAULT_ENV.REDIS.url),
       enableReadyCheck: true,
+    };
+  }
+
+  // Parse iVCall Environment Variables
+  public get VCALL(): iVCALL {
+    return {
+      ENV_RBX_CRON_JOB_TIME: parseInt(
+        this.get(
+          'ENV_RBX_CRON_JOB_TIME',
+          DEFAULT_ENV.VCALL.ENV_RBX_CRON_JOB_TIME,
+        ),
+        10,
+      ),
     };
   }
 

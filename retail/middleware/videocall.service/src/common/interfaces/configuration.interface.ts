@@ -33,6 +33,9 @@ export interface iDATABASE {
   TIMEOUT?: number;
   IS_DEBUG?: boolean;
 }
+export interface iVCALL {
+  ENV_RBX_CRON_JOB_TIME: number;
+}
 
 export interface iConfig {
   /** Application Details */
@@ -42,6 +45,7 @@ export interface iConfig {
   SWAGGER?: iSWAGGER;
   GRAPHQL?: iGRAPHQL;
   REDIS?: RedisModuleOptions;
+  VCALL?: iVCALL;
 
   /**
    * The log level to use.
