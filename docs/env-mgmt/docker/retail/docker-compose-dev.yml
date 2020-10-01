@@ -13,10 +13,7 @@ services:
   # Gateway Service
   #=================================================================
   retail-gateway:
-    build:
-      context: ../../../../retail/middleware/gateway.service
-      dockerfile: Dockerfile
-    image: retail-gateway:v1
+    image: rubixgateway:dev
     container_name: retail_gateway
     environment:
       - ENV_RBX_NGINX_SERVER_NAME=$ENV_RBX_NGINX_SERVER_NAME
@@ -33,34 +30,24 @@ services:
       - core_service_network
     ports:
       - 80:80
-      - 443:443
-
   #=================================================================
   # Admin Web Portal Service
   #=================================================================
   retail-webportal:
-    build:
-      context: ../../../../retail/webadmin/
-      dockerfile: Dockerfile
-    image: "retail-webportal:v1"
-    container_name: "retail_webportal"
+    image: rubixretailwebadmin:dev
+    container_name: retail_webportal
     environment:
       - ENV_RBX_API_BASE_URL=$ENV_RBX_API_BASE_URL
       - ENV_RBX_APP_SECRET=$ENV_RBX_APP_SECRET
     restart: always
     networks:
       - core_service_network
-    ports:
-      - 3000:4200
   #=================================================================
   # Entitlement Business Service
   #=================================================================
   retail-entitlement:
-    build:
-      context: ../../../../retail/middleware/entitlement.business.service
-      dockerfile: Dockerfile
-    image: "retail-entitlement:v1"
-    container_name: "retail_entitlement"
+    image: rubixentitlements:dev
+    container_name: retail_entitlement
     environment:
       - ENV_RBX_PORT=5000
       - ENV_RBX_APP_NAME=Rubix | Entitlement Business Service
@@ -84,11 +71,8 @@ services:
   # Onboarding Business Service
   #=================================================================
   retail-onboarding:
-    build:
-      context: ../../../../retail/middleware/onboarding.business.service
-      dockerfile: Dockerfile
-    image: "retail-onboarding:v1"
-    container_name: "retail_onboarding"
+    image: rubixretailonboarding:dev
+    container_name: retail_onboarding
     environment:
       - ENV_RBX_PORT=4000
       - ENV_RBX_APP_NAME=Rubix | Onboarding Business Service
@@ -110,11 +94,8 @@ services:
   # Identity Service
   #=================================================================
   retail-identity:
-    build:
-      context: ../../../../retail/middleware/identity.service
-      dockerfile: Dockerfile
-    image: "retail-identity:v1"
-    container_name: "retail_identity"
+    image: rubixretailidentity:dev
+    container_name: retail_identity
     environment:
       - ENV_RBX_PORT=4010
       - ENV_RBX_DB_USERNAME=$ENV_RBX_DB_USERNAME
@@ -144,11 +125,8 @@ services:
   # Compliance Service
   #=================================================================
   retail-compliance:
-    build:
-      context: ../../../../retail/middleware/compliance.service
-      dockerfile: Dockerfile
-    image: "retail-compliance:v1"
-    container_name: "retail_compliance"
+    image: rubixcompliance:dev
+    container_name: retail_compliance
     environment:
       - ENV_RBX_PORT=5010
       - ENV_RBX_DB_USERNAME=$ENV_RBX_DB_USERNAME
@@ -165,15 +143,12 @@ services:
     networks:
       - core_service_network
 
-  # #=================================================================
-  # # User Management Service
-  # #=================================================================
+  #=================================================================
+  # User Management Service
+  #=================================================================
   retail-user-management:
-    build:
-      context: ../../../../retail/middleware/entitlement.service
-      dockerfile: Dockerfile
-    image: "retail-user-management:v1"
-    container_name: "retail_user_management"
+    image: rubixusermgmt:dev
+    container_name: retail_user_management
     environment:
       - ENV_RBX_PORT=5020
       - ENV_RBX_DB_USERNAME=$ENV_RBX_DB_USERNAME
@@ -190,15 +165,12 @@ services:
     networks:
       - core_service_network
 
-  # #=================================================================
-  # # Notification Service
-  # #=================================================================
+  #=================================================================
+  # Notification Service
+  #=================================================================
   retail-notification:
-    build:
-      context: ../../../../retail/middleware/notifications
-      dockerfile: Dockerfile
-    image: "retail-notification:v1"
-    container_name: "retail_notification"
+    image: rubixnotifications:dev
+    container_name: retail_notification
     environment:
       - ENV_RBX_PORT=5030
       - ENV_RBX_DB_USERNAME=$ENV_RBX_DB_USERNAME
@@ -232,11 +204,8 @@ services:
   # Reference Service
   #=================================================================
   retail-reference:
-    build:
-      context: ../../../../retail/middleware/reference.service
-      dockerfile: Dockerfile
-    image: "retail-reference:v1"
-    container_name: "retail_reference"
+    image: rubixreference:dev
+    container_name: retail_reference
     environment:
       - ENV_RBX_PORT=2000
       - ENV_RBX_APP_NAME=Rubix | References Service

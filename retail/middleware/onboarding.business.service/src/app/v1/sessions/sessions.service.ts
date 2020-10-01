@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { Session, Evaluation } from './session.entity';
 import { GqlClientService, strToBase64 } from '@common/index';
 import { FaceUploadingInput } from '../attachments/attachment.interface';
@@ -20,10 +20,10 @@ export class SessionsService {
     updated_by   
   }`;
 
-  constructor(private readonly gqlClient: GqlClientService) {}
+  constructor(private readonly gqlClient: GqlClientService) { }
 
   async create(): Promise<Session> {
-    const mutation = `mutation {
+    const mutation: string = `mutation {
       result: addSession ${this.output}
     }`;
     return this.gqlClient.send(mutation);
@@ -37,7 +37,7 @@ export class SessionsService {
    */
   async update(input: FaceUploadingInput): Promise<Session> {
     // Construct GraphQL request
-    const mutation = `mutation {
+    const mutation: string = `mutation {
       result: updateSession(input: {
           file: "${strToBase64(input.file)}"
         }) ${this.output}
@@ -51,13 +51,16 @@ export class SessionsService {
    * @return The Evaluation object
    */
   async evaluation(): Promise<Evaluation> {
-    const mutation = `mutation {
+    const mutation: string = `mutation {
       result: evaluation {
         success
         status
         message
       }
     }`;
-    return this.gqlClient.send(mutation);
+    const result: any = await this.gqlClient.send(mutation);
+    if (result?.errors)
+      throw new BadRequestException({ errors: result.errors });
+    return result;
   }
 }
