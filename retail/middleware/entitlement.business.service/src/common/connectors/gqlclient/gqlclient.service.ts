@@ -27,7 +27,7 @@ export class GqlClientService {
 
     return this.http
       .post(
-        `http://127.0.0.1:${this.config.APP.PORT}/graphql`,
+        `http://localhost:${this.config.APP.PORT}/graphql`,
         {
           query: input,
         },
