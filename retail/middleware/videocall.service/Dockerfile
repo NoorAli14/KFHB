@@ -83,7 +83,7 @@ RUN rm -rf src test
 # These variables will be different from application to application
 ENV ENV_RBX_HOST=${PORT} \
     NODE_ENV=${NODE_ENV} \
-    ENV_RBX_APP_NAME="Rubix | Template Service"  \
+    ENV_RBX_APP_NAME="Rubix | Video Call Service"  \
     ENV_RBX_HOST="http://localhost" \
     TZ=${TZ} \
     ENV_RBX_DB_USERNAME= \
@@ -97,7 +97,11 @@ ENV ENV_RBX_HOST=${PORT} \
     ENV_RBX_DB_DEBUG= \
     ENV_RBX_SWAGGER_ENABLED= \
     ENV_RBX_SWAGGER_ROUTE= \
-    ENV_RBX_CRON_JOB_TIME= 
+    ENV_RBX_CRON_JOB_TIME= \
+    ENV_RBX_MAX_APPOINTMENTS_AT_A_TIME= \
+    ENV_RBX_NOTIFICATION_SERVER= \
+    ENV_RBX_ENTITLEMENT_SERVER= \
+    ENV_RBX_IDENTITY_SERVER= 
 
 # Set user node for future commands
 USER $USER

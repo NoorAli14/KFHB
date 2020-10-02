@@ -36,18 +36,13 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-enum GENDER {
-  MALE
-  FEMALE
-}
-
 type Mutation {
   addAppointment(appointment: NewAppointmentInput!): Appointment!
 }
 
 input NewAppointmentInput {
   call_time: DateTime!
-  gender: GENDER
+  gender: String
   status: APPOINTMENT_STATUS
   user_id: String!
 }
