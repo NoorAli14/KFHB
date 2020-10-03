@@ -6,7 +6,6 @@ import {
   Param,
   Put,
   Delete,
-  NotFoundException,
   ParseUUIDPipe,
   HttpStatus,
   HttpCode,
@@ -23,17 +22,18 @@ import {
   ApiBadRequestResponse,
   ApiNotFoundResponse,
 } from '@nestjs/swagger';
+import { AuthGuard } from '@common/index';
+
 import { RoleService } from './roles.service';
 import { Role } from './role.entity';
-import { RoleDto } from './role.dto';
-import { AuthGuard } from '@common/guards/';
+import { RoleDto, UpdateRoleDto } from './role.dto';
 
 @ApiTags('Role')
 @Controller('roles')
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
 export class RolesController {
-  constructor(private readonly roleService: RoleService) {}
+  constructor(private readonly roleService: RoleService) { }
 
   @Post('/')
   @ApiBody({ description: 'Sets the role properties.', type: RoleDto })
@@ -50,8 +50,10 @@ export class RolesController {
     type: Error,
     description: 'Input Validation failed.',
   })
-  async create(@Body() roleDto: RoleDto): Promise<Role> {
-    return this.roleService.create(roleDto);
+  async create(
+    @Body() input: RoleDto,
+  ): Promise<Role> {
+    return this.roleService.create(input);
   }
 
   @Get('/')
@@ -79,16 +81,14 @@ export class RolesController {
     type: Error,
     description: 'Role Not Found.',
   })
-  async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<Role> {
-    const role: Role = await this.roleService.findOne(id);
-    if (!role) {
-      throw new NotFoundException('Role Not Found');
-    }
-    return role;
+  async findOne(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<Role> {
+    return this.roleService.findOne(id);
   }
 
   @Put(':id')
-  @ApiBody({ description: 'Sets the role properties.', type: RoleDto })
+  @ApiBody({ description: 'Sets the role properties.', type: UpdateRoleDto })
   @ApiOperation({
     summary: 'Update a role by ID',
     description:
@@ -108,7 +108,7 @@ export class RolesController {
   })
   async update(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() roleDto: RoleDto,
+    @Body() roleDto: UpdateRoleDto,
   ): Promise<Role> {
     return this.roleService.update(id, roleDto);
   }
@@ -125,7 +125,9 @@ export class RolesController {
     description: 'Role Not Found.',
   })
   @HttpCode(HttpStatus.NO_CONTENT)
-  async delete(@Param('id', ParseUUIDPipe) id: string): Promise<any> {
+  async delete(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<any> {
     return this.roleService.delete(id);
   }
 }

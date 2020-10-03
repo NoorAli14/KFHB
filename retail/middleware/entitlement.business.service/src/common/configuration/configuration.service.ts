@@ -9,7 +9,7 @@ import {
   iRATE_LIMITER,
   iCORS,
 } from '@common/interfaces/configuration.interface';
-import {DEFAULT_ENV} from './configuration.default';
+import { DEFAULT_ENV } from './configuration.default';
 
 @Injectable()
 export class ConfigurationService {
@@ -31,6 +31,14 @@ export class ConfigurationService {
       VERSION: this.get('ENV_RBX_APP_VERSION', DEFAULT_ENV.APP.VERSION),
       HOST: this.get('ENV_RBX_HOST', DEFAULT_ENV.APP.HOST),
       PORT: parseInt(this.get('ENV_RBX_PORT', DEFAULT_ENV.APP.PORT), 10),
+      WEB_ONBOARDING_LINK: this.get(
+        'ENV_RBX_WEB_ONBOARDING_LINK',
+        DEFAULT_ENV.APP.WEB_ONBOARDING_LINK,
+      ),
+      WEB_RESET_PASSWORD_LINK: this.get(
+        'ENV_RBX_WEB_RESET_PASSWORD_LINK',
+        DEFAULT_ENV.APP.WEB_RESET_PASSWORD_LINK,
+      ),
     };
   }
 
@@ -43,6 +51,25 @@ export class ConfigurationService {
     };
   }
 
+  get REDIS_CONNECTION(): Record<string, any> {
+    return {
+      url: this.get('ENV_RBX_REDIS_URL', ''),
+    };
+  }
+  get JWT(): Record<string, any> {
+    return {
+      EXPIRY_SECONDS: parseInt(this.get('ENV_RBX_JWT_EXPIRY_MINUTES', 0), 10) *
+        60,
+      REFRESH_EXPIRY_SECONDS: parseInt(
+        this.get('ENV_RBX_JWT_REFRESH_EXPIRY_DAYS', 0),
+        10,
+      ) * 24 * 60 * 60,
+      SECRET: this.get('ENV_RBX_JWT_SECRET', null),
+      REFRESH_SECRET: this.get('ENV_RBX_JWT_REFRESH_SECRET', null),
+      ALGORITHM: this.get('ENV_RBX_JWT_ALGORITHM', 'HS256'),
+      IGNORE_EXPIRY: false,
+    };
+  }
   get CORS(): iCORS {
     return {
       ENABLE: isTruthy(
@@ -97,8 +124,8 @@ export class ConfigurationService {
     return this.IS_DEVELOPMENT
       ? true
       : isTruthy(
-          this.get('ENV_RBX_SWAGGER_ENABLED', DEFAULT_ENV.SWAGGER.ENABLE),
-        );
+        this.get('ENV_RBX_SWAGGER_ENABLED', DEFAULT_ENV.SWAGGER.ENABLE),
+      );
   }
 
   get APPLICATION_HOST(): string {
@@ -114,7 +141,7 @@ export class ConfigurationService {
   get IS_PRODUCTION(): boolean {
     return this.environment === 'production';
   }
-  
+
   get IS_TEST(): boolean {
     return this.environment === 'test';
   }

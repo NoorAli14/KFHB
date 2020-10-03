@@ -1,36 +1,89 @@
 import { Module as RubixModule } from '@nestjs/common';
+import { GATEWAY_BUILD_SERVICE, GraphQLGatewayModule } from '@nestjs/graphql';
+import { RemoteGraphQLDataSource } from '@apollo/gateway';
+import { RedisModule } from 'nestjs-redis';
+
+import {
+  CommonModule,
+  GqlClientModule,
+  ConfigurationService,
+  X_USER_ID,
+  X_TENANT_ID,
+  X_CORRELATION_KEY, RegistryService
+} from '@common/index';
+
 import { AuthModule } from './auth/auth.module';
-import { IdentityModule } from './identity/identity.module';
-import { FaceModule } from './faces/faces.module';
-import { ForensicModule } from './forensic/forensic.module';
+import { ComplianceModule } from './compliances/compliances.module';
 import { OtpModule } from './otp/otp.module';
-import { AccountModule } from './accounts/accounts.module';
-import { EvaluationModule } from './evaluation/evaluation.module';
-import { GraphQLGatewayModule } from '@nestjs/graphql';
-import { CommonModule } from '@common/common.module';
+import { SessionModule } from './sessions/session.module';
+import { AttachmentModule } from './attachments/attachment.module';
+import { UserModule } from './users/user.module';
+import { AmlModule } from './aml/aml.module';
+import { AppointmentModule } from './appointments/appointment.module';
+
+class AuthenticatedDataSource extends RemoteGraphQLDataSource {
+  async willSendRequest({ request, context }) {
+    const { userId, tenantId, correlationId } = context;
+    request.http.headers.set(X_USER_ID, userId);
+    request.http.headers.set(X_TENANT_ID, tenantId);
+    request.http.headers.set(X_CORRELATION_KEY, correlationId);
+  }
+}
+
+@RubixModule({
+  providers: [
+    {
+      provide: AuthenticatedDataSource,
+      useValue: AuthenticatedDataSource,
+    },
+    {
+      provide: GATEWAY_BUILD_SERVICE,
+      useFactory: AuthenticatedDataSource => {
+        return ({ name, url }) => new AuthenticatedDataSource({ url });
+      },
+      inject: [AuthenticatedDataSource],
+    },
+  ],
+  exports: [GATEWAY_BUILD_SERVICE],
+})
+class BuildServiceModule { }
+
 @RubixModule({
   imports: [
     CommonModule,
+    GqlClientModule,
     AuthModule,
-    FaceModule,
-    IdentityModule,
+    SessionModule,
+    AttachmentModule,
     OtpModule,
-    ForensicModule,
-    AccountModule,
-    EvaluationModule,
-    GraphQLGatewayModule.forRoot({
-      server: {
-        // ... Apollo server options
-        cors: true,
-      },
-      gateway: {
-        serviceList: [
-          // These all Server values comes through service registery
-          // { name: 'users', url: 'http://localhost:3020/graphql' },
-          // { name: 'customers', url: 'http://localhost:3010/graphql' },
-        ],
-      },
+    UserModule,
+    ComplianceModule,
+    AmlModule,
+    AppointmentModule,
+    GraphQLGatewayModule.forRootAsync({
+      imports: [BuildServiceModule],
+      useFactory: async (schema: RegistryService) => ({
+        gateway: {
+          // Note: All these values comes through service registry. For Demo purposes we hardcode service list
+          serviceList: schema.services.map(({ name, url }) => ({ name, url })),
+        },
+        server: {
+          context: ({ req }) => ({
+            userId: req.headers[X_USER_ID],
+            tenantId: req.headers[X_TENANT_ID],
+            correlationId: req.headers[X_CORRELATION_KEY],
+          }),
+          // ... Apollo server options
+          cors: true,
+        },
+      }),
+      inject: [RegistryService, GATEWAY_BUILD_SERVICE],
+    }),
+    RedisModule.forRootAsync({
+      imports: [CommonModule],
+      useFactory: (_config: ConfigurationService) => _config.REDIS_CONNECTION,
+      inject: [ConfigurationService],
     }),
   ],
 })
-export class ModuleV1 {}
+export class ModuleV1 { }

@@ -4,8 +4,11 @@ import {
   Body,
   Param,
   Put,
-  NotFoundException,
+  Delete,
   ParseUUIDPipe,
+  UseGuards,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -15,17 +18,19 @@ import {
   ApiBearerAuth,
   ApiBadRequestResponse,
   ApiNotFoundResponse,
+  ApiNoContentResponse,
 } from '@nestjs/swagger';
+import { AuthGuard, } from '@common/index';
 import { UserService } from './users.service';
 import { User } from './user.entity';
-import { ChangePasswordDto, UpdateUserDto } from './user.dto';
-import { SuccessDto } from '@common/dtos/';
+import { UpdateUserDto } from './user.dto';
 
 @ApiTags('User')
 @Controller('users')
 @ApiBearerAuth()
+@UseGuards(AuthGuard)
 export class UsersController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
 
   @Get('/')
   @ApiOperation({
@@ -52,12 +57,10 @@ export class UsersController {
     type: Error,
     description: 'User Not Found.',
   })
-  async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<User> {
-    const user = await this.userService.findOne(id);
-    if (!user) {
-      throw new NotFoundException('User Not Found');
-    }
-    return user;
+  async findOne(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<User> {
+    return this.userService.findOne(id);
   }
 
   @Put(':id')
@@ -81,31 +84,28 @@ export class UsersController {
   })
   async update(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() userDto: UpdateUserDto,
+    @Body() input: UpdateUserDto,
   ): Promise<User> {
-    const user = await this.userService.findOne(id);
-    if (!user) {
-      throw new NotFoundException('User Not Found');
-    }
-    return this.userService.update(id, userDto);
+    return this.userService.update(id, input);
   }
 
-  @Put('/password')
-  @ApiBody({
-    description: 'Sets the user properties.',
-    type: ChangePasswordDto,
-  })
+  @Delete(':id')
   @ApiOperation({
-    summary: 'Update user password',
-    description: 'A successful request returns the HTTP 200 OK status code.',
+    summary: 'Delete a User by ID',
+    description:
+      'A successful request returns the HTTP 204 No Content status code with empty response body.',
   })
-  @ApiOkResponse({
-    type: SuccessDto,
-    description: 'User has been successfully updated their password.',
+  @ApiNoContentResponse({
+    description: 'User has been successfully deleted.',
   })
-  async update_password(
-    @Body() changePasswordDto: ChangePasswordDto,
+  @ApiNotFoundResponse({
+    type: Error,
+    description: 'User Not Found.',
+  })
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async delete(
+    @Param('id', ParseUUIDPipe) id: string,
   ): Promise<any> {
-    // this.userService.create(userDto);
+    return this.userService.delete(id);
   }
 }

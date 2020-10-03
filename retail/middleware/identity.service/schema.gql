@@ -1,0 +1,169 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+directive @key(fields: String!) on OBJECT | INTERFACE
+
+directive @extends on OBJECT | INTERFACE
+
+directive @external on OBJECT | FIELD_DEFINITION
+
+directive @requires(fields: String!) on FIELD_DEFINITION
+
+directive @provides(fields: String!) on FIELD_DEFINITION
+
+input CreateCustomerInput {
+  first_name: String
+  last_name: String
+  email: String
+  contact_no: String
+  device_id: String
+  platform: String
+}
+
+type CUSTOM_ERROR {
+  valid: Boolean!
+  errors: [SCHEMA_ERROR!]
+}
+
+type Customer {
+  id: ID
+  first_name: String
+  middle_name: String
+  last_name: String
+  tenant_id: String
+  session_id: String
+  email: String
+  contact_no: String
+  gender: String
+  date_of_birth: String
+  national_id_no: String
+  national_id_expiry: String
+  nationality: String
+  nationality_code: String
+  device_id: String
+  platform: String
+  next_step: String
+  is_aml_verified: Boolean
+  is_email_verified: Boolean
+  is_contact_no_verified: Boolean
+  is_evaluation_verified: Boolean
+  status: String
+  created_on: String
+  created_by: String
+  updated_on: String
+  updated_by: String
+  deleted_on: String
+  deleted_by: String
+  documents: [Document!]!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Document {
+  id: ID!
+  name: String!
+  session_id: String!
+  tenant_id: String!
+  document_type_id: String!
+  attachable_id: String!
+  processed_data: String
+  status: String
+  created_by: String!
+  created_on: DateTime!
+  updated_by: String!
+  updated_on: DateTime!
+  deleted_by: String!
+  deleted_on: DateTime!
+}
+
+type EVALUATION_RESPONSE {
+  success: Boolean!
+  status: String!
+  message: String
+}
+
+type Face {
+  id: ID!
+  session_id: String!
+  tenant_id: String!
+  document_type_id: String!
+  attachable_id: String!
+  processed_data: String
+  status: String
+  created_by: String!
+  created_on: DateTime!
+  updated_by: String!
+  updated_on: DateTime!
+  deleted_by: String!
+  deleted_on: DateTime!
+}
+
+type Mutation {
+  addSession: Session!
+  updateSession(input: UploadFaceInput!): Session!
+  evaluation: EVALUATION_RESPONSE!
+  addCustomer(input: CreateCustomerInput!): Customer!
+  uploadLiveness(input: UploadFaceInput!): Face!
+  addDocument(input: UploadDocumentInput!): Document!
+  processDocument(input: ProcessDocumentInput!): Result!
+}
+
+type PreviewDocument {
+  image: String!
+}
+
+input PreviewDocumentInput {
+  customer_id: String!
+  attachment_id: String!
+  extracted_image: Boolean
+}
+
+input ProcessDocumentInput {
+  type: String!
+}
+
+type Query {
+  findCustomerById(id: String!): Customer!
+  previewAttachment(input: PreviewDocumentInput!): PreviewDocument!
+}
+
+union Result = Document | CUSTOM_ERROR
+
+type SCHEMA_ERROR {
+  group: String!
+  errorCode: String
+  message: String!
+  field: String
+  stack: String
+  value: String
+}
+
+type Session {
+  id: ID!
+  customer_id: String!
+  tenant_id: String!
+  check_id: String!
+  reference_id: String!
+  target_user_id: String
+  fido_reg_req_id: String!
+  fido_reg_req: String!
+  evaluation_id: String
+  status: String
+  created_by: String!
+  created_on: DateTime!
+  updated_by: String!
+  updated_on: DateTime!
+}
+
+input UploadDocumentInput {
+  type: String!
+  file: String!
+}
+
+input UploadFaceInput {
+  file: String!
+}

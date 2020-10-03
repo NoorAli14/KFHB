@@ -1,6 +1,6 @@
 import { INestApplication } from '@nestjs/common';
 import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
-import { ConfigurationService } from '@common/configuration/configuration.service';
+import { ConfigurationService, X_ACCESS_TOKEN } from '@common/index';
 export class Swagger {
 
   /**
@@ -16,12 +16,12 @@ export class Swagger {
     const builder = new DocumentBuilder()
       .setTitle(config.APP.NAME)
       .setDescription(config.APP.DESCRIPTION)
-      .addBearerAuth(
-        { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
-        'access-token',
-      )
       .setVersion(config.APP.VERSION)
-      .setBasePath(config.APP.API_URL_PREFIX);
+      .setBasePath(config.APP.API_URL_PREFIX)
+      .addBearerAuth(
+{ type: 'http', scheme: 'bearer', bearerFormat: 'JWT', name: X_ACCESS_TOKEN },
+X_ACCESS_TOKEN,
+);
     const options = builder.build();
     return SwaggerModule.createDocument(app, options);
   }
@@ -36,10 +36,11 @@ export class Swagger {
     _app: INestApplication,
     _config: ConfigurationService,
   ): INestApplication {
-    SwaggerModule.setup(
+    const documentation: OpenAPIObject = Swagger.createDocument(_app, _config)
+     SwaggerModule.setup(
       _config.SWAGGER.ROUTE,
       _app,
-      Swagger.createDocument(_app, _config),
+      documentation,
       {
         swaggerUrl: `${_config.APPLICATION_HOST}/api/docs-json`,
         explorer: true,

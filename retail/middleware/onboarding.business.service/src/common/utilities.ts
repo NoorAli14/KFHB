@@ -1,15 +1,23 @@
 import * as path from 'path';
 import { v4 as uuidV4 } from 'uuid';
+import * as Crypto from 'crypto';
+import { X_CORRELATION_KEY, X_USER_ID, X_TENANT_ID } from './constants';
+export const strToBase64 = (data: string): string => {
+  const buff: Buffer = new Buffer(data);
+  return buff.toString('base64');
+};
 
-export const toGraphql = (input: any): string => {
-  return JSON.stringify(input).replace(
-    /\"([^(\")"]+)\":/g,
-    '$1:',
-  );
+export const base64ToStr = (data: string): any => {
+  const buff: Buffer = new Buffer(data, 'base64');
+  return buff.toString('ascii');
+};
+
+export const toGraphql = (input: { [key: string]: any }): string => {
+  return JSON.stringify(input).replace(/\"([^(\")"]+)\":/g, '$1:');
 };
 /**
- * Full path string
- * @param fileOrDir
+ * Generate v4 uuid string
+ * @return uuid string
  */
 export const uuid = (): string => {
   return uuidV4();
@@ -50,9 +58,19 @@ export const normalizePort = (param: number | string): number | string => {
  * generate random string
  * @param length
  */
-export const generateRandomString = (length: number): string => {
-  return Math.random()
-    .toString(36)
-    .replace(/[^a-zA-Z0-9]+/g, '')
-    .substr(0, length);
+export const generateRandomString = (length = 36): string => {
+  return Crypto.randomBytes(length)
+    .toString('hex')
+    .slice(0, length);
+};
+
+export const formattedHeader = (
+  user_id: string | undefined,
+  headers: { [key: string]: any },
+): any => {
+  const _headers: { [key: string]: string } = {};
+  _headers[X_CORRELATION_KEY] = headers[X_CORRELATION_KEY];
+  if (user_id) _headers[X_USER_ID] = user_id;
+  _headers[X_TENANT_ID] = headers[X_TENANT_ID];
+  return _headers;
 };

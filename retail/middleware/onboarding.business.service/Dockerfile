@@ -83,12 +83,24 @@ RUN rm -rf src test
 # These variables will be different from application to application
 ENV ENV_RBX_HOST=${PORT} \
     NODE_ENV=${NODE_ENV} \
-    ENV_RBX_APP_NAME="Onboarding Business service"  \
+    ENV_RBX_APP_NAME="Rubix | Onboarding Business service"  \
     ENV_RBX_API_URL_PREFIX="/api/v1/onboarding" \
     ENV_RBX_HOST="http://localhost" \
     TZ=${TZ} \
     ENV_RBX_SWAGGER_ENABLED="true" \
-    ENV_RBX_SWAGGER_ROUTE="/api/v1/onboarding/docs"
+    ENV_RBX_SWAGGER_ROUTE="/api/v1/onboarding/docs" \
+    ENV_RBX_RATE_LIMITER_MAX_REQUEST= \
+    ENV_RBX_JWT_EXPIRY_MINUTES= \
+    ENV_RBX_JWT_REFRESH_EXPIRY_DAYS= \
+    ENV_RBX_JWT_SECRET= \
+    ENV_RBX_JWT_ALGORITHM= \
+    ENV_RBX_JWT_REFRESH_SECRET= \
+    ENV_RBX_CORS_ORIGIN= \
+    ENV_RBX_CORS_ENABLED= \
+    ENV_RBX_REDIS_URL= \
+    ENV_RBX_BASIC_AUTH_KEY= \
+    ENV_RBX_BASIC_AUTH_SECRET=
+
 
 # Set user node for future commands
 USER $USER

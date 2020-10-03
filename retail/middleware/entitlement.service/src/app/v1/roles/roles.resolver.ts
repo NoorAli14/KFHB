@@ -1,75 +1,103 @@
-import { Resolver, Query, Mutation, Args, Info, ResolveField, Parent } from '@nestjs/graphql';
-import { Loader } from 'nestjs-graphql-dataloader';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  ResolveField,
+  Parent,
+  Context,
+  GraphQLExecutionContext,
+} from '@nestjs/graphql';
+import * as DataLoader from 'dataloader';
+import { Loader } from 'nestjs-dataloader';
 
-import { graphqlKeys } from '@common/utilities';
-import { RoleService } from "@app/v1/roles/roles.service";
-import { Role } from "@app/v1/roles/role.model";
-import { RoleInput } from "@app/v1/roles/role.dto";
-import { KeyValInput } from "@common/inputs/key-val.input";
-import * as DataLoader from "dataloader";
-import { Module } from "@app/v1/modules/module.model";
-import {ModulesDataLoader} from "@core/dataloaders";
+import { RoleService } from '@app/v1/roles/roles.service';
+import { Role } from '@app/v1/roles/role.model';
+import { RoleCreateInput, RoleInput } from '@app/v1/roles/role.dto';
+import { KeyValInput } from '@common/inputs/key-val.input';
+import { Module } from '@app/v1/modules/module.model';
+import { STATUS } from '@common/constants';
+import { CurrentUser, Fields } from '@common/decorators';
+import { ICurrentUser } from '@common/interfaces';
+import { RoleNotFoundException } from './exceptions';
 
 @Resolver(Role)
 export class RolesResolver {
   constructor(private readonly roleService: RoleService) {}
 
   @Query(() => [Role])
-  async rolesList(@Info() info): Promise<Role[]> {
-    const keys = graphqlKeys(info);
-    return this.roleService.list(keys);
+  async rolesList(
+    @Fields() columns: string[],
+    @Context() context: GraphQLExecutionContext,
+  ): Promise<Role[]> {
+    return this.roleService.list(columns, context['req'].query);
   }
 
   @Query(() => Role)
-  async findRole(@Args('id') id: string, @Info() info): Promise<Role> {
-    const keys = graphqlKeys(info);
-    return this.roleService.findById(id, keys);
+  async findRoleById(
+    @Args('id') id: string,
+    @Fields() columns: string[],
+    @CurrentUser() currentUser: ICurrentUser,
+  ): Promise<Role> {
+    const role: Role = await this.roleService.findById(
+      currentUser,
+      id,
+      columns,
+    );
+    if (!role) throw new RoleNotFoundException();
+    return role;
   }
 
   @Query(() => [Role])
   async findRoleBy(
-      @Args('checks', { type: () => [KeyValInput] }) checks: KeyValInput[],
-      @Info() info
+    @Args('checks', { type: () => [KeyValInput] }) checks: KeyValInput[],
+    @Fields() output: string[],
+    @CurrentUser() currentUser: ICurrentUser,
   ): Promise<Role[]> {
-    const keys = graphqlKeys(info);
-    return this.roleService.findByProperty(checks, keys);
+    const roles = this.roleService.findByProperty(currentUser, checks, output);
+    if (!roles) throw new RoleNotFoundException();
+    return roles;
   }
 
   @Mutation(() => Role)
-  async addRole(@Args('input') input: RoleInput, @Info() info): Promise<Role> {
-    const keys = graphqlKeys(info);
-    return this.roleService.create(input, keys);
+  async addRole(
+    @Args('input') input: RoleCreateInput,
+    @Fields() output: string[],
+    @CurrentUser() currentUser: ICurrentUser,
+  ): Promise<Role> {
+    return this.roleService.create(currentUser, input, output);
   }
 
   @Mutation(() => Role)
   async updateRole(
     @Args('id') id: string,
     @Args('input') input: RoleInput,
-    @Info() info
+    @Fields() output: string[],
+    @CurrentUser() currentUser: ICurrentUser,
   ): Promise<Role> {
-    const keys = graphqlKeys(info);
-    return this.roleService.update(id, input, keys);
+    const role: Role = await this.roleService.findById(currentUser, id, output);
+    if (!role) throw new RoleNotFoundException(id);
+    return this.roleService.update(currentUser, id, input, output);
   }
 
   @Mutation(() => Boolean)
-  async deleteRole(@Args('id') id: string): Promise<boolean> {
-    return this.roleService.delete(id);
+  async deleteRole(
+    @Args('id') id: string,
+    @CurrentUser() currentUser: ICurrentUser,
+  ): Promise<boolean> {
+    const role: Role = await this.roleService.findById(currentUser, id, ['id']);
+    if (!role) throw new RoleNotFoundException(id);
+    let input = { status: STATUS.INACTIVE };
+    return this.roleService.delete(currentUser, id, input);
   }
 
   @ResolveField('modules', returns => [Module])
-  async getModules(@Parent() role: Role,
-                 @Loader(ModulesDataLoader.name) modulesLoader: DataLoader<Module['id'], Module>) {
-    const Ids: Array<string> = [];
-    if(role.id) {
-      Ids.push(role.id);
-      const results = await modulesLoader.loadMany(Ids);
-      if(results[0]){
-        if(Array.isArray(results[0])){
-          return results[0]
-        }
-        return results
-      }
-    }
-    return []
+  async getModules(
+    @Parent() role: Role,
+    @Loader('ModulesDataLoader')
+    modulesLoader: DataLoader<Module['id'], Module>,
+  ) {
+    if (!role.id) return [];
+    return modulesLoader.load(role.id);
   }
 }

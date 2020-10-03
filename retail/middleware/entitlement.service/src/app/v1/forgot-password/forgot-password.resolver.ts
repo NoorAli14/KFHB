@@ -1,20 +1,33 @@
-import { Resolver, Query, Args, Mutation } from "@nestjs/graphql";
+import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 
-import { User } from "@app/v1/users/user.model";
-import {ChangePasswordInput, ForgotPasswordInput, ForgotPasswordOutput} from "@app/v1/forgot-password/forgot-password.dto";
-import {ForgotPasswordService} from "@app/v1/forgot-password/forgot-password.service";
+import { User } from '@app/v1/users/user.model';
+import {
+  ChangePasswordInput,
+  ForgotPasswordInput,
+} from '@app/v1/forgot-password/forgot-password.dto';
+import { ForgotPasswordService } from '@app/v1/forgot-password/forgot-password.service';
+import { CurrentUser, Fields } from '@common/decorators';
+import { ICurrentUser } from '@common/interfaces';
 
 @Resolver(User)
 export class ForgotPasswordResolver {
   constructor(private readonly forgetPasswordService: ForgotPasswordService) {}
 
-  @Query(() => ForgotPasswordOutput)
-  async forgotPassword(@Args('input') input: ForgotPasswordInput): Promise<any> {
-    return this.forgetPasswordService.verifyAndGetToken(input);
+  @Query(() => User)
+  async forgotPassword(
+    @Args('input') input: ForgotPasswordInput,
+    @Fields() output: string[],
+    @CurrentUser() currentUser: ICurrentUser,
+  ): Promise<any> {
+    return this.forgetPasswordService.verifyAndGetToken(currentUser, input, output);
   }
 
-  @Mutation(() => String)
-  async changePassword(@Args('input') input: ChangePasswordInput): Promise<any> {
-    return this.forgetPasswordService.changePassword(input);
+  @Mutation(() => User)
+  async changePassword(
+    @Args('input') input: ChangePasswordInput,
+    @Fields() output: string[],
+    @CurrentUser() currentUser: ICurrentUser,
+  ): Promise<any> {
+    return this.forgetPasswordService.changePassword(currentUser, input, output);
   }
 }

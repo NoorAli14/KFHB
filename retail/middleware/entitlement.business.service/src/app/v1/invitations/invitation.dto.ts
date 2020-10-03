@@ -3,12 +3,12 @@ import {
   IsOptional,
   Length,
   MaxLength,
-  MinLength,
-  IsDate,
   IsIn,
+  IsNotEmpty,
+  Matches,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { GENDER } from '@common/constants';
+import { GENDER, PASSWORD_REGEX } from '@common/constants';
 
 export class UpdateInvitationDto {
   @ApiProperty({
@@ -59,6 +59,7 @@ export class UpdateInvitationDto {
     required: true,
   })
   @IsString()
+  @IsNotEmpty()
   contact_no: string;
 
   @ApiProperty({
@@ -66,7 +67,7 @@ export class UpdateInvitationDto {
     description: 'Date of Birth of user.',
     required: true,
   })
-  @IsDate()
+  @IsString()
   date_of_birth: string;
 
   @ApiProperty({
@@ -75,7 +76,7 @@ export class UpdateInvitationDto {
     required: true,
   })
   @IsString()
-  @MaxLength(36)
+  // @MaxLength(36)
   nationality_id: string;
 
   @ApiProperty({
@@ -87,7 +88,8 @@ export class UpdateInvitationDto {
   })
   @IsIn(GENDER)
   @IsString()
-  gender?: string;
+  @IsNotEmpty()
+  gender: string;
 
   @ApiProperty({
     title: 'Password',
@@ -95,6 +97,9 @@ export class UpdateInvitationDto {
     required: true,
   })
   @IsString()
-  @MinLength(6)
-  password: string;
+  @IsNotEmpty()
+  @Matches(PASSWORD_REGEX, {
+    message: 'password too weak',
+  })
+  readonly password: string;
 }

@@ -13,21 +13,31 @@ directive @requires(fields: String!) on FIELD_DEFINITION
 directive @provides(fields: String!) on FIELD_DEFINITION
 
 input ChangePasswordInput {
-  token: String!
+  password_reset_token: String!
   password: String!
+}
+
+input CheckAvailabilityInput {
+  call_time: String!
+  gender: String
 }
 
 input CreateUserInput {
   username: String
   contact_no: String
-  password: String
   first_name: String
   middle_name: String
   last_name: String
   gender: String
+  password: String
+  is_owner: Boolean
   date_of_birth: String
-  nationality_id: Float
+  nationality_id: String
   status: String
+  invitation_token: String
+  invitation_token_expiry: String
+  password_reset_token: String
+  password_reset_token_expiry: String
   roles: [IdsInput!]
   email: String!
 }
@@ -41,9 +51,33 @@ input ForgotPasswordInput {
   email: String!
 }
 
-type ForgotPasswordOutput {
-  token: String!
-  token_expiry: DateTime!
+type Holiday {
+  id: ID
+  holiday_date: DateTime
+  description: String
+  remarks: String
+  tenant_id: String
+  status: String
+  created_on: DateTime
+  created_by: String
+  updated_on: DateTime
+  updated_by: String
+  deleted_on: DateTime
+  deleted_by: String
+}
+
+input HolidayCreateInput {
+  holiday_date: String!
+  description: String
+  remarks: String
+  status: String
+}
+
+input HolidayInput {
+  holiday_date: String
+  description: String
+  remarks: String
+  status: String
 }
 
 input IdsInput {
@@ -54,6 +88,64 @@ input IdsInput {
 input KeyValInput {
   record_key: String!
   record_value: String!
+}
+
+type Leave {
+  id: ID
+  user_id: String
+  leave_type_id: String
+  start_date: DateTime
+  end_date: DateTime
+  remarks: String
+  status: String
+  tenant_id: String
+  created_on: DateTime
+  created_by: String
+  updated_on: DateTime
+  updated_by: String
+  deleted_on: DateTime
+  deleted_by: String
+}
+
+input LeaveCreateInput {
+  user_id: String!
+  leave_type_id: String!
+  start_date: String!
+  end_date: String!
+  remarks: String
+  status: String
+}
+
+input LeaveInput {
+  user_id: String
+  leave_type_id: String
+  start_date: String
+  end_date: String
+  remarks: String
+  status: String
+}
+
+type LeaveType {
+  id: ID
+  name: String
+  status: String
+  tenant_id: String
+  created_on: DateTime
+  created_by: String
+  updated_on: DateTime
+  updated_by: String
+  deleted_on: DateTime
+  deleted_by: String
+}
+
+input LeaveTypeCreateInput {
+  name: String!
+  status: String
+}
+
+input LeaveTypeInput {
+  name: String
+  status: String
 }
 
 input LoginInput {
@@ -68,42 +160,60 @@ type Module {
   status: String
   created_on: String
   created_by: String
-  permissions: [Permission!]!
   sub_modules: [Module!]!
+  permissions: [Permission!]!
 }
 
-input ModuleInput {
+input ModuleCreateInput {
   name: String!
   parent_id: String
   status: String
 }
 
+input ModuleInput {
+  name: String
+  parent_id: String
+  status: String
+}
+
 type Mutation {
+  resetInvitationToken(id: String!): User!
+  updatePassword(input: UpdatePasswordInput!): User!
   addUser(input: CreateUserInput!): User!
   updateUser(input: UpdateUserInput!, id: String!): User!
   deleteUser(id: String!): Boolean!
-  addRole(input: RoleInput!): Role!
+  addRole(input: RoleCreateInput!): Role!
   updateRole(input: RoleInput!, id: String!): Role!
   deleteRole(id: String!): Boolean!
-  addModule(input: ModuleInput!): Module!
+  addModule(input: ModuleCreateInput!): Module!
   updateModule(input: ModuleInput!, id: String!): Module!
   deleteModule(id: String!): Boolean!
   addPermission(input: PermissionInput!): Permission!
   updatePermission(input: PermissionInput!, id: String!): Permission!
   deletePermission(id: String!): Boolean!
-  updateUserRole(input: UserRoleInput!, id: String!): UserRole!
-  addUserRole(input: UserRoleInput!): UserRole!
-  deleteUserRole(id: String!): Boolean!
-  addRoleModule(input: RoleModuleInput!): RoleModule!
-  updateRoleModule(input: RoleModuleInput!, id: String!): RoleModule!
-  deleteRoleModule(id: String!): Boolean!
-  addRoleModulePermission(input: RoleModulePermissionInput!): RoleModulePermission!
-  updateRoleModulePermission(input: RoleModulePermissionInput!, id: String!): RoleModulePermission!
-  deleteRoleModulePermission(id: String!): Boolean!
-  changePassword(input: ChangePasswordInput!): String!
-  addWorkingDay(input: WorkingDayInput!): WorkingDay!
+  changePassword(input: ChangePasswordInput!): User!
+  addWorkingDay(input: WorkingDayCreateInput!): WorkingDay!
   updateWorkingDay(input: WorkingDayInput!, id: String!): WorkingDay!
   deleteWorkingDay(id: String!): Boolean!
+  addHoliday(input: HolidayCreateInput!): Holiday!
+  updateHoliday(input: HolidayInput!, id: String!): Holiday!
+  deleteHoliday(id: String!): Boolean!
+  addLeave(input: LeaveCreateInput!): Leave!
+  updateLeave(input: LeaveInput!, id: String!): Leave!
+  deleteLeave(id: String!): Boolean!
+  addLeaveType(input: LeaveTypeCreateInput!): LeaveType!
+  updateLeaveType(input: LeaveTypeInput!, id: String!): LeaveType!
+  deleteLeaveType(id: String!): Boolean!
+}
+
+type PaginationModel {
+  from: Float
+  to: Float
+  total: Float
+  perPage: Float
+  currentPage: Float
+  lastPage: Float
+  offset: Float
 }
 
 type Permission {
@@ -111,6 +221,7 @@ type Permission {
   record_type: String
   created_on: String
   created_by: String
+  module_permission_id: String
 }
 
 input PermissionInput {
@@ -120,36 +231,38 @@ input PermissionInput {
 type Query {
   usersList: [User!]!
   findUserById(id: String!): User!
+  findAvailableAgents(input: CheckAvailabilityInput!): [User!]!
   findUserBy(checks: [KeyValInput!]!): [User!]!
   rolesList: [Role!]!
-  findRole(id: String!): Role!
+  findRoleById(id: String!): Role!
   findRoleBy(checks: [KeyValInput!]!): [Role!]!
   modulesList: [Module!]!
-  findModule(id: String!): Module!
+  findModuleById(id: String!): Module!
   findModuleBy(checks: [KeyValInput!]!): [Module!]!
   permissionsList: [Permission!]!
-  findPermission(id: String!): Permission!
+  findPermissionById(id: String!): Permission!
   findPermissionBy(checks: [KeyValInput!]!): [Permission!]!
-  userRolesList: [UserRole!]!
-  findUserRole(id: String!): UserRole!
-  findUserRoleBy(checks: [KeyValInput!]!): [UserRole!]!
-  roleModulesList: [RoleModule!]!
-  findRoleModule(id: String!): RoleModule!
-  findRoleModuleBy(checks: [KeyValInput!]!): [RoleModule!]!
-  roleModulePermissionsList: [RoleModulePermission!]!
-  findRoleModulePermission(id: String!): RoleModulePermission!
-  findRoleModulePermissionBy(checks: [KeyValInput!]!): [RoleModulePermission!]!
   login(input: LoginInput!): User!
-  forgotPassword(input: ForgotPasswordInput!): ForgotPasswordOutput!
+  forgotPassword(input: ForgotPasswordInput!): User!
   workingDaysList: [WorkingDay!]!
   findWorkingDayById(id: String!): WorkingDay!
   findWorkingDayBy(checks: [KeyValInput!]!): [WorkingDay!]!
+  holidaysList: [Holiday!]!
+  findHolidayById(id: String!): Holiday!
+  findHolidayBy(checks: [KeyValInput!]!): [Holiday!]!
+  leavesList: [Leave!]!
+  findLeaveById(id: String!): Leave!
+  findLeaveBy(checks: [KeyValInput!]!): [Leave!]!
+  leaveTypeList: [LeaveType!]!
+  findLeaveTypeById(id: String!): LeaveType!
+  findLeaveTypeBy(checks: [KeyValInput!]!): [LeaveType!]!
 }
 
 type Role {
   id: ID
   name: String
   description: String
+  tenant_id: String
   status: String
   created_on: String
   created_by: String
@@ -160,53 +273,41 @@ type Role {
   modules: [Module!]!
 }
 
-input RoleInput {
+input RoleCreateInput {
   name: String!
   description: String
   status: String
+  permissions: [IdsInput!]
 }
 
-type RoleModule {
-  id: ID
-  module_id: String
-  role_id: String
+input RoleInput {
+  name: String
+  description: String
   status: String
-  created_on: String
-  created_by: String
+  permissions: [IdsInput!]
 }
 
-input RoleModuleInput {
-  module_id: String!
-  role_id: String!
-  status: String
-}
-
-type RoleModulePermission {
-  id: ID
-  role_module_id: String
-  permission_id: String
-  status: String
-  created_on: String
-  created_by: String
-}
-
-input RoleModulePermissionInput {
-  role_module_id: String!
-  permission_id: String!
-  status: String
+input UpdatePasswordInput {
+  current_password: String!
+  new_password: String!
 }
 
 input UpdateUserInput {
   username: String
   contact_no: String
-  password: String
   first_name: String
   middle_name: String
   last_name: String
   gender: String
+  password: String
+  is_owner: Boolean
   date_of_birth: String
-  nationality_id: Float
+  nationality_id: String
   status: String
+  invitation_token: String
+  invitation_token_expiry: String
+  password_reset_token: String
+  password_reset_token_expiry: String
   roles: [IdsInput!]
 }
 
@@ -218,9 +319,12 @@ type User {
   first_name: String
   middle_name: String
   last_name: String
+  password_digest: String
   gender: String
+  is_owner: String
+  tenant_id: String
   date_of_birth: String
-  nationality_id: Float
+  nationality_id: String
   status: String
   created_on: String
   created_by: String
@@ -230,43 +334,43 @@ type User {
   deleted_by: String
   roles: [Role!]!
   modules: [Module!]!
-}
-
-type UserRole {
-  id: ID!
-  user_id: String!
-  role_id: String!
-  status: String
-  created_on: String
-  created_by: String
-}
-
-input UserRoleInput {
-  user_id: String!
-  role_id: String!
-  status: String
+  invitation_token: String
+  invitation_token_expiry: DateTime
+  password_reset_token: String
+  password_reset_token_expiry: DateTime
+  leaves: [Leave!]!
 }
 
 type WorkingDay {
   id: ID
   week_day: String
-  start_time: String
-  end_time: String
+  start_time_local: String
+  end_time_local: String
   remarks: String
   full_day: Float
+  tenant_id: String
   status: String
-  created_on: String
+  created_on: DateTime
   created_by: String
-  updated_on: String
+  updated_on: DateTime
   updated_by: String
-  deleted_on: String
+  deleted_on: DateTime
   deleted_by: String
+}
+
+input WorkingDayCreateInput {
+  week_day: String!
+  start_time_local: String
+  end_time_local: String
+  full_day: Float!
+  remarks: String
+  status: String
 }
 
 input WorkingDayInput {
   week_day: String
-  start_time: String
-  end_time: String
+  start_time_local: String
+  end_time_local: String
   full_day: Float
   remarks: String
   status: String

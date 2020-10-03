@@ -2,6 +2,8 @@ import { Field, ID, ObjectType } from "@nestjs/graphql";
 
 import { Role } from "@app/v1/roles/role.model";
 import {Module} from "@app/v1/modules/module.model";
+import {Leave} from "@app/v1/leave/leave.model";
+import {PaginationModel} from "@common/models";
 
 @ObjectType()
 export class User {
@@ -9,56 +11,89 @@ export class User {
   id: string;
 
   @Field({ nullable: true })
-  username?: string;
+  username: string;
 
   @Field({ nullable: true })
-  email?: string;
+  email: string;
 
   @Field({ nullable: true })
-  contact_no?: string;
+  contact_no: string;
 
   @Field({ nullable: true })
-  first_name?: string;
+  first_name: string;
 
   @Field({ nullable: true })
-  middle_name?: string;
+  middle_name: string;
 
   @Field({ nullable: true })
-  last_name?: string;
+  last_name: string;
 
   @Field({ nullable: true })
-  gender?: string;
+  password_digest: string;
 
   @Field({ nullable: true })
-  date_of_birth?: string;
+  gender: string;
 
   @Field({ nullable: true })
-  nationality_id?: number;
+  is_owner: string;
 
   @Field({ nullable: true })
-  status?: string;
+  tenant_id: string;
 
   @Field({ nullable: true })
-  created_on?: string;
+  date_of_birth: string;
 
   @Field({ nullable: true })
-  created_by?: string;
+  nationality_id: string;
 
   @Field({ nullable: true })
-  updated_on?: string;
+  status: string;
 
   @Field({ nullable: true })
-  updated_by?: string;
+  created_on: string;
 
   @Field({ nullable: true })
-  deleted_on?: string;
+  created_by: string;
 
   @Field({ nullable: true })
-  deleted_by?: string;
+  updated_on: string;
+
+  @Field({ nullable: true })
+  updated_by: string;
+
+  @Field({ nullable: true })
+  deleted_on: string;
+
+  @Field({ nullable: true })
+  deleted_by: string;
 
   @Field(type => [Role], { nullable: true })
-  roles?: Role[];
+  roles: Role[];
 
   @Field(type => [Module], { nullable: true })
-  modules?: Module[];
+  modules: Module[];
+
+  @Field({ nullable: true })
+  invitation_token: string;
+
+  @Field({ nullable: true })
+  invitation_token_expiry: Date;
+
+  @Field({ nullable: true })
+  password_reset_token: string;
+
+  @Field({ nullable: true })
+  password_reset_token_expiry: Date;
+
+  @Field(type => [Leave], { nullable: true })
+  leaves: Leave[];
+}
+
+@ObjectType()
+export class UserWithPagination {
+  @Field({ nullable: true })
+  pagination: PaginationModel;
+
+  @Field(type => [User], { nullable: true })
+  data: User[];
 }
