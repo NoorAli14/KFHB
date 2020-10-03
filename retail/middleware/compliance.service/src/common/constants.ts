@@ -41,3 +41,8 @@ export const DATABASE_UUID_METHOD = (): string => 'NEWID()';
 export const DATABASE_MIGRATION_TABLE_NAME = 'RUBIX_COMPLIANCE_MIGRATIONS';
 export const DATABASE_MIGRATION_DIRECTORY = 'src/core/database/migrations';
 export const DATABASE_SEED_DIRECTORY = 'src/core/database/seeds';
+export const AML_REQUEST_STATUSES = {
+  CLEAN: 'CLEAN',
+  SUSPECT: 'SUSPECT',
+  BLOCK: 'BLOCK',
+}

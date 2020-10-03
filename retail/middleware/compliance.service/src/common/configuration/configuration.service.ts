@@ -92,6 +92,11 @@ export class ConfigurationService {
     };
   }
 
+  get AML() {
+    return {
+      SUCCESS_CODE: this.get('ENV_RBX_AML_SUCCESS_CODE', ''),
+    };
+  }
   public get GRAPHQL(): iGRAPHQL {
     return {
       ROUTE: this.get('ENV_RBX_GRAPHQL_ROUTE', DEFAULT_ENV.GRAPHQL.ROUTE),
@@ -110,8 +115,8 @@ export class ConfigurationService {
     return this.IS_DEVELOPMENT
       ? true
       : isTruthy(
-          this.get('ENV_RBX_SWAGGER_ENABLED', DEFAULT_ENV.DATABASE.IS_DEBUG),
-        );
+        this.get('ENV_RBX_SWAGGER_ENABLED', DEFAULT_ENV.DATABASE.IS_DEBUG),
+      );
   }
   get APPLICATION_HOST(): string {
     return this.IS_DEVELOPMENT

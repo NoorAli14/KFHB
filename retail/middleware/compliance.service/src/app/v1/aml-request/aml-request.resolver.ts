@@ -14,6 +14,9 @@ import { AmlResponse } from '../aml-response/aml-response-model';
 import { Loader } from 'nestjs-dataloader';
 import DataLoader from '../../../lib/dataloader';
 import { AmlResponseLoader } from '@core/dataloaders/aml-response.loader';
+import { AmlRequestNotFoundException } from './exceptions'
+import { AlmRequestAlertInput } from './aml-request-dto';
+import { AML_REQUEST_STATUSES } from '@common/constants'
 
 @Resolver(AmlRequest)
 export class AmlRequestResolver {
@@ -60,8 +63,28 @@ export class AmlRequestResolver {
       return this.almRequestService.triggerAml(amlRequest, output);
     }
 
-    if (amlRequest?.status === 'SUSPECT') {
+    if (amlRequest?.status === AML_REQUEST_STATUSES.SUSPECT) {
       return this.almRequestService.triggerAml(amlRequest, output);
+    }
+    return amlRequest;
+  }
+
+  @Mutation(() => AmlRequest)
+  async amlAlert(
+    @Args('input') input: AlmRequestAlertInput,
+    @Fields(AmlRequest) output: string[],
+  ): Promise<AmlRequest> {
+    const amlRequest: AmlRequest = await this.almRequestService.getAmlRequestByReferenceNo(
+      input.reference_no,
+      ['id', 'aml_text', 'tenant_id', 'request_reference', 'status', 'user_id', 'created_by', 'created_on', 'updated_by', 'updated_on'],
+    );
+
+    if (!amlRequest) {
+      throw new AmlRequestNotFoundException()
+    }
+
+    if (amlRequest?.status === AML_REQUEST_STATUSES.SUSPECT) {
+      return this.almRequestService.amlAlert(input, output);
     }
     return amlRequest;
   }
