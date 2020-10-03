@@ -86,6 +86,8 @@ services:
       - ENV_RBX_JWT_REFRESH_SECRET=$ENV_RBX_JWT_REFRESH_SECRET
       - ENV_RBX_JWT_ALGORITHM=$ENV_RBX_JWT_ALGORITHM
       - ENV_RBX_REDIS_URL=$ENV_RBX_REDIS_URL
+      - ENV_RBX_BASIC_AUTH_KEY=$ENV_RBX_BASIC_AUTH_KEY
+      - ENV_RBX_BASIC_AUTH_SECRET=$ENV_RBX_BASIC_AUTH_SECRET
     restart: always
     networks:
       - core_service_network
@@ -118,6 +120,34 @@ services:
       - ENV_RBX_IDENTITYX_APPLICATION=$ENV_RBX_IDENTITYX_APPLICATION
       - ENV_RBX_IDENTITYX_EVALUATION_POLICY=$ENV_RBX_IDENTITYX_EVALUATION_POLICY
       - NODE_TLS_REJECT_UNAUTHORIZED=$NODE_TLS_REJECT_UNAUTHORIZED
+    restart: always
+    networks:
+      - core_service_network
+  
+  #=================================================================
+  # Video Call Service
+  #=================================================================
+  retail-videocall:
+    image: rubixretailvediocall:dev
+    container_name: retail_videocall
+    environment:
+      - ENV_RBX_PORT=4020
+      - ENV_RBX_DB_USERNAME=$ENV_RBX_DB_USERNAME
+      - ENV_RBX_DB_PASS=$ENV_RBX_DB_PASS
+      - ENV_RBX_DB_NAME=$ENV_RBX_DB_NAME
+      - ENV_RBX_DB_HOST=$ENV_RBX_DB_HOST
+      - ENV_RBX_DB_PORT=$ENV_RBX_DB_PORT
+      - ENV_RBX_DB_TIMEOUT=$ENV_RBX_DB_TIMEOUT
+      - ENV_RBX_DB_DIALECT=$ENV_RBX_DB_DIALECT
+      - ENV_RBX_DB_DEBUG=$ENV_RBX_DB_DEBUG
+      - ENV_RBX_GRAPHQL_DEBUG=$ENV_RBX_GRAPHQL_DEBUG
+      - ENV_RBX_GRAPHQL_PLAYGROUND=$ENV_RBX_GRAPHQL_PLAYGROUND
+      - ENV_RBX_CRON_JOB_TIME=$ENV_RBX_CRON_JOB_TIME
+      - ENV_RBX_MAX_APPOINTMENTS_AT_A_TIME=$ENV_RBX_MAX_APPOINTMENTS_AT_A_TIME
+      - ENV_RBX_NOTIFICATION_SERVER=$ENV_RBX_NOTIFICATION_SERVER
+      - ENV_RBX_ENTITLEMENT_SERVER=$ENV_RBX_ENTITLEMENT_SERVER
+      - ENV_RBX_IDENTITY_SERVER=$ENV_RBX_IDENTITY_SERVER
+      - ENV_RBX_REDIS_URL=$ENV_RBX_REDIS_URL
     restart: always
     networks:
       - core_service_network

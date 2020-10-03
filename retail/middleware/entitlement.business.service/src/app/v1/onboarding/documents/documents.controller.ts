@@ -5,7 +5,7 @@ import {
     Param,
     Header,
     Get,
-    Req,
+    Req, Query
 } from '@nestjs/common';
 import {
     ApiTags,
@@ -37,10 +37,13 @@ export class DocumentsController {
         @Param('id', ParseUUIDPipe) id: string,
         @Param('customer_id', ParseUUIDPipe) customer_id: string,
         @Req() request: Request,
+        @Query('extracted-image') extracted_image?: boolean,
     ): Promise<any> {
+        console.log(extracted_image);
         const params: any = {
             attachment_id: id,
             customer_id: customer_id,
+            extracted_image: extracted_image || false
         };
         const result = await this.documentService.preview(params);
         const img: any = Buffer.from(result.image, 'base64');

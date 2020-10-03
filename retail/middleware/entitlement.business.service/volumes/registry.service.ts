@@ -17,7 +17,11 @@ export const SERVICES = {
   'api/v1/onboarding/attachments': { channels: ['RUBIX-DEV-INT'] },
   'api/v1/onboarding/documents': { channels: ['RUBIX-DEV-INT'] },
   'api/v1/onboarding/otp': { channels: ['RUBIX-DEV-INT'] },
-  'api/v1/onboarding/compliances': { channels: ['RUBIX-DEV-INT'] },
+  'api/v1/onboarding/compliance': { channels: ['RUBIX-DEV-INT'] },
+  'api/v1/onboarding/callback': { channels: ['RUBIX-DEV-INT'] },
+  'api/v1/onboarding/agents': { channels: ['RUBIX-DEV-INT'] },
+  'api/v1/onboarding/aml': { channels: ['RUBIX-DEV-INT'] },
+  'api/v1/onboarding/appointments': { channels: ['RUBIX-DEV-INT'] },
   'api/v1/references/countries': { channels: ['RUBIX-DEV-INT'] },
   'api/v1/references/currencies': { channels: ['RUBIX-DEV-INT'] },
 };

@@ -9,11 +9,12 @@ import {
 import { map, timeout, catchError } from 'rxjs/operators';
 import { TimeoutError, throwError } from 'rxjs';
 import { HttpHeaders } from '@core/context';
+import { ConfigurationService } from '@common/configuration/configuration.service';
 
 @Injectable()
 export class GqlClientService {
   private readonly logger: Logger = new Logger(GqlClientService.name);
-  constructor(private readonly http: HttpService) { }
+  constructor(private readonly http: HttpService, private readonly config: ConfigurationService) { }
 
   public async send(input: string): Promise<any> {
     this.logger.log(
@@ -22,7 +23,7 @@ export class GqlClientService {
 
     return this.http
       .post(
-        '/graphql',
+        `http://localhost:${this.config.APP.PORT}/graphql`,
         {
           query: input,
         },

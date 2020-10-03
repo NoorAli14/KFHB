@@ -2,9 +2,12 @@ import { Injectable, HttpService, Logger } from '@nestjs/common';
 import { AmlRequestRepository } from '@core/repository/aml-request-repository';
 import { AmlResponseRepository } from '@core/repository/aml-response-repository';
 import { map } from 'rxjs/operators';
+import { ConfigurationService } from '@common/configuration/configuration.service'
 import { ICurrentUser } from '@common/interfaces';
 import { HttpHeaders } from '@core/context';
-
+import { AmlRequest } from './aml.request.model'
+import { AML_REQUEST_STATUSES, CREATED_BY } from '@common/constants'
+import { AlmRequestAlertInput } from './aml-request-dto';
 // import { GqlClientService, toGraphql } from '@common/index';
 
 @Injectable()
@@ -14,6 +17,7 @@ export class AmlRequestService {
     private readonly http: HttpService,
     private readonly amlRequestDB: AmlRequestRepository,
     private readonly amlResponseDB: AmlResponseRepository,
+    private readonly config: ConfigurationService
   ) { }
 
   async list(currentUser: ICurrentUser, user_id: string, output: string[]) {
@@ -32,7 +36,7 @@ export class AmlRequestService {
     currentUser: ICurrentUser,
     user_id: string,
     output: string[],
-  ): Promise<any> {
+  ): Promise<AmlRequest> {
     return this.amlRequestDB.findOne(
       {
         user_id: user_id,
@@ -43,6 +47,18 @@ export class AmlRequestService {
     );
   }
 
+  async getAmlRequestByReferenceNo(
+    reference_no: string,
+    output: string[],
+  ): Promise<AmlRequest> {
+    return this.amlRequestDB.findOne(
+      {
+        request_reference: reference_no,
+        deleted_on: null,
+      },
+      output,
+    );
+  }
   //Get customer details
   async findById(currentUser: ICurrentUser, user_id: string): Promise<any> {
     const gqlQuery = `query {
@@ -118,6 +134,18 @@ export class AmlRequestService {
       ['id'],
     );
 
+    return response;
+  }
+
+  async amlAlert(input: AlmRequestAlertInput, output: string[]): Promise<AmlRequest> {
+    const [response] = await this.amlRequestDB.update(
+      {
+        request_reference: input.reference_no,
+        deleted_on: null,
+      },
+      { status: input.response_code == this.config.AML.SUCCESS_CODE ? AML_REQUEST_STATUSES.CLEAN : AML_REQUEST_STATUSES.BLOCK, updated_by: CREATED_BY.API },
+      output,
+    );
     return response;
   }
 }

@@ -12,6 +12,12 @@ directive @requires(fields: String!) on FIELD_DEFINITION
 
 directive @provides(fields: String!) on FIELD_DEFINITION
 
+input AlmRequestAlertInput {
+  reference_no: String!
+  response_code: String!
+  status: String!
+}
+
 type AmlRequest {
   id: String!
   user_id: String!
@@ -51,6 +57,7 @@ scalar DateTime
 type Mutation {
   addTemplateResponse(input: NewTemplateResponseInput!): TemplateResponse!
   amlScreening(user_id: String!): AmlRequest!
+  amlAlert(input: AlmRequestAlertInput!): AmlRequest!
 }
 
 input NewTemplateResponseInput {

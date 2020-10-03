@@ -26,7 +26,7 @@ export class AppointmentsService {
     private readonly appointmentDB: AppointmentRepository,
     private readonly configService: ConfigurationService,
     private readonly gqlClient: GqlClientService,
-  ) {}
+  ) { }
 
   private async throw_if_appointment_exist(call_time: Date, user_id: string) {
     const record = await this.appointmentDB.findOne(
@@ -328,7 +328,7 @@ export class AppointmentsService {
           appointment.status === APPOINTMENT_STATUS.SCHEDULED) &&
         diff_in_minutes >= 0 &&
         diff_in_minutes <=
-          Number(this.configService.VCALL.ENV_RBX_CRON_JOB_TIME)
+        Number(this.configService.VCALL.ENV_RBX_CRON_JOB_TIME)
       ) {
         return true;
       }
@@ -393,11 +393,11 @@ export class AppointmentsService {
     call_time: Date,
     gender: string,
   ): Promise<any> {
-    const query: string = `query{
-        result: findAvailableUsers(input: ${toGraphQL({
-          call_time,
-          gender,
-        })}){
+    const query = `query{
+        result: findAvailableAgents(input: ${toGraphQL({
+      call_time,
+      gender,
+    })}){
         id
         email
         contact_no

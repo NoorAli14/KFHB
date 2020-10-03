@@ -20,3 +20,15 @@ export class NewAlmRequestInput {
   @Field()
   status: string;
 }
+
+@InputType()
+export class AlmRequestAlertInput {
+  @Field()
+  reference_no: string;
+
+  @Field()
+  response_code: string;
+
+  @Field()
+  status: string;
+}

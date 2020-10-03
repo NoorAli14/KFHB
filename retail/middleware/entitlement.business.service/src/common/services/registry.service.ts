@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { GQL_SERVICES } from '@volume/registry.service';
+import { GQL_SERVICES } from '@root/volumes/registry.service';
 
 @Injectable()
 export class RegistryService {
