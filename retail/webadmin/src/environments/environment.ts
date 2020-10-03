@@ -12,6 +12,7 @@ export const environment = {
   APP_SECRETE: "abfFGHIepqrstuvwSTUCDEXYZ",
   // API_BASE_URL:"http://localhost:3000",
   API_BASE_URL:"http://rubix-dev01.conduit-aiondigital.com",
+  CHANNEL_ID:"RUBIX-DEV-INT",
   hmr:false
 };
 

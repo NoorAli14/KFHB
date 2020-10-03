@@ -15,6 +15,7 @@ import { camelToSnakeCase } from "@shared/helpers/global.helper";
 import { BaseComponent } from '@shared/components/base/base.component';
 import { ActivatedRoute } from '@angular/router';
 import { MESSAGES } from '@shared/constants/messages.constant';
+import { REGEX } from '@config/index';
 
 @Component({
     selector: "reset-password",
@@ -61,7 +62,7 @@ export class ResetPasswordComponent extends BaseComponent implements OnInit {
     ngOnInit(): void {
         this.getEmailTokenStatus();
         this.resetPasswordForm = new FormGroup({
-            password: new FormControl("", Validators.required),
+            password: new FormControl("", [Validators.required,Validators.pattern(REGEX.PASSWORD)]),
             passwordConfirm: new FormControl("", [
                 Validators.required,
                 this.confirmPasswordValidator.bind(this),

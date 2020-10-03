@@ -14,7 +14,7 @@ import { APP_CONST, URI, createUrl } from "@shared/constants/app.constants";
 import { EventBusService } from "../event-bus/event-bus.service";
 import { AuthenticationService } from "../auth/authentication.service";
 import { Router } from '@angular/router';
-
+import { environment } from '@env/environment';
 @Injectable()
 export class AuthInterceptorService implements HttpInterceptor {
     isRefreshTokenInProgress = false;
@@ -90,6 +90,7 @@ export class AuthInterceptorService implements HttpInterceptor {
                 "content-type": "application/json",
                 Accept: "application/json, text/plain, */*",
                 "x-tenant-id": "9013C327-1190-4875-A92A-83ACA9029160",
+                "x-channel-id": environment.CHANNEL_ID,
             }),
         };
 
