@@ -26,11 +26,11 @@ export class LeaveComponent extends BaseComponent implements OnInit {
     dialogRef: any;
     leaves: Leave[];
     displayedColumns = [
-        "leaveTypeId",
-        "startDate",
-        "endDate",
-        "status",
-        "action",
+        'leaveTypeId',
+        'startDate',
+        'endDate',
+        'status',
+        'action',
     ];
     pageSize: number = CONFIG.PAGE_SIZE;
     pageSizeOptions: Array<number> = CONFIG.PAGE_SIZE_OPTIONS;
@@ -44,7 +44,7 @@ export class LeaveComponent extends BaseComponent implements OnInit {
         private _service: CalendarService,
         injector: Injector
     ) {
-        super(injector,MODULES.LEAVES);
+        super(injector, MODULES.LEAVES);
         super.ngOnInit();
     }
 
@@ -52,10 +52,10 @@ export class LeaveComponent extends BaseComponent implements OnInit {
         this.getData();
     }
 
-    getData() {
+    getData(): void {
         this._service.forkLeaveData().subscribe(
             (response) => {
-                this.leaves =  snakeToCamelArray(response[0])
+                this.leaves =  snakeToCamelArray(response[0]);
                 this.leaveTypes = snakeToCamelArray(response[1]);
                 this.users = snakeToCamelArray(response[2]);
                 this.dataSource = new MatTableDataSource(
@@ -69,11 +69,11 @@ export class LeaveComponent extends BaseComponent implements OnInit {
             }
         );
     }
-    getLeaveType(id) {
-        return getName(id, 'name', this.leaveTypes)
+    getLeaveType(id): string  {
+        return getName(id, 'name', this.leaveTypes);
     }
     openDialog(data): void {
-        var _this = this;
+        const _this = this;
         this.dialogRef = this._matDialog
             .open(LeaveFormComponent, {
                 data: {
@@ -81,13 +81,13 @@ export class LeaveComponent extends BaseComponent implements OnInit {
                     leaveTypes: this.leaveTypes,
                     users: this.users
                 },
-                panelClass: "app-leave-form",
+                panelClass: 'app-leave-form',
                 disableClose: true,
                 hasBackdrop: true,
             })
             .componentInstance.sendResponse.subscribe((response) => {
                 if (!response) {
-                    this._errorEmitService.emit("", "");
+                    this._errorEmitService.emit('', '');
                 } else if (response.id) {
                     _this.editLeave(response);
                 } else {
@@ -96,35 +96,35 @@ export class LeaveComponent extends BaseComponent implements OnInit {
             });
     }
 
-    createLeave(model: Leave) {
+    createLeave(model: Leave): void  {
         this._service.createLeave(model).subscribe(
             (response) => {
                 const data: any = this.dataSource.data;
                 data.unshift(snakeToCamelObject(response));
 
                 this.updateGrid(data);
-                this.errorType = "success";
-                this.responseMessage = MESSAGES.CREATED("Leave");
+                this.errorType = 'success';
+                this.responseMessage = MESSAGES.CREATED('Leave');
                 this._matDialog.closeAll();
                 this.hideMessage();
             },
             (response) => {
-                this._errorEmitService.emit(MESSAGES.UNKNOWN(), "error");
+                this._errorEmitService.emit(MESSAGES.UNKNOWN(), 'error');
             }
         );
     }
-    hideMessage() {
+    hideMessage(): void  {
         setTimeout(() => {
-            this.responseMessage = "";
+            this.responseMessage = '';
         }, 2000);
     }
-    editLeave(model: Leave) {
+    editLeave(model: Leave): void  {
         this._service.editLeave(model.id, model).subscribe(
             (response) => {
-                this.errorType = "success";
-                this.responseMessage = MESSAGES.UPDATED("Leave");
+                this.errorType = 'success';
+                this.responseMessage = MESSAGES.UPDATED('Leave');
                 const index = this.dataSource.data.findIndex(
-                    (x) => x.id == model.id
+                    (x) => x.id === model.id
                 );
 
                 const mapped: any = snakeToCamelObject(response);
@@ -134,46 +134,46 @@ export class LeaveComponent extends BaseComponent implements OnInit {
                 this._matDialog.closeAll();
             },
             (response) => {
-                this._errorEmitService.emit(MESSAGES.UNKNOWN(), "error");
+                this._errorEmitService.emit(MESSAGES.UNKNOWN(), 'error');
             }
         );
     }
     confirmDialog(type, id): void {
         const message = MESSAGES.REMOVE_CONFIRMATION();
-        const dialogData = new ConfirmDialogModel("Confirm Action", message);
+        const dialogData = new ConfirmDialogModel('Confirm Action', message);
         const dialogRef = this._matDialog.open(ConfirmDialogComponent, {
             data: dialogData,
             disableClose: true,
-            panelClass: "app-confirm-dialog",
+            panelClass: 'app-confirm-dialog',
             hasBackdrop: true,
         });
 
         dialogRef.afterClosed().subscribe((status) => {
             if (status) {
-                this.deleteLeave(id)
+                this.deleteLeave(id);
             }
         });
     }
-    deleteLeave(id: string) {
+    deleteLeave(id: string): void  {
         this._service.deleteLeave(id).subscribe(
             (response) => {
-                const index = this.dataSource.data.findIndex((x) => x.id == id);
+                const index = this.dataSource.data.findIndex((x) => x.id === id);
                 this.leaves.splice(index, 1);
                 this.updateGrid(this.leaves);
-                this.errorType = "success";
+                this.errorType = 'success';
                 this.hideMessage();
-                this.responseMessage = MESSAGES.DELETED("Leave");
+                this.responseMessage = MESSAGES.DELETED('Leave');
             },
             (response) => super.onError(response)
         );
     }
-    camelToSentenceCase(text) {
+    camelToSentenceCase(text): string  {
         return camelToSentenceCase(text);
     }
-    camelToSnakeCase(text) {
+    camelToSnakeCase(text): object {
         return camelToSnakeCase(text);
     }
-    updateGrid(data) {
+    updateGrid(data): void  {
         this.dataSource.data = data;
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;

@@ -14,8 +14,7 @@ export class FuseSearchBarComponent implements OnInit, OnDestroy
     collapsed: boolean;
     fuseConfig: any;
 
-    @Output()
-    input: EventEmitter<any>;
+    @Output() input: EventEmitter<any>;
 
     // Private
     private _unsubscribeAll: Subject<any>;

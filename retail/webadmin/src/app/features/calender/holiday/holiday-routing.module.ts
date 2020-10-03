@@ -5,7 +5,7 @@ import { HolidayComponent } from './views/holiday.component';
 
 const routes: Routes = [
   {
-      path: "",
+      path: '',
       component: HolidayComponent
   }
 ];

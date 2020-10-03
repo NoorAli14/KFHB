@@ -26,13 +26,13 @@ export class WClockComponent implements OnChanges {
     private selectedTimePart;
 
 
-    ngOnChanges() {
+    ngOnChanges(): void {
 
         this.setupUI();
     }
 
 
-    public setupUI() {
+    public setupUI(): void {
 
         this.steps = [];
 
@@ -62,7 +62,7 @@ export class WClockComponent implements OnChanges {
         }
     }
 
-    public getPointerStyle() {
+    public getPointerStyle(): any {
 
         let divider = 1;
         switch (this.currentView) {
@@ -83,7 +83,7 @@ export class WClockComponent implements OnChanges {
             degrees = Math.round(this.userTime.minute * (360 / divider)) - 180;
         }
 
-        let style = {
+        const style = {
             '-webkit-transform': 'rotate(' + degrees + 'deg)',
             '-ms-transform': 'rotate(' + degrees + 'deg)',
             'transform': 'rotate(' + degrees + 'deg)'
@@ -92,7 +92,7 @@ export class WClockComponent implements OnChanges {
         return style;
     }
 
-    public getTimeValueClass(step: number, index: number) {
+    public getTimeValueClass(step: number, index: number): string {
 
         let classes = 'mat-button mat-raised w-clock-deg' + (this.STEP_DEG * (index + 1));
 
@@ -104,7 +104,7 @@ export class WClockComponent implements OnChanges {
         return classes;
     }
 
-    public changeTimeValue(step: number) {
+    public changeTimeValue(step: number): void{
 
         if (this.currentView === CLOCK_TYPE.HOURS) {
             this.userTime.hour = step;

@@ -5,47 +5,47 @@ import {
     OnInit,
     ViewChild,
     ViewEncapsulation,
-} from "@angular/core";
-import { MatDialog } from "@angular/material/dialog";
-import { MatPaginator } from "@angular/material/paginator";
-import { MatSort } from "@angular/material/sort";
-import { MatTableDataSource } from "@angular/material/table";
-import { CONFIG } from "@config/index";
-import { WorkingDay } from "@feature/calender/models/working-day.model";
-import { CalendarService } from "@feature/calender/services/calendar.service";
-import { fuseAnimations } from "@fuse/animations";
-import { BaseComponent } from "@shared/components/base/base.component";
+} from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { CONFIG } from '@config/index';
+import { WorkingDay } from '@feature/calender/models/working-day.model';
+import { CalendarService } from '@feature/calender/services/calendar.service';
+import { fuseAnimations } from '@fuse/animations';
+import { BaseComponent } from '@shared/components/base/base.component';
 import {
     ConfirmDialogComponent,
     ConfirmDialogModel,
-} from "@shared/components/confirm-dialog/confirm-dialog.component";
-import { MESSAGES } from "@shared/constants/messages.constant";
+} from '@shared/components/confirm-dialog/confirm-dialog.component';
+import { MESSAGES } from '@shared/constants/messages.constant';
 import {
     camelToSentenceCase,
     camelToSnakeCase,
     snakeToCamelArray,
     snakeToCamelObject,
-} from "@shared/helpers/global.helper";
-import { WorkingDayFormComponent } from "../../components/working-day-form/working-day-form.component";
+} from '@shared/helpers/global.helper';
+import { WorkingDayFormComponent } from '../../components/working-day-form/working-day-form.component';
 
 @Component({
-    selector: "app-working-day",
-    templateUrl: "./working-day.component.html",
-    styleUrls: ["./working-day.component.scss"],
+    selector: 'app-working-day',
+    templateUrl: './working-day.component.html',
+    styleUrls: ['./working-day.component.scss'],
     animations: fuseAnimations,
     encapsulation: ViewEncapsulation.None,
 })
 export class WorkingDayComponent extends BaseComponent implements OnInit {
     dialogRef: any;
-    workingDays: WorkingDay[];
+    workingDays: any[];
     displayedColumns = [
-        "weekDay",
-        "startTimeLocal",
-        "endTimeLocal",
-        "fullDay",
-        "remarks",
-        "status",
-        "actions",
+        'weekDay',
+        'startTimeLocal',
+        'endTimeLocal',
+        'fullDay',
+        'remarks',
+        'status',
+        'actions',
     ];
     pageSize: number = CONFIG.PAGE_SIZE;
     pageSizeOptions: Array<number> = CONFIG.PAGE_SIZE_OPTIONS;
@@ -57,7 +57,7 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
         private _service: CalendarService,
         injector: Injector
     ) {
-        super(injector,MODULES.WORKING_WEEK);
+        super(injector, MODULES.WORKING_WEEK);
         super.ngOnInit();
     }
 
@@ -65,7 +65,7 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
         this.getData();
     }
 
-    getData() {
+    getData(): void  {
         this._service.getWorkingDays().subscribe(
             (response) => {
                 this.workingDays = snakeToCamelArray(response);
@@ -79,7 +79,7 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
             }
         );
     }
-    convertData(item) {
+    convertData(item): object {
         return {
             ...item,
             startTimeLocal: this.tConvert(item.startTimeLocal),
@@ -87,17 +87,17 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
         };
     }
     openDialog(data): void {
-        var _this = this;
+        const _this = this;
         this.dialogRef = this._matDialog
             .open(WorkingDayFormComponent, {
                 data: data ? data : new WorkingDay(),
-                panelClass: "app-working-day-form",
+                panelClass: 'app-working-day-form',
                 disableClose: true,
                 hasBackdrop: true,
             })
             .componentInstance.sendResponse.subscribe((response) => {
                 if (!response) {
-                    this._errorEmitService.emit("", "");
+                    this._errorEmitService.emit('', '');
                 } else if (response.id) {
                     _this.editWorkingDay(response);
                 } else {
@@ -105,11 +105,11 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
                 }
             });
     }
-    insert(str, index, value) {
+    insert(str, index, value): string {
         return str.substr(0, index) + value + str.substr(index);
     }
-    tConvert(time) {
-        time = this.insert(time, 2, ":");
+    tConvert(time): string  {
+        time = this.insert(time, 2, ':');
         time = time
             .toString()
             .match(/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
@@ -117,62 +117,63 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
         if (time.length > 1) {
             // If time format correct
             time = time.slice(1); // Remove full string match value
-            time[5] = +time[0] < 12 ? " AM" : " PM"; // Set AM/PM
+            time[5] = +time[0] < 12 ? ' AM' : ' PM'; // Set AM/PM
             time[0] = +time[0] % 12 || 12; // Adjust hours
         }
-        return time.join(""); // return adjusted time or original string
+        return time.join(''); // return adjusted time or original string
     }
 
-    createWorkingDay(model: WorkingDay) {
+    createWorkingDay(model: WorkingDay): void  {
         this._service.createWorkingDay(model).subscribe(
             (response) => {
                 const data: any = this.dataSource.data;
                 data.unshift(this.convertData(snakeToCamelObject(response)));
                 this.updateGrid(data);
-                this.errorType = "success";
-                this.responseMessage = MESSAGES.CREATED("Working Day");
+                this.errorType = 'success';
+                this.responseMessage = MESSAGES.CREATED('Working Day');
                 this._matDialog.closeAll();
                 this.hideMessage();
             },
             (response) => {
-                if (response.error && response.error.statusCode == 409) {
-                    this._errorEmitService.emit(MESSAGES.EXISTS('Working day'), "error");
-                } else
-                    this._errorEmitService.emit(MESSAGES.UNKNOWN(), "error");
+                if (response.error && response.error.statusCode === 409) {
+                    this._errorEmitService.emit(MESSAGES.EXISTS('Working day'), 'error');
+                } else {
+                    this._errorEmitService.emit(MESSAGES.UNKNOWN(), 'error');
+                }
             }
         );
     }
-    hideMessage() {
+    hideMessage(): void  {
         setTimeout(() => {
-            this.responseMessage = "";
+            this.responseMessage = '';
         }, 2000);
     }
-    editWorkingDay(model: WorkingDay) {
+    editWorkingDay(model: WorkingDay): void  {
         this._service.editWorkingDay(model.id, model).subscribe(
             (response) => {
-                this.errorType = "success";
-                this.responseMessage = MESSAGES.UPDATED("Working Day");
+                this.errorType = 'success';
+                this.responseMessage = MESSAGES.UPDATED('Working Day');
                 const index = this.dataSource.data.findIndex(
-                    (x) => x.id == model.id
+                    (x) => x.id === model.id
                 );
                 this.hideMessage();
-                const mapped: any = this.convertData(snakeToCamelObject(response))
+                const mapped: any = this.convertData(snakeToCamelObject(response));
                 this.workingDays[index] = mapped;
                 this.updateGrid(this.workingDays);
                 this._matDialog.closeAll();
             },
             (response) => {
-                this._errorEmitService.emit(MESSAGES.UNKNOWN(), "error");
+                this._errorEmitService.emit(MESSAGES.UNKNOWN(), 'error');
             }
         );
     }
     confirmDialog(type, id): void {
         const message = MESSAGES.REMOVE_CONFIRMATION();
-        const dialogData = new ConfirmDialogModel("Confirm Action", message);
+        const dialogData = new ConfirmDialogModel('Confirm Action', message);
         const dialogRef = this._matDialog.open(ConfirmDialogComponent, {
             data: dialogData,
             disableClose: true,
-            panelClass: "app-confirm-dialog",
+            panelClass: 'app-confirm-dialog',
             hasBackdrop: true,
         });
 
@@ -182,26 +183,26 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
             }
         });
     }
-    deleteWorkingDay(id: string) {
+    deleteWorkingDay(id: string): void  {
         this._service.deleteWorkingDay(id).subscribe(
             (response) => {
-                const index = this.dataSource.data.findIndex((x) => x.id == id);
+                const index = this.dataSource.data.findIndex((x) => x.id === id);
                 this.workingDays.splice(index, 1);
                 this.updateGrid(this.workingDays);
-                this.errorType = "success";
+                this.errorType = 'success';
                 this.hideMessage();
-                this.responseMessage = MESSAGES.DELETED("Working Day");
+                this.responseMessage = MESSAGES.DELETED('Working Day');
             },
             (response) => super.onError(response)
         );
     }
-    camelToSentenceCase(text) {
+    camelToSentenceCase(text): string  {
         return camelToSentenceCase(text);
     }
-    camelToSnakeCase(text) {
+    camelToSnakeCase(text): object  {
         return camelToSnakeCase(text);
     }
-    updateGrid(data) {
+    updateGrid(data): void  {
         this.dataSource.data = data;
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;

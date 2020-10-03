@@ -1,8 +1,8 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AboutComponent } from "./about.component";
+import { AboutComponent } from './about.component';
 
-describe("AboutComponent", () => {
+describe('AboutComponent', () => {
     let component: AboutComponent;
     let fixture: ComponentFixture<AboutComponent>;
 
@@ -19,12 +19,12 @@ describe("AboutComponent", () => {
         fixture.detectChanges();
     });
 
-    it("should create AboutComponent", () => {
+    it('should create AboutComponent', () => {
         expect(component).toBeTruthy();
     });
   
-    it("should getNationality be called", () => {
-        spyOn(component, "getNationality");
+    it('should getNationality be called', () => {
+        spyOn(component, 'getNationality');
         component.getNationality(1);
         expect(component.getNationality).toHaveBeenCalled();
     });

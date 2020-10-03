@@ -5,7 +5,7 @@ import { WorkingDayComponent } from './views/working-day/working-day.component';
 
 const routes: Routes = [
   {
-      path: "",
+      path: '',
       component: WorkingDayComponent
   },
 ];

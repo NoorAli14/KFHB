@@ -29,11 +29,11 @@ export class HolidayComponent extends BaseComponent implements OnInit {
     dialogRef: any;
     holidays: Holiday[];
     displayedColumns = [
-        "holidayDate",
-        "description",
-        "remarks",
-        "status",
-        "action",
+        'holidayDate',
+        'description',
+        'remarks',
+        'status',
+        'action',
     ];
 
     dataSource = new MatTableDataSource<Holiday>();
@@ -48,7 +48,7 @@ export class HolidayComponent extends BaseComponent implements OnInit {
         ,
         injector: Injector
         ) {
-            super(injector,MODULES.HOLIDAYS);
+            super(injector, MODULES.HOLIDAYS);
             super.ngOnInit();
     }
 
@@ -56,10 +56,10 @@ export class HolidayComponent extends BaseComponent implements OnInit {
         this.getData();
     }
 
-    getData() {
+    getData = (): void => {
         this._service.getHolidays().subscribe(
             (response) => {
-                this.holidays =snakeToCamelArray(response)
+                this.holidays = snakeToCamelArray(response);
                 this.dataSource = new MatTableDataSource(    this.holidays);
                 this.dataSource.paginator = this.paginator;
                 this.dataSource.sort = this.sort;
@@ -70,17 +70,17 @@ export class HolidayComponent extends BaseComponent implements OnInit {
         );
     }
     openDialog(data): void {
-        var _this = this;
+        const _this = this;
         this.dialogRef = this._matDialog
             .open(HolidayFormComponent, {
                 data: data ? data : new Holiday(),
-                panelClass: "app-holiday-form",
+                panelClass: 'app-holiday-form',
                 disableClose: true,
                 hasBackdrop: true,
             })
             .componentInstance.sendResponse.subscribe((response) => {
                 if (!response) {
-                    this._errorEmitService.emit("", "");
+                    this._errorEmitService.emit('', '');
                 } else if (response.id) {
                     _this.editHoliday(response);
                 } else {
@@ -89,82 +89,82 @@ export class HolidayComponent extends BaseComponent implements OnInit {
             });
     }
  
-    createHoliday(model: Holiday) {
+    createHoliday  = (model: Holiday): void => {
         this._service.createHoliday(model).subscribe(
             (response) => {
-                const data:any = this.dataSource.data;
+                const data: any = this.dataSource.data;
                 data.unshift(snakeToCamelObject(response));
                 this.updateGrid(data);
-                this.errorType = "success";
-                this.responseMessage = MESSAGES.CREATED("Holiday");
+                this.errorType = 'success';
+                this.responseMessage = MESSAGES.CREATED('Holiday');
                 this._matDialog.closeAll();
                 this.hideMessage();
             },
             (response) => {
-                this._errorEmitService.emit(MESSAGES.UNKNOWN(), "error");
+                this._errorEmitService.emit(MESSAGES.UNKNOWN(), 'error');
             }
         );
     }
-    hideMessage() {
+    hideMessage  = (): void => {
         setTimeout(() => {
-            this.responseMessage = "";
+            this.responseMessage = '';
         }, 2000);
     }
-    editHoliday(model: Holiday) {
+    editHoliday  = (model: Holiday): void => {
         this._service.editHoliday(model.id, model).subscribe(
             (response) => {
-                this.errorType = "success";
-                this.responseMessage = MESSAGES.UPDATED("Holiday");
+                this.errorType = 'success';
+                this.responseMessage = MESSAGES.UPDATED('Holiday');
                 const index = this.dataSource.data.findIndex(
-                    (x) => x.id == model.id
+                    (x) => x.id === model.id
                 );
                 this.hideMessage();
-                const mapped:any= snakeToCamelObject(response);
-                this.holidays[index] = mapped
+                const mapped: any = snakeToCamelObject(response);
+                this.holidays[index] = mapped;
                 this.updateGrid(this.holidays);
                 this._matDialog.closeAll();
             },
             (response) => {
-                this._errorEmitService.emit(MESSAGES.UNKNOWN(), "error");
+                this._errorEmitService.emit(MESSAGES.UNKNOWN(), 'error');
             }
         );
     }
     confirmDialog( id): void {
         const message = MESSAGES.REMOVE_CONFIRMATION();
-        const dialogData = new ConfirmDialogModel("Confirm Action", message);
+        const dialogData = new ConfirmDialogModel('Confirm Action', message);
         const dialogRef = this._matDialog.open(ConfirmDialogComponent, {
             data: dialogData,
             disableClose: true,
-            panelClass: "app-confirm-dialog",
+            panelClass: 'app-confirm-dialog',
             hasBackdrop: true,
         });
 
         dialogRef.afterClosed().subscribe((status) => {
             if (status) {
-               this.deleteHoliday(id)
+               this.deleteHoliday(id);
             }
         });
     }
-    deleteHoliday(id: string) {
+    deleteHoliday = (id: string): void => {
         this._service.deleteHoliday(id).subscribe(
             (response) => {
-                const index = this.dataSource.data.findIndex((x) => x.id == id);
+                const index = this.dataSource.data.findIndex((x) => x.id === id);
                 this.holidays.splice(index, 1);
                 this.updateGrid(this.holidays);
-                this.errorType = "success";
+                this.errorType = 'success';
                 this.hideMessage();
-                this.responseMessage = MESSAGES.DELETED("Holiday");
+                this.responseMessage = MESSAGES.DELETED('Holiday');
             },
             (response) => super.onError(response)
         );
     }
-    camelToSentenceCase(text) {
+    camelToSentenceCase  = (text: string): string =>  {
         return camelToSentenceCase(text);
     }
-    camelToSnakeCase(text) {
+    camelToSnakeCase = (text: string): object => {
         return camelToSnakeCase(text);
     }
-    updateGrid(data) {
+    updateGrid = (data): void =>  {
         this.dataSource.data = data;
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;

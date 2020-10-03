@@ -1,16 +1,16 @@
-import { Modules } from "./../../../models/modules.model";
-import { Component, OnInit, Input, Injector } from "@angular/core";
+import { Modules } from './../../../models/modules.model';
+import { Component, OnInit, Input, Injector } from '@angular/core';
 
-import { camelToSentenceCase } from "@shared/helpers/global.helper";
-import { Permission } from "@feature/entitlement/models/config.model";
-import { MatTableDataSource } from "@angular/material/table";
-import { BaseComponent } from "@shared/components/base/base.component";
-import { fuseAnimations } from "@fuse/animations";
-import { cloneDeep } from "lodash";
+import { camelToSentenceCase } from '@shared/helpers/global.helper';
+import { Permission } from '@feature/entitlement/models/config.model';
+import { MatTableDataSource } from '@angular/material/table';
+import { BaseComponent } from '@shared/components/base/base.component';
+import { fuseAnimations } from '@fuse/animations';
+import { cloneDeep } from 'lodash';
 
 @Component({
-    selector: "app-permission",
-    templateUrl: "./permission.component.html",
+    selector: 'app-permission',
+    templateUrl: './permission.component.html',
     styles: [
         `
             :host {
@@ -24,7 +24,7 @@ import { cloneDeep } from "lodash";
 export class PermissionComponent extends BaseComponent implements OnInit {
     @Input() modules: Array<Modules>;
     @Input() permissions: Array<Permission>;
-    displayedColumns = ["module"];
+    displayedColumns = ['module'];
     dataSource = new MatTableDataSource<any>();
     constructor(injector: Injector) {
         super(injector);
@@ -40,7 +40,7 @@ export class PermissionComponent extends BaseComponent implements OnInit {
             module['module'] = module.name;
             totalPermissions.forEach((permission) => {
                 module[permission] = module.permissions.find(
-                    (item) => item.record_type == permission
+                    (item) => item.record_type === permission
                 )
                     ? true
                     : false;
@@ -49,7 +49,7 @@ export class PermissionComponent extends BaseComponent implements OnInit {
         this.dataSource.data = this.modules;
     }
 
-    camelToSentenceCase(text) {
+    camelToSentenceCase(text): string  {
         return camelToSentenceCase(text);
     }
 }

@@ -1,32 +1,33 @@
-import { Holiday } from "@feature/calender/models/holiday.model";
+import { Holiday } from '@feature/calender/models/holiday.model';
 import {
     Component,
     EventEmitter,
     Inject,
+    OnDestroy,
     Injector,
     OnInit,
     Output,
     ViewEncapsulation,
-} from "@angular/core";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { BaseComponent } from "@shared/components/base/base.component";
+} from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { BaseComponent } from '@shared/components/base/base.component';
 import {
     MatDialogRef,
     MAT_DIALOG_DATA,
-} from "@angular/material/dialog";
+} from '@angular/material/dialog';
 import { camelToSnakeCase } from '@shared/helpers/global.helper';
 import { fuseAnimations } from '@fuse/animations';
 import * as moment from 'moment';
 import { DATE_FORMAT, MODULES } from '@shared/constants/app.constants';
 
 @Component({
-    selector: "app-holiday-form",
-    templateUrl: "./holiday-form.component.html",
-    styleUrls: ["./holiday-form.component.scss"],
+    selector: 'app-holiday-form',
+    templateUrl: './holiday-form.component.html',
+    styleUrls: ['./holiday-form.component.scss'],
     animations: fuseAnimations,
     encapsulation: ViewEncapsulation.None,
 })
-export class HolidayFormComponent extends BaseComponent implements OnInit {
+export class HolidayFormComponent extends BaseComponent implements OnDestroy, OnInit {
     @Output() sendResponse: EventEmitter<Holiday> = new EventEmitter<any>();
     holidayForm: FormGroup;
 
@@ -35,7 +36,7 @@ export class HolidayFormComponent extends BaseComponent implements OnInit {
         @Inject(MAT_DIALOG_DATA) public data: Holiday,
         injector: Injector
     ) {
-        super(injector,MODULES.HOLIDAYS);
+        super(injector, MODULES.HOLIDAYS);
         super.ngOnInit();
     }
 
@@ -48,7 +49,7 @@ export class HolidayFormComponent extends BaseComponent implements OnInit {
             description: new FormControl(this.data.description, [Validators.required]),
         });
     }
-    onSubmit() {
+    onSubmit = (): void => {
         let model = { ...this.holidayForm.value };
         model.holidayDate = moment(model.holidayDate).format(DATE_FORMAT);
         model = camelToSnakeCase(model);
@@ -59,8 +60,8 @@ export class HolidayFormComponent extends BaseComponent implements OnInit {
         this._unsubscribeAll.complete();
         // this._dialogRef.closeAll();
     }
-    onClose() {
+    onClose = (): void => {
         this.sendResponse.emit();
-        this.matDialogRef.close()
+        this.matDialogRef.close();
     }
 }

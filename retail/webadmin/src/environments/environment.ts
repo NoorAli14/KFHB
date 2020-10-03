@@ -3,17 +3,17 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false,
-	staging: false,
-	test: false,
-  develop:false,
-  isMockEnabled: true, // You have to switch this, when your real back-end is done
-  authTokenKey: 'authce9d77b308c149d5992a80073637e4d5',
-  APP_SECRETE: "abfFGHIepqrstuvwSTUCDEXYZ",
-  // API_BASE_URL:"http://localhost:3000",
-  API_BASE_URL:"http://rubix-dev01.conduit-aiondigital.com",
-  CHANNEL_ID:"RUBIX-DEV-INT",
-  hmr:false
+    production: false,
+    staging: false,
+    test: false,
+    develop: false,
+    isMockEnabled: true, // You have to switch this, when your real back-end is done
+    authTokenKey: 'authce9d77b308c149d5992a80073637e4d5',
+    APP_SECRETE: 'abfFGHIepqrstuvwSTUCDEXYZ',
+    // API_BASE_URL:"http://localhost:3000",
+    API_BASE_URL: 'http://rubix-dev01.conduit-aiondigital.com',
+    CHANNEL_ID: 'RUBIX-DEV-INT',
+    hmr: false,
 };
 
 /*

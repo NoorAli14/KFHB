@@ -1,8 +1,8 @@
 import { SettingService } from './../../setting.service';
-import { Component, OnInit, ViewEncapsulation, Inject, Output, EventEmitter, Injector } from "@angular/core";
-import { FormGroup,  FormControl, Validators } from "@angular/forms";
-import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import {  GENDER_LIST, NATIONALITY_LIST } from "@shared/constants/app.constants";
+import { Component, OnInit, ViewEncapsulation, Inject, Output, EventEmitter, Injector, OnDestroy } from '@angular/core';
+import { FormGroup,  FormControl, Validators } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {  GENDER_LIST, NATIONALITY_LIST } from '@shared/constants/app.constants';
 import { fuseAnimations } from '@fuse/animations';
 import { User } from '@feature/entitlement/models/user.model';
 import { BaseComponent } from '@shared/components/base/base.component';
@@ -18,14 +18,14 @@ import { cloneDeep } from 'lodash';
    encapsulation: ViewEncapsulation.None,
     animations: fuseAnimations,
 })
-export class UpdateProfileComponent extends BaseComponent implements OnInit {
+export class UpdateProfileComponent extends BaseComponent implements OnDestroy, OnInit {
 
     userForm: FormGroup;
     response: User;
     @Output() sendResponse: EventEmitter<User> = new EventEmitter<any>();
-    nationalityList: any[]=[]
+    nationalityList: any[] = [];
     filteredNationalities: any[];
-    genderList: any[]=GENDER_LIST;
+    genderList: any[] = GENDER_LIST;
     constructor(
         public matDialogRef: MatDialogRef<UpdateProfileComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
@@ -35,7 +35,7 @@ export class UpdateProfileComponent extends BaseComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        var _this=this;
+        const _this = this;
         this._errorEmitService.currentMessage
         .pipe(takeUntil(this._unsubscribeAll))
         .subscribe((item) => {
@@ -46,26 +46,26 @@ export class UpdateProfileComponent extends BaseComponent implements OnInit {
         this.userForm = new FormGroup({
             id: new FormControl(this.data.user.id),
             firstName: new FormControl(this.data.user.firstName, [Validators.required]),
-            middleName: new FormControl(this.data.user.middleName,),
+            middleName: new FormControl(this.data.user.middleName, ),
             lastName: new FormControl(this.data.user.lastName, [Validators.required]),
-            contactNo: new FormControl(this.data.user.contactNo,[Validators.required,ValidatorService.numbersOnly]),
-            gender: new FormControl(this.data.user.gender,[Validators.required]),
-            email: new FormControl({value:this.data.user.email, disabled:true}),
+            contactNo: new FormControl(this.data.user.contactNo, [Validators.required, ValidatorService.numbersOnly]),
+            gender: new FormControl(this.data.user.gender, [Validators.required]),
+            email: new FormControl({value: this.data.user.email, disabled: true}),
             dateOfBirth: new FormControl(this.data.user.dateOfBirth ? new Date(this.data.user.dateOfBirth) : null, [Validators.required]),
             nationalityId: new FormControl(this.data.user.nationalityId, [Validators.required] ),
         });
-        this.nationalityList= this.data.nationalities;
-        this.filteredNationalities=this.data.nationalities
-        this.userForm.get('nationalityId').valueChanges.subscribe((value=>{
-            this.filteredNationalities=  this._mapperService.filterData(this.nationalityList,'nationality',value)
+        this.nationalityList = this.data.nationalities;
+        this.filteredNationalities = this.data.nationalities;
+        this.userForm.get('nationalityId').valueChanges.subscribe((value => {
+            this.filteredNationalities =  this._mapperService.filterData(this.nationalityList, 'nationality', value);
           }));
     }
-    displayFn=(id: string): string=> {
-        return getName(id,'nationality',cloneDeep(this.nationalityList))
+    displayFn = (id: string): string => {
+        return getName(id, 'nationality', cloneDeep(this.nationalityList));
     }
-    onSubmit() {
+    onSubmit(): void {
         const model = { ...this.userForm.value };
-        model.dateOfBirth= new Date(model.dateOfBirth).toLocaleDateString()
+        model.dateOfBirth = new Date(model.dateOfBirth).toLocaleDateString();
         this.sendResponse.emit(model);
     }
  
@@ -74,8 +74,8 @@ export class UpdateProfileComponent extends BaseComponent implements OnInit {
         this._unsubscribeAll.complete();
         // this._dialogRef.closeAll();
     }
-    onClose() {
+    onClose(): void {
         this.sendResponse.emit();
-        this.matDialogRef.close(this.response)
+        this.matDialogRef.close(this.response);
     }
 }

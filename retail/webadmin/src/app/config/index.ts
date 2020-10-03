@@ -16,12 +16,12 @@ export const ngxUiLoaderConfig: NgxUiLoaderConfig = {
     pbThickness: 5 // progress bar thickness
   };
   
-  export const CONFIG={
-    PAGE_SIZE:5,
-    PAGE_SIZE_OPTIONS:[5,10,15]
-  }
+export const CONFIG = {
+    PAGE_SIZE: 5,
+    PAGE_SIZE_OPTIONS: [5, 10, 15]
+  };
 
 
-  export const REGEX={
-    PASSWORD:/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/
-  }
+export const REGEX = {
+    PASSWORD: /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/
+  };

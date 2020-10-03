@@ -7,7 +7,7 @@ import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
   encapsulation: ViewEncapsulation.None,
 })
 export class StatusComponent implements OnInit {
-  @Input() status:string;
+  @Input() status: string;
   constructor() { }
 
   ngOnInit(): void {

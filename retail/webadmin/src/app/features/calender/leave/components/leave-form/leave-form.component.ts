@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, Injector, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Inject, Injector, OnDestroy, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Leave } from '@feature/calender/models/leave.model';
@@ -16,27 +16,27 @@ import { takeUntil, filter } from 'rxjs/operators';
   animations: fuseAnimations,
   encapsulation: ViewEncapsulation.None,
 })
-export class LeaveFormComponent extends BaseComponent implements OnInit {
+export class LeaveFormComponent extends BaseComponent implements OnDestroy, OnInit {
 
   @Output() sendResponse: EventEmitter<Leave> = new EventEmitter<any>();
   leaveForm: FormGroup;
   leaveTypes: Array<any>;
   users: Array<any>;
   filteredUser: Array<any>;
-  isAdmin=false;
+  isAdmin = false;
   constructor(
     public matDialogRef: MatDialogRef<LeaveFormComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     injector: Injector
   ) {
-    super(injector,MODULES.LEAVES);
+    super(injector, MODULES.LEAVES);
     super.ngOnInit();
   }
 
   ngOnInit(): void {
     this.leaveTypes = this.data.leaveTypes;
-    this.users = this.data.users?.filter(x=>x.roles.find(x=>x.name!='SUPER ADMIN'));
-    this.filteredUser = this.data.users?.filter(x=>x.roles.find(x=>x.name!='SUPER ADMIN'));
+    this.users = this.data.users?.filter(x => x.roles.find(item => item.name !== 'SUPER ADMIN'));
+    this.filteredUser = this.data.users?.filter(x => x.roles.find(item => item.name !== 'SUPER ADMIN'));
     
     this._errorEmitService.currentMessage
       .pipe(takeUntil(this._unsubscribeAll))
@@ -59,16 +59,16 @@ export class LeaveFormComponent extends BaseComponent implements OnInit {
       remarks: new FormControl(this.data.leave.remarks, [Validators.required]),
       userId: new FormControl(this.data.leave.userId, [Validators.required]),
     });
-     this.isAdmin= this._authUserService.User.roles.find(x=>x.name==='SUPER ADMIN')?true: false;
-    if(!this.isAdmin){
+    this.isAdmin = this._authUserService.User.roles.find(x => x.name === 'SUPER ADMIN') ? true : false;
+    if (!this.isAdmin){
       this.leaveForm.get('userId').setValue(this._authUserService.User.id);
     }
-    this.leaveForm.get('userId').valueChanges.subscribe((value=>{
-      this.filteredUser=  this._mapperService.filterData(this.users,'firstName',value)
+    this.leaveForm.get('userId').valueChanges.subscribe((value => {
+      this.filteredUser =  this._mapperService.filterData(this.users, 'firstName', value);
     }));
   }
-  displayFn=(id: string): string=> {
-    return getName(id,'firstName',cloneDeep(this.users))
+  displayFn = (id: string): string => {
+    return getName(id, 'firstName', cloneDeep(this.users));
 }
   confirmPasswordValidator(control: FormControl): { [s: string]: boolean } {
     if (
@@ -78,16 +78,16 @@ export class LeaveFormComponent extends BaseComponent implements OnInit {
     ) {
       const start = moment(this.leaveForm.controls.startDate.value).format(DATE_FORMAT);
       const end = moment(this.leaveForm.controls.endDate.value).format(DATE_FORMAT);
-      var isAfter = moment(end).isSameOrAfter(start);
+      const isAfter = moment(end).isSameOrAfter(start);
       if (isAfter) {
-        this.leaveForm.controls.startDate.setErrors(null)
-        this.leaveForm.controls.endDate.setErrors(null)
+        this.leaveForm.controls.startDate.setErrors(null);
+        this.leaveForm.controls.endDate.setErrors(null);
       }
       return isAfter ? null : { compareDate: true };
     }
     return null;
   }
-  onSubmit() {
+  onSubmit(): void  {
 
     let model = { ...this.leaveForm.value };
     model.startDate = moment(model.startDate).format(DATE_FORMAT);
@@ -100,8 +100,8 @@ export class LeaveFormComponent extends BaseComponent implements OnInit {
     this._unsubscribeAll.complete();
     // this._dialogRef.closeAll();
 }
-onClose() {
+onClose(): void  {
     this.sendResponse.emit();
-    this.matDialogRef.close()
+    this.matDialogRef.close();
 }
 }

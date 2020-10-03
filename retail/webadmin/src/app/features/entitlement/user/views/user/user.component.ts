@@ -1,43 +1,43 @@
-import { BaseComponent } from "@shared/components/base/base.component";
-import { CONFIG } from "@config/index";
+import { BaseComponent } from '@shared/components/base/base.component';
+import { CONFIG } from '@config/index';
 import {
     Component,
     OnInit,
     ViewEncapsulation,
     ViewChild,
     Injector,
-} from "@angular/core";
-import { fuseAnimations } from "@fuse/animations";
-import { MatDialog } from "@angular/material/dialog";
-import { UserFormComponent } from "../../components/user-form/user-form.component";
+} from '@angular/core';
+import { fuseAnimations } from '@fuse/animations';
+import { MatDialog } from '@angular/material/dialog';
+import { UserFormComponent } from '../../components/user-form/user-form.component';
 
-import { UserService } from "../../services/user.service";
-import { MODULES } from "@shared/constants/app.constants";
+import { UserService } from '../../services/user.service';
+import { MODULES } from '@shared/constants/app.constants';
 
-import { FormControl } from "@angular/forms";
-import { User } from "@feature/entitlement/models/user.model";
-import { Role } from "@feature/entitlement/models/role.model";
-import { MatTableDataSource } from "@angular/material/table";
-import { MatPaginator } from "@angular/material/paginator";
-import { MatSort } from "@angular/material/sort";
+import { FormControl } from '@angular/forms';
+import { User } from '@feature/entitlement/models/user.model';
+import { Role } from '@feature/entitlement/models/role.model';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import {
     camelToSentenceCase,
     camelToSnakeCaseText,
     snakeToCamelObject,
     removeRandom,
-} from "@shared/helpers/global.helper";
+} from '@shared/helpers/global.helper';
 import {
     ConfirmDialogModel,
     ConfirmDialogComponent,
-} from "@shared/components/confirm-dialog/confirm-dialog.component";
-import { UserDetailComponent } from "../../components/user-detail/user-detail.component";
-import { takeUntil } from "rxjs/operators";
-import { MESSAGES } from "@shared/constants/messages.constant";
+} from '@shared/components/confirm-dialog/confirm-dialog.component';
+import { UserDetailComponent } from '../../components/user-detail/user-detail.component';
+import { takeUntil } from 'rxjs/operators';
+import { MESSAGES } from '@shared/constants/messages.constant';
 
 @Component({
-    selector: "app-user",
-    templateUrl: "./user.component.html",
-    styleUrls: ["./user.component.scss"],
+    selector: 'app-user',
+    templateUrl: './user.component.html',
+    styleUrls: ['./user.component.scss'],
     animations: fuseAnimations,
     encapsulation: ViewEncapsulation.None,
 })
@@ -49,7 +49,7 @@ export class UserComponent extends BaseComponent implements OnInit {
     pageSize: number = CONFIG.PAGE_SIZE;
     pageSizeOptions: Array<number> = CONFIG.PAGE_SIZE_OPTIONS;
     nationalities: any[];
-    displayedColumns = ["firstName", "lastName", "email", "status", "action"];
+    displayedColumns = ['firstName', 'lastName', 'email', 'status', 'action'];
 
     dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
 
@@ -69,7 +69,7 @@ export class UserComponent extends BaseComponent implements OnInit {
         this.getData();
     }
 
-    getData() {
+    getData(): void {
         this._service
             .forkUserData()
             .pipe(takeUntil(this._unsubscribeAll))
@@ -82,11 +82,11 @@ export class UserComponent extends BaseComponent implements OnInit {
             );
     }
 
-    camelToSnakeCase(text) {
+    camelToSnakeCase(text): void {
         return camelToSnakeCaseText(text);
     }
     openDialog(data): void {
-        var _this = this;
+        const _this = this;
         this.dialogRef = this._matDialog
             .open(UserFormComponent, {
                 data: {
@@ -97,11 +97,11 @@ export class UserComponent extends BaseComponent implements OnInit {
                 },
                 disableClose: true,
                 hasBackdrop: true,
-                panelClass: "app-user-form",
+                panelClass: 'app-user-form',
             })
             .componentInstance.sendResponse.subscribe((response) => {
                 if (!response) {
-                    this._errorEmitService.emit("", "");
+                    this._errorEmitService.emit('', '');
                 } else  if (response.id) {
                     _this.editUser(response);
                 } else {
@@ -120,52 +120,52 @@ export class UserComponent extends BaseComponent implements OnInit {
                 (response) => super.onError(response)
             );
     }
-    openUserDetailModal(response) {
+    openUserDetailModal(response): void {
         response.modules = this._mapperService.makeModulesFlat(response.modules);
         response = snakeToCamelObject(response);
         this.dialogRef = this._matDialog.open(UserDetailComponent, {
             data: response,
-            panelClass: "app-user-detail",
+            panelClass: 'app-user-detail',
         });
     }
-    camelToSentenceCase(text) {
+    camelToSentenceCase(text): string {
         return camelToSentenceCase(text);
     }
     confirmDialog(type, id): void {
         const message =
-            type === "invite"
+            type === 'invite'
                 ? removeRandom(MESSAGES.RESEND_INVITE())
                 : removeRandom(MESSAGES.REMOVE_CONFIRMATION());
-        const dialogData = new ConfirmDialogModel("Confirm Action", message);
+        const dialogData = new ConfirmDialogModel('Confirm Action', message);
         const dialogRef = this._matDialog.open(ConfirmDialogComponent, {
             data: dialogData,
             disableClose: true,
-            panelClass: "app-confirm-dialog",
+            panelClass: 'app-confirm-dialog',
             hasBackdrop: true,
         });
 
         dialogRef.afterClosed().subscribe((status) => {
             if (status) {
-                type === "invite"
+                type === 'invite'
                     ? this.resendInvitation(id)
                     : this.deleteUser(id);
             }
         });
     }
-    resendInvitation(id) {
+    resendInvitation(id): void {
         this._service
             .resendInvite(id)
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe(
                 (response) => {
-                    this.errorType = "success";
+                    this.errorType = 'success';
                     this.responseMessage = MESSAGES.INVITE_RESENT();
                     this.hideMessage();
                 },
                 (response) => super.onError(response)
             );
     }
-    createUser(model: User) {
+    createUser(model: User): void {
         this._service
             .createUser(model)
             .pipe(takeUntil(this._unsubscribeAll))
@@ -174,67 +174,67 @@ export class UserComponent extends BaseComponent implements OnInit {
                     const data = this.dataSource.data;
                     data.unshift(response);
                     this.updateGrid(data);
-                    this.errorType = "success";
-                    this.responseMessage = MESSAGES.CREATED("User");
+                    this.errorType = 'success';
+                    this.responseMessage = MESSAGES.CREATED('User');
                     this._matDialog.closeAll();
                     this.hideMessage();
-                    this._errorEmitService.emit("", "");
+                    this._errorEmitService.emit('', '');
                 },
                 ({ error }) => {
-                    if (error.statusCode == 422) {
-                        this._errorEmitService.emit(MESSAGES.EXISTS("User with this email"), "warning");
+                    if (error.statusCode === 422) {
+                        this._errorEmitService.emit(MESSAGES.EXISTS('User with this email'), 'warning');
                     } else {
-                        this._errorEmitService.emit(MESSAGES.UNKNOWN(), "error");
+                        this._errorEmitService.emit(MESSAGES.UNKNOWN(), 'error');
                     }
                 }
             );
     }
-    hideMessage() {
+    hideMessage(): void {
         setTimeout(() => {
-            this.responseMessage = "";
+            this.responseMessage = '';
         }, 2000);
     }
-    editUser(model: User) {
+    editUser(model: User): void {
         this._service
             .editUser(model.id, model)
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe(
                 (response) => {
-                    this.errorType = "success";
-                    this.responseMessage = MESSAGES.UPDATED("User");
+                    this.errorType = 'success';
+                    this.responseMessage = MESSAGES.UPDATED('User');
                     const index = this.dataSource.data.findIndex(
-                        (x) => x.id == model.id
+                        (x) => x.id === model.id
                     );
                     this.hideMessage();
                     this.users[index] = response;
                     this.updateGrid(this.users);
                     this._matDialog.closeAll();
-                    this._errorEmitService.emit("", "");
+                    this._errorEmitService.emit('', '');
                 },
                 (response) => {
-                    this._errorEmitService.emit(MESSAGES.UNKNOWN(), "error");
+                    this._errorEmitService.emit(MESSAGES.UNKNOWN(), 'error');
                 }
             );
     }
-    deleteUser(id: string) {
+    deleteUser(id: string): void {
         this._service
             .deleteUser(id)
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe(
                 (response) => {
                     const index = this.dataSource.data.findIndex(
-                        (x) => x.id == id
+                        (x) => x.id === id
                     );
                     this.users.splice(index, 1);
                     this.updateGrid(this.users);
-                    this.errorType = "success";
+                    this.errorType = 'success';
                     this.hideMessage();
-                    this.responseMessage = MESSAGES.DELETED("User");
+                    this.responseMessage = MESSAGES.DELETED('User');
                 },
                 (response) => super.onError(response)
             );
     }
-    updateGrid(data) {
+    updateGrid(data): void {
         this.dataSource.data = data;
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;

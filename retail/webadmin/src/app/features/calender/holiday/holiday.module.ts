@@ -11,7 +11,7 @@ import { HolidayComponent } from './views/holiday.component';
 
 
 @NgModule({
-  declarations: [HolidayFormComponent,HolidayComponent],
+  declarations: [HolidayFormComponent, HolidayComponent],
   imports: [
     CommonModule,
     HolidayRoutingModule,
