@@ -89,7 +89,7 @@ export class AuthInterceptorService implements HttpInterceptor {
             headers: new HttpHeaders({
                 'content-type': 'application/json',
                 'Accept': 'application/json, text/plain, */*',
-                'x-tenant-id': '9013C327-1190-4875-A92A-83ACA9029160',
+                'x-tenant-id': environment.TENANT_ID,
                 'x-channel-id': environment.CHANNEL_ID,
             }),
         };
