@@ -1,7 +1,7 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DefaultTextComponent } from './default-text.component';
 
-describe("DefaultTextComponent", async () => {
+describe('DefaultTextComponent', async () => {
     let component: DefaultTextComponent;
     let fixture: ComponentFixture<DefaultTextComponent>;
     beforeEach(async(() => {
@@ -16,7 +16,7 @@ describe("DefaultTextComponent", async () => {
         fixture.detectChanges();
     });
 
-    it("should create DefaultTextComponent", () => {
+    it('should create DefaultTextComponent', () => {
         expect(component).toBeTruthy();
     });
 });

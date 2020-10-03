@@ -1,16 +1,16 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ConfirmDialogComponent } from './confirm-dialog.component';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DOMHelper } from 'testing/dom.helper';
 import { of } from 'rxjs';
 
-describe("ConfirmDialogComponent", async () => {
+describe('ConfirmDialogComponent', async () => {
     let component: ConfirmDialogComponent;
     let fixture: ComponentFixture<ConfirmDialogComponent>;
-    let matDialogRefMock:any
+    let matDialogRefMock: any;
     let helper: DOMHelper<ConfirmDialogComponent>;
     beforeEach(async(() => {
-        matDialogRefMock = jasmine.createSpyObj("MatDialogRef", ["close"]);
+        matDialogRefMock = jasmine.createSpyObj('MatDialogRef', ['close']);
         TestBed.configureTestingModule({
             declarations: [ConfirmDialogComponent],
             providers: [
@@ -33,17 +33,17 @@ describe("ConfirmDialogComponent", async () => {
         fixture.detectChanges();
     });
 
-    it("should create ConfirmDialogComponent", () => {
+    it('should create ConfirmDialogComponent', () => {
         expect(component).toBeTruthy();
     });
-    it("should close the Dialog on confirm", () => {
-        matDialogRefMock.close.and.returnValue(of([]))
-        helper.clickElement('.btn-confirm')
+    it('should close the Dialog on confirm', () => {
+        matDialogRefMock.close.and.returnValue(of([]));
+        helper.clickElement('.btn-confirm');
         expect(matDialogRefMock.close).toHaveBeenCalled();
     });
-    it("should close the Dialog on cancel", () => {
-        matDialogRefMock.close.and.returnValue(of([]))
-        helper.clickElement('.btn-cancel')
+    it('should close the Dialog on cancel', () => {
+        matDialogRefMock.close.and.returnValue(of([]));
+        helper.clickElement('.btn-cancel');
         expect(matDialogRefMock.close).toHaveBeenCalled();
     });
 });

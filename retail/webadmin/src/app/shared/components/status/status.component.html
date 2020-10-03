@@ -1,0 +1,6 @@
+<ng-container [ngSwitch]="status" >
+    <span *ngSwitchCase="'IN_ACTIVE'" class="status text-truncate h6 p-4 orange-500 label-status" >In Active</span>
+    <span *ngSwitchCase="'ACTIVE'" class="status text-truncate h6 p-4 green-800 label-status" > Active</span>
+    <span *ngSwitchCase="'LOCKED'" class="status text-truncate h6 p-4 orange-500 label-status" > Locked</span>
+    <span *ngSwitchCase="'PENDING'" class="status text-truncate h6 p-4 orange-500 label-status" >Pending</span>
+</ng-container>

@@ -6,12 +6,12 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class ErrorEmitterService {
 
-  private messageSource = new BehaviorSubject({type: 'error',message: ''});
+  private messageSource = new BehaviorSubject({type: 'error', message: ''});
   currentMessage = this.messageSource.asObservable();
 
   constructor() { }
 
-  emit(message: string, type:string) {
-    this.messageSource.next({message,type})
+  emit(message: string, type: string): void {
+    this.messageSource.next({message, type});
   }
 }

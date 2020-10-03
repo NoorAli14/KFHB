@@ -4,10 +4,10 @@ export const cloneDeep = (value) => {
 
 export const snakeToCamelArray = (array) => {
     const response = array.map((data) => {
-        let mapped = {};
+        const mapped = {};
         Object.keys(data).forEach((key, index) => {
             const converted = key.replace(/([-_][a-z])/g, (group) =>
-                group.toUpperCase().replace("-", "").replace("_", "")
+                group.toUpperCase().replace('-', '').replace('_', '')
             );
             mapped[converted] = data[key];
         });
@@ -17,19 +17,19 @@ export const snakeToCamelArray = (array) => {
     return response;
 };
 export const snakeToCamelObject = (data) => {
-    if(!data)return;
-    let mapped = {};
+    if (!data) {return; }
+    const mapped = {};
     Object.keys(data).forEach((key, index) => {
         const converted = key.replace(/([-_][a-z])/g, (group) =>
-            group.toUpperCase().replace("-", "").replace("_", "")
+            group.toUpperCase().replace('-', '').replace('_', '')
         );
         mapped[converted] = data[key];
     });
     return mapped;
 };
 export const getName = (id, key, array) => {
-    const data = array.find((item) => item.id == id);
-    return data ? data[key] : "N/A";
+    const data = array.find((item) => item.id === id);
+    return data ? data[key] : 'N/A';
 };
 
 export const camelToSnakeCaseText = (text) => {
@@ -40,7 +40,7 @@ export const camelToSnakeCaseText = (text) => {
 };
 
 export const camelToSnakeCase = (data) => {
-    let mapped = {};
+    const mapped = {};
     Object.keys(data).forEach((key, index) => {
         const converted = key.replace(
             /[A-Z]/g,
@@ -54,14 +54,14 @@ export const camelToSnakeCase = (data) => {
 
 
 export const camelToSentenceCase = (text) => {
-    text=text.replace('Id','');
-    text=text.replace('_id','');
-    var result = text.replace( /([A-Z])/g, " $1" );
-    var finalResult = result.charAt(0).toUpperCase() + result.slice(1);
+    text = text.replace('Id', '');
+    text = text.replace('_id', '');
+    const result = text.replace( /([A-Z])/g, ' $1' );
+    const finalResult = result.charAt(0).toUpperCase() + result.slice(1);
     return finalResult;
 };
 
 
-export const removeRandom=(text)=>{
+export const removeRandom = (text) => {
     return text.replace(/\d+/g, '');
-}
+};

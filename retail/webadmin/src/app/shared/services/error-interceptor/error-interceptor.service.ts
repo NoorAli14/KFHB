@@ -16,7 +16,7 @@ export class ErrorInterceptorService {
       catchError(this.handleError)
     );
   }
-  handleError(error: HttpErrorResponse) {
+  handleError(error: HttpErrorResponse): Observable<any>  {
     let errorMessage = '';
     if (error.error instanceof ErrorEvent) {
       // client-side error

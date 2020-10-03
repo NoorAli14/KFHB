@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { EmitEvent } from '@shared/models/emit-event.model';
-import { Subject } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 import { Events } from '@shared/enums/events.enum';
 import { filter, map } from 'rxjs/operators';
 
@@ -11,13 +11,13 @@ export class EventBusService {
   private subject$ = new Subject();
   constructor() { }
 
-  emit(event: EmitEvent) {
+  emit(event: EmitEvent): void {
     this.subject$.next(event);
   }
-  on(event: Events, callback: any) {
+  on(event: Events, callback: any): Subscription  {
     return this.subject$.pipe(
       filter((e: EmitEvent) => e.name === event),
-      map(item=>item.value)
-    ).subscribe(callback)
+      map(item => item.value)
+    ).subscribe(callback);
   }
 }
