@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { AuthUserService } from '@shared/services/user/auth-user.service';
 import { ErrorEmitterService } from '@shared/services/error-emitter/error-emitter.service';
 import {Injector} from '@angular/core';
@@ -23,7 +23,7 @@ export class BaseComponent implements OnInit {
     // protected _dialogRef: MatDialog
     constructor(
         private injector: Injector,
-        private moduleType?: string, 
+        @Inject(String)  private  moduleType?: string, 
     ) {
         this._authUserService = injector.get(AuthUserService);
         this._errorEmitService = injector.get(ErrorEmitterService);

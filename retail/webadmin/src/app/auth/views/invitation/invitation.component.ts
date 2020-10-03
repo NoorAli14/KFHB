@@ -86,6 +86,7 @@ export class InvitationComponent extends BaseComponent implements OnInit {
           }));
     }
     displayFn = (id: string): string => {
+        if (!id){return ''; }
         return getName(id, 'nationality', cloneDeep(this.nationalityList));
     }
     confirmPasswordValidator(control: FormControl): { [s: string]: boolean } {

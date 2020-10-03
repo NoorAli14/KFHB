@@ -69,9 +69,7 @@ export class UserFormComponent extends BaseComponent implements OnDestroy, OnIni
             });
         this.userForm = new FormGroup({
             id: new FormControl(this.data.user.id),
-            username: new FormControl(this.data.user.username, [
-                this.requiredIfUpdating(() => !this.userForm.get('id').value),
-            ]),
+           
             firstName: new FormControl(this.data.user.firstName, [
                 this.requiredIfUpdating(() => this.userForm.get('id').value),
             ]),

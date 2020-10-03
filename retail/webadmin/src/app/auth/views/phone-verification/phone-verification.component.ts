@@ -64,7 +64,7 @@ export class PhoneVerificationComponent implements OnInit {
         }
         return null;
     }
-    onSubmit = (token): void => {
+    onSubmit(): void {
         console.log(this.recoverPasswordForm);
     }
 }

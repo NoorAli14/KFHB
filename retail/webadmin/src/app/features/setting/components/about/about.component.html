@@ -8,10 +8,7 @@
 
             <div class="content">
                 <div fxLayout="column" fxFlex="48">
-                    <div class="info-line">
-                        <div class="title">User Name</div>
-                        <div class="info" *ngIf="user.username ; else defaultText">{{user.username}}</div>
-                    </div>
+                   
                     <div class="info-line">
                         <div class="title">First Name</div>
                         <div class="info" *ngIf="user.firstName ; else defaultText">{{user.firstName }}</div>
@@ -29,14 +26,14 @@
                         <div class="title">Email</div>
                         <div class="info" *ngIf="user.email ; else defaultText">{{user.email}}</div>
                     </div>
-
-                   
-                </div>
-                <div fxLayout="column" fxFlex="48">
                     <div class="info-line">
                         <div class="title">Gender</div>
                         <div class="info" *ngIf="user.gender ; else defaultText">{{user.gender=='M' ? 'Male' : 'Female'}}</div>
                     </div>
+                   
+                </div>
+                <div fxLayout="column" fxFlex="48">
+                   
 
                     <div class="info-line">
                         <div class="title">Nationality</div>
