@@ -71,7 +71,6 @@ export class InvitationComponent extends BaseComponent implements OnInit {
                 ValidatorService.numbersOnly,
             ]),
             gender: new FormControl("", [Validators.required]),
-            status: new FormControl(""),
             email: new FormControl({ value: "", disabled: true }),
             dateOfBirth: new FormControl("", [Validators.required]),
             nationalityId: new FormControl("", [Validators.required]),

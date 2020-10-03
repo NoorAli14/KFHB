@@ -22,9 +22,7 @@ describe("AboutComponent", () => {
     it("should create AboutComponent", () => {
         expect(component).toBeTruthy();
     });
-    it("should nationalityList array property initialized with more than 1 record", () => {
-        expect(component.nationalityList.length).toBeGreaterThan(1);
-    });
+  
     it("should getNationality be called", () => {
         spyOn(component, "getNationality");
         component.getNationality(1);

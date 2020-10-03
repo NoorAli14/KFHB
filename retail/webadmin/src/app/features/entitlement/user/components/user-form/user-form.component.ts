@@ -36,7 +36,7 @@ export class UserFormComponent extends BaseComponent implements OnInit {
     response: User;
     roles: Role[];
     permissions: any[];
-    nationalityList: any[];
+    nationalityList: any[]=[]
     genderList: any[] = GENDER_LIST;
     statusList: any[] = STATUS_LIST;
     @Output() sendResponse: EventEmitter<User> = new EventEmitter<any>();
@@ -137,7 +137,7 @@ export class UserFormComponent extends BaseComponent implements OnInit {
     ngOnDestroy(): void {
         this._unsubscribeAll.next();
         this._unsubscribeAll.complete();
-        this._dialogRef.closeAll();
+        // this._dialogRef.closeAll();
     }
     onClose(){
         this.sendResponse.emit();

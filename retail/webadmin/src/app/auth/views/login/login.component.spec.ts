@@ -67,7 +67,7 @@ describe("LoginComponent", async () => {
         fixture.detectChanges();
     });
 
-    describe("Reset Password General", () => {
+    describe("Login General", () => {
         it("should create login component", () => {
             expect(component).toBeTruthy();
         });
@@ -75,9 +75,9 @@ describe("LoginComponent", async () => {
             const el = fixture.debugElement.query(By.css(".title"));
             expect(el.nativeElement.textContent).toBe("LOGIN TO YOUR ACCOUNT");
         });
-        it("should have 5 buttons on login page ", () => {
+        it("should have 1 buttons on login page ", () => {
             const buttons = fixture.debugElement.queryAll(By.css("button"));
-            expect(buttons.length).toBe(5);
+            expect(buttons.length).toBe(1);
         });
 
         it("should have the login submit button ", () => {

@@ -140,7 +140,7 @@ export class WorkingDayFormComponent extends BaseComponent implements OnInit {
     ngOnDestroy(): void {
         this._unsubscribeAll.next();
         this._unsubscribeAll.complete();
-        this._dialogRef.closeAll();
+        // this._dialogRef.closeAll();
     }
     onClose(){
         this.sendResponse.emit();

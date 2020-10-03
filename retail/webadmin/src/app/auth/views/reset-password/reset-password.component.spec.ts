@@ -97,8 +97,8 @@ describe("ResetPasswordComponent", async () => {
 
         it("should the reset password button be enable if the form is valid", () => {
             helper.setForm(component.resetPasswordForm, {
-                password: "password",
-                passwordConfirm: "password",
+                password: "TestUser98$$",
+                passwordConfirm: "TestUser98$$",
             });
             fixture.detectChanges();
             const button: HTMLButtonElement = helper.findOne(".submit-button");
@@ -113,26 +113,26 @@ describe("ResetPasswordComponent", async () => {
 
         it("should password and reset password must be same", () => {
             helper.setForm(component.resetPasswordForm, {
-                password: "password",
-                passwordConfirm: "password",
+                password: "TestUser98$$",
+                passwordConfirm: "TestUser98$$",
             });
             expect(component.resetPasswordForm.valid).toBeTruthy();
         });
 
         it("should the form must be invalid if password and reset password does not match", () => {
             helper.setForm(component.resetPasswordForm, {
-                password: "password",
+                password: "TestUser98$$",
                 passwordConfirm: "test",
             });
             expect(component.resetPasswordForm.invalid).toBeTruthy();
         });
     });
 
-    describe("Forgot Form Submit SUITS", () => {
+    describe("Reset password Form Submit SUITS", () => {
         it("should call the onSubmit button only 1 time", () => {
             helper.setForm(component.resetPasswordForm, {
-                password: "password",
-                passwordConfirm: "password",
+                password: "TestUser98$$",
+                passwordConfirm: "TestUser98$$",
             });
             spyOn(component, "onSubmit");
             fixture.detectChanges();
@@ -142,8 +142,8 @@ describe("ResetPasswordComponent", async () => {
 
         it("should call the authentication service one time ", () => {
             helper.setForm(component.resetPasswordForm, {
-                password: "password",
-                passwordConfirm: "password",
+                password: "TestUser98$$",
+                passwordConfirm: "TestUser98$$",
             });
             authenticationMock.resetPassword.and.returnValue(of(""));
             helper.clickElement(".submit-button");
@@ -152,8 +152,8 @@ describe("ResetPasswordComponent", async () => {
 
         it("should show success message if succeed ", () => {
             helper.setForm(component.resetPasswordForm, {
-                password: "password",
-                passwordConfirm: "password",
+                password: "TestUser98$$",
+                passwordConfirm: "TestUser98$$",
             });
             authenticationMock.resetPassword.and.returnValue(of(""));
             helper.clickElement(".submit-button");
@@ -162,8 +162,8 @@ describe("ResetPasswordComponent", async () => {
         });
         it("should show error message if failed ", () => {
             helper.setForm(component.resetPasswordForm, {
-                password: "password",
-                passwordConfirm: "password",
+                password: "TestUser98$$",
+                passwordConfirm: "TestUser98$$",
             });
             authenticationMock.resetPassword.and.returnValue(throwError(""));
             helper.clickElement(".submit-button");

@@ -30,14 +30,14 @@
                         params: { delay: '100ms', x: '-25px' }
                     }"
                 >
-                   <span *ngIf="currentUser.firstName || currentUser.lastName; else username"> {{currentUser?.firstName + ' ' + currentUser?.lastName}}</span>
+                   <span *ngIf="currentUser?.firstName || currentUser?.lastName; else username"> {{currentUser?.firstName + ' ' + currentUser?.lastName}}</span>
                     <ng-template #username>
                         <app-default-text></app-default-text>
                     </ng-template>
                 </div>
                 <div fxLayout="row" fxLayoutAlign="start start">
                     <mat-icon class="s-16 status online"></mat-icon>
-                    <span class="status-1">{{currentUser.status}}</span>
+                    <span class="status-1">{{currentUser?.status}}</span>
                 </div>
             </div>
         </div>

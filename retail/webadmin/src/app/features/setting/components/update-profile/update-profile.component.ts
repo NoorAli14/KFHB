@@ -23,7 +23,7 @@ export class UpdateProfileComponent extends BaseComponent implements OnInit {
     userForm: FormGroup;
     response: User;
     @Output() sendResponse: EventEmitter<User> = new EventEmitter<any>();
-    nationalityList: any[];
+    nationalityList: any[]=[]
     filteredNationalities: any[];
     genderList: any[]=GENDER_LIST;
     constructor(
@@ -72,7 +72,7 @@ export class UpdateProfileComponent extends BaseComponent implements OnInit {
     ngOnDestroy(): void {
         this._unsubscribeAll.next();
         this._unsubscribeAll.complete();
-        this._dialogRef.closeAll();
+        // this._dialogRef.closeAll();
     }
     onClose() {
         this.sendResponse.emit();

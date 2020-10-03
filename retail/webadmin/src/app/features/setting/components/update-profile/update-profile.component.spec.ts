@@ -13,6 +13,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { User } from '@feature/entitlement/models/user.model';
 import { UpdateProfileComponent } from './update-profile.component';
 import { of } from 'rxjs';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 describe("UpdateProfileComponent", async () => {
     let component: UpdateProfileComponent;
@@ -33,6 +34,7 @@ describe("UpdateProfileComponent", async () => {
                 NoopAnimationsModule,
                 FormsModule,
                 MatSelectModule,
+                MatAutocompleteModule,
                 MatInputModule,
             ],
             providers: [
@@ -74,9 +76,7 @@ describe("UpdateProfileComponent", async () => {
         it("should create UpdateProfileComponent", () => {
             expect(component).toBeTruthy();
         });
-        it("should nationalityList array property initialized with more than 1 record", () => {
-            expect(component.nationalityList.length).toBeGreaterThan(1)
-        });
+       
         it("should genderList array property initialized with more than 1 record", () => {
             expect(component.genderList.length).toBeGreaterThan(1)
         });
@@ -108,6 +108,7 @@ describe("UpdateProfileComponent", async () => {
         });
 
         it("should User submit button be disable if form is invalid ", () => {
+            component.ngOnInit();
             component.userForm.patchValue({ ...model, firstName: null });
             fixture.detectChanges();
             const button: HTMLButtonElement = helper.findOne(".submit-button");

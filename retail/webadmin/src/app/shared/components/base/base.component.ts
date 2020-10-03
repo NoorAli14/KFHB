@@ -20,7 +20,7 @@ export class BaseComponent implements OnInit {
     protected _authUserService: AuthUserService;
     protected   _errorEmitService:ErrorEmitterService;
     protected   _mapperService:MapperService;
-    protected _dialogRef: MatDialog
+    // protected _dialogRef: MatDialog
     constructor(
         private injector: Injector,
         private moduleType?: String, 
@@ -28,7 +28,7 @@ export class BaseComponent implements OnInit {
         this._authUserService= injector.get(AuthUserService)
         this._errorEmitService= injector.get(ErrorEmitterService)
         this._mapperService= injector.get(MapperService);
-        this._dialogRef= injector.get(MatDialog); 
+        // this._dialogRef= injector.get(MatDialog); 
         this._unsubscribeAll = new Subject();
     }
 

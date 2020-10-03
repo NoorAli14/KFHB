@@ -12,9 +12,8 @@ import { NATIONALITY_LIST } from "@shared/constants/app.constants";
 })
 export class AboutComponent implements OnInit {
     @Input() user: any;
-    @Input() nationalities: any[];
+    @Input() nationalities: any[]=[]
 
-    nationalityList: any[] = NATIONALITY_LIST;
     constructor() {}
 
     ngOnInit(): void {

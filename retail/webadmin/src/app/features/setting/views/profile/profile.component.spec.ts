@@ -22,12 +22,13 @@ describe("ProfileComponent", async () => {
     dialogRefSpyObj.componentInstance = { body: '' };
     beforeEach(async(() => {
         injectorMock = jasmine.createSpyObj("Injector", ["get"]);
-        matDialogMock = jasmine.createSpyObj("MatDialog", ["open"]);
+        matDialogMock = jasmine.createSpyObj("MatDialog", ["open","closeAll"]);
         settingServiceMock = jasmine.createSpyObj("SettingService", [
-            "updateProfile",
+            "updateProfile","getNationalities"
         ]);
 
         settingServiceMock.updateProfile.and.returnValue(of([]));
+        settingServiceMock.getNationalities.and.returnValue(of([]));
         TestBed.configureTestingModule({
             declarations: [ProfileComponent],
             imports: [RouterTestingModule, NoopAnimationsModule],

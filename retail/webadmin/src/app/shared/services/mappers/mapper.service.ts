@@ -9,12 +9,16 @@ export class MapperService {
     constructor() {}
     makeModulesFlat(modules) {
         this.result = [];
-        this.makeFlat(modules, null);
+        if(modules && modules.length>0){
+            this.makeFlat(modules, null);
+        }
         return this.result;
     }
     makeSiderFlat(modules) {
         this.sidebar = [];
-        this.makeSidebarModuleFlat(modules, null);
+        if(modules && modules.length>0){
+            this.makeSidebarModuleFlat(modules, null);
+        }
         return this.sidebar;
     }
     private makeFlat(modules: any[], parent_id) {
@@ -55,11 +59,11 @@ export class MapperService {
         });
         return module;
     }
- filterData(array,field,value: string): string[] {
-        const filterValue = value.toLowerCase();
+ filterData(array,field,value: string=""): string[] {
+        const filterValue = value?.toLowerCase();
         return array.filter(option => {
             if(!option[field])return;
-            return option[field].toLowerCase().indexOf(filterValue) === 0
+            return option[field]?.toLowerCase().indexOf(filterValue) === 0
         });
       }
 }

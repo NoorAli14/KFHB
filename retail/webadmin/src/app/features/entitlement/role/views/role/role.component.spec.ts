@@ -80,7 +80,7 @@ describe("RoleComponent", async () => {
             expect(component.permissions.length).toBe(0);
         });
         it("should  displayedColumns array property initialized with 5 columns ", () => {
-            expect(component.displayedColumns.length).toBe(5);
+            expect(component.displayedColumns.length).toBe(6);
         });
         it("should display error if forkRolesData failed ", () => {
             roleServiceMock.forkRolesData.and.returnValue(throwError(''))
