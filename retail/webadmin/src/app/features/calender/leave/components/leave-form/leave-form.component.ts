@@ -64,11 +64,18 @@ export class LeaveFormComponent extends BaseComponent implements OnDestroy, OnIn
       this.leaveForm.get('userId').setValue(this._authUserService.User.id);
     }
     this.leaveForm.get('userId').valueChanges.subscribe((value => {
-      this.filteredUser =  this._mapperService.filterData(this.users, 'firstName', value);
+        const filterValue = value?.toLowerCase();
+        this.filteredUser =  this.users.filter(option => {
+          return option['firstName']?.toLowerCase().indexOf(filterValue) === 0 || 
+          option['lastName']?.toLowerCase().indexOf(filterValue) === 0 || 
+          option['email']?.toLowerCase().indexOf(filterValue) === 0;
+      });
     }));
   }
   displayFn = (id: string): string => {
-    return getName(id, 'firstName', cloneDeep(this.users));
+    if (!id) {return ; }
+    const user = this.users.find((item) => item.id === id);
+    return user ? `${user.firstName} ${user.lastName}`  : '';
 }
   confirmPasswordValidator(control: FormControl): { [s: string]: boolean } {
     if (

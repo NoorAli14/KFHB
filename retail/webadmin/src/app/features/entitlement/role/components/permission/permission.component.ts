@@ -34,13 +34,13 @@ export class PermissionComponent extends BaseComponent implements OnInit {
         this.modules = this._mapperService.makeModulesFlat(
             cloneDeep(this.modules)
         );
-        const totalPermissions = this.permissions.map((x) => x.record_type);
+        const totalPermissions = this.permissions.map((x) => x['record_type']);
         this.displayedColumns = this.displayedColumns.concat(totalPermissions);
         this.modules.forEach((module) => {
             module['module'] = module.name;
             totalPermissions.forEach((permission) => {
                 module[permission] = module.permissions.find(
-                    (item) => item.record_type === permission
+                    (item) => item['record_type'] === permission
                 )
                     ? true
                     : false;

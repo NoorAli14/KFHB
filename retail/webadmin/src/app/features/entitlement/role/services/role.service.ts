@@ -40,7 +40,7 @@ export class RoleService {
             return element[key] === true;
         });
         const module = data.modules.find(
-            (item) => item.id === element.item.id
+            (item) => item.id === element.module.id
         );
         const permissions = [];
         checked.forEach((key) => {
