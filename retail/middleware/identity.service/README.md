@@ -4,6 +4,10 @@
 <h1 align="center">Rubix | Identity  Service</h1>
 <br />
 
+<p align="center">
+  <img src="../../../divider.png" alt="divider" width="400" />
+</p>
+
 ## Table of Contents
 
 - [Tech]
@@ -19,9 +23,19 @@
 - [Contributing]
 
 <p align="center">
-  <img src="divider.png" alt="divider" width="400" />
+  <img src="../../../divider.png" alt="divider" width="400" />
 </p>
-![divider](divider.png)
+
+## Tech
+
+* [node.js] - evented I/O for the backend
+* [NestJS](https://docs.nestjs.com/) - fast node.js network app & microservices framework.
+* [Knex](http://knexjs.org/) -  In addition, we're going to use Knex, which is a database query builder that will interface with the **MySQL**, **PostgreSQL**, **SQLite**, **MSSQL**, **Oracle** and **MariaDB** databases for us.
+- [GraphQL](http://graphql.org/) provides as a awesome query language for our api.
+- [DataLoaders](https://github.com/facebook/dataloader) helps with performance thanks to caching and batching.
+- [Smart Validation](https://github.com/pleerock/class-validator) thanks to [class-validator] with some nice annotations.
+- [Custom Validators](https://github.com/pleerock/class-validator#custom-validation-classes) to validate your request even better and stricter.
+- [identity-api](https://github.com/aiondigital/identity-api) Wrapper package on top of the daon services.
 
 ## ❯ How to Run
 
