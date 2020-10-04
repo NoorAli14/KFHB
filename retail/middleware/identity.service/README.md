@@ -11,7 +11,6 @@
 
 - [Tech](#-tech)
 - [Getting Started](#-getting-started)
-- [Features](#-features)
 - [App Structure](#-app-structure)
 - [Relational Schema](#-relational-schema)
 - [Up and Running](#-up-and-running)
@@ -39,23 +38,22 @@
 ## ❯ Getting Started
 As an Identity Microservice it will follow the basics of microservice architecture and scoped with the identity-related features to capture customer identity, here are the details of this module:
 
-- Facial Identity
-  - Face recognition by selfie
-  - Face liveness detection
+### Customer module
+### Face uploading module
+### Document uploading module
 
-- Document identity
-  - National ID (Front & Back)
-  - Passport
-  - Driving License
+As a Document Uploading Module it will facilitate following documents to upload into DAON system
 
-## > Features
+- National ID front side
+- National ID back side
+- Passport
+- Driving License
 
-- Customer module
-- Face uploading module
-* Document uploading module
+<p align="center">
+  <img src="../../../public/identity/document-uploading.png" alt="Document Processing" width="900" />
+</p>
 
-
-* Document processing module
+### Document processing module
 
 As a Document Processing Module this service will call the DAON system to process uploaded documents, the DAON facilitates the following document process:
   
@@ -66,10 +64,15 @@ As a Document Processing Module this service will call the DAON system to proces
   - Driving License
   
 <p align="center">
-  <img src="../../../public/identity/document-processing.png" alt="Document Processing" width="400" />
+  <img src="../../../public/identity/document-processing.png" alt="Document Processing" width="900" />
 </p>
 
-- Evaluation module
+### Evaluation module
+
+As an Evaluation Module it will compare & analyze the images of the provided two documents, the following features are available in this module to evaluate images:
+
+- Face vs Nation ID front
+- Face vs Passport
 
 ## ❯ App Structure
 
