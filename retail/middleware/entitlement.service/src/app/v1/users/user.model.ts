@@ -1,14 +1,14 @@
-import { Field, ID, ObjectType } from "@nestjs/graphql";
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 
-import { Role } from "@app/v1/roles/role.model";
-import {Module} from "@app/v1/modules/module.model";
-import {Leave} from "@app/v1/leave/leave.model";
-import {PaginationModel} from "@common/models";
-import {Type} from 'class-transformer';
+import { Role } from '@app/v1/roles/role.model';
+import { Module } from '@app/v1/modules/module.model';
+import { Leave } from '@app/v1/leave/leave.model';
+import { PaginationModel } from '@common/models';
+import { Type } from 'class-transformer';
 
 @ObjectType()
 export class User {
-  @Field(() => ID,{ nullable: true })
+  @Field(() => ID, { nullable: true })
   id: string;
 
   @Field({ nullable: true })

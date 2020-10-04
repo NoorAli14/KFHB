@@ -18,22 +18,22 @@ import {STATUS, WEEK_DAYS} from '@common/constants';
 export class WorkingDaysService {
   constructor(private workingDaysRepository: WorkingDaysRepository) {}
 
-  async list(current_user: ICurrentUser, keys: string[], paginationParams: Record<string, any>): Promise<WorkingDay[]> {
-    return this.workingDaysRepository.listWithPagination(paginationParams, keys,{deleted_on : null, tenant_id: current_user.tenant_id});
+  async list(current_user: ICurrentUser, output: string[], paginationParams: Record<string, any>): Promise<WorkingDay[]> {
+    return this.workingDaysRepository.listWithPagination(paginationParams, output,{deleted_on : null, tenant_id: current_user.tenant_id});
   }
 
-  async findById(current_user: ICurrentUser, id: string, keys?: string[]): Promise<WorkingDay> {
-    return this.workingDaysRepository.findOne({ id: id, deleted_on : null, tenant_id: current_user.tenant_id }, keys);
+  async findById(current_user: ICurrentUser, id: string, output?: string[]): Promise<WorkingDay> {
+    return this.workingDaysRepository.findOne({ id: id, deleted_on : null, tenant_id: current_user.tenant_id }, output);
   }
 
-  async findByProperty(current_user: ICurrentUser, checks: KeyValInput[], keys?: string[]): Promise<WorkingDay[]> {
+  async findByProperty(current_user: ICurrentUser, checks: KeyValInput[], output?: string[]): Promise<WorkingDay[]> {
     const conditions = {};
     checks.forEach(check => {
       conditions[check.record_key] = check.record_value;
     });
     conditions['tenant_id'] = current_user.tenant_id;
     conditions['deleted_on'] = null;
-    return this.workingDaysRepository.findBy(conditions, keys);
+    return this.workingDaysRepository.findBy(conditions, output);
   }
 
   async update(

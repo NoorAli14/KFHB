@@ -6,8 +6,8 @@ import {
   ForgotPasswordInput,
 } from '@app/v1/forgot-password/forgot-password.dto';
 import { ForgotPasswordService } from '@app/v1/forgot-password/forgot-password.service';
-import { CurrentUser, Fields } from '@common/decorators';
-import { ICurrentUser } from '@common/interfaces';
+import { Tenant, Fields } from '@common/decorators';
+import { ITenant } from '@common/interfaces';
 
 @Resolver(User)
 export class ForgotPasswordResolver {
@@ -17,17 +17,17 @@ export class ForgotPasswordResolver {
   async forgotPassword(
     @Args('input') input: ForgotPasswordInput,
     @Fields() output: string[],
-    @CurrentUser() currentUser: ICurrentUser,
+    @Tenant() tenant: ITenant,
   ): Promise<any> {
-    return this.forgetPasswordService.verifyAndGetToken(currentUser, input, output);
+    return this.forgetPasswordService.verifyAndGetToken(tenant, input, output);
   }
 
   @Mutation(() => User)
   async changePassword(
     @Args('input') input: ChangePasswordInput,
     @Fields() output: string[],
-    @CurrentUser() currentUser: ICurrentUser,
+    @Tenant() tenant: ITenant,
   ): Promise<any> {
-    return this.forgetPasswordService.changePassword(currentUser, input, output);
+    return this.forgetPasswordService.changePassword(tenant, input, output);
   }
 }

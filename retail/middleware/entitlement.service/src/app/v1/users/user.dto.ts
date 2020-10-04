@@ -1,7 +1,7 @@
 import { Field, InputType } from "@nestjs/graphql";
-import {IsBoolean, IsEmail, IsIn, IsISO8601, IsOptional, IsString, MaxLength} from "class-validator";
+import {IsBoolean, IsEmail, isEnum, isIn, IsIn, IsISO8601, IsOptional, IsString, MaxLength} from "class-validator";
 
-import {GENDER, NUMBERS} from "@common/constants";
+import {GENDER, NUMBERS, STATUS} from "@common/constants";
 import {IdsInput} from "@common/inputs/ids.input";
 
 @InputType()
@@ -64,6 +64,7 @@ export class UpdateUserInput {
   @IsString()
   @IsOptional()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  @IsIn(Object.values(STATUS))
   status?: string;
 
   @Field({ nullable: true })
