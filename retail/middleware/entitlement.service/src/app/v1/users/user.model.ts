@@ -4,14 +4,12 @@ import { Role } from '@app/v1/roles/role.model';
 import { Module } from '@app/v1/modules/module.model';
 import { Leave } from '@app/v1/leave/leave.model';
 import { PaginationModel } from '@common/models';
+import { Type } from 'class-transformer';
 
 @ObjectType()
 export class User {
   @Field(() => ID, { nullable: true })
   id: string;
-
-  @Field({ nullable: true })
-  username: string;
 
   @Field({ nullable: true })
   email: string;
@@ -41,7 +39,8 @@ export class User {
   tenant_id: string;
 
   @Field({ nullable: true })
-  date_of_birth: string;
+  @Type(() => Date)
+  date_of_birth: Date;
 
   @Field({ nullable: true })
   nationality_id: string;
@@ -67,10 +66,10 @@ export class User {
   @Field({ nullable: true })
   deleted_by: string;
 
-  @Field(type => [Role], { nullable: true })
+  @Field(() => [Role], { nullable: true })
   roles: Role[];
 
-  @Field(type => [Module], { nullable: true })
+  @Field(() => [Module], { nullable: true })
   modules: Module[];
 
   @Field({ nullable: true })
@@ -85,7 +84,7 @@ export class User {
   @Field({ nullable: true })
   password_reset_token_expiry: Date;
 
-  @Field(type => [Leave], { nullable: true })
+  @Field(() => [Leave], { nullable: true })
   leaves: Leave[];
 }
 
@@ -94,6 +93,6 @@ export class UserWithPagination {
   @Field({ nullable: true })
   pagination: PaginationModel;
 
-  @Field(type => [User], { nullable: true })
+  @Field(() => [User], { nullable: true })
   data: User[];
 }

@@ -59,7 +59,7 @@ export class LeaveFormComponent extends BaseComponent implements OnDestroy, OnIn
       remarks: new FormControl(this.data.leave.remarks, [Validators.required]),
       userId: new FormControl(this.data.leave.userId, [Validators.required]),
     });
-    this.isAdmin = this._authUserService.User.roles.find(x => x.name === 'SUPER ADMIN') ? true : false;
+    this.isAdmin = this._authUserService.User?.roles?.find(x => x.name === 'SUPER ADMIN') ? true : false;
     if (!this.isAdmin){
       this.leaveForm.get('userId').setValue(this._authUserService.User.id);
     }

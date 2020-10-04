@@ -14,6 +14,12 @@ export class ModuleInput {
   @IsString()
   @IsOptional()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  slug?: string;
+
+  @Field({ nullable: true })
+  @IsString()
+  @IsOptional()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   parent_id?: string;
 
   @Field({ nullable: true })
