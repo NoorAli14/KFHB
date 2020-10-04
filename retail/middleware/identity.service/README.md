@@ -19,9 +19,7 @@
     - [Docker Setup](#-docker-setup)
     - [Environment Variable Setup](#-environment-variable-setup)
 - [Migrations & Seeding](#-migration-&-seeding)
-- [Graphql]
-	- [Endpoints]
-- [Contributing]
+- [Graphql Endpoints](#-graphql-endpoints)
 
 <p align="center">
   <img src="../../../divider.png" alt="divider" width="400" />
@@ -39,6 +37,25 @@
 - [identity-api](https://github.com/aiondigital/identity-api) Wrapper package on top of the daon services.
 
 ## ❯ Getting Started
+As an Identity Microservice it will follow the basics of microservice architecture and scoped with the identity-related features to capture customer identity, here are the details of this module:
+
+- Facial Identity
+  - Face recognition by selfie
+  - Face liveness detection
+
+- Document identity
+  - National ID (Front & Back)
+  - Passport
+  - Driving License
+
+## > Features
+
+- Customer module
+- Face uploading module
+- Document uploading module
+- Document processing module
+- Evaluation module
+
 ## ❯ App Structure
 
 ```bash
