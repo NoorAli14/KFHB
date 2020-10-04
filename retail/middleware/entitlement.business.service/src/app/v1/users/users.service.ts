@@ -73,7 +73,6 @@ export class UserService {
         first_name
         middle_name
         last_name
-        username
         email
         contact_no
         gender
