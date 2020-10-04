@@ -1,13 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { OptionsService } from './options.service';
 import { BadRequestException } from '@nestjs/common';
+import { OptionRepository } from '@core/repository';
 
 describe('OptionsService', () => {
   let service: OptionsService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [OptionsService],
+      providers: [OptionsService, OptionRepository],
     }).compile();
 
     service = module.get<OptionsService>(OptionsService);
