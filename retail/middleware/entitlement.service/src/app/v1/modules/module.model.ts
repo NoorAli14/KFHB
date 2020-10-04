@@ -11,6 +11,9 @@ export class Module {
   name?: string;
 
   @Field({ nullable: true })
+  slug?: string;
+
+  @Field({ nullable: true })
   parent_id?: string;
 
   @Field({ nullable: true })
@@ -22,10 +25,10 @@ export class Module {
   @Field({ nullable: true })
   created_by?: string;
 
-  @Field(type => [Module], { nullable: true })
+  @Field(() => [Module], { nullable: true })
   sub_modules?: Module[];
 
-  @Field(type => [Permission], { nullable: true })
+  @Field(() => [Permission], { nullable: true })
   permissions?: Permission[];
 }
 
@@ -34,6 +37,6 @@ export class ModuleWithPagination {
   @Field({ nullable: true })
   pagination?: PaginationModel;
 
-  @Field(type => [Module], { nullable: true })
+  @Field(() => [Module], { nullable: true })
   data?: Module[];
 }

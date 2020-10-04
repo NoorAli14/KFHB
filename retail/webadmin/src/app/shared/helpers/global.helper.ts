@@ -28,6 +28,7 @@ export const snakeToCamelObject = (data) => {
     return mapped;
 };
 export const getName = (id, key, array) => {
+    if ( !array){return; }
     const data = array.find((item) => item.id === id);
     return data ? data[key] : 'N/A';
 };

@@ -9,7 +9,6 @@ import { User } from "@app/v1/users/user.model";
 export class UserRepository extends BaseRepository {
   private readonly __attributes: string[] = [
     `${TABLE.USER}.id`,
-    `${TABLE.USER}.username`,
     `${TABLE.USER}.email`,
     `${TABLE.USER}.contact_no`,
     `${TABLE.USER}.first_name`,
