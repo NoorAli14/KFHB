@@ -2,7 +2,6 @@
   <img src="../../../logo.png" alt="Aion Rubix platform" />
 </p>
 <h1 align="center">Rubix | Identity  Service</h1>
-<br />
 
 <p align="center">
   <img src="../../../divider.png" alt="divider" width="400" />
@@ -10,7 +9,7 @@
 
 ## Table of Contents
 
-- [Tech]
+- [Tech](#-tech)
 - [Getting Started](#-getting-started)
 - [App Structure](#-app-structure)
 - [Relational Schema](#-relational-schema)
@@ -26,7 +25,7 @@
   <img src="../../../divider.png" alt="divider" width="400" />
 </p>
 
-## Tech
+## ❯ Tech
 
 * [node.js] - evented I/O for the backend
 * [NestJS](https://docs.nestjs.com/) - fast node.js network app & microservices framework.
@@ -37,26 +36,7 @@
 - [Custom Validators](https://github.com/pleerock/class-validator#custom-validation-classes) to validate your request even better and stricter.
 - [identity-api](https://github.com/aiondigital/identity-api) Wrapper package on top of the daon services.
 
-## ❯ How to Run
-
-### Pre-requisites
-
-You must install the following on your local machine:
-
-1. Node.js (v12.x recommended)
-2. Docker
-3. Docker Compose
-4. Database Client (MSSQL | MySQL | Postgres | Oracle)
-
-### Running
-
-1. On the Terminal, go into the project's root folder (`cd /project/root/folder`) and execute `npm start`. The start script will install all npm dependencies for all projects, lint the code, transpile the code, build the artifacts (Docker images) and run all of them via `docker-compose`.
-
-2. Once the start script is done,
-
-- The GraphQL Playground will be running on [http://localhost:3000/graphql](http://localhost:3000/graphql)
-- The Swagger OpenAPI Specification will be running on [http://localhost:3000/api/docs](http://localhost:3000/api/docs)
-
+## ❯ Getting Started
 ## ❯ App Structure
 
 ```bash
@@ -134,6 +114,34 @@ TY│   │   ├── app.contrller.spec.ts
 ├── tsconfig.build.json
 └── eslintrc.js
 ```
+
+## ❯ Relational Schema
+
+<p align="center">
+  <img src="../../../public/identity-schema.PNG" alt="Relational DB Schema" />
+</p>
+
+## ❯ How to Run
+
+### Pre-requisites
+
+You must install the following on your local machine:
+
+1. Node.js (v12.x recommended)
+2. Docker
+3. Docker Compose
+4. Database Client (MSSQL | MySQL | Postgres | Oracle)
+
+### Running
+
+1. On the Terminal, go into the project's root folder (`cd /project/root/folder`) and execute `npm start`. The start script will install all npm dependencies for all projects, lint the code, transpile the code, build the artifacts (Docker images) and run all of them via `docker-compose`.
+
+2. Once the start script is done,
+
+- The GraphQL Playground will be running on [http://localhost:3000/graphql](http://localhost:3000/graphql)
+- The Swagger OpenAPI Specification will be running on [http://localhost:3000/api/docs](http://localhost:3000/api/docs)
+
+
 ## ❯ Environment Variables Setup
 | Name  |  Default Value  | Description
 |---|---|---|
@@ -162,11 +170,7 @@ TY│   │   ├── app.contrller.spec.ts
 | ENV_RBX_IDENTITYX_APPLICATION  |   |  Application ID of the daon server |
 | ENV_RBX_IDENTITYX_EVALUATION_POLICY  |   |  Evaluation policy of the DAON server |
 | NODE_TLS_REJECT_UNAUTHORIZED  |   |  set value to `0` if you are running your server on http |
-## ❯ Database
-# Relational Schema
-<p align="center">
-  <img src="../../../public/identity-schema.PNG" alt="Relational DB Schema" />
-</p>
+
 # Migrations & Seeding
 
 Migrations are a way to make database changes or updates, like creating or dropping tables, as well as updating a table with new columns with constraints via generated scripts. We can build these scripts via the command line using `knex` command line tool.
