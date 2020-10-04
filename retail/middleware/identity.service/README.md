@@ -1,30 +1,8 @@
 </p>
-<h1 align="center">NestJS | Knex-GraphQL Starter Kit</h1>
+<h1 align="center">Rubix | Identity  Service  </h1>
 <br />
 
-[travis-image]: https://api.travis-ci.org/nestjs/nest.svg?branch=master
-[travis-url]: https://travis-ci.org/nestjs/nest
-[linux-image]: https://img.shields.io/travis/nestjs/nest/master.svg?label=linux
-[linux-url]: https://travis-ci.org/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="blank">Node.js</a> framework for building efficient and scalable server-side applications, heavily inspired by <a href="https://angular.io" target="blank">Angular</a>.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/dm/@nestjs/core.svg" alt="NPM Downloads" /></a>
-<a href="https://travis-ci.org/nestjs/nest"><img src="https://api.travis-ci.org/nestjs/nest.svg?branch=master" alt="Travis" /></a>
-<a href="https://travis-ci.org/nestjs/nest"><img src="https://img.shields.io/travis/nestjs/nest/master.svg?label=linux" alt="Linux" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#5" alt="Coverage" /></a>
-<a href="https://gitter.im/nestjs/nestjs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=body_badge"><img src="https://badges.gitter.im/nestjs/nestjs.svg" alt="Gitter" /></a>
-<a href="https://opencollective.com/nest#backer"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec"><img src="https://img.shields.io/badge/Donate-PayPal-dc3d53.svg"/></a>
-  <a href="https://twitter.com/nestframework"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## ❯ Table of Contents
+Table of Contents
 
 - [Getting Started](#-getting-started)
 - [How to Run](#-how-to-run)
@@ -132,8 +110,37 @@ TY│   │   ├── app.contrller.spec.ts
 ├── tsconfig.build.json
 └── eslintrc.js
 ```
-
-## ❯ Migrations & Seeding
+## ❯ Environment Variables Setup
+| Name  |  Default Value  | Description
+|---|---|---|
+| NODE_ENV  |development|Node Environment  (production, development, staging, testing)
+| ENV_RBX_APP_NAME  |Identity Service| Name of the  service
+| ENV_RBX_API_URL_PREFIX  | api/v1  | API url prefix  |
+| ENV_RBX_PORT  |   |Port number where the server is listing|
+| ENV_RBX_DB_USERNAME  |   | Username of the database |
+| ENV_RBX_DB_PASS  |   | Password of the database   |
+| ENV_RBX_DB_NAME  |   |  Name of the database |
+| ENV_RBX_DB_HOST  |   | Hostname of the database  |
+| ENV_RBX_DB_PORT  |   |  Port number of the database |
+| ENV_RBX_DB_TIMEOUT  |   | Database timeout value in miliseconds |
+| ENV_RBX_DB_DEBUG  |  false | if the value of this varibale is `true` then knex database connectivity establish in debug mode.  |
+| ENV_RBX_SWAGGER_ENABLED  |  false | This variable is used to publish the swagger documentation  |
+| ENV_RBX_SWAGGER_ROUTE  |/api/docs   |  This variable is used to change the swagger api documentation route. |
+| ENV_RBX_GRAPHQL_DEBUG  | false  | This variable is to used to run graphql in debug mode |
+| ENV_RBX_GRAPHQL_PLAYGROUND  | false  | This variable is used for graphql query interface  |
+| ENV_RBX_IDENTITYX_BASE_URL  |   |  Base URL of the daon server |
+| ENV_RBX_IDENTITYX_API_VERSION  |   | API version of the daon server, like (v1, v2)  |
+| ENV_RBX_IDENTITYX_TOKEN  |   |  Basic auth token of the daon server |
+| ENV_RBX_IDENTITYX_TENANT  |   | Tenant name of the daon server   |
+| ENV_RBX_IDENTITYX_USERNAME  |   |  If you don't want  to authenticate service with `ENV_RBX_IDENTITYX_TOKEN` then you can specift the daon username|
+| ENV_RBX_IDENTITYX_PASSWORD  |   | If you don't want  to authenticate service with `ENV_RBX_IDENTITYX_TOKEN` then you can specift the daon password  |
+| ENV_RBX_IDENTITYX_REG_POLICY  |   | Registration Policy of the daon server  |
+| ENV_RBX_IDENTITYX_APPLICATION  |   |  Application ID of the daon server |
+| ENV_RBX_IDENTITYX_EVALUATION_POLICY  |   |  Evaluation policy of the DAON server |
+| NODE_TLS_REJECT_UNAUTHORIZED  |   |  set value to `0` if you are running your server on http |
+## ❯ Database
+# Relational Schema
+# Migrations & Seeding
 
 Migrations are a way to make database changes or updates, like creating or dropping tables, as well as updating a table with new columns with constraints via generated scripts. We can build these scripts via the command line using `knex` command line tool.
 
@@ -158,7 +165,10 @@ import * as Knex from 'knex';
 import { TABLE, DATABASE_UUID_METHOD } from '@rubix/common/constants';
 export async function up(knex: Knex): Promise<any> {
   return knex.schema.createTable(TABLE.USER, table => {
-    table.uuid('id').primary().defaultTo(knex.raw(DATABASE_UUID_METHOD));
+    table
+      .uuid('id')
+      .primary()
+      .defaultTo(knex.raw(DATABASE_UUID_METHOD));
     table.string('first_name');
     table.string('last_name');
     table.string('email').notNullable();
@@ -234,6 +244,7 @@ export async function down(knex: Knex): Promise<any> {
   return knex.schema.dropTable(TABLE.COMMENT);
 }
 ```
+
 Now we can run the below command performing a migration and updating our local database:
 
 ```bash
