@@ -3,10 +3,7 @@ import { Transport } from '@nestjs/microservices';
 import { INestApplication, ValidationPipe, Logger } from '@nestjs/common';
 import { ApplicationModule } from '@app/index';
 import { CommonModule } from '@common/common.module';
-import {
-  LoggingInterceptor,
-  TransformInterceptor,
-} from '@common/interceptors/';
+import { LoggingInterceptor } from '@common/interceptors/';
 import { HttpExceptionFilter } from '@common/filters/http-exception.filter';
 import { ConfigurationService } from '@common/configuration/configuration.service';
 import { KernelMiddleware } from '@core/middlewares/index';

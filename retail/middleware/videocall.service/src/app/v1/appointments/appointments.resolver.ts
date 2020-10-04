@@ -10,7 +10,6 @@ import { AppointmentsService } from './appointments.service';
 import { Appointment, User } from './appointment.model';
 import { NewAppointmentInput } from './appointment.dto';
 import { CurrentUser, Fields } from '@common/decorators';
-import { PLATFORMS } from '@common/constants';
 import { ICurrentUser } from '@common/interfaces';
 
 @Resolver(Appointment)
