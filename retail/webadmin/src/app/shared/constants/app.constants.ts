@@ -25,11 +25,13 @@ export const GENDER_LIST: Array<Select> = [
     { id: 'F', name: 'Female' },
 ];
 export const WORKING_DAYS: Array<Select> = [
-    { id: 'SUNDAY', name: 'SUNDAY' },
     { id: 'MONDAY', name: 'MONDAY' },
     { id: 'TUESDAY', name: 'TUESDAY' },
     { id: 'WEDNESDAY', name: 'WEDNESDAY' },
     { id: 'THURSDAY', name: 'THURSDAY' },
+    { id: 'FRIDAY', name: 'FRIDAY' },
+    { id: 'SATURDAY', name: 'SATURDAY' },
+    { id: 'SUNDAY', name: 'SUNDAY' },
 ];
 
 export const MODULES = {

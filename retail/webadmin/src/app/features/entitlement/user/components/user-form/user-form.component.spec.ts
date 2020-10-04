@@ -86,7 +86,6 @@ describe('UserFormComponent', async () => {
         beforeEach(() => {
             model = {
                 firstName: 'rashid',
-                username: 'rashid',
                 lastName: 'rashid',
                 contactNo: '123',
                 gender: 'M',
@@ -108,7 +107,7 @@ describe('UserFormComponent', async () => {
             expect(button.disabled).toBe(false);
         });
         it('should User submit button be disable if form is invalid ', () => {
-            component.userForm.patchValue({ ...model, username: null });
+            component.userForm.patchValue({ ...model, firstName: null, contactNo: 'abcd' });
             fixture.detectChanges();
             const button: HTMLButtonElement = helper.findOne('.submit-button');
             expect(button.disabled).toBe(true);

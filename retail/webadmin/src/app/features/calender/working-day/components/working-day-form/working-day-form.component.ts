@@ -50,13 +50,6 @@ export class WorkingDayFormComponent extends BaseComponent implements OnDestroy,
     }
 
     ngOnInit(): void {
-    
-        this._errorEmitService.currentMessage
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((item) => {
-                this.errorType = item.type;
-                this.responseMessage = item.message;
-            });
         this.workingDayForm = new FormGroup({
             id: new FormControl(this.data.id),
             startTimeLocal: new FormControl({value: this.data.startTimeLocal, disabled: this.data.fullDay ? true : false}, [
@@ -85,6 +78,13 @@ export class WorkingDayFormComponent extends BaseComponent implements OnDestroy,
                     .get('endTimeLocal')
                     .setValidators(Validators.required);
             }
+        });
+
+        this._errorEmitService.currentMessage
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((item) => {
+            this.errorType = item.type;
+            this.responseMessage = item.message;
         });
     }
      convertTime12to24 = (time12h) => {

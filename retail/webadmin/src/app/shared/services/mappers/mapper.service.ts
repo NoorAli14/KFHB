@@ -61,10 +61,11 @@ export class MapperService {
         return module;
     }
  filterData(array, field, value: string= ''): string[] {
-        const filterValue = value?.toLowerCase();
+        if (!array || !value){return ; }
+        const filterValue = value?.toString().toLowerCase();
         return array.filter(option => {
             if (!option[field]) {return; }
-            return option[field]?.toLowerCase().indexOf(filterValue) === 0;
+            return option[field]?.toString().toLowerCase().indexOf(filterValue) === 0;
         });
       }
 }
