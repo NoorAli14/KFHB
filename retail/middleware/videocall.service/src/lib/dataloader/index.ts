@@ -108,9 +108,9 @@ class DataLoader<K, V, C = K> {
     }
 
     return promise;
-	}
-	
-	/**
+  }
+
+  /**
    * Loads a key, returning a `Promise` for the value represented by that key.
    */
   loadWithKeys(key: K, columns: string[]): Promise<V> {
@@ -235,7 +235,7 @@ class DataLoader<K, V, C = K> {
           promise = Promise.reject(value);
           // Since this is a case where an Error is intentionally being primed
           // for a given key, we want to disable unhandled promise rejection.
-          promise.catch(() => {});
+          // promise.catch(() => {});
         } else {
           promise = Promise.resolve(value);
         }
