@@ -4,16 +4,24 @@
 <h1 align="center">Rubix | Identity  Service</h1>
 <br />
 
-Table of Contents
+## Table of Contents
 
+- [Tech]
 - [Getting Started](#-getting-started)
-- [How to Run](#-how-to-run)
 - [App Structure](#-app-structure)
+- [Relational Schema](#-relational-schema)
+- [Up and Running](#-up-and-running)
+    - [Local Setup](#-local-setup)
+		- [Docker Setup](#-docker-setup)
 - [Migrations & Seeding](#-migration-&-seeding)
-- [Roadmap](#-roadmap)
-- [License](#-license)
+- [Graphql]
+	- [Endpoints]
+- [Contributing]
 
-![divider](./divider.png)
+<p align="center">
+  <img src="divider.png" alt="divider" width="400" />
+</p>
+![divider](divider.png)
 
 ## ❯ How to Run
 
