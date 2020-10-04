@@ -46,14 +46,6 @@ export class UpdateInvitationDto {
   last_name: string;
 
   @ApiProperty({
-    title: 'Username',
-    description: 'username of the user.',
-    required: false,
-  })
-  @IsOptional()
-  username?: string;
-
-  @ApiProperty({
     title: 'Contact No',
     description: 'Contact No of the user.',
     required: true,
