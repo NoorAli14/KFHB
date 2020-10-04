@@ -16,6 +16,7 @@
 - [Up and Running](#-up-and-running)
     - [Local Setup](#-local-setup)
 		- [Docker Setup](#-docker-setup)
+    - [Environment Variable setup](#-environment-variable-setup)
 - [Migrations & Seeding](#-migration-&-seeding)
 - [Graphql]
 	- [Endpoints]
@@ -121,9 +122,8 @@ TY│   │   ├── app.contrller.spec.ts
   <img src="../../../public/identity-schema.PNG" alt="Relational DB Schema" />
 </p>
 
-## ❯ How to Run
 
-### Pre-requisites
+## ❯ Up and Running
 
 You must install the following on your local machine:
 
@@ -132,17 +132,8 @@ You must install the following on your local machine:
 3. Docker Compose
 4. Database Client (MSSQL | MySQL | Postgres | Oracle)
 
-### Running
+### Environment Variables Setup
 
-1. On the Terminal, go into the project's root folder (`cd /project/root/folder`) and execute `npm start`. The start script will install all npm dependencies for all projects, lint the code, transpile the code, build the artifacts (Docker images) and run all of them via `docker-compose`.
-
-2. Once the start script is done,
-
-- The GraphQL Playground will be running on [http://localhost:3000/graphql](http://localhost:3000/graphql)
-- The Swagger OpenAPI Specification will be running on [http://localhost:3000/api/docs](http://localhost:3000/api/docs)
-
-
-## ❯ Environment Variables Setup
 | Name  |  Default Value  | Description
 |---|---|---|
 | NODE_ENV  |development|Node Environment  (production, development, staging, testing)
@@ -170,6 +161,42 @@ You must install the following on your local machine:
 | ENV_RBX_IDENTITYX_APPLICATION  |   |  Application ID of the daon server |
 | ENV_RBX_IDENTITYX_EVALUATION_POLICY  |   |  Evaluation policy of the DAON server |
 | NODE_TLS_REJECT_UNAUTHORIZED  |   |  set value to `0` if you are running your server on http |
+
+Export environment variables through terninals
+```
+* export NODE_ENV=development
+* export ENV_RBX_APP_NAME=Rubix | Identity Service
+* export ENV_RBX_PORT=3000
+```
+Or rename the `env.example` to `.env` update the values file for your environment
+```
+export NODE_ENV=development
+export ENV_RBX_APP_NAME=Rubix | Identity Service
+export ENV_RBX_PORT=3000
+```
+
+### Local Setup
+Install the dependencies and devDependencies and start the server.
+
+```sh
+git clone https://<username>@github.com/aiondigitalengineering/rubix.git # or clone your own fork
+cd ./rubix/retail/middleware/identity.service/
+npm install # To install NodeJS dependencies.
+
+```
+
+### Docker Setup
+```sh
+git clone https://<username>@github.com/aiondigitalengineering/rubix.git # or clone your own fork
+cd ./rubix/retail/middleware/identity.service/
+docker build  --no-cache  --force-rm -t rubixretailidentity:dev
+
+```
+
+Once the start script is done.
+
+- The GraphQL Playground will be running on [http://localhost:3000/graphql](http://localhost:3000/graphql)
+- The Swagger OpenAPI Specification will be running on [http://localhost:3000/api/docs](http://localhost:3000/api/docs)
 
 # Migrations & Seeding
 
