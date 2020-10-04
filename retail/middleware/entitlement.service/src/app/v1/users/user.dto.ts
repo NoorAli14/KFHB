@@ -6,11 +6,6 @@ import {IdsInput} from "@common/inputs/ids.input";
 
 @InputType()
 export class UpdateUserInput {
-  @Field({ nullable: true })
-  @IsString()
-  @IsOptional()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  username?: string;
 
   @Field({ nullable: true })
   @IsString()
@@ -56,6 +51,7 @@ export class UpdateUserInput {
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
+  @IsISO8601({strict: true})
   date_of_birth?: string;
 
   @Field({ nullable: true })
