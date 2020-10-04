@@ -1,5 +1,7 @@
+<p align="center">
+  <img src="../../../logo.png" alt="Aion Rubix platform" />
 </p>
-<h1 align="center">Rubix | Identity  Service  </h1>
+<h1 align="center">Rubix | Identity  Service</h1>
 <br />
 
 Table of Contents
