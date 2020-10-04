@@ -40,6 +40,16 @@ As an Identity Microservice it will follow the basics of microservice architectu
 
 ### Customer module
 ### Face uploading module
+
+As a Facial Recognition Module it will facilitate to capture customer face with various criteria, in this module following facial recognition patterns are used:
+
+- Selfie upload
+- Liveness upload
+
+<p align="center">
+  <img src="../../../public/identity/face-uploading.png" alt="Face uploading" width="900" />
+</p>
+
 ### Document uploading module
 
 As a Document Uploading Module it will facilitate following documents to upload into DAON system
@@ -50,7 +60,7 @@ As a Document Uploading Module it will facilitate following documents to upload 
 - Driving License
 
 <p align="center">
-  <img src="../../../public/identity/document-uploading.png" alt="Document Processing" width="900" />
+  <img src="../../../public/identity/document-uploading.png" alt="Document uploading" width="900" />
 </p>
 
 ### Document processing module
