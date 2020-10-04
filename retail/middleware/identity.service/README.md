@@ -52,8 +52,23 @@ As an Identity Microservice it will follow the basics of microservice architectu
 
 - Customer module
 - Face uploading module
-- Document uploading module
-- Document processing module
+* Document uploading module
+
+
+* Document processing module
+
+As a Document Processing Module this service will call the DAON system to process uploaded documents, the DAON facilitates the following document process:
+  
+  - OCR (MRZ and Visual Zone) Information
+  - Nation ID front
+  - Nation ID back
+  - Passport
+
+Driving License
+<p align="center">
+  <img src="../../../public/identity/document-processing.png" alt="divider" width="400" />
+</p>
+
 - Evaluation module
 
 ## ❯ App Structure
