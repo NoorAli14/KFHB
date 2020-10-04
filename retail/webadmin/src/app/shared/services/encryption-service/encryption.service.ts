@@ -8,16 +8,16 @@ import { environment } from '@env/environment';
 export class EncryptionService {
 
   constructor() { }
-  encrypt(value) {
+  encrypt(value): any {
     try {
       return CryptoJS.AES.encrypt(JSON.stringify(value), environment.APP_SECRETE).toString();
     } catch (error) {
       return null;
     }
   }
-  decrypt(value) {
+  decrypt(value): any {
     try {
-      return JSON.parse(CryptoJS.AES.decrypt(value, environment.APP_SECRETE).toString(CryptoJS.enc.Utf8))
+      return JSON.parse(CryptoJS.AES.decrypt(value, environment.APP_SECRETE).toString(CryptoJS.enc.Utf8));
     } catch (error) {
       return null;
     }

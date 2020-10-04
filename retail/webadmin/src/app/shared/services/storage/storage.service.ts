@@ -5,28 +5,28 @@ import { EncryptionService } from '../encryption-service/encryption.service';
 )
 export class StorageService {
   constructor(private encryption: EncryptionService) { }
-  setItem(key: any, data: any) {
-    const encryptedValue = this.encryption.encrypt(data)
+  setItem(key: any, data: any): void {
+    const encryptedValue = this.encryption.encrypt(data);
     localStorage.setItem(key, encryptedValue);
   }
-  getItem(key: any) {
+  getItem(key: any): any {
     const data = localStorage.getItem(key);
-    if (!data) return null;
+    if (!data) { return null; }
     const encryptedValue = this.encryption.decrypt(data);
     return encryptedValue;
   }
-  hasKey(key: any) {
+  hasKey(key: any): boolean {
     if (this.getItem(key) === null) {
       return false;
     }
     return true;
   }
 
-  removeItem(key: any) {
+  removeItem(key: any): void {
     localStorage.removeItem(key);
   }
 
-  clearAll() {
+  clearAll(): void {
     localStorage.clear();
   }
 }

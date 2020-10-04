@@ -12,12 +12,24 @@
     "baseUrl": "./",
     "incremental": true,
     "paths": {
-      "@root/*": ["./*"],
-      "@rubix/*": ["./src/*"],
-      "@common/*": ["./src/common/*"],
-      "@app/*": ["./src/app/*"],
-      "@core/*": ["./src/core/*"],
-      "@volume/*": ["./volume/*"]
+      "@root/*": [
+        "./*"
+      ],
+      "@rubix/*": [
+        "./src/*"
+      ],
+      "@common/*": [
+        "./src/common/*"
+      ],
+      "@app/*": [
+        "./src/app/*"
+      ],
+      "@core/*": [
+        "./src/core/*"
+      ],
+      "@volumes/*": [
+        "volumes/*"
+      ]
     }
   }
 }

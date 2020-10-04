@@ -8,6 +8,7 @@
 
     @include media-breakpoint('gt-xs') {
         width: 60%;
+        
     }
 
     .mat-dialog-container {
@@ -23,4 +24,7 @@
 .basic-container {
     padding: 5px 30px;
   }
-
+ 
+.p-24 {
+    padding: 10px 24px !important;
+}

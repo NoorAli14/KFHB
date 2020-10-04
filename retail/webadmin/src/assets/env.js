@@ -3,5 +3,7 @@
   
     window["env"]["ENV_RBX_API_BASE_URL"] = ""
     window["env"]["ENV_RBX_APP_SECRETE"] = ""
+    window["env"]["ENV_RBX_CHANNEL_ID"] = ""
+    window["env"]["ENV_RBX_TENANT_ID"] = ""
    
   })(this);

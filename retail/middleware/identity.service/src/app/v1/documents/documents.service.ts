@@ -148,10 +148,14 @@ export class DocumentsService {
   }
 
   async preview(input: any): Promise<PreviewDocument> {
+    this.logger.log(input);
+
     const reference: any = await this.sessionReferenceDB.getDocumentByCustomerAndId(
       input.customer_id,
       input.attachment_id,
     );
+
+    this.logger.log(reference);
 
     //  Fetch Liveness base64 Content
     if (reference?.name === DOCUMENT_TYPES.LIVENESS) {
@@ -171,11 +175,20 @@ export class DocumentsService {
         DOCUMENT_TYPES.DRIVING_LICENSE,
       ].includes(reference.name)
     ) {
-      const image: any = await this.identityService.getProcessedClientImage(
-        reference.target_user_id,
-        reference.check_id,
-        reference.attachable_id,
-      );
+      let image: any;
+      if (input.extracted_image) {
+        image = await this.identityService.getExtractedClientImage(
+          reference.target_user_id,
+          reference.check_id,
+          reference.attachable_id,
+        );
+      } else {
+        image = await this.identityService.getProcessedClientImage(
+          reference.target_user_id,
+          reference.check_id,
+          reference.attachable_id,
+        );
+      }
       return { image: image.value };
     }
   }

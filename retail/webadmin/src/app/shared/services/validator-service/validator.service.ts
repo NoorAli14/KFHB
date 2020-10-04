@@ -5,7 +5,7 @@ declare var moment: any;
 export class ValidatorService extends Validators {
   // constructor() { super() }
   // ValidateUrl(control: AbstractControl) {
-  static ValidateUrl(control: FormControl) {
+  static ValidateUrl(control: FormControl): any {
     if (!control.value.startsWith('https') || !control.value.includes('.io')) {
       return { validUrl: true };
     }
@@ -13,7 +13,7 @@ export class ValidatorService extends Validators {
   }
 
  
-  static NoWhitespaceValidator(control: FormControl) {
+  static NoWhitespaceValidator(control: FormControl): any {
     const str = control.value.toString();
     if (!str.replace(/\s/g, '').length && str.length > 0) {
       return { whitespace: true };
@@ -21,7 +21,7 @@ export class ValidatorService extends Validators {
       return null;
     }
   }
-  static validateCharacters(control: FormControl) {
+  static validateCharacters(control: FormControl): any {
     const validCharacters = /[^\s\w,.:&\/()+%'`@-]/;
     // first check if the control has a value
     if (control.value && control.value.length > 0) {
@@ -34,7 +34,7 @@ export class ValidatorService extends Validators {
     }
   }
  
-  static numbersOnly(control: FormControl) {
+  static numbersOnly(control: FormControl): any {
     const regex = '^[0-9]*$';
     if (control.value && control.value.length > 0) {
       const matches = control.value.match(regex);
@@ -43,7 +43,7 @@ export class ValidatorService extends Validators {
       return null;
     }
   }
-  static numberAndDecimal(control: FormControl) {
+  static numberAndDecimal(control: FormControl): any {
     const regex = /^[-+]?[0-9]+(\.[0-9]+)?$/;
     if (control.value && control.value.length > 0) {
       const matches = control.value.match(regex);
@@ -53,7 +53,7 @@ export class ValidatorService extends Validators {
     }
   }
 
-  static validateCNIC(control: FormControl) {
+  static validateCNIC(control: FormControl): any {
     const regex = '^[0-9+]{5}-[0-9+]{7}-[0-9]{1}$';
     if (control.value && control.value.length > 0) {
       const matches = control.value.match(regex);
@@ -62,14 +62,14 @@ export class ValidatorService extends Validators {
       return null;
     }
   }
-  static positiveOnly(control: FormControl) {
+  static positiveOnly(control: FormControl): any {
     if (control.value < 0) {
       return { positiveOnly: true };
     } else {
       return null;
     }
   }
-  static validYear(control: FormControl) {
+  static validYear(control: FormControl): any {
     const currentYear = moment().year();
     const val = control.value;
     if (val) {
@@ -78,12 +78,12 @@ export class ValidatorService extends Validators {
       return null;
     }
   }
-  static notFutureDate(control: FormControl) {
+  static notFutureDate(control: FormControl): any {
     const date = new Date(control.value).getTime();
     return new Date().getTime() > date ? null : { isFutureDate: true };
   }
 
-  static dropdownValidator(control: FormControl) {
+  static dropdownValidator(control: FormControl): any {
     if (parseInt(control.value, 10) > 0) {
       return null;
     } else {

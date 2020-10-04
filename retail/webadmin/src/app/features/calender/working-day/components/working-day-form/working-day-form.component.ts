@@ -3,86 +3,111 @@ import {
     EventEmitter,
     Inject,
     Injector,
+    OnDestroy,
     OnInit,
     Output,
     ViewEncapsulation,
-} from "@angular/core";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
+} from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
     MatDialog,
     MatDialogRef,
     MAT_DIALOG_DATA,
-} from "@angular/material/dialog";
-import { WorkingDay } from "@feature/calender/models/working-week.model";
-import { CalendarService } from "@feature/calender/services/calendar.service";
-import { fuseAnimations } from "@fuse/animations";
-import { BaseComponent } from "@shared/components/base/base.component";
-import { WTimeDialogComponent } from "@shared/components/time-control/w-time-dialog.component";
-import { WORKING_DAYS } from "@shared/constants/app.constants";
-import { camelToSnakeCase } from "@shared/helpers/global.helper";
+} from '@angular/material/dialog';
+import { WorkingDay } from '@feature/calender/models/working-day.model';
+import { CalendarService } from '@feature/calender/services/calendar.service';
+import { fuseAnimations } from '@fuse/animations';
+import { BaseComponent } from '@shared/components/base/base.component';
+import { WTimeDialogComponent } from '@shared/components/time-control/w-time-dialog.component';
+import { MODULES, WORKING_DAYS } from '@shared/constants/app.constants';
+import { camelToSnakeCase } from '@shared/helpers/global.helper';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
-    selector: "app-working-day-form",
-    templateUrl: "./working-day-form.component.html",
-    styleUrls: ["./working-day-form.component.scss"],
+    selector: 'app-working-day-form',
+    templateUrl: './working-day-form.component.html',
+    styleUrls: ['./working-day-form.component.scss'],
     animations: fuseAnimations,
     encapsulation: ViewEncapsulation.None,
 })
-export class WorkingDayFormComponent extends BaseComponent implements OnInit {
+export class WorkingDayFormComponent extends BaseComponent implements OnDestroy, OnInit {
     workingDayForm: FormGroup;
     private hour = 10;
     private minute = 25;
-    private meridien = "PM";
+    private meridien = 'PM';
     workingDaysList: any[] = WORKING_DAYS;
     @Output() sendResponse: EventEmitter<WorkingDay> = new EventEmitter<any>();
 
     constructor(
         public matDialogRef: MatDialogRef<WorkingDayFormComponent>,
         @Inject(MAT_DIALOG_DATA) public data: WorkingDay,
-        private _service: CalendarService,
         private dialog: MatDialog,
         injector: Injector
     ) {
-        super(injector);
+        super(injector, MODULES.WORKING_WEEK);
+        super.ngOnInit();
     }
 
     ngOnInit(): void {
+    
+        this._errorEmitService.currentMessage
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe((item) => {
+                this.errorType = item.type;
+                this.responseMessage = item.message;
+            });
         this.workingDayForm = new FormGroup({
             id: new FormControl(this.data.id),
-            startTime: new FormControl(this.data.startTime, [
+            startTimeLocal: new FormControl({value: this.data.startTimeLocal, disabled: this.data.fullDay ? true : false}, [
                 Validators.required,
             ]),
-            endTime: new FormControl(this.data.endTime, [Validators.required]),
+            endTimeLocal: new FormControl({value: this.data.endTimeLocal, disabled: this.data.fullDay ? true : false}, [Validators.required]),
             fullDay: new FormControl(this.data.fullDay),
             remarks: new FormControl(this.data.remarks, [Validators.required]),
-            weekDay: new FormControl(this.data.weekday, [Validators.required]),
+            weekDay: new FormControl(this.data.weekDay, [Validators.required]),
         });
-        this.workingDayForm.get("fullDay").valueChanges.subscribe((value) => {
+        this.workingDayForm.get('fullDay').valueChanges.subscribe((value) => {
             if (value) {
-                this.workingDayForm.get("startTime").disable();
-                this.workingDayForm.get("endTime").disable();
+                this.workingDayForm.get('startTimeLocal').disable();
+                this.workingDayForm.get('endTimeLocal').disable();
                 this.workingDayForm.patchValue({
-                    startTime: null,
-                    endTime: null,
+                    startTimeLocal: null,
+                    endTimeLocal: null,
                 });
             } else {
-                this.workingDayForm.get("startTime").enable();
-                this.workingDayForm.get("endTime").enable();
+                this.workingDayForm.get('startTimeLocal').enable();
+                this.workingDayForm.get('endTimeLocal').enable();
                 this.workingDayForm
-                    .get("startTime")
+                    .get('startTimeLocal')
                     .setValidators(Validators.required);
                 this.workingDayForm
-                    .get("endTime")
+                    .get('endTimeLocal')
                     .setValidators(Validators.required);
             }
         });
     }
-
+     convertTime12to24 = (time12h) => {
+        const [time, modifier] = time12h.split(' ');
+      
+        let [hours, minutes] = time.split(':');
+      
+        if (hours === '12') {
+          hours = '00';
+        }
+      
+        if (modifier === 'PM') {
+          hours = parseInt(hours, 10) + 12;
+        }
+        minutes = minutes.length < 2 ? `0${minutes}`  : minutes;
+        hours = hours.length < 2 ? `0${hours}`  : hours;
+        return `${hours}:${minutes}`;
+      }
     public getTime(): string {
         return `${this.hour}:${this.minute} ${this.meridien}`;
     }
-    public showPicker(control) {
-        let dialogRef = this.dialog.open(WTimeDialogComponent, {
+    public showPicker(control): any {
+        const dialogRef = this.dialog.open(WTimeDialogComponent, {
             data: {
                 hour: this.hour,
                 minute: this.minute,
@@ -97,17 +122,29 @@ export class WorkingDayFormComponent extends BaseComponent implements OnInit {
                 this.hour = result.hour;
                 this.minute = result.minute;
                 this.meridien = result.meriden;
-                this.workingDayForm.get(control).patchValue(this.getTime());
+                const time = this.convertTime12to24(this.getTime());
+                this.workingDayForm.get(control).patchValue(time);
             }
         });
         return false;
     }
-    onSubmit() {
+    onSubmit(): void {
         let model = { ...this.workingDayForm.value };
+        if (!model.fullDay){
+            model.endTimeLocal = model.endTimeLocal.replace(':', '');
+            model.startTimeLocal = model.startTimeLocal.replace(':', ''); 
+        }
         model = camelToSnakeCase(model);
-        model.full_day = model.full_day  ? 1: 0;
-        model.start_time ="Mon Sep 07 2020 15:10:10 GMT+0500 (Pakistan Standard Time)";
-        model.end_time ="Mon Sep 07 2020 15:10:10 GMT+0500 (Pakistan Standard Time)";
+        model.full_day = model.full_day  ? 1 : 0;
         this.sendResponse.emit(model);
+    }
+    ngOnDestroy(): void {
+        this._unsubscribeAll.next();
+        this._unsubscribeAll.complete();
+        // this._dialogRef.closeAll();
+    }
+    onClose(): void{
+        this.sendResponse.emit();
+        this.matDialogRef.close();
     }
 }

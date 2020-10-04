@@ -1,10 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { GQL_SERVICES } from '@volume/registry.service';
-export interface iSERVICE_CONNECTION {
-  baseURL?: string;
-  timeout?: number;
-  maxRedirects?: number;
-}
+import { GQL_SERVICES } from '@root/volumes/registry.service';
 
 @Injectable()
 export class RegistryService {
@@ -27,7 +22,7 @@ export class RegistryService {
   }
 
   formatUrl(service) {
-    return `${service.is_secure ? 'https' : 'http'}://localhost:${service.port
+    return `${service.is_secure ? 'https' : 'http'}://${process.env.NODE_ENV === 'development' ? 'localhost' : service.host_name}:${service.port
       }${service.context}`;
   }
 }

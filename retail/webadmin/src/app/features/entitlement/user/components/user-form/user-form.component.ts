@@ -1,9 +1,8 @@
 import {
-    NATIONALITY_LIST,
     STATUS_LIST,
     GENDER_LIST,
     MODULES,
-} from "@shared/constants/app.constants";
+} from '@shared/constants/app.constants';
 import {
     Component,
     OnInit,
@@ -11,46 +10,45 @@ import {
     Inject,
     EventEmitter,
     Output,
-    Injector,
-} from "@angular/core";
-import { FormGroup, Validators, FormControl } from "@angular/forms";
-import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { User } from "@feature/entitlement/models/user.model";
-import { Role } from "@feature/entitlement/models/role.model";
-import { camelToSnakeCase } from "@shared/helpers/global.helper";
-import { BaseComponent } from "@shared/components/base/base.component";
-import { fuseAnimations } from "@fuse/animations";
-import { ValidatorService } from "@shared/services/validator-service/validator.service";
-import { Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
+    Injector, OnDestroy
+} from '@angular/core';
+import { FormGroup, Validators, FormControl } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { User } from '@feature/entitlement/models/user.model';
+import { Role } from '@feature/entitlement/models/role.model';
+import { camelToSnakeCase } from '@shared/helpers/global.helper';
+import { BaseComponent } from '@shared/components/base/base.component';
+import { fuseAnimations } from '@fuse/animations';
+import { ValidatorService } from '@shared/services/validator-service/validator.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
-    selector: "app-user-form",
-    templateUrl: "./user-form.component.html",
-    styleUrls: ["./user-form.component.scss"],
+    selector: 'app-user-form',
+    templateUrl: './user-form.component.html',
+    styleUrls: ['./user-form.component.scss'],
     encapsulation: ViewEncapsulation.None,
     animations: fuseAnimations,
 })
-export class UserFormComponent extends BaseComponent implements OnInit {
+export class UserFormComponent extends BaseComponent implements OnDestroy, OnInit {
     userForm: FormGroup;
-
     response: User;
     roles: Role[];
     permissions: any[];
-    nationalityList: any[];
+    nationalityList: any[] = [];
     genderList: any[] = GENDER_LIST;
     statusList: any[] = STATUS_LIST;
     @Output() sendResponse: EventEmitter<User> = new EventEmitter<any>();
   
-
     constructor(
         public matDialogRef: MatDialogRef<UserFormComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
         injector: Injector
     ) {
         super(injector, MODULES.USER_MANAGEMENT);
+        super.ngOnInit();
     }
-    requiredIfUpdating(predicate) {
+    requiredIfUpdating(predicate): any {
         return (formControl) => {
             if (!formControl.parent) {
                 return null;
@@ -71,15 +69,13 @@ export class UserFormComponent extends BaseComponent implements OnInit {
             });
         this.userForm = new FormGroup({
             id: new FormControl(this.data.user.id),
-            username: new FormControl(this.data.user.username, [
-                this.requiredIfUpdating(() => !this.userForm.get("id").value),
-            ]),
+           
             firstName: new FormControl(this.data.user.firstName, [
-                this.requiredIfUpdating(() => this.userForm.get("id").value),
+                this.requiredIfUpdating(() => this.userForm.get('id').value),
             ]),
             middleName: new FormControl(this.data.user.middleName),
             lastName: new FormControl(this.data.user.lastName, [
-                this.requiredIfUpdating(() => this.userForm.get("id").value),
+                this.requiredIfUpdating(() => this.userForm.get('id').value),
             ]),
             contactNo: new FormControl(
                 {
@@ -89,7 +85,7 @@ export class UserFormComponent extends BaseComponent implements OnInit {
                 [ValidatorService.numbersOnly]
             ),
             gender: new FormControl(this.data.user.gender, [
-                this.requiredIfUpdating(() => this.userForm.get("id").value),
+                this.requiredIfUpdating(() => this.userForm.get('id').value),
             ]),
             email: new FormControl(
                 {
@@ -114,13 +110,13 @@ export class UserFormComponent extends BaseComponent implements OnInit {
             ),
         });
         this.roles = this.data.roles;
-        this.nationalityList= this.data.nationalities;
+        this.nationalityList = this.data.nationalities;
     }
    
-    isExist(roles, roleId) {
-        return roles.find((x) => x == roleId);
+    isExist(roles, roleId): Role {
+        return roles.find((x) => x === roleId);
     }
-    onSubmit() {
+    onSubmit(): void {
         let model = { ...this.userForm.value };
         model.roles = this.userForm.value.roles.map((item) => ({
             id: item,
@@ -128,12 +124,20 @@ export class UserFormComponent extends BaseComponent implements OnInit {
         if (model.id && model.id.length > 0) {
             this.data.user.roles.forEach((item) => {
                 const isExist = this.isExist(model.roles, item.id);
-                if (!isExist) model.roles.push({ id: item.id, _deleted: true });
+                if (!isExist) { model.roles.push({ id: item.id, _deleted: true }); }
             });
         }
         model = camelToSnakeCase(model);
 
         this.sendResponse.emit(model);
     }
-  
+    ngOnDestroy(): void {
+        this._unsubscribeAll.next();
+        this._unsubscribeAll.complete();
+        // this._dialogRef.closeAll();
+    }
+    onClose(): void{
+        this.sendResponse.emit();
+        this.matDialogRef.close();
+    }
 }

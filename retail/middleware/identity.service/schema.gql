@@ -119,6 +119,7 @@ type PreviewDocument {
 input PreviewDocumentInput {
   customer_id: String!
   attachment_id: String!
+  extracted_image: Boolean
 }
 
 input ProcessDocumentInput {

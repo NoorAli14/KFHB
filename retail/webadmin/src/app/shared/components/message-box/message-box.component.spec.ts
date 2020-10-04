@@ -1,8 +1,8 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MessageBoxComponent } from "./message-box.component";
+import { MessageBoxComponent } from './message-box.component';
 
-describe("MessageBoxComponent", () => {
+describe('MessageBoxComponent', () => {
     let component: MessageBoxComponent;
     let fixture: ComponentFixture<MessageBoxComponent>;
 
@@ -15,15 +15,15 @@ describe("MessageBoxComponent", () => {
     beforeEach(() => {
         fixture = TestBed.createComponent(MessageBoxComponent);
         component = fixture.componentInstance;
-        component.responseMessage = "";
+        component.responseMessage = '';
         fixture.detectChanges();
     });
 
-    it("should create MessageBoxComponent", () => {
+    it('should create MessageBoxComponent', () => {
         expect(component).toBeTruthy();
     });
-    it("should show the message box if there is any error", () => {
-        component.responseMessage = "Hello";
+    it('should show the message box if there is any error', () => {
+        component.responseMessage = 'Hello';
         fixture.detectChanges();
         expect(component).toBeTruthy();
     });

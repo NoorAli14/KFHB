@@ -26,21 +26,21 @@ export class NavbarVerticalStyle1Component extends UnsubscribeOnDestroyAdapter i
     // Private
     private _fusePerfectScrollbar: FusePerfectScrollbarDirective;
     private _unsubscribeAll: Subject<any>;
-    appName:string;
-    user:any;
+    appName: string;
+    user: any;
     constructor(
         private _fuseConfigService: FuseConfigService,
         private _fuseNavigationService: FuseNavigationService,
         private _fuseSidebarService: FuseSidebarService,
         private _router: Router,
-        private _authUserService:AuthUserService,
-        private eventService:EventBusService
+        private _authUserService: AuthUserService,
+        private eventService: EventBusService
     )
     {
-        super()
+        super();
         // Set the private defaults
         this._unsubscribeAll = new Subject();
-        this.appName=APP_CONST.APP_NAME;
+        this.appName = APP_CONST.APP_NAME;
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -92,9 +92,9 @@ export class NavbarVerticalStyle1Component extends UnsubscribeOnDestroyAdapter i
     ngOnInit(): void
     {
         this.subs.sink = this.eventService.on(Events.USER_UPDATED, (user) => {
-            this.user=user;
-          })
-        this.user=this._authUserService.User;
+            this.user = user;
+          });
+        this.user = this._authUserService.User;
         this._router.events
             .pipe(
                 filter((event) => event instanceof NavigationEnd),

@@ -22,7 +22,11 @@
         </ng-container
     >
     <ng-container *ngIf="control.errors.pattern"
-        >Password must contain atleast 8 characters, including UPPER / lowercase and numbers.>
+        >Password must contain atleast 8 characters, including UPPER / lowercase and numbers.
+        </ng-container
+    >
+    <ng-container *ngIf="control.errors.compareDate"
+        >End date must be greater than start date.
         </ng-container
     >
 </ng-container>

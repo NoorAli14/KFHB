@@ -19,7 +19,7 @@ import { Module } from "@app/v1/modules/module.model";
 import { Leave } from "@app/v1/leave/leave.model";
 import { CurrentUser, Fields } from "@common/decorators";
 import { ICurrentUser } from '@common/interfaces';
-import { User, UserWithPagination } from '@app/v1/users/user.model';
+import { User } from '@app/v1/users/user.model';
 import { UserNotFoundException } from './exceptions';
 
 @Resolver(User)
@@ -46,9 +46,9 @@ export class UsersResolver {
   }
 
   @Query(() => [User])
-  async findAvailableUsers(@Args('input') input: CheckAvailabilityInput,
+  async findAvailableAgents(@Args('input') input: CheckAvailabilityInput,
     @CurrentUser() current_user: ICurrentUser): Promise<User[]> {
-    return this.userService.availableAgents(current_user, input);
+    return this.userService.findAvailableAgents(current_user, input);
   }
 
   @Mutation(() => User)

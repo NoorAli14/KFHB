@@ -226,15 +226,21 @@ export class SessionsService {
     //     message: `Evaluation failed due to ${mismatchedDocument['name']} mismatched.`,
     //   };
     // }
+    const PROCESSED_MRZ = {};
+    documents.forEach(document => {
+      PROCESSED_MRZ[document.name] = JSON.parse(document.processed_data)
+    });
 
-    const attributes: any = this.schema.mapAttributes(documents) || {};
-
-    this.logger.log(`Customer Schema on Evaluation Success: ${JSON.stringify(attributes, null, 2)}`);
+    const result: any = this.schema.mapAttributes(PROCESSED_MRZ) || {};
+    if (!result.valid) {
+      return result;
+    }
+    this.logger.log(`Customer Schema on Evaluation Success: ${JSON.stringify(result.data, null, 2)}`);
 
     // Save information in customer table
     await this.customerDB.update(
       { id: customerSession.id },
-      { ...attributes, is_evaluation_verified: true, updated_by: customerSession.id },
+      { ...result.data, is_evaluation_verified: true, updated_by: customerSession.id },
       ['id'],
     );
 

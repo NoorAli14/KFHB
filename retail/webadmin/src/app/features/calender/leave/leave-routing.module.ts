@@ -5,7 +5,7 @@ import { LeaveComponent } from './views/leave/leave.component';
 
 const routes: Routes = [
   {
-      path: "",
+      path: '',
       component: LeaveComponent
   },
 ];

@@ -5,29 +5,30 @@
         <ng-container *ngFor="let key of displayedColumns" [matColumnDef]="key">
             <mat-header-cell *matHeaderCellDef>{{ key.includes('Icon') ? 'Modules' : camelToSentenceCase(key) }}</mat-header-cell>
 
-            <mat-cell *matCellDef="let element; let i = dataIndex">
-                <span *ngIf="key.includes('Icon') || key.includes('action') ; else columns">
-                    <ng-container *ngIf="key.includes('Icon')">
-                        <mat-icon *ngIf="key === 'expandIcon' " matTooltip="Explore" (click)="toggleExpandableSymbol(element['id'])"> {{expandedId==element['id'] ? 'keyboard_arrow_up' : ' keyboard_arrow_down'}} </mat-icon>
-                        <mat-icon *ngIf="key === 'expandIcon' " matTooltip="Close" (click)="toggleExpandableSymbol(element['id'])"></mat-icon>
-                    </ng-container>
-                    <ng-container *ngIf="key.includes('action')">
-                        <mat-icon appPermission [permissions]="userPermissions"  matTooltip="Delete user" [type]="'delete'" color="warn" type="button" (click)="onDelete(element['id'])">delete</mat-icon> &nbsp;&nbsp;
-                        <mat-icon type="button" matTooltip="Edit user" (click)="onEdit(element)">mode_edit</mat-icon>
-                    </ng-container>
-                </span>
-                <ng-template #columns>
-                    <span *ngIf="element[camelToSnakeCase(key)]; else defaultText">
-                        <ng-container  *ngIf="camelToSnakeCase(key).indexOf('created')<0; else date "  >
-                            {{element[camelToSnakeCase(key)]}}
-                        </ng-container>
+            <mat-cell *matCellDef="let element; let i = dataIndex" class="text-elipsis">
+                <ng-container  [ngSwitch]="key">
+                    <span  *ngSwitchCase="'expandIcon'">
+                        <mat-icon class="hover" *ngIf="key === 'expandIcon' " matTooltip="Explore" (click)="toggleExpandableSymbol(element['id'])"> {{expandedId==element['id'] ? 'keyboard_arrow_up' : ' keyboard_arrow_down'}} </mat-icon>
+                        <mat-icon class="hover" *ngIf="key === 'expandIcon' " matTooltip="Close" (click)="toggleExpandableSymbol(element['id'])"></mat-icon>
+                        </span>
+                    <span  *ngSwitchCase="'action'">
+                        <mat-icon class="hover" appPermission [permissions]="userPermissions"  matTooltip="Delete role" [type]="'delete'" color="warn" type="button" (click)="onDelete(element['id'])">delete</mat-icon> &nbsp;&nbsp;
+                        <mat-icon class="hover" type="button" matTooltip="Edit role" (click)="onEdit(element)">mode_edit</mat-icon>
+                        </span>
+                    <span *ngSwitchCase="'status'">
+                        <app-status [status]="element[key]"></app-status>
                     </span>
-                </ng-template>
+                    <span *ngSwitchCase="'createdOn'">
+                        {{element[camelToSnakeCase(key)] | date:'mediumDate'}}
+                    </span>
+                    <span  *ngSwitchDefault>
+                        <span *ngIf="element[camelToSnakeCase(key)]; else defaultText">
+                            {{element[camelToSnakeCase(key)]}}
+                        </span>
+                    </span>
+                </ng-container>
                 <ng-template #defaultText>
                     <app-default-text></app-default-text>
-                </ng-template>
-                <ng-template #date>
-                    {{element[camelToSnakeCase(key)] | date:'mediumDate'}}
                 </ng-template>
             </mat-cell>
         </ng-container>
