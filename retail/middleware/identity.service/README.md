@@ -164,32 +164,33 @@ You must install the following on your local machine:
 
 Export environment variables through terninals
 ```
-* export NODE_ENV=development
-* export ENV_RBX_APP_NAME=Rubix | Identity Service
-* export ENV_RBX_PORT=3000
+$ export NODE_ENV=development
+$ export ENV_RBX_APP_NAME=Rubix | Identity Service
+$ export ENV_RBX_PORT=3000
 ```
 Or rename the `env.example` to `.env` update the values file for your environment
 ```
-export NODE_ENV=development
-export ENV_RBX_APP_NAME=Rubix | Identity Service
-export ENV_RBX_PORT=3000
+NODE_ENV=development
+ENV_RBX_APP_NAME=Rubix | Identity Service
+ENV_RBX_PORT=3000
 ```
 
 ### Local Setup
 Install the dependencies and devDependencies and start the server.
 
 ```sh
-git clone https://<username>@github.com/aiondigitalengineering/rubix.git # or clone your own fork
-cd ./rubix/retail/middleware/identity.service/
-npm install # To install NodeJS dependencies.
+$ git clone https://<username>@github.com/aiondigitalengineering/rubix.git # or clone your own fork
+$ cd ./rubix/retail/middleware/identity.service/
+$ npm install # To install NodeJS dependencies.
+$ npm run start:dev # To run the node server
 
 ```
 
 ### Docker Setup
 ```sh
-git clone https://<username>@github.com/aiondigitalengineering/rubix.git # or clone your own fork
-cd ./rubix/retail/middleware/identity.service/
-docker build  --no-cache  --force-rm -t rubixretailidentity:dev
+$ git clone https://<username>@github.com/aiondigitalengineering/rubix.git # or clone your own fork
+$ cd ./rubix/retail/middleware/identity.service/
+$ docker build  --no-cache  --force-rm -t rubixretailidentity:dev # build the docker image
 
 ```
 
