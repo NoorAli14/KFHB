@@ -142,6 +142,9 @@ TY│   │   ├── app.contrller.spec.ts
 | NODE_TLS_REJECT_UNAUTHORIZED  |   |  set value to `0` if you are running your server on http |
 ## ❯ Database
 # Relational Schema
+<p align="center">
+  <img src="../../../public/identity-schema.PNG" alt="Relational DB Schema" />
+</p>
 # Migrations & Seeding
 
 Migrations are a way to make database changes or updates, like creating or dropping tables, as well as updating a table with new columns with constraints via generated scripts. We can build these scripts via the command line using `knex` command line tool.
