@@ -28,12 +28,17 @@ export class AppointmentsService {
     private readonly gqlClient: GqlClientService,
   ) { }
 
-  private async throw_if_appointment_exist(call_time: Date, user_id: string) {
+  private async throw_if_appointment_exist(
+    currentUser: ICurrentUser,
+    call_time: Date,
+    user_id: string,
+  ) {
     const record = await this.appointmentDB.findOne(
       {
-        call_time: call_time,
         user_id: user_id,
         deleted_on: null,
+        call_time: call_time,
+        tenant_id: currentUser.tenant_id,
       },
       ['id'],
     );
@@ -70,6 +75,7 @@ export class AppointmentsService {
     // this.throw_if_appointment_limit_exceed(newAppointment.call_time)
 
     await this.throw_if_appointment_exist(
+      currentUser,
       newAppointment.call_time,
       newAppointment.user_id,
     );
@@ -294,7 +300,7 @@ export class AppointmentsService {
   // |   |   hour
   // |   minute
   // second (optional)
-  @Cron(`0 */${process.env.ENV_RBX_CRON_JOB_TIME} * * * *`)
+  @Cron('0 */1 * * * *')
   async cron_to_send_push_notification(): Promise<void> {
     console.log('Cron job is running every 15 minute.');
     // Get all Appointments of next 15 minutes.
@@ -305,13 +311,14 @@ export class AppointmentsService {
     );
 
     // Take only dates to put filter on start of the day
-    // const start_date = start_date_time.toISOString().split('T')[0];
-    // const end_date = end_date_time.toISOString().split('T')[0];
+    const start_date = start_date_time.toISOString().split('T')[0];
+    const end_date = end_date_time.toISOString().split('T')[0];
 
     const appointments: Appointment[] = await this.appointmentDB.between(
       'call_time',
-      start_date_time,
-      end_date_time,
+      start_date,
+      end_date,
+      ['id', 'call_time', 'gender', 'status'],
     );
 
     if (appointments && appointments.length <= 0)
