@@ -38,10 +38,11 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
   pageSizeOptions: Array<number> = CONFIG.PAGE_SIZE_OPTIONS;
   serviceRequests: ServiceRequests[];
   displayedColumns = [
-    'Document Name',
-    'View Upload & Download PDF',
+    'title',
+    'viewUpload&DownloadPDF',
   ];
-
+  documents=[];
+  contentType:string;
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -80,6 +81,12 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
         this.letterType = response.data.letterType;
         this.requestType = response.data.requestType;
         this.customerRIM = response.data.customerRim;
+        const responseDocument = response.data.documents;
+        for (let i = 0; i < responseDocument.length ; i++) {
+          this.documents.push(responseDocument[i])
+        }
+        console.log(this.documents);
+        this.updateGrid(this.documents);
         if (response.data.status != 'Pending') {
           this.btnDisable = true;
         }
@@ -143,27 +150,44 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
     this.dataSource.sort = this.sort;
   }
 
-  downlaodReport() {
-    const date = new Date();
-    const linkSource = 'data:application/pdf;base64,' + "64BASE DATA"
+  downlaodReport(data) {
+    let ex ="png";
+    this.checkType(ex);
+    const date = new Date();   
+    const linkSource = 'data:'+this.contentType+',' + data
     const downloadLink = document.createElement("a");
-    const fileName = 'ServiceRequest' + date.getDate() + '.' + date.getMonth() + 1 + '.' + date.getFullYear() + ".pdf";
-
+    const fileName = 'ServiceRequest' + date.getDate() + '.' + date.getMonth() + 1 + '.' + date.getFullYear() + "."+ex;
     downloadLink.href = linkSource;
     downloadLink.download = fileName;
     downloadLink.click();
+    
   }
 
 
-  viewDocument() {
-    var byteCharacters = atob("64BASE DATA");
+  viewDocument(data) {
+    this.checkType("png")
+    var byteCharacters = atob(data);
     var byteNumbers = new Array(byteCharacters.length);
     for (var i = 0; i < byteCharacters.length; i++) {
       byteNumbers[i] = byteCharacters.charCodeAt(i);
     }
     var byteArray = new Uint8Array(byteNumbers);
-    var file = new Blob([byteArray], { type: 'application/pdf;base64' });
+    console.log(byteNumbers);
+    var file = new Blob([byteArray], { type: this.contentType });
     var fileURL = URL.createObjectURL(file);
     window.open(fileURL);
+  }
+
+  checkType(extention){
+    let lowerExtention=extention.toLowerCase();
+    if(lowerExtention==='png'||lowerExtention==='jpg'||lowerExtention==='jpeg'||lowerExtention==='gif'
+    ||lowerExtention==='tiff'||lowerExtention==='webp'|| lowerExtention==='bmp'|| lowerExtention==='jpe'
+    ||lowerExtention==='jif'||lowerExtention==='jfif'|| lowerExtention==='jfi'|| lowerExtention==='tif'
+    ||lowerExtention==='heif'||lowerExtention==='heic'){
+      this.contentType='image/'+extention+';base64'
+    }
+    else{
+      this.contentType='application/'+extention+';base64'
+    }
   }
 }

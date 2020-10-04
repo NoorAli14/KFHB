@@ -60,25 +60,44 @@
                 <mat-spinner></mat-spinner>
             </div> -->
             <app-message-box [type]="errorType" [message]="responseMessage"></app-message-box>
+            <mat-table #table matSort matSortActive="requestDate" matSortDirection="asc" matSortDisableClear [dataSource]="dataSource">
+                <!-- COLUMNS AND ROWS-->
+                <ng-container *ngFor="let key of displayedColumns" [matColumnDef]="key">
+
+                    <mat-header-cell  *matHeaderCellDef mat-sort-header>{{ key.includes('viewUpload&DownloadPDF') ? 'View Upload & Download PDF' : camelToSentenceCase(key) }}</mat-header-cell>
+            
+                    <mat-cell *matCellDef="let element; let i = dataIndex" >
+                       
+                        <span *ngIf="!key.includes('viewUpload&DownloadPDF'); else viewDownloadPDF">
+                            <span *ngIf="element[key]; else defaultText">
+                                <ng-container *ngIf="camelToSnakeCase(key).indexOf('created')<0; else date "  >
+                                    {{element[key]}}
+                                </ng-container>
+                            
+                            </span>
+                        </span>
+    
+                        
+                        <ng-template #viewDownloadPDF>
+                            <mat-icon type="button" (click)="downlaodReport(element. image)" class="secondary-text" matTooltip="Download Document">save_alt</mat-icon> &nbsp;&nbsp;
+                            <mat-icon type="button" (click)="viewDocument(element.image)" class="secondary-text"  matTooltip="View Document">remove_red_eye</mat-icon>
+                        </ng-template>
+                        
+                        
+                    </mat-cell>
+                </ng-container>
+                <!-- -->
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;" [@animate]="{value:'*',params:{y:'100%'}}">
+                </mat-row>
+            
+            </mat-table>
 
 
 
 
             <form class="p-24 mx-24" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0" name="modulesForm" novalidate
                 [formGroup]="serviceRequestForm">
-                <div class="d-flex justify-content-end ">
-                    <button mat-raised-button color="accent" (click)='downlaodReport()'
-                        class="add-product-button fuse-white mt-24 mt-md-0">
-                        Download Document
-                    </button>
-                    <!-- ADD BUTTON -->
-                    &nbsp;
-                    <button mat-raised-button color="accent" (click)='viewDocument()'
-                        class="add-product-button fuse-white mt-24 mt-md-0">
-                        <span>View Document</span>
-                    </button>
-                    <!-- / ADD BUTTON -->
-                </div>
                 <mat-form-field class="mt-24" appearance="outline" fxFlex="48">
                     <mat-label>Comment</mat-label>
                     <input matInput formControlName="comments" [attr.disabled]='btnDisable' />
@@ -108,6 +127,12 @@
                             <span>REJECTED</span>
                         </button>
                         <!-- / ADD BUTTON -->
+                        <button mat-raised-button color="accent" (click)="viewDocument('
+        
+                        ')"
+                        class="add-product-button   mt-md-0">
+                        <span>TEST</span>
+                    </button>
                     </div>
                 </div>
             </form>
