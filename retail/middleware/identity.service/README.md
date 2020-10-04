@@ -63,10 +63,10 @@ As a Document Processing Module this service will call the DAON system to proces
   - Nation ID front
   - Nation ID back
   - Passport
-
-Driving License
+  - Driving License
+  
 <p align="center">
-  <img src="../../../public/identity/document-processing.png" alt="divider" width="400" />
+  <img src="../../../public/identity/document-processing.png" alt="Document Processing" width="400" />
 </p>
 
 - Evaluation module
