@@ -179,18 +179,35 @@ ENV_RBX_PORT=3000
 Install the dependencies and devDependencies and start the server.
 
 ```sh
-$ git clone https://<username>@github.com/aiondigitalengineering/rubix.git # or clone your own fork
+# Get the latest snapshot
+$ git clone https://<username>@github.com/aiondigitalengineering/rubix.git
+
+# Change directory
 $ cd ./rubix/retail/middleware/identity.service/
-$ npm install # To install NodeJS dependencies.
-$ npm run start:dev # To run the node server
+
+# To install NodeJS dependencies.
+$ npm install 
+
+# To run the node server
+$ npm run start:dev
 
 ```
 
 ### Docker Setup
+Build and run identity service container.
+
 ```sh
-$ git clone https://<username>@github.com/aiondigitalengineering/rubix.git # or clone your own fork
+# Get the latest snapshot
+$ git clone https://<username>@github.com/aiondigitalengineering/rubix.git
+
+# Change directory
 $ cd ./rubix/retail/middleware/identity.service/
-$ docker build  --no-cache  --force-rm -t rubixretailidentity:dev # build the docker image
+
+# To build the docker image
+$ docker build  --no-cache  --force-rm -t rubixretailidentity:dev .
+
+# To run the rubixretailidentity:dev container
+$ sudo docker run -d rubixretailidentity:dev
 
 ```
 
