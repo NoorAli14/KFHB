@@ -26,7 +26,7 @@ export class AppointmentsService {
     private readonly appointmentDB: AppointmentRepository,
     private readonly configService: ConfigurationService,
     private readonly gqlClient: GqlClientService,
-  ) { }
+  ) {}
 
   private async throw_if_appointment_exist(
     currentUser: ICurrentUser,
@@ -300,7 +300,7 @@ export class AppointmentsService {
   // |   |   hour
   // |   minute
   // second (optional)
-  @Cron('0 */1 * * * *')
+  @Cron(`0 */${process.env.ENV_RBX_CRON_JOB_TIME} * * * *`)
   async cron_to_send_push_notification(): Promise<void> {
     console.log('Cron job is running every 15 minute.');
     // Get all Appointments of next 15 minutes.
@@ -335,7 +335,7 @@ export class AppointmentsService {
           appointment.status === APPOINTMENT_STATUS.SCHEDULED) &&
         diff_in_minutes >= 0 &&
         diff_in_minutes <=
-        Number(this.configService.VCALL.ENV_RBX_CRON_JOB_TIME)
+          Number(this.configService.VCALL.ENV_RBX_CRON_JOB_TIME)
       ) {
         return true;
       }
@@ -402,9 +402,9 @@ export class AppointmentsService {
   ): Promise<any> {
     const query = `query{
         result: findAvailableAgents(input: ${toGraphQL({
-      call_time,
-      gender,
-    })}){
+          call_time,
+          gender,
+        })}){
         id
         email
         contact_no
