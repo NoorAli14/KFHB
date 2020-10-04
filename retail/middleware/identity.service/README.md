@@ -11,11 +11,12 @@
 
 - [Tech](#-tech)
 - [Getting Started](#-getting-started)
+- [Features](#-features)
 - [App Structure](#-app-structure)
 - [Relational Schema](#-relational-schema)
 - [Up and Running](#-up-and-running)
     - [Local Setup](#-local-setup)
-		- [Docker Setup](#-docker-setup)
+    - [Docker Setup](#-docker-setup)
     - [Environment Variable Setup](#-environment-variable-setup)
 - [Migrations & Seeding](#-migration-&-seeding)
 - [Graphql]
@@ -230,25 +231,6 @@ To rollback the last migration run the below following command.
 $ npm run db:rollback
 ```
 
-## Installation
-
-```bash
-$ npm install
-```
-
-## Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
 ## Test
 
 ```bash
@@ -263,8 +245,6 @@ $ npm run test:cov
 ```
 
 ## ❯ Roadmap
-
-### Rubix Boilerplate
 
 - [x] Multiple Database client support
 - [x] Add graphql
