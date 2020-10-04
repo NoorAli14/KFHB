@@ -26,14 +26,19 @@ export class AppointmentsService {
     private readonly appointmentDB: AppointmentRepository,
     private readonly configService: ConfigurationService,
     private readonly gqlClient: GqlClientService,
-  ) { }
+  ) {}
 
-  private async throw_if_appointment_exist(call_time: Date, user_id: string) {
+  private async throw_if_appointment_exist(
+    currentUser: ICurrentUser,
+    call_time: Date,
+    user_id: string,
+  ) {
     const record = await this.appointmentDB.findOne(
       {
-        call_time: call_time,
         user_id: user_id,
         deleted_on: null,
+        call_time: call_time,
+        tenant_id: currentUser.tenant_id,
       },
       ['id'],
     );
@@ -70,6 +75,7 @@ export class AppointmentsService {
     // this.throw_if_appointment_limit_exceed(newAppointment.call_time)
 
     await this.throw_if_appointment_exist(
+      currentUser,
       newAppointment.call_time,
       newAppointment.user_id,
     );
@@ -305,13 +311,14 @@ export class AppointmentsService {
     );
 
     // Take only dates to put filter on start of the day
-    // const start_date = start_date_time.toISOString().split('T')[0];
-    // const end_date = end_date_time.toISOString().split('T')[0];
+    const start_date = start_date_time.toISOString().split('T')[0];
+    const end_date = end_date_time.toISOString().split('T')[0];
 
     const appointments: Appointment[] = await this.appointmentDB.between(
       'call_time',
-      start_date_time,
-      end_date_time,
+      start_date,
+      end_date,
+      ['id', 'call_time', 'gender', 'status'],
     );
 
     if (appointments && appointments.length <= 0)
@@ -328,7 +335,7 @@ export class AppointmentsService {
           appointment.status === APPOINTMENT_STATUS.SCHEDULED) &&
         diff_in_minutes >= 0 &&
         diff_in_minutes <=
-        Number(this.configService.VCALL.ENV_RBX_CRON_JOB_TIME)
+          Number(this.configService.VCALL.ENV_RBX_CRON_JOB_TIME)
       ) {
         return true;
       }
@@ -395,9 +402,9 @@ export class AppointmentsService {
   ): Promise<any> {
     const query = `query{
         result: findAvailableAgents(input: ${toGraphQL({
-      call_time,
-      gender,
-    })}){
+          call_time,
+          gender,
+        })}){
         id
         email
         contact_no
