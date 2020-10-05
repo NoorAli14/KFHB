@@ -276,6 +276,82 @@ To rollback the last migration run the below following command.
 $ npm run db:rollback
 ```
 
+## ❯ GraphQL Endpoints
+
+### Create Customer: `/graphql`
+```
+POST /graphql
+Host: localhost:3000
+Content-Type: application/json
+x-tenant-id: 9013C327-1190-4875-A92A-83ACA9029160
+x-correlation-id: 9013C327-1190-4875-A92A-83ACA9029160
+
+mutation {
+	addCustomer(input: {
+    email: "test@test.com",
+    device_id: "{{$guid}}",
+    platform: "ios"
+  }) {
+    id
+    first_name
+    last_name
+    contact_no
+    tenant_id
+    session_id
+    email
+    device_id
+    platform
+    created_on
+    created_by
+    updated_on
+    updated_by
+  }
+}
+```
+
+### Find Customer by ID: `/graphql`
+```
+POST /graphql
+Host: localhost:3000
+Content-Type: application/json
+x-tenant-id: 9013C327-1190-4875-A92A-83ACA9029160
+x-correlation-id: 9013C327-1190-4875-A92A-83ACA9029160
+x-user-id: 9013C327-1190-4875-A92A-83ACA9029160
+
+query {
+	result: findCustomerById(id: "{{X-USER-ID}}") {
+    id
+    first_name
+    last_name
+    contact_no
+    date_of_birth
+    tenant_id
+    session_id
+    device_id
+    platform
+    email
+    national_id_no
+    national_id_expiry
+    nationality_code
+    nationality
+    documents {
+        id
+        name
+        processed_data
+        status
+        created_by
+        created_on
+        updated_by
+        updated_on
+    }
+    created_on
+    created_by
+    updated_on
+    updated_by
+  }
+}
+```
+
 ## Test
 
 ```bash
