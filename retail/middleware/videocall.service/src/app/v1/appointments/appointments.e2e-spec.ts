@@ -9,6 +9,12 @@ import { uuidV4 } from '@common/utilities';
 describe('Video Call Module (e2e)', () => {
   let app: INestApplication;
 
+  const headers: { [key: string]: any } = {
+    'x-tenant-id': '9013C327-1190-4875-A92A-83ACA9029160',
+    'x-user-id': '828605C2-7E50-40BC-AA88-C064CE63C155',
+    'x-correlation-id': '7D55A5DB-739A-4B80-BD37-D3D30358D655',
+  };
+
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [ApplicationModule],
@@ -34,6 +40,7 @@ describe('Video Call Module (e2e)', () => {
           'id call_time status',
         ),
       })
+      .set(headers)
       .expect(({ body }) => {
         const data = body.data.addAppointment;
         expect(data.call_time).toBe(newAppointmentInput.call_time);
@@ -60,6 +67,7 @@ describe('Video Call Module (e2e)', () => {
           'id status gender',
         ),
       })
+      .set(headers)
       .expect(({ body }) => {
         const data = body.data.addAppointment;
         expect(data.status).toBe(createAppointmentInput.status);
@@ -75,6 +83,7 @@ describe('Video Call Module (e2e)', () => {
       .send({
         query: `{findAppointmentByUserId(user_id:"${uuidV4()}"){call_time status gender}}`,
       })
+      .set(headers)
       .expect(({ body }) => {
         const data = body.data.findAppointmentByUserId;
         expect(data.status).toBe(createAppointmentInput.status);
@@ -90,6 +99,7 @@ describe('Video Call Module (e2e)', () => {
       .send({
         query: `{findAppointment(user_id:"${uuidV4()}"){call_time status gender}}`,
       })
+      .set(headers)
       .expect(({ body }) => {
         const data = body.data.findAppointment;
         expect(data.status).toBe(createAppointmentInput.status);
