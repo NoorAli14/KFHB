@@ -32,18 +32,18 @@ describe('OptionsResolver', () => {
 
   describe('findOption', () => {
     it('should get one option', () => {
+      const expected = {
+        name: 'test option',
+        name_ar: 'test ar name',
+        id: '6D44CFC4-CDD1-445D-ACCF-2099ED4D347A',
+      };
       expect(
         resolver.findOption('6D44CFC4-CDD1-445D-ACCF-2099ED4D347A', [
           'id',
           'name',
           'name_ar',
         ]),
-      ).toEqual({
-        name: 'test option',
-        name_ar: 'test ar name',
-        question_id: '12-23',
-        id: '6D44CFC4-CDD1-445D-ACCF-2099ED4D347A',
-      });
+      ).toEqual(expected);
     });
   });
 });
