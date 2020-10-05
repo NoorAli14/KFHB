@@ -59,7 +59,7 @@ describe('Complaince Module (e2e)', () => {
         query: `{questionsList{title title_ar status level}}`,
       })
       .expect(({ body }) => {
-        const data = body.data.templatesList;
+        const data = body.data.questionsList;
         expect(data[0].title).toBe(questionInput.title);
         expect(data[0].title_ar).toBe(questionInput.title_ar);
         expect(data[0].status).toBe(questionInput.status);
@@ -74,10 +74,10 @@ describe('Complaince Module (e2e)', () => {
       .post('/graphql')
 
       .send({
-        query: `{findSection(id: "d329c531-9e7a-4b55-923f-04fc62aee79d") {title title_ar status level}}`,
+        query: `{findQuestion(id: "d329c531-9e7a-4b55-923f-04fc62aee79d") {title title_ar status level}}`,
       })
       .expect(({ body }) => {
-        const data = body.data.findTemplateByName;
+        const data = body.data.findQuestion;
         expect(data.title).toBe(questionInput.title);
         expect(data[0].title_ar).toBe(questionInput.title_ar);
       })

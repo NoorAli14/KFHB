@@ -55,7 +55,7 @@ describe('Complaince Module (e2e)', () => {
         query: `{optionsList {name name_ar status}}`,
       })
       .expect(({ body }) => {
-        const data = body.data.templatesList;
+        const data = body.data.optionsList;
         expect(data[0].name).toBe(optionInput.name);
         expect(data[0].name_ar).toBe(optionInput.name_ar);
         expect(data[0].status).toBe(optionInput.status);
@@ -73,7 +73,7 @@ describe('Complaince Module (e2e)', () => {
         query: `{findSection(id: "d329c531-9e7a-4b55-923f-04fc62aee79d") {name name_ar status level}}`,
       })
       .expect(({ body }) => {
-        const data = body.data.findTemplateByName;
+        const data = body.data.findSection;
         expect(data.name).toBe(optionInput.name);
         expect(data[0].name_ar).toBe(optionInput.name_ar);
       })

@@ -58,7 +58,7 @@ describe('Compliance Module (e2e)', () => {
         query: `{sectionsList{name name_ar status}}`,
       })
       .expect(({ body }) => {
-        const data = body.data.templatesList;
+        const data = body.data.sectionsList;
         expect(data[0].name).toBe(sectionInput.name);
         expect(data[0].status).toBe(sectionInput.status);
         expect(data).toBe(sections);
@@ -75,7 +75,7 @@ describe('Compliance Module (e2e)', () => {
         query: `{findSection(id: "d2d409a9-8cf3-439f-a4d0-2361dd59cd98") {name name_ar status}}`,
       })
       .expect(({ body }) => {
-        const data = body.data.findTemplateByName;
+        const data = body.data.findSection;
         expect(data.name).toBe(sectionInput.name);
         expect(data.name_ar).toBe(sectionInput.name_ar);
       })
