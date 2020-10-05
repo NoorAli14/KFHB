@@ -52,8 +52,8 @@ describe('Video Call Module (e2e)', () => {
 
   const createAppointmentInput: NewAppointmentInput = {
     call_time: new Date('2020-10-30 12:39:10'),
-    gender: 'F',
-    status: 'SCHEDULE',
+    gender: 'male',
+    status: 'scheduled',
     user_id: uuidV4(),
   };
 
@@ -97,7 +97,7 @@ describe('Video Call Module (e2e)', () => {
     return request(app.getHttpServer())
       .post('/graphql')
       .send({
-        query: `{findAppointment(user_id:"${uuidV4()}"){call_time status gender}}`,
+        query: `{findAppointment(user_id:"d071a9a3-70af-4ade-a741-04ce8f7bb760"){call_time status gender}}`,
       })
       .set(headers)
       .expect(({ body }) => {
@@ -107,6 +107,24 @@ describe('Video Call Module (e2e)', () => {
       })
       .expect(200)
       .end(done);
+  });
+
+  it(`should return error, appointment not found `, done => {
+    return (
+      request(app.getHttpServer())
+        .post('/graphql')
+        .send({
+          query: `{findAppointment(user_id:"d071a9a3-70af-4ade-a741-04c90f7bb760"){call_time status gender}}`,
+        })
+        .set(headers)
+        // .expect(({ body }) => {
+        //   const data = body.data.findAppointment;
+        //   expect(data.status).toBe(createAppointmentInput.status);
+        //   expect(data.gender).toBe(createAppointmentInput.gender);
+        // })
+        .expect(404)
+        .end(done)
+    );
   });
 
   afterAll(async () => {
