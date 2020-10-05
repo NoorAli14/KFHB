@@ -9,7 +9,6 @@ import { User } from "@app/v1/users/user.model";
 export class UserRepository extends BaseRepository {
   private readonly __attributes: string[] = [
     `${TABLE.USER}.id`,
-    `${TABLE.USER}.username`,
     `${TABLE.USER}.email`,
     `${TABLE.USER}.contact_no`,
     `${TABLE.USER}.first_name`,
@@ -123,9 +122,19 @@ export class UserRepository extends BaseRepository {
       .orderBy(`${TABLE.USER}.created_on`, 'desc');
   }
 
-  async findByTenantIdAndEmail(tenantId: string, email: string, output?: string[]): Promise<any> {
+  async findByTenantIdAndEmail(tenantId: string, email: string, output?: string[]): Promise<User> {
     const conditions = {
       email: email,
+      tenant_id: tenantId,
+      status: STATUS.ACTIVE,
+      deleted_on: null,
+    };
+    return this.findOne(conditions, output);
+  }
+
+  async findByTenantIdAndToken(tenantId: string, password_reset_token: string, output?: string[]): Promise<User> {
+    const conditions = {
+      password_reset_token: password_reset_token,
       tenant_id: tenantId,
       status: STATUS.ACTIVE,
       deleted_on: null,
