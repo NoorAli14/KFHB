@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '@app/app.module';
+import { template } from 'lodash';
 
 const options: any[] = [
   {
@@ -24,6 +25,26 @@ const options: any[] = [
   },
 ];
 
+const templates: any[] = [
+  {
+    name: 'KYC Template',
+    name_ar: 'KYC Template',
+    status: 'Active',
+    id: '123-121',
+  },
+  {
+    name: 'CRS Template',
+    name_ar: 'CRS Template',
+    status: 'Active',
+    id: '123-122',
+  },
+  {
+    name: 'FATCA Template',
+    name_ar: 'FATCA Template',
+    status: 'Active',
+    id: '123-123',
+  },
+];
 const gql = '/graphql';
 
 describe('AppController (e2e)', () => {
@@ -44,24 +65,14 @@ describe('AppController (e2e)', () => {
     await app.close();
   });
 
-  it('/ (GET)', () => {
-    return request(app.getHttpServer())
-      .get(gql)
-      .expect(404);
-    // .expect(
-    //   '{"statusCode":404,"message":"Cannot GET /","error":"Not Found"}',
-    // );
-  });
-
   describe(gql, () => {
     describe('options', () => {
       it('should get the options array', () => {
         return request(app.getHttpServer())
           .post(gql)
           .send({ query: '{optionsList {id name name_ar}}' })
-          .expect(404)
+          .expect(200)
           .expect(res => {
-            console.log(res.body, '-0-0-0');
             expect(res?.body?.data?.optionsList).toEqual(options);
           });
       });
@@ -85,6 +96,49 @@ describe('AppController (e2e)', () => {
             .post(gql)
             .send({
               query: '{findOption(id: "500"){id name name_ar}}',
+            })
+            .expect(200)
+            .expect(res => {
+              expect(res.body.data).toBe(null);
+              // expect(res.body.errors[0].message).toBe(
+              //   'No option with id 500 found',
+              // );
+            });
+        });
+      });
+    });
+
+    //Template test cases
+    describe('templates', () => {
+      it('should get the templates array', () => {
+        return request(app.getHttpServer())
+          .post(gql)
+          .send({ query: '{templatesList {id name name_ar}}' })
+          .expect(200)
+          .expect(res => {
+            expect(res?.body?.data?.templatesList).toEqual(templates);
+          });
+      });
+      describe('one template', () => {
+        it('should get a single template', () => {
+          return request(app.getHttpServer())
+            .post(gql)
+            .send({ query: '{findTemplate(id:"123-123"){id name name_ar}}' })
+            .expect(200)
+            .expect(res => {
+              expect(res.body.data.findTemplate).toEqual({
+                name: 'FATCA Template',
+                name_ar: 'FATCA Template',
+                status: 'Active',
+                id: '123-123',
+              });
+            });
+        });
+        it('should get an error for bad id', () => {
+          return request(app.getHttpServer())
+            .post(gql)
+            .send({
+              query: '{findTemplate(id: "500"){id name name_ar}}',
             })
             .expect(200)
             .expect(res => {
