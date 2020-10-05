@@ -3,7 +3,7 @@ import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { ApplicationModule } from '@rubix/app';
 import { NewAppointmentInput } from './appointment.dto';
-import { createQuery } from '@common/tests/e2e.tests';
+import { createQuery, createQueryObject } from '@common/tests/e2e.tests';
 import { uuidV4 } from '@common/utilities';
 
 describe('Video Call Module (e2e)', () => {
@@ -31,24 +31,31 @@ describe('Video Call Module (e2e)', () => {
   };
 
   it(`create/schedule an appointment`, done => {
-    return request(app.getHttpServer())
-      .post('/graphql')
-      .send({
-        mutation: createQuery(
-          'addAppointment',
-          newAppointmentInput,
-          'id call_time status',
-        ),
-      })
-      .set(headers)
-      .expect(({ body }) => {
-        console.log(body, '-=-=- create/schedule an appointment -=-=-');
-        const data = body.data.addAppointment;
-        expect(data.call_time).toBe(newAppointmentInput.call_time);
-        expect(data.gender).toBe(newAppointmentInput.gender);
-      })
-      .expect(200)
-      .end(done);
+    return (
+      request(app.getHttpServer())
+        .post('/graphql')
+        // .send({
+        //   mutation: createQuery(
+        //     'addAppointment',
+        //     newAppointmentInput,
+        //     'id call_time status',
+        //   ),
+        // })
+        .send({
+          mutation: `{addAppointment(appointment: ${createQueryObject(
+            newAppointmentInput,
+          )}){call_time status gender}}`,
+        })
+        .set(headers)
+        .expect(({ body, ...rest }) => {
+          // console.log(body, '-=-=- create/schedule an appointment -=-=-', rest);
+          const data = body.data.addAppointment;
+          expect(data.call_time).toBe(newAppointmentInput.call_time);
+          expect(data.gender).toBe(newAppointmentInput.gender);
+        })
+        .expect(200)
+        .end(done)
+    );
   });
 
   const createAppointmentInput: NewAppointmentInput = {
@@ -69,8 +76,8 @@ describe('Video Call Module (e2e)', () => {
         ),
       })
       .set(headers)
-      .expect(({ body }) => {
-        console.log(body, '-=-=- mutation create appointment -=-=-');
+      .expect(({ body, ...rest }) => {
+        // console.log(body, '-=-=- mutation create appointment -=-=-', rest);
         const data = body.data.addAppointment;
         expect(data.status).toBe(createAppointmentInput.status);
         // expect(data.gender).toBe(createAppointmentInput.gender);
