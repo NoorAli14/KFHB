@@ -7,6 +7,12 @@ import { NewOptionInput } from './option.dto';
 describe('Complaince Module (e2e)', () => {
   let app: INestApplication;
 
+  const headers: { [key: string]: any } = {
+    'x-tenant-id': '9013C327-1190-4875-A92A-83ACA9029160',
+    'x-user-id': '828605C2-7E50-40BC-AA88-C064CE63C155',
+    'x-correlation-id': '7D55A5DB-739A-4B80-BD37-D3D30358D655',
+  };
+
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [ApplicationModule],
@@ -20,21 +26,21 @@ describe('Complaince Module (e2e)', () => {
     {
       name: 'Low',
       name_ar: 'Low',
-      status: 'Active',
+      status: 'ACTIVE',
       question_id: '123-121',
       id: '123-121',
     },
     {
       name: 'Hihn',
       name_ar: 'High',
-      status: 'Active',
+      status: 'ACTIVE',
       question_id: '123-122',
       id: '123-122',
     },
     {
       name: 'Test Section 3',
       name_ar: 'Test Section 3',
-      status: 'Active',
+      status: 'ACTIVE',
       question_id: '123-123',
       id: '123-123',
     },
@@ -43,7 +49,7 @@ describe('Complaince Module (e2e)', () => {
   const optionInput: any = {
     name: 'Low',
     name_ar: 'Low',
-    status: 'Active',
+    status: 'ACTIVE',
     question_id: '123-121',
     id: '123-121',
   };
@@ -54,12 +60,12 @@ describe('Complaince Module (e2e)', () => {
       .send({
         query: `{optionsList {name name_ar status}}`,
       })
+      .set(headers)
       .expect(({ body }) => {
         const data = body.data.optionsList;
         expect(data[0].name).toBe(optionInput.name);
         expect(data[0].name_ar).toBe(optionInput.name_ar);
         expect(data[0].status).toBe(optionInput.status);
-        expect(data).toBe(options);
       })
       .expect(200)
       .end(done);
@@ -72,6 +78,7 @@ describe('Complaince Module (e2e)', () => {
       .send({
         query: `{findSection(id: "d329c531-9e7a-4b55-923f-04fc62aee79d") {name name_ar status level}}`,
       })
+      .set(headers)
       .expect(({ body }) => {
         const data = body.data.findSection;
         expect(data.name).toBe(optionInput.name);
