@@ -20,6 +20,10 @@ export const locale = {
                     TITLE: "Working Days",
                     BADGE: "25",
                 },
+                LEAVES: {
+                    TITLE: "Leaves",
+                    BADGE: "25",
+                },
                 HOLIDAYS: {
                     TITLE: "Holidays",
                     BADGE: "25",

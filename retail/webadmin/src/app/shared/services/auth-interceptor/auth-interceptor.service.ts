@@ -7,13 +7,14 @@ import {
     HttpHeaders,
     HttpClient,
 } from "@angular/common/http";
-import { Observable,  throwError } from "rxjs";
+import { Observable, throwError } from "rxjs";
 import { StorageService } from "../storage/storage.service";
 import { catchError, mergeMap } from "rxjs/operators";
 import { APP_CONST, URI, createUrl } from "@shared/constants/app.constants";
 import { EventBusService } from "../event-bus/event-bus.service";
 import { AuthenticationService } from "../auth/authentication.service";
 import { Router } from '@angular/router';
+import { environment } from "../../../../environments/environment";
 
 @Injectable()
 export class AuthInterceptorService implements HttpInterceptor {
@@ -23,7 +24,7 @@ export class AuthInterceptorService implements HttpInterceptor {
         private http: HttpClient,
         private eventService: EventBusService,
         private authService: AuthenticationService, private router: Router
-    ) {}
+    ) { }
 
     intercept(
         request: HttpRequest<any>,
@@ -32,14 +33,14 @@ export class AuthInterceptorService implements HttpInterceptor {
         const decodedToken = this.authService.getDecodeToken();
         var current = new Date().getTime() / 1000;
         const hasRefreshToken = request.url.includes("refresh-token");
-        let httpOptions = this.getHttpOption(hasRefreshToken);
+        let httpOptions = this.getHttpOption(hasRefreshToken, request.url);
 
         const isPublicUrl =
             httpOptions.headers.get("public") || request.headers.get("public")
                 ? true
                 : false;
 
-        //Refresh token
+        // Refresh token
         if (!isPublicUrl && decodedToken && decodedToken.exp < current) {
             this.isRefreshTokenInProgress = true;
             return this.refreshToken().pipe(
@@ -55,17 +56,17 @@ export class AuthInterceptorService implements HttpInterceptor {
                             "----------------------------Token refreshed------------------------"
                         );
 
-                        const options = this.getHttpOption(false);
+                        const options = this.getHttpOption(false, request.url);
                         const clonedRequest = request.clone(options);
                         return next.handle(clonedRequest);
                     }
-                    
+
                     // this.eventService.emit(
                     //     new EmitEvent(Events.SESSION_EXPIRED, true)
                     // );
                     // return empty();
                 }),
-                catchError((error:any)=>{
+                catchError((error: any) => {
                     console.log(error);
                     console.log(
                         "----------------------------Token expired------------------------"
@@ -80,18 +81,24 @@ export class AuthInterceptorService implements HttpInterceptor {
         }
     }
     refreshToken() {
-        const endPoint = `${createUrl(URI.REFRESH)}`;
+        const endPoint = `${createUrl(URI.REFRESH, environment.API_BASE_URL_2)}`;
         return this.http.post(endPoint, null, { observe: "response" });
     }
-    getHttpOption(refreshing) {
+    getHttpOption(refreshing, url?): any {
         const token = this.storage.getItem(APP_CONST.ACCESS_TOKEN);
         const httpOptions = {
             headers: new HttpHeaders({
                 "content-type": "application/json",
-                Accept: "application/json, text/plain, */*",
-                "x-tenant-id": "9013C327-1190-4875-A92A-83ACA9029160",
+                'Accept': "application/json, text/plain, */*",
+                "x-tenant-id": environment.TENANT_ID,
             }),
         };
+
+        if (url.includes('http://rubix-dev01.conduit-aiondigital.com/')) {
+            httpOptions.headers = httpOptions.headers.set(
+                "x-channel-id", environment.CHANNEL_ID
+            );
+        }
 
         if (!refreshing) {
             httpOptions.headers = httpOptions.headers.set(

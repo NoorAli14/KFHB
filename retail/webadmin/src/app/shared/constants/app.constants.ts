@@ -1,8 +1,7 @@
 import { Select } from "./../models/common.model";
-import { environment } from "@env/environment";
 const VERSION = "";
-export function createUrl(actionName: string): string {
-    return `${environment.API_BASE_URL}${actionName}${VERSION}`;
+export function createUrl(actionName: string, baseUrl): string {
+    return `${baseUrl}${actionName}${VERSION}`;
 }
 
 export enum APP_CONST {
@@ -41,10 +40,9 @@ export const NATIONALITY_LIST: Array<Select> = [
     { id: "3", name: "Kuwait" },
 ];
 
-const ENTITLEMENT = "/api/v1/entitlements/";
-const REFERENCE = "/api/v1/references/";
-const SERVICEREQUEST ="/requests/api/v1/service/request/";
-const CUSTOMERS = 'customers/api/v1/';
+const ENTITLEMENT = "api/v1/entitlements/";
+const REFERENCE = "api/v1/references/";
+const SERVICEREQUEST = "/requests/api/v1/service/request/";
 const REFERRALREQUEST = 'customers/api/v1/customers/';
 
 export const URI = {
@@ -53,9 +51,9 @@ export const URI = {
     ROLE: `${ENTITLEMENT}roles`,
     PERMISSION: `${ENTITLEMENT}permissions`,
     MODULE: `${ENTITLEMENT}modules`,
-    LOGIN: `${CUSTOMERS}auth/login`,
-    REFRESH: `${CUSTOMERS}auth/refresh-token`,
-    LOGOUT: `${CUSTOMERS}auth/logout`,
+    LOGIN: `${ENTITLEMENT}auth/login`,
+    REFRESH: `${ENTITLEMENT}auth/refresh-token`,
+    LOGOUT: `${ENTITLEMENT}auth/logout`,
     FORGOT_PASSWORD: `${ENTITLEMENT}users/password`,
     RESET_PASSWORD: `${ENTITLEMENT}`,
     WORKING_DAYS: `${ENTITLEMENT}working-days`,
@@ -68,6 +66,4 @@ export const URI = {
     REFERRAL: `${REFERRALREQUEST}referral`,
     REFERRALTRANSACTIONS: `${REFERRALREQUEST}referral/transactions`,
     TRANSACTIONSREPORT: `${REFERRALREQUEST}referral/transactions/excel/report`
-
-
 };

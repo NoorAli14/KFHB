@@ -2,6 +2,7 @@ import { URI } from '@shared/constants/app.constants';
 import { Injectable } from '@angular/core';
 import { Observable, forkJoin } from 'rxjs';
 import { NetworkService } from '@shared/services/network/network.service';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
     providedIn: 'root',
@@ -9,11 +10,11 @@ import { NetworkService } from '@shared/services/network/network.service';
 export class ReferralService {
     modules: Array<any> = [];
     constructor(private _networkService: NetworkService) { }
-    getTransactions() {
-        return this._networkService.getAll(URI.REFERRALTRANSACTIONS);
+    getTransactions = () => {
+        return this._networkService.getAll(URI.REFERRALTRANSACTIONS, environment.API_BASE_URL);
     }
-    getTransactionsReport(){
-        return this._networkService.getAll(URI.TRANSACTIONSREPORT);
+    getTransactionsReport = () => {
+        return this._networkService.getAll(URI.TRANSACTIONSREPORT, environment.API_BASE_URL);
     }
     // forkUserData() {
     //     return forkJoin([this.getUsers(), this.getRoles(),this._refService.getCountries()]);

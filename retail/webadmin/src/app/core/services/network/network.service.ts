@@ -10,44 +10,44 @@ import { createUrl } from "@shared/constants/app.constants";
     providedIn: "root",
 })
 export class NetworkService {
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) { }
 
-    getAll(url: string, params?: Object): Observable<any> {
-        let endPoint = createUrl(url);
+    getAll(url: string, BaseUrl: string, params?: Object): Observable<any> {
+        let endPoint = createUrl(url, BaseUrl);
         if (params) {
             endPoint = `${endPoint}?`;
             Object.keys(params).forEach((key) => {
-                if (!params[key]) return;
+                if (!params[key]) { return; }
                 endPoint += `${key}=${params[key]}&`;
             });
         }
         return this.http
-            .get<any>(endPoint, {params: new HttpParams().set('sortOrder', 'desc') })
+            .get<any>(endPoint, { params: new HttpParams().set('sortOrder', 'desc') })
             .pipe(catchError(this.errorHandler), retry(1));
     }
 
-    getById(url): Observable<any> {
-        const endPoint = `${createUrl(url)}`;
+    getById(url, BaseUrl): Observable<any> {
+        const endPoint = `${createUrl(url, BaseUrl)}`;
         return this.http
             .get<any>(endPoint, {})
             .pipe(catchError(this.errorHandlerMessage), retry(1));
     }
 
-    post(url: string, model: any, options?): Observable<any> {
-        const endPoint = `${createUrl(url)}`;
+    post(url: string, BaseUrl: string, model: any, options?): Observable<any> {
+        const endPoint = `${createUrl(url, BaseUrl)}`;
         return this.http
-            .post<any[]>(endPoint, model,options)
+            .post<any[]>(endPoint, model, options)
     }
 
-    onUpdate(url: string, model: any): Observable<any> {
-        const endPoint = `${createUrl(url)}`;
+    onUpdate(url: string, model: any, BaseUrl): Observable<any> {
+        const endPoint = `${createUrl(url, BaseUrl)}`;
         return this.http
-            .put<any[]>(endPoint, model)
+            .put<any[]>(endPoint, model, BaseUrl)
             .pipe(catchError(this.errorHandlerMessage), retry(1));
     }
 
-    onDelete(url: string): Observable<any> {
-        const endPoint = `${createUrl(url)}`;
+    onDelete(url: string, BaseUrl: string): Observable<any> {
+        const endPoint = `${createUrl(url, BaseUrl)}`;
         return this.http
             .delete<any[]>(endPoint, {})
             .pipe(catchError(this.errorHandlerMessage), retry(1));

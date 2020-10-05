@@ -4,26 +4,27 @@ import { Injectable } from "@angular/core";
 import { forkJoin } from "rxjs";
 import { Role } from "@feature/entitlement/models/role.model";
 import { NetworkService } from "@shared/services/network/network.service";
+import { environment } from "../../../../../environments/environment";
 
 @Injectable({
     providedIn: "root",
 })
 export class RoleService {
-    constructor(private _networkService: NetworkService) {}
+    constructor(private _networkService: NetworkService) { }
     getModules() {
-        return this._networkService.getAll(URI.MODULE);
+        return this._networkService.getAll(URI.MODULE, environment.API_BASE_URL_2);
     }
     getRoles() {
-        return this._networkService.getAll(URI.ROLE);
+        return this._networkService.getAll(URI.ROLE, environment.API_BASE_URL_2);
     }
     createRole(model: Role) {
-        return this._networkService.post(URI.ROLE, model);
+        return this._networkService.post(URI.ROLE, environment.API_BASE_URL_2, model);
     }
     editRole(id: string, model: Role) {
-        return this._networkService.onUpdate(`${URI.ROLE}/${id}`, model);
+        return this._networkService.onUpdate(`${URI.ROLE}/${id}`, `${environment.API_BASE_URL_2}`, model);
     }
     deleteRole(id: string) {
-        return this._networkService.onDelete(`${URI.ROLE}/${id}`);
+        return this._networkService.onDelete(`${URI.ROLE}/${id}`, `${environment.API_BASE_URL_2}`,);
     }
     forkRolesData() {
         return forkJoin([
@@ -33,7 +34,7 @@ export class RoleService {
         ]);
     }
     getPermissions() {
-        return this._networkService.getAll(URI.PERMISSION);
+        return this._networkService.getAll(URI.PERMISSION, environment.API_BASE_URL_2);
     }
     getSelectedPermissions(data, element) {
         const checked = Object.keys(element).filter((key) => {
