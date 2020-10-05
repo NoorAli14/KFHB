@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '@app/app.module';
-import { NewOptionInput } from '@app/v1/options/option.dto';
 
 const options: any[] = [
   {
@@ -38,21 +37,21 @@ describe('AppController (e2e)', () => {
 
     app = moduleFixture.createNestApplication();
     await app.init();
-    server = app.getHttpServer();
+    // server = app.getHttpServer();
   });
 
   afterAll(async () => {
     await app.close();
   });
 
-  // it('/ (GET)', () => {
-  //   return request(server)
-  //     .get('/')
-  //     .expect(404)
-  //     .expect(
-  //       '{"statusCode":404,"message":"Cannot GET /","error":"Not Found"}',
-  //     );
-  // });
+  it('/ (GET)', () => {
+    return request(app.getHttpServer())
+      .get(gql)
+      .expect(404);
+    // .expect(
+    //   '{"statusCode":404,"message":"Cannot GET /","error":"Not Found"}',
+    // );
+  });
 
   describe(gql, () => {
     describe('options', () => {
@@ -60,9 +59,10 @@ describe('AppController (e2e)', () => {
         return request(app.getHttpServer())
           .post(gql)
           .send({ query: '{optionsList {id name name_ar}}' })
-          .expect(200)
+          .expect(404)
           .expect(res => {
-            expect(res.body.data.optionsList).toEqual(options);
+            console.log(res.body, '-0-0-0');
+            expect(res?.body?.data?.optionsList).toEqual(options);
           });
       });
       describe('one option', () => {
@@ -95,44 +95,6 @@ describe('AppController (e2e)', () => {
             });
         });
       });
-      // it('should create a new option and have it added to the array', () => {
-      //   return (
-      //     request(app.getHttpServer())
-      //       .post(gql)
-      //       .send({
-      //         query:
-      //           'mutation {insertCat(newCat: { name: "Vanitas", breed: "Calico", age: 100 }) {breed name id age}}',
-      //       })
-      //       .expect(200)
-      //       .expect(res => {
-      //         expect(res.body.data.insertCat).toEqual({
-      //           name: 'Vanitas',
-      //           breed: 'Calico',
-      //           age: 100,
-      //           id: '4',
-      //         });
-      //       })
-      //       // chain another request to see our original one works as expected
-      //       .then(() =>
-      //         request(app.getHttpServer())
-      //           .post(gql)
-      //           .send({ query: '{getCats {id name breed age}}' })
-      //           .expect(200)
-      //           .expect(res => {
-      //             expect(res.body.data.getCats).toEqual(
-      //               cats.concat([
-      //                 {
-      //                   name: 'Vanitas',
-      //                   breed: 'Calico',
-      //                   age: 100,
-      //                   id: '4',
-      //                 },
-      //               ]),
-      //             );
-      //           }),
-      //       )
-      //   );
-      // });
     });
   });
 });
