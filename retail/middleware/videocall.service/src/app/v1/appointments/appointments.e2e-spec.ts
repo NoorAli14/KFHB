@@ -110,21 +110,14 @@ describe('Video Call Module (e2e)', () => {
   });
 
   it(`should return error, appointment not found `, done => {
-    return (
-      request(app.getHttpServer())
-        .post('/graphql')
-        .send({
-          query: `{findAppointment(user_id:"d071a9a3-70af-4ade-a741-04c90f7bb760"){call_time status gender}}`,
-        })
-        .set(headers)
-        // .expect(({ body }) => {
-        //   const data = body.data.findAppointment;
-        //   expect(data.status).toBe(createAppointmentInput.status);
-        //   expect(data.gender).toBe(createAppointmentInput.gender);
-        // })
-        .expect(404)
-        .end(done)
-    );
+    return request(app.getHttpServer())
+      .post('/graphql')
+      .send({
+        query: `{findAppointment(user_id:"d071a9a3-70af-4ade-a741-04c90f7bb760"){call_time status gender}}`,
+      })
+      .set(headers)
+      .expect(404)
+      .end(done);
   });
 
   afterAll(async () => {
