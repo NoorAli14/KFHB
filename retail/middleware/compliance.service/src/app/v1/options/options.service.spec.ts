@@ -14,10 +14,6 @@ describe('OptionsService', () => {
     service = module.get<OptionsService>(OptionsService);
   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
-  });
-
   describe('getOneOption', () => {
     it('should successfully return a cat', () => {
       expect(service.findById('6D44CFC4-CDD1-445D-ACCF-2099ED4D347A')).toEqual({

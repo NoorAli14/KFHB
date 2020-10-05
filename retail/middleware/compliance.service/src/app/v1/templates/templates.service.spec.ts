@@ -11,8 +11,4 @@ describe('TemplatesService', () => {
 
     service = module.get<TemplatesService>(TemplatesService);
   });
-
-  it('should be defined', () => {
-    expect(service).toBeDefined();
-  });
 });

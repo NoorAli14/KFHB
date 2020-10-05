@@ -28,10 +28,6 @@ describe('QuestionsResolver', () => {
     resolver = module.get<QuestionsResolver>(QuestionsResolver);
   });
 
-  it('should be defined', () => {
-    expect(resolver).toBeDefined();
-  });
-
   describe('findQuestion', () => {
     expect(resolver.findQuestion('123-123-123', [])).toEqual({
       id: '123-123-123',

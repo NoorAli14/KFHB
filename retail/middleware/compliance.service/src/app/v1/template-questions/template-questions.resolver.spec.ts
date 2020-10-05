@@ -25,10 +25,6 @@ describe('TemplateQuestionsResolver', () => {
     resolver = module.get<TemplateQuestionsResolver>(TemplateQuestionsResolver);
   });
 
-  it('should be defined', () => {
-    expect(resolver).toBeDefined();
-  });
-
   describe('findTemplateQuestion', () => {
     expect(resolver.findTemplateQuestion('123-123-123', [])).toEqual({
       id: '123-123-123',

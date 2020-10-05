@@ -11,8 +11,4 @@ describe('AmlRequestResolver', () => {
 
     resolver = module.get<AmlRequestResolver>(AmlRequestResolver);
   });
-
-  it('should be defined', () => {
-    expect(resolver).toBeDefined();
-  });
 });

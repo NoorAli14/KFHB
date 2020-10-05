@@ -26,10 +26,6 @@ describe('OptionsResolver', () => {
     resolver = module.get<OptionsResolver>(OptionsResolver);
   });
 
-  it('should be defined', () => {
-    expect(resolver).toBeDefined();
-  });
-
   describe('findOption', () => {
     it('should get one option', () => {
       const expected = {

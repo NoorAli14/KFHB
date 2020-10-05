@@ -26,10 +26,6 @@ describe('AmlResponseResolver', () => {
     resolver = module.get<AmlResponseResolver>(AmlResponseResolver);
   });
 
-  it('should be defined', () => {
-    expect(resolver).toBeDefined();
-  });
-
   // describe('getAmlStatueByRefNo', () => {
   //   it('should get the aml statue of customer', () => {
   //     expect(

@@ -26,10 +26,6 @@ describe('SectionsResolver', () => {
     resolver = module.get<SectionsResolver>(SectionsResolver);
   });
 
-  it('should be defined', () => {
-    expect(resolver).toBeDefined();
-  });
-
   describe('findSection', () => {
     expect(resolver.findSection('123-123-123', [])).toEqual({
       id: '123-123-123',

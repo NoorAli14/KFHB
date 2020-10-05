@@ -11,8 +11,4 @@ describe('AmlRequestService', () => {
 
     service = module.get<AmlRequestService>(AmlRequestService);
   });
-
-  it('should be defined', () => {
-    expect(service).toBeDefined();
-  });
 });
