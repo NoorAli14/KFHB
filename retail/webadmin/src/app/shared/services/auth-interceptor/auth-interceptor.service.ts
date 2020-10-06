@@ -92,7 +92,6 @@ export class AuthInterceptorService implements HttpInterceptor {
                 'x-tenant-id': environment.TENANT_ID,
                 'x-channel-id': environment.CHANNEL_ID,
             }),
-            withCredentials: true
         };
 
         if (!refreshing) {
