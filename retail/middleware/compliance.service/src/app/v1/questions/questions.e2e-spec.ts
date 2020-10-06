@@ -4,7 +4,12 @@ import { INestApplication } from '@nestjs/common';
 import { ApplicationModule } from '@rubix/app';
 import { NewQuestionInput } from './question.dto';
 
+import { transformAndValidate } from 'class-transformer-validator';
+import { Question } from './question.model';
+import { Option } from '../options/option.model';
+
 describe('Complaince Module (e2e)', () => {
+  let question: NewQuestionInput;
   let app: INestApplication;
 
   const headers: { [key: string]: any } = {
@@ -22,32 +27,108 @@ describe('Complaince Module (e2e)', () => {
     await app.init();
   });
 
-  const questions: any[] = [
-    {
-      title: 'Question 3',
-      title_ar: 'Question 3',
-      status: 'ACTIVE',
+  it('should successfully transform and validate the question', async () => {
+    question = {
+      title: 'Test Question',
+      title_ar: 'Test Question AR',
       rules: '{required: true}',
-      section_id: '123-121',
-      id: '123-121',
-    },
-    {
-      title: 'Test Section 2',
-      title_ar: 'Test Section 2',
-      status: 'ACTIVE',
-      rules: '{required: true}',
-      section_id: '123-122',
-      id: '123-122',
-    },
-    {
-      title: 'Test Section 3',
-      title_ar: 'Test Section 3',
-      status: 'ACTIVE',
-      rules: '{required: true}',
-      section_id: '123-123',
-      id: '123-123',
-    },
-  ];
+      type: 'text',
+    } as NewQuestionInput;
+
+    const transformedQuestion: NewQuestionInput = await transformAndValidate(
+      NewQuestionInput,
+      question,
+    );
+    expect(transformedQuestion).toBeDefined();
+    expect(transformedQuestion.title).toEqual('Test Question');
+    expect(transformedQuestion.title_ar).toEqual('Test Question AR');
+  });
+
+  // it('should successfully transform and validate JSON with array of question', done => {
+  //   return request(app.getHttpServer())
+  //     .post('/graphql')
+  //     .send({
+  //       query: `{questionsList{id title title_ar status type}}`,
+  //     })
+  //     .set(headers)
+  //     .expect(async ({ body }) => {
+  //       const data = body?.data?.questionsList;
+  //       if (data) {
+  //         const questionJson: string = JSON.stringify(data);
+
+  //         const transformedQuestion: NewQuestionInput[] = (await transformAndValidate(
+  //           NewQuestionInput,
+  //           questionJson,
+  //         )) as NewQuestionInput[];
+  //         expect(data).toBeDefined();
+  //         expect(transformedQuestion).toBeInstanceOf(Array);
+  //         expect(transformedQuestion).toHaveLength(data.length);
+  //         expect(transformedQuestion[0].title).toEqual('Question 3');
+  //       } else {
+  //         expect(data).toBeUndefined();
+  //         expect(data).toHaveLength(0);
+  //       }
+  //     })
+  //     .end(done)
+  //     .expect(200);
+  // });
+
+  // it('should successfully transform and validate JSON question', done => {
+  //   return request(app.getHttpServer())
+  //     .post('/graphql')
+  //     .send({
+  //       query: `{findQuestion(id: "d329c531-9e7a-4b55-923f-04fc62aee79d") {id title title_ar status type options {id name name_ar}}}`,
+  //     })
+  //     .set(headers)
+  //     .expect(async ({ body }) => {
+  //       const data = body?.data?.findQuestion;
+  //       if (data) {
+  //         const questionJson: string = JSON.stringify(data);
+
+  //         const transformedQuestion: Question = (await transformAndValidate(
+  //           Question,
+  //           questionJson,
+  //         )) as Question;
+  //         console.log(data, '0-0-0- data -0-0-0');
+  //         console.log(transformedQuestion, '0-0-0- after transform -0-0-0');
+  //         expect(data).toBeDefined();
+  //         expect(transformedQuestion).toBeInstanceOf(Question);
+  //         expect(transformedQuestion.status).toEqual('ACTIVE');
+  //         expect(transformedQuestion.options).toBeInstanceOf(Array);
+  //       } else {
+  //         expect(data).toBeUndefined();
+  //       }
+  //     })
+  //     .end(done)
+  //     .expect(200);
+  // });
+
+  it('should throw error question not found', done => {
+    return request(app.getHttpServer())
+      .post('/graphql')
+      .send({
+        query: `{findQuestion(id: "d2d409a9-8cf3-3562-23de-2361dd59cd98"){id title title_ar status options {id name name_ar}}}`,
+      })
+      .set(headers)
+      .expect(async ({ body }) => {
+        const data = body?.data?.findQuestion;
+        if (data) {
+          const questionJson: string = JSON.stringify(data);
+
+          const transformedQuestion: Question = (await transformAndValidate(
+            Question,
+            questionJson,
+          )) as Question;
+          console.log(transformedQuestion, '-=-=-=-=-=-=-=-=');
+          expect(data).toBeDefined();
+          expect(transformedQuestion).toBeInstanceOf(Question);
+        } else {
+          expect(data).toBeUndefined();
+        }
+      })
+      .end(done)
+      .expect(200);
+  });
 
   const questionInput: any = {
     title: 'Question 3',
@@ -58,7 +139,7 @@ describe('Complaince Module (e2e)', () => {
     id: '123-121',
   };
 
-  it(`Should fetch list of sections`, done => {
+  it(`Should fetch list of questions`, done => {
     return request(app.getHttpServer())
       .post('/graphql')
       .send({
@@ -75,7 +156,7 @@ describe('Complaince Module (e2e)', () => {
       .end(done);
   });
 
-  it(`Should return single section base on section id`, done => {
+  it(`Should return single question base on question id`, done => {
     return request(app.getHttpServer())
       .post('/graphql')
       .send({
@@ -85,7 +166,7 @@ describe('Complaince Module (e2e)', () => {
       .expect(({ body }) => {
         const data = body.data.findQuestion;
         expect(data.title).toBe(questionInput.title);
-        expect(data[0].title_ar).toBe(questionInput.title_ar);
+        expect(data.title_ar).toBe(questionInput.title_ar);
       })
       .expect(200)
       .end(done);
