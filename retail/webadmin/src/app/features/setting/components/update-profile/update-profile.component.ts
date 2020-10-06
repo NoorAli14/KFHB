@@ -57,6 +57,7 @@ export class UpdateProfileComponent extends BaseComponent implements OnDestroy, 
         this.nationalityList = this.data.nationalities;
         this.filteredNationalities = this.data.nationalities;
         this.userForm.get('nationalityId').valueChanges.subscribe((value => {
+            
             this.filteredNationalities =  this._mapperService.filterData(this.nationalityList, 'nationality', value);
           }));
     }
