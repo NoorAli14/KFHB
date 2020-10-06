@@ -19,8 +19,8 @@ describe('Role Module (e2e)', () => {
 
   it(`adds role`, done => {
     const addRoleInput: RoleInput = {
-      name: "Guest",
-      status: "ACTIVE"
+      name: "Guest"
+      // status: "ACTIVE"
     };
     return request(app.getHttpServer())
       .post('/graphql')
@@ -31,6 +31,12 @@ describe('Role Module (e2e)', () => {
       "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
     })
       .expect(( {body} ) => {
+        console.log("body..........................................")
+        console.log("body..........................................")
+        console.log("body..........................................")
+        console.log("body..........................................")
+        console.log("body..........................................")
+        console.log(body);
         const data = body.data.addRole;
         expect(data.id).toBeDefined();
       })

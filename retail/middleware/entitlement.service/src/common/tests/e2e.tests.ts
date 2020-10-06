@@ -1,5 +1,5 @@
 export function createPayloadObject(input: { [key: string]: any }): string {
-  return JSON.stringify(input);
+  return JSON.stringify(input).replace(/\"([^(\")"]+)\":/g, '$1:');
 }
 
 export function createMutationQuery(
@@ -7,12 +7,17 @@ export function createMutationQuery(
   input: { [key: string]: any },
   return_keys: string,
 ): string {
-  return `
+  let result = `
     mutation {
       ${method}(input: ${createPayloadObject(input)}) {
        ${return_keys}
       }
     }`;
+    console.log("Mutaion is..................................")
+    console.log("Mutaion is..................................")
+    console.log("Mutaion is..................................")
+    console.log(result);
+    return result;
 }
 
 export function createUpdateQuery(
