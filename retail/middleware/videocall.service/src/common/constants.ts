@@ -9,17 +9,17 @@ export const FOREIGN_KEYS = {
 };
 
 export enum GENDER {
-  MALE = 'male',
-  FEMALE = 'female',
+  MALE = 'M',
+  FEMALE = 'F',
 }
 
 export enum APPOINTMENT_STATUS {
-  SCHEDULED = 'scheduled',
-  RESCHEDULED = 'rescheduled',
-  QUEUED = 'queued',
-  NOTIFICATION = 'notification',
-  ATTENDED = 'attended',
-  CANCELLED = 'cancelled',
+  SCHEDULED = 'SCHEDULED',
+  RESCHEDULED = 'RESCHEDULED',
+  QUEUED = 'QUEUED',
+  NOTIFICATION = 'NOTIFICATION',
+  ATTENDED = 'ATTENDED',
+  CANCELLED = 'CANCELLED',
 }
 registerEnumType(GENDER, { name: 'GENDER' });
 registerEnumType(APPOINTMENT_STATUS, { name: 'APPOINTMENT_STATUS' });

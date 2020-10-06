@@ -1,5 +1,5 @@
-import {Field, ID, ObjectType} from "@nestjs/graphql";
-import {PaginationModel} from '@common/models';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { PaginationModel } from '@common/models';
 
 @ObjectType()
 export class Permission {

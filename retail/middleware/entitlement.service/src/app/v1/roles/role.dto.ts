@@ -1,8 +1,8 @@
-import {Field, InputType} from "@nestjs/graphql";
-import {IsOptional, IsString, MaxLength} from "class-validator";
+import { Field, InputType } from '@nestjs/graphql';
+import { IsIn, IsOptional, IsString, MaxLength } from 'class-validator';
 
-import {NUMBERS} from "@common/constants";
-import {IdsInput} from "@common/inputs/ids.input";
+import { NUMBERS, STATUS } from '@common/constants';
+import { IdsInput } from '@common/inputs/ids.input';
 
 @InputType()
 export class RoleInput {
@@ -22,6 +22,7 @@ export class RoleInput {
   @IsString()
   @IsOptional()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  @IsIn(Object.values(STATUS))
   status?: string;
 
   @Field(type => [IdsInput], { nullable: true })
@@ -29,7 +30,7 @@ export class RoleInput {
 }
 
 @InputType()
-export class RoleCreateInput extends RoleInput{
+export class RoleCreateInput extends RoleInput {
   @Field()
   @IsString()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)

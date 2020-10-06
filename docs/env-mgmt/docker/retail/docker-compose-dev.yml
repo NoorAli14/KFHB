@@ -39,6 +39,8 @@ services:
     environment:
       - ENV_RBX_API_BASE_URL=$ENV_RBX_API_BASE_URL
       - ENV_RBX_APP_SECRET=$ENV_RBX_APP_SECRET
+      - ENV_RBX_CHANNEL_ID=$ENV_RBX_CHANNEL_ID
+      - ENV_RBX_TENANT_ID=$ENV_RBX_TENANT_ID
     restart: always
     networks:
       - core_service_network
