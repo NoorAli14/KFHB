@@ -2,8 +2,20 @@ import * as request from 'supertest';
 import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { ApplicationModule } from '@rubix/app';
+import {
+  classToClass,
+  classToClassFromExist,
+  classToPlain,
+  classToPlainFromExist,
+  plainToClass,
+  plainToClassFromExist,
+} from 'class-transformer';
+
+import { transformAndValidate } from 'class-transformer-validator';
+import { NewTemplateInput } from './template.dto';
 
 describe('Complince Module (e2e)', () => {
+  let template: NewTemplateInput;
   let app: INestApplication;
 
   const headers: { [key: string]: any } = {
@@ -21,26 +33,45 @@ describe('Complince Module (e2e)', () => {
     await app.init();
   });
 
-  const templates: any[] = [
-    {
-      name: 'KYC Template',
-      name_ar: 'KYC Template',
-      status: 'ACTIVE',
-      id: '123-121',
-    },
-    {
-      name: 'CRS Template',
-      name_ar: 'CRS Template',
-      status: 'ACTIVE',
-      id: '123-122',
-    },
-    {
-      name: 'FATCA Template',
-      name_ar: 'FATCA Template',
-      status: 'ACTIVE',
-      id: '123-123',
-    },
-  ];
+  it('should successfully transform and validate the template', async () => {
+    const template = {
+      name: 'Test Template',
+      name_ar: 'Test Template',
+    } as NewTemplateInput;
+
+    const transformedTemplate: NewTemplateInput = await transformAndValidate(
+      NewTemplateInput,
+      template,
+    );
+    expect(transformedTemplate).toBeDefined();
+    expect(transformedTemplate.name).toEqual('Test Template');
+  });
+
+  it('should successfully transform and validate JSON with array of Templates', done => {
+    return request(app.getHttpServer())
+      .post('/graphql')
+      .send({
+        query: `{templatesList{name name_ar status}}`,
+      })
+      .set(headers)
+      .expect(async ({ body }) => {
+        const data = body.data.templatesList;
+        const templateJson: string = JSON.stringify(data);
+
+        const transformedTemplate: NewTemplateInput[] = (await transformAndValidate(
+          NewTemplateInput,
+          templateJson,
+        )) as NewTemplateInput[];
+        console.log(transformedTemplate, '-=-=- transform template -=-=-');
+        console.log(data, '-=-=- transform 121 template -=-=-');
+        expect(data).toBeDefined();
+        expect(transformedTemplate).toBeInstanceOf(Array);
+        expect(transformedTemplate).toHaveLength(transformedTemplate.length);
+        expect(transformedTemplate[0].name).toEqual('FATCA');
+      })
+      .end(done)
+      .expect(200);
+  });
 
   const templateInput: any = {
     name: 'FATCA',
