@@ -84,7 +84,6 @@ export class AuthInterceptorService implements HttpInterceptor {
         return this.http.post(endPoint, null, { observe: 'response' });
     }
     getHttpOption(refreshing): any {
-        debugger
         const token = this.storage.getItem(APP_CONST.ACCESS_TOKEN);
         const httpOptions = {
             headers: new HttpHeaders({
@@ -93,6 +92,7 @@ export class AuthInterceptorService implements HttpInterceptor {
                 'x-tenant-id': environment.TENANT_ID,
                 'x-channel-id': environment.CHANNEL_ID,
             }),
+            withCredentials: true
         };
 
         if (!refreshing) {
