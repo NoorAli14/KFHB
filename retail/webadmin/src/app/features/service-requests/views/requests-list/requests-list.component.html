@@ -28,7 +28,7 @@
                 <ng-container *ngFor="let key of displayedColumns" [matColumnDef]="key">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>
                         {{ key.includes('action') ? 'Action' : camelToSentenceCase(key) }}</mat-header-cell>
-                    <mat-cell *matCellDef="let element; let i = dataIndex">
+                    <mat-cell *matCellDef="let element; let i = dataIndex" class="pl-24">
                         <span *ngIf="!key.includes('action'); else action">
                             <span *ngIf="element[key]; else defaultText">
                                 <ng-container *ngIf="camelToSnakeCase(key).indexOf('created')<0; else date ">

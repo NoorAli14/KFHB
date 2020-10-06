@@ -30,8 +30,8 @@
                     }
                     <mat-header-cell class="text-left" *matHeaderCellDef mat-sort-header>
                         {{camelToSentenceCase(key) }}</mat-header-cell>
-                    <mat-cell *matCellDef="let element; let i = dataIndex">
-                        <span *ngIf="element[(key)]; else defaultText">
+                    <mat-cell *matCellDef="let element; let i = dataIndex" class="pl-24">
+                        <span  *ngIf="element[(key)]; else defaultText"  >
                             <ng-container>
                                 {{element[(key)]}}
                             </ng-container>
