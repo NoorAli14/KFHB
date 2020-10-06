@@ -13,6 +13,7 @@ import {
 
 import { transformAndValidate } from 'class-transformer-validator';
 import { NewTemplateInput } from './template.dto';
+import { Template } from './template.model';
 
 describe('Complince Module (e2e)', () => {
   let template: NewTemplateInput;
@@ -55,19 +56,75 @@ describe('Complince Module (e2e)', () => {
       })
       .set(headers)
       .expect(async ({ body }) => {
-        const data = body.data.templatesList;
-        const templateJson: string = JSON.stringify(data);
+        const data = body?.data?.templatesList;
+        if (data) {
+          const templateJson: string = JSON.stringify(data);
 
-        const transformedTemplate: NewTemplateInput[] = (await transformAndValidate(
-          NewTemplateInput,
-          templateJson,
-        )) as NewTemplateInput[];
-        console.log(transformedTemplate, '-=-=- transform template -=-=-');
-        console.log(data, '-=-=- transform 121 template -=-=-');
-        expect(data).toBeDefined();
-        expect(transformedTemplate).toBeInstanceOf(Array);
-        expect(transformedTemplate).toHaveLength(transformedTemplate.length);
-        expect(transformedTemplate[0].name).toEqual('FATCA');
+          const transformedTemplate: NewTemplateInput[] = (await transformAndValidate(
+            NewTemplateInput,
+            templateJson,
+          )) as NewTemplateInput[];
+          expect(data).toBeDefined();
+          expect(transformedTemplate).toBeInstanceOf(Array);
+          expect(transformedTemplate).toHaveLength(transformedTemplate.length);
+          expect(transformedTemplate[0].name).toEqual('FATCA');
+        } else {
+          expect(data).toBeUndefined();
+        }
+      })
+      .end(done)
+      .expect(200);
+  });
+
+  it('should successfully transform and validate JSON Templates', done => {
+    return request(app.getHttpServer())
+      .post('/graphql')
+      .send({
+        query: `{findTemplateByName(name: "FATCA"){name name_ar status}}`,
+      })
+      .set(headers)
+      .expect(async ({ body }) => {
+        const data = body?.data?.findTemplateByName;
+        if (data) {
+          const templateJson: string = JSON.stringify(data);
+
+          const transformedTemplate: Template = (await transformAndValidate(
+            Template,
+            templateJson,
+          )) as Template;
+          expect(data).toBeDefined();
+          expect(transformedTemplate).toBeInstanceOf(Template);
+          expect(transformedTemplate.name).toEqual('FATCA');
+        } else {
+          expect(data).toBeUndefined();
+        }
+      })
+      .end(done)
+      .expect(200);
+  });
+
+  it('should throw error template not found', done => {
+    return request(app.getHttpServer())
+      .post('/graphql')
+      .send({
+        query: `{findTemplateByName(name: "XYZ Template"){name name_ar status}}`,
+      })
+      .set(headers)
+      .expect(async ({ body }) => {
+        const data = body?.data?.findTemplateByName;
+        if (data) {
+          const templateJson: string = JSON.stringify(data);
+
+          const transformedTemplate: Template = (await transformAndValidate(
+            Template,
+            templateJson,
+          )) as Template;
+          expect(data).toBeDefined();
+          expect(transformedTemplate).toBeInstanceOf(Template);
+          expect(transformedTemplate.name).toEqual('FATCA');
+        } else {
+          expect(data).toBeUndefined();
+        }
       })
       .end(done)
       .expect(200);
