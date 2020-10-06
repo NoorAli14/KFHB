@@ -5,5 +5,6 @@
     window["env"]["ENV_RBX_APP_SECRETE"] = ""
     window["env"]["ENV_RBX_CHANNEL_ID"] = ""
     window["env"]["ENV_RBX_TENANT_ID"] = ""
+    window["env"]["ENV_RBX_VIDEO_URL"] = ""
    
   })(this);
