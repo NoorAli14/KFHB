@@ -52,7 +52,7 @@ describe('Complince Module (e2e)', () => {
       })
       .set(headers)
       .expect(({ body }) => {
-        const data = body.data.findTemplateResponseByUserId;
+        const data = body.data.addTemplateResponse;
       })
       .expect(200)
       .end(done);

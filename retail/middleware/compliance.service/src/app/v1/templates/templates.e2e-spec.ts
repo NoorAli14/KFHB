@@ -89,7 +89,7 @@ describe('Complince Module (e2e)', () => {
       })
       .set(headers)
       .expect(({ body }) => {
-        const data = body.data.findTemplateByName;
+        const data = body.data.findTemplate;
         expect(data.name).toBe(templateInput.name);
         expect(data.name_ar).toBe(templateInput.name_ar);
       })
