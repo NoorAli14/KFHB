@@ -84,6 +84,7 @@ export class AuthInterceptorService implements HttpInterceptor {
         return this.http.post(endPoint, null, { observe: 'response' });
     }
     getHttpOption(refreshing): any {
+        debugger
         const token = this.storage.getItem(APP_CONST.ACCESS_TOKEN);
         const httpOptions = {
             headers: new HttpHeaders({
