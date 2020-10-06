@@ -2,8 +2,12 @@ import * as request from 'supertest';
 import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { ApplicationModule } from '@rubix/app';
+import { Section } from './section.model';
+import { NewSectionInput } from './section.dto';
+import { transformAndValidate } from 'class-transformer-validator';
 
 describe('Compliance Module (e2e)', () => {
+  let section: NewSectionInput;
   let app: INestApplication;
 
   const headers: { [key: string]: any } = {
@@ -21,32 +25,104 @@ describe('Compliance Module (e2e)', () => {
     await app.init();
   });
 
-  const sections: any[] = [
-    {
-      name: 'Template 3 Section 1',
-      name_ar: 'Template 1 Section 2',
-      status: 'ACTIVE',
-      level: 'level 1',
-      template_id: '123-121',
-      id: '123-121',
-    },
-    {
-      name: 'Test Section 2',
-      name_ar: 'Test Section 2',
-      status: 'ACTIVE',
-      level: 'level 2',
-      template_id: '123-122',
-      id: '123-122',
-    },
-    {
-      name: 'Test Section 3',
-      name_ar: 'Test Section 3',
-      status: 'ACTIVE',
-      level: 'level 2',
-      template_id: '123-123',
-      id: '123-123',
-    },
-  ];
+  it('should successfully transform and validate the section', async () => {
+    section = {
+      name: 'Test Section',
+      name_ar: 'Test Section',
+      level: 'Level 1',
+    } as NewSectionInput;
+
+    const transformedSection: NewSectionInput = await transformAndValidate(
+      NewSectionInput,
+      section,
+    );
+    expect(transformedSection).toBeDefined();
+    expect(transformedSection.name).toEqual('Test Section');
+  });
+
+  it('should successfully transform and validate JSON with array of sections', done => {
+    return request(app.getHttpServer())
+      .post('/graphql')
+      .send({
+        query: `{sectionsList{name name_ar status level}}`,
+      })
+      .set(headers)
+      .expect(async ({ body }) => {
+        const data = body?.data?.sectionsList;
+        if (data) {
+          const sectionJson: string = JSON.stringify(data);
+
+          const transformedSection: NewSectionInput[] = (await transformAndValidate(
+            NewSectionInput,
+            sectionJson,
+          )) as NewSectionInput[];
+          expect(data).toBeDefined();
+          expect(transformedSection).toBeInstanceOf(Array);
+          expect(transformedSection).toHaveLength(data.length);
+          expect(transformedSection[0].name).toEqual('Template 3 Section 1');
+        } else {
+          expect(data).toBeUndefined();
+          expect(data).toHaveLength(0);
+        }
+      })
+      .end(done)
+      .expect(200);
+  });
+
+  it('should successfully transform and validate JSON Sections', done => {
+    return request(app.getHttpServer())
+      .post('/graphql')
+      .send({
+        query: `{findSection(id: "d2d409a9-8cf3-439f-a4d0-2361dd59cd98") {name name_ar status level tenant_id}}`,
+      })
+      .set(headers)
+      .expect(async ({ body }) => {
+        const data = body?.data?.findSection;
+        if (data) {
+          const sectionJson: string = JSON.stringify(data);
+
+          const transformedSection: Section = (await transformAndValidate(
+            Section,
+            sectionJson,
+          )) as Section;
+          expect(data).toBeDefined();
+          expect(transformedSection).toBeInstanceOf(Section);
+          expect(transformedSection.tenant_id).toEqual(
+            process.env.ENV_RBX_TENANT_ID,
+          );
+        } else {
+          expect(data).toBeUndefined();
+        }
+      })
+      .end(done)
+      .expect(200);
+  });
+
+  it('should throw error section not found', done => {
+    return request(app.getHttpServer())
+      .post('/graphql')
+      .send({
+        query: `{findSection(id: "d2d409a9-8cf3-3562-a4d0-2361dd59cd98"){name name_ar status level}}`,
+      })
+      .set(headers)
+      .expect(async ({ body }) => {
+        const data = body?.data?.findSection;
+        if (data) {
+          const sectionJson: string = JSON.stringify(data);
+
+          const transformedSection: Section = (await transformAndValidate(
+            Section,
+            sectionJson,
+          )) as Section;
+          expect(data).toBeDefined();
+          expect(transformedSection).toBeInstanceOf(Section);
+        } else {
+          expect(data).toBeUndefined();
+        }
+      })
+      .end(done)
+      .expect(200);
+  });
 
   const sectionInput: any = {
     name: 'Template 3 Section 1',
