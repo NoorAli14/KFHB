@@ -82,7 +82,6 @@ class App extends React.Component {
 
   }
   validateToken() {
-    debugger
     const query = queryString.parse(window.location.search);
     let config = {
       headers: {
