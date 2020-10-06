@@ -35,7 +35,7 @@ describe('Complince Module (e2e)', () => {
   });
 
   it('should successfully transform and validate the template', async () => {
-    const template = {
+    template = {
       name: 'Test Template',
       name_ar: 'Test Template',
     } as NewTemplateInput;
@@ -70,6 +70,7 @@ describe('Complince Module (e2e)', () => {
           expect(transformedTemplate[0].name).toEqual('FATCA');
         } else {
           expect(data).toBeUndefined();
+          expect(data).toHaveLength(0);
         }
       })
       .end(done)
