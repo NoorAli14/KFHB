@@ -4,7 +4,7 @@ import { RequestDetailsComponent } from './request-details.component';
 
 const routes: Routes = [
   {
-      path: "",
+      path: '',
       component: RequestDetailsComponent
       
   },

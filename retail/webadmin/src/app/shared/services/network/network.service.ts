@@ -1,19 +1,19 @@
 
-import { Injectable } from "@angular/core";
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
-import { catchError, retry } from "rxjs/operators";
-import { throwError as observableThrowError, Observable } from "rxjs";
-import { createUrl } from "@shared/constants/app.constants";
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { catchError, retry } from 'rxjs/operators';
+import { throwError as observableThrowError, Observable } from 'rxjs';
+import { createUrl } from '@shared/constants/app.constants';
 
 
 @Injectable({
-    providedIn: "root",
+    providedIn: 'root',
 })
 export class NetworkService {
     constructor(private http: HttpClient) { }
 
-    getAll(url: string, BaseUrl: string, params?: Object, options?: Object): Observable<any> {
-        let endPoint = createUrl(url, BaseUrl);
+    getAll(baseUrl: string, url: string, params?: object, options?: object): Observable<any> {
+        let endPoint = createUrl(baseUrl, url);
         if (params) {
             endPoint = `${endPoint}?`;
             Object.keys(params).forEach((key) => {
@@ -26,38 +26,38 @@ export class NetworkService {
             .pipe(catchError(this.errorHandler));
     }
 
-    getById(url, BaseUrl: string): Observable<any> {
-        const endPoint = `${createUrl(url, BaseUrl)}`;
+    getById(baseUrl: string, url): Observable<any> {
+        const endPoint = `${createUrl(baseUrl, url)}`;
         return this.http
             .get<any>(endPoint, {})
             .pipe(catchError(this.errorHandlerMessage));
     }
 
-    post(url: string, BaseUrl: string, model: any, options?): Observable<any> {
-        const endPoint = `${createUrl(url, BaseUrl)}`;
+    post(baseUrl: string, url: string, model: any, options?): Observable<any> {
+        const endPoint = `${createUrl(baseUrl, url)}`;
         return this.http
             .post<any[]>(endPoint, model, options);
     }
 
-    onUpdate(url: string, BaseUrl: string, model: any, options?): Observable<any> {
-        const endPoint = `${createUrl(url, BaseUrl)}`;
+    onUpdate(baseUrl: string, url: string, model: any, options?): Observable<any> {
+        const endPoint = `${createUrl(baseUrl, url)}`;
         return this.http
             .put<any[]>(endPoint, model, options)
             .pipe(catchError(this.errorHandlerMessage));
     }
 
-    onDelete(url: string, BaseUrl: string, options?): Observable<any> {
-        const endPoint = `${createUrl(url, BaseUrl)}`;
+    onDelete(baseUrl: string, url: string, options?): Observable<any> {
+        const endPoint = `${createUrl(baseUrl, url)}`;
         return this.http
             .delete<any[]>(endPoint, options)
             .pipe(catchError(this.errorHandlerMessage));
     }
 
-    errorHandler = (error: HttpErrorResponse) => {
+    errorHandler(error: HttpErrorResponse): Observable<any> {
         return observableThrowError(error);
     }
 
-    errorHandlerMessage = (error: HttpErrorResponse) => {
+    errorHandlerMessage(error: HttpErrorResponse): Observable<any> {
         return observableThrowError(error);
     }
 }

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { ReferralsComponent } from './components/referrals.component';
+import { ReferralsComponent } from './views/referrals.component';
 
 const routes: Routes = [
   {

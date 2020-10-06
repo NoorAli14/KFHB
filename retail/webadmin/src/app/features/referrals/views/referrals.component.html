@@ -1,0 +1,52 @@
+<div class="page-container page-layout carded fullwidth inner-scroll">
+    <div class="top-bg accent"></div>
+    <div class="center">
+        <div class="header accent" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row"
+            fxLayoutAlign.gt-sm="space-between center">
+            <div class="logo mb-24 mb-md-0" fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+                    people_outline
+                </mat-icon>
+                <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                    Referrals
+                </span>
+            </div>
+            <div class="search-wrapper mx-32 mx-md-0">
+                <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
+                    <mat-icon>search</mat-icon>
+                    <input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Search .. ">
+                </div>
+            </div>
+            <button mat-raised-button color="accent" (click)='downloadReport()'
+                class="add-product-button fuse-white mt-24 mt-md-0">
+                <span>DOWNLOAD REPORT</span>
+            </button>
+        </div>
+        <div class="content-card" fusePerfectScrollbar>
+            <app-message-box [type]="errorType" [message]="responseMessage"></app-message-box>
+            <mat-table #table matSort matSortActive="dateOfAccountOpening​" matSortDirection="asc" matSortDisableClear
+                [dataSource]="dataSource">
+                <ng-container *ngFor="let key of displayedColumns" [matColumnDef]="key">
+                    }
+                    <mat-header-cell class="text-left" *matHeaderCellDef mat-sort-header>
+                        {{camelToSentenceCase(key) }}</mat-header-cell>
+                    <mat-cell *matCellDef="let element; let i = dataIndex">
+                        <span *ngIf="element[(key)]; else defaultText">
+                            <ng-container>
+                                {{element[(key)]}}
+                            </ng-container>
+                        </span>
+                        <ng-template #defaultText>
+                            <app-default-text></app-default-text>
+                        </ng-template>
+                    </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;" [@animate]="{value:'*',params:{y:'100%'}}">
+                </mat-row>
+            </mat-table>
+            <mat-paginator #paginator [pageIndex]="0" [pageSize]="pageSize" showFirstLastButtons
+                [pageSizeOptions]="pageSizeOptions"></mat-paginator>
+        </div>
+    </div>
+</div>

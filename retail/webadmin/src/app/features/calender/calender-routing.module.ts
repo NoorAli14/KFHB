@@ -1,25 +1,25 @@
-import { NgModule } from "@angular/core";
-import { Routes, RouterModule } from "@angular/router";
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
 
 const routes: Routes = [
     {
-        path: "",
-        redirectTo:'working-week', pathMatch:'full'
+        path: '',
+        redirectTo: 'working-week', pathMatch: 'full'
       },
     {
-        path: "working-days",
+        path: 'working-days',
         loadChildren: () =>
-            import("./working-day/working-day.module").then((m) => m.WorkingDayModule),
+            import('./working-day/working-day.module').then((m) => m.WorkingDayModule),
     },
     {
-        path: "holidays",
+        path: 'holidays',
         loadChildren: () =>
-            import("./holiday/holiday.module").then((m) => m.HolidayModule),
+            import('./holiday/holiday.module').then((m) => m.HolidayModule),
     },
     {
-        path: "leaves",
+        path: 'leaves',
         loadChildren: () =>
-            import("./leave/leave.module").then((m) => m.LeaveModule),
+            import('./leave/leave.module').then((m) => m.LeaveModule),
     },
 ];
 

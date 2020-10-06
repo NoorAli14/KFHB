@@ -1,28 +1,29 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-import { RouterTestingModule } from "@angular/router/testing";
-import { AuthenticationService } from "@shared/services/auth/authentication.service";
-import { FuseConfigService } from "@fuse/services/config.service";
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { AuthenticationService } from '@shared/services/auth/authentication.service';
+import { FuseConfigService } from '@fuse/services/config.service';
 import {
     ReactiveFormsModule,
     AbstractControl,
     FormGroup,
     FormsModule,
-} from "@angular/forms";
+} from '@angular/forms';
 import {
     Injector,
     NO_ERRORS_SCHEMA,
     CUSTOM_ELEMENTS_SCHEMA,
-} from "@angular/core";
-import { NoopAnimationsModule } from "@angular/platform-browser/animations";
-import { By } from "@angular/platform-browser";
-import { of, throwError } from "rxjs";
-import { DOMHelper } from "testing/dom.helper";
-import { InvitationComponent } from "./invitation.component";
-import { MatSelectModule } from "@angular/material/select";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatInputModule } from "@angular/material/input";
+} from '@angular/core';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { By } from '@angular/platform-browser';
+import { of, throwError } from 'rxjs';
+import { DOMHelper } from 'testing/dom.helper';
+import { InvitationComponent } from './invitation.component';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
-describe("InvitationComponent", async () => {
+describe('InvitationComponent', async () => {
     let component: InvitationComponent;
     let fixture: ComponentFixture<InvitationComponent>;
     let fuseConfigServiceMock: any;
@@ -32,16 +33,17 @@ describe("InvitationComponent", async () => {
     let model;
     beforeEach(async(() => {
            
-        fuseConfigServiceMock = jasmine.createSpyObj("FuseConfigService", [
-            "config",
+        fuseConfigServiceMock = jasmine.createSpyObj('FuseConfigService', [
+            'config',
         ]);
-        injectorMock = jasmine.createSpyObj("Injector", ["get"]);
+        injectorMock = jasmine.createSpyObj('Injector', ['get']);
 
-        authenticationMock = jasmine.createSpyObj("AuthenticationService", [
-            "getUserByToken",
-            "updateInvitation",
+        authenticationMock = jasmine.createSpyObj('AuthenticationService', [
+            'getUserByToken',
+            'updateInvitation',
         ]);
-        authenticationMock.getUserByToken.and.returnValue(of([]));
+      
+        authenticationMock.getUserByToken.and.returnValue(of([[],[]]));
         authenticationMock.updateInvitation.and.returnValue(of([]));
         TestBed.configureTestingModule({
             declarations: [InvitationComponent],
@@ -52,6 +54,7 @@ describe("InvitationComponent", async () => {
                 FormsModule,
                 MatSelectModule,
                 MatInputModule,
+                MatAutocompleteModule
             ],
             providers: [
                 {
@@ -72,16 +75,17 @@ describe("InvitationComponent", async () => {
 
     beforeEach(() => {
         model = {
-            firstName: "rashid",
-            lastName: "rashid",
-            contactNo: "123",
-            gender: "M",
-            status: "rashid",
-            email: "rashid@aiondigital.com",
-            dateOfBirth: "12/2/2323",
+            id: '123',
+            firstName: 'rashid',
+            middleName: 'test',
+            lastName: 'rashid',
+            contactNo: '123',
+            gender: 'M',
+            email: 'rashid@aiondigital.com',
+            dateOfBirth: '12/2/2323',
             nationalityId: 1,
-            password: "password",
-            confirmPassword: "password",
+            password: 'TestUser98$$',
+            confirmPassword: 'TestUser98$$',
         };
         fixture = TestBed.createComponent(InvitationComponent);
         component = fixture.componentInstance;
@@ -90,25 +94,23 @@ describe("InvitationComponent", async () => {
         fixture.detectChanges();
     });
 
-    describe("Invitation Password General", () => {
-        it("should create invitation password component", () => {
-            expect(component).toBeTruthy();
-        });
-    });
+   
 
-    describe("Validate Token SUITS", () => {
-        it("should the getUserByToken called one time ", () => {
-            spyOn(component, "getUserByToken");
+    describe('Validate Token SUITS', () => {
+        it('should the getUserByToken called one time ', () => {
+            spyOn(component, 'getUserByToken');
             component.ngOnInit();
+            fixture.detectChanges();
             expect(component.getUserByToken).toHaveBeenCalledTimes(1);
         });
 
-        it("should show the proper message if user already onboard ", () => {
+        it("should show the error message on failed", () => {
             authenticationMock.getUserByToken.and.returnValue(
                 throwError({ error: "error" })
             );
             component.ngOnInit();
-            expect(component.errorType).toEqual("info");
+            fixture.detectChanges();
+            expect(component.errorType).toEqual("error");
         });
 
         it("should show the error message if token is invalid ", () => {
@@ -126,12 +128,15 @@ describe("InvitationComponent", async () => {
         });
     });
 
-    describe("Forgot Form SUITS", () => {
+    describe('Invitation Form SUITS', () => {
         it("should invitation form initialized", () => {
+            component.ngOnInit();
+            fixture.detectChanges();
             expect(component.invitationForm).toBeTruthy();
         });
 
         it("should the invitation button be enable if the form is valid", () => {
+            component.ngOnInit();
             helper.setForm(component.invitationForm, model);
             fixture.detectChanges();
             const button: HTMLButtonElement = helper.findOne(".post-button");
@@ -139,6 +144,7 @@ describe("InvitationComponent", async () => {
         });
 
         it("should invitation submit button be disable if form is invalid ", () => {
+            component.ngOnInit();
             component.invitationForm.patchValue({ ...model, contactNo: null });
             fixture.detectChanges();
             const button: HTMLButtonElement = helper.findOne(".post-button");
@@ -157,7 +163,7 @@ describe("InvitationComponent", async () => {
         });
     });
 
-    describe("Forgot Form Submit SUITS", () => {
+    describe('Invitation Form Submit SUITS', () => {
         it("should call the onSubmit button only 1 time", () => {
             helper.setForm(component.invitationForm, model);
             spyOn(component, "onSubmit");

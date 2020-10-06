@@ -5,7 +5,7 @@ import { fuseAnimations } from '@fuse/animations';
 import { MatDialog } from '@angular/material/dialog';
 import { ServiceRequests } from '@feature/service-requests/models/service-requests.model';
 import { MESSAGES } from '@shared/constants/messages.constant';
-import { ServiceRequestsService } from '@feature/service-requests/services/sercice-reuests.service';
+import { ServiceRequestsService } from '@feature/service-requests/services/service-requests.service';
 import { FormControl } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
@@ -46,58 +46,39 @@ export class RequestsListComponent extends BaseComponent implements OnInit {
     'requestDate',
     'status',
     'actions'
-
   ];
-
-
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
-
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
-
-  constructor(public _matDialog: MatDialog, injector: Injector,
-    private _serviceRequestsService: ServiceRequestsService,
-    private route: ActivatedRoute, private router: Router,
-
+  constructor(public _matDialog: MatDialog, injector: Injector, private _service: ServiceRequestsService, private route: ActivatedRoute, private router: Router,
   ) {
     super(injector);
   }
-
   ngOnInit(): void {
     super.ngOnInit();
     this.getData();
-    this.username = new FormControl('');
-    this.initSearch();
   }
-
-  getData() {
-    this._serviceRequestsService.getServiceRequests().subscribe(
+  getData = () => {
+    this._service.getServiceRequests().subscribe(
       (response) => {
         this.serviceRequests = response;
         this.updateGrid(this.serviceRequests);
       },
       (error) => {
-        console.log(error);
       }
     );
   }
   onDetail(id): void {
-    this._serviceRequestsService.getServiceRequestsById(id)
+    this._service.getServiceRequestsById(id)
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe(
         (response) => {
           this.router.navigateByUrl(
-            this.returnUrl ? this.returnUrl : "/req/details/" + id
+            this.returnUrl ? this.returnUrl : '/req/details/' + id
           );
         },
         (response) => super.onError(response)
       );
-  }
-
-
-  initSearch(): void {
-    this.username.valueChanges.subscribe((text: string) => {
-    });
   }
   camelToSnakeCase(text): void {
     return camelToSnakeCaseText(text);
@@ -105,24 +86,6 @@ export class RequestsListComponent extends BaseComponent implements OnInit {
   camelToSentenceCase(text): void {
     return camelToSentenceCase(text);
   }
-  confirmDialog(type, id): void {
-    const message = type === 'invite' ? removeRandom(MESSAGES.RESEND_INVITE()) : removeRandom(MESSAGES.REMOVE_CONFIRMATION());
-    const dialogData = new ConfirmDialogModel('Confirm Action', message);
-    const dialogRef = this._matDialog.open(ConfirmDialogComponent, {
-      data: dialogData,
-      disableClose: true,
-      panelClass: 'app-confirm-dialog',
-      hasBackdrop: true,
-    });
-
-    dialogRef.afterClosed().subscribe((status) => {
-      if (status) {
-        //   type === 'invite' ? this.resendInvitation(id) : this.deleteUser(id)
-      }
-    });
-  }
-
-
   updateGrid(data): void {
     this.dataSource.data = data.data;
     this.dataSource.paginator = this.paginator;
@@ -131,4 +94,26 @@ export class RequestsListComponent extends BaseComponent implements OnInit {
   public doFilter = (value: string) => {
     this.dataSource.filter = value.trim().toLocaleLowerCase();
   }
+  downloadReport = () => {
+    this._service
+      .getServiceRequestReport().pipe().subscribe(
+        (response) => {
+          if ('Record Not Found') {
+            return;
+          }
+          this.convertBase64ToExcel(response.data);
+        },
+        (response) => super.onError(response)
+      );
+  }
+  convertBase64ToExcel = (data) => {
+    const date = new Date();
+    const linkSource = 'data:application/excel;base64,' + data;
+    const downloadLink = document.createElement('a');
+    const fileName = 'REPORT' + date.getDate() + '.' + date.getMonth() + 1 + '.' + date.getFullYear() + '.xlsx';
+    downloadLink.href = linkSource;
+    downloadLink.download = fileName;
+    downloadLink.click();
+  }
+
 }

@@ -10,7 +10,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { ActivatedRoute } from '@angular/router';
-import { takeUntil } from "rxjs/operators";
+import { takeUntil } from 'rxjs/operators';
 import {
   camelToSentenceCase,
   camelToSnakeCaseText,
@@ -21,7 +21,7 @@ import {
   ConfirmDialogModel,
   ConfirmDialogComponent,
 } from '@shared/components/confirm-dialog/confirm-dialog.component';
-import { ServiceRequestsService } from '@feature/service-requests/services/sercice-reuests.service';
+import { ServiceRequestsService } from '@feature/service-requests/services/service-requests.service';
 @Component({
   selector: 'app-request-details',
   templateUrl: './request-details.component.html',
@@ -41,10 +41,9 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
     'title',
     'viewUpload&DownloadPDF',
   ];
-  documents=[];
-  contentType:string;
+  documents = [];
+  contentType: string;
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
-
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   status: any;
@@ -69,30 +68,25 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
     this.serviceRequestForm = new FormGroup({
       comments: new FormControl('', []),
     });
-    this.username = new FormControl('');
-    this.initSearch();
   }
   getData = () => {
     this._serviceRequestsService.getServiceRequestsById(this.id).subscribe(
       (response) => {
         this.serviceRequests = response.data;
-        console.log(response);
         this.status = response.data.status;
         this.letterType = response.data.letterType;
         this.requestType = response.data.requestType;
         this.customerRIM = response.data.customerRim;
         const responseDocument = response.data.documents;
-        for (let i = 0; i < responseDocument.length ; i++) {
+        for (let i = 0; i < responseDocument.length; i++) {
           this.documents.push(responseDocument[i])
         }
-        console.log(this.documents);
         this.updateGrid(this.documents);
         if (response.data.status != 'Pending') {
           this.btnDisable = true;
         }
       },
       (error) => {
-        console.log(error);
       }
     );
   }
@@ -108,17 +102,11 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
       .pipe()
       .subscribe(
         (response) => {
-
           this.status = status;
           this.btnDisable = true;
         },
         (response) => super.onError(response)
       );
-  }
-
-  initSearch(): void {
-    this.username.valueChanges.subscribe((text: string) => {
-    });
   }
   camelToSnakeCase(text): void {
     return camelToSnakeCaseText(text);
@@ -135,7 +123,6 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
       panelClass: 'app-confirm-dialog',
       hasBackdrop: true,
     });
-
     dialogRef.afterClosed().subscribe((status) => {
       if (status) {
         //   type === 'invite' ? this.resendInvitation(id) : this.deleteUser(id)
@@ -143,28 +130,24 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
     });
   }
 
-
   updateGrid(data): void {
     this.dataSource.data = data;
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
-
-  downlaodReport(data) {
-    let ex ="png";
+  downlaodReport(data): void {
+    let ex = 'png';
     this.checkType(ex);
-    const date = new Date();   
-    const linkSource = 'data:'+this.contentType+',' + data
-    const downloadLink = document.createElement("a");
-    const fileName = 'ServiceRequest' + date.getDate() + '.' + date.getMonth() + 1 + '.' + date.getFullYear() + "."+ex;
+    const date = new Date();
+    const linkSource = 'data:' + this.contentType + ',' + data;
+    const downloadLink = document.createElement('a');
+    const fileName = 'ServiceRequest' + date.getDate() + '.' + date.getMonth() + 1 + '.' + date.getFullYear() + '.' + ex;
     downloadLink.href = linkSource;
     downloadLink.download = fileName;
     downloadLink.click();
-    
+
   }
-
-
-  viewDocument(data) {
+  viewDocument(data): void {
     this.checkType("png")
     var byteCharacters = atob(data);
     var byteNumbers = new Array(byteCharacters.length);
@@ -178,16 +161,16 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
     window.open(fileURL);
   }
 
-  checkType(extention){
-    let lowerExtention=extention.toLowerCase();
-    if(lowerExtention==='png'||lowerExtention==='jpg'||lowerExtention==='jpeg'||lowerExtention==='gif'
-    ||lowerExtention==='tiff'||lowerExtention==='webp'|| lowerExtention==='bmp'|| lowerExtention==='jpe'
-    ||lowerExtention==='jif'||lowerExtention==='jfif'|| lowerExtention==='jfi'|| lowerExtention==='tif'
-    ||lowerExtention==='heif'||lowerExtention==='heic'){
-      this.contentType='image/'+extention+';base64'
+  checkType(extention): void {
+    let lowerExtention = extention.toLowerCase();
+    if (lowerExtention === 'png' || lowerExtention === 'jpg' || lowerExtention === 'jpeg' || lowerExtention === 'gif'
+      || lowerExtention === 'tiff' || lowerExtention === 'webp' || lowerExtention === 'bmp' || lowerExtention === 'jpe'
+      || lowerExtention === 'jif' || lowerExtention === 'jfif' || lowerExtention === 'jfi' || lowerExtention === 'tif'
+      || lowerExtention === 'heif' || lowerExtention === 'heic') {
+      this.contentType = 'image/' + extention + ';base64'
     }
-    else{
-      this.contentType='application/'+extention+';base64'
+    else {
+      this.contentType = 'application/' + extention + ';base64';
     }
   }
 }

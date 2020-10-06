@@ -1,55 +1,66 @@
 import { URI } from '@shared/constants/app.constants';
-import { Injectable } from "@angular/core";
-import { NetworkService } from "@shared/services/network/network.service";
-import { WorkingDay } from '../models/working-week.model';
+import { Injectable } from '@angular/core';
+import { NetworkService } from '@shared/services/network/network.service';
+import { WorkingDay } from '../models/working-day.model';
 import { Holiday } from '../models/holiday.model';
 import { Leave } from '../models/leave.model';
+import { forkJoin, Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 
 @Injectable({
-    providedIn: "root",
+    providedIn: 'root',
 })
 export class CalendarService {
     constructor(private _networkService: NetworkService) { }
 
-    getWorkingDays() {
-        return this._networkService.getAll(URI.WORKING_DAYS, environment.API_BASE_URL_2);
+    getWorkingDays(): Observable<any> {
+        return this._networkService.getAll(environment.API_BASE_URL, URI.WORKING_DAYS);
     }
 
-    createWorkingDay(model: WorkingDay) {
-        return this._networkService.post(URI.WORKING_DAYS, environment.API_BASE_URL_2, model);
+    createWorkingDay(model: WorkingDay): Observable<any> {
+        return this._networkService.post(environment.API_BASE_URL, URI.WORKING_DAYS, model);
     }
-    editWorkingDay(id: string, model: WorkingDay) {
-        return this._networkService.onUpdate(`${URI.WORKING_DAYS}/${id}`, `${environment.API_BASE_URL_2}`, model);
+    editWorkingDay(id: string, model: WorkingDay): Observable<any> {
+        return this._networkService.onUpdate(`${environment.API_BASE_URL}`, `${URI.WORKING_DAYS}/${id}`, model);
     }
-    deleteWorkingDay(id: string) {
-        return this._networkService.onDelete(`${URI.WORKING_DAYS}/${id}`, `${environment.API_BASE_URL_2}`);
-    }
-
-    getHolidays() {
-        return this._networkService.getAll(URI.HOLIDAYS, environment.API_BASE_URL_2, `${environment.API_BASE_URL_2}`);
-    }
-    createHoliday(model: Holiday) {
-        return this._networkService.post(URI.HOLIDAYS, environment.API_BASE_URL_2, `${environment.API_BASE_URL_2}`, model);
-    }
-    editHoliday(id: string, model: Holiday) {
-        return this._networkService.onUpdate(`${URI.HOLIDAYS}/${id}`, `${environment.API_BASE_URL_2}`, model);
-    }
-    deleteHoliday(id: string) {
-        return this._networkService.onDelete(`${URI.HOLIDAYS}/${id}`, `${environment.API_BASE_URL_2}`);
+    deleteWorkingDay(id: string): Observable<any> {
+        return this._networkService.onDelete(`${environment.API_BASE_URL}`, `${URI.WORKING_DAYS}/${id}`);
     }
 
+    getHolidays(): Observable<any> {
+        return this._networkService.getAll(environment.API_BASE_URL, URI.HOLIDAYS);
+    }
+    createHoliday(model: Holiday): Observable<any> {
+        return this._networkService.post(environment.API_BASE_URL, URI.HOLIDAYS, model);
+    }
+    editHoliday(id: string, model: Holiday): Observable<any> {
+        return this._networkService.onUpdate(`${environment.API_BASE_URL}`, `${URI.HOLIDAYS}/${id}`, model);
+    }
+    deleteHoliday(id: string): Observable<any> {
+        return this._networkService.onDelete(`${environment.API_BASE_URL}`, `${URI.HOLIDAYS}/${id}`);
+    }
 
-    getLeaves() {
-        return this._networkService.getAll(URI.LEAVES, environment.API_BASE_URL_2);
+    getLeaves(): Observable<any> {
+        return this._networkService.getAll(environment.API_BASE_URL, URI.LEAVES);
     }
-    createLeave(model: Leave) {
-        return this._networkService.post(URI.LEAVES, environment.API_BASE_URL_2, model);
+    createLeave(model: Leave): Observable<any> {
+        return this._networkService.post(environment.API_BASE_URL, URI.LEAVES, model);
     }
-    editLeave(id: string, model: Leave) {
-        return this._networkService.onUpdate(`${URI.LEAVES}/${id}`, `${environment.API_BASE_URL_2}`, model);
+    editLeave(id: string, model: Leave): Observable<any> {
+        return this._networkService.onUpdate(`${environment.API_BASE_URL}`, `${URI.LEAVES}/${id}`, model);
     }
-    deleteLeave(id: string) {
-        return this._networkService.onDelete(`${URI.LEAVES}/${id}`, `${environment.API_BASE_URL_2}`);
+    deleteLeave(id: string): Observable<any> {
+        return this._networkService.onDelete(`${environment.API_BASE_URL}`, `${URI.LEAVES}/${id}`);
     }
+    forkLeaveData(): Observable<any> {
+        return forkJoin([this._networkService.getAll(`${environment.API_BASE_URL}`, URI.LEAVES), this.getLeaveType(), this.getUsers()]);
+    }
+
+    getLeaveType(): Observable<any> {
+        return this._networkService.getAll(environment.API_BASE_URL, URI.LEAVE_TYPE);
+    }
+    getUsers(): Observable<any> {
+        return this._networkService.getAll(environment.API_BASE_URL, URI.USER);
+    }
+
 }

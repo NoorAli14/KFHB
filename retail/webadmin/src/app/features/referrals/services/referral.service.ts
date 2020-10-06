@@ -8,20 +8,11 @@ import { environment } from '../../../../environments/environment';
     providedIn: 'root',
 })
 export class ReferralService {
-    modules: Array<any> = [];
     constructor(private _networkService: NetworkService) { }
-    getTransactions = () => {
-        return this._networkService.getAll(URI.REFERRALTRANSACTIONS, environment.API_BASE_URL);
+    getTransactions(): Observable<any> {
+        return this._networkService.getAll(environment.API_BASE_URL_2, URI.REFERRAL_TRANSACTIONS);
     }
-    getTransactionsReport = () => {
-        return this._networkService.getAll(URI.TRANSACTIONSREPORT, environment.API_BASE_URL);
+    getTransactionsReport(): Observable<any> {
+        return this._networkService.getAll(environment.API_BASE_URL_2, URI.REFERRAL_TRANSACTIONS_REPORT);
     }
-    // forkUserData() {
-    //     return forkJoin([this.getUsers(), this.getRoles(),this._refService.getCountries()]);
-    // }
-    // mapModules(modules) {
-    //     this.modules = [];
-    //     this.makeFlat(modules, '');
-    //     return this.modules;
-    // }
 }

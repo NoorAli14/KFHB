@@ -103,7 +103,7 @@ export class FuseShortcutsComponent implements OnInit, AfterViewInit, OnDestroy
             //         url  : '/apps/todo'
             //     }
             // ];
-            this.shortcutItems=[];
+            this.shortcutItems = [];
         }
 
     }

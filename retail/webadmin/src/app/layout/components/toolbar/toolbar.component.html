@@ -13,7 +13,7 @@
 
             <div fxLayout="row" fxLayoutAlign="start center" *ngIf="horizontalNavbar">
                 <div class="logo ml-16">
-                    <img class="logo-icon" src="assets/images/logos/fuse.svg">
+                    <img class="logo-icon" src="assets/images/logos/rubix-icon.png">
                 </div>
             </div>
 
@@ -28,7 +28,7 @@
             <button mat-button [matMenuTriggerFor]="userMenu"
                     class="user-button">
                 <div fxLayout="row" fxLayoutAlign="center center">
-                    <img class="avatar mr-0 mr-sm-16 " src="assets/images/avatars/user-circle.svg">
+                    <img class="avatar p-2" src="assets/images/avatars/user-circle.svg">
                     <span class="username mr-12" fxHide fxShow.gt-sm>{{user?.firstName}}</span>
                     <mat-icon class="s-16" fxHide.xs>keyboard_arrow_down</mat-icon>
                 </div>
@@ -58,7 +58,7 @@
                     class="language-button"
                     [matMenuTriggerFor]="languageMenu">
                 <div fxLayout="row" fxLayoutAlign="center center">
-                    <img class="flag  mr-8" [src]="'assets/icons/flags/'+selectedLanguage.flag+'.png'">
+                    <img class="flag mr-8" [src]="'assets/icons/flags/'+selectedLanguage.flag+'.png'">
                     <span class="iso text-uppercase">{{selectedLanguage.id}}</span>
                 </div>
             </button>

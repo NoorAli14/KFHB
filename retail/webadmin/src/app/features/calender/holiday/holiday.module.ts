@@ -7,11 +7,11 @@ import { FuseSidebarModule } from '@fuse/components';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { MaterialModule } from '@shared/modules/material/material.module';
 import { SharedModule } from '@shared/shared.module';
-import { HolidayComponent } from './holiday/holiday.component';
+import { HolidayComponent } from './views/holiday.component';
 
 
 @NgModule({
-  declarations: [HolidayFormComponent,HolidayComponent],
+  declarations: [HolidayFormComponent, HolidayComponent],
   imports: [
     CommonModule,
     HolidayRoutingModule,

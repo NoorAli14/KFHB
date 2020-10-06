@@ -1,9 +1,9 @@
-import { NgModule } from "@angular/core";
-import { Routes, RouterModule } from "@angular/router";
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
 
 const routes: Routes = [
   {
-    path: "",
+    path: '',
     redirectTo: 'ent', pathMatch: 'full'
   },
   {
@@ -19,10 +19,6 @@ const routes: Routes = [
     loadChildren: () => import('./setting/setting.module').then(m => m.SettingModule)
   },
   {
-    path: 'error',
-    loadChildren: () => import('./error/error.module').then(m => m.ErrorModule)
-  },
-  {
     path: 'referrals',
     loadChildren: () => import('./referrals/referrals.module').then(m => m.ReferralsModule)
   },
@@ -31,8 +27,12 @@ const routes: Routes = [
     loadChildren: () => import('./service-requests/service-requests.module').then(m => m.ServiceRequestModule)
   },
   {
-    path: '**', redirectTo: 'error'
+    path: 'error',
+    loadChildren: () => import('./error/error.module').then(m => m.ErrorModule)
   },
+  {
+    path: '**', redirectTo: 'error'
+  }
 ];
 
 @NgModule({

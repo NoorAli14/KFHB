@@ -5,7 +5,7 @@ import { RoleComponent } from './views/role/role.component';
 
 const routes: Routes = [
   {
-      path: "",
+      path: '',
       component: RoleComponent
   },
 ];

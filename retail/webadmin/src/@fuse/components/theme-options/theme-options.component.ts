@@ -187,8 +187,8 @@ export class FuseThemeOptionsComponent implements OnInit, OnDestroy
                     layout: {
                         width    : 'fullwidth',
                         navbar   : {
-                            primaryBackground  : 'grey-50',
-                            secondaryBackground: 'grey-100',
+                            primaryBackground  : 'fuse-navy-700',
+                            secondaryBackground: 'fuse-navy-900',
                             folded             : false,
                             hidden             : false,
                             position           : 'left',
@@ -223,8 +223,8 @@ export class FuseThemeOptionsComponent implements OnInit, OnDestroy
                     layout: {
                         width    : 'fullwidth',
                         navbar   : {
-                            primaryBackground  : 'grey-50',
-                            secondaryBackground: 'grey-100',
+                            primaryBackground  : 'fuse-navy-700',
+                            secondaryBackground: 'fuse-navy-900',
                             folded             : false,
                             hidden             : false,
                             position           : 'left',
@@ -259,8 +259,8 @@ export class FuseThemeOptionsComponent implements OnInit, OnDestroy
                     layout: {
                         width    : 'fullwidth',
                         navbar   : {
-                            primaryBackground  : 'grey-50',
-                            secondaryBackground: 'grey-100',
+                            primaryBackground  : 'fuse-navy-700',
+                            secondaryBackground: 'fuse-navy-900',
                             folded             : false,
                             hidden             : false,
                             position           : 'left',
@@ -295,8 +295,8 @@ export class FuseThemeOptionsComponent implements OnInit, OnDestroy
                     layout: {
                         width    : 'fullwidth',
                         navbar   : {
-                            primaryBackground  : 'grey-50',
-                            secondaryBackground: 'grey-100',
+                            primaryBackground  : 'fuse-navy-700',
+                            secondaryBackground: 'fuse-navy-900',
                             folded             : false,
                             hidden             : false,
                             position           : 'top',

@@ -1,17 +1,9 @@
-<div   class="page-container page-layout carded fullwidth inner-scroll">
-
-    <!-- TOP BACKGROUND -->
+<div class="page-container page-layout carded fullwidth inner-scroll">
     <div class="top-bg accent"></div>
-    <!-- / TOP BACKGROUND -->
-
-    <!-- CENTER -->
     <div class="center">
-
-        <!-- HEADER -->
-        <div class="header accent" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-between center">
-
-            <!-- APP TITLE -->
-            <div class="logo mb-24 mb-md-0" fxLayout="row" fxLayoutAlign="start center" >
+        <div class="header accent" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row"
+            fxLayoutAlign.gt-sm="space-between center">
+            <div class="logo mb-24 mb-md-0" fxLayout="row" fxLayoutAlign="start center">
                 <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
                     credit_card
                 </mat-icon>
@@ -19,71 +11,52 @@
                     Service Request Summary
                 </span>
             </div>
-            <!-- / APP TITLE -->
-              <!-- SEARCH -->
-              <div class="search-wrapper mx-32 mx-md-0" >
+            <div class="search-wrapper mx-32 mx-md-0">
                 <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
                     <mat-icon>search</mat-icon>
                     <input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Search .. ">
                 </div>
             </div>
-            <!-- / SEARCH -->
-          
-            <!-- ADD BUTTON -->
-            <button  mat-raised-button color="accent"  class="add-product-button fuse-white mt-24 mt-md-0">
+            <button mat-raised-button color="accent" (click)='downloadReport()' class="add-product-button fuse-white mt-24 mt-md-0">
                 <span>DOWNLOAD REPORT</span>
             </button>
-            <!-- / ADD BUTTON -->
-
         </div>
-        <!-- / HEADER -->
-
-        <!-- CONTENT CARD -->
         <div class="content-card" fusePerfectScrollbar>
-            <!-- <div class="spinner-container" *ngIf="dataSource.loading$ | async">
-                <mat-spinner></mat-spinner>
-            </div> -->
             <app-message-box [type]="errorType" [message]="responseMessage"></app-message-box>
-            <mat-table #table matSort matSortActive="requestDate" matSortDirection="asc" matSortDisableClear [dataSource]="dataSource">
-                <!-- COLUMNS AND ROWS-->
+            <mat-table #table matSort matSortActive="requestDate" matSortDirection="asc" matSortDisableClear
+                [dataSource]="dataSource">
                 <ng-container *ngFor="let key of displayedColumns" [matColumnDef]="key">
-}
-                    <mat-header-cell  *matHeaderCellDef mat-sort-header>{{ key.includes('action') ? 'Action' : camelToSentenceCase(key) }}</mat-header-cell>
-            
-                    <mat-cell *matCellDef="let element; let i = dataIndex" >
-                       
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{ key.includes('action') ? 'Action' : camelToSentenceCase(key) }}</mat-header-cell>
+                    <mat-cell *matCellDef="let element; let i = dataIndex">
                         <span *ngIf="!key.includes('action'); else action">
                             <span *ngIf="element[key]; else defaultText">
-                                <ng-container *ngIf="camelToSnakeCase(key).indexOf('created')<0; else date "  >
+                                <ng-container *ngIf="camelToSnakeCase(key).indexOf('created')<0; else date ">
                                     {{element[key]}}
                                 </ng-container>
-                            
                             </span>
                         </span>
-                        
                         <ng-template #defaultText>
                             <app-default-text></app-default-text>
                         </ng-template>
-                        
                         <ng-template #action>
-                            <mat-icon type="button" (click)="onDetail(element['id'])" matTooltip="Explore">explore</mat-icon>
-                            <mat-icon  *ngIf="element['status']==='PENDING'"  color="success"  matTooltip="Resend Invitation" type="button" (click)=" confirmDialog('invite',element['id'])">near_me</mat-icon> &nbsp;&nbsp;
+                            <mat-icon type="button" (click)="onDetail(element['id'])" matTooltip="Explore">explore
+                            </mat-icon>
+                            <mat-icon *ngIf="element['status']==='PENDING'" color="success"
+                                matTooltip="Resend Invitation" type="button"
+                                (click)=" confirmDialog('invite',element['id'])">near_me</mat-icon> &nbsp;&nbsp;
                         </ng-template>
                         <ng-template #date>
                             {{element[camelToSnakeCase(key)] | date:'mediumDate'}}
                         </ng-template>
-                        
                     </mat-cell>
                 </ng-container>
-                <!-- -->
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumns;" [@animate]="{value:'*',params:{y:'100%'}}">
                 </mat-row>
-            
             </mat-table>
-            <mat-paginator #paginator [pageIndex]="0" [pageSize]="pageSize" showFirstLastButtons [pageSizeOptions]="pageSizeOptions"></mat-paginator>
+            <mat-paginator #paginator [pageIndex]="0" [pageSize]="pageSize" showFirstLastButtons
+                [pageSizeOptions]="pageSizeOptions"></mat-paginator>
         </div>
-        <!-- / CONTENT CARD -->
     </div>
-    <!-- / CENTER -->
 </div>

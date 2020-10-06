@@ -1,8 +1,8 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatErrorComponent } from './mat-error.component';
 import { FormControl } from '@angular/forms';
 
-describe("MatErrorComponent", async () => {
+describe('MatErrorComponent', async () => {
     let component: MatErrorComponent;
     let fixture: ComponentFixture<MatErrorComponent>;
     beforeEach(async(() => {
@@ -14,10 +14,10 @@ describe("MatErrorComponent", async () => {
     beforeEach(() => {
         fixture = TestBed.createComponent(MatErrorComponent);
         component = fixture.componentInstance;
-        component.control=new FormControl();
+        component.control = new FormControl();
         fixture.detectChanges();
     });
-    it("should create MatErrorComponent", () => {
+    it('should create MatErrorComponent', () => {
         expect(component).toBeTruthy();
     });
 });
