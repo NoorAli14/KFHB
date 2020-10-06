@@ -100,7 +100,6 @@ export class InvitationComponent extends BaseComponent implements OnInit {
     }
     onSubmit = (): void => {
         let model = { ...this.invitationForm.value };
-        model.dateOfBirth = "2020-10-06";
         model = camelToSnakeCase(model);
         this._authService
             .updateInvitation(model, this.token)
