@@ -29,22 +29,41 @@
                     <mat-header-cell *matHeaderCellDef mat-sort-header>
                         {{ key.includes('action') ? 'Action' : camelToSentenceCase(key) }}</mat-header-cell>
                     <mat-cell *matCellDef="let element; let i = dataIndex" class="pl-24">
-                        <span *ngIf="!key.includes('action'); else action">
+                        <!-- <span *ngIf="!key.includes('action'); else action">
                             <span *ngIf="element[key]; else defaultText">
                                 <ng-container *ngIf="camelToSnakeCase(key).indexOf('created')<0; else date ">
                                     {{element[key]}}
                                 </ng-container>
                             </span>
+                        </span> -->
+                            <ng-container [ngSwitch]="key">
+                        <span *ngSwitchCase="'status'">
+                            <span class="status text-truncate h6 p-4 green-800 requests-status" *ngIf="element[key]=='Approved'; else noTemplate">Approved</span>
+                          <ng-template #noTemplate>
+                            <span class="status text-truncate h6 p-4 red-500 requests-status" *ngIf="element[key]=='Rejected'; else pendingTemplate"  >Rejected</span>
+                          </ng-template>
+                          <ng-template #pendingTemplate>
+                            <span class="status text-truncate h6 p-4 orange-500 requests-status">Pending</span>
+                          </ng-template>
                         </span>
-                        <ng-template #defaultText>
-                            <app-default-text></app-default-text>
-                        </ng-template>
-                        <ng-template #action>
+                        <span *ngSwitchCase="'status'">
+                            <app-status [status]="element[key]"></app-status>
+                        </span>
+                        <span *ngSwitchCase="'actions'">
                             <mat-icon type="button" (click)="onDetail(element['id'])" matTooltip="Explore">explore
                             </mat-icon>
                             <mat-icon *ngIf="element['status']==='PENDING'" color="success"
                                 matTooltip="Resend Invitation" type="button"
                                 (click)=" confirmDialog('invite',element['id'])">near_me</mat-icon> &nbsp;&nbsp;
+                        </span>
+                        <span  *ngSwitchDefault>
+                            <span *ngIf="element[key]; else defaultText">
+                                {{element[key] }}
+                            </span>
+                        </span>
+                    </ng-container>
+                        <ng-template #defaultText>
+                            <app-default-text></app-default-text>
                         </ng-template>
                         <ng-template #date>
                             {{element[camelToSnakeCase(key)] | date:'mediumDate'}}

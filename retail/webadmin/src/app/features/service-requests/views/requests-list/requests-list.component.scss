@@ -1,0 +1,10 @@
+@import "src/@fuse/scss/fuse";
+
+app-requests-list {
+    width: 100%;
+    .requests-status{
+        border-radius: 6%;
+        width: 90px;
+        text-align: center;
+    }
+}

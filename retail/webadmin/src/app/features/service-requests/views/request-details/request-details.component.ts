@@ -81,6 +81,7 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
         for (let i = 0; i < responseDocument.length; i++) {
           this.documents.push(responseDocument[i])
         }
+        console.log(this.documents);
         this.updateGrid(this.documents);
         if (response.data.status != 'Pending') {
           this.btnDisable = true;
@@ -135,20 +136,19 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
-  downlaodReport(data): void {
-    let ex = 'png';
-    this.checkType(ex);
+  downlaodReport(data,extention): void {
+    this.checkType(extention);
     const date = new Date();
     const linkSource = 'data:' + this.contentType + ',' + data;
     const downloadLink = document.createElement('a');
-    const fileName = 'ServiceRequest' + date.getDate() + '.' + date.getMonth() + 1 + '.' + date.getFullYear() + '.' + ex;
+    const fileName = 'ServiceRequest' + date.getDate() + '.' + date.getMonth() + 1 + '.' + date.getFullYear() + '.' + extention;
     downloadLink.href = linkSource;
     downloadLink.download = fileName;
     downloadLink.click();
 
   }
-  viewDocument(data): void {
-    this.checkType("png")
+  viewDocument(data,extention): void {
+    this.checkType(extention)
     var byteCharacters = atob(data);
     var byteNumbers = new Array(byteCharacters.length);
     for (var i = 0; i < byteCharacters.length; i++) {

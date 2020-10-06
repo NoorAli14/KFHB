@@ -59,9 +59,9 @@
                             </span>
                         </span>
                         <ng-template #viewDownloadPDF>
-                            <mat-icon type="button" (click)="downlaodReport(element. image)" class="secondary-text"
+                            <mat-icon type="button" (click)="downlaodReport(element.image,element.type)" class="secondary-text"
                                 matTooltip="Download Document">save_alt</mat-icon> &nbsp;&nbsp;
-                            <mat-icon type="button" (click)="viewDocument(element.image)" class="secondary-text"
+                            <mat-icon type="button" (click)="viewDocument(element.image,element.type)" class="secondary-text"
                                 matTooltip="View Document">remove_red_eye</mat-icon>
                         </ng-template>
                     </mat-cell>
