@@ -27,11 +27,11 @@ export class AuthenticationService {
         private _refService: ReferenceService
     ) {}
 
-    get accessToken(): any {
+  public  get accessToken(): any {
         return this.storage.getItem(APP_CONST.ACCESS_TOKEN);
     }
 
-    set accessToken(token) {
+    public  set accessToken(token) {
         this.storage.setItem(APP_CONST.ACCESS_TOKEN, token);
     }
 

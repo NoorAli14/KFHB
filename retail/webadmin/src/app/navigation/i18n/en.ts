@@ -3,6 +3,13 @@ export const locale = {
     data: {
         FEATURES: {
             TITLE: 'Features',
+            AGENT_PORTAL: {
+                TITLE: 'Agent Portal',
+                VIDEO: {
+                    TITLE: 'Video',
+                    BADGE: '25',
+                }
+            },
             ENTITLEMENT: {
                 TITLE: 'Entitlement',
                 USER: {

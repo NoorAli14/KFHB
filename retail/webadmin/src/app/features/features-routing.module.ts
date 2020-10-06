@@ -23,6 +23,10 @@ const routes: Routes = [
     loadChildren: () => import('./error/error.module').then(m => m.ErrorModule)
   },
   {
+    path: 'video',
+    loadChildren: () => import('./video/video.module').then(m => m.VideoModule)
+  },
+  {
     path: '**', redirectTo: 'error'
   }
 ];

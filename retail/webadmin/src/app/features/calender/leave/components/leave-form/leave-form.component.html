@@ -38,7 +38,7 @@
                             <app-mat-error [control]="leaveForm.get('startDate')"></app-mat-error>
                         </mat-error>
                     </mat-form-field>
-                    <mat-form-field appearance="outline" fxFlex="48" class="pl-4">
+                    <mat-form-field appearance="outline" fxFlex="48" class="pr-4">
                         <mat-label>End Date<app-required-indicator></app-required-indicator>
                         </mat-label>
                         <input matInput [matDatepicker]="picker2" formControlName="endDate" />
@@ -78,7 +78,7 @@
                         </mat-error>
                     </mat-form-field>
 
-                    <mat-form-field appearance="outline" fxFlex="100" class="pr-24">
+                    <mat-form-field appearance="outline" fxFlex="100" class="pr-16">
                         <mat-label>Remarks <app-required-indicator></app-required-indicator>
                         </mat-label>
                         <textarea matInput formControlName="remarks"></textarea>

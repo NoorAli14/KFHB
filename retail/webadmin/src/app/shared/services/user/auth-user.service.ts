@@ -16,6 +16,18 @@ export class AuthUserService {
     private _sidebarModules: any;
     private config = [
         {
+            id: 'Agent Portal',
+            icon: 'voice_over_off',
+            url: '',
+            translate: 'FEATURES.AGENT_PORTAL.TITLE',
+        },
+        {
+            id: 'Video',
+            icon: 'videocam',
+            url: '/video',
+            translate: 'FEATURES.AGENT_PORTAL.VIDEO.TITLE',
+        },
+        {
             id: 'Entitlement',
             icon: 'assignment_ind',
             url: '',
