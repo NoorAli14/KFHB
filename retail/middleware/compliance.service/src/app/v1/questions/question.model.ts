@@ -1,4 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { MaxLength } from 'class-validator';
 import { Option } from '../options/option.model';
 import { Section } from '../sections/section.model';
 
@@ -8,15 +9,19 @@ export class Question {
   id: string;
 
   @Field()
+  @MaxLength(255)
   title: string;
 
   @Field()
+  @MaxLength(255)
   title_ar: string;
 
   @Field()
+  @MaxLength(255)
   type: string;
 
   @Field()
+  @MaxLength(255)
   rules: string;
 
   @Field()

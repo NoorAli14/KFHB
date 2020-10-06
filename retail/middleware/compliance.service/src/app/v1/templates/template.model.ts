@@ -1,4 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { MaxLength } from 'class-validator';
 import { Section } from '../sections/section.model';
 
 @ObjectType()
@@ -7,9 +8,11 @@ export class Template {
   id: string;
 
   @Field()
+  @MaxLength(255)
   name: string;
 
   @Field()
+  @MaxLength(255)
   name_ar: string;
 
   @Field(() => [Section], { nullable: true })

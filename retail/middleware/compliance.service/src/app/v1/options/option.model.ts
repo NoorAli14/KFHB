@@ -1,4 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { IsUUID, MaxLength } from 'class-validator';
 import { Question } from '../questions/question.model';
 
 @ObjectType()
@@ -7,12 +8,15 @@ export class Option {
   id: string;
 
   @Field()
+  @MaxLength(255)
   name: string;
 
   @Field()
+  @MaxLength(255)
   name_ar: string;
 
   @Field({ nullable: true })
+  @IsUUID()
   question_id: string;
 
   @Field(() => Question, { nullable: true })

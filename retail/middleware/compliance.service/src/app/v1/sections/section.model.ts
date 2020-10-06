@@ -1,6 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Template } from '../templates/template.model';
 import { Question } from '../questions/question.model';
+import { MaxLength } from 'class-validator';
 
 @ObjectType()
 export class Section {
@@ -11,12 +12,15 @@ export class Section {
   tenant_id: string;
 
   @Field()
+  @MaxLength(255)
   name: string;
 
   @Field()
+  @MaxLength(255)
   name_ar: string;
 
   @Field()
+  @MaxLength(255)
   level: string;
 
   @Field(() => [Question], { nullable: true })
