@@ -62,7 +62,7 @@ describe('Complaince Module (e2e)', () => {
     return request(app.getHttpServer())
       .post('/graphql')
       .send({
-        query: `{questionsList{title title_ar status level}}`,
+        query: `{questionsList{id title title_ar status}}`,
       })
       .set(headers)
       .expect(({ body }) => {
@@ -79,7 +79,7 @@ describe('Complaince Module (e2e)', () => {
     return request(app.getHttpServer())
       .post('/graphql')
       .send({
-        query: `{findQuestion(id: "d329c531-9e7a-4b55-923f-04fc62aee79d") {title title_ar status level}}`,
+        query: `{findQuestion(id: "d329c531-9e7a-4b55-923f-04fc62aee79d") {id title title_ar status}}`,
       })
       .set(headers)
       .expect(({ body }) => {
