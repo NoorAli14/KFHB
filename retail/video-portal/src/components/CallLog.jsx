@@ -46,8 +46,9 @@ class CallLog extends React.Component {
         }
 
         let customerDetails = decryptData(localStorage.getItem('customerDetails'), localStorage.getItem('userId'));
-        let role = customerDetails.roles[0].name.toLowerCase();
-        if (role === "super admin") {
+        let role = localStorage.getItem('userRole')
+
+        if (role === "admin") {
             this.props.history.push('/reports')
         }
 

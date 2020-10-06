@@ -111,7 +111,6 @@ export class AuthUserService {
     }
     setData(response): void {
         const clone = cloneDeep(response);
-        debugger
         const sidebarModules = this.configureModules(clone.modules);
         this.modules = sidebarModules;
         this.User = cloneDeep(response);

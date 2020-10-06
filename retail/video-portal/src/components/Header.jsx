@@ -90,7 +90,7 @@ class Header extends React.Component {
     render() {
         let { calling, dashboard, customerlist, reports } = this.state;
         let customerDetails = decryptData(localStorage.getItem('customerDetails'), localStorage.getItem('userId'));
-        let role = customerDetails.roles[0].name.toLowerCase();
+        let role = localStorage.getItem('userRole')
 
         return (
             <>

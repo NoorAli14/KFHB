@@ -20,7 +20,8 @@ class App extends React.Component {
     this.state = {
       isLoading: false,
       token: null,
-      xid: null
+      xid: null,
+      userRole:''
     }
     this.validateToken = this.validateToken.bind(this);
     this.reInitialize = this.reInitialize.bind(this);
@@ -81,6 +82,20 @@ class App extends React.Component {
     }, 60000);
 
   }
+  findPermission(modules, id) {
+    let role=''
+    modules.forEach((element) => {
+        const video= element.permissions.find(x=>x.record_type==='attend');
+        if(video){
+          this.setState({userRole:'agent'}) ;
+          return;
+        }
+        if (!element.sub_modules) { return; }
+        this.findPermission(element.sub_modules, id);
+        
+    });
+   
+}
   validateToken() {
     const query = queryString.parse(window.location.search);
     let config = {
@@ -99,10 +114,13 @@ class App extends React.Component {
       .then(res => {
         
         if (res.data !== undefined) {
-          debugger
           let userName = res.data.first_name + '' + res.data.last_name
           let encryptdata = encryptData(res.data, userName);
-          let  role= res.data.roles[0].name.toLowerCase();
+          this.findPermission(res.data.modules);
+          let  role= this.state.userRole;
+          role = role ? role : 'admin';
+          localStorage.setItem('userRole',role)
+
           localStorage.setItem('customerDetails', encryptdata)
           localStorage.setItem('channel', query.channelid)
           localStorage.setItem('tenant', query.tenantid)
@@ -110,7 +128,7 @@ class App extends React.Component {
           localStorage.setItem('id',  res.data.id)
           localStorage.setItem('userId',  userName)
           let userType = 1;
-          if (role === "super admin") {
+          if (role === "admin") {
             userType = 0;
           } else if (role === "agent") {
             userType = 1;
@@ -137,7 +155,7 @@ class App extends React.Component {
                       }, () => {
                         if (role === "agent") {
                           window.location.replace('/dashboard')
-                        } else if (role === "super admin") {
+                        } else if (role === "admin") {
                           window.location.replace('/reports')
                         }
                       })
