@@ -85,13 +85,13 @@
                     <div class="logo  mb-md-0" fxLayout="row" fxLayoutAlign="start center">
                     </div>
                     <div class="d-flex justify-content-end ">
-                        <button mat-raised-button color="accent" (click)="updateStatus('Approved')"
+                        <button mat-raised-button color="accent"  (click)="confirmDialog('Approved')"
                             [ngClass]='status=="Approved"?!btnDisable?"light-green":"green-500-bg green-50-fg":"fuse-white"'
                             [disabled]='btnDisable' class="add-product-button    mt-md-0">
                             <span>COMPELETED</span>
                         </button>
                         &nbsp;
-                        <button mat-raised-button color="accent" (click)="updateStatus('Rejected')"
+                        <button mat-raised-button color="accent" (click)="confirmDialog('Rejected')"
                             [ngClass]='status=="Rejected"?!btnDisable?"red":"red-500-bg red-50-fg":"fuse-white"'
                             [disabled]='btnDisable' class="add-product-button   mt-md-0">
                             <span>REJECTED</span>

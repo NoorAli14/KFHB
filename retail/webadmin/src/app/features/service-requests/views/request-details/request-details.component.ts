@@ -114,8 +114,8 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
   camelToSentenceCase(text): void {
     return camelToSentenceCase(text);
   }
-  confirmDialog(type, id): void {
-    const message = type === 'invite' ? removeRandom(MESSAGES.RESEND_INVITE()) : removeRandom(MESSAGES.REMOVE_CONFIRMATION());
+  confirmDialog(status): void {
+    const message = status === 'Rejected' ? MESSAGES.CHANGE_STATUS('Reject') : MESSAGES.CHANGE_STATUS('Approve');
     const dialogData = new ConfirmDialogModel('Confirm Action', message);
     const dialogRef = this._matDialog.open(ConfirmDialogComponent, {
       data: dialogData,
@@ -123,9 +123,9 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
       panelClass: 'app-confirm-dialog',
       hasBackdrop: true,
     });
-    dialogRef.afterClosed().subscribe((status) => {
-      if (status) {
-        //   type === 'invite' ? this.resendInvitation(id) : this.deleteUser(id)
+    dialogRef.afterClosed().subscribe((s) => {
+      if (s) {
+        this.updateStatus(status);
       }
     });
   }
@@ -135,7 +135,7 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
-  downlaodReport(data,extention): void {
+  downlaodReport(data, extention): void {
     this.checkType(extention);
     const date = new Date();
     const linkSource = 'data:' + this.contentType + ',' + data;
@@ -146,7 +146,7 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
     downloadLink.click();
 
   }
-  viewDocument(data,extention): void {
+  viewDocument(data, extention): void {
     this.checkType(extention)
     var byteCharacters = atob(data);
     var byteNumbers = new Array(byteCharacters.length);

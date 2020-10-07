@@ -1,3 +1,5 @@
+import { stat } from 'fs';
+
 export const MESSAGES = {
     UNKNOWN: () => `We are unable to process the request. ${getRandomNumber()}`,
     REMOVE_CONFIRMATION: () => `Are you sure you want to delete?`,
@@ -17,6 +19,7 @@ export const MESSAGES = {
     INVITATION_ACCEPTED: () => `Your profile updated successfully. Login to continue. ${getRandomNumber()}`,
     CUSTOM: (message) => `${message} ${getRandomNumber()}`,
     EXISTS: (type) => `${type} already exists. ${getRandomNumber()}`,
+    CHANGE_STATUS: (status) => `Are you sure you want to ${status} ?`,
 };
 const getRandomNumber = () => {
     return Math.floor(Math.random() * 11);
