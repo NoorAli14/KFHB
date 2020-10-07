@@ -11,7 +11,11 @@ import { ApplicationModule } from '@rubix/app';
 import { NewAppointmentInput } from './appointment.dto';
 import { createQuery, createQueryObject } from '@common/tests/e2e.tests';
 import { uuidV4 } from '@common/utilities';
-import { APPOINTMENT_STATUS, GENDER } from '@common/constants';
+import {
+  APPOINTMENT_QUERY,
+  APPOINTMENT_STATUS,
+  GENDER,
+} from '@common/constants';
 import { Appointment } from './appointment.model';
 
 describe('Video Call Module (e2e)', () => {
@@ -60,7 +64,7 @@ describe('Video Call Module (e2e)', () => {
     return request(app.getHttpServer())
       .post('/graphql')
       .send({
-        query: `{findAppointmentByUserId(user_id: "7d55a5db-739a-4b80-bd37-d3d30358d655"){id call_time gender status created_on created_by updated_by updated_by}}`,
+        query: `{findAppointmentByUserId(user_id: "7d55a5db-739a-4b80-bd37-d3d30358d655"){${APPOINTMENT_QUERY}}}`,
       })
       .set(headers)
       .expect(async ({ body }) => {
@@ -86,34 +90,34 @@ describe('Video Call Module (e2e)', () => {
       .expect(200);
   });
 
-  // it('should successfully transform and validate appointment [appointment id]', done => {
-  //   return request(app.getHttpServer())
-  //     .post('/graphql')
-  //     .send({
-  //       query: `{findAppointment(appointment_id: "1b9ed674-7afe-4664-ab8d-50f9de74062a"){id call_time gender status created_on created_by updated_by updated_by}}`,
-  //     })
-  //     .set(headers)
-  //     .expect(async ({ body }) => {
-  //       const data = body?.data?.findAppointment;
-  //       if (data) {
-  //         const appointmentJson: string = JSON.stringify(data);
+  it('should successfully transform and validate appointment [appointment id]', done => {
+    return request(app.getHttpServer())
+      .post('/graphql')
+      .send({
+        query: `{findAppointment(appointment_id: "1b9ed674-7afe-4664-ab8d-50f9de74062a"){${APPOINTMENT_QUERY}}}`,
+      })
+      .set(headers)
+      .expect(async ({ body }) => {
+        const data = body?.data?.findAppointment;
+        if (data) {
+          const appointmentJson: string = JSON.stringify(data);
 
-  //         const transformedResponse: Appointment = (await transformAndValidate(
-  //           Appointment,
-  //           appointmentJson,
-  //         )) as Appointment;
-  //         expect(transformedResponse).toBeDefined();
-  //         expect(transformedResponse).toBeInstanceOf(Object);
-  //         expect(
-  //           transformedResponse.id === '1b9ed674-7afe-4664-ab8d-50f9de74062a',
-  //         ).toBeTruthy();
-  //       } else {
-  //         expect(data).toBeUndefined();
-  //       }
-  //     })
-  //     .end(done)
-  //     .expect(200);
-  // });
+          const transformedResponse: Appointment = (await transformAndValidate(
+            Appointment,
+            appointmentJson,
+          )) as Appointment;
+          expect(transformedResponse).toBeDefined();
+          expect(transformedResponse).toBeInstanceOf(Object);
+          expect(
+            transformedResponse.id === '1b9ed674-7afe-4664-ab8d-50f9de74062a',
+          ).toBeTruthy();
+        } else {
+          expect(data).toBeUndefined();
+        }
+      })
+      .end(done)
+      .expect(200);
+  });
 
   // it('should create and return appoinment object', done => {
   //   appointment = {

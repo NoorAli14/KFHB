@@ -49,3 +49,6 @@ export const DATABASE_MIGRATION_TABLE_NAME =
   process.env.DATABASE_MIGRATION_TABLE_NAME || 'RUBIX_VIDEO_MIGRATION';
 export const DATABASE_MIGRATION_DIRECTORY = 'src/core/database/migrations';
 export const DATABASE_SEED_DIRECTORY = 'src/core/database/seeds';
+
+export const APPOINTMENT_QUERY =
+  'id call_time gender status created_on created_by updated_by updated_by';
