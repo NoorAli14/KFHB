@@ -161,11 +161,23 @@ export const MODULES = [
     ],
   },
   {
-    name: 'Video Call',
-    sub_modules: [],
+    name: 'Agent Portal',
     permissions: [
       {
-        name: 'attend',
+        name: 'view',
+      },
+    ],
+    sub_modules: [
+      {
+        name: 'Video',
+        permissions: [
+          {
+            name: 'view',
+          },
+          {
+            name: 'attend',
+          },
+        ],
       },
     ],
   },

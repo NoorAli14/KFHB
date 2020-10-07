@@ -65,13 +65,6 @@ export class RolesResolver {
     @Fields() output: string[],
     @CurrentUser() currentUser: ICurrentUser,
   ): Promise<Role> {
-
-    console.log("Add Role..........................................");
-    console.log("Add Role..........................................");
-    console.log("Add Role..........................................");
-    console.log(input)
-    console.log(output)
-    console.log(currentUser);
     return this.roleService.create(currentUser, input, output);
   }
 
