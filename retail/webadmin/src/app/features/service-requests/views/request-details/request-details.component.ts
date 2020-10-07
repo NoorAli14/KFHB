@@ -81,7 +81,6 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
         for (let i = 0; i < responseDocument.length; i++) {
           this.documents.push(responseDocument[i])
         }
-        console.log(this.documents);
         this.updateGrid(this.documents);
         if (response.data.status != 'Pending') {
           this.btnDisable = true;
@@ -155,7 +154,6 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
       byteNumbers[i] = byteCharacters.charCodeAt(i);
     }
     var byteArray = new Uint8Array(byteNumbers);
-    console.log(byteNumbers);
     var file = new Blob([byteArray], { type: this.contentType });
     var fileURL = URL.createObjectURL(file);
     window.open(fileURL);
