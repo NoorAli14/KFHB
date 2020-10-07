@@ -2,13 +2,14 @@ import * as request from 'supertest';
 import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { ApplicationModule } from '@rubix/app';
-import { createQueryObject } from '@common/tests/e2e.tests';
+import { createQueryObject, createQuery } from '@common/tests/e2e.tests';
 import { NewTemplateResponseInput } from './template-response.dto';
 
 import {
   transformAndValidate,
   transformAndValidateSync,
 } from 'class-transformer-validator';
+import { TemplateResponse } from './template-response.model';
 
 describe('Complince Module (e2e)', () => {
   let templateResponse: NewTemplateResponseInput;
@@ -56,11 +57,11 @@ describe('Complince Module (e2e)', () => {
       .expect(async ({ body }) => {
         const data = body?.data?.findTemplateResponseByUserId;
         if (data) {
-          const sectionJson: string = JSON.stringify(data);
+          const templateResponseJson: string = JSON.stringify(data);
 
           // const transformedResponse: NewTemplateResponseInput[] = (await transformAndValidate(
           //   NewTemplateResponseInput,
-          //   sectionJson,
+          //   templateResponseJson,
           // )) as NewTemplateResponseInput[];
           expect(data).toBeDefined();
           expect(data).toBeInstanceOf(Array);
@@ -89,16 +90,16 @@ describe('Complince Module (e2e)', () => {
       })
       .set(headers)
       .expect(async ({ body }) => {
-        const data = body?.data?.findSection;
+        const data = body?.data?.findTemplateResponseByUserId;
         if (data) {
           if (data) {
-            const sectionJson: string = JSON.stringify(data);
-            const transformedSection: NewTemplateResponseInput[] = (await transformAndValidate(
+            const templateResponseJson: string = JSON.stringify(data);
+            const transformedTemplateResponse: NewTemplateResponseInput[] = (await transformAndValidate(
               NewTemplateResponseInput,
-              sectionJson,
+              templateResponseJson,
             )) as NewTemplateResponseInput[];
             expect(data).toBeDefined();
-            expect(transformedSection).toBeInstanceOf(NewTemplateResponseInput);
+            expect(transformedTemplateResponse).toBeInstanceOf(Array);
           }
         } else {
           expect(data).toBeUndefined();
@@ -143,16 +144,26 @@ describe('Complince Module (e2e)', () => {
     return request(app.getHttpServer())
       .post('/graphql')
       .send({
-        mutation: `{addTemplateResponse(input: ${createQueryObject(
-          templateResponses,
-        )}){id status remaks}}`,
+        query: createQuery(
+          'addTemplateResponse',
+          templateResponse,
+          'id status remarks',
+        ),
       })
       .set(headers)
-      .expect(({ body }) => {
-        console.log(body, '-=-=-=-=-');
+      .expect(async ({ body }) => {
         const data = body?.data?.addTemplateResponse;
-        console.log(data, '-=-=-=-=-');
         if (data) {
+          const templateResponseJson: string = JSON.stringify(data);
+          const transformedTemplateResponse: NewTemplateResponseInput[] = (await transformAndValidate(
+            NewTemplateResponseInput,
+            templateResponseJson,
+          )) as NewTemplateResponseInput[];
+
+          expect(
+            transformedTemplateResponse['status'] === 'ACTIVE',
+          ).toBeTruthy();
+          expect(transformedTemplateResponse).toBeInstanceOf(TemplateResponse);
         } else {
           expect(data).toBeUndefined();
         }
