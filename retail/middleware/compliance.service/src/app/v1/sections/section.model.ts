@@ -20,18 +20,20 @@ export class Section {
   id: string;
 
   @Field({ nullable: true })
+  @IsUUID()
+  @IsNotEmpty()
   tenant_id: string;
 
   @Field()
-  @MaxLength(255)
   @IsString()
   @IsNotEmpty()
+  @MaxLength(255)
   name: string;
 
   @Field()
-  @MaxLength(255)
   @IsString()
   @IsNotEmpty()
+  @MaxLength(255)
   name_ar: string;
 
   @Field()
