@@ -39,7 +39,6 @@ export class RoleComponent extends BaseComponent implements OnInit {
         'roleName',
         'description',
         'createdOn',
-        'status',
         'expandIcon',
         'action',
     ];

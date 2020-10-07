@@ -61,7 +61,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
                 this.responseMessage = MESSAGES.LOGGED_IN();
                 setTimeout(() => {
                     this.router.navigateByUrl(
-                        this.returnUrl ? this.returnUrl : '/ent/user'
+                        this.returnUrl ? this.returnUrl : '/dashboard'
                     );
                 }, 1000);
             },

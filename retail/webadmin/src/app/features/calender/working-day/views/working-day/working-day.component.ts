@@ -44,7 +44,6 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
         'endTimeLocal',
         'fullDay',
         'remarks',
-        'status',
         'actions',
     ];
     pageSize: number = CONFIG.PAGE_SIZE;

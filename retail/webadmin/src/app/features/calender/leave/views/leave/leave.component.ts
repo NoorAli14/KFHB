@@ -29,7 +29,6 @@ export class LeaveComponent extends BaseComponent implements OnInit {
         'leaveTypeId',
         'startDate',
         'endDate',
-        'status',
         'action',
     ];
     pageSize: number = CONFIG.PAGE_SIZE;

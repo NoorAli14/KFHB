@@ -32,7 +32,6 @@ export class HolidayComponent extends BaseComponent implements OnInit {
         'holidayDate',
         'description',
         'remarks',
-        'status',
         'action',
     ];
 
