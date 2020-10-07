@@ -1,5 +1,13 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { PLATFORMS } from '@common/constants';
+import { APPOINTMENT_STATUS, GENDER, PLATFORMS } from '@common/constants';
+import {
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUUID,
+  MaxLength,
+} from 'class-validator';
 
 @ObjectType()
 export class User {
@@ -52,15 +60,26 @@ export class User {
 @ObjectType()
 export class Appointment {
   @Field()
+  @IsUUID()
   id: string;
 
   @Field({ nullable: true })
-  call_time: Date;
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(255)
+  call_time: string;
 
   @Field({ nullable: true })
-  gender: string;
+  @IsString()
+  @IsOptional()
+  @IsEnum(Object.keys(GENDER))
+  @MaxLength(25)
+  gender?: string;
 
   @Field({ nullable: true })
+  @IsString()
+  @MaxLength(25)
+  @IsEnum(Object.keys(Object.keys(APPOINTMENT_STATUS)))
   status: string;
 
   user_id?: string;
@@ -69,8 +88,20 @@ export class Appointment {
   user?: User;
 
   @Field()
-  created_on: Date;
+  @IsNotEmpty()
+  created_on: string;
 
   @Field()
-  updated_on: Date;
+  @IsNotEmpty()
+  @IsString()
+  created_by: string;
+
+  @Field()
+  @IsNotEmpty()
+  updated_on: string;
+
+  @Field()
+  @IsNotEmpty()
+  @IsString()
+  updated_by: string;
 }

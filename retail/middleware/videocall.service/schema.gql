@@ -14,12 +14,14 @@ directive @provides(fields: String!) on FIELD_DEFINITION
 
 type Appointment {
   id: String!
-  call_time: DateTime
+  call_time: String
   gender: String
   status: String
   user: User!
-  created_on: DateTime!
-  updated_on: DateTime!
+  created_on: String!
+  created_by: String!
+  updated_on: String!
+  updated_by: String!
 }
 
 enum APPOINTMENT_STATUS {

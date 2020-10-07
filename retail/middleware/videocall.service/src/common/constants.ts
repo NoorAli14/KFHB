@@ -29,6 +29,12 @@ export enum PLATFORMS {
   IOS = 'ios',
   WEB = 'web',
 }
+
+export const CREATED_BY: Record<string, string> = {
+  SYSTEM: 'SYSTEM',
+  API: 'API',
+};
+
 registerEnumType(PLATFORMS, { name: 'MOBILE_PLATFORMS' });
 
 export const DATABASE_UUID_METHOD = (): string => 'NEWID()';

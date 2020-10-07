@@ -9,7 +9,7 @@ export function createQuery(
 ): string {
   const result = `
     mutation {
-      ${method}(input: ${createQueryObject(input)}) {
+      ${method}(appointment: ${createQueryObject(input)}) {
        ${returnkeys}
       }
     }`;
