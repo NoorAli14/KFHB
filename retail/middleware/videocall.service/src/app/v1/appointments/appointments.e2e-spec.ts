@@ -176,27 +176,6 @@ describe('Video Call Module (e2e)', () => {
     user_id: uuidV4(),
   };
 
-  // it(`mutation create appointment`, done => {
-  //   return request(app.getHttpServer())
-  //     .post('/graphql')
-  //     .send({
-  //       mutation: createQuery(
-  //         'addAppointment',
-  //         createAppointmentInput,
-  //         'id status gender',
-  //       ),
-  //     })
-  //     .set(headers)
-  //     .expect(({ body, ...rest }) => {
-  //       // console.log(body, '-=-=- mutation create appointment -=-=-', rest);
-  //       const data = body.data.addAppointment;
-  //       expect(data.status).toBe(createAppointmentInput.status);
-  //       // expect(data.gender).toBe(createAppointmentInput.gender);
-  //     })
-  //     .expect(200)
-  //     .end(done);
-  // });
-
   it(`should return error, appointment not found `, done => {
     return request(app.getHttpServer())
       .post('/graphql')
