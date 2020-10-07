@@ -1,13 +1,14 @@
 import * as request from 'supertest';
 import { Test } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
-import { ApplicationModule } from '@rubix/app';
-import { NewQuestionInput } from './question.dto';
-
 import {
   transformAndValidate,
   transformAndValidateSync,
 } from 'class-transformer-validator';
+
+import { INestApplication } from '@nestjs/common';
+import { ApplicationModule } from '@rubix/app';
+
+import { NewQuestionInput } from './question.dto';
 import { Question } from './question.model';
 
 describe('Complaince Module (e2e)', () => {
