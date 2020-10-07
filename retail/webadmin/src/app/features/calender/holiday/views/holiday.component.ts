@@ -32,7 +32,6 @@ export class HolidayComponent extends BaseComponent implements OnInit {
         'holidayDate',
         'description',
         'remarks',
-        'status',
         'action',
     ];
 
@@ -65,7 +64,7 @@ export class HolidayComponent extends BaseComponent implements OnInit {
                 this.dataSource.sort = this.sort;
             },
             (error) => {
-                console.log(error);
+              this._notifier.error(MESSAGES.UNKNOWN);
             }
         );
     }
@@ -79,9 +78,7 @@ export class HolidayComponent extends BaseComponent implements OnInit {
                 hasBackdrop: true,
             })
             .componentInstance.sendResponse.subscribe((response) => {
-                if (!response) {
-                    this._errorEmitService.emit('', '');
-                } else if (response.id) {
+                 if (response.id) {
                     _this.editHoliday(response);
                 } else {
                     _this.createHoliday(response);
@@ -95,42 +92,35 @@ export class HolidayComponent extends BaseComponent implements OnInit {
                 const data: any = this.dataSource.data;
                 data.unshift(snakeToCamelObject(response));
                 this.updateGrid(data);
-                this.errorType = 'success';
-                this.responseMessage = MESSAGES.CREATED('Holiday');
                 this._matDialog.closeAll();
-                this.hideMessage();
+                this._notifier.success(MESSAGES.CREATED('Holiday'));
             },
             (response) => {
-                this._errorEmitService.emit(MESSAGES.UNKNOWN(), 'error');
+                  this._notifier.error(MESSAGES.UNKNOWN);
             }
         );
     }
-    hideMessage  = (): void => {
-        setTimeout(() => {
-            this.responseMessage = '';
-        }, 2000);
-    }
+   
     editHoliday  = (model: Holiday): void => {
         this._service.editHoliday(model.id, model).subscribe(
             (response) => {
-                this.errorType = 'success';
-                this.responseMessage = MESSAGES.UPDATED('Holiday');
+               
                 const index = this.dataSource.data.findIndex(
                     (x) => x.id === model.id
                 );
-                this.hideMessage();
+                this._notifier.success(MESSAGES.UPDATED('Holiday'));
                 const mapped: any = snakeToCamelObject(response);
                 this.holidays[index] = mapped;
                 this.updateGrid(this.holidays);
                 this._matDialog.closeAll();
             },
             (response) => {
-                this._errorEmitService.emit(MESSAGES.UNKNOWN(), 'error');
+                  this._notifier.error(MESSAGES.UNKNOWN);
             }
         );
     }
     confirmDialog( id): void {
-        const message = MESSAGES.REMOVE_CONFIRMATION();
+        const message = MESSAGES.REMOVE_CONFIRMATION;
         const dialogData = new ConfirmDialogModel('Confirm Action', message);
         const dialogRef = this._matDialog.open(ConfirmDialogComponent, {
             data: dialogData,
@@ -151,11 +141,11 @@ export class HolidayComponent extends BaseComponent implements OnInit {
                 const index = this.dataSource.data.findIndex((x) => x.id === id);
                 this.holidays.splice(index, 1);
                 this.updateGrid(this.holidays);
-                this.errorType = 'success';
-                this.hideMessage();
-                this.responseMessage = MESSAGES.DELETED('Holiday');
+                this._notifier.success(MESSAGES.DELETED('Holiday'));
             },
-            (response) => super.onError(response)
+            (response) => {
+                  this._notifier.error(MESSAGES.UNKNOWN);
+            }
         );
     }
     camelToSentenceCase  = (text: string): string =>  {

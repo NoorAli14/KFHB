@@ -61,7 +61,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
                 this.responseMessage = MESSAGES.LOGGED_IN();
                 setTimeout(() => {
                     this.router.navigateByUrl(
-                        this.returnUrl ? this.returnUrl : '/ent/user'
+                        this.returnUrl ? this.returnUrl : '/dashboard'
                     );
                 }, 1000);
             },
@@ -70,7 +70,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
                 if (response.statusCode === 401) {
                     this.responseMessage = MESSAGES.INVALID_CREDENTIAL();
                 } else {
-                    this.responseMessage = MESSAGES.UNKNOWN();
+                    this.responseMessage = MESSAGES.UNKNOWN;
                 }
             }
         );

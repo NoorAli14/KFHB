@@ -22,7 +22,6 @@
     </mat-toolbar>
 
     <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
-        <app-message-box [type]="errorType" [message]="responseMessage"></app-message-box>
         <div fxLayout="row">
             <form class="p-24" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0" name="leaveForm"
                 (ngSubmit)="onSubmit()" novalidate [formGroup]="leaveForm">
@@ -57,7 +56,7 @@
                                 {{ item.name }}
                             </mat-option>
                         </mat-select>
-                        <mat-icon matSuffix class="secondary-text">assignment_turned_in</mat-icon>
+                       
                         <mat-error>
                             <app-mat-error [control]="leaveForm.get('leaveTypeId')"></app-mat-error>
                         </mat-error>

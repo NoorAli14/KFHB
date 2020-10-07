@@ -80,12 +80,7 @@ export class WorkingDayFormComponent extends BaseComponent implements OnDestroy,
             }
         });
 
-        this._errorEmitService.currentMessage
-        .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((item) => {
-            this.errorType = item.type;
-            this.responseMessage = item.message;
-        });
+       
     }
      convertTime12to24 = (time12h) => {
         const [time, modifier] = time12h.split(' ');
@@ -131,8 +126,8 @@ export class WorkingDayFormComponent extends BaseComponent implements OnDestroy,
     onSubmit(): void {
         let model = { ...this.workingDayForm.value };
         if (!model.fullDay){
-            model.endTimeLocal = model.endTimeLocal.replace(':', '');
-            model.startTimeLocal = model.startTimeLocal.replace(':', ''); 
+            model.endTimeLocal = model.endTimeLocal.replace(/\D/g,'');
+            model.startTimeLocal = model.startTimeLocal.replace(/\D/g,'');
         }
         model = camelToSnakeCase(model);
         model.full_day = model.full_day  ? 1 : 0;

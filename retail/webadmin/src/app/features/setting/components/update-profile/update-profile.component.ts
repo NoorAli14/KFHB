@@ -2,7 +2,7 @@ import { SettingService } from './../../setting.service';
 import { Component, OnInit, ViewEncapsulation, Inject, Output, EventEmitter, Injector, OnDestroy } from '@angular/core';
 import { FormGroup,  FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import {  GENDER_LIST, NATIONALITY_LIST } from '@shared/constants/app.constants';
+import {  DATE_FORMAT, GENDER_LIST, NATIONALITY_LIST } from '@shared/constants/app.constants';
 import { fuseAnimations } from '@fuse/animations';
 import { User } from '@feature/entitlement/models/user.model';
 import { BaseComponent } from '@shared/components/base/base.component';
@@ -10,6 +10,7 @@ import { ValidatorService } from '@shared/services/validator-service/validator.s
 import { takeUntil } from 'rxjs/operators';
 import { getName } from '@shared/helpers/global.helper';
 import { cloneDeep } from 'lodash';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-update-profile',
@@ -35,14 +36,6 @@ export class UpdateProfileComponent extends BaseComponent implements OnDestroy, 
     }
 
     ngOnInit(): void {
-        const _this = this;
-        this._errorEmitService.currentMessage
-        .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((item) => {
-            this.errorType = item.type;
-            this.responseMessage = item.message;
-        });
-        
         this.userForm = new FormGroup({
             id: new FormControl(this.data.user.id),
             firstName: new FormControl(this.data.user.firstName, [Validators.required]),
@@ -66,7 +59,8 @@ export class UpdateProfileComponent extends BaseComponent implements OnDestroy, 
     }
     onSubmit(): void {
         const model = { ...this.userForm.value };
-        model.dateOfBirth = new Date(model.dateOfBirth).toLocaleDateString();
+        
+        model.dateOfBirth = moment(model.dateOfBirth).format(DATE_FORMAT); 
         this.sendResponse.emit(model);
     }
  
