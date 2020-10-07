@@ -116,7 +116,7 @@ export class InvitationComponent extends BaseComponent implements OnInit {
                 },
                 (error) => {
                     this.errorType = 'error';
-                    this.responseMessage = MESSAGES.UNKNOWN();
+                    this.responseMessage = MESSAGES.UNKNOWN;
                 }
             );
     }
@@ -137,7 +137,7 @@ export class InvitationComponent extends BaseComponent implements OnInit {
                         this.errorType = 'warning';
                         this.responseMessage = MESSAGES.INVALID_INVITATION();
                     } else {
-                        this.responseMessage = MESSAGES.UNKNOWN();
+                        this.responseMessage = MESSAGES.UNKNOWN;
                     }
                 }
             );

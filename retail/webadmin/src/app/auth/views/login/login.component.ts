@@ -70,7 +70,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
                 if (response.statusCode === 401) {
                     this.responseMessage = MESSAGES.INVALID_CREDENTIAL();
                 } else {
-                    this.responseMessage = MESSAGES.UNKNOWN();
+                    this.responseMessage = MESSAGES.UNKNOWN;
                 }
             }
         );

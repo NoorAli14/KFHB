@@ -64,7 +64,7 @@ export class LeaveComponent extends BaseComponent implements OnInit {
                 this.dataSource.sort = this.sort;
             },
             (error) => {
-                console.log(error);
+                this._notifier.success(MESSAGES.UNKNOWN);
             }
         );
     }
@@ -85,9 +85,7 @@ export class LeaveComponent extends BaseComponent implements OnInit {
                 hasBackdrop: true,
             })
             .componentInstance.sendResponse.subscribe((response) => {
-                if (!response) {
-                    this._errorEmitService.emit('', '');
-                } else if (response.id) {
+                if (response.id) {
                     _this.editLeave(response);
                 } else {
                     _this.createLeave(response);
@@ -102,43 +100,35 @@ export class LeaveComponent extends BaseComponent implements OnInit {
                 data.unshift(snakeToCamelObject(response));
 
                 this.updateGrid(data);
-                this.errorType = 'success';
-                this.responseMessage = MESSAGES.CREATED('Leave');
                 this._matDialog.closeAll();
-                this.hideMessage();
+                this._notifier.success(MESSAGES.CREATED('Leave'));
             },
             (response) => {
-                this._errorEmitService.emit(MESSAGES.UNKNOWN(), 'error');
+                this._notifier.error(MESSAGES.UNKNOWN);
+           
             }
         );
     }
-    hideMessage(): void  {
-        setTimeout(() => {
-            this.responseMessage = '';
-        }, 2000);
-    }
+  
     editLeave(model: Leave): void  {
         this._service.editLeave(model.id, model).subscribe(
             (response) => {
-                this.errorType = 'success';
-                this.responseMessage = MESSAGES.UPDATED('Leave');
                 const index = this.dataSource.data.findIndex(
                     (x) => x.id === model.id
                 );
-
                 const mapped: any = snakeToCamelObject(response);
-                this.hideMessage();
+                this._notifier.success(MESSAGES.UPDATED('Leave'));
                 this.leaves[index] = mapped;
                 this.updateGrid(this.leaves);
                 this._matDialog.closeAll();
             },
             (response) => {
-                this._errorEmitService.emit(MESSAGES.UNKNOWN(), 'error');
+                this._notifier.error(MESSAGES.UNKNOWN);
             }
         );
     }
     confirmDialog(type, id): void {
-        const message = MESSAGES.REMOVE_CONFIRMATION();
+        const message = MESSAGES.REMOVE_CONFIRMATION;
         const dialogData = new ConfirmDialogModel('Confirm Action', message);
         const dialogRef = this._matDialog.open(ConfirmDialogComponent, {
             data: dialogData,
@@ -159,11 +149,11 @@ export class LeaveComponent extends BaseComponent implements OnInit {
                 const index = this.dataSource.data.findIndex((x) => x.id === id);
                 this.leaves.splice(index, 1);
                 this.updateGrid(this.leaves);
-                this.errorType = 'success';
-                this.hideMessage();
-                this.responseMessage = MESSAGES.DELETED('Leave');
+                this._notifier.success(MESSAGES.DELETED('Leave'));
             },
-            (response) => super.onError(response)
+            (response) => {
+                this._notifier.error(MESSAGES.UNKNOWN);
+            }
         );
     }
     camelToSentenceCase(text): string  {

@@ -36,14 +36,6 @@ export class UpdateProfileComponent extends BaseComponent implements OnDestroy, 
     }
 
     ngOnInit(): void {
-        const _this = this;
-        this._errorEmitService.currentMessage
-        .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((item) => {
-            this.errorType = item.type;
-            this.responseMessage = item.message;
-        });
-        
         this.userForm = new FormGroup({
             id: new FormControl(this.data.user.id),
             firstName: new FormControl(this.data.user.firstName, [Validators.required]),
