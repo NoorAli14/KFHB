@@ -22,30 +22,6 @@ describe('Complaince Module (e2e)', () => {
     await app.init();
   });
 
-  const options: any[] = [
-    {
-      name: 'Low',
-      name_ar: 'Low',
-      status: 'ACTIVE',
-      question_id: '123-121',
-      id: '123-121',
-    },
-    {
-      name: 'Hihn',
-      name_ar: 'High',
-      status: 'ACTIVE',
-      question_id: '123-122',
-      id: '123-122',
-    },
-    {
-      name: 'Test Section 3',
-      name_ar: 'Test Section 3',
-      status: 'ACTIVE',
-      question_id: '123-123',
-      id: '123-123',
-    },
-  ];
-
   const optionInput: any = {
     name: 'Low',
     name_ar: 'Low',
@@ -62,27 +38,34 @@ describe('Complaince Module (e2e)', () => {
       })
       .set(headers)
       .expect(({ body }) => {
-        const data = body.data.optionsList;
-        expect(data[0].name).toBe(optionInput.name);
-        expect(data[0].name_ar).toBe(optionInput.name_ar);
-        expect(data[0].status).toBe(optionInput.status);
+        const data = body?.data?.optionsList;
+        if (data) {
+          expect(data).toBeInstanceOf(Array);
+          expect(data).toHaveLength(data.length);
+        } else {
+          expect(data).toBeUndefined();
+        }
       })
       .expect(200)
       .end(done);
   });
 
-  it(`Should return single section base on section id`, done => {
+  it(`Should return single oprtion base on option id`, done => {
     return request(app.getHttpServer())
       .post('/graphql')
 
       .send({
-        query: `{findSection(id: "d329c531-9e7a-4b55-923f-04fc62aee79d") {name name_ar status level}}`,
+        query: `{findOption(id: "CB92A7AA-E6EC-4856-B740-0D320ECF77F9") {name name_ar status }}`,
       })
       .set(headers)
       .expect(({ body }) => {
-        const data = body.data.findSection;
-        expect(data.name).toBe(optionInput.name);
-        expect(data[0].name_ar).toBe(optionInput.name_ar);
+        const data = body?.data?.findOption;
+        if (data) {
+          expect(data.name).toBe(optionInput.name);
+          expect(data.name_ar).toBe(optionInput.name_ar);
+        } else {
+          expect(data).toBeUndefined();
+        }
       })
       .expect(200)
       .end(done);
