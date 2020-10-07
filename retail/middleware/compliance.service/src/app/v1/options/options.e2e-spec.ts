@@ -2,7 +2,6 @@ import * as request from 'supertest';
 import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { ApplicationModule } from '@rubix/app';
-import { NewOptionInput } from './option.dto';
 
 describe('Complaince Module (e2e)', () => {
   let app: INestApplication;

@@ -3,16 +3,17 @@ import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { ApplicationModule } from '@rubix/app';
 import { createQueryObject } from '@common/tests/e2e.tests';
+import { NewTemplateResponseInput } from './template-response.dto';
+
+import {
+  transformAndValidate,
+  transformAndValidateSync,
+} from 'class-transformer-validator';
 
 describe('Complince Module (e2e)', () => {
+  let templateResponse: NewTemplateResponseInput;
   let app: INestApplication;
 
-  const templateResponses: any = {
-    results: 'Test response results',
-    remarks: 'Test response remarks',
-    template_id: '37678c69-dde5-4452-a66b-401f32211427',
-    user_id: '828605C2-7E50-40BC-AA88-C064CE63C155',
-  };
   const headers: { [key: string]: any } = {
     'x-tenant-id': '9013C327-1190-4875-A92A-83ACA9029160',
     'x-user-id': '828605C2-7E50-40BC-AA88-C064CE63C155',
@@ -27,6 +28,93 @@ describe('Complince Module (e2e)', () => {
     app = moduleRef.createNestApplication();
     await app.init();
   });
+
+  it('should successfully transform and validate the template response', async () => {
+    templateResponse = {
+      results: 'test template results',
+      remarks: 'test template remarks',
+      template_id: '37678c69-dde5-4452-a66b-401f32211427',
+      user_id: '828605C2-7E50-40BC-AA88-C064CE63C155',
+    } as NewTemplateResponseInput;
+
+    const transformedResponse: NewTemplateResponseInput = await transformAndValidate(
+      NewTemplateResponseInput,
+      templateResponse,
+    );
+    expect(transformedResponse).toBeDefined();
+    expect(transformedResponse.results).toEqual('test template results');
+    expect(transformedResponse).toBeInstanceOf(NewTemplateResponseInput);
+  });
+
+  it('should successfully transform and validate JSON with array of template response', done => {
+    return request(app.getHttpServer())
+      .post('/graphql')
+      .send({
+        query: `{findTemplateResponseByUserId(user_id: "828605C2-7E50-40BC-AA88-C064CE63C155"){id results status remarks user_id template {id name}}}`,
+      })
+      .set(headers)
+      .expect(async ({ body }) => {
+        const data = body?.data?.findTemplateResponseByUserId;
+        if (data) {
+          const sectionJson: string = JSON.stringify(data);
+
+          // const transformedResponse: NewTemplateResponseInput[] = (await transformAndValidate(
+          //   NewTemplateResponseInput,
+          //   sectionJson,
+          // )) as NewTemplateResponseInput[];
+          expect(data).toBeDefined();
+          expect(data).toBeInstanceOf(Array);
+          expect(data).toHaveLength(data.length);
+          expect(
+            data
+              .map((response: any) => response.user_id)
+              .includes(
+                data[0].user_id || '828605C2-7E50-40BC-AA88-C064CE63C155',
+              ),
+          ).toBeTruthy();
+        } else {
+          expect(data).toBeUndefined();
+          expect(data).toHaveLength(0);
+        }
+      })
+      .end(done)
+      .expect(200);
+  });
+
+  it('should throw error template response not found', done => {
+    return request(app.getHttpServer())
+      .post('/graphql')
+      .send({
+        query: `{findTemplateResponseByUserId(user_id: "d2d409a9-8cf3-3562-a4d0-2361dd59cd98"){id results status remarks user_id template {id name}}}`,
+      })
+      .set(headers)
+      .expect(async ({ body }) => {
+        const data = body?.data?.findSection;
+        if (data) {
+          if (data) {
+            const sectionJson: string = JSON.stringify(data);
+            const transformedSection: NewTemplateResponseInput[] = (await transformAndValidate(
+              NewTemplateResponseInput,
+              sectionJson,
+            )) as NewTemplateResponseInput[];
+            expect(data).toBeDefined();
+            expect(transformedSection).toBeInstanceOf(NewTemplateResponseInput);
+          }
+        } else {
+          expect(data).toBeUndefined();
+          // expect(data).toHaveLength(0);
+        }
+      })
+      .end(done)
+      .expect(200);
+  });
+
+  const templateResponses: NewTemplateResponseInput = {
+    results: 'Test response results',
+    remarks: 'Test response remarks',
+    template_id: '37678c69-dde5-4452-a66b-401f32211427',
+    user_id: '828605C2-7E50-40BC-AA88-C064CE63C155',
+  };
 
   it(`Should fetch template response`, done => {
     return request(app.getHttpServer())
@@ -55,13 +143,19 @@ describe('Complince Module (e2e)', () => {
     return request(app.getHttpServer())
       .post('/graphql')
       .send({
-        query: `{addTemplateResponse(input: ${createQueryObject(
+        mutation: `{addTemplateResponse(input: ${createQueryObject(
           templateResponses,
         )}){id status remaks}}`,
       })
       .set(headers)
       .expect(({ body }) => {
-        const data = body.data.addTemplateResponse;
+        console.log(body, '-=-=-=-=-');
+        const data = body?.data?.addTemplateResponse;
+        console.log(data, '-=-=-=-=-');
+        if (data) {
+        } else {
+          expect(data).toBeUndefined();
+        }
       })
       .expect(200)
       .end(done);

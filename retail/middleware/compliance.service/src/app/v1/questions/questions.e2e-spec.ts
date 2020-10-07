@@ -9,7 +9,6 @@ import {
   transformAndValidateSync,
 } from 'class-transformer-validator';
 import { Question } from './question.model';
-import { Option } from '../options/option.model';
 
 describe('Complaince Module (e2e)', () => {
   let question: NewQuestionInput;
