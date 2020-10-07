@@ -56,8 +56,8 @@
                                 matTooltip="Resend Invitation" type="button"
                                 (click)=" confirmDialog('invite',element['id'])">near_me</mat-icon> &nbsp;&nbsp;
                         </span>
-                        <span  *ngSwitchDefault>
-                            <span *ngIf="element[key]; else defaultText">
+                        <span  *ngSwitchDefault style="width:100%;word-wrap: break-word;">
+                            <span *ngIf="element[key]; else defaultText" >
                                 {{element[key] }}
                             </span>
                         </span>
