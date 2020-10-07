@@ -138,7 +138,7 @@ export class FuseNavigationService {
         };
         const find = navigation.find((x) => x.id === 'custom-function');
         if (!find) {
-            navigation.push(customFunctionNavItem);
+            // navigation.push(customFunctionNavItem);
         }
         this._registry[key] = navigation;
 

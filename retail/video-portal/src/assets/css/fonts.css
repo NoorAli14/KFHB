@@ -1,0 +1,25 @@
+
+@font-face {
+    font-family: "calibri";
+    src: url("../fonts/calibri.eot");
+    src: url("../fonts/calibri.eot") format("embedded-opentype"),
+      url("../fonts/calibri.woff") format("woff"),
+      url("../fonts/calibri.ttf") format("truetype"),
+      url("../fonts/calibri.svg#Calibri") format("svg");
+  }
+  @font-face {
+    font-family: "calibri-Bold";
+    src: url("../fonts/calibrib.eot");
+    src: url("../fonts/calibrib.eot") format("embedded-opentype"),
+      url("../fonts/calibri-Bold.woff") format("woff"),
+      url("../fonts/calibri-Bold.ttf") format("truetype"),
+      url("../fonts/calibri-Bold.svg#Calibri") format("svg");
+  }
+  @font-face {
+    font-family: "calibri-Light";
+    src: url("../fonts/calibril.eot");
+    src: url("../fonts/calibril.eot") format("embedded-opentype"),
+      url("../fonts/calibri-Light.woff") format("woff"),
+      url("../fonts/calibri-Light.ttf") format("truetype"),
+      url("../fonts/calibri-Light.svg#Calibri") format("svg");
+  }
