@@ -21,6 +21,7 @@ export enum APPOINTMENT_STATUS {
   ATTENDED = 'ATTENDED',
   CANCELLED = 'CANCELLED',
 }
+
 registerEnumType(GENDER, { name: 'GENDER' });
 registerEnumType(APPOINTMENT_STATUS, { name: 'APPOINTMENT_STATUS' });
 
@@ -51,4 +52,4 @@ export const DATABASE_MIGRATION_DIRECTORY = 'src/core/database/migrations';
 export const DATABASE_SEED_DIRECTORY = 'src/core/database/seeds';
 
 export const APPOINTMENT_QUERY =
-  'id call_time gender status created_on created_by updated_by updated_by';
+  'id call_time created_on created_by updated_on updated_by';

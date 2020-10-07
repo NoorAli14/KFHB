@@ -79,10 +79,11 @@ export class Appointment {
   @Field({ nullable: true })
   @IsString()
   @MaxLength(25)
+  @IsOptional()
   @IsEnum(Object.keys(Object.keys(APPOINTMENT_STATUS)))
   status: string;
 
-  user_id?: string;
+  user_id: string;
 
   @Field(() => User) // Will get this field from another service using ResolveField function.
   user?: User;
