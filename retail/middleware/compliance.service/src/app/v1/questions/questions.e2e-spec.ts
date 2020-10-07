@@ -4,7 +4,10 @@ import { INestApplication } from '@nestjs/common';
 import { ApplicationModule } from '@rubix/app';
 import { NewQuestionInput } from './question.dto';
 
-import { transformAndValidate } from 'class-transformer-validator';
+import {
+  transformAndValidate,
+  transformAndValidateSync,
+} from 'class-transformer-validator';
 import { Question } from './question.model';
 import { Option } from '../options/option.model';
 
