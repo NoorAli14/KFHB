@@ -13,11 +13,7 @@ import { Leave } from '@feature/calender/models/leave.model';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 describe('LeaveFormComponent', async () => {
-    let component: LeaveFormComponent;
-    let fixture: ComponentFixture<LeaveFormComponent>;
     let injectorMock: any;
-    let helper: DOMHelper<LeaveFormComponent>;
-    let model;
     let matDialogRefMock: any;
     let authUserServiceMock: any;
     beforeEach(async(() => {

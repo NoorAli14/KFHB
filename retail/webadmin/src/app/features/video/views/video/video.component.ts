@@ -1,14 +1,14 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from "@angular/core";
-import { DomSanitizer } from "@angular/platform-browser";
-import { fuseAnimations } from "@fuse/animations";
-import { AuthenticationService } from "@shared/services/auth/authentication.service";
-import { environment } from "@env/environment";
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
+import { fuseAnimations } from '@fuse/animations';
+import { AuthenticationService } from '@shared/services/auth/authentication.service';
+import { environment } from '@env/environment';
 import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
 
 @Component({
-    selector: "app-video",
-    templateUrl: "./video.component.html",
-    styleUrls: ["./video.component.scss"],
+    selector: 'app-video',
+    templateUrl: './video.component.html',
+    styleUrls: ['./video.component.scss'],
     animations: fuseAnimations,
     encapsulation: ViewEncapsulation.None,
 })
