@@ -1,14 +1,15 @@
 import * as request from 'supertest';
 import { Test } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
-import { ApplicationModule } from '@rubix/app';
-import { createQueryObject, createQuery } from '@common/tests/e2e.tests';
-import { NewTemplateResponseInput } from './template-response.dto';
 
 import {
   transformAndValidate,
   transformAndValidateSync,
 } from 'class-transformer-validator';
+import { INestApplication } from '@nestjs/common';
+import { ApplicationModule } from '@rubix/app';
+
+import { createQueryObject, createQuery } from '@common/tests/e2e.tests';
+import { NewTemplateResponseInput } from './template-response.dto';
 import { TemplateResponse } from './template-response.model';
 
 describe('Complince Module (e2e)', () => {
