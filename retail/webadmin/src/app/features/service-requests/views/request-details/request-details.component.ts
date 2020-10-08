@@ -81,6 +81,7 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
         for (let i = 0; i < responseDocument.length; i++) {
           this.documents.push(responseDocument[i])
         }
+        console.log(this.documents)
         this.updateGrid(this.documents);
         if (response.data.status != 'Pending') {
           this.btnDisable = true;
@@ -135,12 +136,12 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
-  downlaodReport(data, extention): void {
+  downlaodDocument(data, extention): void {
     this.checkType(extention);
     const date = new Date();
     const linkSource = 'data:' + this.contentType + ',' + data;
     const downloadLink = document.createElement('a');
-    const fileName = 'ServiceRequest' + date.getDate() + '.' + date.getMonth() + 1 + '.' + date.getFullYear() + '.' + extention;
+    const fileName = 'ServiceRequest' + date.getDate() + '.' + date.getMonth() + 1 + '.' + date.getFullYear() + extention;
     downloadLink.href = linkSource;
     downloadLink.download = fileName;
     downloadLink.click();
@@ -160,11 +161,11 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
   }
 
   checkType(extention): void {
+    if (extention.includes('.')){
+      extention = extention.split('.')[1];
+    }
     let lowerExtention = extention.toLowerCase();
-    if (lowerExtention === 'png' || lowerExtention === 'jpg' || lowerExtention === 'jpeg' || lowerExtention === 'gif'
-      || lowerExtention === 'tiff' || lowerExtention === 'webp' || lowerExtention === 'bmp' || lowerExtention === 'jpe'
-      || lowerExtention === 'jif' || lowerExtention === 'jfif' || lowerExtention === 'jfi' || lowerExtention === 'tif'
-      || lowerExtention === 'heif' || lowerExtention === 'heic') {
+    if (lowerExtention === 'png' || lowerExtention === 'jpg' || lowerExtention === 'jpeg') {
       this.contentType = 'image/' + extention + ';base64'
     }
     else {
