@@ -85,7 +85,7 @@ export class ResetPasswordComponent extends BaseComponent implements OnInit {
         this._authService.resetPassword(model, this.token).pipe(takeUntil(this._unsubscribeAll)).subscribe(
             (response) => {
                  this.errorType = 'success';
-                 this.responseMessage = MESSAGES.PASSWORD_UPDATED();
+                 this.responseMessage = MESSAGES.PASSWORD_UPDATED;
             },
            (response => super.onError(response))
         );

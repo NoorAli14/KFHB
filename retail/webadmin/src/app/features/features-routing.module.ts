@@ -27,6 +27,10 @@ const routes: Routes = [
     loadChildren: () => import('./video/video.module').then(m => m.VideoModule)
   },
   {
+    path: 'dashboard',
+    loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule)
+  },
+  {
     path: '**', redirectTo: 'error'
   }
 ];

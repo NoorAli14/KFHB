@@ -1,25 +1,28 @@
-import { Component, OnInit, ViewEncapsulation } from "@angular/core";
-import { DomSanitizer } from "@angular/platform-browser";
-import { fuseAnimations } from "@fuse/animations";
-import { AuthenticationService } from "@shared/services/auth/authentication.service";
-import { environment } from "@env/environment";
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
+import { fuseAnimations } from '@fuse/animations';
+import { AuthenticationService } from '@shared/services/auth/authentication.service';
+import { environment } from '@env/environment';
+import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
 
 @Component({
-    selector: "app-video",
-    templateUrl: "./video.component.html",
-    styleUrls: ["./video.component.scss"],
+    selector: 'app-video',
+    templateUrl: './video.component.html',
+    styleUrls: ['./video.component.scss'],
     animations: fuseAnimations,
     encapsulation: ViewEncapsulation.None,
 })
-export class VideoComponent implements OnInit {
+export class VideoComponent implements OnInit, OnDestroy {
     url: any;
     constructor(
         private sanitizer: DomSanitizer,
-        private authService: AuthenticationService
+        private authService: AuthenticationService,
+        private _fuseSidebarService: FuseSidebarService,
     ) {}
 
     ngOnInit(): void {
         this.loadIframe();
+        this._fuseSidebarService.getSidebar('navbar').toggleFold();
     }
 
     loadIframe(): void {
@@ -29,5 +32,8 @@ export class VideoComponent implements OnInit {
         this.url = this.sanitizer.bypassSecurityTrustResourceUrl(
             `${environment.VIDEO_URL}/login?token=${token}&channelid=${channelId}&tenantid=${tenantId}`
         );
+    }
+    ngOnDestroy(): void{
+        this._fuseSidebarService.getSidebar('navbar').toggleFold();
     }
 }

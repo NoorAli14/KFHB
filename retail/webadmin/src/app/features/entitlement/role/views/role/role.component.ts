@@ -39,7 +39,6 @@ export class RoleComponent extends BaseComponent implements OnInit {
         'roleName',
         'description',
         'createdOn',
-        'status',
         'expandIcon',
         'action',
     ];
@@ -68,7 +67,9 @@ export class RoleComponent extends BaseComponent implements OnInit {
                     role_name: role.name,
                 }));
             },
-            (response) => super.onError(response)
+            (response) => {
+                this._notifier.error(MESSAGES.UNKNOWN);
+            }
         );
     }
 
@@ -88,9 +89,7 @@ export class RoleComponent extends BaseComponent implements OnInit {
                 panelClass: 'app-role-form',
             })
             .componentInstance.sendResponse.subscribe((response) => {
-                if (!response) {
-                    this._errorEmitService.emit('', '');
-                } else if (response.id) {
+                if (response.id) {
                     _this.editRole(response);
                 } else {
                     _this.createRole(response);
@@ -98,7 +97,7 @@ export class RoleComponent extends BaseComponent implements OnInit {
             });
     }
     confirmDialog(id): void {
-        const message = removeRandom(MESSAGES.REMOVE_CONFIRMATION());
+        const message = removeRandom(MESSAGES.REMOVE_CONFIRMATION);
         const dialogData = new ConfirmDialogModel('Confirm Action', message);
         const dialogRef = this._matDialog.open(ConfirmDialogComponent, {
             data: dialogData,
@@ -136,56 +135,48 @@ export class RoleComponent extends BaseComponent implements OnInit {
     createRole(data: Role): void {
         this._roleService.createRole(data).pipe(takeUntil(this._unsubscribeAll)).subscribe(
             (response) => {
-                this.errorType = 'success';
-                this.responseMessage = MESSAGES.CREATED('Role');
+                this._notifier.success(MESSAGES.CREATED('Role'));
                 const clone = cloneDeep(this.roles);
                 response.role_name = response.name;
                 clone.unshift(response);
                 this.roles = clone;
-                this.hideMessage();
                 this._matDialog.closeAll();
-                this._errorEmitService.emit('', '');
+                
             },
             (response) => {
-                this._errorEmitService.emit(MESSAGES.UNKNOWN(), 'error');
+                this._notifier.error(MESSAGES.UNKNOWN);
             }
         );
     }
-    hideMessage(): void {
-        setTimeout(() => {
-            this.responseMessage = '';
-        }, 2000);
-    }
+  
     editRole(model: Role): void {
         this._roleService.editRole(model.id, model).pipe(takeUntil(this._unsubscribeAll)).subscribe(
             (response) => {
-                this.errorType = 'success';
                 response.role_name = response.name;
-                this.responseMessage = MESSAGES.UPDATED('Role');
+                this._notifier.success(MESSAGES.UPDATED('Role'));
                 const clone = cloneDeep(this.roles);
                 const index = clone.findIndex((x) => x.id === model.id);
                 clone[index] = response;
                 this.roles = clone;
-                this.hideMessage();
                 this._matDialog.closeAll();
             },
             (response) => {
-                this._errorEmitService.emit(MESSAGES.UNKNOWN(), 'error');
+                this._notifier.error(MESSAGES.UNKNOWN);
             }
         );
     }
     onDelete(id: string): void {
         this._roleService.deleteRole(id).pipe(takeUntil(this._unsubscribeAll)).subscribe(
             (response) => {
-                this.errorType = 'success';
-                this.hideMessage();
                 const index = this.roles.findIndex((x) => x.id === id);
                 const clone = cloneDeep(this.roles);
                 clone.splice(index, 1);
                 this.roles = clone;
-                this.responseMessage = MESSAGES.DELETED('Role');
+                this._notifier.success(MESSAGES.DELETED('Role'));
             },
-            (response) => super.onError(response)
+            (response) => {
+                this._notifier.error(MESSAGES.UNKNOWN);
+            }
         );
     }
 }
