@@ -35,7 +35,6 @@ import { InvitationsService } from './invitations.service';
 
 @ApiTags('Invitation')
 @Controller('invitations')
-@UseGuards(PermissionsGuard)
 export class InvitationsController {
   constructor(
     private readonly userService: UserService,
@@ -43,7 +42,7 @@ export class InvitationsController {
   ) { }
 
   @Post('/')
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, PermissionsGuard)
   @ApiBearerAuth()
   @ApiBody({ description: 'Sets the user properties.', type: NewUserDto })
   @ApiOperation({
@@ -181,7 +180,7 @@ export class InvitationsController {
   }
 
   @Post(':user_id/resend')
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, PermissionsGuard)
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Resend Invitation by User ID',
