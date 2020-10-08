@@ -42,10 +42,7 @@ export class RoleFormComponent extends BaseComponent implements OnDestroy, OnIni
         const totalPermissions = this.data.permissions.map((x) => x.record_type);
         this.displayedColumns = this.displayedColumns.concat(totalPermissions);
 
-        this._errorEmitService.currentMessage.pipe(takeUntil(this._unsubscribeAll)).subscribe((item) => {
-            this.errorType = item.type;
-            this.responseMessage = item.message;
-        });
+     
         this.roleForm = new FormGroup({
             id: new FormControl(this.data.role.id),
             name: new FormControl(this.data.role.name, [Validators.required]),

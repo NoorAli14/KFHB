@@ -1,7 +1,7 @@
 import { Component, OnInit, Injector } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { User } from '@feature/entitlement/models/user.model';
-import {  GENDER_LIST } from '@shared/constants/app.constants';
+import {  DATE_FORMAT, GENDER_LIST } from '@shared/constants/app.constants';
 import { AuthenticationService } from '@shared/services/auth/authentication.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseConfigService } from '@fuse/services/config.service';
@@ -15,6 +15,7 @@ import { fuseAnimations } from '@fuse/animations';
 import {  takeUntil } from 'rxjs/operators';
 import { MESSAGES } from '@shared/constants/messages.constant';
 import { REGEX } from '@config/index';
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-invitation',
@@ -100,6 +101,7 @@ export class InvitationComponent extends BaseComponent implements OnInit {
     }
     onSubmit = (): void => {
         let model = { ...this.invitationForm.value };
+        model.dateOfBirth = moment(model.dateOfBirth).format(DATE_FORMAT); 
         model = camelToSnakeCase(model);
         this._authService
             .updateInvitation(model, this.token)
@@ -114,7 +116,7 @@ export class InvitationComponent extends BaseComponent implements OnInit {
                 },
                 (error) => {
                     this.errorType = 'error';
-                    this.responseMessage = MESSAGES.UNKNOWN();
+                    this.responseMessage = MESSAGES.UNKNOWN;
                 }
             );
     }
@@ -135,7 +137,7 @@ export class InvitationComponent extends BaseComponent implements OnInit {
                         this.errorType = 'warning';
                         this.responseMessage = MESSAGES.INVALID_INVITATION();
                     } else {
-                        this.responseMessage = MESSAGES.UNKNOWN();
+                        this.responseMessage = MESSAGES.UNKNOWN;
                     }
                 }
             );

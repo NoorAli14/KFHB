@@ -14,7 +14,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 @NgModule({
     declarations: [],
     imports: [
@@ -26,6 +26,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
         MatDatepickerModule,
         MatSelectModule,
         MatTooltipModule,
+        MatSnackBarModule,
         MatToolbarModule,
         MatDialogModule,
         MatTableModule,
@@ -44,6 +45,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
         MatFormFieldModule,
         MatToolbarModule,
         MatDialogModule,
+        MatSnackBarModule,
         MatTableModule,
         MatIconModule,
         MatRippleModule,

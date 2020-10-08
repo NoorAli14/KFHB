@@ -78,7 +78,9 @@ export class UserComponent extends BaseComponent implements OnInit {
                     [this.users, this.roles, this.nationalities] = response;
                     this.updateGrid(this.users);
                 },
-                (response) => super.onError(response)
+                (response) => {
+                    this._notifier.error(MESSAGES.UNKNOWN);
+                }
             );
     }
 
@@ -100,9 +102,7 @@ export class UserComponent extends BaseComponent implements OnInit {
                 panelClass: 'app-user-form',
             })
             .componentInstance.sendResponse.subscribe((response) => {
-                if (!response) {
-                    this._errorEmitService.emit('', '');
-                } else  if (response.id) {
+                  if (response.id) {
                     _this.editUser(response);
                 } else {
                     _this.createUser(response);
@@ -134,8 +134,8 @@ export class UserComponent extends BaseComponent implements OnInit {
     confirmDialog(type, id): void {
         const message =
             type === 'invite'
-                ? removeRandom(MESSAGES.RESEND_INVITE())
-                : removeRandom(MESSAGES.REMOVE_CONFIRMATION());
+                ? removeRandom(MESSAGES.RESEND_INVITE)
+                : removeRandom(MESSAGES.REMOVE_CONFIRMATION)
         const dialogData = new ConfirmDialogModel('Confirm Action', message);
         const dialogRef = this._matDialog.open(ConfirmDialogComponent, {
             data: dialogData,
@@ -158,11 +158,12 @@ export class UserComponent extends BaseComponent implements OnInit {
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe(
                 (response) => {
-                    this.errorType = 'success';
-                    this.responseMessage = MESSAGES.INVITE_RESENT();
-                    this.hideMessage();
+                   
+                    this._notifier.success(MESSAGES.INVITE_RESENT);
                 },
-                (response) => super.onError(response)
+                (response) => {
+                    this._notifier.error(MESSAGES.UNKNOWN);
+                }
             );
     }
     createUser(model: User): void {
@@ -174,45 +175,35 @@ export class UserComponent extends BaseComponent implements OnInit {
                     const data = this.dataSource.data;
                     data.unshift(response);
                     this.updateGrid(data);
-                    this.errorType = 'success';
-                    this.responseMessage = MESSAGES.CREATED('User');
                     this._matDialog.closeAll();
-                    this.hideMessage();
-                    this._errorEmitService.emit('', '');
+                    this._notifier.success(MESSAGES.CREATED('User'));
                 },
                 ({ error }) => {
                     if (error.statusCode === 422) {
-                        this._errorEmitService.emit(MESSAGES.EXISTS('User with this email'), 'warning');
+                        this._notifier.error(MESSAGES.EXISTS('User with this email'));
                     } else {
-                        this._errorEmitService.emit(MESSAGES.UNKNOWN(), 'error');
+                        this._notifier.error(MESSAGES.UNKNOWN);
                     }
                 }
             );
     }
-    hideMessage(): void {
-        setTimeout(() => {
-            this.responseMessage = '';
-        }, 2000);
-    }
+  
     editUser(model: User): void {
         this._service
             .editUser(model.id, model)
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe(
                 (response) => {
-                    this.errorType = 'success';
-                    this.responseMessage = MESSAGES.UPDATED('User');
+                    this._notifier.success(MESSAGES.UPDATED('User'));
                     const index = this.dataSource.data.findIndex(
                         (x) => x.id === model.id
                     );
-                    this.hideMessage();
                     this.users[index] = response;
                     this.updateGrid(this.users);
                     this._matDialog.closeAll();
-                    this._errorEmitService.emit('', '');
                 },
                 (response) => {
-                    this._errorEmitService.emit(MESSAGES.UNKNOWN(), 'error');
+                    this._notifier.error(MESSAGES.UNKNOWN);
                 }
             );
     }
@@ -227,11 +218,11 @@ export class UserComponent extends BaseComponent implements OnInit {
                     );
                     this.users.splice(index, 1);
                     this.updateGrid(this.users);
-                    this.errorType = 'success';
-                    this.hideMessage();
-                    this.responseMessage = MESSAGES.DELETED('User');
+                    this._notifier.success(MESSAGES.DELETED('User'));
                 },
-                (response) => super.onError(response)
+                (response) => {
+                    this._notifier.error(MESSAGES.UNKNOWN);
+                }
             );
     }
     updateGrid(data): void {
