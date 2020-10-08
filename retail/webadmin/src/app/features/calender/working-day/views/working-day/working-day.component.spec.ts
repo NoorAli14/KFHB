@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { UserFormComponent } from '@feature/entitlement/user/components/user-form/user-form.component';
 import { CalendarService } from '@feature/calender/services/calendar.service';
 import { WorkingDayComponent } from './working-day.component';
+import { NotifierService } from '@shared/services/notifier/notifier.service';
 
 describe('WorkingDayComponent', async () => {
     let component: WorkingDayComponent;
@@ -19,10 +20,12 @@ describe('WorkingDayComponent', async () => {
     let helper: DOMHelper<WorkingDayComponent>;
     const dialogRefSpyObj = jasmine.createSpyObj({ afterClosed : of({}), close: null });
     dialogRefSpyObj.componentInstance = { body: '' };
+    let notifierServiceMock: any;
     beforeEach(async(() => {
         injectorMock = jasmine.createSpyObj('Injector', ['get']);
         matDialogMock = jasmine.createSpyObj('MatDialog', ['open', 'closeAll']);
-     
+        notifierServiceMock = jasmine.createSpyObj('NotifierService', ['success','error']);
+
         calendarServiceMock = jasmine.createSpyObj(
             'CalendarService',
             ['getWorkingDays', 'createWorkingDay', 'editWorkingDay', 'deleteWorkingDay']
@@ -41,6 +44,10 @@ describe('WorkingDayComponent', async () => {
                 {
                     provide: CalendarService,
                     useValue: calendarServiceMock,
+                },
+                {
+                    provide: NotifierService,
+                    useValue: notifierServiceMock,
                 },
                 {
                     provide: MatDialog,
@@ -67,8 +74,8 @@ describe('WorkingDayComponent', async () => {
             expect(component).toBeTruthy();
         });
       
-        it('should  displayedColumns array property initialized with 7 columns ', () => {
-            expect(component.displayedColumns.length).toBe(7);
+        it('should  displayedColumns array property initialized with 6 columns ', () => {
+            expect(component.displayedColumns.length).toBe(6);
         });
       
         it('should call openDialog method on create new user button click only 1 time', () => {

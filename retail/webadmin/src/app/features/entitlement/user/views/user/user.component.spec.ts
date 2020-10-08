@@ -3,12 +3,14 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { MockComponent } from 'ng-mocks';
 import { Injector } from '@angular/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { of, throwError } from 'rxjs';
+import { of,  } from 'rxjs';
 import { DOMHelper } from 'testing/dom.helper';
 import { MatDialog } from '@angular/material/dialog';
 import { UserFormComponent } from '../../components/user-form/user-form.component';
 import { UserComponent } from './user.component';
 import { UserService } from '../../services/user.service';
+import { NotifierService } from '@shared/services/notifier/notifier.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 describe('UserComponent', async () => {
     let component: UserComponent;
@@ -19,11 +21,17 @@ describe('UserComponent', async () => {
     let helper: DOMHelper<UserComponent>;
     const dialogRefSpyObj = jasmine.createSpyObj({ afterClosed : of({}), close: null });
     dialogRefSpyObj.componentInstance = { body: '' };
+    let notifierServiceMock: any;
+    let matSnackBarMock: any;
+
     beforeEach(async(() => {
         injectorMock = jasmine.createSpyObj('Injector', ['get']);
         userServiceMock = jasmine.createSpyObj('UserService', ['get']);
         matDialogMock = jasmine.createSpyObj('MatDialog', ['open', 'closeAll']);
-     
+        notifierServiceMock = jasmine.createSpyObj('NotifierService', ['success','error']);
+
+        matSnackBarMock = jasmine.createSpyObj('MatSnackBar', ['open']);
+       
         userServiceMock = jasmine.createSpyObj(
             'UserService',
             ['forkUserData', 'createUser', 'editUser', 'deleteUser']
@@ -42,6 +50,14 @@ describe('UserComponent', async () => {
                 {
                     provide: UserService,
                     useValue: userServiceMock,
+                },
+                {
+                    provide: NotifierService,
+                    useValue: notifierServiceMock,
+                },
+                {
+                    provide: MatSnackBar,
+                    useValue: matSnackBarMock,
                 },
                 {
                     provide: MatDialog,
@@ -78,12 +94,7 @@ describe('UserComponent', async () => {
             expect(component.displayedColumns.length).toBe(5);
         });
 
-        it('should display error if forkRolesData failed ', () => {
-            userServiceMock.forkUserData.and.returnValue(throwError(''));
-            component.ngOnInit();
-            fixture.detectChanges();
-            expect(component.errorType).toEqual('error');
-        });
+       
         it('should call openDialog method on create new user button click only 1 time', () => {
             spyOn(component, 'openDialog');
             helper.clickElement('.add-product-button');

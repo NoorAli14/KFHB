@@ -13,6 +13,7 @@ import { By } from '@angular/platform-browser';
 import { of, throwError } from 'rxjs';
 import { DOMHelper } from 'testing/dom.helper';
 import { ResetPasswordComponent } from './reset-password.component';
+import { NotifierService } from '@shared/services/notifier/notifier.service';
 
 describe('ResetPasswordComponent', async () => {
     let component: ResetPasswordComponent;
@@ -21,11 +22,13 @@ describe('ResetPasswordComponent', async () => {
     let authenticationMock: any;
     let injectorMock: any;
     let helper: DOMHelper<ResetPasswordComponent>;
-
+    let notifierServiceMock: any;
     beforeEach(async(() => {
         fuseConfigServiceMock = jasmine.createSpyObj('FuseConfigService', [
             'config',
         ]);
+        notifierServiceMock = jasmine.createSpyObj('NotifierService', ['success','error']);
+
         injectorMock = jasmine.createSpyObj('Injector', ['get']);
 
         authenticationMock = jasmine.createSpyObj('AuthenticationService', [
@@ -45,6 +48,10 @@ describe('ResetPasswordComponent', async () => {
                 {
                     provide: AuthenticationService,
                     useValue: authenticationMock,
+                },
+                {
+                    provide: NotifierService,
+                    useValue: notifierServiceMock,
                 },
                 {
                     provide: Injector,

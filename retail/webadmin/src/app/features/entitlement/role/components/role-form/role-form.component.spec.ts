@@ -5,8 +5,7 @@ import { FuseConfigService } from '@fuse/services/config.service';
 import { ReactiveFormsModule, FormsModule, AbstractControl } from '@angular/forms';
 import { Injector } from '@angular/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { By } from '@angular/platform-browser';
-import { of, throwError } from 'rxjs';
+import { of,  } from 'rxjs';
 import { DOMHelper } from 'testing/dom.helper';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
@@ -14,6 +13,8 @@ import { RoleFormComponent } from './role-form.component';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Role } from '@feature/entitlement/models/role.model';
 import { RoleService } from '../../services/role.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { NotifierService } from '@shared/services/notifier/notifier.service';
 
 describe('RoleFormComponent', async () => {
     let component: RoleFormComponent;
@@ -23,9 +24,13 @@ describe('RoleFormComponent', async () => {
     let helper: DOMHelper<RoleFormComponent>;
     let model;
     let matDialogRefMock: any;
+    let matSnackBarMock: any;
+    let notifierServiceMock: any;
     beforeEach(async(() => {
         injectorMock = jasmine.createSpyObj('Injector', ['get']);
+        matSnackBarMock = jasmine.createSpyObj('MatSnackBar', ['open']);
         matDialogRefMock = jasmine.createSpyObj('MatDialogRef', ['close']);
+        notifierServiceMock = jasmine.createSpyObj('NotifierService', ['success','error']);
         roleServiceMock = jasmine.createSpyObj('RoleService', [
             'getSelectedPermissions',
         ]);
@@ -52,6 +57,14 @@ describe('RoleFormComponent', async () => {
                         role: new Role(),
                         modules: [],
                     },
+                },
+                {
+                    provide: NotifierService,
+                    useValue: notifierServiceMock,
+                },
+                {
+                    provide: MatSnackBar,
+                    useValue: matSnackBarMock,
                 },
                 {
                     provide: Injector,
@@ -86,7 +99,7 @@ describe('RoleFormComponent', async () => {
         it('should modulesMapped array property initialized with empty array', () => {
             expect(component.modulesMapped.length).toBe(0);
         });
-        it('should  displayedColumns array property initialized with 5 columns ', () => {
+        it('should  displayedColumns array property initialized with 1 columns ', () => {
             expect(component.displayedColumns.length).toBe(1);
         });
         it('should camelToSentenceCase be called', () => {
