@@ -14,13 +14,13 @@ import {
     ApiBearerAuth,
 } from '@nestjs/swagger';
 import { Request } from 'express';
-import { AuthGuard } from '@common/index';
+import { AuthGuard, PermissionsGuard, Permissions } from '@common/index';
 import { DocumentsService } from './documents.service';
 
 @ApiTags('Documents Module')
 @Controller()
 @ApiBearerAuth()
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, PermissionsGuard)
 export class DocumentsController {
 
     constructor(private readonly documentService: DocumentsService) { }
@@ -33,6 +33,7 @@ export class DocumentsController {
     })
     @ApiOkResponse({})
     @Header('Content-Type', 'image/jpeg')
+    @Permissions('attend:video')
     async preview(
         @Param('id', ParseUUIDPipe) id: string,
         @Param('customer_id', ParseUUIDPipe) customer_id: string,

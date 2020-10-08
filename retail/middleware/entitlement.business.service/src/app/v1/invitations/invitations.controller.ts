@@ -25,6 +25,7 @@ import {
   AuthGuard,
   SuccessDto,
   USER_STATUSES,
+  PermissionsGuard, Permissions
 } from '@common/index';
 import { UserService } from '@app/v1/users/users.service';
 import { NewUserDto } from '@app/v1/users/user.dto';
@@ -34,6 +35,7 @@ import { InvitationsService } from './invitations.service';
 
 @ApiTags('Invitation')
 @Controller('invitations')
+@UseGuards(PermissionsGuard)
 export class InvitationsController {
   constructor(
     private readonly userService: UserService,
@@ -57,6 +59,7 @@ export class InvitationsController {
     type: Error,
     description: 'Input Validation failed.',
   })
+  @Permissions('create:users')
   async create(
     @Body() input: NewUserDto,
   ): Promise<User> {
@@ -197,6 +200,7 @@ export class InvitationsController {
     description: 'User has been already onboard.',
   })
   @HttpCode(HttpStatus.OK)
+  @Permissions('create:users')
   async resendInvitationLink(
     @Param('user_id') user_id: string,
   ): Promise<SuccessDto> {

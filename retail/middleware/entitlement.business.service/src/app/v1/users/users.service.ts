@@ -31,10 +31,12 @@ export class UserService {
     modules {
         id
         name
+        slug
         parent_id
         sub_modules {
           id
           name
+          slug
           parent_id
           permissions {
             id
