@@ -13,6 +13,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { UserFormComponent } from './user-form.component';
 import { UserService } from '../../services/user.service';
 import { User } from '@feature/entitlement/models/user.model';
+import { NotifierService } from '@shared/services/notifier/notifier.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 describe('UserFormComponent', async () => {
     let component: UserFormComponent;
@@ -21,10 +23,15 @@ describe('UserFormComponent', async () => {
     let helper: DOMHelper<UserFormComponent>;
     let model;
     let matDialogRefMock: any;
+    let notifierServiceMock: any;
+    let matSnackBarMock: any;
+
     beforeEach(async(() => {
         injectorMock = jasmine.createSpyObj('Injector', ['get']);
         matDialogRefMock = jasmine.createSpyObj('MatDialogRef', ['close']);
-      
+        notifierServiceMock = jasmine.createSpyObj('NotifierService', ['success','error']);
+
+        matSnackBarMock = jasmine.createSpyObj('MatSnackBar', ['open']);
         TestBed.configureTestingModule({
             declarations: [UserFormComponent],
             imports: [
@@ -46,6 +53,14 @@ describe('UserFormComponent', async () => {
                         user: new User(),
                         roles: [],
                     },
+                },
+                {
+                    provide: NotifierService,
+                    useValue: notifierServiceMock,
+                },
+                {
+                    provide: MatSnackBar,
+                    useValue: matSnackBarMock,
                 },
                 {
                     provide: Injector,

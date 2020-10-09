@@ -41,7 +41,6 @@ export class RoleFormComponent extends BaseComponent implements OnDestroy, OnIni
     ngOnInit(): void {
         const totalPermissions = this.data.permissions.map((x) => x.record_type);
         this.displayedColumns = this.displayedColumns.concat(totalPermissions);
-
      
         this.roleForm = new FormGroup({
             id: new FormControl(this.data.role.id),

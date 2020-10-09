@@ -1,5 +1,4 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import {
     ReactiveFormsModule,
     FormsModule,
@@ -7,12 +6,11 @@ import {
 import { Injector } from '@angular/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { DOMHelper } from 'testing/dom.helper';
-import { MatSelectModule } from '@angular/material/select';
-import { MatInputModule } from '@angular/material/input';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { User } from '@feature/entitlement/models/user.model';
 import { HolidayFormComponent } from './holiday-form.component';
 import { Holiday } from '@feature/calender/models/holiday.model';
+import { NotifierService } from '@shared/services/notifier/notifier.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 describe('HolidayFormComponent', async () => {
     let component: HolidayFormComponent;
@@ -21,10 +19,13 @@ describe('HolidayFormComponent', async () => {
     let helper: DOMHelper<HolidayFormComponent>;
     let model;
     let matDialogRefMock: any;
+    let notifierServiceMock: any;
+    let matSnackBarMock: any;
     beforeEach(async(() => {
         injectorMock = jasmine.createSpyObj('Injector', ['get']);
         matDialogRefMock = jasmine.createSpyObj('MatDialogRef', ['close']);
-      
+        notifierServiceMock = jasmine.createSpyObj('NotifierService', ['success','error']);
+        matSnackBarMock = jasmine.createSpyObj('MatSnackBar', ['open']);
         TestBed.configureTestingModule({
             declarations: [HolidayFormComponent],
             imports: [
@@ -36,6 +37,14 @@ describe('HolidayFormComponent', async () => {
                 {
                     provide: MatDialogRef,
                     useValue: matDialogRefMock,
+                },
+                {
+                    provide: MatSnackBar,
+                    useValue: matSnackBarMock,
+                },
+                {
+                    provide: NotifierService,
+                    useValue: notifierServiceMock,
                 },
                 {
                     provide: MAT_DIALOG_DATA,

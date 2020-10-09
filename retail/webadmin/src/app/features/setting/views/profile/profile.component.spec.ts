@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ProfileComponent } from './profile.component';
 import { SettingService } from '@feature/setting/setting.service';
 import { of, throwError } from 'rxjs';
+import { NotifierService } from '@shared/services/notifier/notifier.service';
 
 describe('ProfileComponent', async () => {
     let component: ProfileComponent;
@@ -19,6 +20,7 @@ describe('ProfileComponent', async () => {
         afterClosed: of({}),
         close: null,
     });
+    let notifierServiceMock: any;
     dialogRefSpyObj.componentInstance = { body: '' };
     beforeEach(async(() => {
         injectorMock = jasmine.createSpyObj('Injector', ['get']);
@@ -26,6 +28,7 @@ describe('ProfileComponent', async () => {
         settingServiceMock = jasmine.createSpyObj('SettingService', [
             'updateProfile', 'getNationalities'
         ]);
+        notifierServiceMock = jasmine.createSpyObj('NotifierService', ['success','error']);
 
         settingServiceMock.updateProfile.and.returnValue(of([]));
         settingServiceMock.getNationalities.and.returnValue(of([]));
@@ -36,6 +39,10 @@ describe('ProfileComponent', async () => {
                 {
                     provide: MatDialog,
                     useValue: matDialogMock,
+                },
+                {
+                    provide: NotifierService,
+                    useValue: notifierServiceMock,
                 },
                 {
                     provide: Injector,
