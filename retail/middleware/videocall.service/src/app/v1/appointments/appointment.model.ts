@@ -10,7 +10,7 @@ import {
 } from 'class-validator';
 
 @ObjectType()
-export class User {
+export class UserGQL {
   @Field()
   id?: string;
 
@@ -85,8 +85,8 @@ export class Appointment {
 
   user_id: string;
 
-  @Field(() => User) // Will get this field from another service using ResolveField function.
-  user?: User;
+  @Field(() => UserGQL) // Will get this field from another service using ResolveField function.
+  user?: UserGQL;
 
   @Field()
   @IsNotEmpty()

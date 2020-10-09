@@ -11,11 +11,7 @@ import { ApplicationModule } from '@rubix/app';
 import { NewAppointmentInput } from './appointment.dto';
 import { createQuery } from '@common/tests/e2e.tests';
 import { uuidV4 } from '@common/utilities';
-import {
-  APPOINTMENT_QUERY,
-  APPOINTMENT_STATUS,
-  GENDER,
-} from '@common/constants';
+import { APPOINTMENT_QUERY } from '@common/constants';
 import { Appointment } from './appointment.model';
 
 describe('Video Call Module (e2e)', () => {
@@ -45,7 +41,7 @@ describe('Video Call Module (e2e)', () => {
   it('should successfully transform and validate the appointment response', async () => {
     appointment = {
       call_time: new Date(),
-      user_id: '828605C2-7E50-40BC-AA88-C064CE63C155',
+      user_id: headers['x-user-id'],
     } as NewAppointmentInput;
 
     const transformedResponse: NewAppointmentInput = await transformAndValidate(
@@ -66,18 +62,14 @@ describe('Video Call Module (e2e)', () => {
       .set(headers)
       .expect(async ({ body }) => {
         const data = body?.data?.findAppointmentByUserId;
-        if (data) {
-          const appointmentJson: string = JSON.stringify(data);
+        const appointmentJson: string = JSON.stringify(data);
 
-          const transformedResponse: Appointment = (await transformAndValidate(
-            Appointment,
-            appointmentJson,
-          )) as Appointment;
-          expect(transformedResponse).toBeDefined();
-          expect(transformedResponse).toBeInstanceOf(Object);
-        } else {
-          expect(data).toBeUndefined();
-        }
+        const transformedResponse: Appointment = (await transformAndValidate(
+          Appointment,
+          appointmentJson,
+        )) as Appointment;
+        expect(transformedResponse).toBeDefined();
+        expect(transformedResponse).toBeInstanceOf(Object);
       })
       .end(done)
       .expect(200);
@@ -92,18 +84,14 @@ describe('Video Call Module (e2e)', () => {
       .set(headers)
       .expect(async ({ body }) => {
         const data = body?.data?.findAppointment;
-        if (data) {
-          const appointmentJson: string = JSON.stringify(data);
+        const appointmentJson: string = JSON.stringify(data);
 
-          const transformedResponse: Appointment = (await transformAndValidate(
-            Appointment,
-            appointmentJson,
-          )) as Appointment;
-          expect(transformedResponse).toBeDefined();
-          expect(transformedResponse).toBeInstanceOf(Object);
-        } else {
-          expect(data).toBeUndefined();
-        }
+        const transformedResponse: Appointment = transformAndValidateSync(
+          Appointment,
+          appointmentJson,
+        ) as Appointment;
+        expect(transformedResponse).toBeDefined();
+        expect(transformedResponse).toBeInstanceOf(Object);
       })
       .end(done)
       .expect(200);
@@ -123,18 +111,15 @@ describe('Video Call Module (e2e)', () => {
       .set(headers)
       .expect(async ({ body }) => {
         const data = body?.data?.addAppointment;
-        if (data) {
-          const appointmentJson: string = JSON.stringify(data);
 
-          const transformedResponse: Appointment = (await transformAndValidate(
-            Appointment,
-            appointmentJson,
-          )) as Appointment;
-          expect(transformedResponse).toBeDefined();
-          expect(transformedResponse).toBeInstanceOf(Object);
-        } else {
-          expect(data).toBeUndefined();
-        }
+        const appointmentJson: string = JSON.stringify(data);
+
+        const transformedResponse: Appointment = (await transformAndValidate(
+          Appointment,
+          appointmentJson,
+        )) as Appointment;
+        expect(transformedResponse).toBeDefined();
+        expect(transformedResponse).toBeInstanceOf(Object);
       })
       .end(done)
       .expect(200);
@@ -153,17 +138,13 @@ describe('Video Call Module (e2e)', () => {
       .set(headers)
       .expect(async ({ body }) => {
         const data = body?.data?.addAppointment;
-        if (data) {
-          const appointmentJson: string = JSON.stringify(data);
-          const transformedResponse: Appointment = (await transformAndValidate(
-            Appointment,
-            appointmentJson,
-          )) as Appointment;
-          expect(transformedResponse).toBeDefined();
-          expect(transformedResponse).toBeInstanceOf(Object);
-        } else {
-          expect(data).toBeUndefined();
-        }
+        const appointmentJson: string = JSON.stringify(data);
+        const transformedResponse: Appointment = (await transformAndValidate(
+          Appointment,
+          appointmentJson,
+        )) as Appointment;
+        expect(transformedResponse).toBeDefined();
+        expect(transformedResponse).toBeInstanceOf(Object);
       })
       .expect(200)
       .end(done);

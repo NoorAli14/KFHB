@@ -17,7 +17,7 @@ type Appointment {
   call_time: String
   gender: String
   status: String
-  user: User!
+  user: UserGQL!
   created_on: String!
   created_by: String!
   updated_on: String!
@@ -45,7 +45,7 @@ type Query {
   findAppointmentByUserId(user_id: String!): Appointment!
 }
 
-type User {
+type UserGQL {
   id: String!
   first_name: String!
   middle_name: String!
