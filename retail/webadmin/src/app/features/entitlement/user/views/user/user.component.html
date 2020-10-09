@@ -56,8 +56,13 @@
                                 <mat-icon class="hover" type="button" (click)="onDetail(element['id'])" matTooltip="Explore">explore</mat-icon>
                                 <mat-icon class="hover"  *ngIf="element['status']==='PENDING'"  color="success"  matTooltip="Resend Invitation" type="button" (click)=" confirmDialog('invite',element['id'])">near_me</mat-icon> &nbsp;&nbsp;
                                 </span>
-                            <span *ngSwitchCase="'status'">
+                         
+                                <span *ngSwitchCase="'status'">
                                 <app-status [status]="element[key]"></app-status>
+                            </span>
+                        
+                            <span  *ngSwitchCase="'createdOn'">
+                                {{element[camelToSnakeCase(key)] | date:'mediumDate'}}
                             </span>
                             <span  *ngSwitchDefault>
                                 <span *ngIf="element[camelToSnakeCase(key)]; else defaultText">

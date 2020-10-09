@@ -50,7 +50,9 @@
                                 [type]="'delete'" type="button" (click)=" confirmDialog(element['id'])">delete</mat-icon> &nbsp;&nbsp;
                                 <mat-icon class="hover" type="button" matTooltip="Edit holiday" (click)="openDialog(element)">mode_edit</mat-icon>
                             </span>
-                          
+                            <span  *ngSwitchCase="'createdOn'">
+                                {{element[key] | date:'mediumDate'}}
+                            </span>
                             <span  *ngSwitchDefault>
                                 <span *ngIf="element[key]; else defaultText">
                                     {{element[key] }}

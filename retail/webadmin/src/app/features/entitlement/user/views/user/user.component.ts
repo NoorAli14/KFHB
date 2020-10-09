@@ -49,7 +49,7 @@ export class UserComponent extends BaseComponent implements OnInit {
     pageSize: number = CONFIG.PAGE_SIZE;
     pageSizeOptions: Array<number> = CONFIG.PAGE_SIZE_OPTIONS;
     nationalities: any[];
-    displayedColumns = ['firstName', 'lastName', 'email', 'status', 'action'];
+    displayedColumns = ['firstName', 'lastName', 'email', 'createdOn', 'status', 'action'];
 
     dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
 

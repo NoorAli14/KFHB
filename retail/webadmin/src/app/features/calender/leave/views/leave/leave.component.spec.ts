@@ -75,8 +75,8 @@ describe('LeaveComponent', async () => {
             expect(component).toBeTruthy();
         });
       
-        it('should  displayedColumns array property initialized with 4 columns ', () => {
-            expect(component.displayedColumns.length).toBe(4);
+        it('should  displayedColumns array property initialized with 5 columns ', () => {
+            expect(component.displayedColumns.length).toBe(5);
         });
       
         it('should call openDialog method on create new user button click only 1 time', () => {

@@ -40,8 +40,8 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
     workingDays: any[];
     displayedColumns = [
         'weekDay',
-        'startTimeLocal',
-        'endTimeLocal',
+        'startTime',
+        'endTime',
         'fullDay',
         'remarks',
         'actions',
