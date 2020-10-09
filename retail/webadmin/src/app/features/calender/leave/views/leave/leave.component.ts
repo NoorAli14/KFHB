@@ -73,7 +73,7 @@ export class LeaveComponent extends BaseComponent implements OnInit {
                 this.dataSource.sort = this.sort;
             },
             (error) => {
-                this._notifier.success(MESSAGES.UNKNOWN);
+                this._notifier.error(MESSAGES.UNKNOWN);
             }
         );
     }

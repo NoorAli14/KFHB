@@ -112,7 +112,6 @@ class App extends React.Component {
     })
     axios.get(window._env_.RUBIX_BASE_URL + "/entitlements/auth/me", config)
       .then(res => {
-        
         if (res.data !== undefined) {
           let userName = res.data.first_name + '' + res.data.last_name
           let encryptdata = encryptData(res.data, userName);
