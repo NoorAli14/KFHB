@@ -28,7 +28,7 @@ describe('UserComponent', async () => {
         injectorMock = jasmine.createSpyObj('Injector', ['get']);
         userServiceMock = jasmine.createSpyObj('UserService', ['get']);
         matDialogMock = jasmine.createSpyObj('MatDialog', ['open', 'closeAll']);
-        notifierServiceMock = jasmine.createSpyObj('NotifierService', ['success','error']);
+        notifierServiceMock = jasmine.createSpyObj('NotifierService', ['success', 'error']);
 
         matSnackBarMock = jasmine.createSpyObj('MatSnackBar', ['open']);
        
@@ -90,8 +90,8 @@ describe('UserComponent', async () => {
         it('should roles array property initialized with empty array', () => {
             expect(component.roles.length).toBe(0);
         });
-        it('should  displayedColumns array property initialized with 5 columns ', () => {
-            expect(component.displayedColumns.length).toBe(5);
+        it('should  displayedColumns array property initialized with 6 columns ', () => {
+            expect(component.displayedColumns.length).toBe(6);
         });
 
        

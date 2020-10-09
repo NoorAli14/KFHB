@@ -27,7 +27,7 @@ describe('UpdateProfileComponent', async () => {
     beforeEach(async(() => {
         injectorMock = jasmine.createSpyObj('Injector', ['get']);
         matDialogRefMock = jasmine.createSpyObj('MatDialogRef', ['close']);
-        notifierServiceMock = jasmine.createSpyObj('NotifierService', ['success','error']);
+        notifierServiceMock = jasmine.createSpyObj('NotifierService', ['success', 'error']);
 
         TestBed.configureTestingModule({
             declarations: [UpdateProfileComponent],

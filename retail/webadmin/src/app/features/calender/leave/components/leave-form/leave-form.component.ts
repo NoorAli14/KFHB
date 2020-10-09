@@ -35,7 +35,7 @@ export class LeaveFormComponent extends BaseComponent implements OnDestroy, OnIn
 
   ngOnInit(): void {
     this.leaveTypes = this.data.leaveTypes;
-    const users =  this.data.users?.filter(x => x.roles.find(item => item.name !== 'SUPER ADMIN') &&  x.status==='ACTIVE');
+    const users =  this.data.users?.filter(x => x.roles.find(item => item.name !== 'SUPER ADMIN') &&  x.status === 'ACTIVE');
     this.users = [...users];
     this.filteredUser =  [...users];
 

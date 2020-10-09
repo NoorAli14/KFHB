@@ -49,7 +49,7 @@ export class UserComponent extends BaseComponent implements OnInit {
     pageSize: number = CONFIG.PAGE_SIZE;
     pageSizeOptions: Array<number> = CONFIG.PAGE_SIZE_OPTIONS;
     nationalities: any[];
-    displayedColumns = ['firstName', 'lastName', 'email', 'status', 'action'];
+    displayedColumns = ['firstName', 'lastName', 'email', 'createdOn', 'status', 'action'];
 
     dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
 
@@ -135,7 +135,7 @@ export class UserComponent extends BaseComponent implements OnInit {
         const message =
             type === 'invite'
                 ? removeRandom(MESSAGES.RESEND_INVITE)
-                : removeRandom(MESSAGES.REMOVE_CONFIRMATION)
+                : removeRandom(MESSAGES.REMOVE_CONFIRMATION);
         const dialogData = new ConfirmDialogModel('Confirm Action', message);
         const dialogRef = this._matDialog.open(ConfirmDialogComponent, {
             data: dialogData,

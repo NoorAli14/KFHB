@@ -55,6 +55,9 @@
                         <span *ngSwitchCase="'leaveTypeId'">
                             {{getLeaveType(element[key])}}
                         </span>
+                        <span *ngSwitchCase="'User'">
+                            {{getUserName(element['userId'])}}
+                        </span>
                      
                         <span *ngSwitchCase="'action'">
                             <mat-icon class="hover" matTooltip="Delete leave" appPermission [permissions]="userPermissions"  [type]="'delete'" color="warn" type="button" (click)=" confirmDialog('delete',element['id'])">delete</mat-icon> &nbsp;&nbsp;
