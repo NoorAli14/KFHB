@@ -24,7 +24,7 @@ export class BaseComponent implements OnInit {
     ) {
         this._authUserService = injector.get(AuthUserService);
         this._mapperService = injector.get(MapperService);
-        this._notifier= injector.get(NotifierService); 
+        this._notifier = injector.get(NotifierService); 
         this._unsubscribeAll = new Subject();
     }
 

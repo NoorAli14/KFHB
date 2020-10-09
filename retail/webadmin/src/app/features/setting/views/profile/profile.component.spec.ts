@@ -28,7 +28,7 @@ describe('ProfileComponent', async () => {
         settingServiceMock = jasmine.createSpyObj('SettingService', [
             'updateProfile', 'getNationalities'
         ]);
-        notifierServiceMock = jasmine.createSpyObj('NotifierService', ['success','error']);
+        notifierServiceMock = jasmine.createSpyObj('NotifierService', ['success', 'error']);
 
         settingServiceMock.updateProfile.and.returnValue(of([]));
         settingServiceMock.getNationalities.and.returnValue(of([]));

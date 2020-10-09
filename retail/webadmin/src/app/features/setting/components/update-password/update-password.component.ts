@@ -43,7 +43,7 @@ export class UpdatePasswordComponent extends BaseComponent implements OnInit {
         return null;
     }
     onSubmit(): void {
-        debugger
+        debugger;
         let model = { ...this.updatePasswordForm.value };
         model = camelToSnakeCase(model);
         this.onUpdate.emit(model);

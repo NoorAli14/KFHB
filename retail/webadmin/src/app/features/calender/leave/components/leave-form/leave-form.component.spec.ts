@@ -23,7 +23,7 @@ describe('LeaveFormComponent', async () => {
         injectorMock = jasmine.createSpyObj('Injector', ['get']);
         matDialogRefMock = jasmine.createSpyObj('MatDialogRef', ['close']);
         authUserServiceMock = jasmine.createSpyObj('AuthUserService', ['User']);
-        notifierServiceMock = jasmine.createSpyObj('NotifierService', ['success','error']);
+        notifierServiceMock = jasmine.createSpyObj('NotifierService', ['success', 'error']);
 
         authUserServiceMock.User.and.returnValue(
           of({roles: []})

@@ -135,7 +135,7 @@ export class UserComponent extends BaseComponent implements OnInit {
         const message =
             type === 'invite'
                 ? removeRandom(MESSAGES.RESEND_INVITE)
-                : removeRandom(MESSAGES.REMOVE_CONFIRMATION)
+                : removeRandom(MESSAGES.REMOVE_CONFIRMATION);
         const dialogData = new ConfirmDialogModel('Confirm Action', message);
         const dialogRef = this._matDialog.open(ConfirmDialogComponent, {
             data: dialogData,

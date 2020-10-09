@@ -27,7 +27,7 @@ describe('ForgotPasswordComponent', async () => {
         fuseConfigServiceMock = jasmine.createSpyObj('FuseConfigService', [
             'config',
         ]);
-        notifierServiceMock = jasmine.createSpyObj('NotifierService', ['success','error']);
+        notifierServiceMock = jasmine.createSpyObj('NotifierService', ['success', 'error']);
         injectorMock = jasmine.createSpyObj('Injector', ['get']);
 
         authenticationMock = jasmine.createSpyObj('AuthenticationService', [

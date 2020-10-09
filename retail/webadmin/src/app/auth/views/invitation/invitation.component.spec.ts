@@ -29,7 +29,7 @@ describe('InvitationComponent', async () => {
     
     let notifierServiceMock: any;
     beforeEach(async(() => {
-        notifierServiceMock = jasmine.createSpyObj('NotifierService', ['success','error']);
+        notifierServiceMock = jasmine.createSpyObj('NotifierService', ['success', 'error']);
         fuseConfigServiceMock = jasmine.createSpyObj('FuseConfigService', [
             'config',
         ]);

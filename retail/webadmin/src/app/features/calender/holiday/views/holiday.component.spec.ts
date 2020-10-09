@@ -26,7 +26,7 @@ describe('HolidayComponent', async () => {
     beforeEach(async(() => {
         injectorMock = jasmine.createSpyObj('Injector', ['get']);
         matDialogMock = jasmine.createSpyObj('MatDialog', ['open', 'closeAll']);
-        notifierServiceMock = jasmine.createSpyObj('NotifierService', ['success','error']);
+        notifierServiceMock = jasmine.createSpyObj('NotifierService', ['success', 'error']);
         matSnackBarMock = jasmine.createSpyObj('MatSnackBar', ['open']);
 
         calendarServiceMock = jasmine.createSpyObj(

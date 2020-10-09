@@ -30,7 +30,7 @@ describe('RoleFormComponent', async () => {
         injectorMock = jasmine.createSpyObj('Injector', ['get']);
         matSnackBarMock = jasmine.createSpyObj('MatSnackBar', ['open']);
         matDialogRefMock = jasmine.createSpyObj('MatDialogRef', ['close']);
-        notifierServiceMock = jasmine.createSpyObj('NotifierService', ['success','error']);
+        notifierServiceMock = jasmine.createSpyObj('NotifierService', ['success', 'error']);
         roleServiceMock = jasmine.createSpyObj('RoleService', [
             'getSelectedPermissions',
         ]);
