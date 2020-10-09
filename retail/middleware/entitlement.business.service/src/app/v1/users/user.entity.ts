@@ -38,14 +38,6 @@ export class User {
   last_name?: string;
 
   @ApiProperty({
-    title: 'Username',
-    description: 'username of the user.',
-    required: false,
-  })
-  @IsOptional()
-  username?: string;
-
-  @ApiProperty({
     title: 'Email',
     example: 'example@aiondigital.com',
     description: 'Email of the user.',

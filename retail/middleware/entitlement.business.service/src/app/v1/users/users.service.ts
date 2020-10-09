@@ -15,7 +15,6 @@ export class UserService {
     first_name
     middle_name
     last_name
-    username
     email
     contact_no
     gender
@@ -32,10 +31,12 @@ export class UserService {
     modules {
         id
         name
+        slug
         parent_id
         sub_modules {
           id
           name
+          slug
           parent_id
           permissions {
             id
@@ -73,7 +74,6 @@ export class UserService {
         first_name
         middle_name
         last_name
-        username
         email
         contact_no
         gender

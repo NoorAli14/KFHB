@@ -41,6 +41,24 @@ services:
       - ENV_RBX_APP_SECRET=$ENV_RBX_APP_SECRET
       - ENV_RBX_CHANNEL_ID=$ENV_RBX_CHANNEL_ID
       - ENV_RBX_TENANT_ID=$ENV_RBX_TENANT_ID
+      - ENV_RBX_VIDEO_URL=$ENV_RBX_VIDEO_URL
+    restart: always
+    networks:
+      - core_service_network
+  #=================================================================
+  # Video Call Portal Service
+  #=================================================================
+  video-portal:
+    image: videoportal:dev
+    container_name: video_portal
+    environment:
+      - REACT_APP_IV=$REACT_APP_IV
+      - REACT_APP_BASE_URL=$REACT_APP_BASE_URL
+      - REACT_APP_SIGNAL_SERVER=$REACT_APP_SIGNAL_SERVER
+      - REACT_APP_XMPP_HOST=$REACT_APP_XMPP_HOST
+      - RUBIX_BASE_URL=$RUBIX_BASE_URL
+      - REACT_APP_XMPP_PORT=$REACT_APP_XMPP_PORT
+      - REACT_APP_SSL=$REACT_APP_SSL
     restart: always
     networks:
       - core_service_network

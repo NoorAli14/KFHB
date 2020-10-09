@@ -38,19 +38,31 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
+  setPermissions(modules: any[], track: string[]): string[] {
+    return modules.reduce((accumulator, module) => {
+      let result = [];
+      if (module.slug)
+        result = module.permissions.map(p => `${p.record_type}:${module.slug}`)
+      if (module.sub_modules)
+        result = this.setPermissions(module.sub_modules, result);
+      return [...result, ...accumulator];
+    }, track);
+  }
   /**
    * Function to check that a given token is valid
    * @param request
    * @param payload Payload info
    * @returns {Promise<User>}
    */
-  async validate(request: Request, payload: Record<string, string>): Promise<User> {
+  async validate(request: any, payload: Record<string, string>): Promise<User> {
     this.logger.log(`Start authenticating with user ID with [${payload.id}]`);
+    // const user = await this.redisService.getUserProfile(payload.id);
     if (!(await this.redisService.getValue(payload.id))) return null;
     const header: IHEADER = formattedHeader(request, payload.id);
     setContext('HttpHeaders', header);
     const user: User = await this.userService.findOne(payload.id);
     if (!user) throw new UnauthorizedException();
+    request.permissions = this.setPermissions(user.modules, []);;
     setContext('currentUser', user);
     return user;
   }
