@@ -20,7 +20,7 @@ import { ConfigurationService } from '@common/configuration/configuration.servic
         preview: false,
         template: {
           // dir: __dirname + '/templates',
-          dir: join(`${process.cwd()}`, './src/app/v1/email/templates'),
+          dir: join(`${process.cwd()}`, './dist/src/app/v1/email/templates'),
           adapter: new PugAdapter(),
           options: {
             strict: true,
@@ -34,4 +34,4 @@ import { ConfigurationService } from '@common/configuration/configuration.servic
   providers: [EmailService, EmailResolver],
   exports: [EmailService],
 })
-export class EmailModule {}
+export class EmailModule { }
