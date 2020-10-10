@@ -7,7 +7,7 @@ export const DEFAULT_ENV: iConfig = {
     PORT: null,
     HOST: '',
     ENVIRONMENT: 'development',
-    API_URL_PREFIX: '/api/v1/',
+    API_URL_PREFIX: '/api/v1',
   },
   SWAGGER: {
     ENABLE: true,
