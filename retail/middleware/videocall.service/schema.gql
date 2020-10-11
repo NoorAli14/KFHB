@@ -14,21 +14,14 @@ directive @provides(fields: String!) on FIELD_DEFINITION
 
 type Appointment {
   id: String!
-  call_time: DateTime
+  call_time: String
   gender: String
   status: String
-  user: User!
-  created_on: DateTime!
-  updated_on: DateTime!
-}
-
-enum APPOINTMENT_STATUS {
-  SCHEDULED
-  RESCHEDULED
-  QUEUED
-  NOTIFICATION
-  ATTENDED
-  CANCELLED
+  user: UserGQL!
+  created_on: String!
+  created_by: String!
+  updated_on: String!
+  updated_by: String!
 }
 
 """
@@ -43,7 +36,7 @@ type Mutation {
 input NewAppointmentInput {
   call_time: DateTime!
   gender: String
-  status: APPOINTMENT_STATUS
+  status: String
   user_id: String!
 }
 
@@ -52,7 +45,7 @@ type Query {
   findAppointmentByUserId(user_id: String!): Appointment!
 }
 
-type User {
+type UserGQL {
   id: String!
   first_name: String!
   middle_name: String!
