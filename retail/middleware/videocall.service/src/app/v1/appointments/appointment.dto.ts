@@ -18,7 +18,7 @@ export class NewAppointmentInput {
   @IsString()
   @IsOptional()
   @Field({ nullable: true })
-  @IsEnum(Object.keys(GENDER))
+  @IsEnum(['M', 'F'])
   gender: string;
 
   @IsString()
