@@ -115,10 +115,10 @@ $ git clone https://<username>@github.com/aiondigitalengineering/rubix.git
 $ cd ./rubix/retail/middleware/videocall.service/
 
 # To build the docker image
-$ docker build  --no-cache  --force-rm -t rubixretailvideocall:dev .
+$ docker build  --no-cache  --force-rm -t rubixretailvediocall:dev .
 
-# To run the rubixretailvideocall:dev container
-$ sudo docker run -d rubixretailvideocall:dev
+# To run the rubixretailvediocall:dev container
+$ sudo docker run -d rubixretailvediocall:dev
 
 ```
 

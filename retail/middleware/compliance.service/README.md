@@ -121,10 +121,10 @@ $ git clone https://<username>@github.com/aiondigitalengineering/rubix.git
 $ cd ./rubix/retail/middleware/compliance.service/
 
 # To build the docker image
-$ docker build  --no-cache  --force-rm -t rubixretailcompliance:dev .
+$ docker build  --no-cache  --force-rm -t rubixcompliance:dev .
 
-# To run the rubixretailcompliance:dev container
-$ sudo docker run -d rubixretailcompliance:dev
+# To run the rubixcompliance:dev container
+$ sudo docker run -d rubixcompliance:dev
 
 ```
 
