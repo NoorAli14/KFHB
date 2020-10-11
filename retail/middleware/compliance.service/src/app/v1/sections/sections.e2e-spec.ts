@@ -102,16 +102,11 @@ describe('Compliance Module (e2e)', () => {
         query: `{findSection(id: "d2d409a9-8cf3-3562-a4d0-2361dd59cd98"){name name_ar status level}}`,
       })
       .set(headers)
-      .expect(async ({ body }) => {
+      .expect(({ body }) => {
         const data = body?.data?.findSection;
-        const sectionJson: string = JSON.stringify(data);
-
-        const transformedSection: Section = (await transformAndValidate(
-          Section,
-          sectionJson,
-        )) as Section;
-        expect(data).toBeDefined();
-        expect(transformedSection).toBeInstanceOf(Section);
+        expect(data).toBeUndefined();
+        expect(!data).toBeTruthy();
+        expect(data).toEqual(null);
       })
       .end(done)
       .expect(200);

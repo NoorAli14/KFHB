@@ -9,7 +9,8 @@ export class TemplateResponse {
   id: string;
 
   @Field()
-  @IsJSON()
+  @IsString()
+  @IsOptional()
   results: string;
 
   @Field()

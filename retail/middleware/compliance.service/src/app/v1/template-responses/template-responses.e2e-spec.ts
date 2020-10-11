@@ -59,10 +59,10 @@ describe('Complince Module (e2e)', () => {
         const data = body?.data?.findTemplateResponseByUserId;
         const templateResponseJson: string = JSON.stringify(data);
 
-        const transformedResponse: NewTemplateResponseInput[] = (await transformAndValidate(
-          NewTemplateResponseInput,
+        const transformedResponse: TemplateResponse[] = (await transformAndValidate(
+          TemplateResponse,
           templateResponseJson,
-        )) as NewTemplateResponseInput[];
+        )) as TemplateResponse[];
         expect(transformedResponse).toBeDefined();
         expect(transformedResponse).toBeInstanceOf(Array);
         expect(transformedResponse).toHaveLength(data.length);
@@ -88,10 +88,10 @@ describe('Complince Module (e2e)', () => {
       .expect(async ({ body }) => {
         const data = body?.data?.findTemplateResponseByUserId;
         // const templateResponseJson: string = JSON.stringify(data);
-        // const transformedTemplateResponse: NewTemplateResponseInput[] = (await transformAndValidate(
-        //   NewTemplateResponseInput,
+        // const transformedTemplateResponse: TemplateResponse[] = (await transformAndValidate(
+        //   TemplateResponse,
         //   templateResponseJson,
-        // )) as NewTemplateResponseInput[];
+        // )) as TemplateResponse[];
         expect(data).toBeUndefined();
         expect(!data).toBeTruthy();
         expect(data).toEqual(null);
@@ -99,13 +99,6 @@ describe('Complince Module (e2e)', () => {
       .end(done)
       .expect(200);
   });
-
-  const templateResponses: NewTemplateResponseInput = {
-    results: 'Test response results',
-    remarks: 'Test response remarks',
-    template_id: '37678c69-dde5-4452-a66b-401f32211427',
-    user_id: '828605C2-7E50-40BC-AA88-C064CE63C155',
-  };
 
   it(`Should fetch template response`, done => {
     return request(app.getHttpServer())
@@ -145,10 +138,10 @@ describe('Complince Module (e2e)', () => {
         const data = body?.data?.addTemplateResponse;
         if (data) {
           const templateResponseJson: string = JSON.stringify(data);
-          const transformedTemplateResponse: NewTemplateResponseInput[] = (await transformAndValidate(
-            NewTemplateResponseInput,
+          const transformedTemplateResponse: TemplateResponse[] = (await transformAndValidate(
+            TemplateResponse,
             templateResponseJson,
-          )) as NewTemplateResponseInput[];
+          )) as TemplateResponse[];
 
           expect(
             transformedTemplateResponse['status'] === 'ACTIVE',
