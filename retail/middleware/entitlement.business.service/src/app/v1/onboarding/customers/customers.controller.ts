@@ -2,7 +2,6 @@ import {
   Controller,
   Get,
   Param,
-  NotFoundException,
   ParseUUIDPipe,
   UseGuards,
 } from '@nestjs/common';
@@ -13,14 +12,14 @@ import {
   ApiBearerAuth,
   ApiNotFoundResponse,
 } from '@nestjs/swagger';
-import { AuthGuard } from '@common/index';
+import { AuthGuard, PermissionsGuard, Permissions } from '@common/index';
 import { CustomersService } from './customers.service';
 import { Customer } from './customer.entity';
 
 @ApiTags('Customer Module')
 @Controller('customers')
 @ApiBearerAuth()
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, PermissionsGuard)
 export class CustomersController {
 
   constructor(private readonly customerService: CustomersService) { }
@@ -39,13 +38,10 @@ export class CustomersController {
     type: Error,
     description: 'Customer Not Found.',
   })
+  @Permissions('attend:video')
   async findOne(
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<Customer> {
-    const customer: Customer = await this.customerService.findOne(id);
-    if (!customer) {
-      throw new NotFoundException('Customer Not Found');
-    }
-    return customer;
+    return this.customerService.findOne(id);
   }
 }

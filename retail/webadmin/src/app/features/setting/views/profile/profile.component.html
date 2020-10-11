@@ -69,7 +69,7 @@
                 <app-about [nationalities]="nationalities" [user]="currentUser"></app-about>
             </mat-tab>
             <mat-tab label="Security">
-                <app-update-password [errorType]="errorType" [responseMessage]="responseMessage" (submit)="onUpdatePassword($event)"></app-update-password>
+                <app-update-password [errorType]="errorType" [responseMessage]="responseMessage" (update)="onUpdatePassword($event)"></app-update-password>
             </mat-tab>
         </mat-tab-group>
     </div>

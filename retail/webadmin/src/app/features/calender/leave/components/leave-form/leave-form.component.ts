@@ -35,15 +35,9 @@ export class LeaveFormComponent extends BaseComponent implements OnDestroy, OnIn
 
   ngOnInit(): void {
     this.leaveTypes = this.data.leaveTypes;
-    this.users = this.data.users?.filter(x => x.roles.find(item => item.name !== 'SUPER ADMIN'));
-    this.filteredUser = this.data.users?.filter(x => x.roles.find(item => item.name !== 'SUPER ADMIN'));
-    
-    this._errorEmitService.currentMessage
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((item) => {
-        this.errorType = item.type;
-        this.responseMessage = item.message;
-      });
+    const users =  this.data.users?.filter(x => x.roles.find(item => item.name !== 'SUPER ADMIN') &&  x.status === 'ACTIVE');
+    this.users = [...users];
+    this.filteredUser =  [...users];
 
     this.leaveForm = new FormGroup({
       id: new FormControl(this.data.leave.id),

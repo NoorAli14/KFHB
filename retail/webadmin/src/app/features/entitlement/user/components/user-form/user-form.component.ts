@@ -61,12 +61,7 @@ export class UserFormComponent extends BaseComponent implements OnDestroy, OnIni
     }
     ngOnInit(): void {
         this._unsubscribeAll = new Subject();
-        this._errorEmitService.currentMessage
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((item) => {
-                this.errorType = item.type;
-                this.responseMessage = item.message;
-            });
+      
         this.userForm = new FormGroup({
             id: new FormControl(this.data.user.id),
            

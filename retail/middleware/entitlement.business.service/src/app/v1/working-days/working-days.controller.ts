@@ -5,7 +5,6 @@ import {
   Param,
   Put,
   Delete,
-  NotFoundException,
   ParseUUIDPipe,
   UseGuards,
   HttpCode,
@@ -22,7 +21,7 @@ import {
   ApiNotFoundResponse,
   ApiNoContentResponse,
 } from '@nestjs/swagger';
-import { AuthGuard } from '@common/index';
+import { AuthGuard, PermissionsGuard, Permissions } from '@common/index';
 import { WorkingDaysService } from './working-days.service';
 import { WorkingDay } from './working-day.entity';
 import { WorkingDayDTO } from './working-day.dto';
@@ -30,7 +29,7 @@ import { WorkingDayDTO } from './working-day.dto';
 @ApiTags('Working Days Module')
 @Controller('working-days')
 @ApiBearerAuth()
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, PermissionsGuard)
 export class WorkingDaysController {
   constructor(private readonly workingDayService: WorkingDaysService) { }
 
@@ -44,6 +43,7 @@ export class WorkingDaysController {
     type: [WorkingDay],
     description: 'List of all working days.',
   })
+  @Permissions('view:working-days')
   async list(): Promise<WorkingDay[]> {
     return this.workingDayService.list();
   }
@@ -66,6 +66,7 @@ export class WorkingDaysController {
     type: Error,
     description: 'Input Validation failed.',
   })
+  @Permissions('create:working-days')
   async create(
     @Body() input: WorkingDayDTO,
   ): Promise<WorkingDay> {
@@ -86,16 +87,13 @@ export class WorkingDaysController {
     type: Error,
     description: 'Working day Not Found.',
   })
+  @Permissions('view:working-days')
   async findOne(
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<WorkingDay> {
-    const working: WorkingDay = await this.workingDayService.findOne(
+    return this.workingDayService.findOne(
       id,
     );
-    if (!working) {
-      throw new NotFoundException('Working day not found');
-    }
-    return working;
   }
 
   @Put(':id')
@@ -120,6 +118,7 @@ export class WorkingDaysController {
     type: Error,
     description: 'Working day Not Found.',
   })
+  @Permissions('edit:working-days')
   async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() input: WorkingDayDTO,
@@ -141,6 +140,7 @@ export class WorkingDaysController {
     description: 'Working day Not Found.',
   })
   @HttpCode(HttpStatus.NO_CONTENT)
+  @Permissions('delete:working-days')
   async delete(
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<any> {
