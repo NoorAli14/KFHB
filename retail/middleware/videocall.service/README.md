@@ -67,7 +67,6 @@ You must install the following on your local machine:
 | ENV_RBX_GRAPHQL_DEBUG  | false  | This variable is to used to run graphql in debug mode |
 | ENV_RBX_GRAPHQL_PLAYGROUND  | false  | This variable is used for graphql query interface  |
 | ENV_RBX_IDX_BASE_URL  |   |  Base URL of the daon server |
-
 | ENV_RBX_TENANT_ID  |   |  Tendant Id |
 | ENV_RBX_ENTITLEMENT_SERVER  |   |  Base URL of the entitlement server |
 | ENV_RBX_CRON_JOB_TIME  |   |  Cron Job restart time |
