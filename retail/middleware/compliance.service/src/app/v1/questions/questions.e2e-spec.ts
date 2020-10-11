@@ -10,6 +10,7 @@ import { ApplicationModule } from '@rubix/app';
 
 import { NewQuestionInput } from './question.dto';
 import { Question } from './question.model';
+import { QUESTION_QUERY } from '@common/constants';
 
 describe('Complaince Module (e2e)', () => {
   let question: NewQuestionInput;
@@ -30,7 +31,7 @@ describe('Complaince Module (e2e)', () => {
     await app.init();
   });
 
-  it('should successfully transform and validate the question', async () => {
+  it('should successfully transform and validate the question response', async () => {
     question = {
       title: 'Test Question',
       title_ar: 'Test Question AR',
@@ -47,60 +48,51 @@ describe('Complaince Module (e2e)', () => {
     expect(transformedQuestion.title_ar).toEqual('Test Question AR');
   });
 
-  it('should successfully transform and validate JSON with array of question', done => {
+  it('should fetch list of question and validate based on question model', done => {
     return request(app.getHttpServer())
       .post('/graphql')
       .send({
-        query: `{questionsList{id title title_ar status options {id name name_ar}}}`,
+        query: `{questionsList{${QUESTION_QUERY}}}`,
       })
       .set(headers)
-      .expect(async ({ body }) => {
+      .expect(({ body }) => {
         const data = body?.data?.questionsList;
-        if (data) {
-          const questionJson: string = JSON.stringify(data);
+        const questionJson: string = JSON.stringify(data);
 
-          // const transformedQuestion: Question[] = (await transformAndValidate(
-          //   Question,
-          //   questionJson,
-          // )) as Question[];
+        const transformedQuestion: Question[] = transformAndValidateSync(
+          Question,
+          questionJson,
+        ) as Question[];
 
-          expect(data).toBeDefined();
-          expect(data).toBeInstanceOf(Array);
-          expect(data).toHaveLength(data.length);
-          expect(data[0].title).toEqual('Question 3');
-          expect(data[0].options).toBeInstanceOf(Array);
-        } else {
-          expect(data).toBeUndefined();
-          expect(data).toHaveLength(0);
-        }
+        expect(transformedQuestion).toBeDefined();
+        expect(transformedQuestion).toBeInstanceOf(Array);
+        expect(transformedQuestion).toHaveLength(data.length);
+        expect(transformedQuestion[0].title).toEqual('Question 3');
+        expect(transformedQuestion[0].options).toBeInstanceOf(Array);
       })
       .end(done)
       .expect(200);
   });
 
-  it('should successfully transform and validate JSON question', done => {
+  it('should fetch question, transform and validate the response', done => {
     return request(app.getHttpServer())
       .post('/graphql')
       .send({
-        query: `{findQuestion(id: "d329c531-9e7a-4b55-923f-04fc62aee79d") {id title title_ar status type options {id name name_ar}}}`,
+        query: `{findQuestion(id: "d329c531-9e7a-4b55-923f-04fc62aee79d") {${QUESTION_QUERY}}`,
       })
       .set(headers)
-      .expect(async ({ body }) => {
+      .expect(({ body }) => {
         const data = body?.data?.findQuestion;
-        if (data) {
-          const questionJson: string = JSON.stringify(data);
+        const questionJson: string = JSON.stringify(data);
 
-          // const transformedQuestion: Question = (await transformAndValidate(
-          //   Question,
-          //   questionJson,
-          // )) as Question;
-          expect(data).toBeDefined();
-          expect(data).toBeInstanceOf(Object);
-          expect(data.status).toEqual('ACTIVE');
-          expect(data.options).toBeInstanceOf(Array);
-        } else {
-          expect(data).toBeUndefined();
-        }
+        const transformedQuestion: Question = transformAndValidateSync(
+          Question,
+          questionJson,
+        ) as Question;
+        expect(transformedQuestion).toBeDefined();
+        expect(transformedQuestion).toBeInstanceOf(Question);
+        expect(transformedQuestion.status).toEqual('ACTIVE');
+        expect(transformedQuestion.options).toBeInstanceOf(Array);
       })
       .end(done)
       .expect(200);
@@ -110,23 +102,14 @@ describe('Complaince Module (e2e)', () => {
     return request(app.getHttpServer())
       .post('/graphql')
       .send({
-        query: `{findQuestion(id: "d2d409a9-8cf3-3562-23de-2361dd59cd98"){id title title_ar status options {id name name_ar}}}`,
+        query: `{findQuestion(id: "d2d409a9-8cf3-3562-23de-2361dd59cd98"){${QUESTION_QUERY}}}`,
       })
       .set(headers)
       .expect(async ({ body }) => {
         const data = body?.data?.findQuestion;
-        if (data) {
-          const questionJson: string = JSON.stringify(data);
 
-          const transformedQuestion: Question = (await transformAndValidate(
-            Question,
-            questionJson,
-          )) as Question;
-          expect(data).toBeDefined();
-          expect(transformedQuestion).toBeInstanceOf(Question);
-        } else {
-          expect(data).toBeUndefined();
-        }
+        expect(data).toBeUndefined();
+        expect(!data).toBeTruthy();
       })
       .end(done)
       .expect(200);

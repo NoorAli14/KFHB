@@ -2,16 +2,11 @@ import * as request from 'supertest';
 import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { ApplicationModule } from '@rubix/app';
-import {
-  classToClass,
-  classToClassFromExist,
-  classToPlain,
-  classToPlainFromExist,
-  plainToClass,
-  plainToClassFromExist,
-} from 'class-transformer';
 
-import { transformAndValidate } from 'class-transformer-validator';
+import {
+  transformAndValidate,
+  transformAndValidateSync,
+} from 'class-transformer-validator';
 import { Template } from './template.model';
 import { NewTemplateInput } from './template.dto';
 import { TEMPLATE_QUERY } from '@common/constants';
@@ -52,57 +47,48 @@ describe('Complince Module (e2e)', () => {
   });
 
   // Response string for fetch list of templates (nested data structure template => sections => questions => options)
-  it('should successfully transform and validate JSON with array of Templates', done => {
+  it('should fetch list of templated and validate the response based template model', done => {
     return request(app.getHttpServer())
       .post('/graphql')
       .send({
         query: `{templatesList{${TEMPLATE_QUERY}}}`,
       })
       .set(headers)
-      .expect(async ({ body }) => {
+      .expect(({ body }) => {
         const data = body?.data?.templatesList;
-        if (data) {
-          const templateJson: string = JSON.stringify(data);
+        const templateJson: string = JSON.stringify(data);
 
-          // const transformedTemplate: Template[] = (await transformAndValidate(
-          //   Template,
-          //   templateJson,
-          // )) as Template[];
-          expect(data).toBeDefined();
-          expect(data).toBeInstanceOf(Array);
-          expect(data).toHaveLength(data.length);
-          expect(data[0].name).toEqual('FATCA');
-        } else {
-          expect(data).toBeUndefined();
-          expect(data).toHaveLength(0);
-        }
+        const transformedTemplate: Template[] = transformAndValidateSync(
+          Template,
+          templateJson,
+        ) as Template[];
+        expect(transformedTemplate).toBeDefined();
+        expect(transformedTemplate).toBeInstanceOf(Array);
+        expect(transformedTemplate).toHaveLength(data.length);
+        expect(transformedTemplate[0].name).toEqual('FATCA');
       })
       .end(done)
       .expect(200);
   });
 
-  it('should successfully transform and validate JSON Templates', done => {
+  it('should return a template based on template Id', done => {
     return request(app.getHttpServer())
       .post('/graphql')
       .send({
         query: `{findTemplateByName(name: "FATCA") {${TEMPLATE_QUERY}}}`,
       })
       .set(headers)
-      .expect(async ({ body }) => {
+      .expect(({ body }) => {
         const data = body?.data?.findTemplate;
-        if (data) {
-          const templateJson: string = JSON.stringify(data);
+        const templateJson: string = JSON.stringify(data);
 
-          const transformedTemplate: Template = (await transformAndValidate(
-            Template,
-            templateJson,
-          )) as Template;
-          expect(data).toBeDefined();
-          expect(transformedTemplate).toBeInstanceOf(Template);
-          expect(transformedTemplate.name).toEqual('FATCA');
-        } else {
-          expect(data).toBeUndefined();
-        }
+        const transformedTemplate: Template = transformAndValidateSync(
+          Template,
+          templateJson,
+        ) as Template;
+        expect(data).toBeDefined();
+        expect(transformedTemplate).toBeInstanceOf(Template);
+        expect(transformedTemplate.name).toEqual('FATCA');
       })
       .end(done)
       .expect(200);
@@ -117,19 +103,15 @@ describe('Complince Module (e2e)', () => {
       .set(headers)
       .expect(async ({ body }) => {
         const data = body?.data?.findTemplateByName;
-        if (data) {
-          const templateJson: string = JSON.stringify(data);
+        const templateJson: string = JSON.stringify(data);
 
-          const transformedTemplate: Template = (await transformAndValidate(
-            Template,
-            templateJson,
-          )) as Template;
-          expect(data).toBeDefined();
-          expect(transformedTemplate).toBeInstanceOf(Template);
-          expect(transformedTemplate.name).toEqual('FATCA');
-        } else {
-          expect(data).toBeUndefined();
-        }
+        const transformedTemplate: Template = (await transformAndValidate(
+          Template,
+          templateJson,
+        )) as Template;
+        expect(data).toBeDefined();
+        expect(transformedTemplate).toBeInstanceOf(Template);
+        expect(transformedTemplate.name).toEqual('FATCA');
       })
       .end(done)
       .expect(200);
@@ -182,7 +164,7 @@ describe('Complince Module (e2e)', () => {
       })
       .set(headers)
       .expect(({ body }) => {
-        const data = body.data.findTemplate;
+        const data = body?.data?.findTemplate;
         expect(data.name).toBe(templateInput.name);
         expect(data.name_ar).toBe(templateInput.name_ar);
       })

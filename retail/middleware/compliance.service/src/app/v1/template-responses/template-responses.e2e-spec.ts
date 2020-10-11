@@ -57,27 +57,22 @@ describe('Complince Module (e2e)', () => {
       .set(headers)
       .expect(async ({ body }) => {
         const data = body?.data?.findTemplateResponseByUserId;
-        if (data) {
-          const templateResponseJson: string = JSON.stringify(data);
+        const templateResponseJson: string = JSON.stringify(data);
 
-          // const transformedResponse: NewTemplateResponseInput[] = (await transformAndValidate(
-          //   NewTemplateResponseInput,
-          //   templateResponseJson,
-          // )) as NewTemplateResponseInput[];
-          expect(data).toBeDefined();
-          expect(data).toBeInstanceOf(Array);
-          expect(data).toHaveLength(data.length);
-          expect(
-            data
-              .map((response: any) => response.user_id)
-              .includes(
-                data[0].user_id || '828605C2-7E50-40BC-AA88-C064CE63C155',
-              ),
-          ).toBeTruthy();
-        } else {
-          expect(data).toBeUndefined();
-          expect(data).toHaveLength(0);
-        }
+        const transformedResponse: NewTemplateResponseInput[] = (await transformAndValidate(
+          NewTemplateResponseInput,
+          templateResponseJson,
+        )) as NewTemplateResponseInput[];
+        expect(transformedResponse).toBeDefined();
+        expect(transformedResponse).toBeInstanceOf(Array);
+        expect(transformedResponse).toHaveLength(data.length);
+        expect(
+          data
+            .map((response: any) => response.user_id)
+            .includes(
+              data[0].user_id || '828605C2-7E50-40BC-AA88-C064CE63C155',
+            ),
+        ).toBeTruthy();
       })
       .end(done)
       .expect(200);
@@ -92,20 +87,14 @@ describe('Complince Module (e2e)', () => {
       .set(headers)
       .expect(async ({ body }) => {
         const data = body?.data?.findTemplateResponseByUserId;
-        if (data) {
-          if (data) {
-            const templateResponseJson: string = JSON.stringify(data);
-            const transformedTemplateResponse: NewTemplateResponseInput[] = (await transformAndValidate(
-              NewTemplateResponseInput,
-              templateResponseJson,
-            )) as NewTemplateResponseInput[];
-            expect(data).toBeDefined();
-            expect(transformedTemplateResponse).toBeInstanceOf(Array);
-          }
-        } else {
-          expect(data).toBeUndefined();
-          // expect(data).toHaveLength(0);
-        }
+        // const templateResponseJson: string = JSON.stringify(data);
+        // const transformedTemplateResponse: NewTemplateResponseInput[] = (await transformAndValidate(
+        //   NewTemplateResponseInput,
+        //   templateResponseJson,
+        // )) as NewTemplateResponseInput[];
+        expect(data).toBeUndefined();
+        expect(!data).toBeTruthy();
+        expect(data).toEqual(null);
       })
       .end(done)
       .expect(200);

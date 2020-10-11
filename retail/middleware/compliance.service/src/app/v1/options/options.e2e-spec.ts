@@ -48,7 +48,7 @@ describe('Complaince Module (e2e)', () => {
     expect(transformedOption.name_ar).toEqual('Test Option AR');
   });
 
-  it('should successfully transform and validate JSON with array of options', done => {
+  it('should fetch list of options, and validate based on option model', done => {
     return request(app.getHttpServer())
       .post('/graphql')
       .send({
@@ -57,21 +57,16 @@ describe('Complaince Module (e2e)', () => {
       .set(headers)
       .expect(async ({ body }) => {
         const data = body?.data?.optionsList;
-        if (data) {
-          const optionJson: string = JSON.stringify(data);
+        const optionJson: string = JSON.stringify(data);
 
-          // const transformedOption: Option[] = (await transformAndValidate(
-          //   Option,
-          //   optionJson,
-          // )) as Option[];
+        // const transformedOption: Option[] = (await transformAndValidate(
+        //   Option,
+        //   optionJson,
+        // )) as Option[];
 
-          expect(data).toBeDefined();
-          expect(data).toBeInstanceOf(Array);
-          expect(data).toHaveLength(data.length);
-        } else {
-          expect(data).toBeUndefined();
-          expect(data).toHaveLength(0);
-        }
+        expect(data).toBeDefined();
+        expect(data).toBeInstanceOf(Array);
+        expect(data).toHaveLength(data.length);
       })
       .end(done)
       .expect(200);
@@ -84,21 +79,17 @@ describe('Complaince Module (e2e)', () => {
         query: `{findOption(id: "6c211a24-4d69-4899-b0bb-040f6fcffdd8") {${OPTION_QUERY}}}`,
       })
       .set(headers)
-      .expect(async ({ body }) => {
+      .expect(({ body }) => {
         const data = body?.data?.findOption;
-        if (data) {
-          const optionJson: string = JSON.stringify(data);
+        const optionJson: string = JSON.stringify(data);
 
-          // const transformedOption: Option = (await transformAndValidate(
-          //   Option,
-          //   optionJson,
-          // )) as Option;
-          expect(data).toBeDefined();
-          expect(data).toBeInstanceOf(Object);
-          expect(data.status).toEqual('ACTIVE');
-        } else {
-          expect(data).toBeUndefined();
-        }
+        const transformedOption: Option = transformAndValidateSync(
+          Option,
+          optionJson,
+        ) as Option;
+        expect(data).toBeDefined();
+        expect(data).toBeInstanceOf(Object);
+        expect(data.status).toEqual('ACTIVE');
       })
       .end(done)
       .expect(200);
@@ -111,20 +102,16 @@ describe('Complaince Module (e2e)', () => {
         query: `{findOption(id: "d2d409a9-8cf3-3562-23de-2361dd59cd98"){${OPTION_QUERY}}}`,
       })
       .set(headers)
-      .expect(async ({ body }) => {
+      .expect(({ body }) => {
         const data = body?.data?.findOption;
-        if (data) {
-          const optionJson: string = JSON.stringify(data);
+        // const optionJson: string = JSON.stringify(data);
 
-          const transformedOption: Option = (await transformAndValidate(
-            Option,
-            optionJson,
-          )) as Option;
-          expect(data).toBeDefined();
-          expect(transformedOption).toBeInstanceOf(Object);
-        } else {
-          expect(data).toBeUndefined();
-        }
+        // const transformedOption: Option = (await transformAndValidate(
+        //   Option,
+        //   optionJson,
+        // )) as Option;
+        expect(data).toBeUndefined();
+        expect(!data).toBeTruthy();
       })
       .end(done)
       .expect(200);

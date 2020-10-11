@@ -41,7 +41,7 @@ describe('Compliance Module (e2e)', () => {
     expect(transformedSection.name).toEqual('Test Section');
   });
 
-  it('should successfully transform and validate JSON with array of sections', done => {
+  it('should fetch list of sections, transform and validate the response based on section model', done => {
     return request(app.getHttpServer())
       .post('/graphql')
       .send({
@@ -70,7 +70,7 @@ describe('Compliance Module (e2e)', () => {
       .expect(200);
   });
 
-  it('should successfully transform and validate JSON Sections', done => {
+  it('should return a section based on dection id', done => {
     return request(app.getHttpServer())
       .post('/graphql')
       .send({
@@ -79,19 +79,17 @@ describe('Compliance Module (e2e)', () => {
       .set(headers)
       .expect(async ({ body }) => {
         const data = body?.data?.findSection;
-        if (data) {
-          const sectionJson: string = JSON.stringify(data);
+        const sectionJson: string = JSON.stringify(data);
 
-          // const transformedSection: Section = (await transformAndValidate(
-          //   Section,
-          //   sectionJson,
-          // )) as Section;
-          expect(data).toBeDefined();
-          expect(data).toBeInstanceOf(Object);
-          expect(data.tenant_id).toEqual(process.env.ENV_RBX_TENANT_ID);
-        } else {
-          expect(data).toBeUndefined();
-        }
+        const transformedSection: Section = (await transformAndValidate(
+          Section,
+          sectionJson,
+        )) as Section;
+        expect(transformedSection).toBeDefined();
+        expect(transformedSection).toBeInstanceOf(Section);
+        expect(transformedSection.tenant_id).toEqual(
+          process.env.ENV_RBX_TENANT_ID,
+        );
       })
       .end(done)
       .expect(200);
@@ -106,18 +104,14 @@ describe('Compliance Module (e2e)', () => {
       .set(headers)
       .expect(async ({ body }) => {
         const data = body?.data?.findSection;
-        if (data) {
-          const sectionJson: string = JSON.stringify(data);
+        const sectionJson: string = JSON.stringify(data);
 
-          const transformedSection: Section = (await transformAndValidate(
-            Section,
-            sectionJson,
-          )) as Section;
-          expect(data).toBeDefined();
-          expect(transformedSection).toBeInstanceOf(Object);
-        } else {
-          expect(data).toBeUndefined();
-        }
+        const transformedSection: Section = (await transformAndValidate(
+          Section,
+          sectionJson,
+        )) as Section;
+        expect(data).toBeDefined();
+        expect(transformedSection).toBeInstanceOf(Section);
       })
       .end(done)
       .expect(200);
