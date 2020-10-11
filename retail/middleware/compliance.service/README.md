@@ -1,3 +1,46 @@
+<p align="center">
+  <img src="../../../logo.png" alt="Aion Rubix platform" />
+</p>
+<h1 align="center">Rubix | Compliance  Service</h1>
+
+<p align="center">
+  <img src="../../../divider.png" alt="divider" width="400" />
+</p>
+
+## Table of Contents
+
+- [Compliance Service](#compliance-service)
+  - [❯ Table of Contents](#-table-of-contents)
+  - [❯ How to Run](#-how-to-run)
+    - [Pre-requisites](#pre-requisites)
+    - [Running](#running)
+  - [❯ App Structure](#-app-structure)
+  - [❯ Migrations & Seeding](#-migrations--seeding)
+    - [Creating/Dropping Tables](#creatingdropping-tables)
+  - [Installation](#installation)
+  - [Running the app](#running-the-app)
+  - [Test](#test)
+  - [❯ Roadmap](#-roadmap)
+    - [API Gateway](#api-gateway)
+    - [Microservices](#microservices)
+    - [Notes](#notes)
+
+<p align="center">
+  <img src="../../../divider.png" alt="divider" width="400" />
+</p>
+
+## ❯ Tech
+
+* [node.js] - evented I/O for the backend
+* [NestJS](https://docs.nestjs.com/) - fast node.js network app & microservices framework.
+* [Knex](http://knexjs.org/) -  In addition, we're going to use Knex, which is a database query builder that will interface with the **MySQL**, **PostgreSQL**, **SQLite**, **MSSQL**, **Oracle** and **MariaDB** databases for us.
+- [GraphQL](http://graphql.org/) provides as a awesome query language for our api.
+- [DataLoaders](https://github.com/facebook/dataloader) helps with performance thanks to caching and batching.
+- [Smart Validation](https://github.com/pleerock/class-validator) thanks to [class-validator] with some nice annotations.
+
+## ❯ Getting Started
+In a Complaince Microservice it will follow the basics of microservice architecture and scoped with the customer detaile like KYC (Know Your Customer), FATCA (Foreign Account Tax Compliance Act) and CRS (Common Reporting Standard), A part from this we also include the AML (Anti Money Laundering) module in complince service as well here are the details of this module:
+
 # Compliance Service
 
 [travis-image]: https://api.travis-ci.org/nestjs/nest.svg?branch=master
