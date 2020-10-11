@@ -61,7 +61,7 @@ export const GQL_SERVICES = [
   },
   {
     name: 'Video Call Service',
-    host_name: 'retail_identity',
+    host_name: 'retail_videocall',
     port: 4020,
     version: '1.0',
     context: '/graphql',
