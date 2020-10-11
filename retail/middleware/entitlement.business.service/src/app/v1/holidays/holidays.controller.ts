@@ -21,7 +21,7 @@ import {
   ApiNotFoundResponse,
   ApiNoContentResponse,
 } from '@nestjs/swagger';
-import { AuthGuard } from '@common/index';
+import { AuthGuard, PermissionsGuard, Permissions } from '@common/index';
 import { Holiday } from './holiday.entity';
 import { CreateHolidayDto, UpdateHolidayDTO } from './holiday.dto';
 import { HolidaysService } from './holidays.service';
@@ -29,7 +29,7 @@ import { HolidaysService } from './holidays.service';
 @ApiTags('Holidays')
 @Controller('holidays')
 @ApiBearerAuth()
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, PermissionsGuard)
 export class HolidaysController {
   constructor(private readonly holidayService: HolidaysService) { }
 
@@ -43,6 +43,7 @@ export class HolidaysController {
     type: [Holiday],
     description: 'List of all holidays.',
   })
+  @Permissions('view:holidays')
   async list(): Promise<Holiday[]> {
     return this.holidayService.list();
   }
@@ -65,6 +66,7 @@ export class HolidaysController {
     type: Error,
     description: 'Input Validation failed.',
   })
+  @Permissions('create:holidays')
   async create(
     @Body() input: CreateHolidayDto,
   ): Promise<Holiday> {
@@ -85,6 +87,7 @@ export class HolidaysController {
     type: Error,
     description: 'Holiday Not Found.',
   })
+  @Permissions('view:holidays')
   async findOne(
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<Holiday> {
@@ -113,6 +116,7 @@ export class HolidaysController {
     type: Error,
     description: 'Holiday Not Found.',
   })
+  @Permissions('edit:holidays')
   async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() input: UpdateHolidayDTO,
@@ -134,6 +138,7 @@ export class HolidaysController {
     description: 'Holiday Not Found.',
   })
   @HttpCode(HttpStatus.NO_CONTENT)
+  @Permissions('delete:holidays')
   async delete(
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<any> {

@@ -10,7 +10,7 @@ const isAuthorizedChannel = (url: string, channelName: string): boolean => {
 
 export const RegistryMiddleware = (): any => {
   return (req: Request, res: Response, next: NextFunction): void => {
-    const channelId: string = req.headers[X_CHANNEL_KEY] as string;
+    const channelId: string = req.headers[X_CHANNEL_KEY] as string || req.query[X_CHANNEL_KEY] as string || null;
     console.log(`RegistryMiddleware:: Initialize registry middleware [${channelId}]`);
     const urlPrefix: string = req.originalUrl?.split("/")?.slice(1, 5)?.join("/");
     if (urlPrefix === 'graphql' || isAuthorizedChannel(urlPrefix, channelId)) {

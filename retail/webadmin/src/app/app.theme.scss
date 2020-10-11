@@ -151,5 +151,11 @@ mat-form-field.mat-form-field.mat-form-field-appearance-outline>div.mat-form-fie
 }
 
 .success-snackbar{
-    background: #448b44;
+    background: #448b44 !important;
+}
+.warning-snackbar{
+    background: #6c7715 !important;
+}
+.error-snackbar{
+    background: rgb(175, 29, 29) !important;
 }

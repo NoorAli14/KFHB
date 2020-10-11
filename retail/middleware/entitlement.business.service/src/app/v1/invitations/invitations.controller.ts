@@ -25,6 +25,7 @@ import {
   AuthGuard,
   SuccessDto,
   USER_STATUSES,
+  PermissionsGuard, Permissions
 } from '@common/index';
 import { UserService } from '@app/v1/users/users.service';
 import { NewUserDto } from '@app/v1/users/user.dto';
@@ -41,7 +42,7 @@ export class InvitationsController {
   ) { }
 
   @Post('/')
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, PermissionsGuard)
   @ApiBearerAuth()
   @ApiBody({ description: 'Sets the user properties.', type: NewUserDto })
   @ApiOperation({
@@ -57,6 +58,7 @@ export class InvitationsController {
     type: Error,
     description: 'Input Validation failed.',
   })
+  @Permissions('create:users')
   async create(
     @Body() input: NewUserDto,
   ): Promise<User> {
@@ -178,7 +180,7 @@ export class InvitationsController {
   }
 
   @Post(':user_id/resend')
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, PermissionsGuard)
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Resend Invitation by User ID',
@@ -197,6 +199,7 @@ export class InvitationsController {
     description: 'User has been already onboard.',
   })
   @HttpCode(HttpStatus.OK)
+  @Permissions('create:users')
   async resendInvitationLink(
     @Param('user_id') user_id: string,
   ): Promise<SuccessDto> {

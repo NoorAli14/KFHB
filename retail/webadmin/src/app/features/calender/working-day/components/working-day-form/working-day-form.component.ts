@@ -126,8 +126,8 @@ export class WorkingDayFormComponent extends BaseComponent implements OnDestroy,
     onSubmit(): void {
         let model = { ...this.workingDayForm.value };
         if (!model.fullDay){
-            model.endTimeLocal = model.endTimeLocal.replace(/\D/g,'');
-            model.startTimeLocal = model.startTimeLocal.replace(/\D/g,'');
+            model.endTimeLocal = model.endTimeLocal.replace(/\D/g, '');
+            model.startTimeLocal = model.startTimeLocal.replace(/\D/g, '');
         }
         model = camelToSnakeCase(model);
         model.full_day = model.full_day  ? 1 : 0;

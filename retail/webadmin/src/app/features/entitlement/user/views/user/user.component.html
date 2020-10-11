@@ -32,7 +32,7 @@
 
             <!-- ADD BUTTON -->
             <button  mat-raised-button color="accent" (click)="openDialog(null)" class="add-product-button fuse-white mt-24 mt-md-0">
-                <span>ADD NEW USER</span>
+                <span> NEW USER</span>
             </button>
             <!-- / ADD BUTTON -->
 
@@ -56,8 +56,13 @@
                                 <mat-icon class="hover" type="button" (click)="onDetail(element['id'])" matTooltip="Explore">explore</mat-icon>
                                 <mat-icon class="hover"  *ngIf="element['status']==='PENDING'"  color="success"  matTooltip="Resend Invitation" type="button" (click)=" confirmDialog('invite',element['id'])">near_me</mat-icon> &nbsp;&nbsp;
                                 </span>
-                            <span *ngSwitchCase="'status'">
+                         
+                                <span *ngSwitchCase="'status'">
                                 <app-status [status]="element[key]"></app-status>
+                            </span>
+                        
+                            <span  *ngSwitchCase="'createdOn'">
+                                {{element[camelToSnakeCase(key)] | date:'mediumDate'}}
                             </span>
                             <span  *ngSwitchDefault>
                                 <span *ngIf="element[camelToSnakeCase(key)]; else defaultText">

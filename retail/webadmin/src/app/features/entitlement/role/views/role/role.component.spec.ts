@@ -7,11 +7,13 @@ import {
 import { MockComponent } from 'ng-mocks';
 import { Injector } from '@angular/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { of, throwError } from 'rxjs';
+import { of,  } from 'rxjs';
 import { DOMHelper } from 'testing/dom.helper';
 import { RoleComponent } from './role.component';
 import { RoleService } from '../../services/role.service';
 import { MatDialog } from '@angular/material/dialog';
+import { NotifierService } from '@shared/services/notifier/notifier.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 describe('RoleComponent', async () => {
     let component: RoleComponent;
@@ -21,11 +23,15 @@ describe('RoleComponent', async () => {
     let injectorMock: any;
     let helper: DOMHelper<RoleComponent>;
     const dialogRefSpyObj = jasmine.createSpyObj({ afterClosed : of({}), close: null });
+    let notifierServiceMock: any;
     dialogRefSpyObj.componentInstance = { body: '' };
+    let matSnackBarMock: any;
+
     beforeEach(async(() => {
         injectorMock = jasmine.createSpyObj('Injector', ['get']);
         matDialogMock = jasmine.createSpyObj('MatDialog', ['open', 'closeAll']);
-     
+        notifierServiceMock = jasmine.createSpyObj('NotifierService', ['success', 'error']);
+        matSnackBarMock = jasmine.createSpyObj('MatSnackBar', ['open']);
         roleServiceMock = jasmine.createSpyObj(
             'RoleService',
             ['forkRolesData', 'createRole', 'editRole', 'deleteRole']
@@ -45,6 +51,14 @@ describe('RoleComponent', async () => {
                 {
                     provide: RoleService,
                     useValue: roleServiceMock,
+                },
+                {
+                    provide: NotifierService,
+                    useValue: notifierServiceMock,
+                },
+                {
+                    provide: MatSnackBar,
+                    useValue: matSnackBarMock,
                 },
                 {
                     provide: MatDialog,
@@ -80,14 +94,9 @@ describe('RoleComponent', async () => {
             expect(component.permissions.length).toBe(0);
         });
         it('should  displayedColumns array property initialized with 5 columns ', () => {
-            expect(component.displayedColumns.length).toBe(6);
+            expect(component.displayedColumns.length).toBe(5);
         });
-        it('should display error if forkRolesData failed ', () => {
-            roleServiceMock.forkRolesData.and.returnValue(throwError(''));
-            component.ngOnInit();
-            fixture.detectChanges();
-            expect(component.errorType).toEqual('error');
-        });
+      
         it('should call openDialog method on create new role button click only 1 time', () => {
             spyOn(component, 'openDialog');
             helper.clickElement('.add-product-button');

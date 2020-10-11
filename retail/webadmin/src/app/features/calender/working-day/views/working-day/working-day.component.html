@@ -23,7 +23,7 @@
 
             <!-- ADD BUTTON -->
             <button mat-raised-button color="accent" (click)="openDialog(null)" class="add-product-button fuse-white mt-24 mt-md-0">
-                <span>ADD NEW</span>
+                <span> NEW WORKING DAY</span>
             </button>
             <!-- / ADD BUTTON -->
 
@@ -50,7 +50,16 @@
                             <span class="status text-truncate h6 p-4 orange-500 full-day" > No</span>
                           </ng-template>
                         </span>
-                       
+                        <span *ngSwitchCase="'startTime'">
+                            <span *ngIf="element['startTimeLocal']; else defaultText">
+                                {{element['startTimeLocal'] }}
+                            </span>
+                        </span>
+                        <span *ngSwitchCase="'endTime'">
+                            <span *ngIf="element['endTimeLocal']; else defaultText">
+                                {{element['endTimeLocal'] }}
+                            </span>
+                        </span>
                         <span *ngSwitchCase="'actions'">
                             <mat-icon class="hover" matTooltip="Delete working day" appPermission [permissions]="userPermissions"  [type]="'delete'" color="warn" type="button" (click)=" confirmDialog('delete',element['id'])">delete</mat-icon> &nbsp;&nbsp;
                             <mat-icon class="hover" matTooltip="Edit working day" type="button" (click)="openDialog(element)">mode_edit</mat-icon> &nbsp;&nbsp;

@@ -23,7 +23,7 @@
 
             <!-- ADD BUTTON -->
             <button mat-raised-button color="accent" (click)="openDialog(null)" class="add-product-button fuse-white mt-24 mt-md-0">
-                <span>ADD NEW</span>
+                <span>NEW LEAVE</span>
             </button>
             <!-- / ADD BUTTON -->
 
@@ -54,6 +54,9 @@
                         </span>
                         <span *ngSwitchCase="'leaveTypeId'">
                             {{getLeaveType(element[key])}}
+                        </span>
+                        <span *ngSwitchCase="'User'">
+                            {{getUserName(element['userId'])}}
                         </span>
                      
                         <span *ngSwitchCase="'action'">

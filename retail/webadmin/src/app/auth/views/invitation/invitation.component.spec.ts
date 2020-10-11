@@ -4,24 +4,19 @@ import { AuthenticationService } from '@shared/services/auth/authentication.serv
 import { FuseConfigService } from '@fuse/services/config.service';
 import {
     ReactiveFormsModule,
-    AbstractControl,
-    FormGroup,
     FormsModule,
 } from '@angular/forms';
 import {
     Injector,
-    NO_ERRORS_SCHEMA,
-    CUSTOM_ELEMENTS_SCHEMA,
 } from '@angular/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { By } from '@angular/platform-browser';
 import { of, throwError } from 'rxjs';
 import { DOMHelper } from 'testing/dom.helper';
 import { InvitationComponent } from './invitation.component';
 import { MatSelectModule } from '@angular/material/select';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { NotifierService } from '@shared/services/notifier/notifier.service';
 
 describe('InvitationComponent', async () => {
     let component: InvitationComponent;
@@ -31,8 +26,10 @@ describe('InvitationComponent', async () => {
     let injectorMock: any;
     let helper: DOMHelper<InvitationComponent>;
     let model;
+    
+    let notifierServiceMock: any;
     beforeEach(async(() => {
-           
+        notifierServiceMock = jasmine.createSpyObj('NotifierService', ['success', 'error']);
         fuseConfigServiceMock = jasmine.createSpyObj('FuseConfigService', [
             'config',
         ]);
@@ -61,6 +58,11 @@ describe('InvitationComponent', async () => {
                     provide: AuthenticationService,
                     useValue: authenticationMock,
                 },
+                
+{
+    provide: NotifierService,
+    useValue: notifierServiceMock,
+},
                 {
                     provide: Injector,
                     useValue: injectorMock,

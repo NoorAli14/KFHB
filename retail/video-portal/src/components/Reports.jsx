@@ -64,8 +64,9 @@ class Reports extends React.Component {
             videoControlEle.style.visibility = "hidden";
         }
 
-        let customerDetails = decryptData(localStorage.getItem('customerDetails'), localStorage.getItem('userId'));
-        let role = customerDetails.roles[0].name.toLowerCase();
+       
+        let role = localStorage.getItem('userRole')
+      
         if (role === "agent") {
             this.props.history.push('/dashboard')
         }

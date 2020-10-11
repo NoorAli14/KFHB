@@ -17,7 +17,7 @@ export const DEFAULT_ENV: iConfig = {
     ENVIRONMENT: 'development',
     PORT: 3000,
     HOST: 'http://127.0.0.1',
-    API_URL_PREFIX: '/api/v1/',
+    API_URL_PREFIX: '/api/v1',
   },
   DATABASE: {
     USERNAME: '',
