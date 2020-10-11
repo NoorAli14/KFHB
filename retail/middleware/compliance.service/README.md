@@ -200,6 +200,12 @@ query {
 
 ### Create Template Response: `/graphql`
 ```
+POST /graphql
+Host: localhost:3000
+Content-Type: application/json
+x-tenant-id: 9013C327-1190-4875-A92A-83ACA9029160
+x-correlation-id: 9013C327-1190-4875-A92A-83ACA9029160
+
 mutation {
   addTemplateResponse(input: {
     results: "Result here"
