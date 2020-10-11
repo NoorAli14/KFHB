@@ -178,8 +178,7 @@ export class AppointmentsService {
       ['id', 'call_time', 'gender', 'status'],
     );
 
-    if (appointments && appointments.length <= 0)
-      throw new AppointmentNotFoundException(start_date_time, end_date_time);
+    if (appointments && appointments.length <= 0) return;
 
     // Filter the appointments under 15 minutes from Date.now()
     const appointments_coming = appointments.filter(appointment => {
@@ -231,9 +230,9 @@ export class AppointmentsService {
           },
           ['id'],
         );
-      } else {
-        throw new SentNotificationFailedException(appointment.user.id);
-      }
+      } // else {
+      //throw new SentNotificationFailedException(appointment.user.id);
+      //}
     });
   }
 
