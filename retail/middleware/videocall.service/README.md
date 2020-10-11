@@ -52,7 +52,7 @@ You must install the following on your local machine:
 | Name  |  Default Value  | Description
 |---|---|---|
 | NODE_ENV  |development|Node Environment  (production, development, staging, testing)
-| ENV_RBX_APP_NAME  |Compliance Service| Name of the  service
+| ENV_RBX_APP_NAME  |Video Call Service| Name of the  service
 | ENV_RBX_API_URL_PREFIX  | api/v1  | API url prefix  |
 | ENV_RBX_PORT  |   |Port number where the server is listing|
 | ENV_RBX_DB_USERNAME  |   | Username of the database |
