@@ -63,7 +63,7 @@ class CustomerDetails extends React.Component {
 
         let customerId = localStorage.getItem("customerId");
         if (customerId) {
-          const  customerId='7D55A5DB-739A-4B80-BD37-D3D30358D655'
+          // const  customerId='7D55A5DB-739A-4B80-BD37-D3D30358D655'
           axios
           .get(
             window._env_.RUBIX_BASE_URL +
