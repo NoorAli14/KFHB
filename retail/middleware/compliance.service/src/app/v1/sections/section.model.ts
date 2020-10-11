@@ -45,7 +45,7 @@ export class Section {
   @Field(() => [Question], { nullable: true })
   @ValidateNested({ each: true })
   @Type(() => Question)
-  questions: Question[];
+  questions?: Question[];
 
   @Field({ nullable: true })
   @IsUUID()
@@ -54,7 +54,7 @@ export class Section {
   @Field(() => Template, { nullable: true })
   @ValidateNested({ each: true })
   @Type(() => Section)
-  template: Template;
+  template?: Template;
 
   @Field()
   @IsNotEmpty()

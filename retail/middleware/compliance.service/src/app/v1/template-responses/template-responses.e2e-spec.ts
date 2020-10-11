@@ -82,19 +82,14 @@ describe('Complince Module (e2e)', () => {
     return request(app.getHttpServer())
       .post('/graphql')
       .send({
-        query: `{findTemplateResponseByUserId(user_id: "d2d409a9-8cf3-3562-a4d0-2361dd59cd98"){id results status remarks user_id template {id name}}}`,
+        query: `{findTemplateResponseByUserId(user_id: "d2d409a9-8cf3-32-a4d0-2361dd59cd98"){id results status remarks user_id template {id name}}}`,
       })
       .set(headers)
       .expect(async ({ body }) => {
         const data = body?.data?.findTemplateResponseByUserId;
-        // const templateResponseJson: string = JSON.stringify(data);
-        // const transformedTemplateResponse: TemplateResponse[] = (await transformAndValidate(
-        //   TemplateResponse,
-        //   templateResponseJson,
-        // )) as TemplateResponse[];
         expect(data).toBeUndefined();
         expect(!data).toBeTruthy();
-        expect(data).toEqual(null);
+        expect(data).toEqual(undefined);
       })
       .end(done)
       .expect(200);

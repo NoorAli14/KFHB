@@ -106,7 +106,7 @@ describe('Compliance Module (e2e)', () => {
         const data = body?.data?.findSection;
         expect(data).toBeUndefined();
         expect(!data).toBeTruthy();
-        expect(data).toEqual(null);
+        expect(data).toEqual(undefined);
       })
       .end(done)
       .expect(200);

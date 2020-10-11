@@ -52,7 +52,7 @@ export class Question {
   @Field(() => [Option], { nullable: true })
   @ValidateNested({ each: true })
   @Type(() => Option)
-  options: Option[];
+  options?: Option[];
 
   @Field({ nullable: true })
   section_id: string;

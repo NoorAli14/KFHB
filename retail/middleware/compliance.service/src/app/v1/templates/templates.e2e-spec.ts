@@ -101,17 +101,11 @@ describe('Complince Module (e2e)', () => {
         query: `{findTemplateByName(name: "XYZ Template"){name name_ar status}}`,
       })
       .set(headers)
-      .expect(async ({ body }) => {
+      .expect(({ body }) => {
         const data = body?.data?.findTemplateByName;
-        const templateJson: string = JSON.stringify(data);
-
-        const transformedTemplate: Template = (await transformAndValidate(
-          Template,
-          templateJson,
-        )) as Template;
-        expect(data).toBeDefined();
-        expect(transformedTemplate).toBeInstanceOf(Template);
-        expect(transformedTemplate.name).toEqual('FATCA');
+        expect(data).toBeUndefined();
+        expect(!data).toBeTruthy();
+        expect(data).toEqual(undefined);
       })
       .end(done)
       .expect(200);
