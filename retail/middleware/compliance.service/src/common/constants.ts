@@ -45,4 +45,12 @@ export const AML_REQUEST_STATUSES = {
   CLEAN: 'CLEAN',
   SUSPECT: 'SUSPECT',
   BLOCK: 'BLOCK',
-}
+};
+
+export const OPTION_QUERY = `id name name_ar status created_on created_by updated_on updated_by`;
+
+export const QUESTION_QUERY = `id title title_ar type rules status created_on created_by updated_on updated_by options {${OPTION_QUERY}}`;
+
+export const SECTION_QUERY = `id tenant_id name name_ar level status created_on created_by updated_on updated_by questions {${QUESTION_QUERY}}`;
+
+export const TEMPLATE_QUERY = `id name name_ar status created_on created_by updated_on updated_by sections {${SECTION_QUERY}}`;

@@ -74,7 +74,7 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
                 this.dataSource.sort = this.sort;
             },
             (response) => {
-                this._notifier.success(MESSAGES.UNKNOWN);
+                this._notifier.error(MESSAGES.UNKNOWN);
             }
         );
     }
@@ -130,7 +130,7 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
                 this._notifier.success(MESSAGES.CREATED('Working Day'));
             },
             (response) => {
-                this._notifier.success(MESSAGES.UNKNOWN);
+                this._notifier.error(MESSAGES.UNKNOWN);
             }
         );
     }
@@ -148,7 +148,7 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
                 this._matDialog.closeAll();
             },
             (response) => {
-                this._notifier.success(MESSAGES.UNKNOWN);
+                this._notifier.error(MESSAGES.UNKNOWN);
             }
         );
     }
@@ -177,7 +177,7 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
                 this._notifier.success(MESSAGES.DELETED('Working Day'));
             },
             (response) => {
-                this._notifier.success(MESSAGES.UNKNOWN);
+                this._notifier.error(MESSAGES.UNKNOWN);
             }
         );
     }

@@ -74,9 +74,9 @@ type Option {
   question_id: String
   question: Question
   status: String!
-  created_on: DateTime
+  created_on: String
   created_by: String
-  updated_on: DateTime
+  updated_on: String
   updated_by: String
 }
 
@@ -105,7 +105,7 @@ type Question {
   options: [Option!]
   section_id: String
   section: Section
-  created_on: DateTime
+  created_on: String
   created_by: String
   updated_on: DateTime
   updated_by: String
@@ -133,9 +133,9 @@ type Template {
   name_ar: String!
   sections: [Section!]
   status: String!
-  created_on: DateTime
+  created_on: String
   created_by: String
-  updated_on: DateTime
+  updated_on: String
   updated_by: String
 }
 
