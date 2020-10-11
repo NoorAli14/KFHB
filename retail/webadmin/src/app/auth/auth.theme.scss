@@ -1,12 +1,9 @@
 @mixin app-auth-theme($theme) {
-
     $background: map-get($theme, background);
     $is-dark: map-get($theme, is-dark);
 
     .auth-container {
-
         .auth-form-wrapper {
-
             .auth-form {
                 @if ($is-dark) {
                     background: mat-color($fuse-navy, 600);
@@ -16,20 +13,19 @@
             }
         }
     }
-    
 }
 
 @mixin app-auth-form-theme($theme) {
     .auth-container {
         width: 100%;
-        background: url('/assets/images/backgrounds/dark-material-bg.jpg') no-repeat;
+        background-image: linear-gradient(150deg, #197586 51%, #3ca3b5 75%);
         background-size: cover;
 
         .auth-form-wrapper {
             flex: 1 0 auto;
-            padding: 10px 32px ;
+            padding: 10px 32px;
 
-            @include media-breakpoint('xs') {
+            @include media-breakpoint("xs") {
                 padding: 16px;
             }
 
@@ -40,7 +36,7 @@
                 text-align: center;
                 @include mat-elevation(16);
 
-                @include media-breakpoint('xs') {
+                @include media-breakpoint("xs") {
                     padding: 24px;
                     width: 100%;
                 }
@@ -68,17 +64,48 @@
                         margin: 16px auto;
                         display: block;
 
-                        @include media-breakpoint('xs') {
+                        @include media-breakpoint("xs") {
                             width: 90%;
                         }
                     }
                 }
-
-               
             }
-            
+            .invitation-form {
+                width: 800px;
+                max-width: 800px;
+                padding: 32px;
+                text-align: center;
+                @include mat-elevation(16);
+                background: white;
+                @include media-breakpoint("xs") {
+                    padding: 24px;
+                    width: 100%;
+                }
+
+                .title {
+                    font-size: 20px;
+                    margin: 16px 0 32px 0;
+                }
+
+                form {
+                    width: 100%;
+                    text-align: left;
+
+                    mat-form-field {
+                        width: 100%;
+                    }
+
+                    .submit-button {
+                        width: 220px;
+                        margin: 16px auto;
+                        display: block;
+
+                        @include media-breakpoint("xs") {
+                            width: 90%;
+                        }
+                    }
+                }
+            }
         }
     }
-   
-    
 }

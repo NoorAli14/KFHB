@@ -1,19 +1,17 @@
 <div class="navbar-top" [ngClass]="fuseConfig.layout.navbar.secondaryBackground">
 
     <div class="logo">
-        <img class="logo-icon" src="assets/images/logos/fuse.svg">
-        <span class="logo-text secondary-text">Rubix</span>
+        <img class="logo-icon" src="assets/images/logos/kfh.png">
     </div>
+
 
     <div class="buttons">
 
-        <button mat-icon-button class="toggle-sidebar-folded"
-                (click)="toggleSidebarFolded()" fxHide.lt-lg>
+        <button mat-icon-button class="toggle-sidebar-folded" (click)="toggleSidebarFolded()" fxHide.lt-lg>
             <mat-icon class="secondary-text">menu</mat-icon>
         </button>
 
-        <button mat-icon-button class="toggle-sidebar-opened"
-                (click)="toggleSidebarOpened()" fxHide.gt-md>
+        <button mat-icon-button class="toggle-sidebar-opened" (click)="toggleSidebarOpened()" fxHide.gt-md>
             <mat-icon class="secondary-text">arrow_back</mat-icon>
         </button>
 
@@ -22,15 +20,15 @@
 </div>
 
 
-<div class="navbar-scroll-container" [ngClass]="fuseConfig.layout.navbar.primaryBackground"
-     fusePerfectScrollbar [fusePerfectScrollbarOptions]="{suppressScrollX: true}">
+<div class="navbar-scroll-container" [ngClass]="fuseConfig.layout.navbar.primaryBackground" fusePerfectScrollbar
+    [fusePerfectScrollbarOptions]="{suppressScrollX: true}">
 
     <div class="user" fxLayout="column" [ngClass]="fuseConfig.layout.navbar.secondaryBackground">
 
-        <div class="h3 username">Rashid Aslam</div>
-        <div class="h5 email hint-text mt-8">rashid@aiondigital.com</div>
-        <div class="avatar-container" [ngClass]="fuseConfig.layout.navbar.primaryBackground">
-            <img class="avatar" src="assets/images/avatars/user-male.png">
+        <div class="h3 username">{{user?.firstName}}</div>
+        <div class="h5 email hint-text mt-8">{{user?.email}}</div>
+        <div class="avatar-container d-none" [ngClass]="fuseConfig.layout.navbar.primaryBackground">
+            <img class="avatar p-2" src="assets/images/avatars/user-circle.svg">
         </div>
 
     </div>
@@ -38,5 +36,11 @@
     <div class="navbar-content">
         <fuse-navigation class="material2" layout="vertical"></fuse-navigation>
     </div>
+    <footer>
+            <div class="logo">
+                <img class="logo-icon" src="assets/images/logos/rubix.png">
+                <img class="logo-icon" src="assets/images/logos/kfh-license.png">
+            </div>
+    </footer>
 
 </div>

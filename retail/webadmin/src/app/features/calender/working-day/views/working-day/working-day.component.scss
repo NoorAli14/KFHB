@@ -1,0 +1,10 @@
+@import "src/@fuse/scss/fuse";
+
+app-working-day {
+    width: 100%;
+    .full-day{
+        border-radius: 6%;
+        width: 50px;
+        text-align: center;
+    }
+}

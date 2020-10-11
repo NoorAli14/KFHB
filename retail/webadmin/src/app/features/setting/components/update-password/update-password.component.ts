@@ -1,30 +1,33 @@
-import { SettingService } from "./../../setting.service";
-import { Component, OnInit, ViewEncapsulation } from "@angular/core";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { fuseAnimations } from "@fuse/animations";
-import { MESSAGES } from "@shared/constants/app.constants";
-import { camelToSnakeCase } from "@shared/helpers/global.helper";
+import { Component, OnInit, ViewEncapsulation, Injector, EventEmitter, Output, Input } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { fuseAnimations } from '@fuse/animations';
+import { camelToSnakeCase } from '@shared/helpers/global.helper';
 import { BaseComponent } from '@shared/components/base/base.component';
+import { REGEX } from '@config/index';
 
 @Component({
-    selector: "app-update-password",
-    templateUrl: "./update-password.component.html",
-    styleUrls: ["./update-password.component.scss"],
+    selector: 'app-update-password',
+    templateUrl: './update-password.component.html',
+    styleUrls: ['./update-password.component.scss'],
     encapsulation: ViewEncapsulation.None,
     animations: fuseAnimations,
 })
 export class UpdatePasswordComponent extends BaseComponent implements OnInit {
     updatePasswordForm: FormGroup;
-    
-    constructor(private _settingService: SettingService) {
-        super()
+    @Input() responseMessage: string;
+    @Input() errorType: string;
+    @Output() submit: EventEmitter<any> = new EventEmitter();
+    constructor(
+        injector: Injector
+        ) {
+            super(injector);
     }
 
     ngOnInit(): void {
         this.updatePasswordForm = new FormGroup({
-            currentPassword: new FormControl("", [Validators.required]),
-            newPassword: new FormControl("", [Validators.required]),
-            confirmPassword: new FormControl("", [
+            currentPassword: new FormControl('', [Validators.required]),
+            newPassword: new FormControl('', [Validators.required, Validators.pattern(REGEX.PASSWORD)]),
+            confirmPassword: new FormControl('', [
                 Validators.required,
                 this.confirmPasswordValidator.bind(this),
             ]),
@@ -39,15 +42,9 @@ export class UpdatePasswordComponent extends BaseComponent implements OnInit {
         }
         return null;
     }
-    onSubmit() {
+    onSubmit(): void {
         let model = { ...this.updatePasswordForm.value };
         model = camelToSnakeCase(model);
-        this._settingService.updatePassword(model).subscribe(
-            (response) => {
-                 this.errorType = "success";
-                 this.responseMessage = MESSAGES.UPDATED("Password");
-            },
-            (response=>super.onError(response))
-        );
+        this.submit.emit(model);
     }
 }

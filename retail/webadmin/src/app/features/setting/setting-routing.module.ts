@@ -5,11 +5,11 @@ import { ProfileComponent } from './views/profile/profile.component';
 
 const routes: Routes = [
   {
-      path: "",
-      redirectTo:'profile',
+      path: '',
+      redirectTo: 'profile',
   },
   {
-      path: "profile",
+      path: 'profile',
       component: ProfileComponent,
   },
 ];

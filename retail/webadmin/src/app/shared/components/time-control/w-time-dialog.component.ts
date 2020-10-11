@@ -1,6 +1,6 @@
 
 import { Component, Inject, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
-;
+
 
 import { CLOCK_TYPE } from './w-clock.component';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -40,22 +40,22 @@ export class WTimeDialogComponent {
         }
     }
 
-    public setCurrentView(type: CLOCK_TYPE) {
+    public setCurrentView(type: CLOCK_TYPE): void {
 
         this.currentView = type;
     }
 
-    public setMeridien(m: string) {
+    public setMeridien(m: string): void {
 
         this.userTime.meriden = m;
     }
 
-    public revert() {
+    public revert(): void {
 
         this.dialogRef.close(-1);
     }
 
-    public submit() {
+    public submit(): void {
 
         this.dialogRef.close(this.userTime);
     }

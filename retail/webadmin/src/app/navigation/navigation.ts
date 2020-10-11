@@ -57,7 +57,24 @@ export const navigation: FuseNavigation[] = [
                         url      : '/calender/holidays',
                     }
                 ]
-            }]
+            },
+            {
+                id       : 'service_requests',
+                title    : 'Service Requests',
+                translate: 'FEATURES.SERVICE_REQUESTS.TITLE',
+                type     : 'item',
+                icon     : 'calendar_today',
+                url      : '/service-request',
+            },
+            {
+                id       : 'referrals',
+                title    : 'Referrals',
+                translate: 'FEATURES.REFERRALS.TITLE',
+                type     : 'item',
+                icon     : 'calendar_today',
+                url      : '/referrals',
+            },
+]
         
     }
 ];

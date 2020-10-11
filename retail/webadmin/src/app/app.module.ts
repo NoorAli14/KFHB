@@ -1,29 +1,28 @@
-import { NgModule, Injector } from "@angular/core";
-import { BrowserModule } from "@angular/platform-browser";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { MatMomentDateModule } from "@angular/material-moment-adapter";
+import { NgModule, Injector, ErrorHandler } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
 
-import { TranslateModule } from "@ngx-translate/core";
-import "hammerjs";
+import { TranslateModule } from '@ngx-translate/core';
+import 'hammerjs';
 
-import { FuseModule } from "@fuse/fuse.module";
-import { FuseSharedModule } from "@fuse/shared.module";
+import { FuseModule } from '@fuse/fuse.module';
+import { FuseSharedModule } from '@fuse/shared.module';
 import {
     FuseProgressBarModule,
     FuseSidebarModule,
     FuseThemeOptionsModule,
-} from "@fuse/components";
-import { CoreModule } from "@core/core.module";
-import { fuseConfig } from "app/fuse-config";
-import { AppComponent } from "app/app.component";
-import { LayoutModule } from "app/layout/layout.module";
-import { AppRoutingModule } from "./app-routing.module";
-import { NgxUiLoaderModule, NgxUiLoaderHttpModule } from "ngx-ui-loader";
-import { ngxUiLoaderConfig } from "@config/index";
-import { EventBusService } from '@core/services/event-bus/event-bus.service';
-import { AuthUserService } from '@core/services/user/auth-user.service';
+} from '@fuse/components';
+import { fuseConfig } from 'app/fuse-config';
+import { AppComponent } from 'app/app.component';
+import { LayoutModule } from 'app/layout/layout.module';
+import { AppRoutingModule } from './app-routing.module';
+import { NgxUiLoaderModule, NgxUiLoaderHttpModule } from 'ngx-ui-loader';
+import { ngxUiLoaderConfig } from '@config/index';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptorService } from '@shared/services/auth-interceptor/auth-interceptor.service';
 import { AppInjector } from '@shared/app.injector';
-import { TreeviewModule } from 'ngx-treeview';
+
 
 @NgModule({
     declarations: [AppComponent],
@@ -32,7 +31,7 @@ import { TreeviewModule } from 'ngx-treeview';
         BrowserAnimationsModule,
         AppRoutingModule,
         TranslateModule.forRoot(),
-
+        HttpClientModule,
         // Material moment date module
         MatMomentDateModule,
         NgxUiLoaderHttpModule,
@@ -44,16 +43,27 @@ import { TreeviewModule } from 'ngx-treeview';
         FuseSharedModule,
         FuseSidebarModule,
         FuseThemeOptionsModule,
-        CoreModule,
-        TreeviewModule.forRoot(),
         // App modules
         LayoutModule,
     ],
-    providers:[EventBusService,AuthUserService],
+    providers: [
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthInterceptorService,
+            multi: true,
+        },
+       
+        // {
+        //     provide: HTTP_INTERCEPTORS,
+        //     useClass: ErrorInterceptorService,
+        //     multi: true,
+        // },
+        // { provide: ErrorHandler, useClass: GlobalErrorService },
+    ],
     bootstrap: [AppComponent],
 })
 export class AppModule {
     constructor(injector: Injector) {
         AppInjector.injector = injector;
-      }
+    }
 }

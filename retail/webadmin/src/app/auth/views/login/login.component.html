@@ -12,13 +12,11 @@
             }"
         >
             <div class="logo">
-                <img src="assets/images/logos/fuse.svg" />
+                <img src="assets/images/logos/rubix-icon.png" />
             </div>
 
             <div class="title">LOGIN TO YOUR ACCOUNT</div>
-            <div *ngIf="responseMessage.length > 0" fxLayout="row" fxLayoutAlign="center" class="p-16  message-box {{ errorType }} ">
-                {{ responseMessage }}
-            </div>
+            <app-message-box [type]="errorType" [message]="responseMessage"></app-message-box>
             <br>
             <form
                 name="loginForm"
@@ -27,7 +25,7 @@
                 novalidate
             >
                 <mat-form-field appearance="outline">
-                    <mat-label>Email</mat-label>
+                    <mat-label>Email <app-required-indicator></app-required-indicator></mat-label>
                     <input matInput formControlName="email" />
                     <mat-icon matSuffix class="secondary-text">mail</mat-icon>
                     <mat-error>
@@ -38,7 +36,7 @@
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
-                    <mat-label>Password</mat-label>
+                    <mat-label>Password <app-required-indicator></app-required-indicator></mat-label>
                     <input
                         matInput
                         type="password"
@@ -60,10 +58,6 @@
                     fxLayout.xs="column"
                     fxLayoutAlign="space-between center"
                 >
-                    <mat-checkbox class="remember-me" aria-label="Remember Me">
-                        Remember Me
-                    </mat-checkbox>
-
                     <a
                         class="forgot-password"
                         mat-button
@@ -85,7 +79,7 @@
                     LOGIN
                 </button>
             </form>
-            <div class="separator">
+            <!-- <div class="separator">
                 <span class="text">Login with</span>
             </div>
 
@@ -119,7 +113,7 @@
                 >
                     Twitter
                 </button>
-            </div>
+            </div> -->
             <!-- <div class="register" fxLayout="column" fxLayoutAlign="center center">
                 <span class="text">Don't have an account?</span>
                 <a class="link" [routerLink]="'/auth/register'">Create an account</a>

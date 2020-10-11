@@ -1,0 +1,81 @@
+<div class="page-container page-layout carded fullwidth inner-scroll">
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg accent"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header accent" style="min-height: 95px !important; height:95px !important"  fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-between center">
+
+            <!-- APP TITLE -->
+            <div class="logo mb-24 mb-md-0" fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+                    history
+                </mat-icon>
+                <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                    Holidays
+                </span>
+            </div>
+            <!-- / APP TITLE -->
+
+            <!-- ADD BUTTON -->
+            <button mat-raised-button color="accent" (click)="openDialog(null)" class="add-product-button fuse-white mt-24 mt-md-0">
+                <span>ADD NEW</span>
+            </button>
+            <!-- / ADD BUTTON -->
+
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT CARD -->
+        <div class="content-card" fusePerfectScrollbar>
+            <!-- <div class="spinner-container" *ngIf="dataSource.loading$ | async">
+                <mat-spinner></mat-spinner>
+            </div> -->
+            <app-message-box [type]="errorType" [message]="responseMessage"></app-message-box>
+            <mat-table #table matSort matSortActive="username" matSortDirection="asc" matSortDisableClear [dataSource]="dataSource">
+                <!-- COLUMNS AND ROWS-->
+                <ng-container *ngFor="let key of displayedColumns" [matColumnDef]="key">
+                    <mat-header-cell *matHeaderCellDef>{{ key.includes('action') ? 'Action' : camelToSentenceCase(key) }}</mat-header-cell>
+            
+                    <mat-cell *matCellDef="let element; let i = dataIndex" class="text-elipsis">
+                        <ng-container  [ngSwitch]="key">
+                            <span  *ngSwitchCase="'holidayDate'">
+                                {{element[key] | date:'mediumDate'}}
+                            </span>
+                            <span  *ngSwitchCase="'action'">
+                                <mat-icon class="hover" color="warn" matTooltip="Delete holiday"  appPermission   [permissions]="userPermissions"
+                                [type]="'delete'" type="button" (click)=" confirmDialog(element['id'])">delete</mat-icon> &nbsp;&nbsp;
+                                <mat-icon class="hover" type="button" matTooltip="Edit holiday" (click)="openDialog(element)">mode_edit</mat-icon>
+                            </span>
+                            <span *ngSwitchCase="'status'">
+                                <app-status [status]="element[key]"></app-status>
+                            </span>
+                            <span  *ngSwitchDefault>
+                                <span *ngIf="element[key]; else defaultText">
+                                    {{element[key] }}
+                                </span>
+                            </span>
+                           
+                        </ng-container>
+                        <ng-template #defaultText>
+                            <app-default-text></app-default-text>
+                        </ng-template>
+                    </mat-cell>
+                </ng-container>
+                <!-- -->
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;" [@animate]="{value:'*',params:{y:'100%'}}">
+                </mat-row>
+            
+            </mat-table>
+            
+            <mat-paginator #paginator [pageIndex]="0" [pageSize]="pageSize" showFirstLastButtons [pageSizeOptions]="pageSizeOptions"></mat-paginator>
+        </div>
+        <!-- / CONTENT CARD -->
+    </div>
+    <!-- / CENTER -->
+</div>

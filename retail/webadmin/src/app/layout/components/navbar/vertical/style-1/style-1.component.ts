@@ -1,5 +1,5 @@
-import { EventBusService } from './../../../../../core/services/event-bus/event-bus.service';
-import { AuthUserService } from '@core/services/user/auth-user.service';
+import { EventBusService } from '@shared/services/event-bus/event-bus.service';
+import { AuthUserService } from '@shared/services/user/auth-user.service';
 import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subject } from 'rxjs';
@@ -23,24 +23,24 @@ export class NavbarVerticalStyle1Component extends UnsubscribeOnDestroyAdapter i
 {
     fuseConfig: any;
     navigation: any;
-currentUser:any
     // Private
     private _fusePerfectScrollbar: FusePerfectScrollbarDirective;
     private _unsubscribeAll: Subject<any>;
-    appName:string;
+    appName: string;
+    user: any;
     constructor(
         private _fuseConfigService: FuseConfigService,
         private _fuseNavigationService: FuseNavigationService,
         private _fuseSidebarService: FuseSidebarService,
         private _router: Router,
-        private _authUserService:AuthUserService,
-        private eventService:EventBusService
+        private _authUserService: AuthUserService,
+        private eventService: EventBusService
     )
     {
-        super()
+        super();
         // Set the private defaults
         this._unsubscribeAll = new Subject();
-        this.appName=APP_CONST.APP_NAME;
+        this.appName = APP_CONST.APP_NAME;
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -92,9 +92,9 @@ currentUser:any
     ngOnInit(): void
     {
         this.subs.sink = this.eventService.on(Events.USER_UPDATED, (user) => {
-            this.currentUser=user;
-          })
-        this.currentUser=this._authUserService.User;
+            this.user = user;
+          });
+        this.user = this._authUserService.User;
         this._router.events
             .pipe(
                 filter((event) => event instanceof NavigationEnd),

@@ -8,12 +8,15 @@
                     }">
                     person
                 </mat-icon>
-                <span class="logo-text" [@animate]="{
+                <span *ngIf="data.firstName || data.lastName; else defaultText" class="logo-text" [@animate]="{
                         value: '*',
                         params: { delay: '100ms', x: '-25px' }
                     }">
                     {{data.firstName +' ' + data.lastName}}
                 </span>
+                <ng-template #defaultText>
+                    <app-default-text></app-default-text>
+                </ng-template>
             </div>
             <button mat-icon-button (click)="matDialogRef.close()" aria-label="Close dialog">
                 <mat-icon>close</mat-icon>
@@ -23,7 +26,11 @@
 
     <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
         <div fxLayout="row wrap" fxLayout.lt-lg="column" fxLayoutAlign.lt-lg="center" fxLayoutGap="20px" fxLayoutAlign="start center" fxFlex="1 1 auto">
-           <ng-container *ngFor="let module of data.modules">
+          
+            <div *ngIf="data.modules.length < 1" fxLayout="row" fxLayoutAlign="center" class="p-16 full-width">
+                This user does not have a module assigned.
+            </div>
+            <ng-container *ngFor="let module of data.modules">
             <app-detail-item [module]="module" ></app-detail-item>
            </ng-container>
            

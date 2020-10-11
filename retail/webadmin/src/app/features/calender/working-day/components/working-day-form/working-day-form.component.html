@@ -1,0 +1,182 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar class="mat-accent m-0">
+        <mat-toolbar-row
+            fxFlex
+            fxLayout="row"
+            fxLayoutAlign="space-between center"
+        >
+            <div
+                class="logo mb-24 mb-md-0"
+                fxLayout="row"
+                fxLayoutAlign="start center"
+            >
+                <mat-icon
+                    class="logo-icon mr-12"
+                    [@animate]="{
+                        value: '*',
+                        params: { delay: '50ms', scale: '0.2' }
+                    }"
+                >
+                av_timer
+                </mat-icon>
+                <span
+                    class="logo-text"
+                    [@animate]="{
+                        value: '*',
+                        params: { delay: '100ms', x: '-25px' }
+                    }"
+                >
+                {{ data.id ? "Edit" : "Add" }} Working Day
+                </span>
+            </div>
+            <button
+                mat-icon-button
+                (click)="onClose()"
+                aria-label="Close dialog"
+            >
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
+        <app-message-box
+        [type]="errorType"
+        [message]="responseMessage"
+    ></app-message-box>
+        <div fxLayout="row">
+            <form
+                class="p-24 mr-24"
+                fxLayout="column"
+                fxLayoutAlign="start"
+                fxFlex="1 0"
+                name="workingDayForm"
+                (ngSubmit)="onSubmit()"
+                novalidate
+                [formGroup]="workingDayForm"
+            >
+                <div
+                    fxLayout="row wrap"
+                    fxLayout.lt-lg="column"
+                    fxLayoutAlign.lt-lg="center"
+                    fxLayoutGap="10px"
+                    fxLayoutAlign="start center"
+                    fxFlex="1 1 auto"
+                >
+                    <div fxFlex="100" class="pr-4 margin">
+                        <mat-checkbox
+                            formControlName="fullDay"
+                            class="example-margin"
+                            >Is Full Day</mat-checkbox
+                        >
+                    </div>
+                    <mat-form-field
+                        appearance="outline"
+                        fxFlex="100"
+                        class="pr-4"
+                    >
+                        <mat-label>Week Day <app-required-indicator></app-required-indicator></mat-label>
+                        <mat-select formControlName="weekDay">
+                            <mat-option
+                                *ngFor="let item of workingDaysList"
+                                [value]="item.id"
+                            >
+                                {{ item.name }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>
+                            <app-mat-error
+                                [control]="workingDayForm.get('weekDay')"
+                            ></app-mat-error>
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field
+                        appearance="outline"
+                        fxFlex="48"
+                        class="pr-4"
+                    >
+                        <mat-label>Start Time </mat-label>
+                        <input matInput formControlName="startTimeLocal" />
+                        <mat-icon
+                            (click)="showPicker('startTimeLocal')"
+                            matSuffix
+                            class="secondary-text hover"
+                            style="cursor: pointer"
+                            >arrow_drop_down</mat-icon
+                        >
+                        <mat-error>
+                            <app-mat-error
+                                [control]="workingDayForm.get('startTimeLocal')"
+                            ></app-mat-error>
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field
+                        appearance="outline"
+                        fxFlex="48"
+                        class="pl-4"
+                    >
+                        <mat-label>End Time </mat-label>
+                        <input matInput formControlName="endTimeLocal" />
+                        <mat-icon
+                            (click)="showPicker('endTimeLocal')"
+                            matSuffix
+                            class="secondary-text hover"
+                            style="cursor: pointer"
+                            >arrow_drop_down</mat-icon
+                        >
+                        <mat-error>
+                            <app-mat-error
+                                [control]="workingDayForm.get('endTimeLocal')"
+                            ></app-mat-error>
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field
+                        appearance="outline"
+                        fxFlex="100"
+                        class="pr-16"
+                    >
+                        <mat-label>Remarks <app-required-indicator></app-required-indicator></mat-label>
+                        <textarea matInput formControlName="remarks"></textarea>
+                        <mat-error>
+                            <app-mat-error
+                                [control]="workingDayForm.get('remarks')"
+                            ></app-mat-error>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div
+                    class="actions"
+                    fxLayoutGap="10px"
+                    fxLayout="row"
+                    fxLayoutAlign="end center"
+                >
+                    <button
+                        type="button"
+                        mat-raised-button
+                        (click)="onClose()"
+                        color="secondary"
+                        aria-label="Follow"
+                    >
+                        Cancel
+                    </button>
+                    &nbsp;&nbsp;&nbsp;
+                    <button
+                    appPermission
+                    [permissions]="userPermissions"
+                    [type]="data.id ? 'edit' : 'create'"
+                        type="submit"
+                        class="submit-button"
+                        mat-raised-button
+                        [disabled]="workingDayForm.invalid"
+                        color="accent"
+                        aria-label="Send Message"
+                    >
+                        Submit
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
