@@ -21,6 +21,7 @@ export enum APPOINTMENT_STATUS {
   ATTENDED = 'ATTENDED',
   CANCELLED = 'CANCELLED',
 }
+
 registerEnumType(GENDER, { name: 'GENDER' });
 registerEnumType(APPOINTMENT_STATUS, { name: 'APPOINTMENT_STATUS' });
 
@@ -29,6 +30,12 @@ export enum PLATFORMS {
   IOS = 'ios',
   WEB = 'web',
 }
+
+export const CREATED_BY: Record<string, string> = {
+  SYSTEM: 'SYSTEM',
+  API: 'API',
+};
+
 registerEnumType(PLATFORMS, { name: 'MOBILE_PLATFORMS' });
 
 export const DATABASE_UUID_METHOD = (): string => 'NEWID()';
@@ -43,3 +50,6 @@ export const DATABASE_MIGRATION_TABLE_NAME =
   process.env.DATABASE_MIGRATION_TABLE_NAME || 'RUBIX_VIDEO_MIGRATION';
 export const DATABASE_MIGRATION_DIRECTORY = 'src/core/database/migrations';
 export const DATABASE_SEED_DIRECTORY = 'src/core/database/seeds';
+
+export const APPOINTMENT_QUERY =
+  'id call_time created_on created_by updated_on updated_by';
