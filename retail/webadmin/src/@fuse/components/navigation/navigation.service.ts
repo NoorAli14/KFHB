@@ -1,12 +1,12 @@
-import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable, Subject } from "rxjs";
-import * as _ from "lodash";
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import * as _ from 'lodash';
 
-import { FuseNavigationItem } from "@fuse/types";
-import { FuseSidebarService } from "../sidebar/sidebar.service";
+import { FuseNavigationItem } from '@fuse/types';
+import { FuseSidebarService } from '../sidebar/sidebar.service';
 
 @Injectable({
-    providedIn: "root",
+    providedIn: 'root',
 })
 export class FuseNavigationService {
     onItemCollapsed: Subject<any>;
@@ -120,25 +120,25 @@ export class FuseNavigationService {
         }
         // Add to the registry
         const customFunctionNavItem = {
-            id: "custom-function",
-            title: "Custom Function",
-            type: "group",
-            icon: "settings",
+            id: 'custom-function',
+            title: 'Custom Function',
+            type: 'group',
+            icon: 'settings',
             children: [
                 {
-                    id: "customize",
-                    title: "Customize",
-                    type: "item",
-                    icon: "settings",
+                    id: 'customize',
+                    title: 'Customize',
+                    type: 'item',
+                    icon: 'settings',
                     function: () => {
-                        this.toggleSidebarOpen("themeOptionsPanel");
+                        this.toggleSidebarOpen('themeOptionsPanel');
                     },
                 },
             ],
         };
-        const find = navigation.find((x) => x.id == "custom-function");
+        const find = navigation.find((x) => x.id === 'custom-function');
         if (!find) {
-            navigation.push(customFunctionNavItem);
+            // navigation.push(customFunctionNavItem);
         }
         this._registry[key] = navigation;
 
@@ -196,13 +196,13 @@ export class FuseNavigationService {
         flatNavigation: FuseNavigationItem[] = []
     ): any {
         for (const item of navigation) {
-            if (item.type === "item") {
+            if (item.type === 'item') {
                 flatNavigation.push(item);
 
                 continue;
             }
 
-            if (item.type === "collapsable" || item.type === "group") {
+            if (item.type === 'collapsable' || item.type === 'group') {
                 if (item.children) {
                     this.getFlatNavigation(item.children, flatNavigation);
                 }
@@ -261,7 +261,7 @@ export class FuseNavigationService {
         if (!navigation) {
             navigation = this.getCurrentNavigation();
         }
-        if (!navigation) return null;
+        if (!navigation) { return null; }
         for (const item of navigation) {
             if (item.id === id) {
                 return item;
@@ -325,7 +325,7 @@ export class FuseNavigationService {
         const navigation: any[] = this.getCurrentNavigation();
 
         // Add to the end of the navigation
-        if (id === "end") {
+        if (id === 'end') {
             navigation.push(item);
 
             // Trigger the observable
@@ -335,7 +335,7 @@ export class FuseNavigationService {
         }
 
         // Add to the start of the navigation
-        if (id === "start") {
+        if (id === 'start') {
             navigation.unshift(item);
 
             // Trigger the observable

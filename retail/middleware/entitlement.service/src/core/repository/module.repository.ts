@@ -8,6 +8,7 @@ export class ModuleRepository extends BaseRepository {
   private readonly __attributes: string[] = [
     `${TABLE.MODULE}.id`,
     `${TABLE.MODULE}.name`,
+    `${TABLE.MODULE}.slug`,
     `${TABLE.MODULE}.status`,
     `${TABLE.MODULE}.parent_id`,
     `${TABLE.MODULE}.created_by`,

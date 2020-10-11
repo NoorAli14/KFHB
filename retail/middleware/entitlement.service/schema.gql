@@ -23,7 +23,6 @@ input CheckAvailabilityInput {
 }
 
 input CreateUserInput {
-  username: String
   contact_no: String
   first_name: String
   middle_name: String
@@ -156,6 +155,7 @@ input LoginInput {
 type Module {
   id: ID
   name: String
+  slug: String
   parent_id: String
   status: String
   created_on: String
@@ -166,12 +166,14 @@ type Module {
 
 input ModuleCreateInput {
   name: String!
+  slug: String
   parent_id: String
   status: String
 }
 
 input ModuleInput {
   name: String
+  slug: String
   parent_id: String
   status: String
 }
@@ -231,7 +233,7 @@ input PermissionInput {
 type Query {
   usersList: [User!]!
   findUserById(id: String!): User!
-  findAvailableUsers(input: CheckAvailabilityInput!): [User!]!
+  findAvailableAgents(input: CheckAvailabilityInput!): [User!]!
   findUserBy(checks: [KeyValInput!]!): [User!]!
   rolesList: [Role!]!
   findRoleById(id: String!): Role!
@@ -293,7 +295,6 @@ input UpdatePasswordInput {
 }
 
 input UpdateUserInput {
-  username: String
   contact_no: String
   first_name: String
   middle_name: String
@@ -313,7 +314,6 @@ input UpdateUserInput {
 
 type User {
   id: ID
-  username: String
   email: String
   contact_no: String
   first_name: String
@@ -323,7 +323,7 @@ type User {
   gender: String
   is_owner: String
   tenant_id: String
-  date_of_birth: String
+  date_of_birth: DateTime
   nationality_id: String
   status: String
   created_on: String

@@ -9,8 +9,7 @@ import {
   ConfigurationService,
   X_USER_ID,
   X_TENANT_ID,
-  iSERVICE,
-  X_CORRELATION_KEY,
+  X_CORRELATION_KEY, RegistryService
 } from '@common/index';
 
 import { AuthModule } from './auth/auth.module';
@@ -19,24 +18,9 @@ import { OtpModule } from './otp/otp.module';
 import { SessionModule } from './sessions/session.module';
 import { AttachmentModule } from './attachments/attachment.module';
 import { UserModule } from './users/user.module';
+import { AmlModule } from './aml/aml.module';
+import { AppointmentModule } from './appointments/appointment.module';
 
-let services: iSERVICE[];
-if (process.env.NODE_ENV === 'production') {
-  services = [
-    { name: 'identity', url: 'http://retail_identity:4010/graphql' },
-    { name: 'compliance', url: 'http://retail_compliance:5010/graphql' },
-    { name: 'notifications', url: 'http://retail_notification:5030/graphql' },
-    { name: 'users', url: 'http://retail_user_management:5020/graphql' }
-  ];
-} else {
-  services = [
-    { name: 'notification', url: 'http://localhost:5030/graphql' },
-    { name: 'identity', url: 'http://localhost:4010/graphql' },
-    { name: 'compliance', url: 'http://localhost:5010/graphql' },
-    { name: 'users', url: 'http://localhost:5020/graphql' },
-
-  ];
-}
 class AuthenticatedDataSource extends RemoteGraphQLDataSource {
   async willSendRequest({ request, context }) {
     const { userId, tenantId, correlationId } = context;
@@ -74,12 +58,14 @@ class BuildServiceModule { }
     OtpModule,
     UserModule,
     ComplianceModule,
+    AmlModule,
+    AppointmentModule,
     GraphQLGatewayModule.forRootAsync({
       imports: [BuildServiceModule],
-      useFactory: async () => ({
+      useFactory: async (schema: RegistryService) => ({
         gateway: {
           // Note: All these values comes through service registry. For Demo purposes we hardcode service list
-          serviceList: services,
+          serviceList: schema.services.map(({ name, url }) => ({ name, url })),
         },
         server: {
           context: ({ req }) => ({
@@ -91,7 +77,7 @@ class BuildServiceModule { }
           cors: true,
         },
       }),
-      inject: [GATEWAY_BUILD_SERVICE],
+      inject: [RegistryService, GATEWAY_BUILD_SERVICE],
     }),
     RedisModule.forRootAsync({
       imports: [CommonModule],

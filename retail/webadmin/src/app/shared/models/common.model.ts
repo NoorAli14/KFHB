@@ -1,5 +1,5 @@
 
 export class Select{
-    id:number | string;
-    name:string;
+    id: number | string;
+    name: string;
 }

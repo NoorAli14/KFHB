@@ -21,7 +21,6 @@ export class TemplatesResolver {
     @Loader(SectionLoaderForTemplate.name)
     sectionLoader: DataLoader<Section['id'], Section>,
   ): Promise<any> {
-    console.log(template, 'template 0-0-0-0');
     return sectionLoader.loadWithKeys(template.id, columns);
   }
 

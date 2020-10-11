@@ -31,13 +31,13 @@ import {
 
 export const DEFAULT_ENV: iConfig = {
   APP: {
-    NAME: 'Rubix | Boilerplate',
+    NAME: 'Rubix | Notification Service',
     DESCRIPTION: '',
     VERSION: '1.0.0',
     ENVIRONMENT: 'development',
     PORT: 3000,
     HOST: 'http://127.0.0.1',
-    API_URL_PREFIX: '/api/v1/',
+    API_URL_PREFIX: '/api/v1',
   },
   DATABASE: {
     USERNAME: '',
@@ -90,9 +90,9 @@ export const DEFAULT_ENV: iConfig = {
   FIREBASE: {
     CLIENT_EMAIL: '',
     PRIVATE_KEY: '',
-    PROJECT_ID:''
+    PROJECT_ID: ''
   },
-  
+
   HTTP: {
     TIMEOUT: DEFAULT_HTTP_TIMEOUT,
     MAXDIRECTS: DEFAULT_HTTP_MAX_REDIRECTS
@@ -198,7 +198,7 @@ export class ConfigurationService {
     };
   }
 
-  public get HTTP(): iHTTP{
+  public get HTTP(): iHTTP {
     return {
       TIMEOUT: parseInt(
         this.get('ENV_RBX_HTTP_TIMEOUT', DEFAULT_ENV.HTTP.TIMEOUT),
@@ -243,8 +243,8 @@ export class ConfigurationService {
     return this.IS_DEVELOPMENT
       ? true
       : isTruthy(
-          this.get('ENV_RBX_SWAGGER_ENABLED', DEFAULT_ENV.DATABASE.IS_DEBUG),
-        );
+        this.get('ENV_RBX_SWAGGER_ENABLED', DEFAULT_ENV.DATABASE.IS_DEBUG),
+      );
   }
   get APPLICATION_HOST(): string {
     return this.IS_DEVELOPMENT

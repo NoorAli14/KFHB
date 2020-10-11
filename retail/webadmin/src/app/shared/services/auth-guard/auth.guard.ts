@@ -1,11 +1,11 @@
-import { AuthUserService } from "@shared/services/user/auth-user.service";
-import { Injectable } from "@angular/core";
+import { AuthUserService } from '@shared/services/user/auth-user.service';
+import { Injectable } from '@angular/core';
 import {
     ActivatedRouteSnapshot,
     RouterStateSnapshot,
     CanActivate,
     Router,
-} from "@angular/router";
+} from '@angular/router';
 
 @Injectable({
     providedIn: 'root',
@@ -24,7 +24,7 @@ export class AuthGuard implements CanActivate {
         if (currentUser) {
             return true;
         }
-        this.router.navigate(["/auth/login"], {
+        this.router.navigate(['/auth/login'], {
             queryParams: { returnUrl: state.url },
         });
         return false;

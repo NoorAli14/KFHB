@@ -1,23 +1,23 @@
-import { APP_CONST } from "@shared/constants/app.constants";
-import { URI } from "./../../../shared/constants/app.constants";
-import { AuthUserService } from "@shared/services/user/auth-user.service";
-import { NetworkService } from "@shared/services/network/network.service";
-import { Login } from "./../../../auth/model/login.model";
+import { APP_CONST } from '@shared/constants/app.constants';
+import { URI } from './../../../shared/constants/app.constants';
+import { AuthUserService } from '@shared/services/user/auth-user.service';
+import { NetworkService } from '@shared/services/network/network.service';
+import { Login } from './../../../auth/model/login.model';
 import {
     throwError as observableThrowError,
     Observable,
     pipe,
     forkJoin,
-} from "rxjs";
-import { map, catchError } from "rxjs/operators";
-import { Injectable } from "@angular/core";
+} from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
 
-import { StorageService } from "../storage/storage.service";
-import * as jwt_decode from "jwt-decode";
-import { ReferenceService } from "../reference/reference.service";
-import { HttpHeaders } from "@angular/common/http";
+import { StorageService } from '../storage/storage.service';
+import * as jwt_decode from 'jwt-decode';
+import { ReferenceService } from '../reference/reference.service';
+import { HttpHeaders } from '@angular/common/http';
 @Injectable({
-    providedIn: "root",
+    providedIn: 'root',
 })
 export class AuthenticationService {
     constructor(
@@ -27,29 +27,31 @@ export class AuthenticationService {
         private _refService: ReferenceService
     ) {}
 
-    get accessToken() {
+  public  get accessToken(): any {
         return this.storage.getItem(APP_CONST.ACCESS_TOKEN);
     }
-    get refreshToken() {
-        return this.storage.getItem(APP_CONST.REFRESH_TOKEN);
-    }
-    set accessToken(token) {
+
+    public  set accessToken(token) {
         this.storage.setItem(APP_CONST.ACCESS_TOKEN, token);
     }
 
-    set refreshToken(token) {
+    get refreshToken(): any {
+        return this.storage.getItem(APP_CONST.REFRESH_TOKEN);
+    }
+    set refreshToken(token){
         this.storage.setItem(APP_CONST.REFRESH_TOKEN, token);
     }
+   
     login(model: Login): Observable<any> {
         return this.network
             .post(URI.LOGIN, model, {
                 headers: this.getPublicHeader(),
-                observe: "response",
+                observe: 'response',
             })
             .pipe(
                 map((response) => {
-                    this.accessToken = response.headers.get("x-access-token");
-                    this.refreshToken = response.headers.get("x-refresh-token");
+                    this.accessToken = response.headers.get('x-access-token');
+                    this.refreshToken = response.headers.get('x-refresh-token');
                     this.userService.setData(response.body);
                     return response.body;
                 }),
@@ -61,13 +63,13 @@ export class AuthenticationService {
             headers: this.getPublicHeader(),
         });
     }
-    getPublicHeader() {
+    getPublicHeader(): HttpHeaders {
         let headers = new HttpHeaders();
-        return (headers = headers.set("public", "true"));
+        return (headers = headers.set('public', 'true'));
     }
-    getUserByToken(token) {
+    getUserByToken(token): Observable<any> {
         return forkJoin([
-            this.network.getAll(`${URI.USER_INVITATION}/${token}`,null, {
+            this.network.getAll(`${URI.USER_INVITATION}/${token}`, null, {
                 headers: this.getPublicHeader(),
             }),
             this._refService.getCountries(),
@@ -81,7 +83,7 @@ export class AuthenticationService {
         );
     }
     logout(): Observable<any> {
-        return this.network.onDelete(`${URI.LOGOUT}`,{ headers: this.getPublicHeader()});
+        return this.network.onDelete(`${URI.LOGOUT}`, { headers: this.getPublicHeader()});
     }
 
     updateInvitation(model, token): Observable<any> {
@@ -95,14 +97,14 @@ export class AuthenticationService {
         });
     }
 
-    errorHandler(response) {
-        return observableThrowError(response.error || "Server Error");
+    errorHandler(response): Observable<any> {
+        return observableThrowError(response.error || 'Server Error');
     }
     getDecodeToken = () => {
         const token = this.accessToken;
         return token ? jwt_decode(token) : null;
-    };
-    flushAll() {
+    }
+    flushAll(): void {
         this.storage.clearAll();
     }
 }

@@ -1,23 +1,23 @@
 
-import { Injectable } from "@angular/core";
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
-import { catchError, retry } from "rxjs/operators";
-import { throwError as observableThrowError, Observable } from "rxjs";
-import { createUrl } from "@shared/constants/app.constants";
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { catchError, retry } from 'rxjs/operators';
+import { throwError as observableThrowError, Observable } from 'rxjs';
+import { createUrl } from '@shared/constants/app.constants';
 
 
 @Injectable({
-    providedIn: "root",
+    providedIn: 'root',
 })
 export class NetworkService {
     constructor(private http: HttpClient) {}
 
-    getAll(url: string, params?: Object,options?:Object): Observable<any> {
+    getAll(url: string, params?: object, options?: object): Observable<any> {
         let endPoint = createUrl(url);
         if (params) {
             endPoint = `${endPoint}?`;
             Object.keys(params).forEach((key) => {
-                if (!params[key]) return;
+                if (!params[key]) { return; }
                 endPoint += `${key}=${params[key]}&`;
             });
         }
@@ -36,28 +36,28 @@ export class NetworkService {
     post(url: string, model: any, options?): Observable<any> {
         const endPoint = `${createUrl(url)}`;
         return this.http
-            .post<any[]>(endPoint, model,options)
+            .post<any[]>(endPoint, model, options);
     }
 
     onUpdate(url: string, model: any, options?): Observable<any> {
         const endPoint = `${createUrl(url)}`;
         return this.http
-            .put<any[]>(endPoint, model,options)
+            .put<any[]>(endPoint, model, options)
             .pipe(catchError(this.errorHandlerMessage));
     }
 
-    onDelete(url: string,options?): Observable<any> {
+    onDelete(url: string, options?): Observable<any> {
         const endPoint = `${createUrl(url)}`;
         return this.http
             .delete<any[]>(endPoint, options)
             .pipe(catchError(this.errorHandlerMessage));
     }
 
-    errorHandler(error: HttpErrorResponse) {
+    errorHandler(error: HttpErrorResponse): Observable<any> {
         return observableThrowError(error);
     }
 
-    errorHandlerMessage(error: HttpErrorResponse) {
+    errorHandlerMessage(error: HttpErrorResponse): Observable<any> {
         return observableThrowError(error);
     }
 }

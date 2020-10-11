@@ -44,7 +44,7 @@ export class IdentityService {
       response => {
         return response;
       },
-      async function(error) {
+      async function (error) {
         const originalRequest = error.config;
         if (error.response.status === 403 && !originalRequest._retry) {
           originalRequest._retry = true;
@@ -176,6 +176,17 @@ export class IdentityService {
     return this.__identity
       .documents(userId, checkId)
       .getProcessedClientImage(documentId);
+  }
+
+  async getExtractedClientImage(
+    userId: string,
+    checkId: string,
+    documentId: string,
+  ) {
+    this.logger.log(`Get document extracted Image with ID ${documentId}`);
+    return this.__identity
+      .documents(userId, checkId)
+      .getExtractedClientImage(documentId);
   }
   async createEvaluation(userId: string, checkId: string): Promise<any> {
     this.logger.log(`Creating evaluation with User ID ${userId}`);

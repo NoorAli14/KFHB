@@ -1,4 +1,5 @@
 export const X_CORRELATION_KEY = 'x-correlation-id';
+export const X_CHANNEL_KEY = 'x-channel-id';
 export const X_ACCESS_TOKEN = 'x-access-token';
 export const X_REFRESH_TOKEN = 'x-refresh-token';
 export const X_USER_ID = 'x-user-id';

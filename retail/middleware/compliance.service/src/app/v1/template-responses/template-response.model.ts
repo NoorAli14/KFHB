@@ -1,6 +1,6 @@
 // Graphql Model
 import { Field, ObjectType } from '@nestjs/graphql';
-import { IsJSON } from 'class-validator';
+import { IsJSON, IsOptional, IsString, IsUUID } from 'class-validator';
 import { Template } from '../templates/template.model';
 
 @ObjectType()
@@ -9,13 +9,17 @@ export class TemplateResponse {
   id: string;
 
   @Field()
-  @IsJSON()
+  @IsString()
+  @IsOptional()
   results: string;
 
   @Field()
+  @IsString()
+  @IsOptional()
   remarks: string;
 
   @Field()
+  @IsUUID()
   user_id: string;
 
   template_id: string;

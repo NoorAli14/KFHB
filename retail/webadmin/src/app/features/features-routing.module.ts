@@ -1,10 +1,10 @@
-import { NgModule } from "@angular/core";
-import { Routes, RouterModule } from "@angular/router";
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
 
 const routes: Routes = [
   {
-    path: "",
-    redirectTo:'ent', pathMatch:'full'
+    path: '',
+    redirectTo: 'ent', pathMatch: 'full'
   },
   {
     path: 'ent',
@@ -23,7 +23,15 @@ const routes: Routes = [
     loadChildren: () => import('./error/error.module').then(m => m.ErrorModule)
   },
   {
-    path: '**', redirectTo:'error'
+    path: 'video',
+    loadChildren: () => import('./video/video.module').then(m => m.VideoModule)
+  },
+  {
+    path: 'dashboard',
+    loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule)
+  },
+  {
+    path: '**', redirectTo: 'error'
   }
 ];
 

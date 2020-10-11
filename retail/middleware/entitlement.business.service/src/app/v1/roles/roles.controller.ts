@@ -22,7 +22,7 @@ import {
   ApiBadRequestResponse,
   ApiNotFoundResponse,
 } from '@nestjs/swagger';
-import { AuthGuard } from '@common/index';
+import { AuthGuard, PermissionsGuard, Permissions } from '@common/index';
 
 import { RoleService } from './roles.service';
 import { Role } from './role.entity';
@@ -31,7 +31,7 @@ import { RoleDto, UpdateRoleDto } from './role.dto';
 @ApiTags('Role')
 @Controller('roles')
 @ApiBearerAuth()
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, PermissionsGuard)
 export class RolesController {
   constructor(private readonly roleService: RoleService) { }
 
@@ -50,6 +50,7 @@ export class RolesController {
     type: Error,
     description: 'Input Validation failed.',
   })
+  @Permissions('create:roles')
   async create(
     @Body() input: RoleDto,
   ): Promise<Role> {
@@ -63,6 +64,7 @@ export class RolesController {
     summary: 'List of all the roles',
   })
   @ApiOkResponse({ type: [Role], description: 'List of all the roles.' })
+  @Permissions('view:roles')
   async list(): Promise<Role[]> {
     return this.roleService.list();
   }
@@ -81,6 +83,7 @@ export class RolesController {
     type: Error,
     description: 'Role Not Found.',
   })
+  @Permissions('view:roles')
   async findOne(
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<Role> {
@@ -106,6 +109,7 @@ export class RolesController {
     type: Error,
     description: 'Role Not Found.',
   })
+  @Permissions('edit:roles')
   async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() roleDto: UpdateRoleDto,
@@ -125,6 +129,7 @@ export class RolesController {
     description: 'Role Not Found.',
   })
   @HttpCode(HttpStatus.NO_CONTENT)
+  @Permissions('delete:roles')
   async delete(
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<any> {

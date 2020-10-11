@@ -7,5 +7,6 @@ export const environment = {
 	authTokenKey: 'authce9d77b308c149d5992a80073637e4d5',
 	APP_SECRETE: "abfFGHIepqrstuvwadkalekd",
 	API_BASE_URL:"",
+	CHANNEL_ID:"",
     hmr       : false
 };

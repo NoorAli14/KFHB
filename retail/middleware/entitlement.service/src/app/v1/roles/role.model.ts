@@ -1,7 +1,7 @@
-import {Field, ID, ObjectType} from "@nestjs/graphql";
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 
-import {Module} from "@app/v1/modules/module.model";
-import {PaginationModel} from '@common/models';
+import { Module } from '@app/v1/modules/module.model';
+import { PaginationModel } from '@common/models';
 
 @ObjectType()
 export class Role {

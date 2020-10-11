@@ -1,9 +1,8 @@
-export class Holiday{
-    id:string;
-    date:string;
-    type:string;
-    detail:string;
-    isRepititive:boolean;
-    remarks:string;
-    status:string;
+import { BaseModel } from '@shared/models/base.model';
+
+export class Holiday extends BaseModel{
+    holidayDate: string;
+    description: string;
+    remarks: string;
+    status: string;
 }

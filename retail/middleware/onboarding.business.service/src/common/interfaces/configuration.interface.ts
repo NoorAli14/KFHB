@@ -27,6 +27,8 @@ export interface iAPP {
   MONITOR_ENABLED?: boolean;
   WEB_ONBOARDING_LINK?: string;
   WEB_RESET_PASSWORD_LINK?: string;
+  BASIC_AUTH_KEY?: string;
+  BASIC_AUTH_SECRET?: string;
 }
 export interface iDATABASE {
   USERNAME: string;

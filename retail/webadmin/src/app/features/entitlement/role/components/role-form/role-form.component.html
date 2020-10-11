@@ -8,15 +8,15 @@
          <div class="logo mb-24 mb-md-0"
                  fxLayout="row" fxLayoutAlign="start center">
                 <mat-icon class="logo-icon mr-12" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
-                    security
+                    settings_applications
                 </mat-icon>
                 <span class="logo-text" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
-                    Roles
+                  {{data.role.id ? 'Edit' : 'New'}}  Role
                 </span>
             </div>
             <button
                 mat-icon-button
-                (click)="matDialogRef.close()"
+                (click)="onClose()"
                 aria-label="Close dialog"
             >
                 <mat-icon>close</mat-icon>
@@ -36,8 +36,7 @@
         novalidate
         [formGroup]="roleForm"
     >
-    <app-message-box [type]="errorType" [message]="responseMessage"></app-message-box>
-    
+        <br>
         <div
             fxLayout="row wrap"
             fxLayout.lt-lg="column"
@@ -60,8 +59,6 @@
             <mat-form-field appearance="outline" fxFlex="100" class="pr-4">
                 <mat-label>Description <app-required-indicator></app-required-indicator></mat-label>
                 <textarea matInput placeholder="Description" formControlName="description"></textarea>
-                <mat-icon matSuffix class="secondary-text"
-                    >account_circle</mat-icon>
                 <mat-error>
                     <app-mat-error [control]="roleForm.get('description')"></app-mat-error>
                 </mat-error>
@@ -80,7 +77,6 @@
                         {{ camelToSentenceCase(key)  }}
                        </div>   
                    </mat-header-cell>
-                  
                    <mat-cell  *matCellDef="let control of modules.controls; let i = index;" >
                        <div *ngIf="key==='module'; else checkboxes" fxLayout="row" fxLayoutAlign="start start">
                         <span >{{modules.controls[i].get(key).value.name}}</span>
@@ -95,7 +91,6 @@
                         </ng-template>
                         </ng-template>
                        </div>
-                            
                    </mat-cell>
                </ng-container>
                <!-- -->
@@ -109,7 +104,7 @@
             <button
                 type="button"
                 mat-raised-button
-                (click)="matDialogRef.close()"
+                (click)="onClose()"
                 color="secondary"
                 aria-label="Follow"
             >

@@ -1,4 +1,4 @@
-import { Permission } from "./config.model";
+import { Permission } from './config.model';
 import { BaseModel } from '@shared/models/base.model';
 
 export class Modules extends BaseModel {

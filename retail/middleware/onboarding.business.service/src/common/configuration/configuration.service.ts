@@ -39,6 +39,14 @@ export class ConfigurationService {
         'ENV_RBX_WEB_RESET_PASSWORD_LINK',
         DEFAULT_ENV.APP.WEB_RESET_PASSWORD_LINK,
       ),
+      BASIC_AUTH_KEY: this.get(
+        'ENV_RBX_BASIC_AUTH_KEY',
+        null,
+      ),
+      BASIC_AUTH_SECRET: this.get(
+        'ENV_RBX_BASIC_AUTH_SECRET',
+        null,
+      ),
     };
   }
 
@@ -124,8 +132,8 @@ export class ConfigurationService {
     return this.IS_DEVELOPMENT
       ? true
       : isTruthy(
-          this.get('ENV_RBX_SWAGGER_ENABLED', DEFAULT_ENV.SWAGGER.ENABLE),
-        );
+        this.get('ENV_RBX_SWAGGER_ENABLED', DEFAULT_ENV.SWAGGER.ENABLE),
+      );
   }
 
   get APPLICATION_HOST(): string {

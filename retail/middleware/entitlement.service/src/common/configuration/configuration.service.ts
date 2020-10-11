@@ -17,7 +17,7 @@ export const DEFAULT_ENV: iConfig = {
     ENVIRONMENT: 'development',
     PORT: 3000,
     HOST: 'http://127.0.0.1',
-    API_URL_PREFIX: '/api/v1/',
+    API_URL_PREFIX: '/api/v1',
     INVITATION_TOKEN_EXPIRY: 240,
     PASSWORD_RESET_TOKEN_EXPIRY: 240
   },
@@ -114,8 +114,8 @@ export class ConfigurationService {
     return this.IS_DEVELOPMENT
       ? true
       : isTruthy(
-          this.get('ENV_RBX_SWAGGER_ENABLED', DEFAULT_ENV.DATABASE.IS_DEBUG),
-        );
+        this.get('ENV_RBX_SWAGGER_ENABLED', DEFAULT_ENV.DATABASE.IS_DEBUG),
+      );
   }
   get APPLICATION_HOST(): string {
     return this.IS_DEVELOPMENT

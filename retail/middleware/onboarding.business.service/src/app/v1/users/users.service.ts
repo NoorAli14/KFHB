@@ -13,7 +13,6 @@ export class UserService {
     middle_name
     last_name
     email
-    username
     contact_no
     gender
     status
@@ -28,7 +27,7 @@ export class UserService {
   async availableAgents(input: CheckAvailabilityInput): Promise<User[]> {
     this.logger.log(`Agent:: Start find available agents at [${input.call_time}]`)
     const query: string = `query {
-      result: findAvailableUsers(input: ${toGraphql(input)}) ${this.output}
+      result: findAvailableAgents(input: ${toGraphql(input)}) ${this.output}
     }`;
     return this.gqlClient.send(query);
   }

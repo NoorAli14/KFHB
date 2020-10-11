@@ -20,7 +20,7 @@ import {
   ApiNotFoundResponse,
   ApiNoContentResponse,
 } from '@nestjs/swagger';
-import { AuthGuard, } from '@common/index';
+import { AuthGuard, PermissionsGuard, Permissions } from '@common/index';
 import { UserService } from './users.service';
 import { User } from './user.entity';
 import { UpdateUserDto } from './user.dto';
@@ -28,7 +28,7 @@ import { UpdateUserDto } from './user.dto';
 @ApiTags('User')
 @Controller('users')
 @ApiBearerAuth()
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, PermissionsGuard)
 export class UsersController {
   constructor(private readonly userService: UserService) { }
 
@@ -39,6 +39,7 @@ export class UsersController {
     summary: 'List of all users.',
   })
   @ApiOkResponse({ type: [User], description: 'List of all users.' })
+  @Permissions('view:users')
   async list(): Promise<User[]> {
     return this.userService.list();
   }
@@ -57,6 +58,7 @@ export class UsersController {
     type: Error,
     description: 'User Not Found.',
   })
+  @Permissions('view:users')
   async findOne(
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<User> {
@@ -82,6 +84,7 @@ export class UsersController {
     type: Error,
     description: 'User Not Found.',
   })
+  @Permissions('edit:users')
   async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() input: UpdateUserDto,
@@ -103,6 +106,7 @@ export class UsersController {
     description: 'User Not Found.',
   })
   @HttpCode(HttpStatus.NO_CONTENT)
+  @Permissions('delete:users')
   async delete(
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<any> {

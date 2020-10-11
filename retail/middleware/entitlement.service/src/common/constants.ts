@@ -60,6 +60,7 @@ export const MODULES = [
     sub_modules: [
       {
         name: 'User Management',
+        slug: 'users',
         permissions: [
           {
             name: 'view',
@@ -77,6 +78,7 @@ export const MODULES = [
       },
       {
         name: 'Role Management',
+        slug: 'roles',
         permissions: [
           {
             name: 'view',
@@ -104,22 +106,43 @@ export const MODULES = [
     sub_modules: [
       {
         name: 'Working Week',
+        slug: 'working-days',
         permissions: [
           {
             name: 'view',
+          },
+          {
+            name: 'edit',
+          },
+          {
+            name: 'delete',
+          },
+          {
+            name: 'create',
           },
         ],
       },
       {
         name: 'Holidays',
+        slug: 'holidays',
         permissions: [
           {
             name: 'view',
+          },
+          {
+            name: 'edit',
+          },
+          {
+            name: 'delete',
+          },
+          {
+            name: 'create',
           },
         ],
       },
       {
         name: 'Leaves',
+        slug: 'leaves',
         permissions: [
           {
             name: 'view',
@@ -144,6 +167,7 @@ export const MODULES = [
   },
   {
     name: 'Video Call',
+    slug: 'video',
     sub_modules: [],
     permissions: [
       {
