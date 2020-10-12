@@ -23,6 +23,7 @@ input CheckAvailabilityInput {
 }
 
 input CreateUserInput {
+  email: String!
   contact_no: String
   first_name: String
   middle_name: String
@@ -38,7 +39,6 @@ input CreateUserInput {
   password_reset_token: String
   password_reset_token_expiry: String
   roles: [IdsInput!]
-  email: String!
 }
 
 """
@@ -295,6 +295,7 @@ input UpdatePasswordInput {
 }
 
 input UpdateUserInput {
+  email: String
   contact_no: String
   first_name: String
   middle_name: String
