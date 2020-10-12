@@ -6,6 +6,7 @@ import { ConfigurationService } from '@common/configuration/configuration.servic
 import { DataloaderModule } from '@core/dataloaders/loader.module';
 import { RepositoryModule } from '@core/repository/repository.module';
 import { AppointmentsModule } from './appointments/appointments.module';
+import { ScreenshotsModule } from './screenshots/screenshots.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { AppointmentsModule } from './appointments/appointments.module';
       }),
       inject: [ConfigurationService],
     }),
+    ScreenshotsModule,
   ],
 })
 export class V1Module {}
