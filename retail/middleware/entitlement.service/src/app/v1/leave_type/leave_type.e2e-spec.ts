@@ -3,15 +3,16 @@ import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import {getChecksQuery, getDeleteMutation, getMutation, getQuery} from '@common/tests';
 import {V1Module} from '@app/v1/v1.module';
-import {ModuleInput} from '@app/v1/modules/module.dto';
+import {LeaveTypeInput} from '@app/v1/leave_type/leave_type.dto';
 import {KeyValInput} from '@common/inputs/key-val.input';
 
 
-describe('Module Module (e2e)', () => {
+describe('Leave-Type Module (e2e)', () => {
   let app: INestApplication;
-  let moduleId: string;
+  let leaveTypeId: string;
 
   beforeAll(async () => {
+    jest.setTimeout(500000);
     const moduleRef = await Test.createTestingModule({
       imports: [V1Module],
     }).compile();
@@ -19,115 +20,153 @@ describe('Module Module (e2e)', () => {
     await app.init();
   });
 
-  it(`adds Module`, done => {
-    const input: ModuleInput = {
-      name: "E2E",
+  it(`adds Leave-Type`, done => {
+    const input: LeaveTypeInput = {
+      name: "E2E-testing",
       status: "ACTIVE"
     };
     return request(app.getHttpServer())
       .post('/graphql')
       .send({
-        query: getMutation("addModule", input, "id"),
+        query: getMutation("addLeaveType", input, "id"),
       }).set({
       "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
       "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
     })
       .expect(( {body} ) => {
-        const data = body.data.addModule;
-        moduleId = data.id;
+        const data = body.data.addLeaveType;
+        leaveTypeId = data.id;
         expect(data.id).toBeDefined();
       })
       .expect(200)
       .end(done);
-  }, 50000);
+  });
 
-  it(`updates Module`, done => {
-    const input: ModuleInput = {
-      name: "E2E-updated",
-      status: "ACTIVE"
+  it(`updates Leave-Type`, done => {
+    const input: LeaveTypeInput = {
+      name : 'E2E-testing',
+      status : 'INACTIVE'
     };
     return request(app.getHttpServer())
     .post('/graphql')
     .send({
-      query: getMutation("updateModule", input, "id name", moduleId),
+      query: getMutation("updateLeaveType", input, "id status", leaveTypeId),
     }).set({
       "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
       "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
     })
     .expect(( {body} ) => {
-      const data = body.data.updateModule;
-      expect(data.name).toBe("E2E-updated");
+      const data = body.data.updateLeaveType;
+      expect(data.status).toBe("INACTIVE");
     })
     .expect(200)
     .end(done);
   });
 
-  it(`lists Modules`, done => {
+  it(`lists Leave-Types`, done => {
     return request(app.getHttpServer())
     .post('/graphql')
     .send({
-      query: getQuery("modulesList", "id name"),
+      query: getQuery("leaveTypeList", "id name"),
     }).set({
       "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
       "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
     })
     .expect(( {body} ) => {
-      const data = body.data.modulesList;
+      const data = body.data.leaveTypeList;
       expect(data.length).toBeDefined();
     })
     .expect(200)
     .end(done);
   });
 
-  it(`gets Module by ID`, done => {
+  it(`gets Leave-Type by ID`, done => {
     return request(app.getHttpServer())
     .post('/graphql')
     .send({
-      query: getQuery("findModuleById", "id name", moduleId),
+      query: getQuery("findLeaveTypeById", "id name", leaveTypeId),
     }).set({
       "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
       "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
     })
     .expect(( {body} ) => {
-      const data = body.data.findModuleById;
+      const data = body.data.findLeaveTypeById;
       expect(data.id).toBeDefined();
     })
     .expect(200)
     .end(done);
   });
 
-  it(`searches Modules by properties`, done => {
+  it(`searches Leave-Types by properties`, done => {
     const checks: KeyValInput[] = [
-      {record_key: "name", record_value: "E2E"}
+      {record_key: "name", record_value: "E2E-testing"}
     ];
     return request(app.getHttpServer())
     .post('/graphql')
     .send({
-      query: getChecksQuery("findModuleBy", checks, "id name"),
+      query: getChecksQuery("findLeaveTypeBy", checks, "id name"),
     }).set({
       "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
       "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
     })
     .expect(( {body} ) => {
-      const data = body.data.findModuleBy;
+      const data = body.data.findLeaveTypeBy;
       expect(data.length).toBeDefined();
     })
     .expect(200)
     .end(done);
   });
 
-  it(`deletes Module`, done => {
+  it(`should return error of Leave Type already exists`, done => {
+    const input: LeaveTypeInput = {
+      name: "E2E-testing",
+      status: "ACTIVE"
+    };
     return request(app.getHttpServer())
     .post('/graphql')
     .send({
-      query: getDeleteMutation("deleteModule", moduleId),
+      query: getMutation("addLeaveType", input, "id"),
     }).set({
       "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
       "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
     })
     .expect(( {body} ) => {
-      const data = body.data.deleteModule;
+      const [error] = body.errors;
+      expect(error.message).toBe("Leave Type already exists");
+    })
+    .expect(200)
+    .end(done);
+  });
+
+  it(`deletes Leave-Type`, done => {
+    return request(app.getHttpServer())
+    .post('/graphql')
+    .send({
+      query: getDeleteMutation("deleteLeaveType", leaveTypeId),
+    }).set({
+      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
+      "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
+    })
+    .expect(( {body} ) => {
+      const data = body.data.deleteLeaveType;
       expect(data).toBeTruthy();
+    })
+    .expect(200)
+    .end(done);
+  });
+
+  it(`should return error of Leave Type Not Found`, done => {
+    return request(app.getHttpServer())
+    .post('/graphql')
+    .send({
+      query: getQuery("findLeaveTypeById", "id name", leaveTypeId),
+    }).set({
+      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
+      "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
+    })
+    .expect(( {body} ) => {
+      const [error] = body.errors;
+      expect(error.message).toBe("Leave Type Not Found");
     })
     .expect(200)
     .end(done);

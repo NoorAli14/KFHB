@@ -1,9 +1,9 @@
 import * as request from 'supertest';
 import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import {getChecksQuery, getDeleteMutation, getMutation, getQuery} from '@common/tests';
+import {createPayloadObject, getChecksQuery, getDeleteMutation, getMutation, getQuery} from '@common/tests';
 import {V1Module} from '@app/v1/v1.module';
-import {CheckAvailabilityInput, CreateUserInput, UpdatePasswordInput} from '@app/v1/users/user.dto';
+import {CheckAvailabilityInput, CreateUserInput, UpdatePasswordInput, UpdateUserInput} from '@app/v1/users/user.dto';
 import {KeyValInput} from '@common/inputs/key-val.input';
 
 
@@ -12,6 +12,7 @@ describe('User Module (e2e)', () => {
   let userId: string;
 
   beforeAll(async () => {
+    jest.setTimeout(500000);
     const moduleRef = await Test.createTestingModule({
       imports: [V1Module],
     }).compile();
@@ -21,8 +22,8 @@ describe('User Module (e2e)', () => {
 
   it(`adds User`, done => {
     const input: CreateUserInput = {
-      email:"test@jest.com",
-      first_name: "test",
+      email:"teste2e@jest.com",
+      first_name: "teste2e",
       last_name: "jest",
       status: "ACTIVE",
       password: "something"
@@ -45,8 +46,8 @@ describe('User Module (e2e)', () => {
   });
 
   it(`updates User`, done => {
-    const input: CreateUserInput = {
-      email:"test@jest.com",
+    const input: UpdateUserInput = {
+      email:"test_updated@jest.com",
       last_name: "jest-updated",
     };
     return request(app.getHttpServer())
@@ -86,6 +87,27 @@ describe('User Module (e2e)', () => {
     .end(done);
   });
 
+  it(`should return error of Password Mismatch`, done => {
+    const input: UpdatePasswordInput = {
+      current_password: "something_wrong",
+      new_password: "something2"
+    };
+    return request(app.getHttpServer())
+    .post('/graphql')
+    .send({
+      query: getMutation("updatePassword", input, "id last_name"),
+    }).set({
+      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
+      "x-user-id": userId
+    })
+    .expect(( {body} ) => {
+      const [error] = body.errors;
+      expect(error.message).toBe("Password Mismatch");
+    })
+    .expect(200)
+    .end(done);
+  });
+
   it(`lists Users`, done => {
     return request(app.getHttpServer())
     .post('/graphql')
@@ -110,7 +132,7 @@ describe('User Module (e2e)', () => {
     };
     const query =
       `query {
-      findAvailableAgents (input: ${input}){
+      findAvailableAgents (input: ${createPayloadObject(input)}){
        id last_name
       }
     }`;
@@ -133,7 +155,7 @@ describe('User Module (e2e)', () => {
   it(`resets the invitation_token of User`, done => {
     const query =
       `mutation {
-      resetInvitationToken (id: ${userId}){
+      resetInvitationToken (id: "${userId}"){
        id last_name
       }
     }`;
@@ -202,6 +224,23 @@ describe('User Module (e2e)', () => {
     .expect(( {body} ) => {
       const data = body.data.deleteUser;
       expect(data).toBeTruthy();
+    })
+    .expect(200)
+    .end(done);
+  });
+
+  it(`should return error of User Not Found`, done => {
+    return request(app.getHttpServer())
+    .post('/graphql')
+    .send({
+      query: getQuery("findUserById", "id last_name", userId),
+    }).set({
+      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
+      "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
+    })
+    .expect(( {body} ) => {
+      const [error] = body.errors;
+      expect(error.message).toBe("User Not Found");
     })
     .expect(200)
     .end(done);

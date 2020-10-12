@@ -12,6 +12,7 @@ describe('Working-Day Module (e2e)', () => {
   let workingDayId: string;
 
   beforeAll(async () => {
+    jest.setTimeout(500000);
     const moduleRef = await Test.createTestingModule({
       imports: [V1Module],
     }).compile();
@@ -33,7 +34,7 @@ describe('Working-Day Module (e2e)', () => {
       .send({
         query: getMutation("addWorkingDay", input, "id"),
       }).set({
-      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F6",
+      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F3",
       "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
     })
       .expect(( {body} ) => {
@@ -43,7 +44,82 @@ describe('Working-Day Module (e2e)', () => {
       })
       .expect(200)
       .end(done);
-  }, 500000);
+  });
+
+  it(`should return error of Working Day already exists`, done => {
+    const input: WorkingDayInput = {
+      week_day: "MONDAY",
+      start_time_local: "0900",
+      end_time_local: "1800",
+      full_day: 0,
+      remarks: "Approved",
+      status: "ACTIVE"
+    };
+    return request(app.getHttpServer())
+    .post('/graphql')
+    .send({
+      query: getMutation("addWorkingDay", input, "id"),
+    }).set({
+      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F3",
+      "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
+    })
+    .expect(( {body} ) => {
+      const [error] = body.errors;
+      expect(error.message).toBe("Working Day already exists");
+    })
+    .expect(200)
+    .end(done);
+  });
+
+  it(`should return error of Working Day start time should be less than end time`, done => {
+    const input: WorkingDayInput = {
+      week_day: "TUESDAY",
+      start_time_local: "1800",
+      end_time_local: "0900",
+      full_day: 0,
+      remarks: "Approved",
+      status: "ACTIVE"
+    };
+    return request(app.getHttpServer())
+    .post('/graphql')
+    .send({
+      query: getMutation("addWorkingDay", input, "id"),
+    }).set({
+      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F3",
+      "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
+    })
+    .expect(( {body} ) => {
+      const [error] = body.errors;
+      expect(error.message).toBe("Working Day start time should be less than end time");
+    })
+    .expect(200)
+    .end(done);
+  });
+
+  it(`should return error of Working Day start-time/end-time should be in range [0000-2359]`, done => {
+    const input: WorkingDayInput = {
+      week_day: "TUESDAY",
+      start_time_local: "0900",
+      end_time_local: "2500",
+      full_day: 0,
+      remarks: "Approved",
+      status: "ACTIVE"
+    };
+    return request(app.getHttpServer())
+    .post('/graphql')
+    .send({
+      query: getMutation("addWorkingDay", input, "id"),
+    }).set({
+      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F3",
+      "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
+    })
+    .expect(( {body} ) => {
+      const [error] = body.errors;
+      expect(error.message).toBe("Working Day start-time/end-time should be in range [0000-2359]");
+    })
+    .expect(200)
+    .end(done);
+  });
 
   it(`updates Working-Day`, done => {
     const input: WorkingDayInput = {
@@ -59,7 +135,7 @@ describe('Working-Day Module (e2e)', () => {
     .send({
       query: getMutation("updateWorkingDay", input, "id remarks", workingDayId),
     }).set({
-      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F6",
+      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F3",
       "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
     })
     .expect(( {body} ) => {
@@ -68,7 +144,7 @@ describe('Working-Day Module (e2e)', () => {
     })
     .expect(200)
     .end(done);
-  }, 500000);
+  });
 
   it(`lists Working-Days`, done => {
     return request(app.getHttpServer())
@@ -76,7 +152,7 @@ describe('Working-Day Module (e2e)', () => {
     .send({
       query: getQuery("workingDaysList", "id remarks"),
     }).set({
-      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F6",
+      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F3",
       "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
     })
     .expect(( {body} ) => {
@@ -85,7 +161,7 @@ describe('Working-Day Module (e2e)', () => {
     })
     .expect(200)
     .end(done);
-  }, 500000);
+  });
 
   it(`gets Working-Day by ID`, done => {
     return request(app.getHttpServer())
@@ -93,7 +169,7 @@ describe('Working-Day Module (e2e)', () => {
     .send({
       query: getQuery("findWorkingDayById", "id remarks", workingDayId),
     }).set({
-      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F6",
+      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F3",
       "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
     })
     .expect(( {body} ) => {
@@ -102,7 +178,7 @@ describe('Working-Day Module (e2e)', () => {
     })
     .expect(200)
     .end(done);
-  }, 500000);
+  });
 
   it(`searches Working-Days by properties`, done => {
     const checks: KeyValInput[] = [
@@ -113,7 +189,7 @@ describe('Working-Day Module (e2e)', () => {
     .send({
       query: getChecksQuery("findWorkingDayBy", checks, "id remarks"),
     }).set({
-      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
+      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F3",
       "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
     })
     .expect(( {body} ) => {
@@ -122,7 +198,7 @@ describe('Working-Day Module (e2e)', () => {
     })
     .expect(200)
     .end(done);
-  }, 500000);
+  });
 
   it(`deletes Working-Day`, done => {
     return request(app.getHttpServer())
@@ -130,7 +206,7 @@ describe('Working-Day Module (e2e)', () => {
     .send({
       query: getDeleteMutation("deleteWorkingDay", workingDayId),
     }).set({
-      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F6",
+      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F3",
       "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
     })
     .expect(( {body} ) => {
@@ -139,7 +215,24 @@ describe('Working-Day Module (e2e)', () => {
     })
     .expect(200)
     .end(done);
-  }, 500000);
+  });
+
+  it(`should return error of Working Day Not Found`, done => {
+    return request(app.getHttpServer())
+    .post('/graphql')
+    .send({
+      query: getQuery("findWorkingDayById", "id remarks", workingDayId),
+    }).set({
+      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F3",
+      "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
+    })
+    .expect(( {body} ) => {
+      const [error] = body.errors;
+      expect(error.message).toBe("Working Day Not Found");
+    })
+    .expect(200)
+    .end(done);
+  });
 
   afterAll(async () => {
     await app.close();

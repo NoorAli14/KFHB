@@ -3,15 +3,16 @@ import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import {getChecksQuery, getDeleteMutation, getMutation, getQuery} from '@common/tests';
 import {V1Module} from '@app/v1/v1.module';
-import {LeaveTypeInput} from '@app/v1/leave_type/leave_type.dto';
+import {ModuleInput} from '@app/v1/modules/module.dto';
 import {KeyValInput} from '@common/inputs/key-val.input';
 
 
-describe('Leave-Type Module (e2e)', () => {
+describe('Module Module (e2e)', () => {
   let app: INestApplication;
-  let leaveTypeId: string;
+  let moduleId: string;
 
   beforeAll(async () => {
+    jest.setTimeout(500000);
     const moduleRef = await Test.createTestingModule({
       imports: [V1Module],
     }).compile();
@@ -19,115 +20,132 @@ describe('Leave-Type Module (e2e)', () => {
     await app.init();
   });
 
-  it(`adds Leave-Type`, done => {
-    const input: LeaveTypeInput = {
-      name: "sick",
+  it(`adds Module`, done => {
+    const input: ModuleInput = {
+      name: "E2E-testing",
       status: "ACTIVE"
     };
     return request(app.getHttpServer())
       .post('/graphql')
       .send({
-        query: getMutation("addLeaveType", input, "id"),
+        query: getMutation("addModule", input, "id"),
       }).set({
       "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
       "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
     })
       .expect(( {body} ) => {
-        const data = body.data.addLeaveType;
-        leaveTypeId = data.id;
+        const data = body.data.addModule;
+        moduleId = data.id;
         expect(data.id).toBeDefined();
       })
       .expect(200)
       .end(done);
-  });
+  }, 50000);
 
-  it(`updates Leave-Type`, done => {
-    const input: LeaveTypeInput = {
-      name : 'sick',
-      status : 'INACTIVE'
+  it(`updates Module`, done => {
+    const input: ModuleInput = {
+      name: "E2E-updated",
+      status: "ACTIVE"
     };
     return request(app.getHttpServer())
     .post('/graphql')
     .send({
-      query: getMutation("updateLeaveType", input, "id status", leaveTypeId),
+      query: getMutation("updateModule", input, "id name", moduleId),
     }).set({
       "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
       "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
     })
     .expect(( {body} ) => {
-      const data = body.data.updateLeaveType;
-      expect(data.status).toBe("INACTIVE");
+      const data = body.data.updateModule;
+      expect(data.name).toBe("E2E-updated");
     })
     .expect(200)
     .end(done);
   });
 
-  it(`lists Leave-Types`, done => {
+  it(`lists Modules`, done => {
     return request(app.getHttpServer())
     .post('/graphql')
     .send({
-      query: getQuery("leaveTypeList", "id name"),
+      query: getQuery("modulesList", "id name"),
     }).set({
       "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
       "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
     })
     .expect(( {body} ) => {
-      const data = body.data.leaveTypeList;
+      const data = body.data.modulesList;
       expect(data.length).toBeDefined();
     })
     .expect(200)
     .end(done);
   });
 
-  it(`gets Leave-Type by ID`, done => {
+  it(`gets Module by ID`, done => {
     return request(app.getHttpServer())
     .post('/graphql')
     .send({
-      query: getQuery("findLeaveTypeById", "id name", leaveTypeId),
+      query: getQuery("findModuleById", "id name", moduleId),
     }).set({
       "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
       "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
     })
     .expect(( {body} ) => {
-      const data = body.data.findLeaveTypeById;
+      const data = body.data.findModuleById;
       expect(data.id).toBeDefined();
     })
     .expect(200)
     .end(done);
   });
 
-  it(`searches Leave-Types by properties`, done => {
+  it(`searches Modules by properties`, done => {
     const checks: KeyValInput[] = [
-      {record_key: "name", record_value: "sick"}
+      {record_key: "name", record_value: "E2E-testing"}
     ];
     return request(app.getHttpServer())
     .post('/graphql')
     .send({
-      query: getChecksQuery("findLeaveTypeBy", checks, "id name"),
+      query: getChecksQuery("findModuleBy", checks, "id name"),
     }).set({
       "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
       "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
     })
     .expect(( {body} ) => {
-      const data = body.data.findLeaveTypeBy;
+      const data = body.data.findModuleBy;
       expect(data.length).toBeDefined();
     })
     .expect(200)
     .end(done);
   });
 
-  it(`deletes Leave-Type`, done => {
+  it(`deletes Module`, done => {
     return request(app.getHttpServer())
     .post('/graphql')
     .send({
-      query: getDeleteMutation("deleteLeaveType", leaveTypeId),
+      query: getDeleteMutation("deleteModule", moduleId),
     }).set({
       "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
       "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
     })
     .expect(( {body} ) => {
-      const data = body.data.deleteLeaveType;
+      const data = body.data.deleteModule;
       expect(data).toBeTruthy();
+    })
+    .expect(200)
+    .end(done);
+  });
+
+  it(`should return error of Module Not Found`, done => {
+    return request(app.getHttpServer())
+    .post('/graphql')
+    .send({
+      query: getQuery("findModuleById", "id name", moduleId),
+    }).set({
+      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
+      "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
+    })
+    .expect(( {body} ) => {
+      const [error] = body.errors;
+      expect(error.message).toBe("Module Not Found");
     })
     .expect(200)
     .end(done);

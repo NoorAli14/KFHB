@@ -10,21 +10,18 @@ export function getMutation(
   return_keys: string,
   id?: string,
 ): string {
-  const result = id ?
-    `mutation {
-      ${method}(input: ${createPayloadObject(input)}, id: ${id}) {
+  return id ?
+    `mutation{
+      ${method}(input:${createPayloadObject(input)},id:"${id}") {
        ${return_keys}
       }
     }`
     :
-    `mutation {
-      ${method}(input: ${createPayloadObject(input)}) {
+    `mutation{
+      ${method}(input:${createPayloadObject(input)}) {
        ${return_keys}
       }
     }`;
-  // console.log("Mutation is..................................");
-  // console.log(result);
-  return result;
 }
 
 export function getQuery(
@@ -32,21 +29,18 @@ export function getQuery(
   return_keys: string,
   id?: string
 ): string {
-  const result = id ?
-    `query {
-      ${method} (id: ${id}){
+  return id ?
+    `query{
+      ${method}(id:"${id}"){
        ${return_keys}
       }
     }`
     :
-    `query {
-      ${method} {
+    `query{
+      ${method}{
        ${return_keys}
       }
     }`;
-  // console.log("Query is..................................");
-  // console.log(result);
-  return result;
 }
 
 export function getChecksQuery(
@@ -54,26 +48,15 @@ export function getChecksQuery(
   checks: KeyValInput[],
   return_keys: string,
 ): string {
-  const result =
-    `query {
-      ${method} (checks: ${checks}){
-       ${return_keys}
-      }
-    }`;
-  // console.log("Checks Query is..................................");
-  // console.log(result);
-  return result;
+  const input = checks.map(check => createPayloadObject(check));
+  return "query{"+method+"(checks:"+input+"){"+return_keys+"}}";
 }
 
 export function getDeleteMutation(
   method: string,
   id: string,
 ): string {
-  const result =
-    `mutation {
-      ${method} (id: ${id}){}
+  return `mutation{
+      ${method}(id:"${id}")
     }`;
-  // console.log("Delete Mutation is..................................");
-  // console.log(result);
-  return result;
 }
