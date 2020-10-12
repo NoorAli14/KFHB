@@ -38,7 +38,7 @@ export class Role {
   @Field({ nullable: true })
   deleted_by?: string;
 
-  @Field(type => [Module], { nullable: true })
+  @Field(() => [Module], { nullable: true })
   modules?: Module[];
 }
 
@@ -47,6 +47,6 @@ export class RoleWithPagination {
   @Field({ nullable: true })
   pagination?: PaginationModel;
 
-  @Field(type => [Role], { nullable: true })
+  @Field(() => [Role], { nullable: true })
   data?: Role[];
 }
