@@ -13,7 +13,7 @@ variables:
   dockerRegistryServiceConnection: 'e11b76b8-024b-445d-b872-aaba976b9e8b'
   imageRepository: 'rubixvideocall'
   containerRegistry: 'testdaon.azurecr.io'
-  dockerfilePath: '$(Build.SourcesDirectory)/retail/middleware/videocall/Dockerfile'
+  dockerfilePath: '$(Build.SourcesDirectory)/retail/middleware/videocall.service/Dockerfile'
   tag: '$(Build.BuildId)'
   tagLatest: $(Build.SourceBranchName)_latest
   
