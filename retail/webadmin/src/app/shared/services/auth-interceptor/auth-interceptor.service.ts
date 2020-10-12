@@ -92,7 +92,7 @@ export class AuthInterceptorService implements HttpInterceptor {
                 'x-tenant-id': environment.TENANT_ID,
             }),
         };
-        if (baseUrl.includes('http://rubix-dev01.conduit-aiondigital.com')) {
+        if (baseUrl.includes('https://rubix-dev01.conduit-aiondigital.com')) {
             httpOptions.headers = httpOptions.headers.set(
                 'x-channel-id', environment.CHANNEL_ID
             );
