@@ -1,10 +1,9 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { ICurrentUser } from '@common/interfaces';
-import { CurrentUser } from '@common/decorators';
+import { CurrentUser, Fields } from '@common/decorators';
 import { AttachmentsService } from './attachments.service';
 import { NewAttachmentInput } from './attachment.dto';
-import { UploadedFile, UseInterceptors } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express/multer/interceptors/file.interceptor';
+import { Attachment } from './attachment.model';
 
 @Resolver()
 export class AttachmentsResolver {
@@ -23,16 +22,18 @@ export class AttachmentsResolver {
     ]);
   }
 
-  @Query(() => String)
+  @Query(() => Attachment)
   async findAttachment(
     @CurrentUser() currentUser: ICurrentUser,
-    @Args('tag_name') tag_name: string,
-  ): Promise<any> {
-    return this.attachmentService.findByTagName(currentUser, tag_name, [
-      'id',
-      'name',
-      'created_on',
-      'updated_on',
-    ]);
+    @Args('user_id') user_id: string,
+    @Args('screenshot_id') screenshot_id: string,
+    @Fields(Attachment) output: string[],
+  ): Promise<Attachment> {
+    return this.attachmentService.find(
+      currentUser,
+      user_id,
+      screenshot_id,
+      output,
+    );
   }
 }

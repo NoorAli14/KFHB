@@ -9,7 +9,7 @@ export class NewAttachmentInput {
   @IsUUID('all', { message: 'user_id is not a valid UUID', always: true })
   user_id: string;
 
-  @Field(() => GraphQLUpload)
+  @Field()
   @IsNotEmpty()
   @IsString()
   file: string;

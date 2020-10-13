@@ -1,16 +1,14 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import {
-  IsEnum,
   IsNotEmpty,
   IsNumber,
-  IsOptional,
   IsString,
   IsUUID,
   MaxLength,
 } from 'class-validator';
 
 @ObjectType()
-export class Appointment {
+export class Attachment {
   @Field()
   @IsUUID()
   @IsString()

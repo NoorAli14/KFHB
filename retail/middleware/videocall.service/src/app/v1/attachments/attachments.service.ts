@@ -1,9 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { ICurrentUser } from '@common/interfaces';
 import { NewAttachmentInput } from './attachment.dto';
+import { AttachmentRepository } from '@core/repository';
+import { AttachmentNotFoundException } from './exceptions';
+import { Attachment } from './attachment.model';
 
 @Injectable()
 export class AttachmentsService {
+  constructor(private attachmentDB: AttachmentRepository) {}
+  async uploadFile(file: string): Promise<any> {}
+
   async create(
     currentUser: ICurrentUser,
     input: NewAttachmentInput,
@@ -12,11 +18,25 @@ export class AttachmentsService {
     return `This will return a attachment after create entry in database`;
   }
 
-  async findByTagName(
+  async find(
     currentUser: ICurrentUser,
-    tag_name: string,
+    user_id: string,
+    screenshot_id: string,
     output: string[],
-  ) {
-    return `This will return attachment base on tag name  + [${tag_name}]`;
+  ): Promise<Attachment> {
+    const response = await this.attachmentDB.findOne(
+      {
+        deleted_on: null,
+        user_id: user_id,
+        // screenshot_id: screenshot_id,
+        tenant_id: currentUser.tenant_id,
+      },
+      output,
+    );
+
+    if (!response)
+      throw new AttachmentNotFoundException(user_id, screenshot_id);
+
+    return response;
   }
 }
