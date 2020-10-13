@@ -31,7 +31,7 @@ scalar DateTime
 
 type Mutation {
   addAppointment(appointment: NewAppointmentInput!): Appointment!
-  addScreenshot(input: NewScreenshotInput!): String!
+  addAttachment(input: NewAttachmentInput!): String!
 }
 
 input NewAppointmentInput {
@@ -41,14 +41,14 @@ input NewAppointmentInput {
   user_id: String!
 }
 
-input NewScreenshotInput {
+input NewAttachmentInput {
   user_id: String!
 }
 
 type Query {
   findAppointment(appointment_id: String!): Appointment!
   findAppointmentByUserId(user_id: String!): Appointment!
-  findScreenshot(tag_name: String!): String!
+  findAttachment(tag_name: String!): String!
 }
 
 type UserGQL {
