@@ -43,6 +43,7 @@ input NewAppointmentInput {
 
 input NewAttachmentInput {
   user_id: String!
+  file: String!
 }
 
 type Query {
