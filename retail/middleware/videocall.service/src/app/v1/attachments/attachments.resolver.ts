@@ -11,9 +11,7 @@ export class AttachmentsResolver {
   constructor(private readonly attachmentService: AttachmentsService) {}
 
   @Mutation(() => String)
-  @UseInterceptors(FileInterceptor('file'))
   async addAttachment(
-    @UploadedFile() file: any,
     @CurrentUser() currentUser: ICurrentUser,
     @Args('input') input: NewAttachmentInput,
   ): Promise<any> {

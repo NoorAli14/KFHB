@@ -2,6 +2,7 @@ import { registerEnumType } from '@nestjs/graphql';
 
 export enum TABLE {
   APPOINTMENT = 'VC_APPOINTMENT',
+  ATTACHMENT = 'VC_ATTACHMENT',
 }
 
 export const FOREIGN_KEYS = {

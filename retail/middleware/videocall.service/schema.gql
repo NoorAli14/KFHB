@@ -43,7 +43,7 @@ input NewAppointmentInput {
 
 input NewAttachmentInput {
   user_id: String!
-  file: String!
+  file: Upload!
 }
 
 type Query {
@@ -51,6 +51,9 @@ type Query {
   findAppointmentByUserId(user_id: String!): Appointment!
   findAttachment(tag_name: String!): String!
 }
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
 
 type UserGQL {
   id: String!
