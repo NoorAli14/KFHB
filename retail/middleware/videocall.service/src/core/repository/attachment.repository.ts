@@ -4,6 +4,6 @@ import { TABLE } from '@common/constants';
 @Injectable()
 export class AttachmentRepository extends BaseRepository {
   constructor() {
-    super(TABLE.APPOINTMENT);
+    super(TABLE.ATTACHMENT);
   }
 }

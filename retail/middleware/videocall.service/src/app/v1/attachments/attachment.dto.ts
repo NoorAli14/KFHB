@@ -12,5 +12,10 @@ export class NewAttachmentInput {
   @Field()
   @IsNotEmpty()
   @IsString()
-  file: string;
+  screenshot_id: string;
+
+  @Field()
+  @IsNotEmpty()
+  @IsString()
+  file_source: string;
 }

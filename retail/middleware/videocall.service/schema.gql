@@ -31,7 +31,7 @@ type Attachment {
   file_name: String
   file_size: Float
   file_path: String
-  tag_name: String
+  screenshot_id: String
   status: String
   created_on: String
   created_by: String
@@ -48,7 +48,7 @@ scalar DateTime
 
 type Mutation {
   addAppointment(appointment: NewAppointmentInput!): Appointment!
-  addAttachment(input: NewAttachmentInput!): String!
+  addAttachment(input: NewAttachmentInput!): Attachment!
 }
 
 input NewAppointmentInput {
@@ -60,7 +60,8 @@ input NewAppointmentInput {
 
 input NewAttachmentInput {
   user_id: String!
-  file: String!
+  screenshot_id: String!
+  file_source: String!
 }
 
 type Query {

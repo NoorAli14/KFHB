@@ -9,17 +9,13 @@ import { Attachment } from './attachment.model';
 export class AttachmentsResolver {
   constructor(private readonly attachmentService: AttachmentsService) {}
 
-  @Mutation(() => String)
+  @Mutation(() => Attachment)
   async addAttachment(
     @CurrentUser() currentUser: ICurrentUser,
     @Args('input') input: NewAttachmentInput,
-  ): Promise<any> {
-    return this.attachmentService.create(currentUser, input, [
-      'id',
-      'name',
-      'created_on',
-      'updated_on',
-    ]);
+    @Fields(Attachment) output: string[],
+  ): Promise<Attachment> {
+    return this.attachmentService.create(currentUser, input, output);
   }
 
   @Query(() => Attachment)

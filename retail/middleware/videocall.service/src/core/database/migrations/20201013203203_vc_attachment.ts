@@ -15,7 +15,7 @@ export async function up(knex: Knex): Promise<void> {
     table.float('file_size');
     table.string('file_path');
 
-    table.string('tag_name');
+    table.string('screenshot_id');
     table.string('status');
 
     table.timestamp('created_on', { useTz: true }).defaultTo(knex.fn.now());
