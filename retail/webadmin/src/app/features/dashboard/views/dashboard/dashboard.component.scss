@@ -1,11 +1,11 @@
 @import "src/@fuse/scss/fuse";
 
 
-.header {
+.headers {
     position: relative;
     flex: 1 0 auto;
-    height: 280px;
-    max-height: 280px;
+    height: 280px !important;
+    max-height: 280px !important;
     text-align: center;
     overflow: hidden;
 
@@ -15,7 +15,9 @@
     }
 
     .hero-text {
-
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         .hero-icon {
             position: absolute;
             top: -64px;

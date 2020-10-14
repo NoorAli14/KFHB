@@ -59,4 +59,12 @@ export const GQL_SERVICES = [
     context: '/graphql',
     is_secure: false,
   },
+  {
+    name: 'Video Call Service',
+    host_name: 'retail_videocall',
+    port: 4020,
+    version: '1.0',
+    context: '/graphql',
+    is_secure: false,
+  },
 ];

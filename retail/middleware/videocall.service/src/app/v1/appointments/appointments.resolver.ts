@@ -7,7 +7,7 @@ import {
   Parent,
 } from '@nestjs/graphql';
 import { AppointmentsService } from './appointments.service';
-import { Appointment, User } from './appointment.model';
+import { Appointment, UserGQL } from './appointment.model';
 import { NewAppointmentInput } from './appointment.dto';
 import { CurrentUser, Fields } from '@common/decorators';
 import { ICurrentUser } from '@common/interfaces';
@@ -16,8 +16,8 @@ import { ICurrentUser } from '@common/interfaces';
 export class AppointmentsResolver {
   constructor(private readonly appointmentsService: AppointmentsService) {}
 
-  @ResolveField(() => User)
-  async user(@Parent() appointment: Appointment): Promise<User> {
+  @ResolveField(() => UserGQL)
+  async user(@Parent() appointment: Appointment): Promise<UserGQL> {
     return await this.appointmentsService.get_user_by_id_from_service(
       appointment.user_id,
     );

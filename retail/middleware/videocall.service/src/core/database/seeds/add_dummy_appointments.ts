@@ -1,5 +1,10 @@
 import * as Knex from 'knex';
-import { TABLE, GENDER, APPOINTMENT_STATUS } from '@common/constants';
+import {
+  TABLE,
+  GENDER,
+  APPOINTMENT_STATUS,
+  CREATED_BY,
+} from '@common/constants';
 import { uuidV4 } from '@common/utilities';
 
 export async function seed(knex: Knex): Promise<void> {
@@ -40,6 +45,8 @@ export async function seed(knex: Knex): Promise<void> {
       ...appointment,
       tenant_id: process.env.ENV_RBX_TENANT_ID,
       user_id: '7D55A5DB-739A-4B80-BD37-D3D30358D655',
+      created_by: CREATED_BY.SYSTEM,
+      updated_by: CREATED_BY.SYSTEM,
     })),
   );
 }

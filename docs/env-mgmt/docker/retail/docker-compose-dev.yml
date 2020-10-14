@@ -148,7 +148,7 @@ services:
   # Video Call Service
   #=================================================================
   retail-videocall:
-    image: rubixretailvediocall:dev
+    image: rubixretailvideocall:dev
     container_name: retail_videocall
     environment:
       - ENV_RBX_PORT=4020
