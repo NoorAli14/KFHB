@@ -1,10 +1,13 @@
 import * as request from 'supertest';
 import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
+import {transformAndValidateSync} from "class-transformer-validator";
+
 import {getChecksQuery, getDeleteMutation, getMutation, getQuery} from '@common/tests';
 import {V1Module} from '@app/v1/v1.module';
 import {RoleInput} from '@app/v1/roles/role.dto';
 import {KeyValInput} from '@common/inputs/key-val.input';
+import {Role} from "@app/v1/roles/role.model";
 
 describe('Role Module (e2e)', () => {
   let app: INestApplication;
@@ -21,21 +24,31 @@ describe('Role Module (e2e)', () => {
 
   it(`adds Role`, done => {
     const input: RoleInput = {
-      name: "E2E-testing",
+      name: "role_e2e_testing",
       status: "ACTIVE"
     };
+    const input_validated: RoleInput = transformAndValidateSync(
+        RoleInput,
+        input,
+    ) as RoleInput;
     return request(app.getHttpServer())
       .post('/graphql')
       .send({
-        query: getMutation("addRole", input, "id"),
+        query: getMutation("addRole", input_validated, "id"),
       }).set({
-      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
-      "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
+          "x-tenant-id": process.env.ENV_RBX_E2E_TENANT_ID,
+          "x-user-id": process.env.ENV_RBX_E2E_USER_ID
     })
       .expect(( {body} ) => {
-        const data = body.data.addRole;
-        roleId = data.id;
-        expect(data.id).toBeDefined();
+        const data = body?.data?.addRole;
+        roleId = data?.id;
+        const role_json: string = JSON.stringify(data);
+        const role_validated: Role = transformAndValidateSync(
+            Role,
+            role_json,
+        ) as Role;
+        expect(role_validated).toBeDefined();
+        expect(role_validated).toBeInstanceOf(Role);
       })
       .expect(200)
       .end(done);
@@ -43,20 +56,31 @@ describe('Role Module (e2e)', () => {
 
   it(`updates Role`, done => {
     const input: RoleInput = {
-      name: "E2E-updated",
+      name: "role_e2e_testing_updated",
       status: "ACTIVE"
     };
+    const input_validated: RoleInput = transformAndValidateSync(
+        RoleInput,
+        input,
+    ) as RoleInput;
     return request(app.getHttpServer())
     .post('/graphql')
     .send({
-      query: getMutation("updateRole", input, "id name", roleId),
+      query: getMutation("updateRole", input_validated, "id name", roleId),
     }).set({
-      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
-      "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
+          "x-tenant-id": process.env.ENV_RBX_E2E_TENANT_ID,
+          "x-user-id": process.env.ENV_RBX_E2E_USER_ID
     })
     .expect(( {body} ) => {
-      const data = body.data.updateRole;
-      expect(data.name).toBe("E2E-updated");
+      const data = body?.data?.updateRole;
+      expect(data?.name).toBe("role_e2e_testing_updated");
+      const role_json: string = JSON.stringify(data);
+      const role_validated: Role = transformAndValidateSync(
+          Role,
+          role_json,
+      ) as Role;
+      expect(role_validated).toBeDefined();
+      expect(role_validated).toBeInstanceOf(Role);
     })
     .expect(200)
     .end(done);
@@ -68,12 +92,19 @@ describe('Role Module (e2e)', () => {
     .send({
       query: getQuery("rolesList", "id name"),
     }).set({
-      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
-      "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
+          "x-tenant-id": process.env.ENV_RBX_E2E_TENANT_ID,
+          "x-user-id": process.env.ENV_RBX_E2E_USER_ID
     })
     .expect(( {body} ) => {
-      const data = body.data.rolesList;
-      expect(data.length).toBeDefined();
+      const data = body?.data?.rolesList;
+      expect(data?.length).toBeDefined();
+      const role_json: string = JSON.stringify(data);
+      const role_validated: Role[] = transformAndValidateSync(
+          Role,
+          role_json,
+      ) as Role[];
+      expect(role_validated).toBeDefined();
+      expect(role_validated).toBeInstanceOf(Array);
     })
     .expect(200)
     .end(done);
@@ -85,12 +116,18 @@ describe('Role Module (e2e)', () => {
     .send({
       query: getQuery("findRoleById", "id name", roleId),
     }).set({
-      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
-      "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
+          "x-tenant-id": process.env.ENV_RBX_E2E_TENANT_ID,
+          "x-user-id": process.env.ENV_RBX_E2E_USER_ID
     })
     .expect(( {body} ) => {
-      const data = body.data.findRoleById;
-      expect(data.id).toBeDefined();
+      const data = body?.data?.findRoleById;
+      const role_json: string = JSON.stringify(data);
+      const role_validated: Role = transformAndValidateSync(
+          Role,
+          role_json,
+      ) as Role;
+      expect(role_validated).toBeDefined();
+      expect(role_validated).toBeInstanceOf(Role);
     })
     .expect(200)
     .end(done);
@@ -98,19 +135,25 @@ describe('Role Module (e2e)', () => {
 
   it(`searches Roles by properties`, done => {
     const checks: KeyValInput[] = [
-      {record_key: "name", record_value: "E2E-testing"}
+      {record_key: "name", record_value: "role_e2e_testing_updated"}
     ];
     return request(app.getHttpServer())
     .post('/graphql')
     .send({
       query: getChecksQuery("findRoleBy", checks, "id name"),
     }).set({
-      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
-      "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
+          "x-tenant-id": process.env.ENV_RBX_E2E_TENANT_ID,
+          "x-user-id": process.env.ENV_RBX_E2E_USER_ID
     })
     .expect(( {body} ) => {
-      const data = body.data.findRoleBy;
-      expect(data.length).toBeDefined();
+      const data = body?.data?.findRoleBy;
+      const role_json: string = JSON.stringify(data);
+      const role_validated: Role[] = transformAndValidateSync(
+          Role,
+          role_json,
+      ) as Role[];
+      expect(role_validated).toBeDefined();
+      expect(role_validated).toBeInstanceOf(Array);
     })
     .expect(200)
     .end(done);
@@ -118,20 +161,24 @@ describe('Role Module (e2e)', () => {
 
   it(`should return error of Role with this name already exists`, done => {
     const input: RoleInput = {
-      name: "E2E-updated",
+      name: "role_e2e_testing_updated",
       status: "ACTIVE"
     };
+    const input_validated: RoleInput = transformAndValidateSync(
+        RoleInput,
+        input,
+    ) as RoleInput;
     return request(app.getHttpServer())
     .post('/graphql')
     .send({
-      query: getMutation("addRole", input, "id"),
+      query: getMutation("addRole", input_validated, "id"),
     }).set({
-      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
-      "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
+          "x-tenant-id": process.env.ENV_RBX_E2E_TENANT_ID,
+          "x-user-id": process.env.ENV_RBX_E2E_USER_ID
     })
     .expect(( {body} ) => {
-      const [error] = body.errors;
-      expect(error.message).toBe("Role with this name already exists");
+      const [error] = body?.errors;
+      expect(error?.message).toBe("Role with this name already exists");
     })
     .expect(200)
     .end(done);
@@ -143,11 +190,11 @@ describe('Role Module (e2e)', () => {
     .send({
       query: getDeleteMutation("deleteRole", roleId),
     }).set({
-      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
-      "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
+          "x-tenant-id": process.env.ENV_RBX_E2E_TENANT_ID,
+          "x-user-id": process.env.ENV_RBX_E2E_USER_ID
     })
     .expect(( {body} ) => {
-      const data = body.data.deleteRole;
+      const data = body?.data?.deleteRole;
       expect(data).toBeTruthy();
     })
     .expect(200)
@@ -160,12 +207,12 @@ describe('Role Module (e2e)', () => {
     .send({
       query: getQuery("findRoleById", "id name", roleId),
     }).set({
-      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
-      "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
+          "x-tenant-id": process.env.ENV_RBX_E2E_TENANT_ID,
+          "x-user-id": process.env.ENV_RBX_E2E_USER_ID
     })
     .expect(( {body} ) => {
-      const [error] = body.errors;
-      expect(error.message).toBe("Role not found");
+      const [error] = body?.errors;
+      expect(error?.message).toBe("Role not found");
     })
     .expect(200)
     .end(done);
