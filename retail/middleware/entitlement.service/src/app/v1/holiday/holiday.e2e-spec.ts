@@ -1,10 +1,13 @@
 import * as request from 'supertest';
 import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
+import {transformAndValidateSync} from "class-transformer-validator";
+
 import { HolidayInput } from '@app/v1/holiday/holiday.dto';
 import {V1Module} from '@app/v1/v1.module';
 import {getChecksQuery, getDeleteMutation, getMutation, getQuery} from '@common/tests';
 import {KeyValInput} from '@common/inputs/key-val.input';
+import {Holiday} from "@app/v1/holiday/holiday.model";
 
 describe('Holiday Module (e2e)', () => {
   let app: INestApplication;
@@ -21,23 +24,33 @@ describe('Holiday Module (e2e)', () => {
 
   it(`adds Holiday`, done => {
     const input: HolidayInput = {
-      description: "Independence Day",
-      holiday_date: "2020-08-14",
+      description: "holiday_e2e_testing",
+      holiday_date: "1970-01-01",
       remarks: "Approved",
       status: "ACTIVE"
     };
+    const holiday_validated: HolidayInput = transformAndValidateSync(
+        HolidayInput,
+        input,
+    ) as HolidayInput;
     return request(app.getHttpServer())
       .post('/graphql')
       .send({
-        query: getMutation("addHoliday", input, "id"),
+        query: getMutation("addHoliday", holiday_validated, "id"),
       }).set({
-      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
-      "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
+          "x-tenant-id": process.env.ENV_RBX_E2E_TENANT_ID,
+          "x-user-id": process.env.ENV_RBX_E2E_USER_ID
     })
       .expect(( {body} ) => {
-        const data = body.data.addHoliday;
-        holidayId = data.id;
-        expect(data.id).toBeDefined();
+        const data = body?.data?.addHoliday;
+        holidayId = data?.id;
+        const holiday_json: string = JSON.stringify(data);
+        const holiday_validated: Holiday = transformAndValidateSync(
+            Holiday,
+            holiday_json,
+        ) as Holiday;
+        expect(holiday_validated).toBeDefined();
+        expect(holiday_validated).toBeInstanceOf(Holiday);
       })
       .expect(200)
       .end(done);
@@ -45,22 +58,33 @@ describe('Holiday Module (e2e)', () => {
 
   it(`updates Holiday`, done => {
     const input: HolidayInput = {
-      description: "Independence Day",
-      holiday_date: "2020-08-14",
+      description: "holiday_e2e_testing",
+      holiday_date: "1970-01-01",
       status: "ACTIVE",
       remarks: "Not-Approved",
     };
+    const holiday_validated: HolidayInput = transformAndValidateSync(
+        HolidayInput,
+        input,
+    ) as HolidayInput;
     return request(app.getHttpServer())
     .post('/graphql')
     .send({
-      query: getMutation("updateHoliday", input, "id remarks", holidayId),
+      query: getMutation("updateHoliday", holiday_validated, "id remarks", holidayId),
     }).set({
-      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
-      "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
+          "x-tenant-id": process.env.ENV_RBX_E2E_TENANT_ID,
+          "x-user-id": process.env.ENV_RBX_E2E_USER_ID
     })
     .expect(( {body} ) => {
-      const data = body.data.updateHoliday;
-      expect(data.remarks).toBe("Not-Approved");
+      const data = body?.data?.updateHoliday;
+      expect(data?.remarks).toBe("Not-Approved");
+      const holiday_json: string = JSON.stringify(data);
+      const holiday_validated: Holiday = transformAndValidateSync(
+          Holiday,
+          holiday_json,
+      ) as Holiday;
+      expect(holiday_validated).toBeDefined();
+      expect(holiday_validated).toBeInstanceOf(Holiday);
     })
     .expect(200)
     .end(done);
@@ -72,12 +96,19 @@ describe('Holiday Module (e2e)', () => {
     .send({
       query: getQuery("holidaysList", "id remarks"),
     }).set({
-      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
-      "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
+          "x-tenant-id": process.env.ENV_RBX_E2E_TENANT_ID,
+          "x-user-id": process.env.ENV_RBX_E2E_USER_ID
     })
     .expect(( {body} ) => {
-      const data = body.data.holidaysList;
-      expect(data.length).toBeDefined();
+      const data = body?.data?.holidaysList;
+      expect(data?.length).toBeDefined();
+      const holiday_json: string = JSON.stringify(data);
+      const holiday_validated: Holiday[] = transformAndValidateSync(
+          Holiday,
+          holiday_json,
+      ) as Holiday[];
+      expect(holiday_validated).toBeDefined();
+      expect(holiday_validated).toBeInstanceOf(Array);
     })
     .expect(200)
     .end(done);
@@ -89,12 +120,18 @@ describe('Holiday Module (e2e)', () => {
     .send({
       query: getQuery("findHolidayById", "id remarks", holidayId),
     }).set({
-      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
-      "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
+          "x-tenant-id": process.env.ENV_RBX_E2E_TENANT_ID,
+          "x-user-id": process.env.ENV_RBX_E2E_USER_ID
     })
     .expect(( {body} ) => {
-      const data = body.data.findHolidayById;
-      expect(data.id).toBeDefined();
+      const data = body?.data?.findHolidayById;
+      const holiday_json: string = JSON.stringify(data);
+      const holiday_validated: Holiday = transformAndValidateSync(
+          Holiday,
+          holiday_json,
+      ) as Holiday;
+      expect(holiday_validated).toBeDefined();
+      expect(holiday_validated).toBeInstanceOf(Holiday);
     })
     .expect(200)
     .end(done);
@@ -102,19 +139,26 @@ describe('Holiday Module (e2e)', () => {
 
   it(`searches Holidays by properties`, done => {
     const checks: KeyValInput[] = [
-      {record_key: "remarks", record_value: "Approved"}
+      {record_key: "remarks", record_value: "Not-Approved"}
     ];
     return request(app.getHttpServer())
     .post('/graphql')
     .send({
       query: getChecksQuery("findHolidayBy", checks, "id remarks"),
     }).set({
-      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
-      "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
+          "x-tenant-id": process.env.ENV_RBX_E2E_TENANT_ID,
+          "x-user-id": process.env.ENV_RBX_E2E_USER_ID
     })
     .expect(( {body} ) => {
-      const data = body.data.findHolidayBy;
-      expect(data.length).toBeDefined();
+      const data = body?.data?.findHolidayBy;
+      expect(data?.length).toBeDefined();
+      const holiday_json: string = JSON.stringify(data);
+      const holiday_validated: Holiday[] = transformAndValidateSync(
+          Holiday,
+          holiday_json,
+      ) as Holiday[];
+      expect(holiday_validated).toBeDefined();
+      expect(holiday_validated).toBeInstanceOf(Array);
     })
     .expect(200)
     .end(done);
@@ -126,11 +170,11 @@ describe('Holiday Module (e2e)', () => {
     .send({
       query: getDeleteMutation("deleteHoliday", holidayId),
     }).set({
-      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
-      "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
+          "x-tenant-id": process.env.ENV_RBX_E2E_TENANT_ID,
+          "x-user-id": process.env.ENV_RBX_E2E_USER_ID
     })
     .expect(( {body} ) => {
-      const data = body.data.deleteHoliday;
+      const data = body?.data?.deleteHoliday;
       expect(data).toBeTruthy();
     })
     .expect(200)
@@ -143,12 +187,12 @@ describe('Holiday Module (e2e)', () => {
     .send({
       query: getQuery("findHolidayById", "id remarks", holidayId),
     }).set({
-      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
-      "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
+          "x-tenant-id": process.env.ENV_RBX_E2E_TENANT_ID,
+          "x-user-id": process.env.ENV_RBX_E2E_USER_ID
     })
     .expect(( {body} ) => {
-      const [error] = body.errors;
-      expect(error.message).toBe("Holiday Not Found");
+      const [error] = body?.errors;
+      expect(error?.message).toBe("Holiday Not Found");
     })
     .expect(200)
     .end(done);
