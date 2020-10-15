@@ -1,31 +1,50 @@
 import * as fs from 'fs';
-import { Injectable, UseInterceptors } from '@nestjs/common';
+import * as mime from 'mime';
+import { Injectable } from '@nestjs/common';
 import { ICurrentUser } from '@common/interfaces';
-import { NewAttachmentInput } from './attachment.dto';
 import { AttachmentRepository } from '@core/repository';
-import { AttachmentNotFoundException } from './exceptions';
+import { ConfigurationService } from '@common/configuration/configuration.service';
+
 import { Attachment } from './attachment.model';
+import { NewAttachmentInput } from './attachment.dto';
+import {
+  AttachmentNotFoundException,
+  NotCreatedException,
+  InvalidBase64Exception,
+} from './exceptions';
 
 @Injectable()
 export class AttachmentsService {
-  constructor(private attachmentDB: AttachmentRepository) {}
+  constructor(
+    private attachmentDB: AttachmentRepository,
+    private readonly configService: ConfigurationService,
+  ) {}
   // async uploadFile(file: string): Promise<any> {}
 
-  async uploadFile(
-    file_source: string | any,
-    filename: string | any,
-    type?: string | any,
-  ) {
-    // console.log(atob(file_source), '[][][][][][][][]');
-    let base64Image = file_source.split(';base64,').pop();
-    fs.writeFile(
-      `./uploads/ROB_AgentScreenshots/${filename}.png`,
-      base64Image,
-      { encoding: type || 'base64' },
-      err => {
-        console.log('File created', [err]);
-      },
-    );
+  async uploadFile(file_source: string | any, filename: string | any) {
+    let response: any = {};
+    var matches = file_source.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+    if (matches.length !== 3) return new InvalidBase64Exception(filename);
+
+    response.type = matches[1];
+    response.data = new Buffer(matches[2], 'base64');
+
+    const decodedImg = response;
+    const imageBuffer = decodedImg.data;
+    const type = decodedImg.type;
+
+    const extension = mime.getExtension(`${type}`);
+    const fileName = `${filename}_${Date.now()}.${extension}`;
+    const path = `${this.configService.ATTACHMENT.ENV_RBX_ATTACHMENT_LOCATION}/${fileName}`;
+
+    response.file_name = filename;
+    response.file_path = path;
+    try {
+      fs.writeFileSync(path, imageBuffer, 'utf8');
+      return response;
+    } catch (error) {
+      return new NotCreatedException(filename);
+    }
   }
 
   async create(
@@ -38,15 +57,17 @@ export class AttachmentsService {
       input.screenshot_id,
     );
 
+    delete attachment.type;
+    delete attachment.data;
+
     //TODO: need this to be dynamic
     const newAttachment: any = {
-      file_name: `${input.screenshot_id}_${new Date()}`,
+      ...attachment,
       file_size: 20.1,
-      file_path: 'some path here',
-      tag_name: 'test tag',
-      user_id: input.user_id,
+      customer_id: input.customer_id,
       screenshot_id: input.screenshot_id,
     };
+
     const [response] = await this.attachmentDB.create(
       {
         ...newAttachment,
