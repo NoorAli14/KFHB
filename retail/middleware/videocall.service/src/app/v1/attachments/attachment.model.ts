@@ -25,7 +25,7 @@ export class Attachment {
   @IsUUID()
   @IsString()
   @IsNotEmpty()
-  user_id: string;
+  customer_id: string;
 
   @Field({ nullable: true })
   @IsString()

@@ -27,7 +27,7 @@ type Appointment {
 type Attachment {
   id: String!
   tenant_id: String!
-  user_id: String
+  customer_id: String
   file_name: String
   file_size: Float
   file_path: String
@@ -59,7 +59,7 @@ input NewAppointmentInput {
 }
 
 input NewAttachmentInput {
-  user_id: String!
+  customer_id: String!
   screenshot_id: String!
   file_source: String!
 }
@@ -67,7 +67,7 @@ input NewAttachmentInput {
 type Query {
   findAppointment(appointment_id: String!): Appointment!
   findAppointmentByUserId(user_id: String!): Appointment!
-  findAttachment(screenshot_id: String!, user_id: String!): Attachment!
+  findAttachment(screenshot_id: String!, customer_id: String!): Attachment!
 }
 
 type UserGQL {

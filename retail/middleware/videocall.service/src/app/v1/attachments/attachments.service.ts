@@ -19,7 +19,20 @@ export class AttachmentsService {
     private attachmentDB: AttachmentRepository,
     private readonly configService: ConfigurationService,
   ) {}
-  // async uploadFile(file: string): Promise<any> {}
+
+  calculateImageSize(base64String: string) {
+    let padding: number;
+    let inBytes: number;
+    let base64StringLength: number;
+
+    if (base64String.endsWith('==')) padding = 2;
+    else if (base64String.endsWith('=')) padding = 1;
+    else padding = 0;
+
+    base64StringLength = base64String.length;
+    inBytes = base64StringLength * (4 / 3) - padding;
+    return inBytes / 1024;
+  }
 
   async uploadFile(file_source: string | any, filename: string | any) {
     let response: any = {};
@@ -29,18 +42,16 @@ export class AttachmentsService {
     response.type = matches[1];
     response.data = new Buffer(matches[2], 'base64');
 
-    const decodedImg = response;
-    const imageBuffer = decodedImg.data;
-    const type = decodedImg.type;
-
-    const extension = mime.getExtension(`${type}`);
+    const extension = mime.getExtension(`${response.type}`);
     const fileName = `${filename}_${Date.now()}.${extension}`;
     const path = `${this.configService.ATTACHMENT.ENV_RBX_ATTACHMENT_LOCATION}/${fileName}`;
 
     response.file_name = filename;
     response.file_path = path;
+    response.file_size = this.calculateImageSize(file_source);
+
     try {
-      fs.writeFileSync(path, imageBuffer, 'utf8');
+      fs.writeFileSync(path, response.data, 'utf8');
       return response;
     } catch (error) {
       return new NotCreatedException(filename);
@@ -60,38 +71,30 @@ export class AttachmentsService {
     delete attachment.type;
     delete attachment.data;
 
-    //TODO: need this to be dynamic
     const newAttachment: any = {
       ...attachment,
-      file_size: 20.1,
+      status: 'Active',
       customer_id: input.customer_id,
       screenshot_id: input.screenshot_id,
+      created_by: currentUser.id,
+      updated_by: currentUser.id,
+      tenant_id: currentUser.tenant_id,
     };
 
-    const [response] = await this.attachmentDB.create(
-      {
-        ...newAttachment,
-        status: 'Active',
-        created_by: currentUser.id,
-        updated_by: currentUser.id,
-        tenant_id: currentUser.tenant_id,
-      },
-      output,
-    );
-    console.log(response, '[][][][][][]');
+    const [response] = await this.attachmentDB.create(newAttachment, output);
     return response;
   }
 
   async find(
     currentUser: ICurrentUser,
-    user_id: string,
+    customer_id: string,
     screenshot_id: string,
     output: string[],
   ): Promise<Attachment> {
     const response = await this.attachmentDB.findOne(
       {
         deleted_on: null,
-        user_id: user_id,
+        customer_id: customer_id,
         screenshot_id: screenshot_id,
         tenant_id: currentUser.tenant_id,
       },
@@ -99,7 +102,7 @@ export class AttachmentsService {
     );
 
     if (!response)
-      throw new AttachmentNotFoundException(user_id, screenshot_id);
+      throw new AttachmentNotFoundException(customer_id, screenshot_id);
 
     return response;
   }

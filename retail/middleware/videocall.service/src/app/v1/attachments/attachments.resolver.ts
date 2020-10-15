@@ -21,13 +21,13 @@ export class AttachmentsResolver {
   @Query(() => Attachment)
   async findAttachment(
     @CurrentUser() currentUser: ICurrentUser,
-    @Args('user_id') user_id: string,
+    @Args('customer_id') customer_id: string,
     @Args('screenshot_id') screenshot_id: string,
     @Fields(Attachment) output: string[],
   ): Promise<Attachment> {
     return this.attachmentService.find(
       currentUser,
-      user_id,
+      customer_id,
       screenshot_id,
       output,
     );
