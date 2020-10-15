@@ -47,9 +47,6 @@ export class AttachmentsService {
       fs.mkdirSync(this.configService.ATTACHMENT.ENV_RBX_ATTACHMENT_LOCATION);
     }
 
-    // let date = moment(new Date(), 'YYYY/MM/DD');
-    // let folder = `${date.format('YYYY')}${date.format('MM')}`;
-
     //check folder created inside ROB_AgentScreenshots or not for current customer
     if (
       !fs.existsSync(
@@ -61,6 +58,11 @@ export class AttachmentsService {
       );
     }
 
+    let current_date = moment(new Date(), 'YYYY/MM/DD');
+    let formated_date = `${current_date.format('YYYY')}${current_date.format(
+      'MM',
+    )}${current_date.format('DD')}`;
+
     let response: any = {};
     var matches = file_source.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
     if (matches.length !== 3) return new InvalidBase64Exception(filename);
@@ -69,7 +71,7 @@ export class AttachmentsService {
     response.data = new Buffer(matches[2], 'base64');
 
     const extension = mime.getExtension(`${response.type}`);
-    const fileName = `${filename}_${Date.now()}.${extension}`;
+    const fileName = `${formated_date}_${Date.now()}_${filename}.${extension}`;
     const path = `${this.configService.ATTACHMENT.ENV_RBX_ATTACHMENT_LOCATION}${customer_id}/${fileName}`;
 
     response.file_name = fileName;
