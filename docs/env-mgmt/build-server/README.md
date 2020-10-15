@@ -1,10 +1,19 @@
 Build server
 ===========
 
-The common build server is hosted on MS Azure. The VM name is `aionservercentos.westindia.cloudapp.azure.com` with public IP address of `52.183.133.141`.
+All build servers will be maintained on MS Azure. Separate servers will be created for different teams to avoid stepping on each others' toes.
 
-User id's
---------
+## Retail product CIT server
+The VM name is `AionServerCentOS`. OS installed on this machine is CentOS 7.8.x.
+
+DNS name is `aionservercentos.westindia.cloudapp.azure.com` with public IP address of `52.183.133.141`.
+
+## Corporate product CIT server
+The VM name is `AionRubixCorp-01-VM`. OS installed on this machine is CentOS 8.2.x.
+
+DNS name is `rubixcorp-dev01.westindia.cloudapp.azure.com` with public IP address of `104.211.155.242`.
+
+# User id's
 Unique user id would be created for each individual, and team members should login with their own user id's and switch to the common user for carrying out team related activities. For example,
 ```
 ssh mshah@52.183.133.141
@@ -22,8 +31,7 @@ rubix
 [rubix@AionServerCentOS ~]$
 ```
 
-Uploading SSH keys
-------------------
+## Uploading SSH keys
 One benefit of having individual id's is the ability to upload SSH keys to the server so that login without a password is possible. Use `git client` on your local machine to generate and upload the key as shown below
 ```
 $ ssh-keygen
