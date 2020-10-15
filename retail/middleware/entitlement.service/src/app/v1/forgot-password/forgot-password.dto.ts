@@ -12,8 +12,10 @@ export class ForgotPasswordInput {
 @InputType()
 export class ChangePasswordInput {
   @Field()
+  @IsString()
   password_reset_token: string;
 
   @Field()
+  @IsString()
   password: string;
 }
