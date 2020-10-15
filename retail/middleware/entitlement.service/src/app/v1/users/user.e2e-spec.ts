@@ -1,10 +1,13 @@
 import * as request from 'supertest';
 import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
+import {transformAndValidateSync} from "class-transformer-validator";
+
 import {createPayloadObject, getChecksQuery, getDeleteMutation, getMutation, getQuery} from '@common/tests';
 import {V1Module} from '@app/v1/v1.module';
 import {CheckAvailabilityInput, CreateUserInput, UpdatePasswordInput, UpdateUserInput} from '@app/v1/users/user.dto';
 import {KeyValInput} from '@common/inputs/key-val.input';
+import {User} from "@app/v1/users/user.model";
 
 
 describe('User Module (e2e)', () => {
@@ -22,24 +25,34 @@ describe('User Module (e2e)', () => {
 
   it(`adds User`, done => {
     const input: CreateUserInput = {
-      email:"teste2e@jest.com",
-      first_name: "teste2e",
+      email:"user_e2e_testing@jest.com",
+      first_name: "user_e2e_testing",
       last_name: "jest",
       status: "ACTIVE",
       password: "something"
     };
+    const input_validated: CreateUserInput = transformAndValidateSync(
+        CreateUserInput,
+        input,
+    ) as CreateUserInput;
     return request(app.getHttpServer())
       .post('/graphql')
       .send({
-        query: getMutation("addUser", input, "id"),
+        query: getMutation("addUser", input_validated, "id"),
       }).set({
-      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
-      "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
+          "x-tenant-id": process.env.ENV_RBX_E2E_TENANT_ID,
+          "x-user-id": process.env.ENV_RBX_E2E_USER_ID
     })
       .expect(( {body} ) => {
-        const data = body.data.addUser;
-        userId = data.id;
-        expect(data.id).toBeDefined();
+        const user = body?.data?.addUser;
+        userId = user?.id;
+        const user_json: string = JSON.stringify(user);
+        const user_validated: User = transformAndValidateSync(
+            User,
+            user_json,
+        ) as User;
+        expect(user_validated).toBeDefined();
+        expect(user_validated).toBeInstanceOf(User);
       })
       .expect(200)
       .end(done);
@@ -47,20 +60,30 @@ describe('User Module (e2e)', () => {
 
   it(`updates User`, done => {
     const input: UpdateUserInput = {
-      email:"test_updated@jest.com",
       last_name: "jest-updated",
     };
+    const input_validated: UpdateUserInput = transformAndValidateSync(
+        UpdateUserInput,
+        input,
+    ) as UpdateUserInput;
     return request(app.getHttpServer())
     .post('/graphql')
     .send({
-      query: getMutation("updateUser", input, "id last_name", userId),
+      query: getMutation("updateUser", input_validated, "id last_name", userId),
     }).set({
-      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
-      "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
+          "x-tenant-id": process.env.ENV_RBX_E2E_TENANT_ID,
+          "x-user-id": process.env.ENV_RBX_E2E_USER_ID
     })
     .expect(( {body} ) => {
-      const data = body.data.updateUser;
-      expect(data.last_name).toBe("jest-updated");
+      const user = body?.data?.updateUser;
+      expect(user?.last_name).toBe("jest-updated");
+      const user_json: string = JSON.stringify(user);
+      const user_validated: User = transformAndValidateSync(
+          User,
+          user_json,
+      ) as User;
+      expect(user_validated).toBeDefined();
+      expect(user_validated).toBeInstanceOf(User);
     })
     .expect(200)
     .end(done);
@@ -71,17 +94,27 @@ describe('User Module (e2e)', () => {
       current_password: "something",
       new_password: "something2"
     };
+    const input_validated: UpdatePasswordInput = transformAndValidateSync(
+        UpdatePasswordInput,
+        input,
+    ) as UpdatePasswordInput;
     return request(app.getHttpServer())
     .post('/graphql')
     .send({
-      query: getMutation("updatePassword", input, "id last_name"),
+      query: getMutation("updatePassword", input_validated, "id last_name"),
     }).set({
-      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
-      "x-user-id": userId
+          "x-tenant-id": process.env.ENV_RBX_E2E_TENANT_ID,
+          "x-user-id": userId
     })
     .expect(( {body} ) => {
-      const data = body.data.updatePassword;
-      expect(data.id).toBeDefined();
+      const user = body?.data?.updatePassword;
+      const user_json: string = JSON.stringify(user);
+      const user_validated: User = transformAndValidateSync(
+          User,
+          user_json,
+      ) as User;
+      expect(user_validated).toBeDefined();
+      expect(user_validated).toBeInstanceOf(User);
     })
     .expect(200)
     .end(done);
@@ -92,17 +125,21 @@ describe('User Module (e2e)', () => {
       current_password: "something_wrong",
       new_password: "something2"
     };
+    const input_validated: UpdatePasswordInput = transformAndValidateSync(
+        UpdatePasswordInput,
+        input,
+    ) as UpdatePasswordInput;
     return request(app.getHttpServer())
     .post('/graphql')
     .send({
-      query: getMutation("updatePassword", input, "id last_name"),
+      query: getMutation("updatePassword", input_validated, "id last_name"),
     }).set({
-      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
-      "x-user-id": userId
+          "x-tenant-id": process.env.ENV_RBX_E2E_TENANT_ID,
+          "x-user-id": userId
     })
     .expect(( {body} ) => {
-      const [error] = body.errors;
-      expect(error.message).toBe("Password Mismatch");
+      const [error] = body?.errors;
+      expect(error?.message).toBe("Password Mismatch");
     })
     .expect(200)
     .end(done);
@@ -114,12 +151,19 @@ describe('User Module (e2e)', () => {
     .send({
       query: getQuery("usersList", "id last_name"),
     }).set({
-      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
-      "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
+          "x-tenant-id": process.env.ENV_RBX_E2E_TENANT_ID,
+          "x-user-id": process.env.ENV_RBX_E2E_USER_ID
     })
     .expect(( {body} ) => {
-      const data = body.data.usersList;
-      expect(data.length).toBeDefined();
+      const user = body?.data?.usersList;
+      expect(user?.length).toBeDefined();
+      const user_json: string = JSON.stringify(user);
+      const user_validated: User[] = transformAndValidateSync(
+          User,
+          user_json,
+      ) as User[];
+      expect(user_validated).toBeDefined();
+      expect(user_validated).toBeInstanceOf(Array);
     })
     .expect(200)
     .end(done);
@@ -130,9 +174,13 @@ describe('User Module (e2e)', () => {
       call_time: new Date().toISOString(),
       gender: "M"
     };
+    const input_validated: CheckAvailabilityInput = transformAndValidateSync(
+        CheckAvailabilityInput,
+        input,
+    ) as CheckAvailabilityInput;
     const query =
       `query {
-      findAvailableAgents (input: ${createPayloadObject(input)}){
+      findAvailableAgents (input: ${createPayloadObject(input_validated)}){
        id last_name
       }
     }`;
@@ -141,12 +189,19 @@ describe('User Module (e2e)', () => {
     .send({
       query: query,
     }).set({
-      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
-      "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
+          "x-tenant-id": process.env.ENV_RBX_E2E_TENANT_ID,
+          "x-user-id": process.env.ENV_RBX_E2E_USER_ID
     })
     .expect(( {body} ) => {
-      const data = body.data.findAvailableAgents;
-      expect(data.length).toBeDefined();
+      const user = body?.data?.findAvailableAgents;
+      expect(user?.length).toBeDefined();
+      const user_json: string = JSON.stringify(user);
+      const user_validated: User[] = transformAndValidateSync(
+          User,
+          user_json,
+      ) as User[];
+      expect(user_validated).toBeDefined();
+      expect(user_validated).toBeInstanceOf(Array);
     })
     .expect(200)
     .end(done);
@@ -164,12 +219,18 @@ describe('User Module (e2e)', () => {
     .send({
       query: query,
     }).set({
-      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
-      "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
+          "x-tenant-id": process.env.ENV_RBX_E2E_TENANT_ID,
+          "x-user-id": process.env.ENV_RBX_E2E_USER_ID
     })
     .expect(( {body} ) => {
-      const data = body.data.resetInvitationToken;
-      expect(data.id).toBeDefined();
+      const user = body?.data?.resetInvitationToken;
+      const user_json: string = JSON.stringify(user);
+      const user_validated: User = transformAndValidateSync(
+          User,
+          user_json,
+      ) as User;
+      expect(user_validated).toBeDefined();
+      expect(user_validated).toBeInstanceOf(User);
     })
     .expect(200)
     .end(done);
@@ -181,12 +242,18 @@ describe('User Module (e2e)', () => {
     .send({
       query: getQuery("findUserById", "id last_name", userId),
     }).set({
-      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
-      "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
+          "x-tenant-id": process.env.ENV_RBX_E2E_TENANT_ID,
+          "x-user-id": process.env.ENV_RBX_E2E_USER_ID
     })
     .expect(( {body} ) => {
-      const data = body.data.findUserById;
-      expect(data.id).toBeDefined();
+      const user = body?.data?.findUserById;
+      const user_json: string = JSON.stringify(user);
+      const user_validated: User = transformAndValidateSync(
+          User,
+          user_json,
+      ) as User;
+      expect(user_validated).toBeDefined();
+      expect(user_validated).toBeInstanceOf(User);
     })
     .expect(200)
     .end(done);
@@ -194,19 +261,26 @@ describe('User Module (e2e)', () => {
 
   it(`searches Users by properties`, done => {
     const checks: KeyValInput[] = [
-      {record_key: "last_name", record_value: "doe"}
+      {record_key: "last_name", record_value: "jest-updated"}
     ];
     return request(app.getHttpServer())
     .post('/graphql')
     .send({
       query: getChecksQuery("findUserBy", checks, "id last_name"),
     }).set({
-      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
-      "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
+          "x-tenant-id": process.env.ENV_RBX_E2E_TENANT_ID,
+          "x-user-id": process.env.ENV_RBX_E2E_USER_ID
     })
     .expect(( {body} ) => {
-      const data = body.data.findUserBy;
-      expect(data.length).toBeDefined();
+      const user = body?.data?.findUserBy;
+      expect(user?.length).toBeDefined();
+      const user_json: string = JSON.stringify(user);
+      const user_validated: User[] = transformAndValidateSync(
+          User,
+          user_json,
+      ) as User[];
+      expect(user_validated).toBeDefined();
+      expect(user_validated).toBeInstanceOf(Array);
     })
     .expect(200)
     .end(done);
@@ -218,11 +292,11 @@ describe('User Module (e2e)', () => {
     .send({
       query: getDeleteMutation("deleteUser", userId),
     }).set({
-      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
-      "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
+          "x-tenant-id": process.env.ENV_RBX_E2E_TENANT_ID,
+          "x-user-id": process.env.ENV_RBX_E2E_USER_ID
     })
     .expect(( {body} ) => {
-      const data = body.data.deleteUser;
+      const data = body?.data?.deleteUser;
       expect(data).toBeTruthy();
     })
     .expect(200)
@@ -235,12 +309,12 @@ describe('User Module (e2e)', () => {
     .send({
       query: getQuery("findUserById", "id last_name", userId),
     }).set({
-      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
-      "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
+          "x-tenant-id": process.env.ENV_RBX_E2E_TENANT_ID,
+          "x-user-id": process.env.ENV_RBX_E2E_USER_ID
     })
     .expect(( {body} ) => {
-      const [error] = body.errors;
-      expect(error.message).toBe("User Not Found");
+      const [error] = body?.errors;
+      expect(error?.message).toBe("User Not Found");
     })
     .expect(200)
     .end(done);

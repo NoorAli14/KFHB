@@ -9,6 +9,7 @@ export class UpdateUserInput {
   @Field({nullable: true})
   @IsString()
   @IsEmail()
+  @IsOptional()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   email?: string;
 
