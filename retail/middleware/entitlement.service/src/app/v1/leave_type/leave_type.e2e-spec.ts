@@ -1,10 +1,13 @@
 import * as request from 'supertest';
 import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
+import {transformAndValidateSync} from "class-transformer-validator";
+
 import {getChecksQuery, getDeleteMutation, getMutation, getQuery} from '@common/tests';
 import {V1Module} from '@app/v1/v1.module';
 import {LeaveTypeInput} from '@app/v1/leave_type/leave_type.dto';
 import {KeyValInput} from '@common/inputs/key-val.input';
+import {LeaveType} from "@app/v1/leave_type/leave_type.model";
 
 
 describe('Leave-Type Module (e2e)', () => {
@@ -22,21 +25,31 @@ describe('Leave-Type Module (e2e)', () => {
 
   it(`adds Leave-Type`, done => {
     const input: LeaveTypeInput = {
-      name: "E2E-testing",
+      name: "leave_type_e2e_testing",
       status: "ACTIVE"
     };
+    const leave_type_validated: LeaveTypeInput = transformAndValidateSync(
+        LeaveTypeInput,
+        input,
+    ) as LeaveTypeInput;
     return request(app.getHttpServer())
       .post('/graphql')
       .send({
-        query: getMutation("addLeaveType", input, "id"),
+        query: getMutation("addLeaveType", leave_type_validated, "id"),
       }).set({
-      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
-      "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
+          "x-tenant-id": process.env.ENV_RBX_E2E_TENANT_ID,
+          "x-user-id": process.env.ENV_RBX_E2E_USER_ID
     })
       .expect(( {body} ) => {
-        const data = body.data.addLeaveType;
-        leaveTypeId = data.id;
-        expect(data.id).toBeDefined();
+        const data = body?.data?.addLeaveType;
+        leaveTypeId = data?.id;
+        const leave_type_json: string = JSON.stringify(data);
+        const leave_type_validated: LeaveType = transformAndValidateSync(
+            LeaveType,
+            leave_type_json,
+        ) as LeaveType;
+        expect(leave_type_validated).toBeDefined();
+        expect(leave_type_validated).toBeInstanceOf(LeaveType);
       })
       .expect(200)
       .end(done);
@@ -44,20 +57,31 @@ describe('Leave-Type Module (e2e)', () => {
 
   it(`updates Leave-Type`, done => {
     const input: LeaveTypeInput = {
-      name : 'E2E-testing',
+      name : 'leave_type_e2e_testing',
       status : 'INACTIVE'
     };
+    const leave_type_validated: LeaveTypeInput = transformAndValidateSync(
+        LeaveTypeInput,
+        input,
+    ) as LeaveTypeInput;
     return request(app.getHttpServer())
     .post('/graphql')
     .send({
-      query: getMutation("updateLeaveType", input, "id status", leaveTypeId),
+      query: getMutation("updateLeaveType", leave_type_validated, "id status", leaveTypeId),
     }).set({
-      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
-      "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
+          "x-tenant-id": process.env.ENV_RBX_E2E_TENANT_ID,
+          "x-user-id": process.env.ENV_RBX_E2E_USER_ID
     })
     .expect(( {body} ) => {
-      const data = body.data.updateLeaveType;
-      expect(data.status).toBe("INACTIVE");
+      const data = body?.data?.updateLeaveType;
+      expect(data?.status).toBe("INACTIVE");
+      const leave_type_json: string = JSON.stringify(data);
+      const leave_type_validated: LeaveType = transformAndValidateSync(
+          LeaveType,
+          leave_type_json,
+      ) as LeaveType;
+      expect(leave_type_validated).toBeDefined();
+      expect(leave_type_validated).toBeInstanceOf(LeaveType);
     })
     .expect(200)
     .end(done);
@@ -69,12 +93,19 @@ describe('Leave-Type Module (e2e)', () => {
     .send({
       query: getQuery("leaveTypeList", "id name"),
     }).set({
-      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
-      "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
+          "x-tenant-id": process.env.ENV_RBX_E2E_TENANT_ID,
+          "x-user-id": process.env.ENV_RBX_E2E_USER_ID
     })
     .expect(( {body} ) => {
-      const data = body.data.leaveTypeList;
-      expect(data.length).toBeDefined();
+      const data = body?.data?.leaveTypeList;
+      expect(data?.length).toBeDefined();
+      const leave_type_json: string = JSON.stringify(data);
+      const leave_type_validated: LeaveType[] = transformAndValidateSync(
+          LeaveType,
+          leave_type_json,
+      ) as LeaveType[];
+      expect(leave_type_validated).toBeDefined();
+      expect(leave_type_validated).toBeInstanceOf(Array);
     })
     .expect(200)
     .end(done);
@@ -86,12 +117,18 @@ describe('Leave-Type Module (e2e)', () => {
     .send({
       query: getQuery("findLeaveTypeById", "id name", leaveTypeId),
     }).set({
-      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
-      "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
+          "x-tenant-id": process.env.ENV_RBX_E2E_TENANT_ID,
+          "x-user-id": process.env.ENV_RBX_E2E_USER_ID
     })
     .expect(( {body} ) => {
-      const data = body.data.findLeaveTypeById;
-      expect(data.id).toBeDefined();
+      const data = body?.data?.findLeaveTypeById;
+      const leave_type_json: string = JSON.stringify(data);
+      const leave_type_validated: LeaveType = transformAndValidateSync(
+          LeaveType,
+          leave_type_json,
+      ) as LeaveType;
+      expect(leave_type_validated).toBeDefined();
+      expect(leave_type_validated).toBeInstanceOf(LeaveType);
     })
     .expect(200)
     .end(done);
@@ -99,19 +136,26 @@ describe('Leave-Type Module (e2e)', () => {
 
   it(`searches Leave-Types by properties`, done => {
     const checks: KeyValInput[] = [
-      {record_key: "name", record_value: "E2E-testing"}
+      {record_key: "name", record_value: "leave_type_e2e_testing"}
     ];
     return request(app.getHttpServer())
     .post('/graphql')
     .send({
       query: getChecksQuery("findLeaveTypeBy", checks, "id name"),
     }).set({
-      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
-      "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
+          "x-tenant-id": process.env.ENV_RBX_E2E_TENANT_ID,
+          "x-user-id": process.env.ENV_RBX_E2E_USER_ID
     })
     .expect(( {body} ) => {
-      const data = body.data.findLeaveTypeBy;
-      expect(data.length).toBeDefined();
+      const data = body?.data?.findLeaveTypeBy;
+      expect(data?.length).toBeDefined();
+      const leave_type_json: string = JSON.stringify(data);
+      const leave_type_validated: LeaveType[] = transformAndValidateSync(
+          LeaveType,
+          leave_type_json,
+      ) as LeaveType[];
+      expect(leave_type_validated).toBeDefined();
+      expect(leave_type_validated).toBeInstanceOf(Array);
     })
     .expect(200)
     .end(done);
@@ -119,20 +163,24 @@ describe('Leave-Type Module (e2e)', () => {
 
   it(`should return error of Leave Type already exists`, done => {
     const input: LeaveTypeInput = {
-      name: "E2E-testing",
+      name: "leave_type_e2e_testing",
       status: "ACTIVE"
     };
+    const leave_type_validated: LeaveTypeInput = transformAndValidateSync(
+        LeaveTypeInput,
+        input,
+    ) as LeaveTypeInput;
     return request(app.getHttpServer())
     .post('/graphql')
     .send({
-      query: getMutation("addLeaveType", input, "id"),
+      query: getMutation("addLeaveType", leave_type_validated, "id"),
     }).set({
-      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
-      "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
+          "x-tenant-id": process.env.ENV_RBX_E2E_TENANT_ID,
+          "x-user-id": process.env.ENV_RBX_E2E_USER_ID
     })
     .expect(( {body} ) => {
-      const [error] = body.errors;
-      expect(error.message).toBe("Leave Type already exists");
+      const [error] = body?.errors;
+      expect(error?.message).toBe("Leave Type already exists");
     })
     .expect(200)
     .end(done);
@@ -144,11 +192,11 @@ describe('Leave-Type Module (e2e)', () => {
     .send({
       query: getDeleteMutation("deleteLeaveType", leaveTypeId),
     }).set({
-      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
-      "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
+          "x-tenant-id": process.env.ENV_RBX_E2E_TENANT_ID,
+          "x-user-id": process.env.ENV_RBX_E2E_USER_ID
     })
     .expect(( {body} ) => {
-      const data = body.data.deleteLeaveType;
+      const data = body?.data?.deleteLeaveType;
       expect(data).toBeTruthy();
     })
     .expect(200)
@@ -161,12 +209,12 @@ describe('Leave-Type Module (e2e)', () => {
     .send({
       query: getQuery("findLeaveTypeById", "id name", leaveTypeId),
     }).set({
-      "x-tenant-id": "58B630C1-B884-43B1-AE17-E7214FDB09F7",
-      "x-user-id": "289CB901-C8CB-444A-A0F0-2452019D7E0D"
+          "x-tenant-id": process.env.ENV_RBX_E2E_TENANT_ID,
+          "x-user-id": process.env.ENV_RBX_E2E_USER_ID
     })
     .expect(( {body} ) => {
-      const [error] = body.errors;
-      expect(error.message).toBe("Leave Type Not Found");
+      const [error] = body?.errors;
+      expect(error?.message).toBe("Leave Type Not Found");
     })
     .expect(200)
     .end(done);
