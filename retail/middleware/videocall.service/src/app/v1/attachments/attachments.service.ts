@@ -21,6 +21,67 @@ export class AttachmentsService {
     private readonly configService: ConfigurationService,
   ) {}
 
+  async list(currentUser: ICurrentUser, customer_id: string, output: string[]) {
+    return await this.attachmentDB.findBy(
+      {
+        customer_id: customer_id,
+        tenant_id: currentUser.tenant_id,
+        deleted_on: null,
+      },
+      output,
+    );
+  }
+
+  async find(
+    currentUser: ICurrentUser,
+    customer_id: string,
+    screenshot_id: string,
+    output: string[],
+  ): Promise<Attachment> {
+    const response = await this.attachmentDB.findOne(
+      {
+        deleted_on: null,
+        customer_id: customer_id,
+        screenshot_id: screenshot_id,
+        tenant_id: currentUser.tenant_id,
+      },
+      output,
+    );
+
+    if (!response)
+      throw new AttachmentNotFoundException(customer_id, screenshot_id);
+
+    return response;
+  }
+
+  async create(
+    currentUser: ICurrentUser,
+    input: NewAttachmentInput,
+    output?: string[],
+  ): Promise<Attachment> {
+    const attachment = await this.uploadFile(
+      input.file_source,
+      input.screenshot_id,
+      input.customer_id,
+    );
+
+    delete attachment.type;
+    delete attachment.data;
+
+    const newAttachment: any = {
+      ...attachment,
+      status: 'Active',
+      customer_id: input.customer_id,
+      screenshot_id: input.screenshot_id,
+      created_by: currentUser.id,
+      updated_by: currentUser.id,
+      tenant_id: currentUser.tenant_id,
+    };
+
+    const [response] = await this.attachmentDB.create(newAttachment, output);
+    return response;
+  }
+
   calculateImageSize(base64String: string) {
     let padding: number;
     let inBytes: number;
@@ -84,55 +145,5 @@ export class AttachmentsService {
     } catch (error) {
       return new NotCreatedException(filename);
     }
-  }
-
-  async create(
-    currentUser: ICurrentUser,
-    input: NewAttachmentInput,
-    output?: string[],
-  ): Promise<Attachment> {
-    const attachment = await this.uploadFile(
-      input.file_source,
-      input.screenshot_id,
-      input.customer_id,
-    );
-
-    delete attachment.type;
-    delete attachment.data;
-
-    const newAttachment: any = {
-      ...attachment,
-      status: 'Active',
-      customer_id: input.customer_id,
-      screenshot_id: input.screenshot_id,
-      created_by: currentUser.id,
-      updated_by: currentUser.id,
-      tenant_id: currentUser.tenant_id,
-    };
-
-    const [response] = await this.attachmentDB.create(newAttachment, output);
-    return response;
-  }
-
-  async find(
-    currentUser: ICurrentUser,
-    customer_id: string,
-    screenshot_id: string,
-    output: string[],
-  ): Promise<Attachment> {
-    const response = await this.attachmentDB.findOne(
-      {
-        deleted_on: null,
-        customer_id: customer_id,
-        screenshot_id: screenshot_id,
-        tenant_id: currentUser.tenant_id,
-      },
-      output,
-    );
-
-    if (!response)
-      throw new AttachmentNotFoundException(customer_id, screenshot_id);
-
-    return response;
   }
 }

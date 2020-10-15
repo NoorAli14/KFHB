@@ -67,6 +67,7 @@ input NewAttachmentInput {
 type Query {
   findAppointment(appointment_id: String!): Appointment!
   findAppointmentByUserId(user_id: String!): Appointment!
+  attachmentList(customer_id: String!): [Attachment!]!
   findAttachment(screenshot_id: String!, customer_id: String!): Attachment!
 }
 

@@ -9,13 +9,13 @@ import { Attachment } from './attachment.model';
 export class AttachmentsResolver {
   constructor(private readonly attachmentService: AttachmentsService) {}
 
-  @Mutation(() => Attachment)
-  async addAttachment(
+  @Query(() => [Attachment])
+  async attachmentList(
     @CurrentUser() currentUser: ICurrentUser,
-    @Args('input') input: NewAttachmentInput,
+    @Args('customer_id') customer_id: string,
     @Fields(Attachment) output: string[],
-  ): Promise<Attachment> {
-    return this.attachmentService.create(currentUser, input, output);
+  ): Promise<Attachment[]> {
+    return await this.attachmentService.list(currentUser, customer_id, output);
   }
 
   @Query(() => Attachment)
@@ -31,5 +31,14 @@ export class AttachmentsResolver {
       screenshot_id,
       output,
     );
+  }
+
+  @Mutation(() => Attachment)
+  async addAttachment(
+    @CurrentUser() currentUser: ICurrentUser,
+    @Args('input') input: NewAttachmentInput,
+    @Fields(Attachment) output: string[],
+  ): Promise<Attachment> {
+    return this.attachmentService.create(currentUser, input, output);
   }
 }
