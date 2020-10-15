@@ -9,7 +9,7 @@ export async function up(knex: Knex): Promise<void> {
       .defaultTo(knex.raw(DATABASE_UUID_METHOD()));
 
     table.uuid('tenant_id').notNullable();
-    table.uuid('user_id').notNullable();
+    table.uuid('customer_id').notNullable();
 
     table.string('file_name');
     table.float('file_size');
@@ -28,7 +28,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string('deleted_by');
 
     table.index('tenant_id', `${TABLE.ATTACHMENT}_TENANT_ID_INDEX`);
-    table.index('user_id', `${TABLE.ATTACHMENT}_USER_ID_INDEX`);
+    table.index('customer_id', `${TABLE.ATTACHMENT}_CUSTOMER_ID_INDEX`);
     table.index('status', `${TABLE.ATTACHMENT}_STATUS_INDEX`);
     table.index('deleted_on', `${TABLE.ATTACHMENT}_DELETED_ON_INDEX`);
   });

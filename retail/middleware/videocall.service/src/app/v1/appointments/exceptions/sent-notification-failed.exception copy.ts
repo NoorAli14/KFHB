@@ -4,7 +4,7 @@ export class SentNotificationFailedException extends BaseException {
   constructor(user_id?: string) {
     super(HttpStatus.EXPECTATION_FAILED, {
       message: `We're unable to sent notification, to the user`,
-      errorCode: 'VC-1066',
+      errorCode: 'VC-1064',
       name: 'SENT_NOTIFICATION_FAILED',
       developerMessage: `We're unable to sent notification, to the user: [${user_id}]`,
     });

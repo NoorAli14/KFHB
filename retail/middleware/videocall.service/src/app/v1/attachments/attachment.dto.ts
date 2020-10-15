@@ -6,8 +6,8 @@ import { GraphQLUpload } from 'apollo-server-express';
 @InputType()
 export class NewAttachmentInput {
   @Field()
-  @IsUUID('all', { message: 'user_id is not a valid UUID', always: true })
-  user_id: string;
+  @IsUUID('all', { message: 'customer_id is not a valid UUID', always: true })
+  customer_id: string;
 
   @Field()
   @IsNotEmpty()
