@@ -54,7 +54,7 @@ export const DEFAULT_ENV: iConfig = {
       'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTZELk_VnIIulq0wOTiIXsyhXh0GNXfMInuJg&usqp=CAU',
   },
   ATTACHMENT: {
-    ENV_RBX_ATTACHMENT_LOCATION: './uploads/ROB_AgentScreenshots',
+    ENV_RBX_ATTACHMENT_LOCATION: './uploads/ROB_AgentScreenshots/',
   },
   logLevel: 'info',
 };

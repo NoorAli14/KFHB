@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as mime from 'mime';
+import * as moment from 'moment';
 import { Injectable } from '@nestjs/common';
 import { ICurrentUser } from '@common/interfaces';
 import { AttachmentRepository } from '@core/repository';
@@ -34,7 +35,32 @@ export class AttachmentsService {
     return inBytes / 1024;
   }
 
-  async uploadFile(file_source: string | any, filename: string | any) {
+  async uploadFile(
+    file_source: string | any,
+    filename: string | any,
+    customer_id: string | any,
+  ) {
+    //check wether ROB_AgentScreenshots folder created or not
+    if (
+      !fs.existsSync(this.configService.ATTACHMENT.ENV_RBX_ATTACHMENT_LOCATION)
+    ) {
+      fs.mkdirSync(this.configService.ATTACHMENT.ENV_RBX_ATTACHMENT_LOCATION);
+    }
+
+    // let date = moment(new Date(), 'YYYY/MM/DD');
+    // let folder = `${date.format('YYYY')}${date.format('MM')}`;
+
+    //check folder created inside ROB_AgentScreenshots or not for current customer
+    if (
+      !fs.existsSync(
+        this.configService.ATTACHMENT.ENV_RBX_ATTACHMENT_LOCATION + customer_id,
+      )
+    ) {
+      fs.mkdirSync(
+        this.configService.ATTACHMENT.ENV_RBX_ATTACHMENT_LOCATION + customer_id,
+      );
+    }
+
     let response: any = {};
     var matches = file_source.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
     if (matches.length !== 3) return new InvalidBase64Exception(filename);
@@ -44,7 +70,7 @@ export class AttachmentsService {
 
     const extension = mime.getExtension(`${response.type}`);
     const fileName = `${filename}_${Date.now()}.${extension}`;
-    const path = `${this.configService.ATTACHMENT.ENV_RBX_ATTACHMENT_LOCATION}/${fileName}`;
+    const path = `${this.configService.ATTACHMENT.ENV_RBX_ATTACHMENT_LOCATION}${customer_id}/${fileName}`;
 
     response.file_name = fileName;
     response.file_path = path;
@@ -66,6 +92,7 @@ export class AttachmentsService {
     const attachment = await this.uploadFile(
       input.file_source,
       input.screenshot_id,
+      input.customer_id,
     );
 
     delete attachment.type;
