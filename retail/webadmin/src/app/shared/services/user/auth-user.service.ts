@@ -28,6 +28,12 @@ export class AuthUserService {
             translate: 'FEATURES.AGENT_PORTAL.VIDEO.TITLE',
         },
         {
+            id: 'Customer',
+            icon: 'videocam',
+            url: '/customer',
+            translate: 'FEATURES.AGENT_PORTAL.CUSTOMER.TITLE',
+        },
+        {
             id: 'Entitlement',
             icon: 'assignment_ind',
             url: '',

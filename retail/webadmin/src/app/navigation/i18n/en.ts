@@ -8,6 +8,10 @@ export const locale = {
                 VIDEO: {
                     TITLE: 'Video',
                     BADGE: '25',
+                },
+                CUSTOMER: {
+                    TITLE: 'CUSTOMER',
+                    BADGE: '25',
                 }
             },
             ENTITLEMENT: {
