@@ -46,7 +46,7 @@ export class AttachmentsService {
     const fileName = `${filename}_${Date.now()}.${extension}`;
     const path = `${this.configService.ATTACHMENT.ENV_RBX_ATTACHMENT_LOCATION}/${fileName}`;
 
-    response.file_name = filename;
+    response.file_name = fileName;
     response.file_path = path;
     response.file_size = this.calculateImageSize(file_source);
 
