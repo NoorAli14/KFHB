@@ -1,7 +1,7 @@
 import { Field, InputType } from "@nestjs/graphql";
 import {IsBoolean, IsEmail, IsIn, IsISO8601, IsOptional, IsString, MaxLength} from "class-validator";
 
-import {GENDER, NUMBERS, STATUS} from "@common/constants";
+import {NUMBERS, STATUS} from "@common/constants";
 import {IdsInput} from "@common/inputs/ids.input";
 
 @InputType()
@@ -135,6 +135,5 @@ export class CheckAvailabilityInput {
   @IsString()
   @IsOptional()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  @IsIn(Object.keys(GENDER))
   gender?: string;
 }

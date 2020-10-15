@@ -1,51 +1,50 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
 import {PaginationModel} from '@common/models';
 import {Type} from 'class-transformer';
-import {IsOptional, IsString, IsUUID} from "class-validator";
+import {IsIn, IsOptional, IsString, IsUUID, MaxLength} from "class-validator";
+import {NUMBERS, STATUS} from "@common/constants";
 
 @ObjectType()
 export class LeaveType {
-  @Field(() => ID,{ nullable: true })
+  @Field(() => ID)
   @IsString()
-  @IsOptional()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsUUID()
   id: string;
 
-  @Field({ nullable: true })
+  @Field()
   @IsString()
-  @IsOptional()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   name: string;
 
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  @IsIn(Object.keys(STATUS))
   status: string;
 
-  @Field({ nullable: true })
+  @Field()
   @IsString()
-  @IsOptional()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsUUID()
   tenant_id: string;
 
-  @Field({ nullable: true })
+  @Field()
   @Type(() => Date)
-  @IsOptional()
   created_on: Date;
 
-  @Field({ nullable: true })
+  @Field()
   @IsString()
-  @IsOptional()
   @IsUUID()
   created_by: string;
 
-  @Field({ nullable: true })
+  @Field()
   @Type(() => Date)
-  @IsOptional()
   updated_on: Date;
 
-  @Field({ nullable: true })
+  @Field()
   @IsString()
-  @IsOptional()
   @IsUUID()
   updated_by: string;
 

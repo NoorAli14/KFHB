@@ -27,14 +27,14 @@ describe('Permission Module (e2e)', () => {
     const input: PermissionInput = {
       record_type: "permission_e2e_testing"
     };
-    const permission_validated: Permission = transformAndValidateSync(
-        Permission,
+    const permission_validated: PermissionInput = transformAndValidateSync(
+        PermissionInput,
         input,
-    ) as Permission;
+    ) as PermissionInput;
     return request(app.getHttpServer())
       .post('/graphql')
       .send({
-        query: getMutation("addPermission", permission_validated, "id"),
+        query: getMutation("addPermission", permission_validated, "id record_type"),
       }).set({
           "x-tenant-id": process.env.ENV_RBX_E2E_TENANT_ID,
           "x-user-id": process.env.ENV_RBX_E2E_USER_ID
@@ -58,10 +58,10 @@ describe('Permission Module (e2e)', () => {
     const input: PermissionInput = {
       record_type: "permission_e2e_testing_updated"
     };
-    const permission_validated: Permission = transformAndValidateSync(
-        Permission,
+    const permission_validated: PermissionInput = transformAndValidateSync(
+        PermissionInput,
         input,
-    ) as Permission;
+    ) as PermissionInput;
     return request(app.getHttpServer())
     .post('/graphql')
     .send({
