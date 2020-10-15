@@ -166,12 +166,43 @@ export const MODULES = [
     ],
   },
   {
-    name: 'Video Call',
-    slug: 'video',
-    sub_modules: [],
+    name: 'Agent Portal',
+    slug: 'agent-portal',
     permissions: [
       {
-        name: 'attend',
+        name: 'view',
+      },
+    ],
+    sub_modules: [
+      {
+        name: 'Video',
+        slug: 'video',
+        permissions: [
+          {
+            name: 'view',
+          },
+          {
+            name: 'attend',
+          },
+        ],
+      },
+      {
+        name: 'Customer',
+        slug: 'customer',
+        permissions: [
+          {
+            name: 'view',
+          },
+          {
+            name: 'edit',
+          },
+          {
+            name: 'delete',
+          },
+          {
+            name: 'create',
+          },
+        ],
       },
     ],
   },
