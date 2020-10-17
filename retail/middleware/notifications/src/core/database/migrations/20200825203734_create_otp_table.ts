@@ -1,9 +1,9 @@
 import * as Knex from 'knex';
-import { TABLE, DATABASE_UUID_METHOD } from '@common/constants';
+import { TABLE, DATABASE_UUID_METHOD } from '@rubix/common';
 
-export async function up(knex: Knex): Promise<any> {
+export function up(knex: Knex): any {
   return knex.schema.createTable(TABLE.OTP, table => {
-    table.uuid('id').primary().defaultTo(knex.raw(DATABASE_UUID_METHOD));
+    table.uuid('id').primary().defaultTo(DATABASE_UUID_METHOD(knex));
     table.uuid('user_id').notNullable();
     table.uuid('tenent_id').notNullable();
     table.string('delivery_mode').notNullable();
