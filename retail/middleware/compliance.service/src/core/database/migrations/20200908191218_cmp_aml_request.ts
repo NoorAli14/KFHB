@@ -1,12 +1,10 @@
 import * as Knex from 'knex';
-import { TABLE, DATABASE_UUID_METHOD } from '@common/constants';
+import { TABLE } from '@common/constants';
+import { DATABASE_UUID_METHOD } from '@common/utilities';
 
-export async function up(knex: Knex): Promise<void> {
+export function up(knex: Knex) {
   return knex.schema.createTable(TABLE.AML_REQUEST, table => {
-    table
-      .uuid('id')
-      .primary()
-      .defaultTo(knex.raw(DATABASE_UUID_METHOD()));
+    table.uuid('id').primary().defaultTo(DATABASE_UUID_METHOD(knex));
 
     table.uuid('tenant_id').notNullable();
     table.uuid('user_id').notNullable();

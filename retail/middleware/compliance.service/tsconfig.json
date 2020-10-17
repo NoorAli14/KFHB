@@ -12,12 +12,25 @@
     "baseUrl": "./",
     "incremental": true,
     "paths": {
-      "@root/*": ["./*"],
-      "@rubix/*": ["./src/*"],
-      "@common/*": ["./src/common/*"],
-      "@app/*": ["./src/app/*"],
-      "@core/*": ["./src/core/*"]
+      "@root/*": [
+        "./*"
+      ],
+      "@rubix/*": [
+        "./src/*"
+      ],
+      "@common/*": [
+        "./src/common/*"
+      ],
+      "@app/*": [
+        "./src/app/*"
+      ],
+      "@core/*": [
+        "./src/core/*"
+      ]
     },
-    "typeRoots": ["./src/typings", "./node_modules/@types"]
+    "typeRoots": [
+      "./src/typings",
+      "./node_modules/@types"
+    ]
   }
 }
