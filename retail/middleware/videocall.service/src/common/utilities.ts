@@ -1,3 +1,4 @@
+import { NotImplementedException } from '@nestjs/common';
 import { Request } from 'express';
 import * as path from 'path';
 import { X_CORRELATION_KEY, X_TENANT_ID, X_USER_ID } from './constants';
@@ -27,7 +28,7 @@ export function graphqlFields(info: Record<string, unknown>): string[] {
 }
 
 export function uuidV4(): string {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
     const r = (Math.random() * 16) | 0,
       v = c == 'x' ? r : (r & 0x3) | 0x8;
     return v.toString(16);
@@ -99,4 +100,23 @@ export const formattedHeader = (req: Request): IHEADER => {
   headers[X_TENANT_ID] = (req.headers?.[X_TENANT_ID] ||
     req.query?.[X_TENANT_ID]) as string;
   return headers;
+};
+
+/**
+ * DATABASE UUID GENERATION
+ * @param knex
+ */
+export const DATABASE_UUID_METHOD = (knex): any => {
+  switch (knex.client.config.client) {
+    case 'pg':
+      return knex.raw('uuid_generate_v4()');
+    case 'mssql':
+      return knex.raw('NEWID()');
+    case 'oracledb':
+      return '';
+    default:
+      throw new NotImplementedException(
+        `Database type ['${process.env.ENV_RBX_DB_DIALECT}'] not supported`,
+      );
+  }
 };

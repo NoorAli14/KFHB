@@ -38,8 +38,6 @@ export const CREATED_BY: Record<string, string> = {
 
 registerEnumType(PLATFORMS, { name: 'MOBILE_PLATFORMS' });
 
-export const DATABASE_UUID_METHOD = (): string => 'NEWID()';
-
 export const X_USER_ID = 'x-user-id';
 export const X_TENANT_ID = 'x-tenant-id';
 export const X_CORRELATION_KEY = 'x-correlation-id';
