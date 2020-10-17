@@ -212,7 +212,6 @@ export const MESSAGES = {
   PASSWORD_MISMATCH: 'Current password did not match',
 };
 
-export const DATABASE_UUID_METHOD = 'NEWID()';
 export const DATABASE_MIGRATION_TABLE_NAME = 'RUBIX_ENTITLEMENT_MIGRATIONS';
 export const DATABASE_MIGRATION_DIRECTORY = 'src/core/database/migrations';
 export const DATABASE_SEED_DIRECTORY = 'src/core/database/seeds';

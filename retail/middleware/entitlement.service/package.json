@@ -18,6 +18,7 @@
     "migrate:make": "knex migrate:make -x ts --knexfile database.ts",
     "db:seed": "knex  --knexfile database.ts seed:run",
     "seed:make": "knex seed:make -x ts --knexfile database.ts",
+    "generate:schema": "node --require ts-node/register generate-sql-schema.ts",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "update:packages": "npm ncu -u",
     "generate:docs": "npx compodoc -p tsconfig.json -s",

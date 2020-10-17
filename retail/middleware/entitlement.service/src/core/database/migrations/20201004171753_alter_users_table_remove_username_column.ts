@@ -1,8 +1,7 @@
-import * as Knex from "knex";
-import {TABLE} from "@common/constants";
-
-export async function up(knex: Knex): Promise<any> {
-  return knex.schema.table(TABLE.USER, table =>  {
+import * as Knex from 'knex';
+import { TABLE } from '@common/index';
+export function up(knex: Knex): any {
+  return knex.schema.table(TABLE.USER, table => {
     table.dropIndex(['username'], `${TABLE.USER}_USERNAME_INDEX`);
 
     table.dropColumn('username');
@@ -11,7 +10,7 @@ export async function up(knex: Knex): Promise<any> {
 }
 
 export async function down(knex: Knex): Promise<any> {
-  return knex.schema.table(TABLE.USER, table =>  {
+  return knex.schema.table(TABLE.USER, table => {
     table.string('date_of_birth').alter();
     table.string('username');
 
