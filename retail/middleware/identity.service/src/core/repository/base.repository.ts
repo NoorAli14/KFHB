@@ -1,6 +1,4 @@
 import { InjectKnex, Knex } from 'nestjs-knex';
-import {IQueryParams, NUMBERS} from "@rubix/common";
-import {PaginationModel} from "@common/models";
 
 export abstract class BaseRepository {
   @InjectKnex() private readonly _connection: Knex;
@@ -8,33 +6,6 @@ export abstract class BaseRepository {
 
   constructor(tableName: string) {
     this._tableName = tableName;
-  }
-
-  async listWithPagination(queryParams: IQueryParams,
-                           keys: string | string[],
-                           condition?: Record<string, any>): Promise<any> {
-    const perPage = queryParams.limit;
-    const currentPage = queryParams.page;
-    const pagination: PaginationModel = {};
-    const limitPerPage = (perPage || NUMBERS.DEFAULT_PAGE_SIZE) > 100 ? 100 : (perPage || NUMBERS.DEFAULT_PAGE_SIZE);
-    const page = Math.max(currentPage || 1, 1);
-    const offset = (page - 1) * limitPerPage;
-    const total = condition?
-      await this._connection(this._tableName).where(condition).count('id as count').first():
-      await this._connection(this._tableName).count('id as count').first();
-    const rows = condition?
-      await this._connection(this._tableName).where(condition).offset(offset).limit(limitPerPage).orderBy('created_on', 'desc'):
-      await this._connection(this._tableName).offset(offset).limit(limitPerPage).orderBy('created_on', 'desc');
-    const count = parseInt(String(total.count), 10);
-    pagination.total = count;
-    pagination.pages = Math.ceil(count / limitPerPage);
-    pagination.perPage = limitPerPage;
-    pagination.current = page;
-    pagination.next = page + 1 > pagination.pages ? null : page + 1;
-    pagination.prev = page - 1 < 1 ? null : page - 1;
-    pagination.isFirst = pagination.current == 1;
-    pagination.isLast = pagination.current == pagination.pages;
-    return {pagination: pagination, data: rows};
   }
 
   get tableName(): string {

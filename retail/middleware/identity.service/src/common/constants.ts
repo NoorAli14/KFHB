@@ -79,7 +79,17 @@ export const CREATED_BY: { [key: string]: string } = {
 
 export const PAGINATION_PARAMS = {
   PAGE: 'page',
-  PER_PAGE: 'perPage',
+  LIMIT: 'limit',
+  NATIONAL_ID_NO: 'national_id_no',
+  GENDER: 'gender',
+  NATIONALITY: 'nationality',
+  FIRST_NAME: 'first_name',
+  LAST_NAME: 'last_name',
+  STATUS: 'status',
+  CONTACT_NO: 'contact_no',
+  EMAIL: 'email',
+  CREATED_ON_START: 'created_on?start',
+  CREATED_ON_END: 'end',
 };
 
 export const NUMBERS = {

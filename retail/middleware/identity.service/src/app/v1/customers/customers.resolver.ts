@@ -12,7 +12,7 @@ import {
   Fields,
   Tenant,
   CREATED_BY,
-  CUSTOMER_STATUSES, CurrentUser, ICurrentUser, QueryParams, IQueryParams
+  CUSTOMER_STATUSES, CurrentUser, ICurrentUser,
 } from '@rubix/common';
 import * as DataLoader from 'dataloader';
 import { Loader } from 'nestjs-dataloader';
@@ -21,6 +21,8 @@ import { Document } from '@rubix/app/v1/documents/document.model';
 import {Customer, CustomerWithPagination} from './customer.model';
 import { CustomersService } from './customers.service';
 import { NewCustomerInput } from './customer.dto';
+import {CustomerQueryParams} from "@app/v1/customers/decorators";
+import {ICustomerQueryParams} from "@app/v1/customers/interfaces";
 
 @Resolver(Customer)
 export class CustomersResolver {
@@ -29,9 +31,8 @@ export class CustomersResolver {
   @Query(() => CustomerWithPagination)
   async customersList(
       @Fields() output: string[],
-      @Context() context: GraphQLExecutionContext,
       @CurrentUser() currentUser: ICurrentUser,
-      @QueryParams() queryParams: IQueryParams,
+      @CustomerQueryParams() queryParams: ICustomerQueryParams,
   ): Promise<CustomerWithPagination> {
     return this.customerService.list(currentUser, output, queryParams);
   }
