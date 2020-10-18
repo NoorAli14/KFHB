@@ -22,7 +22,7 @@ export class VideoComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.loadIframe();
-        this._fuseSidebarService.getSidebar('navbar').toggleFold();
+        // this._fuseSidebarService.getSidebar('navbar').toggleFold();
     }
 
     loadIframe(): void {
@@ -34,6 +34,6 @@ export class VideoComponent implements OnInit, OnDestroy {
         );
     }
     ngOnDestroy(): void{
-        this._fuseSidebarService.getSidebar('navbar').toggleFold();
+        // this._fuseSidebarService.getSidebar('navbar').toggleFold();
     }
 }

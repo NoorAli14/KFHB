@@ -10,7 +10,7 @@ export const locale = {
                     BADGE: '25',
                 },
                 CUSTOMER: {
-                    TITLE: 'CUSTOMER',
+                    TITLE: 'Customers',
                     BADGE: '25',
                 }
             },

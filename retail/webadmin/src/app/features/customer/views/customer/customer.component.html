@@ -37,7 +37,35 @@
 
         <!-- CONTENT CARD -->
         <div class="content-card" fusePerfectScrollbar>
+            <mat-table #table [dataSource]="dataSource">
+                <!-- COLUMNS AND ROWS-->
+                <ng-container *ngFor="let key of displayedColumns" [matColumnDef]="key">
+                    <mat-header-cell *matHeaderCellDef>{{ key.includes('action') ? 'Action' : camelToSentenceCase(key) }}</mat-header-cell>
             
+                    <mat-cell *matCellDef="let element; let i = dataIndex" class="text-elipsis">
+                      <ng-container [ngSwitch]="key">
+                        <span *ngSwitchCase="'action'">
+                            <mat-icon class="hover" (click)="getCustomerDetail(element['id'])" matTooltip="View Detail"color="warn" type="button">fullscreen</mat-icon> 
+                        </span>
+                        <span  *ngSwitchDefault>
+                            <span *ngIf="element[key]; else defaultText">
+                                {{element[key] }}
+                            </span>
+                        </span>
+                    </ng-container>
+                    <ng-template #defaultText>
+                        <app-default-text></app-default-text>
+                    </ng-template>
+                    </mat-cell>
+                </ng-container>
+                <!-- -->
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;" [@animate]="{value:'*',params:{y:'100%'}}">
+                </mat-row>
+            
+            </mat-table>
+            <mat-paginator #paginator [pageIndex]="0" [pageSize]="pageSize" showFirstLastButtons [pageSizeOptions]="pageSizeOptions"></mat-paginator>
+       
         </div>
         <!-- / CONTENT CARD -->
     </div>
