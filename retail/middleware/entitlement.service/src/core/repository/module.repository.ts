@@ -15,10 +15,10 @@ export class ModuleRepository extends BaseRepository {
     `${TABLE.MODULE}.created_on`
   ];
   constructor() {
-    super(TABLE.MODULE);
+    super(TABLE.MODULE, false);
   }
 
-  async listModulesByRoleID(roleIds): Promise<any>{
+  async listModulesByRoleID(roleIds: string[]): Promise<any>{
     const condition = {};
     condition[`${TABLE.MODULE}.status`] = STATUS.ACTIVE;
     condition[`${TABLE.MODULE}.parent_id`] = null;
@@ -31,7 +31,7 @@ export class ModuleRepository extends BaseRepository {
         .orderBy(`${TABLE.MODULE}.created_on`, 'desc');
   }
 
-  async listModulesByParentModuleID(parentIds): Promise<any>{
+  async listModulesByParentModuleID(parentIds: string[] | any): Promise<any>{
     const condition = {};
     condition[`${TABLE.MODULE}.status`] = STATUS.ACTIVE;
     let query:any;
@@ -52,7 +52,7 @@ export class ModuleRepository extends BaseRepository {
     return query.where(condition);
   }
 
-  async listModulesByUserID(userIds): Promise<any>{
+  async listModulesByUserID(userIds: string[]): Promise<any>{
     const condition = {};
     condition[`${TABLE.MODULE}.status`] = STATUS.ACTIVE;
     condition[`${TABLE.ROLE}.status`] = STATUS.ACTIVE;

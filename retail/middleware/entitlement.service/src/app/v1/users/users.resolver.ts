@@ -30,8 +30,9 @@ export class UsersResolver {
   async usersList(
     @Fields() output: string[],
     @Context() context: GraphQLExecutionContext,
+    @CurrentUser() currentUser: ICurrentUser
   ): Promise<User[]> {
-    return this.userService.list(output, context['req'].query);
+    return this.userService.list(currentUser, output, context['req'].query);
   }
 
   @Query(() => User)
@@ -123,21 +124,21 @@ export class UsersResolver {
 
   @ResolveField('roles', () => [Role])
   async getRoles(@Parent() user: User,
-    @Loader('RolesDataLoader') rolesLoader: DataLoader<Role['id'], Role>) {
+    @Loader('RolesDataLoader') rolesLoader: DataLoader<Role['id'], Role>): Promise<any> {
     if (!user.id) return [];
     return rolesLoader.load(user.id);
   }
 
   @ResolveField('modules', () => [Module])
   async getModules(@Parent() user: User,
-    @Loader('ModulesDataLoaderByUser') modulesLoader: DataLoader<Module['id'], Module>) {
+    @Loader('ModulesDataLoaderByUser') modulesLoader: DataLoader<Module['id'], Module>): Promise<any> {
     if (!user.id) return [];
     return modulesLoader.load(user.id);
   }
 
   @ResolveField('leaves', () => [Leave])
   async getLeaves(@Parent() user: User,
-    @Loader('LeavesDataLoader') leavesLoader: DataLoader<Leave['id'], Leave>) {
+    @Loader('LeavesDataLoader') leavesLoader: DataLoader<Leave['id'], Leave>): Promise<any> {
     if (!user.id) return [];
     return leavesLoader.load(user.id);
   }
