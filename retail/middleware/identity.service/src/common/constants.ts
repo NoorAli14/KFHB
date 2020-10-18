@@ -76,3 +76,12 @@ export const CREATED_BY: { [key: string]: string } = {
   API: 'API',
   SYSTEM: 'SYSTEM',
 };
+
+export const PAGINATION_PARAMS = {
+  PAGE: 'page',
+  PER_PAGE: 'perPage',
+};
+
+export const NUMBERS = {
+  DEFAULT_PAGE_SIZE: 25,
+};

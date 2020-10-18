@@ -1,7 +1,8 @@
-import { Injectable, Logger, forwardRef, Inject } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { IdentityService } from '@rubix/common/connectors';
 import { CustomerRepository } from '@rubix/core';
-import { Customer } from './customer.model';
+import {Customer, CustomerWithPagination} from './customer.model';
+import {ICurrentUser, IQueryParams} from "@rubix/common";
 
 @Injectable()
 export class CustomersService {
@@ -10,6 +11,10 @@ export class CustomersService {
     private readonly identityService: IdentityService,
     private readonly customerDB: CustomerRepository,
   ) {}
+
+  async list(current_user: ICurrentUser, output: string[], queryParams: IQueryParams): Promise<CustomerWithPagination> {
+    return this.customerDB.listWithPagination(queryParams, output, { deleted_on: null, tenant_id: current_user.tenant_id });
+  }
 
   async create(
     input: { [key: string]: any },

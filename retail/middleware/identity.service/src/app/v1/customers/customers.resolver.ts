@@ -4,7 +4,7 @@ import {
   Mutation,
   Args,
   Parent,
-  ResolveField,
+  ResolveField, GraphQLExecutionContext, Context,
 } from '@nestjs/graphql';
 import { UseGuards, NotFoundException } from '@nestjs/common';
 import {
@@ -12,20 +12,29 @@ import {
   Fields,
   Tenant,
   CREATED_BY,
-  CUSTOMER_STATUSES,
+  CUSTOMER_STATUSES, CurrentUser, ICurrentUser, QueryParams, IQueryParams
 } from '@rubix/common';
 import * as DataLoader from 'dataloader';
 import { Loader } from 'nestjs-dataloader';
 import { Document } from '@rubix/app/v1/documents/document.model';
 
-import { Customer } from './customer.model';
+import {Customer, CustomerWithPagination} from './customer.model';
 import { CustomersService } from './customers.service';
 import { NewCustomerInput } from './customer.dto';
-import { String } from 'lodash';
 
 @Resolver(Customer)
 export class CustomersResolver {
   constructor(private readonly customerService: CustomersService) {}
+
+  @Query(() => CustomerWithPagination)
+  async customersList(
+      @Fields() output: string[],
+      @Context() context: GraphQLExecutionContext,
+      @CurrentUser() currentUser: ICurrentUser,
+      @QueryParams() queryParams: IQueryParams,
+  ): Promise<CustomerWithPagination> {
+    return this.customerService.list(currentUser, output, queryParams);
+  }
 
   @Mutation(() => Customer)
   addCustomer(
