@@ -134,7 +134,9 @@ export class AttachmentsService {
 
     const extension = mime.getExtension(`${response.type}`);
     const fileName = `${formated_date}_${Date.now()}_${filename}.${extension}`;
-    const path = `${this.configService.ATTACHMENT.ENV_RBX_ATTACHMENT_LOCATION}${customer_id}/${fileName}`;
+    const path = `${
+      this.configService.ATTACHMENT.ENV_RBX_ATTACHMENT_LOCATION
+    }${current_date.format('YYYY')}${current_date.format('MM')}/${fileName}`;
 
     response.file_name = fileName;
     response.file_path = path;
