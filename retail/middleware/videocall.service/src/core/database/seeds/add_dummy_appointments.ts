@@ -45,22 +45,30 @@ export async function seed(knex: Knex): Promise<void> {
   const attachments = [
     {
       id: uuidV4(),
-      file_content: IMAGE_BASE64,
+      file_name: `${new Date(base_time.getTime())}_passport.png`,
+      file_path: 'dummy/path',
+      file_size: 20.1,
       status: STATUS.ACTIVE,
     },
     {
       id: uuidV4(),
-      file_content: IMAGE_BASE64,
+      file_name: `${new Date(base_time.getTime())}_passport.png`,
+      file_path: 'dummy/path',
+      file_size: 20.1,
       status: STATUS.ACTIVE,
     },
     {
       id: uuidV4(),
-      file_content: IMAGE_BASE64,
+      file_name: `${new Date(base_time.getTime())}_passport.png`,
+      file_path: 'dummy/path',
+      file_size: 20.1,
       status: STATUS.ACTIVE,
     },
     {
       id: uuidV4(),
-      file_content: IMAGE_BASE64,
+      file_name: `${new Date(base_time.getTime())}_passport.png`,
+      file_path: 'dummy/path',
+      file_size: 20.1,
       status: STATUS.ACTIVE,
     },
   ];
@@ -75,10 +83,10 @@ export async function seed(knex: Knex): Promise<void> {
     })),
   );
   await knex(TABLE.ATTACHMENT).insert(
-    appointments.map(attachment => ({
+    attachments.map(attachment => ({
       ...attachment,
       tenant_id: process.env.ENV_RBX_TENANT_ID,
-      user_id: '7D55A5DB-739A-4B80-BD37-D3D30358D655',
+      customer_id: '7D55A5DB-739A-4B80-BD37-D3D30358D655',
       created_by: CREATED_BY.SYSTEM,
       updated_by: CREATED_BY.SYSTEM,
     })),
