@@ -66,5 +66,5 @@ export const URI = {
     LEAVE_TYPE: `${ENTITLEMENT}leave-types`,
     LEAVES: `${ENTITLEMENT}leaves`,
     COUNTRIES: `${REFERENCE}countries`,
-    CUSTOMERS: `${REFERENCE}customers`,
+    CUSTOMERS: `${ENTITLEMENT}customers`,
 };

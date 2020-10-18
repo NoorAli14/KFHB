@@ -1,4 +1,3 @@
-import { MaterialFormsModule } from './../../shared/modules/material-forms/material-forms.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -8,7 +7,8 @@ import { CustomerDetailComponent } from './components/customer-detail/customer-d
 import { MaterialModule } from '@shared/modules/material/material.module';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { SharedModule } from '@shared/shared.module';
-
+import { GalleryModule } from '@ngx-gallery/core';
+import { LightboxModule } from '@ngx-gallery/lightbox';
 
 @NgModule({
   declarations: [CustomerComponent, CustomerDetailComponent],
@@ -17,7 +17,9 @@ import { SharedModule } from '@shared/shared.module';
     CustomerRoutingModule,
     SharedModule,
     FuseSharedModule,
-    MaterialModule
+    MaterialModule,
+    GalleryModule,
+    LightboxModule
   ]
 })
 export class CustomerModule { }

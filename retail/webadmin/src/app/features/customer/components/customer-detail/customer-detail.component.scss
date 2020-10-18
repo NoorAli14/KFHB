@@ -1,0 +1,54 @@
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+@import "src/@fuse/scss/fuse";
+
+.app-customer-detail {
+
+    @include media-breakpoint('xs') {
+        width: 100%;
+    }
+
+    @include media-breakpoint('gt-xs') {
+        width: 60%;
+        
+    }
+
+    .mat-dialog-container {
+        padding: 0;
+    }
+
+    .dialog-content-wrapper {
+        max-height: 200vh;
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  .gallery {
+    width: 100px;
+    height: 90px;
+    object-fit: cover;
+    margin: 5px;
+  }
+}
+
+.g-overlay {
+  min-width: 320px;
+}
+
+gallery {
+  font-size: 16px;
+}
+
+img {
+  width: 150px;
+}
+
+.lightbox-example, .gallerize-example {
+  margin: 2em;
+}
