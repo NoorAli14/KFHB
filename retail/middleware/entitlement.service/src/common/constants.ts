@@ -167,7 +167,6 @@ export const MODULES = [
   },
   {
     name: 'Agent Portal',
-    slug: 'agent-portal',
     permissions: [
       {
         name: 'view',
@@ -187,21 +186,15 @@ export const MODULES = [
         ],
       },
       {
-        name: 'Customer',
-        slug: 'customer',
+        name: 'Customers',
+        slug: 'customers',
         permissions: [
           {
             name: 'view',
           },
           {
             name: 'edit',
-          },
-          {
-            name: 'delete',
-          },
-          {
-            name: 'create',
-          },
+          }
         ],
       },
     ],
