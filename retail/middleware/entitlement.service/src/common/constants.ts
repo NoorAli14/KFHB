@@ -57,6 +57,7 @@ export const TEMP_ROLE = {
 export const MODULES = [
   {
     name: 'Entitlement',
+    slug: 'entitlement',
     sub_modules: [
       {
         name: 'User Management',
@@ -103,6 +104,7 @@ export const MODULES = [
   },
   {
     name: 'Calender',
+    slug: 'calender',
     sub_modules: [
       {
         name: 'Working Week',
@@ -167,6 +169,7 @@ export const MODULES = [
   },
   {
     name: 'Agent Portal',
+    slug: 'agent-portal',
     permissions: [
       {
         name: 'view',
