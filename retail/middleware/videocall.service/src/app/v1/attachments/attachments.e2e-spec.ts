@@ -34,7 +34,7 @@ describe('Video Call Module (e2e)', () => {
   });
 
   const newAttachmentInput: any = {
-    file_source: IMAGE_BASE64,
+    file_content: IMAGE_BASE64,
     customer_id: uuidV4(),
     screenshot_id: 'customer_password',
   };
@@ -43,7 +43,7 @@ describe('Video Call Module (e2e)', () => {
     attachment = {
       customer_id: headers['x-user-id'],
       screenshot_id: 'screenshot_id',
-      file_source: 'imageBase64',
+      file_content: 'imageBase64',
     } as NewAttachmentInput;
 
     const transformedResponse: NewAttachmentInput = await transformAndValidate(
@@ -107,7 +107,7 @@ describe('Video Call Module (e2e)', () => {
     attachment = {
       customer_id: uuidV4(),
       screenshot_id: 'screenshot_id',
-      file_source: IMAGE_BASE64,
+      file_content: IMAGE_BASE64,
     } as NewAttachmentInput;
 
     const newAttachmentJson: string = JSON.stringify(attachment);

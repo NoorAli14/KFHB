@@ -61,7 +61,7 @@ input NewAppointmentInput {
 input NewAttachmentInput {
   customer_id: String!
   screenshot_id: String!
-  file_source: String!
+  file_content: String!
 }
 
 type Query {

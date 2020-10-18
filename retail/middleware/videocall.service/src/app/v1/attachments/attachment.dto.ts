@@ -17,5 +17,5 @@ export class NewAttachmentInput {
   @Field()
   @IsNotEmpty()
   @IsString()
-  file_source: string;
+  file_content: string;
 }

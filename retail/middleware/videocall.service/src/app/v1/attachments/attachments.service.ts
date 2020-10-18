@@ -60,7 +60,7 @@ export class AttachmentsService {
     output?: string[],
   ): Promise<Attachment> {
     const attachment = await this.uploadFile(
-      input.file_source,
+      input.file_content,
       input.screenshot_id,
       input.customer_id,
     );
@@ -97,7 +97,7 @@ export class AttachmentsService {
   }
 
   async uploadFile(
-    file_source: string | any,
+    file_content: string | any,
     filename: string | any,
     customer_id: string | any,
   ) {
@@ -126,7 +126,7 @@ export class AttachmentsService {
     )}${current_date.format('DD')}`;
 
     let response: any = {};
-    var matches = file_source.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+    var matches = file_content.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
     if (matches.length !== 3) return new InvalidBase64Exception(filename);
 
     response.type = matches[1];
@@ -138,7 +138,7 @@ export class AttachmentsService {
 
     response.file_name = fileName;
     response.file_path = path;
-    response.file_size = this.calculateImageSize(file_source);
+    response.file_size = this.calculateImageSize(file_content);
 
     try {
       fs.writeFileSync(path, response.data, 'utf8');
