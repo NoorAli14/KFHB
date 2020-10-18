@@ -1,21 +1,34 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { PaginationModel } from '@common/models';
+import {IsOptional, IsString, IsUUID, MaxLength} from "class-validator";
+import {NUMBERS} from "@common/constants";
 
 @ObjectType()
 export class Permission {
-  @Field(() => ID, { nullable: true })
+  @Field(() => ID)
+  @IsString()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  @IsUUID()
   id?: string;
 
-  @Field({ nullable: true })
+  @Field()
+  @IsString()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   record_type?: string;
 
-  @Field({ nullable: true })
+  @Field()
+  @IsString()
   created_on?: string;
 
-  @Field({ nullable: true })
+  @Field()
+  @IsString()
+  @IsUUID()
   created_by?: string;
 
   @Field({ nullable: true })
+  @IsString()
+  @IsOptional()
+  @IsUUID()
   module_permission_id?: string;
 }
 
@@ -24,6 +37,6 @@ export class PermissionWithPagination {
   @Field({ nullable: true })
   pagination?: PaginationModel;
 
-  @Field(type => [Permission], { nullable: true })
+  @Field(() => [Permission], { nullable: true })
   data?: Permission[];
 }

@@ -4,9 +4,9 @@ export abstract class BaseRepository {
   protected _tableName: string;
   protected _timestamps: boolean;
 
-  constructor(tableName: string, timestamps?:boolean) {
+  constructor(tableName: string, timestamps=true) {
     this._tableName = tableName;
-    this._timestamps = timestamps || true;
+    this._timestamps = timestamps;
   }
 
   get connection(): Knex {

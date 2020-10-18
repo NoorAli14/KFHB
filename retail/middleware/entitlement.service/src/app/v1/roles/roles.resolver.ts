@@ -28,9 +28,10 @@ export class RolesResolver {
   @Query(() => [Role])
   async rolesList(
     @Fields() columns: string[],
+    @CurrentUser() current_user: ICurrentUser,
     @Context() context: GraphQLExecutionContext,
   ): Promise<Role[]> {
-    return this.roleService.list(columns, context['req'].query);
+    return this.roleService.list(current_user, columns, context['req'].query);
   }
 
   @Query(() => Role)
@@ -91,12 +92,12 @@ export class RolesResolver {
     return this.roleService.delete(currentUser, id, input);
   }
 
-  @ResolveField('modules', returns => [Module])
+  @ResolveField('modules', () => [Module])
   async getModules(
     @Parent() role: Role,
     @Loader('ModulesDataLoader')
     modulesLoader: DataLoader<Module['id'], Module>,
-  ) {
+  ): Promise<any> {
     if (!role.id) return [];
     return modulesLoader.load(role.id);
   }

@@ -23,6 +23,7 @@ input CheckAvailabilityInput {
 }
 
 input CreateUserInput {
+  email: String!
   contact_no: String
   first_name: String
   middle_name: String
@@ -38,7 +39,6 @@ input CreateUserInput {
   password_reset_token: String
   password_reset_token_expiry: String
   roles: [IdsInput!]
-  email: String!
 }
 
 """
@@ -51,16 +51,16 @@ input ForgotPasswordInput {
 }
 
 type Holiday {
-  id: ID
-  holiday_date: DateTime
+  id: ID!
+  holiday_date: DateTime!
   description: String
   remarks: String
   tenant_id: String
   status: String
-  created_on: DateTime
-  created_by: String
-  updated_on: DateTime
-  updated_by: String
+  created_on: DateTime!
+  created_by: String!
+  updated_on: DateTime!
+  updated_by: String!
   deleted_on: DateTime
   deleted_by: String
 }
@@ -90,18 +90,18 @@ input KeyValInput {
 }
 
 type Leave {
-  id: ID
-  user_id: String
-  leave_type_id: String
-  start_date: DateTime
-  end_date: DateTime
+  id: ID!
+  user_id: String!
+  leave_type_id: String!
+  start_date: DateTime!
+  end_date: DateTime!
   remarks: String
   status: String
-  tenant_id: String
-  created_on: DateTime
-  created_by: String
-  updated_on: DateTime
-  updated_by: String
+  tenant_id: String!
+  created_on: DateTime!
+  created_by: String!
+  updated_on: DateTime!
+  updated_by: String!
   deleted_on: DateTime
   deleted_by: String
 }
@@ -125,14 +125,14 @@ input LeaveInput {
 }
 
 type LeaveType {
-  id: ID
-  name: String
+  id: ID!
+  name: String!
   status: String
-  tenant_id: String
-  created_on: DateTime
-  created_by: String
-  updated_on: DateTime
-  updated_by: String
+  tenant_id: String!
+  created_on: DateTime!
+  created_by: String!
+  updated_on: DateTime!
+  updated_by: String!
   deleted_on: DateTime
   deleted_by: String
 }
@@ -153,13 +153,13 @@ input LoginInput {
 }
 
 type Module {
-  id: ID
-  name: String
-  slug: String
+  id: ID!
+  name: String!
+  slug: String!
   parent_id: String
   status: String
-  created_on: String
-  created_by: String
+  created_on: String!
+  created_by: String!
   sub_modules: [Module!]!
   permissions: [Permission!]!
 }
@@ -219,10 +219,10 @@ type PaginationModel {
 }
 
 type Permission {
-  id: ID
-  record_type: String
-  created_on: String
-  created_by: String
+  id: ID!
+  record_type: String!
+  created_on: String!
+  created_by: String!
   module_permission_id: String
 }
 
@@ -261,15 +261,15 @@ type Query {
 }
 
 type Role {
-  id: ID
-  name: String
-  description: String
-  tenant_id: String
+  id: ID!
+  name: String!
+  description: String!
+  tenant_id: String!
   status: String
-  created_on: String
-  created_by: String
-  updated_on: String
-  updated_by: String
+  created_on: String!
+  created_by: String!
+  updated_on: String!
+  updated_by: String!
   deleted_on: String
   deleted_by: String
   modules: [Module!]!
@@ -295,6 +295,7 @@ input UpdatePasswordInput {
 }
 
 input UpdateUserInput {
+  email: String
   contact_no: String
   first_name: String
   middle_name: String
@@ -313,23 +314,23 @@ input UpdateUserInput {
 }
 
 type User {
-  id: ID
-  email: String
+  id: ID!
+  email: String!
   contact_no: String
-  first_name: String
+  first_name: String!
   middle_name: String
-  last_name: String
+  last_name: String!
   password_digest: String
   gender: String
-  is_owner: String
-  tenant_id: String
+  is_owner: Boolean
+  tenant_id: String!
   date_of_birth: DateTime
   nationality_id: String
   status: String
-  created_on: String
-  created_by: String
-  updated_on: String
-  updated_by: String
+  created_on: String!
+  created_by: String!
+  updated_on: String!
+  updated_by: String!
   deleted_on: String
   deleted_by: String
   roles: [Role!]!
@@ -342,18 +343,18 @@ type User {
 }
 
 type WorkingDay {
-  id: ID
-  week_day: String
+  id: ID!
+  week_day: String!
   start_time_local: String
   end_time_local: String
   remarks: String
   full_day: Float
-  tenant_id: String
+  tenant_id: String!
   status: String
-  created_on: DateTime
-  created_by: String
-  updated_on: DateTime
-  updated_by: String
+  created_on: DateTime!
+  created_by: String!
+  updated_on: DateTime!
+  updated_by: String!
   deleted_on: DateTime
   deleted_by: String
 }

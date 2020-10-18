@@ -1,34 +1,57 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Permission } from '@app/v1/permissions/permission.model';
 import { PaginationModel } from '@common/models';
+import {IsIn, IsOptional, IsString, IsUUID, MaxLength} from "class-validator";
+import {NUMBERS, STATUS} from "@common/constants";
 
 @ObjectType()
 export class Module {
-  @Field(() => ID, { nullable: true })
+  @Field(() => ID)
+  @IsString()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  @IsUUID()
   id?: string;
 
-  @Field({ nullable: true })
+  @Field()
+  @IsString()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   name?: string;
 
-  @Field({ nullable: true })
+  @Field()
+  @IsString()
+  @IsOptional()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   slug?: string;
 
   @Field({ nullable: true })
+  @IsString()
+  @IsOptional()
+  @IsUUID()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   parent_id?: string;
 
   @Field({ nullable: true })
+  @IsString()
+  @IsOptional()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  @IsIn(Object.keys(STATUS))
   status?: string;
 
-  @Field({ nullable: true })
+  @Field()
+  @IsString()
   created_on?: string;
 
-  @Field({ nullable: true })
+  @Field()
+  @IsString()
+  @IsUUID()
   created_by?: string;
 
   @Field(() => [Module], { nullable: true })
+  @IsOptional()
   sub_modules?: Module[];
 
   @Field(() => [Permission], { nullable: true })
+  @IsOptional()
   permissions?: Permission[];
 }
 

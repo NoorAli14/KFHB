@@ -13,7 +13,7 @@ export class PermissionRepository extends BaseRepository {
   ];
 
   constructor() {
-    super(TABLE.PERMISSION);
+    super(TABLE.PERMISSION, false);
   }
 
   async listPermissionsByModuleID(ids: any): Promise<any> {
