@@ -13,7 +13,7 @@ export class Encrypter {
         return Bcrypt.hashSync(password, this.saltRounds);
     }
 
-    comparePassword(password, hash): boolean {
+    comparePassword(password: string, hash: string): boolean {
         return Bcrypt.compareSync(password, hash);
     }
 
