@@ -102,9 +102,7 @@ ENV ENV_RBX_HOST=${PORT} \
     ENV_RBX_NOTIFICATION_SERVER= \
     ENV_RBX_ENTITLEMENT_SERVER= \
     ENV_RBX_IDENTITY_SERVER= \
-    ENV_RBX_REDIS_URL= \
-    # need to specify the location i.e (uploads) in the project root directory
-    ENV_RBX_ATTACHMENT_LOCATION= 
+    ENV_RBX_REDIS_URL= 
 
 # Set user node for future commands
 USER $USER

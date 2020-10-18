@@ -108,18 +108,19 @@ export class AttachmentsService {
       fs.mkdirSync(this.configService.ATTACHMENT.ENV_RBX_ATTACHMENT_LOCATION);
     }
 
+    let current_date = moment(new Date(), 'YYYY/MM/DD');
     //check folder created inside ROB_AgentScreenshots or not for current customer
     if (
       !fs.existsSync(
-        this.configService.ATTACHMENT.ENV_RBX_ATTACHMENT_LOCATION + customer_id,
+        this.configService.ATTACHMENT.ENV_RBX_ATTACHMENT_LOCATION +
+          `${current_date.format('YYYY')}${current_date.format('MM')}`,
       )
     ) {
       fs.mkdirSync(
-        this.configService.ATTACHMENT.ENV_RBX_ATTACHMENT_LOCATION + customer_id,
+        this.configService.ATTACHMENT.ENV_RBX_ATTACHMENT_LOCATION +
+          `${current_date.format('YYYY')}${current_date.format('MM')}`,
       );
     }
-
-    let current_date = moment(new Date(), 'YYYY/MM/DD');
     let formated_date = `${current_date.format('YYYY')}${current_date.format(
       'MM',
     )}${current_date.format('DD')}`;
