@@ -12,7 +12,7 @@ export class NewAttachmentInput {
   @Field()
   @IsNotEmpty()
   @IsString()
-  screenshot_id: string;
+  attachment_id: string;
 
   @Field()
   @IsNotEmpty()

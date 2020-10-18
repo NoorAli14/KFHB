@@ -35,21 +35,21 @@ export class AttachmentsService {
   async find(
     currentUser: ICurrentUser,
     customer_id: string,
-    screenshot_id: string,
+    attachment_id: string,
     output: string[],
   ): Promise<Attachment> {
     const response = await this.attachmentDB.findOne(
       {
         deleted_on: null,
         customer_id: customer_id,
-        screenshot_id: screenshot_id,
+        attachment_id: attachment_id,
         tenant_id: currentUser.tenant_id,
       },
       output,
     );
 
     if (!response)
-      throw new AttachmentNotFoundException(customer_id, screenshot_id);
+      throw new AttachmentNotFoundException(customer_id, attachment_id);
 
     return response;
   }
@@ -61,7 +61,7 @@ export class AttachmentsService {
   ): Promise<Attachment> {
     const attachment = await this.uploadFile(
       input.file_content,
-      input.screenshot_id,
+      input.attachment_id,
       input.customer_id,
     );
 
@@ -72,7 +72,7 @@ export class AttachmentsService {
       ...attachment,
       status: 'Active',
       customer_id: input.customer_id,
-      screenshot_id: input.screenshot_id,
+      attachment_id: input.attachment_id,
       created_by: currentUser.id,
       updated_by: currentUser.id,
       tenant_id: currentUser.tenant_id,
