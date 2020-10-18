@@ -26,6 +26,8 @@ services:
       - ENV_RBX_REFERENCE_HOST=$ENV_RBX_REFERENCE_HOST
       - ENV_RBX_REFERENCE_PORT=$ENV_RBX_REFERENCE_PORT
       - ENV_RBX_NGINX_MAX_BODY=$ENV_RBX_NGINX_MAX_BODY
+    volumes: 
+      - ENV_RBX_NGINX_VOLUME=$ENV_RBX_NGINX_MAX_BODY:/etc/nginx/conf.d/default.conf    
     networks:
       - core_service_network
     ports:
