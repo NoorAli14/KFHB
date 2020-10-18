@@ -1,4 +1,4 @@
-import { DATABASE_UUID_METHOD, TABLE } from '@common/constants';
+import { DATABASE_UUID_METHOD, STATUS, TABLE } from '@common/constants';
 import * as Knex from 'knex';
 
 export async function up(knex: Knex): Promise<void> {
@@ -16,7 +16,10 @@ export async function up(knex: Knex): Promise<void> {
     table.string('file_path');
 
     table.string('screenshot_id');
-    table.string('status');
+    table
+      .string('status')
+      .defaultTo(STATUS.ACTIVE)
+      .notNullable();
 
     table.timestamp('created_on', { useTz: true }).defaultTo(knex.fn.now());
     table.string('created_by');

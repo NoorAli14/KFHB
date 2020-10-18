@@ -23,6 +23,11 @@ export enum APPOINTMENT_STATUS {
   CANCELLED = 'CANCELLED',
 }
 
+export const STATUS = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+};
+
 registerEnumType(GENDER, { name: 'GENDER' });
 registerEnumType(APPOINTMENT_STATUS, { name: 'APPOINTMENT_STATUS' });
 
