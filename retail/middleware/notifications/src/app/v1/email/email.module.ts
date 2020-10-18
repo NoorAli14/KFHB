@@ -21,6 +21,7 @@ import { ConfigurationService } from '@common/configuration/configuration.servic
         template: {
           // dir: __dirname + '/templates',
           dir: join(`${process.cwd()}`, './volumes/templates'),
+          // dir: join(`${process.cwd()}`, './src/app/v1/email/templates'),
           adapter: new PugAdapter(),
           options: {
             strict: true,

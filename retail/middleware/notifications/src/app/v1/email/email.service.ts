@@ -10,6 +10,10 @@ export class EmailService {
       subject: emailObj.subject,
     };
 
+    if(emailObj.cc){
+      message.cc = emailObj.cc;
+    }
+
     if (emailObj.template && emailObj.template == DEFAULT_TEMPLATE_NAME) {
       message.html = emailObj.body;
     } else {

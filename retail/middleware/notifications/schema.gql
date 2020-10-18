@@ -29,6 +29,7 @@ scalar DateTime
 
 type EmailGQL {
   to: String!
+  cc: [String!]!
   template: String!
   subject: String!
   body: String
@@ -96,6 +97,7 @@ type OTPResponse {
 
 input SendEmailInput {
   to: String!
+  cc: [String!]
   template: String!
   subject: String!
   body: String

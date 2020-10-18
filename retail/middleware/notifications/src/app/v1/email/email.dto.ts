@@ -1,4 +1,4 @@
-import { IsOptional, MaxLength } from 'class-validator';
+import { IsOptional, MaxLength, IsEmail, IsString } from 'class-validator';
 
 // Graphql Example DTO
 import { Field, InputType } from '@nestjs/graphql';
@@ -9,6 +9,13 @@ export class SendEmailInput {
   @Field()
   @MaxLength(30)
   to: string;
+
+  @Field(() => [String], { nullable: true })
+  @IsOptional()
+  @MaxLength(36, {
+    each: true,
+  })
+  cc?: string[];
 
   @Field()
   @MaxLength(100)
