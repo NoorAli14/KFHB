@@ -5,6 +5,9 @@
 trigger:
 - master
 
+# Disable pipeline for pull requets
+pr: none
+
 resources:
 - repo: self
 
