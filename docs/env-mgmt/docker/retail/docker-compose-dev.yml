@@ -28,12 +28,21 @@ services:
       - ENV_RBX_NGINX_MAX_BODY=$ENV_RBX_NGINX_MAX_BODY
     volumes: 
       - type: bind
-        source: ${ENV_RBX_NGINX_VOLUME}/domain.conf
-        target: /etc/nginx/conf.d/default.conf      
+        source: ${ENV_RBX_VOLUME_PATH}/gateway.service/domain.conf
+        target: /etc/nginx/conf.d/default.conf
+      - type: bind
+        source: ${ENV_RBX_VOLUME_PATH}/gateway.service/fullchain.pem
+        target: /etc/nginx/conf.d/fullchain.pem
+      - type: bind
+        source: ${ENV_RBX_VOLUME_PATH}/gateway.service/private.key
+        target: /etc/nginx/conf.d/private.key
     networks:
       - core_service_network
     ports:
       - 80:80
+      - 8080:8080
+      - 8443:8443
+      - 443:8444
   #=================================================================
   # Admin Web Portal Service
   #=================================================================
