@@ -93,32 +93,32 @@ export class AttachmentsService {
     file_content: string | any,
     filename: string | any,
   ): Promise<FileResponse> {
-    let current_date = moment(new Date(), 'YYYY/MM/DD');
+    const current_date = moment(new Date(), 'YYYY/MM/DD');
     //check wether ROB_AgentScreenshots folder created or not
     createDirIfNotExist(
       this.configService.ATTACHMENT.ENV_RBX_ATTACHMENT_LOCATION,
     );
 
     //check folder created inside ROB_AgentScreenshots or not for current customer
-    const ROB_path: string = `${
+    const ROB_path = `${
       this.configService.ATTACHMENT.ENV_RBX_ATTACHMENT_LOCATION
     }${current_date.format('YYYY')}${current_date.format('MM')}`;
     createDirIfNotExist(ROB_path);
 
-    let formated_date: string = `${current_date.format(
-      'YYYY',
-    )}${current_date.format('MM')}${current_date.format('DD')}`;
+    const formated_date = `${current_date.format('YYYY')}${current_date.format(
+      'MM',
+    )}${current_date.format('DD')}`;
 
-    var matches: string[] = file_content.match(
+    const matches: string[] = file_content.match(
       /^data:([A-Za-z-+\/]+);base64,(.+)$/,
     );
     if (!matches && matches.length !== 3)
       throw new InvalidBase64Exception(filename);
 
     const extension: string = mime.getExtension(matches[1]);
-    const fileName: string = `${formated_date}_${Date.now()}_${filename}.${extension}`;
+    const fileName = `${formated_date}_${Date.now()}_${filename}.${extension}`;
 
-    let response: FileResponse = {
+    const response: FileResponse = {
       type: matches[1],
       data: new Buffer(matches[2], 'base64'),
       file_name: fileName,
