@@ -4,7 +4,7 @@ import { NewAppointmentInput } from './appointment.dto';
 import { AppointmentRepository } from '@core/repository';
 
 import { ConfigurationService } from '@common/configuration/configuration.service';
-import { Appointment } from './appointment.model';
+import { Appointment, UserGQL } from './appointment.model';
 import * as moment from 'moment';
 import { APPOINTMENT_STATUS } from '@common/constants';
 import { GqlClientService } from '@common/libs/gqlclient/gqlclient.service';
@@ -95,6 +95,16 @@ export class AppointmentsService {
     if (available_agents && available_agents.length <= 0)
       throw new AgentNotAvailableException(newAppointment.user_id);
     // End Section: Validating Input
+
+    /**
+     * 
+      Getting email of all available agents
+      Calling other service to send email to available agent
+     * 
+     */
+    await this.send_email_to_agents(
+      available_agents.map((item: UserGQL) => item.email),
+    );
 
     const [response] = await this.appointmentDB.create(
       {
@@ -284,6 +294,17 @@ export class AppointmentsService {
         status
         created_on
         created_by
+      }
+    }`;
+
+    return await this.gqlClient
+      .client('ENV_RBX_NOTIFICATION_SERVER')
+      .send(mutation);
+  }
+  private async send_email_to_agents(list: string[]) {
+    const mutation = `mutation {
+      result: sendEmail(bcc: "${list}") {
+        id
       }
     }`;
 
