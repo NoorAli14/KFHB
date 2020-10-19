@@ -1,4 +1,3 @@
-import * as fs from 'fs';
 import * as mime from 'mime';
 import * as moment from 'moment';
 import { Injectable } from '@nestjs/common';
@@ -13,6 +12,12 @@ import {
   NotCreatedException,
   InvalidBase64Exception,
 } from './exceptions';
+import {
+  calculateImageSize,
+  createDirIfNotExist,
+  writeFileSync,
+} from '@rubix/common/utilities';
+import { FileResponse } from './interfaces/file-response.interface';
 
 @Injectable()
 export class AttachmentsService {
@@ -21,8 +26,12 @@ export class AttachmentsService {
     private readonly configService: ConfigurationService,
   ) {}
 
-  async list(currentUser: ICurrentUser, customer_id: string, output: string[]) {
-    return await this.attachmentDB.findBy(
+  async list(
+    currentUser: ICurrentUser,
+    customer_id: string,
+    output: string[],
+  ): Promise<Attachment[]> {
+    return this.attachmentDB.findBy(
       {
         customer_id: customer_id,
         tenant_id: currentUser.tenant_id,
@@ -60,9 +69,8 @@ export class AttachmentsService {
     output?: string[],
   ): Promise<Attachment> {
     const attachment = await this.uploadFile(
-      input.file_content,
+      `data:image/png;base64,${input.file_content}`,
       input.attachment_id,
-      input.customer_id,
     );
 
     delete attachment.type;
@@ -70,83 +78,59 @@ export class AttachmentsService {
 
     const newAttachment: any = {
       ...attachment,
-      status: 'Active',
-      customer_id: input.customer_id,
-      attachment_id: input.attachment_id,
       created_by: currentUser.id,
       updated_by: currentUser.id,
+      customer_id: input.customer_id,
       tenant_id: currentUser.tenant_id,
+      attachment_id: input.attachment_id,
     };
 
     const [response] = await this.attachmentDB.create(newAttachment, output);
     return response;
   }
 
-  calculateImageSize(base64String: string) {
-    let padding: number;
-    let inBytes: number;
-    let base64StringLength: number;
-
-    if (base64String.endsWith('==')) padding = 2;
-    else if (base64String.endsWith('=')) padding = 1;
-    else padding = 0;
-
-    base64StringLength = base64String.length;
-    inBytes = base64StringLength * (4 / 3) - padding;
-    return inBytes / 1024;
-  }
-
   async uploadFile(
     file_content: string | any,
     filename: string | any,
-    customer_id: string | any,
-  ) {
-    //check wether ROB_AgentScreenshots folder created or not
-    if (
-      !fs.existsSync(this.configService.ATTACHMENT.ENV_RBX_ATTACHMENT_LOCATION)
-    ) {
-      fs.mkdirSync(this.configService.ATTACHMENT.ENV_RBX_ATTACHMENT_LOCATION);
-    }
-
+  ): Promise<FileResponse> {
     let current_date = moment(new Date(), 'YYYY/MM/DD');
+    //check wether ROB_AgentScreenshots folder created or not
+    createDirIfNotExist(
+      this.configService.ATTACHMENT.ENV_RBX_ATTACHMENT_LOCATION,
+    );
+
     //check folder created inside ROB_AgentScreenshots or not for current customer
-    if (
-      !fs.existsSync(
-        this.configService.ATTACHMENT.ENV_RBX_ATTACHMENT_LOCATION +
-          `${current_date.format('YYYY')}${current_date.format('MM')}`,
-      )
-    ) {
-      fs.mkdirSync(
-        this.configService.ATTACHMENT.ENV_RBX_ATTACHMENT_LOCATION +
-          `${current_date.format('YYYY')}${current_date.format('MM')}`,
-      );
-    }
-    let formated_date = `${current_date.format('YYYY')}${current_date.format(
-      'MM',
-    )}${current_date.format('DD')}`;
-
-    let response: any = {};
-    var matches = file_content.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
-    if (matches.length !== 3) return new InvalidBase64Exception(filename);
-
-    response.type = matches[1];
-    response.data = new Buffer(matches[2], 'base64');
-
-    const extension = mime.getExtension(`${response.type}`);
-    const fileName = `${formated_date}_${Date.now()}_${filename}.${extension}`;
-    const path = `${
+    const ROB_path: string = `${
       this.configService.ATTACHMENT.ENV_RBX_ATTACHMENT_LOCATION
-    }${current_date.format('YYYY')}${current_date.format('MM')}/${fileName}`;
+    }${current_date.format('YYYY')}${current_date.format('MM')}`;
+    createDirIfNotExist(ROB_path);
 
-    response.file_name = fileName;
-    response.file_path = path;
-    response.file_size = this.calculateImageSize(file_content);
+    let formated_date: string = `${current_date.format(
+      'YYYY',
+    )}${current_date.format('MM')}${current_date.format('DD')}`;
+
+    var matches: string[] = file_content.match(
+      /^data:([A-Za-z-+\/]+);base64,(.+)$/,
+    );
+    if (!matches && matches.length !== 3)
+      throw new InvalidBase64Exception(filename);
+
+    const extension: string = mime.getExtension(matches[1]);
+    const fileName: string = `${formated_date}_${Date.now()}_${filename}.${extension}`;
+
+    let response: FileResponse = {
+      type: matches[1],
+      data: new Buffer(matches[2], 'base64'),
+      file_name: fileName,
+      file_path: `${ROB_path}/${fileName}`,
+      file_size: calculateImageSize(file_content),
+    };
 
     try {
-      fs.writeFileSync(path, response.data, 'utf8');
+      writeFileSync(response.file_path, response.data);
       return response;
     } catch (error) {
-      return new NotCreatedException(filename);
+      throw new NotCreatedException(filename);
     }
   }
 }

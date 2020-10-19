@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsUUID, MaxLength } from 'class-validator';
+import { IsBase64, IsNotEmpty, IsString, IsUUID } from 'class-validator';
 
 import { Field, InputType } from '@nestjs/graphql';
 import { GraphQLUpload } from 'apollo-server-express';
@@ -17,5 +17,6 @@ export class NewAttachmentInput {
   @Field()
   @IsNotEmpty()
   @IsString()
+  @IsBase64()
   file_content: string;
 }

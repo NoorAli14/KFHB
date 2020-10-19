@@ -1,5 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { STATUS } from '@common/constants';
 import {
+  IsEnum,
   IsNotEmpty,
   IsNumber,
   IsString,
@@ -54,6 +56,7 @@ export class Attachment {
   @IsString()
   @MaxLength(255)
   @IsNotEmpty()
+  @IsEnum(Object.keys(STATUS))
   status: string;
 
   @Field({ nullable: true })
