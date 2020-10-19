@@ -16,9 +16,9 @@ import {
   AgentNotAvailableException,
   AppointmentNotFoundException,
   MaxAppointLimitReachException,
-  SentNotificationFailedException,
   AppointmentAlreadyExistException,
 } from './exceptions';
+import { EmailRequest } from './interfaces/email-request.interface';
 
 @Injectable()
 export class AppointmentsService {
@@ -96,16 +96,6 @@ export class AppointmentsService {
       throw new AgentNotAvailableException(newAppointment.user_id);
     // End Section: Validating Input
 
-    /**
-     * 
-      Getting email of all available agents
-      Calling other service to send email to available agent
-     * 
-     */
-    await this.send_email_to_agents(
-      available_agents.map((item: UserGQL) => item.email),
-    );
-
     const [response] = await this.appointmentDB.create(
       {
         ...newAppointment,
@@ -116,6 +106,21 @@ export class AppointmentsService {
       },
       output,
     );
+
+    /**
+     *
+     * Getting email of all available agents
+     * Calling other service to send email to available agent
+     *
+     */
+    const { user } = response;
+    await this.send_email_to_agents(
+      available_agents.map((item: UserGQL) => item.email),
+      newAppointment.user_id,
+      `${user.first_name} ${user.last_name}`,
+      newAppointment.call_time,
+    );
+
     return response;
   }
 
@@ -301,10 +306,39 @@ export class AppointmentsService {
       .client('ENV_RBX_NOTIFICATION_SERVER')
       .send(mutation);
   }
-  private async send_email_to_agents(list: string[]) {
+
+  /**
+   *
+   * @param list
+   * calling another service to send email to all available agents.
+   *
+   */
+  private async send_email_to_agents(
+    list: string[],
+    user_id: string,
+    user_name: string,
+    call_time: Date,
+  ) {
+    const input: EmailRequest = {
+      bcc: list,
+      template: 'appointment_sucess',
+      subject: 'New Appointment',
+      body: '',
+      context: [
+        { key: 'title', value: 'New Appointment' },
+        { key: 'customer_id', value: user_id },
+        { key: 'customer_name', value: user_name },
+        {
+          key: 'appointment_date',
+          value: moment(call_time).format('YYYY-MM-DD'),
+        },
+        { key: 'appointment_time', value: moment(call_time).format('HH:mm') },
+      ],
+    };
+
     const mutation = `mutation {
-      result: sendEmail(bcc: "${list}") {
-        id
+      result: sendEmail(input: ${toGraphQL(input)}) {
+        bcc
       }
     }`;
 
