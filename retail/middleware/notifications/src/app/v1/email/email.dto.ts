@@ -10,21 +10,21 @@ export class SendEmailInput {
   @IsString()
   @IsOptional()
   @MaxLength(36)
-  to: string;
+  to?: string;
 
   @Field(() => [String], { nullable: true })
   @IsOptional()
   @MaxLength(36, {
     each: true,
   })
-  cc: string[];
+  cc?: string[];
 
   @Field(() => [String], { nullable: true })
   @IsOptional()
   @MaxLength(36, {
     each: true,
   })
-  bcc: string[];
+  bcc?: string[];
 
   @Field()
   @MaxLength(100)
@@ -37,11 +37,11 @@ export class SendEmailInput {
   @Field({ nullable: true })
   @IsOptional()
   @MaxLength(5000)
-  body: string;
+  body?: string;
 
   @Field(() => [Context], { nullable: true })
   @IsOptional()
-  context: Context[];
+  context?: Context[];
 }
 @InputType()
 class Context {
