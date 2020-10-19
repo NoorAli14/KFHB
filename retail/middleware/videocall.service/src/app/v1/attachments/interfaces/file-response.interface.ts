@@ -1,5 +1,5 @@
 import { InputType } from '@nestjs/graphql';
-import { IsBase64, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
 
 @InputType()
 export class FileResponse {
