@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import {TABLE, SESSION_STATUSES, NUMBERS} from '@rubix/common/constants';
+import {TABLE, SESSION_STATUSES} from '@rubix/common/constants';
 import { BaseRepository } from './base.repository';
-import {PaginationModel} from "@common/models";
-import {ICustomerQueryParams} from "@app/v1/customers/interfaces";
+import {CustomerQueryParams} from "@app/v1/customers/classes";
+import {QueryBuilder} from "knex";
 
 @Injectable()
 export class CustomerRepository extends BaseRepository {
@@ -15,43 +15,24 @@ export class CustomerRepository extends BaseRepository {
     super(TABLE.CUSTOMER);
   }
 
-  async listWithPagination(queryParams: ICustomerQueryParams,
-                           keys: string | string[],
+  async list(query_params: CustomerQueryParams,
                            condition: Record<string, any>): Promise<any> {
-    const perPage = queryParams.limit;
-    const currentPage = queryParams.page;
-    const pagination: PaginationModel = {};
-    const limitPerPage = (perPage || NUMBERS.DEFAULT_PAGE_SIZE) > 100 ? 100 : (perPage || NUMBERS.DEFAULT_PAGE_SIZE);
-    const page = Math.max(currentPage || 1, 1);
-    const offset = (page - 1) * limitPerPage;
-    const query_total = this.connection(this.tableName).where(condition).count('id as count').first();
-    const total = await this.getFilteredQuery(query_total, queryParams);
-    const query_rows = this.connection(this.tableName).where(condition).offset(offset).limit(limitPerPage).orderBy('created_on', 'desc');
-    const rows = await this.getFilteredQuery(query_rows, queryParams);
-    const count = parseInt(String(total.count), 10);
-    pagination.total = count;
-    pagination.pages = Math.ceil(count / limitPerPage);
-    pagination.perPage = limitPerPage;
-    pagination.current = page;
-    pagination.next = page + 1 > pagination.pages ? null : page + 1;
-    pagination.prev = page - 1 < 1 ? null : page - 1;
-    pagination.isFirst = pagination.current == 1;
-    pagination.isLast = pagination.current == pagination.pages;
-    return {pagination: pagination, data: rows};
+    const query_count: QueryBuilder = this.getFilteredQuery(this.connection(this.tableName).where(condition), query_params);
+    const query_data: QueryBuilder = this.getFilteredQuery(this.connection(this.tableName).where(condition), query_params);
+    return super.listWithPagination(query_count, query_data, query_params)
   }
 
-  getFilteredQuery(query: any, queryParams: ICustomerQueryParams): any{
-    if(queryParams.national_id_no) query = query.where('national_id_no', 'like', `%${queryParams.national_id_no}%`);
-    if(queryParams.gender) query = query.where('gender', 'like', `%${queryParams.gender}%`);
-    if(queryParams.nationality) query = query.where('nationality', 'like', `%${queryParams.nationality}%`);
-    if(queryParams.first_name) query = query.where('first_name', 'like', `%${queryParams.first_name}%`);
-    if(queryParams.last_name) query = query.where('last_name', 'like', `%${queryParams.last_name}%`);
-    if(queryParams.status) query = query.where('status', 'like', `%${queryParams.status}%`);
-    if(queryParams.contact_no) query = query.where('contact_no', 'like', `%${queryParams.contact_no}%`);
-    if(queryParams.email) query = query.where('email', 'like', `%${queryParams.email}%`);
-    if(queryParams.created_on_start) {
-      query = query.where('created_on', '>', queryParams.created_on_start);
-      query = query.where('created_on', '<', queryParams.created_on_end);
+  getFilteredQuery(query: QueryBuilder, query_params: CustomerQueryParams): any {
+    if(query_params.national_id_no) query = query.where('national_id_no', 'like', `%${query_params.national_id_no}%`);
+    if(query_params.gender) query = query.where('gender', 'like', `%${query_params.gender}%`);
+    if(query_params.nationality) query = query.where('nationality', 'like', `%${query_params.nationality}%`);
+    if(query_params.first_name) query = query.where('first_name', 'like', `%${query_params.first_name}%`);
+    if(query_params.last_name) query = query.where('last_name', 'like', `%${query_params.last_name}%`);
+    if(query_params.status) query = query.where('status', query_params.status);
+    if(query_params.contact_no) query = query.where('contact_no', 'like', `%${query_params.contact_no}%`);
+    if(query_params.email) query = query.where('email', 'like', `%${query_params.email}%`);
+    if(query_params.created_on_start && query_params.created_on_end) {
+      query = query.whereBetween('created_on', [query_params.created_on_start, query_params.created_on_end]);
     }
     return query;
   }

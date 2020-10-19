@@ -1,1 +1,1 @@
-export * from './query_params.decorator';
+export * from './query-params-customer.decorator';

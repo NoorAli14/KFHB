@@ -2,7 +2,7 @@ import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import {PAGINATION_PARAMS} from '@rubix/common/constants';
 
-export const CustomerQueryParams = createParamDecorator(
+export const QueryParamsCustomer = createParamDecorator(
   async (data: any, context: ExecutionContext & { [key: string]: any }) => {
     const ctx: any = GqlExecutionContext.create(context);
     const { req } = ctx.getContext();

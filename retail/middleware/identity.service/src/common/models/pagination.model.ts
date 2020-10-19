@@ -4,26 +4,26 @@ import { Field, ObjectType } from "@nestjs/graphql";
 export class PaginationModel {
 
   @Field({ nullable: true })
-  total?: number;
+  total: number;
 
   @Field({ nullable: true })
-  pages?: number;
+  pages: number;
 
   @Field({ nullable: true })
-  perPage?: number;
+  perPage: number;
 
   @Field({ nullable: true })
-  current?: number;
+  current: number;
 
   @Field({ nullable: true })
-  next?: number;
+  next: number;
 
   @Field({ nullable: true })
-  prev?: number;
+  prev: number;
 
   @Field({ nullable: true })
-  isFirst?: boolean;
+  isFirst: boolean;
 
   @Field({ nullable: true })
-  isLast?: boolean;
+  isLast: boolean;
 }
