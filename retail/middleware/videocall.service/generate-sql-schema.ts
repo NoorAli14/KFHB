@@ -43,6 +43,12 @@ import { DBConfigurationService } from '@rubix/common/configuration/dbconfigurat
     }
 })();
 
+/**
+ * This method is used to generate a raw sql query
+ * 
+ * @param db : Knex DB connection
+ * @param filePath : Location of the migration file
+ */
 function getSQL(db, filePath): Promise<string> {
     return new Promise<string>((resolve, reject) => {
         const { up } = require(filePath);
