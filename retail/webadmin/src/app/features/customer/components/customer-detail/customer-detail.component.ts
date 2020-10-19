@@ -1,3 +1,4 @@
+import { snakeToCamelObject } from "./../../../../shared/helpers/global.helper";
 import { Component, Inject, OnInit, ViewEncapsulation } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { environment } from "@env/environment";
@@ -20,6 +21,11 @@ import { AuthenticationService } from "@shared/services/auth/authentication.serv
 export class CustomerDetailComponent implements OnInit {
     items: GalleryItem[];
     imagesUrl: Array<any> = [];
+    FATCA: any;
+    bankingTransaction: any;
+    passportProcessed: any;
+    civilIdBackProcessed: any;
+    customer:any;
     constructor(
         public gallery: Gallery,
         public matDialogRef: MatDialogRef<CustomerDetailComponent>,
@@ -28,9 +34,30 @@ export class CustomerDetailComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        debugger;
-        this.imagesUrl=data;
-        return; 
+        // this.imagesUrl=data;
+
+        const data = this.data.templates.map((item) => {
+            return { ...item, results: JSON.parse(atob(item.results)) };
+        });
+        const civilIdBackProcessData =
+            this.data.documents.length > 0
+                ? this.data.documents.find(
+                      (x) => x.name === "NATIONAL_ID_BACK_SIDE"
+                  )
+                : null;
+        this.civilIdBackProcessed = civilIdBackProcessData
+            ? JSON.parse(civilIdBackProcessData.processed_data)?.mrz
+            : null;
+        const passportProcessData =
+            this.data.documents.length > 0
+                ? this.data.documents.find((x) => x.name === "PASSPORT")
+                : null;
+        this.passportProcessed = passportProcessData
+            ? JSON.parse(passportProcessData.processed_data)?.mrz
+            : null;
+        this.customer = snakeToCamelObject(this.data);
+        this.FATCA = data.find((x) => x.results.name === "FATCA");
+        this.bankingTransaction = data.find((x) => x.results.name === "KYC");
         const _documents = [
             { type: "PASSPORT", isExtracted: false },
             { type: "PASSPORT", isExtracted: true },
