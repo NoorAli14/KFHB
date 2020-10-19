@@ -9,6 +9,7 @@ import {
   iGRAPHQL,
   iConfig,
   iVCALL,
+  iATTACHMENT,
 } from '@common/interfaces/configuration.interface';
 import { RedisModuleOptions } from 'nestjs-redis';
 
@@ -51,6 +52,9 @@ export const DEFAULT_ENV: iConfig = {
     ENV_RBX_NOTIFICATION_MESSAGE_BODY: 'Dummy: until get from Business Team.',
     ENV_RBX_NOTIFICATION_IMAGE_URL:
       'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTZELk_VnIIulq0wOTiIXsyhXh0GNXfMInuJg&usqp=CAU',
+  },
+  ATTACHMENT: {
+    ENV_RBX_ATTACHMENT_LOCATION: './uploads/ROB_AgentScreenshots/',
   },
   logLevel: 'info',
 };
@@ -147,6 +151,15 @@ export class ConfigurationService {
       ENV_RBX_NOTIFICATION_IMAGE_URL: this.get(
         'ENV_RBX_NOTIFICATION_IMAGE_URL',
         DEFAULT_ENV.VCALL.ENV_RBX_NOTIFICATION_IMAGE_URL,
+      ),
+    };
+  }
+
+  public get ATTACHMENT(): iATTACHMENT {
+    return {
+      ENV_RBX_ATTACHMENT_LOCATION: this.get(
+        'ENV_RBX_ATTACHMENT_LOCATION',
+        DEFAULT_ENV.ATTACHMENT.ENV_RBX_ATTACHMENT_LOCATION,
       ),
     };
   }

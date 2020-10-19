@@ -36,5 +36,5 @@ lerna-debug.log*
 # Application .gitignore
 .env
 
-# Ignore uploads folder
+# Ignore assets (upload) folder
 /uploads
