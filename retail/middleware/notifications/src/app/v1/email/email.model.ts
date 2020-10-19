@@ -1,17 +1,26 @@
 // Graphql Model
 import { Field, ObjectType } from '@nestjs/graphql';
-import { MaxLength } from 'class-validator';
+import { MaxLength, IsOptional } from 'class-validator';
 
 @ObjectType()
 export class EmailGQL {
-  @Field()
+  @Field({ nullable: true })
+  @IsOptional()
   to: string;
 
-  @Field(() => [String], { nullable: false })
+  @Field(() => [String], { nullable: true })
+  @IsOptional()
   @MaxLength(36, {
     each: true,
   })
-  cc?: string[];
+  cc: string[];
+
+  @Field(() => [String], { nullable: true })
+  @IsOptional()
+  @MaxLength(36, {
+    each: true,
+  })
+  bcc: string[];
 
   @Field()
   template: string;
@@ -20,9 +29,11 @@ export class EmailGQL {
   subject: string;
 
   @Field({ nullable: true })
+  @IsOptional()
   body: string;
 
   @Field(() => [Contexts], { nullable: true })
+  @IsOptional()
   context: Contexts[];
 }
 

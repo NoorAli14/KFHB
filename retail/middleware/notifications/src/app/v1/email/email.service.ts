@@ -6,12 +6,19 @@ export class EmailService {
   constructor(private readonly mailerService: MailerService) {}
   async sendEmail(emailObj: Record<string, any>): Promise<any> {
     const message: any = {
-      to: emailObj.to,
       subject: emailObj.subject,
     };
 
+    if(emailObj.to){
+      message.to = emailObj.to;
+    }
+
     if(emailObj.cc){
       message.cc = emailObj.cc;
+    }
+
+    if(emailObj.bcc){
+      message.bcc = emailObj.bcc;
     }
 
     if (emailObj.template && emailObj.template == DEFAULT_TEMPLATE_NAME) {
