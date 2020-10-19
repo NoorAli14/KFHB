@@ -1,4 +1,5 @@
 import { NotImplementedException } from '@nestjs/common';
+import * as fs from 'fs';
 import { Request } from 'express';
 import * as path from 'path';
 import { X_CORRELATION_KEY, X_TENANT_ID, X_USER_ID } from './constants';
@@ -119,4 +120,39 @@ export const DATABASE_UUID_METHOD = (knex): any => {
         `Database type ['${process.env.ENV_RBX_DB_DIALECT}'] not supported`,
       );
   }
+};
+/**
+* @param path
+ * Helper function to create directory if not exist
+   * /
+export const createDirIfNotExist = (path: string): void => {
+ if (!fs.existsSync(path)) {
+   fs.mkdirSync(path);
+ }
+};
+
+/**
+*
+* @param path
+* @param content
+* helper function to create file inside the folder directory
+*/
+export const writeFileSync = (path: string, content: Buffer): void => {
+  fs.writeFileSync(path, content, 'utf8');
+};
+
+/**
+ *
+ * @param base64String
+ * helper function to calculate the size of base64 string
+ */
+export const calculateImageSize = (base64String: string): number => {
+  let padding: number;
+
+  if (base64String.endsWith('==')) padding = 2;
+  else if (base64String.endsWith('=')) padding = 1;
+  else padding = 0;
+
+  const base64StringLength: number = base64String.length;
+  return (base64StringLength * (4 / 3) - padding) / 1024;
 };
