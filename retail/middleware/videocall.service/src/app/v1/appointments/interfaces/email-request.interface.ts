@@ -1,5 +1,5 @@
 import { InputType } from '@nestjs/graphql';
-import { IsArray, IsBase64, IsString } from 'class-validator';
+import { IsArray, IsString } from 'class-validator';
 
 @InputType()
 export class EmailRequest {
