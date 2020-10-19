@@ -9,9 +9,11 @@ import { FuseSharedModule } from '@fuse/shared.module';
 import { SharedModule } from '@shared/shared.module';
 import { GalleryModule } from '@ngx-gallery/core';
 import { LightboxModule } from '@ngx-gallery/lightbox';
+import { MatTabsModule } from '@angular/material/tabs';
+import { AdvanceSearchComponent } from './components/advance-search/advance-search.component';
 
 @NgModule({
-  declarations: [CustomerComponent, CustomerDetailComponent],
+  declarations: [CustomerComponent, CustomerDetailComponent,AdvanceSearchComponent],
   imports: [
     CommonModule,
     CustomerRoutingModule,
@@ -19,7 +21,8 @@ import { LightboxModule } from '@ngx-gallery/lightbox';
     FuseSharedModule,
     MaterialModule,
     GalleryModule,
-    LightboxModule
+    LightboxModule,
+    MatTabsModule
   ]
 })
 export class CustomerModule { }

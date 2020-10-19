@@ -1,16 +1,14 @@
-@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
 
 @import "src/@fuse/scss/fuse";
 
 .app-customer-detail {
-
-    @include media-breakpoint('xs') {
+    @include media-breakpoint("xs") {
         width: 100%;
     }
 
-    @include media-breakpoint('gt-xs') {
-        width: 60%;
-        
+    @include media-breakpoint("gt-xs") {
+        width: 80%;
     }
 
     .mat-dialog-container {
@@ -23,32 +21,50 @@
         flex-direction: column;
     }
 }
-
+.tab-height {
+    height: 400px;
+}
 .container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 
-  .gallery {
-    width: 100px;
-    height: 90px;
-    object-fit: cover;
-    margin: 5px;
-  }
+    .gallery {
+        width: 100px;
+        height: 90px;
+        object-fit: cover;
+        margin: 5px;
+    }
 }
 
 .g-overlay {
-  min-width: 320px;
+    min-width: 320px;
 }
 
 gallery {
-  font-size: 16px;
+    font-size: 16px;
 }
 
 img {
-  width: 150px;
+    width: 150px;
 }
 
-.lightbox-example, .gallerize-example {
-  margin: 2em;
+.lightbox-example,
+.gallerize-example {
+    margin: 2em;
+}
+
+.product-image {
+    overflow: hidden;
+    width: 128px;
+    height: 128px;
+    margin-right: 16px;
+    margin-bottom: 16px;
+    border-radius: 4px;
+
+    img {
+        height: 100%;
+        width: auto;
+        max-width: none;
+    }
 }

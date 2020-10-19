@@ -19,7 +19,7 @@ import { AuthenticationService } from "@shared/services/auth/authentication.serv
 })
 export class CustomerDetailComponent implements OnInit {
     items: GalleryItem[];
-    imagesUrl: Array<string> = [];
+    imagesUrl: Array<any> = [];
     constructor(
         public gallery: Gallery,
         public matDialogRef: MatDialogRef<CustomerDetailComponent>,
@@ -29,6 +29,8 @@ export class CustomerDetailComponent implements OnInit {
 
     ngOnInit(): void {
         debugger;
+        this.imagesUrl=data;
+        return; 
         const _documents = [
             { type: "PASSPORT", isExtracted: false },
             { type: "PASSPORT", isExtracted: true },
@@ -84,3 +86,21 @@ export class CustomerDetailComponent implements OnInit {
     }
 }
 
+const data = [
+    {
+        srcUrl: "https://preview.ibb.co/jrsA6R/img12.jpg",
+        previewUrl: "https://preview.ibb.co/jrsA6R/img12.jpg",
+    },
+    {
+        srcUrl: "https://preview.ibb.co/kPE1D6/clouds.jpg",
+        previewUrl: "https://preview.ibb.co/kPE1D6/clouds.jpg",
+    },
+    {
+        srcUrl: "https://preview.ibb.co/mwsA6R/img7.jpg",
+        previewUrl: "https://preview.ibb.co/mwsA6R/img7.jpg",
+    },
+    {
+        srcUrl: "https://preview.ibb.co/kZGsLm/img8.jpg",
+        previewUrl: "https://preview.ibb.co/kZGsLm/img8.jpg",
+    },
+];

@@ -124,6 +124,7 @@ export class CustomerComponent extends BaseComponent implements OnInit {
             panelClass: "app-customer-detail",
         });
     }
+    hello(){}
     getCustomerDetail(id) {
         this._service
             .getCustomerById("34A8F400-23F0-445F-A20C-5407BDC1C6FC")

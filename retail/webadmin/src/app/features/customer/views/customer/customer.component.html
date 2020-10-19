@@ -8,10 +8,10 @@
     <div class="center">
 
         <!-- HEADER -->
-        <div class="header accent" style="min-height: 95px !important; height:95px !important" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-between center">
+        <div class="header accent" style="min-height: 95px !important; height:95px !important; " fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-between center">
 
             <!-- APP TITLE -->
-            <div class="logo mb-24 mb-md-0" fxLayout="row" fxLayoutAlign="start center" >
+            <div class="logo mb-24 mb-md-0" style="flex: 0 1 30%;" fxLayout="row" fxLayoutAlign="start center" >
                 <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
                     people
                 </mat-icon>
@@ -22,15 +22,14 @@
             <!-- / APP TITLE -->
 
             <!-- SEARCH -->
-            <div class="search-wrapper mx-32 mx-md-0" >
-                <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
-                    <mat-icon>search</mat-icon>
-                    <input  placeholder="Search for a customer">
-                </div>
-            </div>
+           <div style="flex:1">
+            <app-advance-search (filterChange)="hello()" (filterReset)="hello()">
+            </app-advance-search>
+           </div>
+           
             <!-- / SEARCH -->
 
-         <div></div>
+        
 
         </div>
         <!-- / HEADER -->
