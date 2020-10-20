@@ -69,6 +69,9 @@ export class Customer {
   status?: string;
 
   @Field({ nullable: true })
+  fcm_token_id?: string;
+
+  @Field({ nullable: true })
   created_on?: string;
 
   @Field({ nullable: true })

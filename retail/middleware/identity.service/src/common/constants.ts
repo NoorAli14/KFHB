@@ -1,4 +1,3 @@
-import { NotImplementedException } from "@nestjs/common";
 
 export const TABLE: { [key: string]: string } = {
   SESSION: 'IDT_SESSION',
