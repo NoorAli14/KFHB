@@ -15,6 +15,7 @@ describe('Email Module (e2e)', () => {
 
     app = moduleRef.createNestApplication();
     await app.init();
+    jest.setTimeout(50000);
   });
 
   const sendEmailInput: SendEmailInput = {
@@ -63,6 +64,96 @@ describe('Email Module (e2e)', () => {
       .expect(200)
       .end(done);
   });
+
+
+  // CC list of emails.
+
+  const sendNewAppointmentEmailInput : SendEmailInput ={
+    subject: 'New Appointment',
+    template: 'appointment_sucess',
+    to: 'ahmad.raza@virtualforce.io',
+    cc: ["2014fsd@gmail.com", "2015fsd@gmail.com"],
+    context: [
+      {"key": "title", "value": "New Appointment" },
+      {"key": "customer_id", "value": "4512sdswd232s4454"},
+      {"key": "customer_name", "value": "Ahmad Raza"},
+      {"key": "appointment_date", "value": "11-11-2020"},
+      {"key": "appointment_time", "value": "19:00"},
+    ]
+  }
+
+  it(`Send Email with Appointment template and Check CC functionality.`, done => {
+    return request(app.getHttpServer())
+      .post('/graphql')
+      .send({
+        query: createQuery("sendEmail",sendNewAppointmentEmailInput, "to cc"),
+      })
+      .expect(({ body }) => {
+        const data = body.data.sendEmail;
+        expect(data.to).toBe(sendNewAppointmentEmailInput.to);
+        expect(data.cc).toMatchObject(sendNewAppointmentEmailInput.cc);
+      })
+      .expect(200)
+      .end(done);
+  });
+
+  // BCC List of Emails.
+
+  const bccEmailInput : SendEmailInput ={
+    subject: 'New Appointment',
+    template: 'appointment_sucess',
+    bcc: ["ahmad.raza@virtualforce.io", "2014fsd@gmail.com"],
+    context: [
+      {"key": "title", "value": "New Appointment" },
+      {"key": "customer_id", "value": "4512sdswd232s4454"},
+      {"key": "customer_name", "value": "Ahmad Raza"},
+      {"key": "appointment_date", "value": "11-11-2020"},
+      {"key": "appointment_time", "value": "19:00"},
+    ]
+  }
+
+  it(`Send Email as BCC to recepients.`, done => {
+    return request(app.getHttpServer())
+      .post('/graphql')
+      .send({
+        query: createQuery("sendEmail",bccEmailInput, "bcc"),
+      })
+      .expect(({ body }) => {
+        const data = body.data.sendEmail;
+        expect(data.bcc).toMatchObject(bccEmailInput.bcc);
+      })
+      .expect(200)
+      .end(done);
+  });
+
+  // Test with no Recepients.
+
+  const withoutRecepientsEmailInput : SendEmailInput ={
+    subject: 'New Appointment',
+    template: 'appointment_sucess',
+    context: [
+      {"key": "title", "value": "New Appointment" },
+      {"key": "customer_id", "value": "4512sdswd232s4454"},
+      {"key": "customer_name", "value": "Ahmad Raza"},
+      {"key": "appointment_date", "value": "11-11-2020"},
+      {"key": "appointment_time", "value": "19:00"},
+    ]
+  }
+
+  it(`Test Send email without any kind of recepients.`, done => {
+    return request(app.getHttpServer())
+      .post('/graphql')
+      .send({
+        query: createQuery("sendEmail",withoutRecepientsEmailInput, "subject template"),
+      })
+      .expect(({ body }) => {
+        const errors = body.errors;
+        expect(errors[0].message).toBe("No recipients defined");
+      })
+      .expect(200)
+      .end(done);
+  });
+  
 
   afterAll(async () => {
     await app.close();
