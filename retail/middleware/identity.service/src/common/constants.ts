@@ -76,3 +76,30 @@ export const CREATED_BY: { [key: string]: string } = {
   API: 'API',
   SYSTEM: 'SYSTEM',
 };
+
+export const PAGINATION_PARAMS = {
+  PAGE: 'page',
+  LIMIT: 'limit',
+  NATIONAL_ID_NO: 'national_id_no',
+  GENDER: 'gender',
+  NATIONALITY: 'nationality',
+  FIRST_NAME: 'first_name',
+  LAST_NAME: 'last_name',
+  STATUS: 'status',
+  CONTACT_NO: 'contact_no',
+  EMAIL: 'email',
+  CREATED_ON_START: 'created_on?start',
+  CREATED_ON_END: 'end',
+};
+
+export const NUMBERS = {
+  DEFAULT_PAGE_SIZE: 25,
+  MAX_PAGE_SIZE: 100,
+  MAX_COLUMN_LENGTH: 255,
+};
+
+export const STATUS = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  PENDING: 'PENDING',
+};

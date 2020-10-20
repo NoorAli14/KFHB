@@ -60,6 +60,11 @@ type Customer {
   documents: [Document!]!
 }
 
+type CustomerWithPagination {
+  pagination: PaginationModel
+  data: [Customer!]
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
@@ -114,6 +119,17 @@ type Mutation {
   processDocument(input: ProcessDocumentInput!): Result!
 }
 
+type PaginationModel {
+  total: Float
+  pages: Float
+  perPage: Float
+  current: Float
+  next: Float
+  prev: Float
+  isFirst: Boolean
+  isLast: Boolean
+}
+
 type PreviewDocument {
   image: String!
 }
@@ -129,6 +145,7 @@ input ProcessDocumentInput {
 }
 
 type Query {
+  customersList: CustomerWithPagination!
   findCustomerById(id: String!): Customer!
   previewAttachment(input: PreviewDocumentInput!): PreviewDocument!
 }
