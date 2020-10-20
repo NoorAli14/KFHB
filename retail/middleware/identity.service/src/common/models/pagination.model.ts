@@ -1,7 +1,7 @@
 import { Field, ObjectType } from "@nestjs/graphql";
 
 @ObjectType()
-export class PaginationModel {
+export class IDT_PaginationModel {
 
   @Field({ nullable: true })
   total: number;
