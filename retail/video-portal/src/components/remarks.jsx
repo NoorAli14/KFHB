@@ -10,7 +10,7 @@ export const RemarksTab = () => {
         <br/>
         <textarea name="" id="" cols="30" rows="6" style={{width:"100%"}}></textarea>
         <br/>
-        <button   style={{height:'30px', width:'90px', marginRight:'5px'}}>Submit</button>
+        <button className="submit-btn" style={{height:'30px', width:'90px', marginRight:'5px'}}>Submit</button>
      </div>
     </div>
   );

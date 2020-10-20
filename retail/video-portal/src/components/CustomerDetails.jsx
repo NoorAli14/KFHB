@@ -181,7 +181,7 @@ class CustomerDetails extends React.Component {
           <div className="customerbasic-details">
             <Tabs>
               <TabList>
-                <Tab>Id Card</Tab>
+                <Tab>ID Card</Tab>
                 <Tab>Passport</Tab>
                 <Tab>Additional Data</Tab>
                 <Tab>FATCA & CRS</Tab>
@@ -371,7 +371,7 @@ class CustomerDetails extends React.Component {
           <div className="customerbasic-details">
             <Tabs>
               <TabList>
-                <Tab>Id Card</Tab>
+                <Tab>ID Card</Tab>
                 <Tab>Passport</Tab>
                 <Tab>Additional Data</Tab>
                 <Tab>Screen shots</Tab>
@@ -380,9 +380,9 @@ class CustomerDetails extends React.Component {
               <TabPanel>
                 <div className="details">
                   <div style={{width:'100%', display: 'flex', justifyContent: 'center'}}>
-                    <a  href="#" onClick={()=>this.setImageActive('nationalIdFace')} style={{cursor:'pointer'}} >Face Image</a> &nbsp;&nbsp;
-                    <a href="#" onClick={()=>this.setImageActive('nationalIdFront')} style={{cursor:'pointer'}}>Front Image</a>&nbsp;&nbsp;
-                    <a href="#" onClick={()=>this.setImageActive('nationalIdBack')} style={{cursor:'pointer'}}>Back Image</a>
+                    <a className="image-btns" href="#" onClick={()=>this.setImageActive('nationalIdFace')} style={{cursor:'pointer'}} >Face Image</a> &nbsp;&nbsp;
+                    <a className="image-btns" href="#" onClick={()=>this.setImageActive('nationalIdFront')} style={{cursor:'pointer'}}>Front Image</a>&nbsp;&nbsp;
+                    <a className="image-btns" href="#" onClick={()=>this.setImageActive('nationalIdBack')} style={{cursor:'pointer'}}>Back Image</a>
                   </div>
                   <div style={{ marginTop:'30px', display: 'flex', justifyContent: 'center'}}>
                    {selectedImage=='nationalIdFace' && (
@@ -404,8 +404,8 @@ class CustomerDetails extends React.Component {
               <TabPanel>
                  <div className="details" >
                   <div style={{width:'100%', display: 'flex', justifyContent: 'center'}}>
-                      <a href="#" onClick={()=>this.setPassportActive('passport')} style={{cursor:'pointer'}}>Passport</a> &nbsp;&nbsp;
-                      <a href="#" onClick={()=>this.setPassportActive('passportFace')} style={{cursor:'pointer'}}>Passport Face</a>
+                      <a className="image-btns" href="#" onClick={()=>this.setPassportActive('passport')} style={{cursor:'pointer'}}>Passport</a> &nbsp;&nbsp;
+                      <a className="image-btns" href="#" onClick={()=>this.setPassportActive('passportFace')} style={{cursor:'pointer'}}>Passport Face</a>
                     </div>
                     <div style={{ marginTop:'30px', display: 'flex', justifyContent: 'center'}}>
                     {selectedPassport=='passportFace' && (
@@ -414,6 +414,7 @@ class CustomerDetails extends React.Component {
                     )}
                     {selectedPassport=='passport' && (
                         <img style={{maxHeight:'250px'}} src={passportImage} alt="Passport"/>
+                        
                     )}
                     </div>
                 </div>
