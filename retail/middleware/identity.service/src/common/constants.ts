@@ -94,6 +94,7 @@ export const PAGINATION_PARAMS = {
 
 export const NUMBERS = {
   DEFAULT_PAGE_SIZE: 25,
+  MAX_PAGE_SIZE: 100,
   MAX_COLUMN_LENGTH: 255,
 };
 
