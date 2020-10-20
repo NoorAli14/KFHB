@@ -17,7 +17,7 @@ import {
 } from '@nestjs/swagger';
 import { AuthGuard, DOCUMENT_TYPES } from '@common/index';
 import { AttachmentsService } from './attachments.service';
-import { Attachment } from './attachment.entity';
+import { Attachment, Evaluation } from './attachment.entity';
 import { UploadDocumentDTO } from './document.dto';
 import {
   DocumentUploadingInput,
@@ -216,5 +216,24 @@ export class DocumentsController {
       type: DOCUMENT_TYPES.DRIVING_LICENSE,
     };
     return this.documentService.process(params);
+  }
+
+  @Post('verification')
+  @ApiOperation({
+    summary: 'Perform Documents Verification',
+    description:
+      'A successful request returns the HTTP 200 OK status code and a JSON response body that shows documents verification information.',
+  })
+  @ApiCreatedResponse({
+    type: Evaluation,
+    description: 'Documents Verification has been successfully performed.',
+  })
+  @ApiBadRequestResponse({
+    type: Error,
+    description: 'Input Validation failed.',
+  })
+  @HttpCode(HttpStatus.OK)
+  async evaluation(): Promise<Evaluation> {
+    return this.documentService.evaluation();
   }
 }

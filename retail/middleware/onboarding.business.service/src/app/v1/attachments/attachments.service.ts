@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
-import { Attachment } from './attachment.entity';
+import { Attachment, Evaluation } from './attachment.entity';
 import { GqlClientService, toGraphql } from '@common/index';
 import {
   FaceUploadingInput,
@@ -102,5 +102,24 @@ export class AttachmentsService {
       }
     }`;
     return this.gqlClient.send(query);
+  }
+
+  /**
+   *
+   * @param header GQL request headers
+   * @return The Evaluation object
+   */
+  async evaluation(): Promise<Evaluation> {
+    const mutation: string = `mutation {
+      result: evaluation {
+        success
+        status
+        message
+      }
+    }`;
+    const result: any = await this.gqlClient.send(mutation);
+    if (result?.errors)
+      throw new BadRequestException({ errors: result.errors });
+    return result;
   }
 }
