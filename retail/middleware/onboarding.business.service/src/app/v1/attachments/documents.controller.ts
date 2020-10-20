@@ -23,6 +23,8 @@ import {
   DocumentUploadingInput,
   IDocumentProcess,
 } from './attachment.interface';
+import { Evaluation } from '../sessions/session.entity';
+import { SessionsService } from '../sessions/sessions.service';
 
 @ApiTags('Documents Uploading & Processing Module')
 @Controller('documents')
@@ -31,7 +33,10 @@ import {
 export class DocumentsController {
   private readonly logger: Logger = new Logger(DocumentsController.name);
 
-  constructor(private readonly documentService: AttachmentsService) {}
+  constructor(
+    private readonly documentService: AttachmentsService,
+    private readonly sessionService: SessionsService
+  ) {}
 
   @Post('nationality-id-front/upload')
   @ApiOperation({
@@ -216,5 +221,24 @@ export class DocumentsController {
       type: DOCUMENT_TYPES.DRIVING_LICENSE,
     };
     return this.documentService.process(params);
+  }
+
+  @Post('documents/verification')
+  @ApiOperation({
+    summary: 'Perform Documents Verification',
+    description:
+      'A successful request returns the HTTP 200 OK status code and a JSON response body that shows documents verification information.',
+  })
+  @ApiCreatedResponse({
+    type: Evaluation,
+    description: 'Documents Verification has been successfully performed.',
+  })
+  @ApiBadRequestResponse({
+    type: Error,
+    description: 'Input Validation failed.',
+  })
+  @HttpCode(HttpStatus.OK)
+  async evaluation(): Promise<Evaluation> {
+    return this.sessionService.evaluation();
   }
 }
