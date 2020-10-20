@@ -44,7 +44,7 @@ type Customer {
   nationality_code: String
   device_id: String
   platform: String
-  next_step: String
+  last_step: String
   is_aml_verified: Boolean
   is_email_verified: Boolean
   is_contact_no_verified: Boolean

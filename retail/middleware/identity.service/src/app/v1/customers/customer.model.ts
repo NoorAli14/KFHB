@@ -51,7 +51,7 @@ export class Customer {
   platform: string;
 
   @Field({ nullable: true })
-  next_step: string;
+  last_step: string;
 
   @Field({ nullable: true })
   is_aml_verified: boolean;
