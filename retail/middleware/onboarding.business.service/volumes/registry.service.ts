@@ -28,30 +28,30 @@ export const SERVICES = {
 };
 
 export const GQL_SERVICES = [
-  // {
-  //   name: 'Notification Service',
-  //   host_name: 'retail_notification',
-  //   port: 5030,
-  //   version: '1.0',
-  //   context: '/graphql',
-  //   is_secure: false,
-  // },
-  // {
-  //   name: 'User Management Service',
-  //   host_name: 'retail_user_management',
-  //   port: 5020,
-  //   version: '1.0',
-  //   context: '/graphql',
-  //   is_secure: false,
-  // },
-  // {
-  //   name: 'Compliance Service',
-  //   host_name: 'retail_compliance',
-  //   port: 5010,
-  //   version: '1.0',
-  //   context: '/graphql',
-  //   is_secure: false,
-  // },
+  {
+    name: 'Notification Service',
+    host_name: 'retail_notification',
+    port: 5030,
+    version: '1.0',
+    context: '/graphql',
+    is_secure: false,
+  },
+  {
+    name: 'User Management Service',
+    host_name: 'retail_user_management',
+    port: 5020,
+    version: '1.0',
+    context: '/graphql',
+    is_secure: false,
+  },
+  {
+    name: 'Compliance Service',
+    host_name: 'retail_compliance',
+    port: 5010,
+    version: '1.0',
+    context: '/graphql',
+    is_secure: false,
+  },
   {
     name: 'Identity Service',
     host_name: 'retail_identity',
@@ -60,12 +60,12 @@ export const GQL_SERVICES = [
     context: '/graphql',
     is_secure: false,
   },
-  // {
-  //   name: 'Video Call Service',
-  //   host_name: 'retail_videocall',
-  //   port: 4020,
-  //   version: '1.0',
-  //   context: '/graphql',
-  //   is_secure: false,
-  // },
+  {
+    name: 'Video Call Service',
+    host_name: 'retail_videocall',
+    port: 4020,
+    version: '1.0',
+    context: '/graphql',
+    is_secure: false,
+  },
 ];
