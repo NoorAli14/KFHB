@@ -1,5 +1,6 @@
+import { DEFAULT_IMAGE } from './../../../../shared/constants/app.constants';
 import { snakeToCamelObject } from "@shared/helpers/global.helper";
-import { Component, Inject, OnInit, ViewEncapsulation } from "@angular/core";
+import { AfterContentChecked, Component, Inject, OnInit, ViewEncapsulation } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { environment } from "@env/environment";
 import { fuseAnimations } from "@fuse/animations";
@@ -18,16 +19,14 @@ import { AuthenticationService } from "@shared/services/auth/authentication.serv
     animations: fuseAnimations,
     encapsulation: ViewEncapsulation.None,
 })
-export class CustomerDetailComponent implements OnInit {
+export class CustomerDetailComponent implements OnInit, AfterContentChecked {
     nationalIdDocuments: GalleryItem[];
     passportDocuments: GalleryItem[];
-    imagesUrl: Array<any> = [];
     FATCA: any;
     bankingTransaction: any;
     passportProcessed: any;
     civilIdBackProcessed: any;
-    customer:any;
-    img:any;
+    customer: any;
     constructor(
         public gallery: Gallery,
         public matDialogRef: MatDialogRef<CustomerDetailComponent>,
@@ -36,7 +35,9 @@ export class CustomerDetailComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-
+       this.initData();
+    }
+    initData(){
         const data = this.data.templates.map((item) => {
             return { ...item, results: JSON.parse(atob(item.results)) };
         });
@@ -59,7 +60,7 @@ export class CustomerDetailComponent implements OnInit {
         this.customer = snakeToCamelObject(this.data);
         this.FATCA = data.find((x) => x.results.name === "FATCA");
         this.bankingTransaction = data.find((x) => x.results.name === "KYC");
-       
+
         const _nationalIdDocuments = [
             { type: "NATIONAL_ID_BACK_SIDE", isExtracted: false },
             { type: "NATIONAL_ID_FRONT_SIDE", isExtracted: false },
@@ -68,7 +69,7 @@ export class CustomerDetailComponent implements OnInit {
 
         const _passportDocuments = [
             { type: "PASSPORT", isExtracted: false },
-            { type: "PASSPORT", isExtracted: true }
+            { type: "PASSPORT", isExtracted: true },
         ];
 
         this.nationalIdDocuments = _nationalIdDocuments.map((item) => {
@@ -85,10 +86,21 @@ export class CustomerDetailComponent implements OnInit {
 
         // Load item into different lightbox instance
         // With custom gallery config
-        this.withCustomGalleryConfig('passportDocuments',this.passportDocuments);
-        this.withCustomGalleryConfig('nationalIdDocuments',this.nationalIdDocuments);
+        this.withCustomGalleryConfig(
+            "passportDocuments",
+            this.passportDocuments
+        );
+        this.withCustomGalleryConfig(
+            "nationalIdDocuments",
+            this.nationalIdDocuments
+        );
     }
-    
+    ngAfterContentChecked(): void {
+        const el = document.querySelectorAll(".g-image-item");
+        el.forEach((x) => {
+            x["style"].backgroundSize = "contain";
+        });
+    }
     basicLightboxExample(items) {
         this.gallery.ref().load(items);
     }
@@ -104,16 +116,15 @@ export class CustomerDetailComponent implements OnInit {
         const customerId = this.data.id;
 
         const document = this.data.documents.find((x) => x.name === type);
-        if (!document) return "";
-        debugger
-        
+        if (!document) return DEFAULT_IMAGE;
+
         let url = `/entitlements/customers/${customerId}/documents/${document.id}/preview?x-access-token=${token}&x-tenant-id=${tenantId}&x-channel-id=${channelId}`;
         if (isExtracted) {
             url = `${url}&extracted-image=true`;
         }
         return this.getUrl(url);
     }
-    withCustomGalleryConfig(element,images) {
+    withCustomGalleryConfig(element, images) {
         const lightboxGalleryRef = this.gallery.ref(element);
 
         lightboxGalleryRef.setConfig({
@@ -124,4 +135,3 @@ export class CustomerDetailComponent implements OnInit {
         lightboxGalleryRef.load(images);
     }
 }
-

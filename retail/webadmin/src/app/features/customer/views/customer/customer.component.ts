@@ -61,56 +61,21 @@ export class CustomerComponent extends BaseComponent implements OnInit {
     }
 
     getData(): void {
-        this.customers = snakeToCamelArray([
-            {
-                id: "A969F80D-24FF-4264-9221-0A7B78831001",
-                tenant_id: "9013C327-1190-4875-A92A-83ACA9029160",
-                session_id: null,
-                first_name: null,
-                last_name: null,
-                contact_no: "03338184261",
-                email: "faizuali4@gmail.com",
-                date_of_birth: null,
-                national_id_no: null,
-                national_id_expiry: null,
-                nationality: null,
-                nationality_code: null,
-                gender: null,
-                status: "PENDING",
-                created_on: "1603002290153",
-                created_by: "API",
-                updated_on: "1603002290153",
-                updated_by: "API",
-            },
-        ]);
-        this.pagination = {
-            total: 0,
-            pages: 0,
-            perPage: 0,
-            current: 0,
-            next: 0,
-            prev: 0,
-            isFirst: true,
-            isLast: true,
-        };
-        this.dataSource = new MatTableDataSource(this.customers);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        // this._roleService.forkRolesData().pipe(takeUntil(this._unsubscribeAll)).subscribe(
-        //     (response) => {
-        //         this.roles = response[0];
-        //         const modules = response[1];
-        //         this.permissions = response[2];
-        //         this.modules = this._mapperService.makeModulesFlat(modules);
-        //         this.roles = this.roles.map((role) => ({
-        //             ...role,
-        //             role_name: role.name,
-        //         }));
-        //     },
-        //     (response) => {
-        //         this._notifier.error(MESSAGES.UNKNOWN);
-        //     }
-        // );
+        this._service
+            .getCustomers()
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe(
+                (response) => {
+                    this.customers = snakeToCamelArray(response.data);
+                    this.pagination = response.pagination;
+                    this.dataSource = new MatTableDataSource(this.customers);
+                    this.dataSource.paginator = this.paginator;
+                    this.dataSource.sort = this.sort;
+                },
+                (response) => {
+                    this._notifier.error(MESSAGES.UNKNOWN);
+                }
+            );
     }
     camelToSentenceCase(text): string {
         return camelToSentenceCase(text);
@@ -124,10 +89,11 @@ export class CustomerComponent extends BaseComponent implements OnInit {
             panelClass: "app-customer-detail",
         });
     }
-    hello(){}
+    hello() {}
     getCustomerDetail(id) {
+        // const id="34A8F400-23F0-445F-A20C-5407BDC1C6FC";
         this._service
-            .getCustomerById("34A8F400-23F0-445F-A20C-5407BDC1C6FC")
+            .getCustomerById(id)
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe(
                 (response) => {

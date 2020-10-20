@@ -13,6 +13,6 @@ export class CustomerService {
         return this.network.getAll(URI.CUSTOMERS);
     }
     getCustomerById(id){
-        return this.network.getAll(`${URI.CUSTOMERS}/${id}`);
+        return this.network.getAll(`${URI.CUSTOMER360}/${id}`);
     }
 }
