@@ -2,7 +2,7 @@ import { Controller, UseGuards, Get } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOkResponse, ApiOperation } from '@nestjs/swagger';
 import { CustomersService } from './customers.service';
 import { AuthGuard } from '@common/index';
-import { Customer, CustomerPaginationList } from './customer.entity';
+import { CustomerPaginationList } from './customer.entity';
 
 @ApiTags('Customers Module')
 @Controller('customers')

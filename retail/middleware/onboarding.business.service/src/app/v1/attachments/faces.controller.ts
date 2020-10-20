@@ -22,7 +22,7 @@ export class FacesController {
   constructor(
     private readonly attachmentService: AttachmentsService,
     private readonly sessionService: SessionsService,
-  ) {}
+  ) { }
 
   @Post('selfie/upload')
   @ApiOperation({
@@ -41,7 +41,6 @@ export class FacesController {
   async uploadSelfie(@Body() input: UploadSelfieDTO): Promise<Session> {
     const params: FaceUploadingInput = {
       file: input.file,
-      sub_type: input.sub_type,
     };
     return this.sessionService.update(params);
   }

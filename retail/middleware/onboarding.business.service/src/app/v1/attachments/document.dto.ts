@@ -22,10 +22,13 @@ export class UploadSelfieDTO {
   readonly file: string;
 
   @ApiProperty({
-    title: 'Selfie uploading step',
+    enum: Object.values(SELFIE_SUB_TYPES),
+    example: Object.values(SELFIE_SUB_TYPES)[0],
+    description: 'Selfie uploading step',
     required: true,
   })
   @IsString()
+  @IsNotEmpty()
   @IsIn(Object.values(SELFIE_SUB_TYPES))
   readonly sub_type: string;
 }
