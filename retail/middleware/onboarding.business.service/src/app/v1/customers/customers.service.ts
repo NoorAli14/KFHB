@@ -18,6 +18,9 @@ export class CustomersService {
     national_id_expiry
     nationality
     nationality_code
+    fcm_token_id
+    device_id
+    platform
     gender
     status
     created_on
