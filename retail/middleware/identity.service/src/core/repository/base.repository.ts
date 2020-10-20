@@ -11,7 +11,9 @@ export abstract class BaseRepository {
   async listWithPagination(query_count: QueryBuilder,
                            query_data: QueryBuilder,
                            query_params: QueryParams): Promise<any> {
-    const limitPerPage = (query_params.limit || NUMBERS.DEFAULT_PAGE_SIZE) > 100 ? 100 : (query_params.limit || NUMBERS.DEFAULT_PAGE_SIZE);
+    const limitPerPage = (query_params.limit || NUMBERS.DEFAULT_PAGE_SIZE) > NUMBERS.MAX_PAGE_SIZE ?
+        NUMBERS.MAX_PAGE_SIZE :
+        (query_params.limit || NUMBERS.DEFAULT_PAGE_SIZE);
     const page = Math.max(query_params.page || 1, 1);
     const offset = (page - 1) * limitPerPage;
     const total = await query_count.count('id as count').first();
