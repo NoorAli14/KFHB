@@ -7,6 +7,8 @@ import { LoggingInterceptor } from '@common/interceptors/';
 import { HttpExceptionFilter } from '@common/filters/http-exception.filter';
 import { ConfigurationService } from '@common/configuration/configuration.service';
 import { KernelMiddleware } from '@core/middlewares/index';
+import * as bodyParser from 'body-parser';
+
 class Server {
   private _app: INestApplication;
   private _config: ConfigurationService;
@@ -33,6 +35,8 @@ class Server {
    */
   private mountMiddlewares(): void {
     this._app = KernelMiddleware.init(this.app, this.Config);
+    this._app.use(bodyParser.json({ limit: '50mb' }));
+    this._app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
   }
 
   /**

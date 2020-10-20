@@ -1,4 +1,4 @@
-export const TABLE: { [key: string]: string } = {
+export const TABLE = {
   SESSION: 'IDT_SESSION',
   DOCUMENT_TYPE: 'IDT_DOCUMENT_TYPE',
   CUSTOMER: 'IDT_CUSTOMER',

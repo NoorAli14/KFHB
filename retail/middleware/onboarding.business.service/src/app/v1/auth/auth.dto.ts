@@ -83,4 +83,14 @@ export class RegisterCustomerDto {
   @IsNotEmpty()
   @MaxLength(10)
   platform: string;
+
+  @ApiProperty({
+    title: 'FCM Token Id',
+    description: 'FCM Token Id',
+    required: true,
+  })
+  @IsNotEmpty()
+  @IsString()
+  @MaxLength(255)
+  fcm_token_id: string;
 }
