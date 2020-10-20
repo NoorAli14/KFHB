@@ -107,13 +107,14 @@ export class AppointmentsService {
       output,
     );
 
+    const user = await this.get_user_by_id_from_service(newAppointment.user_id);
+    // console.log(response, '-=-=-=-=-=-=-');
     /**
      *
      * Getting email of all available agents
      * Calling other service to send email to available agent
      *
      */
-    const { user } = response;
     await this.send_email_to_agents(
       available_agents.map((item: UserGQL) => item.email),
       newAppointment.user_id,
