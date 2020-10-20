@@ -19,6 +19,7 @@ input CreateCustomerInput {
   contact_no: String
   device_id: String
   platform: String
+  fcm_token_id: String
 }
 
 type CUSTOM_ERROR {
@@ -43,12 +44,13 @@ type Customer {
   nationality_code: String
   device_id: String
   platform: String
-  next_step: String
+  last_step: String
   is_aml_verified: Boolean
   is_email_verified: Boolean
   is_contact_no_verified: Boolean
   is_evaluation_verified: Boolean
   status: String
+  fcm_token_id: String
   created_on: String
   created_by: String
   updated_on: String
@@ -56,6 +58,11 @@ type Customer {
   deleted_on: String
   deleted_by: String
   documents: [Document!]!
+}
+
+type CustomerWithPagination {
+  pagination: PaginationModel
+  data: [Customer!]
 }
 
 """
@@ -112,6 +119,17 @@ type Mutation {
   processDocument(input: ProcessDocumentInput!): Result!
 }
 
+type PaginationModel {
+  total: Float
+  pages: Float
+  perPage: Float
+  current: Float
+  next: Float
+  prev: Float
+  isFirst: Boolean
+  isLast: Boolean
+}
+
 type PreviewDocument {
   image: String!
 }
@@ -127,6 +145,7 @@ input ProcessDocumentInput {
 }
 
 type Query {
+  customersList: CustomerWithPagination!
   findCustomerById(id: String!): Customer!
   previewAttachment(input: PreviewDocumentInput!): PreviewDocument!
 }
