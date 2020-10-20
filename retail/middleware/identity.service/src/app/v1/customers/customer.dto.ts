@@ -45,4 +45,10 @@ export class NewCustomerInput {
   @IsIn(DEVICES)
   @MaxLength(10)
   platform: string;
+
+  @Field({ nullable: true })
+  @IsString()
+  @IsOptional()
+  @MaxLength(255)
+  fcm_token_id: string;
 }

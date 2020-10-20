@@ -19,6 +19,7 @@ input CreateCustomerInput {
   contact_no: String
   device_id: String
   platform: String
+  fcm_token_id: String
 }
 
 type CUSTOM_ERROR {
@@ -49,6 +50,7 @@ type Customer {
   is_contact_no_verified: Boolean
   is_evaluation_verified: Boolean
   status: String
+  fcm_token_id: String
   created_on: String
   created_by: String
   updated_on: String
