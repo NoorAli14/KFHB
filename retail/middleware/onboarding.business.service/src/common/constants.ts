@@ -52,3 +52,14 @@ export const CONTEXT_NAMESPACE_ID =
 export const DAY_FORMAT = 'MM/DD/YYYY';
 export const HOUR_FORMAT = 'HH';
 export const DAY_WITH_HOUR_FORMAT = 'MM/DD/YYYY HH';
+export const PAGINATION_OUTPUT: string = ` {
+  total
+  pages
+  perPage
+  current
+  next
+  prev
+  isFirst
+  isLast
+}`;
+export const DEVICES: string[] = ['ios', 'andriod'];
