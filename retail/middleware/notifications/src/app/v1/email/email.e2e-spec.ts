@@ -15,6 +15,7 @@ describe('Email Module (e2e)', () => {
 
     app = moduleRef.createNestApplication();
     await app.init();
+    jest.setTimeout(50000);
   });
 
   const sendEmailInput: SendEmailInput = {
