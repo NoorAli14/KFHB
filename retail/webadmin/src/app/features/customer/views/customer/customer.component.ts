@@ -21,6 +21,7 @@ import { MatTableDataSource } from "@angular/material/table";
 import { CONFIG } from "@config/index";
 import { takeUntil } from "rxjs/operators";
 import { MESSAGES } from "@shared/constants/messages.constant";
+import { Pagination } from '@shared/models/pagination.model';
 
 @Component({
     selector: "app-customer",
@@ -31,9 +32,8 @@ import { MESSAGES } from "@shared/constants/messages.constant";
 })
 export class CustomerComponent extends BaseComponent implements OnInit {
     customers: any;
-    pagination: any;
+    pagination: Pagination;
     dialogRef: any;
-    pageSize: number = CONFIG.PAGE_SIZE;
     pageSizeOptions: Array<number> = CONFIG.PAGE_SIZE_OPTIONS;
     dataSource = new MatTableDataSource<any>();
     @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -55,14 +55,15 @@ export class CustomerComponent extends BaseComponent implements OnInit {
     ) {
         super(injector, MODULES.ROLE_MANAGEMENT);
         super.ngOnInit();
+        this.pagination=new Pagination();
     }
     ngOnInit(): void {
-        this.getData();
+        this.getData(1,CONFIG.PAGE_SIZE);
     }
 
-    getData(): void {
+    getData(pageIndex,perPage): void {
         this._service
-            .getCustomers()
+            .getCustomers(pageIndex,perPage)
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe(
                 (response) => {
@@ -77,6 +78,9 @@ export class CustomerComponent extends BaseComponent implements OnInit {
                 }
             );
     }
+    onPageFired(data){
+        // this.getDetail(this.currentTab,data['pageIndex']+1)
+      }
     camelToSentenceCase(text): string {
         return camelToSentenceCase(text);
     }
@@ -91,7 +95,7 @@ export class CustomerComponent extends BaseComponent implements OnInit {
     }
     hello() {}
     getCustomerDetail(id) {
-        // const id="34A8F400-23F0-445F-A20C-5407BDC1C6FC";
+         id="34A8F400-23F0-445F-A20C-5407BDC1C6FC";
         this._service
             .getCustomerById(id)
             .pipe(takeUntil(this._unsubscribeAll))

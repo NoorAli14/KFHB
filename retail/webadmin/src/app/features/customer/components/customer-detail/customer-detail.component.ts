@@ -23,6 +23,7 @@ export class CustomerDetailComponent implements OnInit, AfterContentChecked {
     nationalIdDocuments: GalleryItem[];
     passportDocuments: GalleryItem[];
     FATCA: any;
+    amlData: any;
     bankingTransaction: any;
     passportProcessed: any;
     civilIdBackProcessed: any;

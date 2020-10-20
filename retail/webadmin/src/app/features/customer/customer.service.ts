@@ -9,7 +9,7 @@ export class CustomerService {
     constructor(private network:NetworkService) {
         
     }
-    getCustomers(){
+    getCustomers(pageIndex,perPage){
         return this.network.getAll(URI.CUSTOMERS);
     }
     getCustomerById(id){

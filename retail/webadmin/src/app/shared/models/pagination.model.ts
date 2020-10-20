@@ -1,11 +1,10 @@
 export class Pagination {
-    next: number;
-    previous: number;
     current: number;
-    pages: number;
-    pageList: Array<number>;
+    isFirst:boolean;
+    isLast:boolean;
+    next: number;
+    prev: number;
     perPage:number;
-    startingFrom:number;
-    endingTo:number;
+    pages: number;
     total:number
 }

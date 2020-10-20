@@ -23,7 +23,7 @@ app-customer-detail {
         }
 
         .content {
-            padding: 16px;
+            flex-direction: column;padding: 20px;    min-height: 365px;max-height: 365px;
         }
 
         footer {
