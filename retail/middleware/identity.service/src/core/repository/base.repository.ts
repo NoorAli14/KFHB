@@ -46,16 +46,16 @@ export abstract class BaseRepository {
   }
 
   async findAll(columns: string[], limit?: number): Promise<any> {
-    const qb = this._connection(this._tableName).select(columns);
+    let qb = this._connection(this._tableName).select(columns);
     if (limit) {
-      qb.limit(limit);
+      qb = qb.limit(limit);
     }
-    return qb.limit(10);
+    return qb;
   }
 
   async create(newObj: { [key: string]: any }, keys: string[], trx?: any) {
     const _knex: any = trx || this.connection;
-    return _knex(this._tableName).insert(newObj, keys);
+    return _knex(this._tableName).insert(newObj).returning(keys);
   }
 
   async update(
@@ -69,8 +69,7 @@ export abstract class BaseRepository {
       .where(condition)
       .update(
         { ...newObj, ...{ updated_on: this.connection.fn.now() } },
-        columns,
-      );
+      ).returning(columns);
   }
 
   async delete(condition: { [key: string]: any }): Promise<any> {

@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsOptional } from 'class-validator';
-import { USER_STATUSES, GENDER } from '@common/constants';
+import { IsEmail, IsOptional, MaxLength } from 'class-validator';
+import { USER_STATUSES, GENDER, DEVICES } from '@common/constants';
+import { PaginationDTO } from '@root/src/common/dtos';
 
 export class Customer {
     @ApiProperty({
@@ -107,6 +108,40 @@ export class Customer {
     })
     @IsOptional()
     nationality_code: string;
+
+    @ApiProperty({
+        title: 'Device ID',
+        example: '358e380bc0d66abb',
+        required: false,
+    })
+    @IsOptional()
+    device_id: string;
+
+    @ApiProperty({
+        title: 'FCM Token ID',
+        example: '358e380bc0d66abb',
+        required: false,
+    })
+    @IsOptional()
+    fcm_token_id: string;
+
+    @ApiProperty({
+        enum: DEVICES,
+        title: 'Platform',
+        example: DEVICES[0],
+        required: true,
+    })
+    @MaxLength(10)
+    platform: string;
+
+    @ApiProperty({
+        title: 'Last successfully completed step',
+        example: 'RBX_ONB_STEP_EMAIL_OTP_SENT',
+        required: false,
+    })
+    @IsOptional()
+    last_step: string;
+
     @ApiProperty({
         enum: USER_STATUSES,
         example: USER_STATUSES[0],
@@ -134,12 +169,21 @@ export class Customer {
     @ApiProperty({ required: false })
     updated_by?: string;
 
-    @ApiProperty({
-        required: false,
-        description: 'timestamp without time zone',
-    })
-    deleted_on?: Date;
+}
 
-    @ApiProperty({ required: false })
-    deleted_by?: string;
+
+export class CustomerPaginationList {
+    @ApiProperty({
+        type: [Customer],
+        description: 'List of all customer.',
+        required: true,
+    })
+    data: Customer[];
+
+    @ApiProperty({
+        type: PaginationDTO,
+        description: 'Pagination meta data',
+        required: true,
+    })
+    pagination: PaginationDTO;
 }

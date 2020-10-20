@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, Logger } from '@nestjs/common';
-import { GqlClientService, toGraphql } from '@common/index';
-import { Customer } from './customer.entity';
+import { GqlClientService, PAGINATION_OUTPUT, toGraphql } from '@common/index';
+import { Customer, CustomerPaginationList } from './customer.entity';
 
 @Injectable()
 export class CustomersService {
@@ -22,6 +22,7 @@ export class CustomersService {
     device_id
     platform
     gender
+    last_step
     status
     created_on
     created_by
@@ -64,5 +65,16 @@ export class CustomersService {
       }
     }`;
     return this.gqlClient.send(mutation);
+  }
+
+  async list(): Promise<CustomerPaginationList> {
+    this.logger.log(`Start fetching a list of paginated customers`);
+    const query: string = `query {
+      result: customersList {
+        pagination ${PAGINATION_OUTPUT}
+        data ${this.output}
+      }
+    }`;
+    return this.gqlClient.send(query);
   }
 }
