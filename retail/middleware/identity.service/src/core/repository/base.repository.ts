@@ -1,36 +1,36 @@
 import { InjectKnex, Knex } from 'nestjs-knex';
-import {NUMBERS} from "@rubix/common";
-import {PaginationModel} from "@common/models";
-import {QueryParams} from "@common/classes";
-import {QueryBuilder} from "knex";
+import { NUMBERS } from "@rubix/common";
+import { IDT_PaginationModel } from "@common/models";
+import { QueryParams } from "@common/classes";
+import { QueryBuilder } from "knex";
 
 export abstract class BaseRepository {
   @InjectKnex() private readonly _connection: Knex;
   private _tableName: string;
 
   async listWithPagination(query_count: QueryBuilder,
-                           query_data: QueryBuilder,
-                           query_params: QueryParams): Promise<any> {
+    query_data: QueryBuilder,
+    query_params: QueryParams): Promise<any> {
     const limitPerPage = (query_params.limit || NUMBERS.DEFAULT_PAGE_SIZE) > NUMBERS.MAX_PAGE_SIZE ?
-        NUMBERS.MAX_PAGE_SIZE :
-        (query_params.limit || NUMBERS.DEFAULT_PAGE_SIZE);
+      NUMBERS.MAX_PAGE_SIZE :
+      (query_params.limit || NUMBERS.DEFAULT_PAGE_SIZE);
     const page = Math.max(query_params.page || 1, 1);
     const offset = (page - 1) * limitPerPage;
     const total = await query_count.count('id as count').first();
     const rows = await query_data.offset(offset).limit(limitPerPage).orderBy('created_on', 'desc');
     const count = parseInt(String(total.count), 10);
     const pages = Math.ceil(count / limitPerPage);
-    const pagination: PaginationModel = {
-      total : count,
-      pages : pages,
-      perPage : limitPerPage,
-      current : page,
-      next : page + 1 > pages ? null : page + 1,
-      prev : page - 1 < 1 ? null : page - 1,
-      isFirst : page == 1,
-      isLast : page == pages,
+    const pagination: IDT_PaginationModel = {
+      total: count,
+      pages: pages,
+      perPage: limitPerPage,
+      current: page,
+      next: page + 1 > pages ? null : page + 1,
+      prev: page - 1 < 1 ? null : page - 1,
+      isFirst: page == 1,
+      isLast: page == pages,
     };
-    return {pagination: pagination, data: rows};
+    return { pagination: pagination, data: rows };
   }
 
   constructor(tableName: string) {

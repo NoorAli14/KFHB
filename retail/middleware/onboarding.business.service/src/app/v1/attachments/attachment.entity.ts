@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { DOCUMENT_STATUSES } from '@common/index';
+const evaluationStatus: string[] = ['CUSTOMER_SELFIE_MISMATCHED'];
 
 export class Attachment {
   @ApiProperty({
@@ -46,4 +47,24 @@ export class Attachment {
 
   @ApiProperty({ required: false })
   updated_by: string;
+}
+
+export class Evaluation {
+  @ApiProperty({
+    example: true,
+  })
+  success: boolean;
+
+  @ApiProperty({
+    enum: evaluationStatus,
+    example: evaluationStatus[0],
+    description: 'Status of the Evaluation.',
+    required: false,
+  })
+  statuss: string;
+
+  @ApiProperty({
+    required: false,
+  })
+  message?: string;
 }

@@ -23,6 +23,12 @@ export const DOCUMENT_TYPES: { [key: string]: string } = {
   NATIONAL_ID_BACK_SIDE: 'NATIONAL_ID_BACK_SIDE',
 };
 
+export const SELFIE_SUB_TYPES: { [key: string]: string } = {
+  SELFIE: 'SELFIE',
+  DEVICE_REGISTRATION: 'DEVICE_REGISTRATION',
+  UPDATE_REGISTRATION_CHANLLENGE: 'UPDATE_REGISTRATION_CHANLLENGE',
+};
+
 export const DOCUMENT_STATUSES: { [key: string]: string } = {
   PENDING: 'PENDING',
   PROCESSING: 'PROCESSING',
