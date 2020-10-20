@@ -17,14 +17,12 @@ import {
 } from '@nestjs/swagger';
 import { AuthGuard, DOCUMENT_TYPES } from '@common/index';
 import { AttachmentsService } from './attachments.service';
-import { Attachment } from './attachment.entity';
+import { Attachment, Evaluation } from './attachment.entity';
 import { UploadDocumentDTO } from './document.dto';
 import {
   DocumentUploadingInput,
   IDocumentProcess,
 } from './attachment.interface';
-import { Evaluation } from '../sessions/session.entity';
-import { SessionsService } from '../sessions/sessions.service';
 
 @ApiTags('Documents Uploading & Processing Module')
 @Controller('documents')
@@ -33,10 +31,7 @@ import { SessionsService } from '../sessions/sessions.service';
 export class DocumentsController {
   private readonly logger: Logger = new Logger(DocumentsController.name);
 
-  constructor(
-    private readonly documentService: AttachmentsService,
-    private readonly sessionService: SessionsService
-  ) {}
+  constructor(private readonly documentService: AttachmentsService) {}
 
   @Post('nationality-id-front/upload')
   @ApiOperation({
@@ -223,7 +218,7 @@ export class DocumentsController {
     return this.documentService.process(params);
   }
 
-  @Post('documents/verification')
+  @Post('verification')
   @ApiOperation({
     summary: 'Perform Documents Verification',
     description:
@@ -239,6 +234,6 @@ export class DocumentsController {
   })
   @HttpCode(HttpStatus.OK)
   async evaluation(): Promise<Evaluation> {
-    return this.sessionService.evaluation();
+    return this.documentService.evaluation();
   }
 }
