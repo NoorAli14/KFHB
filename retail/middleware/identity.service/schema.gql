@@ -125,6 +125,7 @@ type Mutation {
   updateSession(input: UploadFaceInput!): Session!
   evaluation: EVALUATION_RESPONSE!
   addCustomer(input: CreateCustomerInput!): Customer!
+  updateCustomer(input: UpdateCustomerInput!, id: String!): Customer!
   uploadLiveness(input: UploadFaceInput!): Face!
   addDocument(input: UploadDocumentInput!): Document!
   processDocument(input: ProcessDocumentInput!): Result!
@@ -176,6 +177,23 @@ type Session {
   created_on: DateTime!
   updated_by: String!
   updated_on: DateTime!
+}
+
+input UpdateCustomerInput {
+  first_name: String
+  middle_name: String
+  last_name: String
+  gender: String
+  date_of_birth: String
+  last_step: String
+  status: String
+  contact_no: String
+  nationality: String
+  nationality_code: String
+  is_aml_verified: Boolean
+  is_email_verified: Boolean
+  is_evaluation_verified: Boolean
+  is_contact_no_verified: Boolean
 }
 
 input UploadDocumentInput {

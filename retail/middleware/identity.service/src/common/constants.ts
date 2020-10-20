@@ -98,6 +98,11 @@ export const NUMBERS = {
   MAX_COLUMN_LENGTH: 255,
 };
 
+export const GENDER = {
+  M: 'M',
+  F: 'F',
+};
+
 export const STATUS = {
   ACTIVE: 'ACTIVE',
   INACTIVE: 'INACTIVE',
