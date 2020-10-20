@@ -41,6 +41,7 @@ export class FacesController {
   async uploadSelfie(@Body() input: UploadSelfieDTO): Promise<Session> {
     const params: FaceUploadingInput = {
       file: input.file,
+      sub_type: input.sub_type,
     };
     return this.sessionService.update(params);
   }

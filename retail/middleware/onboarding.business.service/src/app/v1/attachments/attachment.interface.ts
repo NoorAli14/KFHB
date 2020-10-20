@@ -1,5 +1,6 @@
 export interface FaceUploadingInput {
   file: string;
+  sub_type?: string;
 }
 
 export interface DocumentUploadingInput {
