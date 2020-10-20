@@ -7,7 +7,7 @@ import {
   MaxLength,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-const DEVICES: string[] = ['ios', 'andriod'];
+import { DEVICES } from '@common/constants'
 
 export class RegisterCustomerDto {
   @ApiProperty({
