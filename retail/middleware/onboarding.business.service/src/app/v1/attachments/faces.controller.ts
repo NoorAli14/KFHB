@@ -22,7 +22,7 @@ export class FacesController {
   constructor(
     private readonly attachmentService: AttachmentsService,
     private readonly sessionService: SessionsService,
-  ) {}
+  ) { }
 
   @Post('selfie/upload')
   @ApiOperation({
