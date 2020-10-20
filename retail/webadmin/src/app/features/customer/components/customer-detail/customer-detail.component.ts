@@ -1,4 +1,4 @@
-import { snakeToCamelObject } from "./../../../../shared/helpers/global.helper";
+import { snakeToCamelObject } from "@shared/helpers/global.helper";
 import { Component, Inject, OnInit, ViewEncapsulation } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { environment } from "@env/environment";
@@ -19,13 +19,15 @@ import { AuthenticationService } from "@shared/services/auth/authentication.serv
     encapsulation: ViewEncapsulation.None,
 })
 export class CustomerDetailComponent implements OnInit {
-    items: GalleryItem[];
+    nationalIdDocuments: GalleryItem[];
+    passportDocuments: GalleryItem[];
     imagesUrl: Array<any> = [];
     FATCA: any;
     bankingTransaction: any;
     passportProcessed: any;
     civilIdBackProcessed: any;
     customer:any;
+    img:any;
     constructor(
         public gallery: Gallery,
         public matDialogRef: MatDialogRef<CustomerDetailComponent>,
@@ -34,7 +36,6 @@ export class CustomerDetailComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        // this.imagesUrl=data;
 
         const data = this.data.templates.map((item) => {
             return { ...item, results: JSON.parse(atob(item.results)) };
@@ -58,30 +59,42 @@ export class CustomerDetailComponent implements OnInit {
         this.customer = snakeToCamelObject(this.data);
         this.FATCA = data.find((x) => x.results.name === "FATCA");
         this.bankingTransaction = data.find((x) => x.results.name === "KYC");
-        const _documents = [
-            { type: "PASSPORT", isExtracted: false },
-            { type: "PASSPORT", isExtracted: true },
+       
+        const _nationalIdDocuments = [
             { type: "NATIONAL_ID_BACK_SIDE", isExtracted: false },
             { type: "NATIONAL_ID_FRONT_SIDE", isExtracted: false },
             { type: "NATIONAL_ID_FRONT_SIDE", isExtracted: true },
         ];
 
-        this.items = _documents.map((item) => {
+        const _passportDocuments = [
+            { type: "PASSPORT", isExtracted: false },
+            { type: "PASSPORT", isExtracted: true }
+        ];
+
+        this.nationalIdDocuments = _nationalIdDocuments.map((item) => {
             const url = this.previewDocumentUrl(item.type, item.isExtracted);
             return new ImageItem({ src: url, thumb: url });
         });
-        this.basicLightboxExample();
+        this.passportDocuments = _passportDocuments.map((item) => {
+            const url = this.previewDocumentUrl(item.type, item.isExtracted);
+            return new ImageItem({ src: url, thumb: url });
+        });
+
+        this.basicLightboxExample(this.passportDocuments);
+        this.basicLightboxExample(this.nationalIdDocuments);
 
         // Load item into different lightbox instance
         // With custom gallery config
-        this.withCustomGalleryConfig();
+        this.withCustomGalleryConfig('passportDocuments',this.passportDocuments);
+        this.withCustomGalleryConfig('nationalIdDocuments',this.nationalIdDocuments);
     }
-    basicLightboxExample() {
-        this.gallery.ref().load(this.items);
+    
+    basicLightboxExample(items) {
+        this.gallery.ref().load(items);
     }
 
     getUrl(url) {
-        return `${environment.API_BASE_URL}${url}`;
+        return `${environment.API_BASE_URL}/api/v1${url}`;
     }
 
     previewDocumentUrl(type, isExtracted) {
@@ -92,42 +105,23 @@ export class CustomerDetailComponent implements OnInit {
 
         const document = this.data.documents.find((x) => x.name === type);
         if (!document) return "";
+        debugger
+        
         let url = `/entitlements/customers/${customerId}/documents/${document.id}/preview?x-access-token=${token}&x-tenant-id=${tenantId}&x-channel-id=${channelId}`;
         if (isExtracted) {
             url = `${url}&extracted-image=true`;
         }
         return this.getUrl(url);
     }
-    withCustomGalleryConfig() {
-        // 2. Get a lightbox gallery ref
-        const lightboxGalleryRef = this.gallery.ref("documents");
+    withCustomGalleryConfig(element,images) {
+        const lightboxGalleryRef = this.gallery.ref(element);
 
-        // (Optional) Set custom gallery config to this lightbox
         lightboxGalleryRef.setConfig({
             imageSize: ImageSize.Cover,
             thumbPosition: ThumbnailsPosition.Top,
         });
 
-        // 3. Load the items into the lightbox
-        lightboxGalleryRef.load(this.items);
+        lightboxGalleryRef.load(images);
     }
 }
 
-const data = [
-    {
-        srcUrl: "https://preview.ibb.co/jrsA6R/img12.jpg",
-        previewUrl: "https://preview.ibb.co/jrsA6R/img12.jpg",
-    },
-    {
-        srcUrl: "https://preview.ibb.co/kPE1D6/clouds.jpg",
-        previewUrl: "https://preview.ibb.co/kPE1D6/clouds.jpg",
-    },
-    {
-        srcUrl: "https://preview.ibb.co/mwsA6R/img7.jpg",
-        previewUrl: "https://preview.ibb.co/mwsA6R/img7.jpg",
-    },
-    {
-        srcUrl: "https://preview.ibb.co/kZGsLm/img8.jpg",
-        previewUrl: "https://preview.ibb.co/kZGsLm/img8.jpg",
-    },
-];

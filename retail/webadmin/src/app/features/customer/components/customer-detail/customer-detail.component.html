@@ -16,12 +16,7 @@
     </mat-toolbar>
 
     <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar style="max-height: 83vh !important">
-        <!-- <div class="gallerize-example">
-            <p class="container">
-                <img *ngFor="let item of items; index as i" [lightbox]="i" class="gallery" [gallery]="'documents'"
-                    [src]="item.data.thumb">
-            </p>
-        </div> -->
+
         <mat-tab-group>
 
             <mat-tab label="CIVIL ID">
@@ -164,7 +159,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <br> 
+                                <br>
                                 <hr> <br>
                             </ng-container>
                         </div>
@@ -185,7 +180,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <br> 
+                                <br>
                                 <hr> <br>
                             </ng-container>
                         </div>
@@ -199,18 +194,23 @@
             </mat-tab>
             <mat-tab label="CIVIL ID DOCUMENT">
                 <div class="tab-content p-24 tab-height" fusePerfectScrollbar>
-                    <div fxLayout="row wrap" fxLayoutAlign="start start">
-                        <div *ngFor="let image of imagesUrl">
-                            <div class="product-image" fxlayout="row" fxLayoutAlign="center center">
-                                <img class="media" [src]="image.srcUrl">
-                            </div>
-                        </div>
+                    <div class="gallerize-example">
+                        <p class="container">
+                            <img *ngFor="let item of nationalIdDocuments; index as i" [lightbox]="i" class="gallery"
+                                [gallery]="'nationalIdDocuments'" [src]="item.data.thumb">
+                        </p>
                     </div>
                 </div>
             </mat-tab>
             <mat-tab label="PASSPORT DOCUMENT">
                 <div class="tab-content p-24 tab-height" fusePerfectScrollbar>
-
+                    <div class="gallerize-example">
+                        <p class="container">
+                            <img *ngFor="let item of passportDocuments; index as i" [lightbox]="i" class="gallery"
+                                [gallery]="'passportDocuments'" [src]="item.data.thumb">
+                                <img [src]="img" alt="">
+                        </p>
+                    </div>
                 </div>
             </mat-tab>
         </mat-tab-group>
