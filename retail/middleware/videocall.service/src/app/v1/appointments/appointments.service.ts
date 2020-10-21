@@ -1,3 +1,4 @@
+import * as moment from 'moment';
 import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { NewAppointmentInput } from './appointment.dto';
@@ -5,10 +6,11 @@ import { AppointmentRepository } from '@core/repository';
 
 import { ConfigurationService } from '@common/configuration/configuration.service';
 import { Appointment, UserGQL } from './appointment.model';
-import * as moment from 'moment';
 import { APPOINTMENT_STATUS } from '@common/constants';
 import { GqlClientService } from '@common/libs/gqlclient/gqlclient.service';
-import { PushNotificationModel } from './push_notification.model';
+import { EmailService, PushNotificationService } from '@common/connectors';
+
+import { iPushNotification } from '@common/connectors/notification/interfaces/push_notification.interface';
 import { toGraphQL } from '@common/utilities';
 import { ICurrentUser } from '@common/interfaces';
 import {
@@ -18,7 +20,6 @@ import {
   MaxAppointLimitReachException,
   AppointmentAlreadyExistException,
 } from './exceptions';
-import { EmailService } from './email.service';
 
 @Injectable()
 export class AppointmentsService {
@@ -27,6 +28,7 @@ export class AppointmentsService {
     private readonly configService: ConfigurationService,
     private readonly gqlClient: GqlClientService,
     private readonly emailService: EmailService,
+    private readonly pushNotificationService: PushNotificationService,
   ) {}
 
   private async throw_if_appointment_exist(
@@ -218,7 +220,7 @@ export class AppointmentsService {
       console.log('Appointment Coming At:', appointment.call_time);
 
       // Send Push Notification
-      const notification: PushNotificationModel = {
+      const notification: iPushNotification = {
         platform: appointment.user.platform,
         device_id: appointment.user.device_id,
         token: appointment.user.firebase_token,
@@ -229,7 +231,9 @@ export class AppointmentsService {
         image_url: this.configService.VCALL.ENV_RBX_NOTIFICATION_IMAGE_URL,
       };
 
-      const send_notification = await this.send_push_notification(notification);
+      const send_notification = await this.pushNotificationService.send_push_notification(
+        notification,
+      );
 
       // If success then
       if (send_notification) {
@@ -286,25 +290,5 @@ export class AppointmentsService {
     }`;
 
     return this.gqlClient.client('ENV_RBX_ENTITLEMENT_SERVER').send(query);
-  }
-
-  private async send_push_notification(input: PushNotificationModel) {
-    const mutation = `mutation {
-      result: sendPushNotification(input: ${toGraphQL(input)}) {
-        id
-        platform
-        device_id
-        message_title
-        message_body
-        image_url
-        status
-        created_on
-        created_by
-      }
-    }`;
-
-    return await this.gqlClient
-      .client('ENV_RBX_NOTIFICATION_SERVER')
-      .send(mutation);
   }
 }

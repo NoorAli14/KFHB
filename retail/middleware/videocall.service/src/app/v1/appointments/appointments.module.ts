@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
+import { EmailService, PushNotificationService } from '@common/connectors';
 import { AppointmentsResolver } from './appointments.resolver';
 import { AppointmentsService } from './appointments.service';
 import { AppointmentRepository } from '@core/repository';
 import { GqlClientModule } from '@common/libs/gqlclient/gqlclient.module';
-import { EmailService } from './email.service';
 
 @Module({
   imports: [GqlClientModule],
@@ -12,6 +12,7 @@ import { EmailService } from './email.service';
     AppointmentsService,
     AppointmentRepository,
     EmailService,
+    PushNotificationService,
   ],
 })
 export class AppointmentsModule {}

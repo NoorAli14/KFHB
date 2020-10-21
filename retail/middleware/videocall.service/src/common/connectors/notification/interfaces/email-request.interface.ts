@@ -2,7 +2,7 @@ import { InputType } from '@nestjs/graphql';
 import { IsArray, IsString } from 'class-validator';
 
 @InputType()
-export class EmailRequest {
+export class iEmailRequest {
   @IsArray()
   bcc: string[];
 

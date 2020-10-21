@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 
 import { toGraphQL } from '@common/utilities';
 import { GqlClientService } from '@common/libs/gqlclient/gqlclient.service';
-import { EmailRequest } from './interfaces/email-request.interface';
+import { iEmailRequest } from './interfaces/email-request.interface';
 
 @Injectable()
 export class EmailService {
@@ -24,7 +24,7 @@ export class EmailService {
     user_name: string,
     call_time: Date,
   ) {
-    const input: EmailRequest = {
+    const input: iEmailRequest = {
       bcc: ['asajid451@gmail.com'],
       template: 'appointment_sucess',
       subject: 'New Appointment',
