@@ -15,10 +15,10 @@
         </mat-toolbar-row>
     </mat-toolbar>
 
-    <div mat-dialog-content class="p-24 m-0"  style="max-height: 83vh !important">
+    <div mat-dialog-content class="p-24 m-0" style="max-height: 83vh !important">
         <mat-tab-group>
             <mat-tab label="CIVIL ID">
-                <div class="tab-content p-24 " >
+                <div class="tab-content p-24 ">
                     <div class="profile-box info-box general">
                         <div class="content" fusePerfectScrollbar>
                             <div fxLayout="column" fxFlex="48">
@@ -89,7 +89,7 @@
 
             </mat-tab>
             <mat-tab label="PASSPORT">
-                <div class="tab-content p-24 " >
+                <div class="tab-content p-24 ">
                     <div class="profile-box info-box general">
                         <div class="content" fusePerfectScrollbar>
                             <div fxLayout="column" fxFlex="48">
@@ -157,9 +157,9 @@
                 </div>
             </mat-tab>
             <mat-tab label="FATCA">
-                <div class="tab-content p-24 " >
+                <div class="tab-content p-24 ">
                     <div class="profile-box info-box general">
-                        <div class="content" fusePerfectScrollbar >
+                        <div class="content" fusePerfectScrollbar>
                             <ng-container *ngFor="let item of FATCA?.results?.sections">
                                 <div fxLayout="column" fxFlex="100">
                                     <div class="info-line" *ngFor="let question of item.questions">
@@ -181,7 +181,7 @@
                 </div>
             </mat-tab>
             <mat-tab label="BANKING TRANSACTION">
-                <div class="tab-content p-24 " >
+                <div class="tab-content p-24 ">
                     <div class="profile-box info-box general">
                         <div class="content" style="flex-direction:column" fusePerfectScrollbar>
                             <ng-container *ngFor="let item of bankingTransaction?.results?.sections">
@@ -205,7 +205,7 @@
                 </div>
             </mat-tab>
             <mat-tab label="AML">
-                <div class="tab-content p-24 " >
+                <div class="tab-content p-24 ">
                     <div class="profile-box info-box general">
                         <div class="content" style="flex-direction:column" fusePerfectScrollbar>
                             <ng-container *ngFor="let item of amlData?.results?.sections">
