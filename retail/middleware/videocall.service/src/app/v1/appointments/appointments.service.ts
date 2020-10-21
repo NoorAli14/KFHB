@@ -18,7 +18,7 @@ import {
   MaxAppointLimitReachException,
   AppointmentAlreadyExistException,
 } from './exceptions';
-import { EmailRequest } from './interfaces/email-request.interface';
+import { EmailService } from './email.service';
 
 @Injectable()
 export class AppointmentsService {
@@ -26,6 +26,7 @@ export class AppointmentsService {
     private readonly appointmentDB: AppointmentRepository,
     private readonly configService: ConfigurationService,
     private readonly gqlClient: GqlClientService,
+    private readonly emailService: EmailService,
   ) {}
 
   private async throw_if_appointment_exist(
@@ -114,7 +115,7 @@ export class AppointmentsService {
      * Calling other service to send email to available agent
      *
      */
-    this.send_email_to_agents(
+    this.emailService.send_email_to_agents(
       available_agents.map((item: UserGQL) => item.email),
       newAppointment.user_id,
       `${user.first_name} ${user.last_name}`,
@@ -299,49 +300,6 @@ export class AppointmentsService {
         status
         created_on
         created_by
-      }
-    }`;
-
-    return await this.gqlClient
-      .client('ENV_RBX_NOTIFICATION_SERVER')
-      .send(mutation);
-  }
-
-  /**
-   *
-   * @param list
-   * @param user_id
-   * @param user_name
-   * @param call_time
-   * calling another service to send email to all available agents.
-   *
-   */
-  private async send_email_to_agents(
-    list: string[],
-    user_id: string,
-    user_name: string,
-    call_time: Date,
-  ) {
-    const input: EmailRequest = {
-      bcc: list,
-      template: 'appointment_sucess',
-      subject: 'New Appointment',
-      body: '',
-      context: [
-        { key: 'title', value: 'New Appointment' },
-        { key: 'customer_id', value: user_id },
-        { key: 'customer_name', value: user_name },
-        {
-          key: 'appointment_date',
-          value: moment(call_time).format('YYYY-MM-DD'),
-        },
-        { key: 'appointment_time', value: moment(call_time).format('HH:mm') },
-      ],
-    };
-
-    const mutation = `mutation {
-      result: sendEmail(input: ${toGraphQL(input)}) {
-        bcc
       }
     }`;
 
