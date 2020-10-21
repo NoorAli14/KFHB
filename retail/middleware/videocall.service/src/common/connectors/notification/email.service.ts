@@ -23,9 +23,9 @@ export class EmailService {
     user_id: string,
     user_name: string,
     call_time: Date,
-  ) {
+  ): Promise<void> {
     const input: iEmailRequest = {
-      bcc: ['asajid451@gmail.com'],
+      bcc: list,
       template: 'appointment_sucess',
       subject: 'New Appointment',
       body: '',
