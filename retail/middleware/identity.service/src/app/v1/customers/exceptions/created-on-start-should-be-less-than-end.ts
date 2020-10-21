@@ -5,7 +5,7 @@ export class CreatedOnStartShouldBeLessThanEndException extends BaseException {
     super(HttpStatus.BAD_REQUEST, {
       message: 'created_on start should be less than end',
       errorCode: 'IDT-1002',
-      name: 'CREATED_ON_START_AND_END_BE_PRESENT',
+      name: 'CREATED_ON_START_SHOULD_BE_LESS_THAN_END',
       developerMessage: `start(${start}) should be less than end(${end}) for filter on created_on`
     });
   }

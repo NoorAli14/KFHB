@@ -6,6 +6,7 @@ import {ICurrentUser} from "@rubix/common";
 import {CustomerQueryParams} from "@app/v1/customers/classes";
 import {CreatedOnStartAndEndBePresentException} from "@app/v1/customers/exceptions/created-on-start-and-end-be-present";
 import {CreatedOnStartShouldBeLessThanEndException} from "@app/v1/customers/exceptions/created-on-start-should-be-less-than-end";
+import {UpdateCustomerInput} from "@app/v1/customers/customer.dto";
 
 @Injectable()
 export class CustomersService {
@@ -40,7 +41,19 @@ export class CustomersService {
     return customer;
   }
 
-  async findById(id: string, output: string[]): Promise<Customer> {
-    return this.customerDB.findOne({ id: id }, output);
+  async findById(currentUser: ICurrentUser, id: string, output?: string[]): Promise<Customer> {
+    return this.customerDB.findOne({ id: id, deleted_on: null, tenant_id: currentUser.tenant_id }, output);
+  }
+
+  async update(
+      current_user: ICurrentUser,
+      id: string,
+      input: UpdateCustomerInput,
+      output?: string[],
+  ): Promise<Customer> {
+    const [result] = await this.customerDB.update(
+        { id: id, deleted_on : null, tenant_id: current_user.tenant_id},
+        {...input, ...{updated_by: current_user.id}}, output);
+    return result;
   }
 }

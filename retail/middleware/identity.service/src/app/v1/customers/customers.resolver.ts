@@ -19,9 +19,10 @@ import { Document } from '@rubix/app/v1/documents/document.model';
 
 import {Customer, CustomerWithPagination} from './customer.model';
 import { CustomersService } from './customers.service';
-import { NewCustomerInput } from './customer.dto';
+import {NewCustomerInput, UpdateCustomerInput} from './customer.dto';
 import {CustomerQueryParams} from "@app/v1/customers/classes";
 import {QueryParamsCustomer} from "@app/v1/customers/decorators";
+import {CustomerNotFoundException} from "@app/v1/customers/exceptions";
 
 @Resolver(Customer)
 export class CustomersResolver {
@@ -51,14 +52,27 @@ export class CustomersResolver {
     return this.customerService.create(params, output);
   }
 
+  @Mutation(() => Customer)
+  async updateCustomer(
+      @Args('id') id: string,
+      @Args('input') input: UpdateCustomerInput,
+      @Fields() output: string[],
+      @CurrentUser() current_user: ICurrentUser,
+  ): Promise<Customer> {
+    const customer: Customer = await this.customerService.findById(current_user, id,['id']);
+    if(!customer) throw new CustomerNotFoundException(id);
+    return this.customerService.update(current_user, id, input, output);
+  }
+
   @UseGuards(AuthGuard)
   @Query(() => Customer)
   async findCustomerById(
     @Args('id') id: string,
+    @CurrentUser() current_user: ICurrentUser,
     @Fields() output: string[],
   ): Promise<Customer> {
-    const customer: Customer = await this.customerService.findById(id, output);
-    if (!customer) throw new NotFoundException('Customer Not Found');
+    const customer: Customer = await this.customerService.findById(current_user, id, output);
+    if(!customer) throw new CustomerNotFoundException(id);
     return customer;
   }
 
