@@ -1,4 +1,10 @@
-import { IsBase64, IsNotEmpty, IsString, IsUUID } from 'class-validator';
+import {
+  IsBase64,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from 'class-validator';
 
 import { Field, InputType } from '@nestjs/graphql';
 
@@ -18,4 +24,9 @@ export class NewAttachmentInput {
   @IsString()
   @IsBase64()
   file_content: string;
+
+  @IsOptional()
+  @IsString()
+  @Field({ nullable: true })
+  type?: string;
 }

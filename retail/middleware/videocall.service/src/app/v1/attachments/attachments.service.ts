@@ -71,6 +71,7 @@ export class AttachmentsService {
     const attachment = await this.uploadFile(
       `data:image/png;base64,${input.file_content}`,
       input.attachment_id,
+      input.type,
     );
 
     delete attachment.type;
@@ -92,6 +93,7 @@ export class AttachmentsService {
   async uploadFile(
     file_content: string | any,
     filename: string | any,
+    type?: string | any,
   ): Promise<FileResponse> {
     const current_date = moment(new Date(), 'YYYY/MM/DD');
     //check wether ROB_AgentScreenshots folder created or not
@@ -115,11 +117,11 @@ export class AttachmentsService {
     if (!matches && matches.length !== 3)
       throw new InvalidBase64Exception(filename);
 
-    const extension: string = mime.getExtension(matches[1]);
+    const extension: string = mime.getExtension((type && type) || matches[1]);
     const fileName = `${formated_date}_${Date.now()}_${filename}.${extension}`;
 
     const response: FileResponse = {
-      type: matches[1],
+      type: (type && type) || matches[1],
       data: new Buffer(matches[2], 'base64'),
       file_name: fileName,
       file_path: `${ROB_path}/${fileName}`,

@@ -62,6 +62,7 @@ input NewAttachmentInput {
   customer_id: String!
   attachment_id: String!
   file_content: String!
+  type: String
 }
 
 type Query {
