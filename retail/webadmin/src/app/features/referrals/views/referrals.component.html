@@ -33,7 +33,7 @@
                     <mat-cell  *matCellDef="let element; let i = dataIndex" class="pl-24" >
                         <span *ngIf="element[(key)]; else defaultText" style="width:100%;word-wrap: break-word;" >
                             <ng-container>
-                                {{element[(key)]}}
+                                {{ key.includes('date') ?(element[(key)]| date: "dd-MM-yyyy"): element[(key)] }}
                             </ng-container>
                         </span>
                         <ng-template #defaultText>

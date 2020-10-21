@@ -31,15 +31,17 @@ export class ReferralsComponent extends BaseComponent implements OnInit {
   pageSize: number = CONFIG.PAGE_SIZE;
   pageSizeOptions: Array<number> = CONFIG.PAGE_SIZE_OPTIONS;
   displayedColumns = [
-    'requestType',
-    'nameOfReferringCustomer',
-    'referringCustomerEmail',
-    'referringCustomerMobileNo​',
+    'rimOfReferredCustomer​',
+    'nameOfReferredCustomer',
     'rimOfReferringCustomer​',
-    'dateOfAccountOpening​',
+    'nameOfReferringCustomer',
+    'dateOfJazeelRegistration',
+    'customerOpenedAccount',
+    'dateOfAccountOpening',
     'referredCustomerEmail',
     'referredCustomerMobileNo​',
-    'rimOfReferredCustomer​',
+    'referringCustomerEmail',
+    'referringCustomerMobileNo​',
   ];
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;

@@ -1,8 +1,8 @@
 import { BaseModel } from '@shared/models/base.model';
 
 export class Referral extends BaseModel {
-    requestType: string;
     nameOfReferringCustomer: string;
+    nameOfReferredCustomer: string;
     referringCustomerEmail: string;
     referringCustomerMobileNo: boolean;
     rimOfReferringCustomer: string;
@@ -10,4 +10,14 @@ export class Referral extends BaseModel {
     referredCustomerEmail: string;
     referredCustomerMobileNo: string;
     rimOfReferredCustomer: string;
+    dateOfJazeelRegistration: string;
+    customerOpenedAccount: string;
 }
+
+
+
+
+
+
+
+
