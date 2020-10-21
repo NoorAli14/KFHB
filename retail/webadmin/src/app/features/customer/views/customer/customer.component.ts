@@ -108,4 +108,7 @@ export class CustomerComponent extends BaseComponent implements OnInit {
                 }
             );
     }
+    sortData(e){
+        debugger
+    }
 }

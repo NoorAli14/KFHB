@@ -11,6 +11,7 @@ import { GalleryModule } from '@ngx-gallery/core';
 import { LightboxModule } from '@ngx-gallery/lightbox';
 import { MatTabsModule } from '@angular/material/tabs';
 import { AdvanceSearchComponent } from './components/advance-search/advance-search.component';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
   declarations: [CustomerComponent, CustomerDetailComponent,AdvanceSearchComponent],
@@ -22,7 +23,8 @@ import { AdvanceSearchComponent } from './components/advance-search/advance-sear
     MaterialModule,
     GalleryModule,
     LightboxModule,
-    MatTabsModule
+    MatTabsModule,
+    MatSortModule
   ]
 })
 export class CustomerModule { }

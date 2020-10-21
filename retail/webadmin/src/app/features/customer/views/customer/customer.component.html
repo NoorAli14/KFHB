@@ -36,10 +36,10 @@
 
         <!-- CONTENT CARD -->
         <div class="content-card" fusePerfectScrollbar>
-            <mat-table #table [dataSource]="dataSource">
+            <mat-table #table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
                 <!-- COLUMNS AND ROWS-->
                 <ng-container *ngFor="let key of displayedColumns" [matColumnDef]="key">
-                    <mat-header-cell *matHeaderCellDef>{{ key.includes('action') ? 'Action' : camelToSentenceCase(key) }}</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef [disabled]=" key=='action' ? true : false " [mat-sort-header]=" key=='action' ? null : key ">{{ key.includes('action') ? 'Action' : camelToSentenceCase(key) }}</mat-header-cell>
             
                     <mat-cell *matCellDef="let element; let i = dataIndex" class="text-elipsis">
                       <ng-container [ngSwitch]="key">
