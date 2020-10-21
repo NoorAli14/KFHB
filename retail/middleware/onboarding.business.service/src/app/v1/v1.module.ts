@@ -19,7 +19,6 @@ import { SessionModule } from './sessions/session.module';
 import { AttachmentModule } from './attachments/attachment.module';
 import { UserModule } from './users/user.module';
 import { AmlModule } from './aml/aml.module';
-import { AppointmentModule } from './appointments/appointment.module';
 
 class AuthenticatedDataSource extends RemoteGraphQLDataSource {
   async willSendRequest({ request, context }) {
@@ -59,7 +58,6 @@ class BuildServiceModule { }
     UserModule,
     ComplianceModule,
     AmlModule,
-    AppointmentModule,
     GraphQLGatewayModule.forRootAsync({
       imports: [BuildServiceModule],
       useFactory: async (schema: RegistryService) => ({

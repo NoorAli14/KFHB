@@ -13,7 +13,7 @@ export class Appointment {
   @ApiProperty({
     title: 'Call Time',
     description: 'Current Date and time',
-    example: "2020-10-07T14:48:00.000Z",
+    example: '2020-10-07T14:48:00.000Z',
     required: true,
   })
   @IsString()
