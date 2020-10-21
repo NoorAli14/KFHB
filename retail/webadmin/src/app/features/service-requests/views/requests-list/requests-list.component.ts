@@ -98,9 +98,6 @@ export class RequestsListComponent extends BaseComponent implements OnInit {
     this._service
       .getServiceRequestReport().pipe().subscribe(
         (response) => {
-          if ('Record Not Found') {
-            return;
-          }
           this.convertBase64ToExcel(response.data);
         },
         (response) => super.onError(response)
