@@ -81,7 +81,6 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
         for (let i = 0; i < responseDocument.length; i++) {
           this.documents.push(responseDocument[i])
         }
-        console.log(this.documents)
         this.updateGrid(this.documents);
         if (response.data.status != 'Pending') {
           this.btnDisable = true;

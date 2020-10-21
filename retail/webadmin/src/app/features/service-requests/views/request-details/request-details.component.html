@@ -21,10 +21,16 @@
                         <div class="info">{{requestType}}</div>
                     </div>
                 </div>
-                <div fxLayout="column" fxFlex="32">
+                <div *ngIf="requestType=='Standing Order Request/Cancellation'" fxLayout="column" fxFlex="32">
+                    <div class="info-line p-24">
+                        <div class="title text-bold">Order Type</div>
+                        <div class="info"*ngIf="letterType; else defaultText"> {{letterType}}</div>
+                    </div>
+                </div>
+                <div *ngIf="requestType==='Letter Request'" fxLayout="column" fxFlex="32">
                     <div class="info-line p-24">
                         <div class="title text-bold">Letter Type</div>
-                        <div class="info"> {{letterType}}</div>
+                        <div class="info" *ngIf="letterType; else defaultText"> {{letterType}}</div>
                     </div>
                 </div>
                 <div fxLayout="column" fxFlex="32">
@@ -44,20 +50,21 @@
                 </div>
             </div>
             <app-message-box [type]="errorType" [message]="responseMessage"></app-message-box>
-            <mat-table #table matSort matSortActive="requestDate" matSortDirection="asc" matSortDisableClear
+            <div *ngIf='documents.length>0'><mat-table #table matSort matSortActive="requestDate" matSortDirection="asc" matSortDisableClear
                 [dataSource]="dataSource">
                 <ng-container *ngFor="let key of displayedColumns" [matColumnDef]="key">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>
-                        {{ key.includes('viewUpload&DownloadPDF') ? 'View Upload & Download PDF' : camelToSentenceCase(key) }}
+                        {{ key.includes('viewUpload&DownloadPDF') ? 'View & Download' : camelToSentenceCase(key) }}
                     </mat-header-cell>
                     <mat-cell *matCellDef="let element; let i = dataIndex">
                         <span *ngIf="!key.includes('viewUpload&DownloadPDF'); else viewDownloadPDF">
                             <span *ngIf="element[key]; else defaultText">
-                                <ng-container *ngIf="camelToSnakeCase(key).indexOf('created')<0; else date ">
+                                <ng-container *ngIf="camelToSnakeCase(key)">
                                     {{element[key]}}
                                 </ng-container>
                             </span>
                         </span>
+                       
                         <ng-template #viewDownloadPDF>
                             <mat-icon type="button" (click)="downlaodDocument(element.image,element.type)" class="secondary-text"
                                 matTooltip="Download Document">save_alt</mat-icon> &nbsp;&nbsp;
@@ -69,7 +76,7 @@
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumns;" [@animate]="{value:'*',params:{y:'100%'}}">
                 </mat-row>
-            </mat-table>
+            </mat-table></div>
             <form class="p-24 mx-24" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0" name="modulesForm" novalidate
                 [formGroup]="serviceRequestForm">
                 <mat-form-field class="mt-24" appearance="outline" fxFlex="48">
@@ -88,7 +95,7 @@
                         <button mat-raised-button color="accent"  (click)="confirmDialog('Approved')"
                             [ngClass]='status=="Approved"?!btnDisable?"light-green":"green-500-bg green-50-fg":"fuse-white"'
                             [disabled]='btnDisable' class="add-product-button    mt-md-0">
-                            <span>COMPELETED</span>
+                            <span>COMPLETED</span>
                         </button>
                         &nbsp;
                         <button mat-raised-button color="accent" (click)="confirmDialog('Rejected')"
@@ -100,5 +107,8 @@
                 </div>
             </form>
         </div>
+        <ng-template #defaultText>
+            <app-default-text></app-default-text>
+        </ng-template>
     </div>
 </div>

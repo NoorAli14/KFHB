@@ -26,16 +26,9 @@
             <mat-table #table matSort matSortActive="requestDate" matSortDirection="asc" matSortDisableClear
                 [dataSource]="dataSource">
                 <ng-container *ngFor="let key of displayedColumns" [matColumnDef]="key">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+                    <mat-header-cell *matHeaderCellDef  [mat-sort-header]="key.includes('requestDate') || key.includes('date')?key:null" [disabled]="!key.includes('status') && !key.includes('requestDate')? true : false " >
                         {{ key.includes('action') ? 'Action' : camelToSentenceCase(key) }}</mat-header-cell>
                     <mat-cell *matCellDef="let element; let i = dataIndex" class="pl-24">
-                        <!-- <span *ngIf="!key.includes('action'); else action">
-                            <span *ngIf="element[key]; else defaultText">
-                                <ng-container *ngIf="camelToSnakeCase(key).indexOf('created')<0; else date ">
-                                    {{element[key]}}
-                                </ng-container>
-                            </span>
-                        </span> -->
                             <ng-container [ngSwitch]="key">
                         <span *ngSwitchCase="'status'">
                             <span class="status text-truncate h6 p-4 green-800 requests-status" *ngIf="element[key]=='Approved'; else noTemplate">Approved</span>
@@ -55,6 +48,10 @@
                             <mat-icon *ngIf="element['status']==='PENDING'" color="success"
                                 matTooltip="Resend Invitation" type="button"
                                 (click)=" confirmDialog('invite',element['id'])">near_me</mat-icon> &nbsp;&nbsp;
+                        </span>
+                        <span *ngSwitchCase="'requestDate'">
+                            <span>{{element[key] |  date: "dd-MM-yyyy"}}</span>
+                    
                         </span>
                         <span  *ngSwitchDefault style="width:100%;word-wrap: break-word;">
                             <span *ngIf="element[key]; else defaultText" >
