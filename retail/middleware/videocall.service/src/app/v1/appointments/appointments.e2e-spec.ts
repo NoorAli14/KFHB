@@ -150,13 +150,6 @@ describe('Video Call Module (e2e)', () => {
       .end(done);
   });
 
-  const createAppointmentInput: NewAppointmentInput = {
-    call_time: new Date('2020-10-30 12:39:10'),
-    gender: 'M',
-    status: 'SCHEDULED',
-    user_id: uuidV4(),
-  };
-
   it(`should return error, appointment not found `, done => {
     return request(app.getHttpServer())
       .post('/graphql')

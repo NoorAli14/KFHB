@@ -33,12 +33,6 @@ describe('Video Call Module (e2e)', () => {
     await app.init();
   });
 
-  const newAttachmentInput: any = {
-    file_content: IMAGE_BASE64,
-    customer_id: uuidV4(),
-    attachment_id: 'customer_password',
-  };
-
   it('Should transfoem and validate the response based on attachment', async () => {
     attachment = {
       customer_id: headers['x-user-id'],
@@ -112,10 +106,11 @@ describe('Video Call Module (e2e)', () => {
 
     const newAttachmentJson: string = JSON.stringify(attachment);
 
-    const transformedResponse: NewAttachmentInput = transformAndValidateSync(
+    transformAndValidateSync(
       NewAttachmentInput,
       newAttachmentJson,
     ) as NewAttachmentInput;
+
     return request(app.getHttpServer())
       .post('/graphql')
       .send({

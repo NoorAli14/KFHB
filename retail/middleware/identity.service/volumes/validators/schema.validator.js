@@ -8,7 +8,7 @@ exports.SCHEMA = [
     name: "Issuing State Code",
     type: "string",
     pattern: "^[A-Z]*$", // Regex: Only uppercase letter allowed
-    groups: ["NATIONAL_ID_FRONT_SIDE", "NATIONAL_ID_BACK_SIDE", "PASSPORT"],
+    groups: ["NATIONAL_ID_BACK_SIDE", "PASSPORT"],
     context: {
       pattern: {
         errorCode: "IDT-1001",
@@ -38,7 +38,7 @@ exports.SCHEMA = [
     type: "string",
     format: "date", // Only date format valid: 1992-12-04
     required: true,
-    groups: ["NATIONAL_ID_FRONT_SIDE", "NATIONAL_ID_BACK_SIDE", "PASSPORT"],
+    groups: ["NATIONAL_ID_BACK_SIDE", "PASSPORT"],
     context: {
       format: {
         errorCode: "IDT-1002",
@@ -55,7 +55,7 @@ exports.SCHEMA = [
     type: "string",
     format: "date", // Only date format valid: 1992-12-04
     required: true,
-    groups: ["NATIONAL_ID_FRONT_SIDE", "NATIONAL_ID_BACK_SIDE", "PASSPORT"],
+    groups: ["NATIONAL_ID_BACK_SIDE", "PASSPORT"],
     context: {
       format: {
         errorCode: "IDT-1002",
@@ -89,7 +89,7 @@ exports.SCHEMA = [
     type: "string",
     pattern: "^[a-zA-Z][a-zA-Z\\s]*$", // Only letters and spaces are allowed
     required: true,
-    groups: ["NATIONAL_ID_FRONT_SIDE", "NATIONAL_ID_BACK_SIDE", "PASSPORT"],
+    groups: ["NATIONAL_ID_BACK_SIDE", "PASSPORT"],
     context: {
       required: {
         errorCode: "IDT-1008",
@@ -106,7 +106,7 @@ exports.SCHEMA = [
     type: "string",
     pattern: "^[a-zA-Z][a-zA-Z\\s]*$", // Only letters and spaces are allowed
     required: true,
-    groups: ["NATIONAL_ID_FRONT_SIDE", "NATIONAL_ID_BACK_SIDE", "PASSPORT"],
+    groups: ["NATIONAL_ID_BACK_SIDE", "PASSPORT"],
     context: {
       required: {
         errorCode: "IDT-1010",
@@ -123,7 +123,7 @@ exports.SCHEMA = [
     type: "string",
     pattern: "^[a-zA-Z][a-zA-Z\\s]*$", // Only letters and spaces are allowed
     required: true,
-    groups: ["NATIONAL_ID_FRONT_SIDE", "NATIONAL_ID_BACK_SIDE", "PASSPORT"],
+    groups: ["NATIONAL_ID_BACK_SIDE", "PASSPORT"],
     context: {
       required: {
         errorCode: "IDT-1012",
@@ -140,7 +140,7 @@ exports.SCHEMA = [
     type: "string",
     enum: ["M", "F"],
     required: true,
-    groups: ["NATIONAL_ID_BACK_SIDE", "NATIONAL_ID_FRONT_SIDE", "PASSPORT"],
+    groups: ["NATIONAL_ID_BACK_SIDE", "PASSPORT"],
     context: {
       required: {
         errorCode: "IDT-9001",
@@ -157,7 +157,7 @@ exports.SCHEMA = [
     type: "string",
     pattern: "^[a-zA-Z][a-zA-Z\\s]*$", // Only letters and spaces are allowed
     required: true,
-    groups: ["NATIONAL_ID_FRONT_SIDE", "NATIONAL_ID_BACK_SIDE"],
+    groups: ["NATIONAL_ID_BACK_SIDE"],
     context: {
       required: {
         errorCode: "IDT-1014",
@@ -174,7 +174,7 @@ exports.SCHEMA = [
     type: "string",
     pattern: "^[A-Z]*$", // Regex: Only uppercase letter allowed
     required: true,
-    groups: ["NATIONAL_ID_FRONT_SIDE", "NATIONAL_ID_BACK_SIDE", "PASSPORT"],
+    groups: ["NATIONAL_ID_BACK_SIDE", "PASSPORT"],
     context: {
       required: {
         errorCode: "IDT-1016",
@@ -208,7 +208,7 @@ exports.SCHEMA = [
     type: "string",
     pattern: "^[a-zA-Z][a-zA-Z\\s]*$", // Only letters and spaces are allowed
     required: true,
-    groups: ["NATIONAL_ID_FRONT_SIDE", "NATIONAL_ID_BACK_SIDE", "PASSPORT"],
+    groups: ["NATIONAL_ID_BACK_SIDE", "PASSPORT"],
     context: {
       required: {
         errorCode: "IDT-1020",
@@ -236,6 +236,6 @@ exports.SCHEMA = [
       },
     },
     required: true,
-    groups: ["NATIONAL_ID_FRONT_SIDE", "NATIONAL_ID_BACK_SIDE"],
+    groups: ["NATIONAL_ID_BACK_SIDE"],
   },
 ];
