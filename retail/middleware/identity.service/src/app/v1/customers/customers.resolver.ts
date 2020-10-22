@@ -32,8 +32,8 @@ export class CustomersResolver {
   async customersList(
       @CurrentUser() currentUser: ICurrentUser,
       @Args('pagination', {nullable: true}) paginationParams: PaginationParams,
-      @Args('filteringParams', {nullable: true}) filteringParams: CustomersFilterParams,
-      @Args('sortingParams', {nullable: true, type: () => [SortingParam]}) sortingParams: SortingParam[],
+      @Args('filters', {nullable: true}) filteringParams: CustomersFilterParams,
+      @Args('sort_by', {nullable: true, type: () => [SortingParam]}) sortingParams: SortingParam[],
       @Fields() output: string[]
   ): Promise<CustomerWithPagination> {
     return this.customerService.list(currentUser, paginationParams, filteringParams, sortingParams, output);
