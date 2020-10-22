@@ -67,9 +67,9 @@ export class OtpController {
     return this.otpService.send(currentUser, DELIVERY_MODES.EMAIL);
   }
 
-  @Post('/verify')
+  @Post('/sms/verify')
   @ApiOperation({
-    summary: 'Verify sms/email otp',
+    summary: 'Verify sms otp',
     description:
       'A successful request returns the HTTP 200 OK status code and a JSON response body.',
   })
@@ -82,7 +82,29 @@ export class OtpController {
     description: 'Input Validation failed.',
   })
   @HttpCode(HttpStatus.OK)
-  async verify_otp(
+  async sms_verify_otp(
+    @CurrentUser() currentUser: User,
+    @Body() input: VerifyOTPDto,
+  ): Promise<SuccessDto> {
+    return this.otpService.verify(currentUser, input);
+  }
+
+  @Post('/email/verify')
+  @ApiOperation({
+    summary: 'Verify email otp',
+    description:
+      'A successful request returns the HTTP 200 OK status code and a JSON response body.',
+  })
+  @ApiOkResponse({
+    type: SuccessDto,
+    description: 'Email OTP has been successfully verified.',
+  })
+  @ApiBadRequestResponse({
+    type: Error,
+    description: 'Input Validation failed.',
+  })
+  @HttpCode(HttpStatus.OK)
+  async email_verify_otp(
     @CurrentUser() currentUser: User,
     @Body() input: VerifyOTPDto,
   ): Promise<SuccessDto> {
