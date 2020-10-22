@@ -1,70 +1,62 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { DOCUMENT_STATUSES } from '@common/index';
-const evaluationStatus: string[] = ['CUSTOMER_SELFIE_MISMATCHED'];
+import { ATTACHMENT_TYPES } from '@common/constants';
+import { IsNotEmpty, IsBase64, IsString, IsIn } from 'class-validator';
 
 export class Attachment {
-  @ApiProperty({
-    title: 'Document ID',
-    example: '3dfdecc1-a616-4817-a841-61d824d82a13',
-    description: 'Unique Identifier',
-  })
-  readonly id: string;
+    @ApiProperty({
+        title: 'Attachment ID',
+        example: '3dfdecc1-a616-4817-a841-61d824d82a13',
+        description: 'Unique Identifier',
+    })
+    readonly id: string;
 
-  @ApiProperty({
-    title: 'Session ID',
-    example: '7315F39A-CBE5-48D0-BD8C-26E4F8B8A4D2',
-    description: 'Unique Identifier',
-  })
-  readonly session_id: string;
+    @ApiProperty({
+        title: 'File name of the attachment',
+        example: '20201022_1603369982284_passport_id.png',
+    })
+    readonly file_name: string
 
-  @ApiProperty({
-    title: 'Processed Data',
-  })
-  readonly processed_data: Record<string, unknown>;
+    @ApiProperty({
+        title: 'File size of the attachment in kb',
+        example: 4.9036458333,
+    })
+    readonly file_size: string
 
-  @ApiProperty({
-    enum: DOCUMENT_STATUSES,
-    example: DOCUMENT_STATUSES[0],
-    description: 'Status of the Document.',
-    required: false,
-  })
-  status: string;
+    @ApiProperty({
+        enum: Object.values(ATTACHMENT_TYPES),
+        example: Object.values(ATTACHMENT_TYPES)[0],
+        description: 'Attachment Type',
+        required: true,
+    })
+    @IsString()
+    @IsNotEmpty()
+    @IsIn(Object.values(ATTACHMENT_TYPES))
+    readonly attachment_id: string;
 
-  @ApiProperty({
-    required: false,
-    description: 'timestamp without time zone',
-  })
-  created_on: Date;
+    @ApiProperty({
+        enum: ['ACTIVE', 'INACTIVE'],
+        example: 'ACTIVE',
+        description: 'Status of the attachment.',
+        required: false,
+    })
+    status: string;
 
-  @ApiProperty({ required: false })
-  created_by?: string;
+    @ApiProperty({
+        required: false,
+        description: 'timestamp without time zone',
+    })
+    created_on: Date;
 
-  @ApiProperty({
-    required: false,
-    description: 'timestamp without time zone',
-  })
-  updated_on: Date;
 
-  @ApiProperty({ required: false })
-  updated_by: string;
-}
+    @ApiProperty({ required: false })
+    created_by?: string;
 
-export class Evaluation {
-  @ApiProperty({
-    example: true,
-  })
-  success: boolean;
+    @ApiProperty({
+        required: false,
+        description: 'timestamp without time zone',
+    })
+    updated_on: Date;
 
-  @ApiProperty({
-    enum: evaluationStatus,
-    example: evaluationStatus[0],
-    description: 'Status of the Evaluation.',
-    required: false,
-  })
-  statuss: string;
-
-  @ApiProperty({
-    required: false,
-  })
-  message?: string;
+    @ApiProperty({ required: false })
+    updated_by: string;
 }

@@ -7,10 +7,10 @@ import {
   ApiCreatedResponse,
 } from '@nestjs/swagger';
 import { AuthGuard } from '@common/index';
-import { AttachmentsService } from './attachments.service';
-import { Attachment } from './attachment.entity';
+import { DocumentsService as FaceService } from './documents.service';
+import { Document } from './document.entity';
 import { UploadDocumentDTO, UploadSelfieDTO } from './document.dto';
-import { FaceUploadingInput } from './attachment.interface';
+import { FaceUploadingInput } from './document.interface';
 import { SessionsService } from '../sessions/sessions.service';
 import { Session } from '../sessions/session.entity';
 
@@ -20,7 +20,7 @@ import { Session } from '../sessions/session.entity';
 @UseGuards(AuthGuard)
 export class FacesController {
   constructor(
-    private readonly attachmentService: AttachmentsService,
+    private readonly attachmentService: FaceService,
     private readonly sessionService: SessionsService,
   ) { }
 
@@ -31,7 +31,7 @@ export class FacesController {
       'A successful request returns the HTTP 201 CREATED status code and a JSON response body that shows face information.',
   })
   @ApiCreatedResponse({
-    type: Attachment,
+    type: Document,
     description: 'Selfie has been successfully uploaded.',
   })
   @ApiBadRequestResponse({
@@ -52,14 +52,14 @@ export class FacesController {
       'A successful request returns the HTTP 201 CREATED status code and a JSON response body that shows face information.',
   })
   @ApiCreatedResponse({
-    type: Attachment,
+    type: Document,
     description: 'Liveness image has been successfully uploaded.',
   })
   @ApiBadRequestResponse({
     type: Error,
     description: 'Input Validation failed.',
   })
-  async uploadLiveness(@Body() input: UploadDocumentDTO): Promise<Attachment> {
+  async uploadLiveness(@Body() input: UploadDocumentDTO): Promise<Document> {
     const params: FaceUploadingInput = {
       file: input.file,
     };

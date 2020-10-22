@@ -3,37 +3,37 @@ import { ApiProperty } from '@nestjs/swagger';
 export class PaginationDTO {
     @ApiProperty({
         example: 250,
-        description: 'Total number of record'
+        description: 'Total number of record',
+        required: false
     })
     readonly total: number;
 
     @ApiProperty({
         example: 10,
-        description: 'Total number of pages'
+        description: 'Total number of pages',
+        required: false
     })
     readonly pages: number;
 
     @ApiProperty({
         example: 25,
-        description: 'Total number of records per page'
+        description: 'Total number of records per page',
+        required: false
     })
     readonly perPage: number;
 
     @ApiProperty({
         example: 6,
-        description: 'Next page number'
+        description: 'Next page number',
+        required: false
     })
     readonly next: number;
 
     @ApiProperty({
         example: 5,
-        description: 'Current page number'
+        description: 'Current page number',
+        required: false
     })
-    readonly current: number;
+    readonly page: number;
 
-    @ApiProperty({
-        example: 4,
-        description: 'Previous page number'
-    })
-    readonly prev: number;
 }
