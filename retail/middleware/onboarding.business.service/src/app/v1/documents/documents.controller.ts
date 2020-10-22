@@ -23,7 +23,7 @@ import {
 } from '@nestjs/swagger';
 import { Request, Response } from 'express';
 
-import { AuthGuard, CurrentUser, DOCUMENT_TYPES } from '@common/index';
+import { AuthGuard, CurrentUser, CUSTOMER_LAST_STEPS, DOCUMENT_STATUSES, DOCUMENT_TYPES, EVALUATION_STATUSES } from '@common/index';
 import { DocumentsService } from './documents.service';
 import { Document, Evaluation } from './document.entity';
 import { UploadDocumentDTO } from './document.dto';
@@ -31,6 +31,7 @@ import {
   DocumentUploadingInput,
   IDocumentProcess,
 } from './document.interface';
+import { CustomersService } from '../customers/customers.service';
 import { User } from '../users/user.entity';
 
 @ApiTags('Documents Uploading & Processing Module')
@@ -40,7 +41,10 @@ import { User } from '../users/user.entity';
 export class DocumentsController {
   private readonly logger: Logger = new Logger(DocumentsController.name);
 
-  constructor(private readonly documentService: DocumentsService) { }
+  constructor(
+    private readonly documentService: DocumentsService,
+    private readonly customerService: CustomersService,
+  ) { }
 
   @Post('nationality-id-front/upload')
   @ApiOperation({
@@ -57,6 +61,7 @@ export class DocumentsController {
     description: 'Input Validation failed.',
   })
   async uploadNationIdFront(
+    @CurrentUser() currentUser: User,
     @Body() input: UploadDocumentDTO,
   ): Promise<Document> {
     this.logger.log(
@@ -66,7 +71,14 @@ export class DocumentsController {
       file: input.file,
       type: DOCUMENT_TYPES.NATIONAL_ID_FRONT_SIDE,
     };
-    return this.documentService.upload(params);
+    const result = await this.documentService.upload(params);
+    if(result?.status === DOCUMENT_STATUSES.PROCESSING) {
+      await this.customerService.updateLastStep(
+        currentUser.id,
+        CUSTOMER_LAST_STEPS.RBX_ONB_STEP_NATIONAL_ID_FRONT_UPLOADED,
+      );
+    }
+    return result;
   }
 
   @Post('nationality-id-front/process')
@@ -84,11 +96,18 @@ export class DocumentsController {
     description: 'Input Validation failed.',
   })
   @HttpCode(HttpStatus.OK)
-  async processNationIdFront(): Promise<Document> {
+  async processNationIdFront(@CurrentUser() currentUser: User): Promise<Document> {
     const params: IDocumentProcess = {
       type: DOCUMENT_TYPES.NATIONAL_ID_FRONT_SIDE,
     };
-    return this.documentService.process(params);
+    const result = await this.documentService.process(params);
+    if(result?.status === DOCUMENT_STATUSES.PROCESSED) {
+      await this.customerService.updateLastStep(
+        currentUser.id,
+        CUSTOMER_LAST_STEPS.RBX_ONB_STEP_NATIONAL_ID_FRONT_PROCESSED,
+      );
+    }
+    return result;
   }
 
   @Post('nationality-id-back/upload')
@@ -106,13 +125,21 @@ export class DocumentsController {
     description: 'Input Validation failed.',
   })
   async uploadNationIdBack(
+    @CurrentUser() currentUser: User,
     @Body() input: UploadDocumentDTO,
   ): Promise<Document> {
     const params: DocumentUploadingInput = {
       file: input.file,
       type: DOCUMENT_TYPES.NATIONAL_ID_BACK_SIDE,
     };
-    return this.documentService.upload(params);
+    const result = await this.documentService.upload(params);
+    if(result?.status === DOCUMENT_STATUSES.PROCESSING) {
+      await this.customerService.updateLastStep(
+        currentUser.id,
+        CUSTOMER_LAST_STEPS.RBX_ONB_STEP_NATIONAL_ID_BACK_UPLOADED,
+      );
+    }
+    return result;
   }
 
   @Post('nationality-id-back/process')
@@ -130,11 +157,18 @@ export class DocumentsController {
     description: 'Input Validation failed.',
   })
   @HttpCode(HttpStatus.OK)
-  async processNationIdBack(): Promise<Document> {
+  async processNationIdBack(@CurrentUser() currentUser: User): Promise<Document> {
     const params: IDocumentProcess = {
       type: DOCUMENT_TYPES.NATIONAL_ID_BACK_SIDE,
     };
-    return this.documentService.process(params);
+    const result = await this.documentService.process(params);
+    if(result?.status === DOCUMENT_STATUSES.PROCESSED) {
+      await this.customerService.updateLastStep(
+        currentUser.id,
+        CUSTOMER_LAST_STEPS.RBX_ONB_STEP_NATIONAL_ID_BACK_PROCESSED,
+      );
+    }
+    return result;
   }
 
   @Post('passport/upload')
@@ -151,12 +185,22 @@ export class DocumentsController {
     type: Error,
     description: 'Input Validation failed.',
   })
-  async uploadPassport(@Body() input: UploadDocumentDTO): Promise<Document> {
+  async uploadPassport(
+    @CurrentUser() currentUser: User,
+    @Body() input: UploadDocumentDTO,
+  ): Promise<Document> {
     const params: DocumentUploadingInput = {
       file: input.file,
       type: DOCUMENT_TYPES.PASSPORT,
     };
-    return this.documentService.upload(params);
+    const result = await this.documentService.upload(params);
+    if(result?.status === DOCUMENT_STATUSES.PROCESSING) {
+      await this.customerService.updateLastStep(
+        currentUser.id,
+        CUSTOMER_LAST_STEPS.RBX_ONB_STEP_PASSPORT_UPLOADED,
+      );
+    }
+    return result;
   }
 
   @Post('passport/process')
@@ -174,11 +218,18 @@ export class DocumentsController {
     description: 'Input Validation failed.',
   })
   @HttpCode(HttpStatus.OK)
-  async processPassport(): Promise<Document> {
+  async processPassport(@CurrentUser() currentUser: User): Promise<Document> {
     const params: IDocumentProcess = {
       type: DOCUMENT_TYPES.PASSPORT,
     };
-    return this.documentService.process(params);
+    const result = await this.documentService.process(params);
+    if(result?.status === DOCUMENT_STATUSES.PROCESSED) {
+      await this.customerService.updateLastStep(
+        currentUser.id,
+        CUSTOMER_LAST_STEPS.RBX_ONB_STEP_PASSPORT_PROCESSED,
+      );
+    }
+    return result;
   }
 
   @Post('driving-license/upload')
@@ -196,14 +247,21 @@ export class DocumentsController {
     description: 'Input Validation failed.',
   })
   async uploadDrivingLicense(
+    @CurrentUser() currentUser: User,
     @Body() input: UploadDocumentDTO,
   ): Promise<Document> {
     const params: DocumentUploadingInput = {
       file: input.file,
       type: DOCUMENT_TYPES.DRIVING_LICENSE,
     };
-    const document = await this.documentService.upload(params);
-    return document
+    const result = await this.documentService.upload(params);
+    if(result?.status === DOCUMENT_STATUSES.PROCESSING) {
+      await this.customerService.updateLastStep(
+        currentUser.id,
+        CUSTOMER_LAST_STEPS.RBX_ONB_STEP_DRIVING_LICENCE_UPLOADED,
+      );
+    }
+    return result;
   }
 
   @Post('driving-license/process')
@@ -221,11 +279,18 @@ export class DocumentsController {
     description: 'Input Validation failed.',
   })
   @HttpCode(HttpStatus.OK)
-  async processDrivingLicense(): Promise<Document> {
+  async processDrivingLicense(@CurrentUser() currentUser: User): Promise<Document> {
     const params: IDocumentProcess = {
       type: DOCUMENT_TYPES.DRIVING_LICENSE,
     };
-    return this.documentService.process(params);
+    const result = await this.documentService.process(params);
+    if(result?.status === DOCUMENT_STATUSES.PROCESSED) {
+      await this.customerService.updateLastStep(
+        currentUser.id,
+        CUSTOMER_LAST_STEPS.RBX_ONB_STEP_DRIVING_LICENCE_PROCESSED,
+      );
+    }
+    return result;
   }
 
   @Post('verification')
@@ -243,8 +308,14 @@ export class DocumentsController {
     description: 'Input Validation failed.',
   })
   @HttpCode(HttpStatus.OK)
-  async evaluation(): Promise<Evaluation> {
-    return this.documentService.evaluation();
+  async evaluation(@CurrentUser() currentUser: User): Promise<Evaluation> {
+    const result = await this.documentService.evaluation();
+    if(result?.status === EVALUATION_STATUSES.MATCH) {
+      await this.customerService.updateLastStep(currentUser.id, CUSTOMER_LAST_STEPS.RBX_ONB_STEP_DOCUMENTS_MATCHED);
+    } else if (result?.status === EVALUATION_STATUSES.MISMATCH) {
+      await this.customerService.updateLastStep(currentUser.id, CUSTOMER_LAST_STEPS.RBX_ONB_STEP_DOCUMENTS_MISMATCHED);
+    }
+    return result;
   }
 
   @Get(':id/preview')

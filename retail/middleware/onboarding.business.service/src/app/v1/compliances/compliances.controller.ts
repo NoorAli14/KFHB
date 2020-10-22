@@ -19,13 +19,15 @@ import {
   ApiNotFoundResponse,
   ApiBody,
 } from '@nestjs/swagger';
-import { AuthGuard, CurrentUser } from '@common/index';
+import { AuthGuard, CurrentUser, CUSTOMER_LAST_STEPS } from '@common/index';
 
 import { Template } from './compliance.entity';
 import { ComplianceService } from './compliances.service';
 import { ComplianceDto } from './compliance.dto';
 import { ITemplateResponse } from './compliance.interface';
 import { Customer } from '../customers/customer.entity';
+import { CustomersService } from '../customers/customers.service';
+import { User } from '../users/user.entity';
 @ApiTags('Compliance Module')
 @Controller('compliance')
 @ApiBearerAuth()
@@ -37,7 +39,10 @@ export class CompliancesController {
     KYC: 'KYC',
     FATCA: 'FATCA',
   };
-  constructor(private readonly complianceService: ComplianceService) { }
+  constructor(
+    private readonly complianceService: ComplianceService,
+    private readonly customerService: CustomersService,
+  ) { }
 
   @Get('crs')
   @ApiOperation({
@@ -53,11 +58,15 @@ export class CompliancesController {
     type: Error,
     description: 'Template Not Found.',
   })
-  async crs(): Promise<Template> {
+  async crs(@CurrentUser() currentUser: User): Promise<Template> {
     const compliance: Template = await this.complianceService.findOneByName(
       this.__template.CRS,
     );
     if (!compliance) throw new NotFoundException(`Template not found.`);
+    await this.customerService.updateLastStep(
+      currentUser.id,
+      CUSTOMER_LAST_STEPS.RBX_ONB_STEP_CRS_SUBMITTED,
+    );
     return compliance;
   }
 
@@ -75,11 +84,15 @@ export class CompliancesController {
     type: Error,
     description: 'Template Not Found.',
   })
-  async kyc(): Promise<Template> {
+  async kyc(@CurrentUser() currentUser: User): Promise<Template> {
     const compliance: Template = await this.complianceService.findOneByName(
       this.__template.KYC,
     );
     if (!compliance) throw new NotFoundException(`Template not found.`);
+    await this.customerService.updateLastStep(
+      currentUser.id,
+      CUSTOMER_LAST_STEPS.RBX_ONB_STEP_KYC_SUBMITTED,
+    );
     return compliance;
   }
 
@@ -97,11 +110,15 @@ export class CompliancesController {
     type: Error,
     description: 'Template Not Found.',
   })
-  async fatca(): Promise<Template> {
+  async fatca(@CurrentUser() currentUser: User): Promise<Template> {
     const compliance: Template = await this.complianceService.findOneByName(
       this.__template.FATCA,
     );
     if (!compliance) throw new NotFoundException(`Template not found.`);
+    await this.customerService.updateLastStep(
+      currentUser.id,
+      CUSTOMER_LAST_STEPS.RBX_ONB_STEP_FATCA_SUBMITTED,
+    );
     return compliance;
   }
 

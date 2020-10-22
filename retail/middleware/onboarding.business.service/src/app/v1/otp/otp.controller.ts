@@ -18,16 +18,22 @@ import {
   CurrentUser,
   SuccessDto,
   DELIVERY_MODES,
+  CUSTOMER_LAST_STEPS,
+  OTP_STATUSES,, STATUSES
 } from '@common/index';
 import { OtpService } from './otp.service';
 import { User } from '../users/user.entity';
 import { VerifyOTPDto } from './otp.dto';
+import { CustomersService } from '../customers/customers.service';
 @ApiTags('OTP Module')
 @Controller('otp')
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
 export class OtpController {
-  constructor(private readonly otpService: OtpService) {}
+  constructor(
+    private readonly otpService: OtpService,
+    private readonly customerService: CustomersService,
+  ) { }
 
   @Post('/sms/send')
   @ApiOperation({
@@ -45,7 +51,14 @@ export class OtpController {
   })
   @HttpCode(HttpStatus.OK)
   async send_sms_otp(@CurrentUser() currentUser: User): Promise<SuccessDto> {
-    return this.otpService.send(currentUser, DELIVERY_MODES.MOBILE);
+    const result = await this.otpService.send(currentUser, DELIVERY_MODES.MOBILE);
+    if(result?.status === STATUSES.SUCCESS) {
+      await this.customerService.updateLastStep(
+        currentUser.id,
+        CUSTOMER_LAST_STEPS.RBX_ONB_STEP_SMS_OTP_SENT,
+      );
+    }
+    return result;
   }
 
   @Post('/email/send')
@@ -64,7 +77,14 @@ export class OtpController {
   })
   @HttpCode(HttpStatus.OK)
   async send_email_otp(@CurrentUser() currentUser: User): Promise<SuccessDto> {
-    return this.otpService.send(currentUser, DELIVERY_MODES.EMAIL);
+    const result = await this.otpService.send(currentUser, DELIVERY_MODES.EMAIL);
+    if(result?.status === STATUSES.SUCCESS) {
+      await this.customerService.updateLastStep(
+        currentUser.id,
+        CUSTOMER_LAST_STEPS.RBX_ONB_STEP_EMAIL_OTP_SENT,
+      );
+    }
+    return result;
   }
 
   @Post('/sms/verify')
@@ -86,7 +106,14 @@ export class OtpController {
     @CurrentUser() currentUser: User,
     @Body() input: VerifyOTPDto,
   ): Promise<SuccessDto> {
-    return this.otpService.verify(currentUser, input);
+    const result = await this.otpService.verify(currentUser, input);
+    if(result?.status === OTP_STATUSES.VERIFIED) {
+      await this.customerService.updateLastStep(
+        currentUser.id,
+        CUSTOMER_LAST_STEPS.RBX_ONB_STEP_SMS_OTP_VERIFIED,
+      );
+    }
+    return result;
   }
 
   @Post('/email/verify')
@@ -108,6 +135,13 @@ export class OtpController {
     @CurrentUser() currentUser: User,
     @Body() input: VerifyOTPDto,
   ): Promise<SuccessDto> {
-    return this.otpService.verify(currentUser, input);
+    const result = await this.otpService.verify(currentUser, input);
+    if(result?.status === OTP_STATUSES.VERIFIED) {
+      await this.customerService.updateLastStep(
+        currentUser.id,
+        CUSTOMER_LAST_STEPS.RBX_ONB_STEP_EMAIL_OTP_VERIFIED,
+      );
+    }
+    return result;
   }
 }

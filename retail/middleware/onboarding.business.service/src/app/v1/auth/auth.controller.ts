@@ -26,6 +26,7 @@ import {
 import {
   X_ACCESS_TOKEN,
   X_REFRESH_TOKEN,
+  CUSTOMER_LAST_STEPS,
   AuthGuard,
   CurrentUser,
   SuccessDto,
@@ -35,6 +36,7 @@ import { CurrentUserUpdateDto } from '@app/v1/users/user.dto';
 import { RegisterCustomerDto } from './auth.dto';
 import { Customer } from '@app/v1/customers/customer.entity';
 import { AuthService } from './auth.service';
+import { CreateCustomerInput } from '../customers/customer.interface';
 
 @ApiTags('Authentication / Authorization Module')
 @Controller('auth')
@@ -105,7 +107,8 @@ export class AuthController {
     @Req() request: Request,
     @Body() input: RegisterCustomerDto,
   ): Promise<Customer> {
-    const customer: Customer = await this.customerService.create(input);
+    const params: CreateCustomerInput = { ...input, last_step: CUSTOMER_LAST_STEPS.RBX_ONB_STEP_REG_INITIATED }
+    const customer: Customer = await this.customerService.create(params);
     const refreshToken: string = await this.authService.getRefreshToken(
       customer.id,
     );

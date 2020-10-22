@@ -6,16 +6,21 @@ import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
 } from '@nestjs/swagger';
-import { AuthGuard } from '@common/index';
+import { AuthGuard, CurrentUser, CUSTOMER_LAST_STEPS } from '@common/index';
 import { SessionsService } from './sessions.service';
 import { Session } from './session.entity';
+import { CustomersService } from '../customers/customers.service';
+import { User } from '../users/user.entity';
 
 @ApiTags('Session Module')
 @Controller('sessions')
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
 export class SessionsController {
-  constructor(private readonly sessionService: SessionsService) {}
+  constructor(
+    private readonly sessionService: SessionsService,
+    private readonly customerService: CustomersService,
+  ) {}
 
   @Post()
   @ApiOperation({
@@ -31,7 +36,12 @@ export class SessionsController {
     type: Error,
     description: 'Input Validation failed.',
   })
-  async create(): Promise<Session> {
-    return this.sessionService.create();
+  async create(@CurrentUser() currentUser: User): Promise<Session> {
+    const result = this.sessionService.create();
+    await this.customerService.updateLastStep(
+      currentUser.id,
+      CUSTOMER_LAST_STEPS.RBX_ONB_STEP_SELFIE_UPLOADED
+    );
+    return result;
   }
 }
