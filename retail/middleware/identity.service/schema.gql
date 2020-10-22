@@ -22,6 +22,11 @@ input CreateCustomerInput {
   fcm_token_id: String
 }
 
+input CreatedOnParams {
+  start: String!
+  end: String!
+}
+
 type CUSTOM_ERROR {
   valid: Boolean!
   errors: [SCHEMA_ERROR!]
@@ -58,6 +63,18 @@ type Customer {
   deleted_on: String
   deleted_by: String
   documents: [Document!]!
+}
+
+input CustomersFilterParams {
+  national_id_no: String
+  gender: String
+  nationality: String
+  first_name: String
+  last_name: String
+  status: String
+  contact_no: String
+  email: String
+  created_on: CreatedOnParams
 }
 
 type CustomerWithPagination {
@@ -112,10 +129,8 @@ type Face {
 type IDT_PaginationModel {
   total: Float
   pages: Float
-  perPage: Float
+  pageSize: Float
   current: Float
-  next: Float
-  prev: Float
   isFirst: Boolean
   isLast: Boolean
 }
@@ -129,6 +144,11 @@ type Mutation {
   uploadLiveness(input: UploadFaceInput!): Face!
   addDocument(input: UploadDocumentInput!): Document!
   processDocument(input: ProcessDocumentInput!): Result!
+}
+
+input PaginationParams {
+  page: Float
+  limit: Float
 }
 
 type PreviewDocument {
@@ -146,7 +166,7 @@ input ProcessDocumentInput {
 }
 
 type Query {
-  customersList: CustomerWithPagination!
+  customersList(sortingParams: [SortingParam!], filteringParams: CustomersFilterParams, pagination: PaginationParams): CustomerWithPagination!
   findCustomerById(id: String!): Customer!
   previewAttachment(input: PreviewDocumentInput!): PreviewDocument!
 }
@@ -177,6 +197,11 @@ type Session {
   created_on: DateTime!
   updated_by: String!
   updated_on: DateTime!
+}
+
+input SortingParam {
+  field: String!
+  direction: String!
 }
 
 input UpdateCustomerInput {
