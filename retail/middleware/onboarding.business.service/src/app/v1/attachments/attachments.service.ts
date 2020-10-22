@@ -11,6 +11,7 @@ export class AttachmentsService {
           id
           file_name
           file_size
+          attachment_id
           status
           created_on
           created_by
