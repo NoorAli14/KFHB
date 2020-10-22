@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Session } from './session.entity';
 import { GqlClientService, strToBase64 } from '@common/index';
-import { FaceUploadingInput } from '../attachments/attachment.interface';
+import { FaceUploadingInput } from '../documents/document.interface';
 
 @Injectable()
 export class SessionsService {

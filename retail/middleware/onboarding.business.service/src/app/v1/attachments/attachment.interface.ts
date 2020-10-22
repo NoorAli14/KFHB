@@ -1,14 +1,6 @@
-export interface FaceUploadingInput {
-  file: string;
-  sub_type?: string;
-}
-
-export interface DocumentUploadingInput {
-  //   customer_id: string;
-  file: string;
-  type: string;
-}
-
-export interface IDocumentProcess {
-  type: string;
+export interface AttachmentUploadingInput {
+    customer_id: string;
+    file_content: string;
+    attachment_id: string;
+    type?: string
 }

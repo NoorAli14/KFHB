@@ -69,3 +69,5 @@ export const PAGINATION_OUTPUT: string = ` {
   isLast
 }`;
 export const DEVICES: string[] = ['ios', 'andriod'];
+
+export const ATTACHMENT_TYPES: string[] = ['PASSPORT_SCREENSHOT', 'FACE_SCREENSHOT', 'NATIONAL_ID_FRONT_SIDE_SCREENSHOT', 'NATIONAL_ID_BACK_SIDE_SCREENSHOT']
