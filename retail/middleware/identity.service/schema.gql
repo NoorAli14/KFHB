@@ -130,9 +130,7 @@ type IDT_PaginationModel {
   total: Float
   pages: Float
   pageSize: Float
-  current: Float
-  isFirst: Boolean
-  isLast: Boolean
+  page: Float
 }
 
 type Mutation {

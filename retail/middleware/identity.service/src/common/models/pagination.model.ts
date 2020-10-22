@@ -13,11 +13,5 @@ export class IDT_PaginationModel {
   pageSize: number;
 
   @Field({ nullable: true })
-  current: number;
-
-  @Field({ nullable: true })
-  isFirst: boolean;
-
-  @Field({ nullable: true })
-  isLast: boolean;
+  page: number;
 }
