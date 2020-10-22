@@ -3,14 +3,14 @@ import {
     UseGuards,
     ParseUUIDPipe,
     Param,
-    Header,
     Get,
-    Req, Query, Res, Post, Body
+    Post, Body
 } from '@nestjs/common';
 import {
     ApiTags,
     ApiOperation,
     ApiBearerAuth,
+    ApiOkResponse,
     ApiCreatedResponse,
     ApiBadRequestResponse,
 } from '@nestjs/swagger';
@@ -53,4 +53,19 @@ export class AttachmentsController {
         return this.attachmentService.upload(params);
     }
 
+    @Get('customers/:customer_id/attachments')
+    @ApiOperation({
+        summary: 'List of all the attachment by customer ID',
+        description:
+            'A successful request returns the HTTP 200 OK status code and a JSON response body that shows a attachments information.',
+    })
+    @ApiOkResponse({
+        type: [Attachment],
+        description: 'List of all the attachment by customer ID',
+    })
+    async list(
+        @Param('customer_id', ParseUUIDPipe) customer_id: string,
+    ): Promise<Attachment[]> {
+        return this.attachmentService.listByCustomerID(customer_id);
+    }
 }

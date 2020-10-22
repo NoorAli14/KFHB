@@ -35,4 +35,20 @@ export class AttachmentsService {
       }`;
         return this.gqlClient.send(mutation);
     }
+
+    /**
+ *
+ * @param customer_id  The customer unique identifies
+ * @return The attachment array of objects
+ */
+    async listByCustomerID(customer_id: string): Promise<Attachment[]> {
+        this.logger.log(`Attachment:: list of attachments by customer ID [${customer_id}]`)
+        // Construct GraphQL request
+        const query: string = `query {
+        result: attachmentList(customer_id: "${customer_id}") ${this.output}
+      }`;
+        return this.gqlClient.send(query);
+    }
+
+
 }
