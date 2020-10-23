@@ -55,11 +55,12 @@ export const requireDefaults = (pattern: string): any => {
 /**
  * graphqlFields string[]
  * @param info
+ * @param data
  */
 export const graphqlFields = (info: { [key: string]: any }, data: { [key: string]: any }): string[] => {
   const keys = [];
   if (data?.type) {
-    const node = info.fieldNodes[0].selectionSet.selections.find(item => item.typeCondition?.name?.value == data?.type)
+    const node = info.fieldNodes[0].selectionSet.selections.find(item => item.typeCondition?.name?.value == data?.type);
     node?.selectionSet.selections.forEach(item => {
       if (!item.selectionSet) {
         keys.push(item.name.value);
@@ -67,7 +68,14 @@ export const graphqlFields = (info: { [key: string]: any }, data: { [key: string
     });
   } else {
     info.fieldNodes[0].selectionSet.selections.forEach(item => {
-      if (!item.selectionSet) {
+      if (item.name.value == "data"){
+        item.selectionSet.selections.forEach(item => {
+          if (!item.selectionSet) {
+            keys.push(item.name.value);
+          }
+        });
+      }
+      else if (!item.selectionSet) {
         keys.push(item.name.value);
       }
     });
