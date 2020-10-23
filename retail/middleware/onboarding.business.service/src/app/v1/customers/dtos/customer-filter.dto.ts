@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { GENDER, USER_STATUSES } from '@root/src/common';
-import { IsEmail, IsIn, IsISO8601, IsOptional, IsString, MaxLength } from 'class-validator';
+import { IsIn, IsISO8601, IsOptional, IsString, MaxLength } from 'class-validator';
 
 export class CustomerFilterDTO {
 
@@ -54,7 +54,6 @@ export class CustomerFilterDTO {
         description: 'Email of the customer.',
         required: false,
     })
-    @IsEmail()
     @IsOptional()
     @IsString()
     @MaxLength(128)
@@ -143,3 +142,4 @@ export class CustomerFilterDTO {
     status: string;
 
 }
+

@@ -61,12 +61,8 @@ export const DAY_WITH_HOUR_FORMAT = 'MM/DD/YYYY HH';
 export const PAGINATION_OUTPUT: string = ` {
   total
   pages
-  perPage
-  current
-  next
-  prev
-  isFirst
-  isLast
+  pageSize
+  page
 }`;
 export const DEVICES: string[] = ['ios', 'andriod'];
 
