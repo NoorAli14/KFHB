@@ -23,8 +23,11 @@ export class CustomerRepository extends BaseRepository {
              output: string[]): Promise<any> {
     const query_count: QueryBuilder = this.getFilteredQuery(this.connection(this.tableName).where(condition), filteringParams);
     let query_data: QueryBuilder = this.getFilteredQuery(this.connection(this.tableName).where(condition), filteringParams);
-    if(sortingParams?.length > 0)
+    if(sortingParams?.length > 0){
       query_data = this.getSortedQuery(query_data, sortingParams);
+    } else {
+      query_data = this.getSortedQuery(query_data, [{field:"created_on", direction:"desc"}]);
+    }
     return super.listWithPagination(query_count, query_data, paginationParams, output)
   }
 
