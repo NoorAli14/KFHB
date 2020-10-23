@@ -130,9 +130,7 @@ type IDT_PaginationModel {
   total: Float
   pages: Float
   pageSize: Float
-  current: Float
-  isFirst: Boolean
-  isLast: Boolean
+  page: Float
 }
 
 type Mutation {
@@ -166,7 +164,7 @@ input ProcessDocumentInput {
 }
 
 type Query {
-  customersList(sortingParams: [SortingParam!], filteringParams: CustomersFilterParams, pagination: PaginationParams): CustomerWithPagination!
+  customersList(sort_by: [SortingParam!], filters: CustomersFilterParams, pagination: PaginationParams): CustomerWithPagination!
   findCustomerById(id: String!): Customer!
   previewAttachment(input: PreviewDocumentInput!): PreviewDocument!
 }

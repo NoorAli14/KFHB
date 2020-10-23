@@ -21,14 +21,11 @@ export abstract class BaseRepository {
     const total = await query_count.count('id as count').first();
     const rows = await query_data.offset(offset).limit(limitPerPage).select(output);
     const count = parseInt(String(total.count), 10);
-    const pages = Math.ceil(count / limitPerPage);
     const pagination: IDT_PaginationModel = {
       total: count,
-      pages: pages,
+      pages: Math.ceil(count / limitPerPage),
       pageSize: limitPerPage,
-      current: page,
-      isFirst: page == 1,
-      isLast: page == pages,
+      page: page,
     };
     return { pagination: pagination, data: rows };
   }
