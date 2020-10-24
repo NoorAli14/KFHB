@@ -45,6 +45,7 @@ export class CustomerComponent
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
     displayedColumns = [
+        "SerialNo",
         "firstName",
         "lastName",
         "email",
