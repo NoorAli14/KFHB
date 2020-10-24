@@ -21,7 +21,7 @@ export class CustomerController {
     })
     @ApiOkResponse({ type: CustomerPaginationList, description: 'List of all customers.' })
     // @Permissions('view:users')
-    async list(@Query('pagination') pagination: PaginationDTO, @Query('filters') filters: CustomerFilterDTO, @Query('sort_by') sort_by: [SortByDTO]): Promise<CustomerPaginationList> {
+    async list(@Query() pagination: PaginationDTO, @Query() filters: CustomerFilterDTO, @Query() sort_by: [SortByDTO]): Promise<CustomerPaginationList> {
         return this.customerService.list({ pagination, filters, sort_by });
     }
 }
