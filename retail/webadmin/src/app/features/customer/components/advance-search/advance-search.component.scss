@@ -14,6 +14,8 @@
     justify-content: flex-start;
     -ms-flex-align: center;
     align-items: center;
+    position: relative;
+    z-index: 999;
     // background: url("../images/Searchs_008.png");
     background-size: cover;
     // padding: 15px;

@@ -1,3 +1,4 @@
+import { camelToSnakeCaseText } from './../../../../shared/helpers/global.helper';
 import { CustomerService } from "./../../customer.service";
 import {
     camelToSentenceCase,
@@ -163,6 +164,6 @@ export class CustomerComponent
             );
     }
     sortData(e) {
-        this.getData({ sort_order: e.direction, sort_by: e.active });
+        this.getData({ sort_order: e.direction? e.direction : 'asc', sort_by: camelToSnakeCaseText(e.active) });
     }
 }
