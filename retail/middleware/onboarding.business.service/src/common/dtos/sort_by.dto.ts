@@ -15,6 +15,7 @@ export class SortByDTO {
         enum: ['asc', 'desc'],
         title: 'Order of sorting',
         example: 'asc',
+        default: 'asc',
         required: false
     })
     @IsString()

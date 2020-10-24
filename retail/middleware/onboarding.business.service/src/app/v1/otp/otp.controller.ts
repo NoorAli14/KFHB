@@ -19,7 +19,7 @@ import {
   SuccessDto,
   DELIVERY_MODES,
   CUSTOMER_LAST_STEPS,
-  OTP_STATUSES,, STATUSES
+  OTP_STATUSES, STATUSES
 } from '@common/index';
 import { OtpService } from './otp.service';
 import { User } from '../users/user.entity';
@@ -52,7 +52,7 @@ export class OtpController {
   @HttpCode(HttpStatus.OK)
   async send_sms_otp(@CurrentUser() currentUser: User): Promise<SuccessDto> {
     const result = await this.otpService.send(currentUser, DELIVERY_MODES.MOBILE);
-    if(result?.status === STATUSES.SUCCESS) {
+    if (result?.status === STATUSES.SUCCESS) {
       await this.customerService.updateLastStep(
         currentUser.id,
         CUSTOMER_LAST_STEPS.RBX_ONB_STEP_SMS_OTP_SENT,
@@ -78,7 +78,7 @@ export class OtpController {
   @HttpCode(HttpStatus.OK)
   async send_email_otp(@CurrentUser() currentUser: User): Promise<SuccessDto> {
     const result = await this.otpService.send(currentUser, DELIVERY_MODES.EMAIL);
-    if(result?.status === STATUSES.SUCCESS) {
+    if (result?.status === STATUSES.SUCCESS) {
       await this.customerService.updateLastStep(
         currentUser.id,
         CUSTOMER_LAST_STEPS.RBX_ONB_STEP_EMAIL_OTP_SENT,
@@ -107,7 +107,7 @@ export class OtpController {
     @Body() input: VerifyOTPDto,
   ): Promise<SuccessDto> {
     const result = await this.otpService.verify(currentUser, input);
-    if(result?.status === OTP_STATUSES.VERIFIED) {
+    if (result?.status === OTP_STATUSES.VERIFIED) {
       await this.customerService.updateLastStep(
         currentUser.id,
         CUSTOMER_LAST_STEPS.RBX_ONB_STEP_SMS_OTP_VERIFIED,
@@ -136,7 +136,7 @@ export class OtpController {
     @Body() input: VerifyOTPDto,
   ): Promise<SuccessDto> {
     const result = await this.otpService.verify(currentUser, input);
-    if(result?.status === OTP_STATUSES.VERIFIED) {
+    if (result?.status === OTP_STATUSES.VERIFIED) {
       await this.customerService.updateLastStep(
         currentUser.id,
         CUSTOMER_LAST_STEPS.RBX_ONB_STEP_EMAIL_OTP_VERIFIED,
