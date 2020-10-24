@@ -6,7 +6,7 @@ import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
 } from '@nestjs/swagger';
-import { AuthGuard, CurrentUser, CUSTOMER_LAST_STEPS, DOCUMENT_STATUSES } from '@common/index';
+import { AuthGuard, CurrentUser, CUSTOMER_LAST_STEPS, DOCUMENT_STATUSES, SELFIE_SUB_TYPES } from '@common/index';
 import { DocumentsService as FaceService } from './documents.service';
 import { Document } from './document.entity';
 import { UploadDocumentDTO, UploadSelfieDTO } from './document.dto';
@@ -49,10 +49,12 @@ export class FacesController {
       file: input.file,
     };
     const result = await this.sessionService.update(params);
-    await this.customerService.updateLastStep(
-      currentUser.id,
-      CUSTOMER_LAST_STEPS.RBX_ONB_STEP_SELFIE_UPLOADED
-    );
+    if (SELFIE_SUB_TYPES.DEVICE_REGISTRATION === input.sub_type) {
+      await this.customerService.updateLastStep(
+        currentUser.id,
+        CUSTOMER_LAST_STEPS.RBX_ONB_STEP_SELFIE_UPLOADED
+      );
+    }
     return result;
   }
 
@@ -78,7 +80,7 @@ export class FacesController {
       file: input.file,
     };
     const result = await this.attachmentService.uploadLiveness(params);
-    if(result?.status === DOCUMENT_STATUSES.PROCESSED) {
+    if (result?.status === DOCUMENT_STATUSES.PROCESSED) {
       await this.customerService.updateLastStep(
         currentUser.id,
         CUSTOMER_LAST_STEPS.RBX_ONB_STEP_LIVENESS_UPLOADED,
