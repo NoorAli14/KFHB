@@ -41,7 +41,7 @@ export class CustomersService {
     //     `User Already Exist with email ${input.email}`,
     //   );
     // }
-    const mutation = `mutation {
+    const mutation: string = `mutation {
       result: addCustomer(input: ${toGraphql(input)}) ${this.output}
     }`;
     return this.gqlClient.send(mutation);
@@ -68,10 +68,15 @@ export class CustomersService {
     return this.gqlClient.send(mutation);
   }
 
-  async list(): Promise<CustomerPaginationList> {
+  async list(params?: any): Promise<CustomerPaginationList> {
     this.logger.log(`Start fetching a list of paginated customers`);
+    this.logger.log(params)
     const query: string = `query {
-      result: customersList {
+      result: customersList(
+        filters: ${toGraphql(params?.filters)},
+        sort_by: ${toGraphql(params?.sort_by || [])},
+        pagination: ${toGraphql(params?.pagination)}
+      ) {
         pagination ${PAGINATION_OUTPUT}
         data ${this.output}
       }

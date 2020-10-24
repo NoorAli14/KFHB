@@ -1,39 +1,28 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, } from '@nestjs/swagger';
+import { IsOptional, IsInt } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class PaginationDTO {
     @ApiProperty({
-        example: 250,
-        description: 'Total number of record',
-        required: false
+        example: 50,
+        description: 'Number of records per page',
+        required: false,
+        type: 'number'
     })
-    readonly total: number;
-
-    @ApiProperty({
-        example: 10,
-        description: 'Total number of pages',
-        required: false
-    })
-    readonly pages: number;
-
-    @ApiProperty({
-        example: 25,
-        description: 'Total number of records per page',
-        required: false
-    })
-    readonly perPage: number;
-
-    @ApiProperty({
-        example: 6,
-        description: 'Next page number',
-        required: false
-    })
-    readonly next: number;
+    @Type(() => Number)
+    @IsInt()
+    @IsOptional()
+    readonly limit: number;
 
     @ApiProperty({
         example: 5,
         description: 'Current page number',
-        required: false
-    })
-    readonly page: number;
+        required: false,
+        type: 'number'
 
+    })
+    @Type(() => Number)
+    @IsInt()
+    @IsOptional()
+    readonly page: number;
 }
