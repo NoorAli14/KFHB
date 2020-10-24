@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { GqlClientService, PAGINATION_OUTPUT, toGraphql } from '@common/index';
 import { Customer, CustomerPaginationList } from './customer.entity';
+import { CreateCustomerInput } from './customer.interface';
 
 @Injectable()
 export class CustomersService {
@@ -32,7 +33,7 @@ export class CustomersService {
 
   constructor(private readonly gqlClient: GqlClientService) { }
 
-  async create(input: any): Promise<Customer> {
+  async create(input: CreateCustomerInput): Promise<Customer> {
     this.logger.log(`Start registering a new customer`);
     // const user: User = await this.findByEmail(input.email);
     // if (user) {
@@ -81,5 +82,9 @@ export class CustomersService {
       }
     }`;
     return this.gqlClient.send(query);
+  }
+
+  async updateLastStep(id: string, lastStep: string): Promise<Customer> {
+    return this.update(id, { last_step: lastStep });
   }
 }

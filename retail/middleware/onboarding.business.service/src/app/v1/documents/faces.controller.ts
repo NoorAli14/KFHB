@@ -6,13 +6,15 @@ import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
 } from '@nestjs/swagger';
-import { AuthGuard } from '@common/index';
+import { AuthGuard, CurrentUser, CUSTOMER_LAST_STEPS, DOCUMENT_STATUSES, SELFIE_SUB_TYPES } from '@common/index';
 import { DocumentsService as FaceService } from './documents.service';
 import { Document } from './document.entity';
 import { UploadDocumentDTO, UploadSelfieDTO } from './document.dto';
 import { FaceUploadingInput } from './document.interface';
 import { SessionsService } from '../sessions/sessions.service';
 import { Session } from '../sessions/session.entity';
+import { CustomersService } from '../customers/customers.service';
+import { User } from '../users/user.entity';
 
 @ApiTags('Face Images Uploading Module')
 @Controller('faces')
@@ -22,6 +24,7 @@ export class FacesController {
   constructor(
     private readonly attachmentService: FaceService,
     private readonly sessionService: SessionsService,
+    private readonly customerService: CustomersService,
   ) { }
 
   @Post('selfie/upload')
@@ -38,11 +41,21 @@ export class FacesController {
     type: Error,
     description: 'Input Validation failed.',
   })
-  async uploadSelfie(@Body() input: UploadSelfieDTO): Promise<Session> {
+  async uploadSelfie(
+    @CurrentUser() currentUser: User,
+    @Body() input: UploadSelfieDTO
+  ): Promise<Session> {
     const params: FaceUploadingInput = {
       file: input.file,
     };
-    return this.sessionService.update(params);
+    const result = await this.sessionService.update(params);
+    if (SELFIE_SUB_TYPES.DEVICE_REGISTRATION === input.sub_type) {
+      await this.customerService.updateLastStep(
+        currentUser.id,
+        CUSTOMER_LAST_STEPS.RBX_ONB_STEP_SELFIE_UPLOADED
+      );
+    }
+    return result;
   }
 
   @Post('liveness/upload')
@@ -59,10 +72,20 @@ export class FacesController {
     type: Error,
     description: 'Input Validation failed.',
   })
-  async uploadLiveness(@Body() input: UploadDocumentDTO): Promise<Document> {
+  async uploadLiveness(
+    @CurrentUser() currentUser: User,
+    @Body() input: UploadDocumentDTO
+  ): Promise<Document> {
     const params: FaceUploadingInput = {
       file: input.file,
     };
-    return this.attachmentService.uploadLiveness(params);
+    const result = await this.attachmentService.uploadLiveness(params);
+    if (result?.status === DOCUMENT_STATUSES.PROCESSED) {
+      await this.customerService.updateLastStep(
+        currentUser.id,
+        CUSTOMER_LAST_STEPS.RBX_ONB_STEP_LIVENESS_UPLOADED,
+      );
+    }
+    return result;
   }
 }

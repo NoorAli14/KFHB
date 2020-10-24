@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { ATTACHMENT_TYPES } from '@common/constants';
-import { IsNotEmpty, IsBase64, IsString, IsIn } from 'class-validator';
+import { IsNotEmpty, IsString, IsIn } from 'class-validator';
 
 export class Attachment {
     @ApiProperty({
