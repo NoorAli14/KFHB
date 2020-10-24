@@ -1,20 +1,25 @@
+import { STATUS_LIST } from './../../../../shared/constants/app.constants';
+import {
+    camelToSnakeCase,
+    cloneDeep,
+    getName,
+} from "@shared/helpers/global.helper";
 import { ReferenceService } from "@shared/services/reference/reference.service";
 import {
     Component,
     OnInit,
     Output,
     EventEmitter,
-    ViewChild,
-    ElementRef,
     Injector,
+    Input,
+    SimpleChanges,
 } from "@angular/core";
 import { trigger, transition, style, animate } from "@angular/animations";
 import { FormGroup, FormControl } from "@angular/forms";
-import { map, debounceTime, distinctUntilChanged } from "rxjs/operators";
+import { map, debounceTime, distinctUntilChanged, skip } from "rxjs/operators";
 import { GENDER_LIST } from "@shared/constants/app.constants";
 import { fuseAnimations } from "@fuse/animations";
 import { BaseComponent } from "@shared/components/base/base.component";
-import { MESSAGES } from '@shared/constants/messages.constant';
 
 @Component({
     selector: "app-advance-search",
@@ -44,53 +49,56 @@ export class AdvanceSearchComponent extends BaseComponent implements OnInit {
     searchForm: FormGroup;
     civilId: FormControl;
     genderList = GENDER_LIST;
-    nationalities=[];
+    statusList = STATUS_LIST;
+    filteredNationalities: any[] = [];
     maxDate: Date;
+    @Input() nationalityList;
     @Output() filterChange = new EventEmitter();
     @Output() filterReset = new EventEmitter();
 
-    constructor(
-        private _refService: ReferenceService,
-         injector: Injector
-    ) {
+    constructor(private _refService: ReferenceService, injector: Injector) {
         super(injector);
-        // this.getCountries()
+        this.initForm();
     }
 
     ngOnInit() {
         this.civilId = new FormControl("");
         this.maxDate = new Date();
         this.maxDate.setDate(this.maxDate.getDate());
-        this.initForm();
         this.initSearch();
+        this.genderList = [...this.genderList, { id: "", name: "All" }];
+        this.filteredNationalities=this.nationalityList;
     }
+
     openAdvance(status) {
         this.civilId.setValue("");
         this.isAdvance = status;
     }
-    getCountries(): void {
-        this._refService.getCountries().subscribe(
-            (response) => {
-                this.nationalities=response;
-            },
-            (response) => {
-                this._notifier.error(MESSAGES.UNKNOWN);
-            }
-        );
+
+    ngOnChanges(changes: SimpleChanges): void {
+        //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
+        //Add '${implements OnChanges}' to the class.
     }
+
     ngAfterContentChecked(): void {
         const el = document.querySelectorAll(".mat-form-field-label");
         el.forEach((x) => {
             x["style"].color = "rgba(0, 0, 0, 0.6)";
         });
         const inputs = document.querySelectorAll(".mat-input-element");
+        const dropdown = document.querySelector(".mat-select-value-text>span");
+        if (dropdown) {
+            dropdown["style"].color = "#3c4252";
+        }
         inputs.forEach((x) => {
             x["style"].color = "#3c4252";
         });
     }
+
     initSearch() {
         this.civilId.valueChanges
             .pipe(
+                skip(1),
                 map((value: any) => {
                     return value;
                 }),
@@ -98,9 +106,11 @@ export class AdvanceSearchComponent extends BaseComponent implements OnInit {
                 distinctUntilChanged()
             )
             .subscribe((text: string) => {
-                this.filterChange.emit({ nationalId: text });
+                this.isAdvance = false;
+                this.filterChange.emit({ national_id_no: text });
             });
     }
+
     initForm() {
         this.searchForm = new FormGroup({
             firstName: new FormControl(),
@@ -110,20 +120,37 @@ export class AdvanceSearchComponent extends BaseComponent implements OnInit {
             nationality: new FormControl(),
             gender: new FormControl(),
             createdOn: new FormControl(),
+            status: new FormControl(),
+        });
+        this.searchForm.get("nationality").valueChanges.subscribe((value) => {
+            this.filteredNationalities = this._mapperService.filterData(
+                this.nationalityList,
+                "nationality",
+                value
+            );
         });
     }
+
+    displayFn = (id: string): string => {
+        if (!id) {
+            return "";
+        }
+        return getName(id, "nationality", cloneDeep(this.nationalityList));
+    };
+
     onReset() {
         this.isAdvance = false;
         this.filterReset.emit();
         this.searchForm.reset();
     }
+
     onSubmit() {
         const filters = this.searchForm.value;
         Object.keys(filters).forEach(
             (key) => !filters[key] && delete filters[key]
         );
         if (!Boolean(filters)) return;
-        this.filterChange.emit(filters);
+        this.filterChange.emit(camelToSnakeCase(filters));
         this.isAdvance = false;
     }
 }

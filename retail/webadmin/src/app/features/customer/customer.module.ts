@@ -12,7 +12,8 @@ import { LightboxModule } from '@ngx-gallery/lightbox';
 import { MatTabsModule } from '@angular/material/tabs';
 import { AdvanceSearchComponent } from './components/advance-search/advance-search.component';
 import { MatSortModule } from '@angular/material/sort';
-
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MaterialFormsModule } from '@shared/modules/material-forms/material-forms.module';
 @NgModule({
   declarations: [CustomerComponent, CustomerDetailComponent,AdvanceSearchComponent],
   imports: [
@@ -23,8 +24,10 @@ import { MatSortModule } from '@angular/material/sort';
     MaterialModule,
     GalleryModule,
     LightboxModule,
+    MaterialFormsModule,
     MatTabsModule,
-    MatSortModule
+    MatSortModule,
+    MatAutocompleteModule
   ]
 })
 export class CustomerModule { }

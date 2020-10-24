@@ -9,8 +9,8 @@ export class CustomerService {
     constructor(private network:NetworkService) {
         
     }
-    getCustomers(pageIndex,perPage){
-        return this.network.getAll(URI.CUSTOMERS);
+    getCustomers(queryParams){
+        return this.network.getAll(`${URI.CUSTOMERS}?${queryParams}`);
     }
     getCustomerById(id){
         return this.network.getAll(`${URI.CUSTOMER360}/${id}`);

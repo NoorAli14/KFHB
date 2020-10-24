@@ -6,7 +6,8 @@
                     person
                 </mat-icon>
                 <span class="logo-text" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
-                    Rashid
+                   <span *ngIf="customer?.firstName"> {{customer?.firstName}}</span>
+                   <span *ngIf="customer?.lastName"> {{customer?.lastName}}</span>
                 </span>
             </div>
             <button mat-icon-button (click)="matDialogRef.close()" aria-label="Close dialog">
