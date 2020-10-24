@@ -73,7 +73,7 @@ export class CustomersService {
     const query: string = `query {
       result: customersList(
         filters: ${toGraphql(params?.filters)},
-        sort_by: ${toGraphql(params?.sort_by || [])},
+        sort_by: ${toGraphql(params?.sort_by)},
         pagination: ${toGraphql(params?.pagination)}
       ) {
         pagination ${PAGINATION_OUTPUT}
