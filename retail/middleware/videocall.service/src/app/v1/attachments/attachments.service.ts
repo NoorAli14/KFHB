@@ -97,12 +97,12 @@ export class AttachmentsService {
     type?: string | any,
   ): Promise<FileResponse> {
     const current_date = moment(new Date(), 'YYYY/MM/DD');
-    //check wether ROB_AgentScreenshots folder created or not
+    //check whether ENV_RBX_ATTACHMENT_LOCATION folder created or not
     createDirIfNotExist(
       this.configService.ATTACHMENT.ENV_RBX_ATTACHMENT_LOCATION,
     );
 
-    //check folder created inside ROB_AgentScreenshots or not for current customer
+    //check folder created insideENV_RBX_ATTACHMENT_LOCATION or not for current customer
     const ROB_path = `${
       this.configService.ATTACHMENT.ENV_RBX_ATTACHMENT_LOCATION
     }${current_date.format('YYYY')}${current_date.format('MM')}`;
