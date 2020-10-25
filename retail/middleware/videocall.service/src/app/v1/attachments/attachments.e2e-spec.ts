@@ -36,7 +36,7 @@ describe('Video Call Module (e2e)', () => {
   it('Should transfoem and validate the response based on attachment', async () => {
     attachment = {
       customer_id: headers['x-user-id'],
-      attachment_id: 'attachment_id',
+      attachment_type: 'attachment_type',
       file_content: 'imageBase64',
     } as NewAttachmentInput;
 
@@ -56,7 +56,7 @@ describe('Video Call Module (e2e)', () => {
         query: `{
           findAttachment(
             customer_id: "828605C2-7E50-40BC-AA88-C064CE63C155",
-            attachment_id: "passport_id"
+            attachment_type: "passport_id"
           ){${ATTACHMENT_QUERY}}}`,
       })
       .set(headers)
@@ -83,7 +83,7 @@ describe('Video Call Module (e2e)', () => {
         query: `{
           findAttachment(
             customer_id: "828605c2-7e50-9808-aa88-c064ce63c155",
-            attachment_id: "passport_id"
+            attachment_type: "passport_id"
           ){${ATTACHMENT_QUERY}}}`,
       })
       .set(headers)
@@ -100,7 +100,7 @@ describe('Video Call Module (e2e)', () => {
   it('should create attachment abd validate the response as well as the request payload', done => {
     attachment = {
       customer_id: uuidV4(),
-      attachment_id: 'attachment_id',
+      attachment_type: 'attachment_type',
       file_content: IMAGE_BASE64,
     } as NewAttachmentInput;
 

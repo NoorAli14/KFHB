@@ -50,7 +50,7 @@ export class Attachment {
   @IsString()
   @MaxLength(255)
   @IsNotEmpty()
-  attachment_id: string;
+  attachment_type: string;
 
   @Field({ nullable: true })
   @IsString()

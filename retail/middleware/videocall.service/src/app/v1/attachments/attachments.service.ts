@@ -71,7 +71,7 @@ export class AttachmentsService {
   ): Promise<Attachment> {
     const attachment = await this.uploadFile(
       `data:image/png;base64,${input.file_content}`,
-      input.attachment_id,
+      input.attachment_type,
       input.type,
     );
 
@@ -84,7 +84,7 @@ export class AttachmentsService {
       updated_by: currentUser.id,
       customer_id: input.customer_id,
       tenant_id: currentUser.tenant_id,
-      attachment_id: input.attachment_id,
+      attachment_type: input.attachment_type,
     };
 
     const [response] = await this.attachmentDB.create(newAttachment, output);

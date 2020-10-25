@@ -10,7 +10,7 @@ export class AttachmentRepository extends BaseRepository {
     await super.update(
       {
         customer_id: args.customer_id,
-        attachment_id: args.attachment_id,
+        attachment_type: args.attachment_type,
       },
       { status: STATUS.ARCHIVED },
       ['id', 'status'],

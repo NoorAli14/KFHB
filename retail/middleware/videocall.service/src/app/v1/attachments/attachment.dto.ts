@@ -17,7 +17,7 @@ export class NewAttachmentInput {
   @Field()
   @IsNotEmpty()
   @IsString()
-  attachment_id: string;
+  attachment_type: string;
 
   @Field()
   @IsNotEmpty()

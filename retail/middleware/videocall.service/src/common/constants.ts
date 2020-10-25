@@ -62,7 +62,7 @@ export const APPOINTMENT_QUERY =
   'id call_time created_on created_by updated_on updated_by';
 
 export const ATTACHMENT_QUERY =
-  'id tenant_id customer_id file_name file_size file_path attachment_id status created_on updated_on';
+  'id tenant_id customer_id file_name file_size file_path attachment_type status created_on updated_on';
 
 // This is for testing purposes
 export const IMAGE_BASE64 =
