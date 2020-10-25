@@ -5,7 +5,7 @@ import {
   Parent,
   ResolveField, Query,
 } from '@nestjs/graphql';
-import { UseGuards, NotFoundException } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import {
   AuthGuard,
   Fields,
@@ -20,9 +20,9 @@ import { Document } from '@rubix/app/v1/documents/document.model';
 import {Customer, CustomerWithPagination} from './customer.model';
 import { CustomersService } from './customers.service';
 import {NewCustomerInput, UpdateCustomerInput} from './customer.dto';
-import {CustomerQueryParams} from "@app/v1/customers/classes";
-import {QueryParamsCustomer} from "@app/v1/customers/decorators";
 import {CustomerNotFoundException} from "@app/v1/customers/exceptions";
+import {PaginationParams, SortingParam} from "@common/classes";
+import {CustomersFilterParams} from "@app/v1/customers/classes";
 
 @Resolver(Customer)
 export class CustomersResolver {
@@ -31,9 +31,12 @@ export class CustomersResolver {
   @Query(() => CustomerWithPagination)
   async customersList(
       @CurrentUser() currentUser: ICurrentUser,
-      @QueryParamsCustomer() queryParams: CustomerQueryParams,
+      @Args('pagination', {nullable: true}) paginationParams: PaginationParams,
+      @Args('filters', {nullable: true}) filteringParams: CustomersFilterParams,
+      @Args('sort_by', {nullable: true, type: () => [SortingParam]}) sortingParams: SortingParam[],
+      @Fields() output: string[]
   ): Promise<CustomerWithPagination> {
-    return this.customerService.list(currentUser, queryParams);
+    return this.customerService.list(currentUser, paginationParams, filteringParams, sortingParams, output);
   }
 
   @Mutation(() => Customer)

@@ -15,9 +15,9 @@ import { DetailItemComponent } from './components/detail-item/detail-item.compon
     entryComponents: [UserFormComponent],
     imports: [
         CommonModule,
+        UserRoutingModule,
         SharedModule,
         FuseSharedModule,
-        UserRoutingModule,
         MaterialModule
     ],
 })

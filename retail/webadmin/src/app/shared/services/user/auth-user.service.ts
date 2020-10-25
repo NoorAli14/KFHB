@@ -16,55 +16,61 @@ export class AuthUserService {
     private _sidebarModules: any;
     private config = [
         {
-            id: 'Agent Portal',
+            id: 'agent-portal',
             icon: 'voice_over_off',
             url: '',
             translate: 'FEATURES.AGENT_PORTAL.TITLE',
         },
         {
-            id: 'Video',
+            id: 'video',
             icon: 'videocam',
             url: '/video',
             translate: 'FEATURES.AGENT_PORTAL.VIDEO.TITLE',
         },
         {
-            id: 'Entitlement',
+            id: 'customers',
+            icon: 'person',
+            url: '/customer',
+            translate: 'FEATURES.AGENT_PORTAL.CUSTOMER.TITLE',
+        },
+        {
+            id: 'entitlement',
             icon: 'assignment_ind',
             url: '',
             translate: 'FEATURES.ENTITLEMENT.TITLE',
         },
         {
-            id: 'User Management',
+            id: 'users',
             icon: 'person',
             url: '/ent/user',
             translate: 'FEATURES.ENTITLEMENT.USER.TITLE',
         },
         {
-            id: 'Role Management',
+            id: 'roles',
             icon: 'settings_applications',
             url: '/ent/role',
             translate: 'FEATURES.ENTITLEMENT.ROLE.TITLE',
         },
         {
-            id: 'Calender',
+            id: 'calender',
             icon: 'calendar_today',
             url: '',
             translate: 'FEATURES.CALENDER.TITLE',
         },
         {
-            id: 'Working Week',
+            id: 'working-days',
             icon: 'av_timer',
             url: '/calender/working-days',
             translate: 'FEATURES.CALENDER.WORKING_DAYS.TITLE',
         },
         {
-            id: 'Holidays',
+            id: 'holidays',
             icon: 'history',
             url: '/calender/holidays',
             translate: 'FEATURES.CALENDER.HOLIDAYS.TITLE',
         },
         {
-            id: 'Leaves',
+            id: 'leaves',
             icon: 'update',
             url: '/calender/leaves',
             translate: 'FEATURES.CALENDER.LEAVES.TITLE',
@@ -131,7 +137,7 @@ export class AuthUserService {
         return modules.map((item) => {
             const isChildren = item.sub_modules &&  item.sub_modules.length > 0;
             item.type = isChildren ? 'collapsable' : 'item';
-            const data = this.config.find((x) => x.id === item.name);
+            const data = this.config.find((x) => x.id === item.slug);
             if (isChildren) {
                 const child = this.configureModules(item.sub_modules);
                 delete item.sub_modules;

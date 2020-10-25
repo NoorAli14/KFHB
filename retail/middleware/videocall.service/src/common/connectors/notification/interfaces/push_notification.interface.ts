@@ -3,7 +3,7 @@ import { PLATFORMS } from '@common/constants';
 import { Length, IsEnum } from 'class-validator';
 
 @ObjectType()
-export class PushNotificationModel {
+export class iPushNotification {
   @Field()
   @IsEnum(PLATFORMS)
   platform: string;

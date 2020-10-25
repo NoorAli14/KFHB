@@ -1,1 +1,1 @@
-export * from './customer-query-params.class';
+export * from './customers-filter-params.class';

@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { GqlClientService, PAGINATION_OUTPUT, toGraphql } from '@common/index';
 import { Customer, CustomerPaginationList } from './customer.entity';
+import { CreateCustomerInput } from './customer.interface';
 
 @Injectable()
 export class CustomersService {
@@ -32,7 +33,7 @@ export class CustomersService {
 
   constructor(private readonly gqlClient: GqlClientService) { }
 
-  async create(input: any): Promise<Customer> {
+  async create(input: CreateCustomerInput): Promise<Customer> {
     this.logger.log(`Start registering a new customer`);
     // const user: User = await this.findByEmail(input.email);
     // if (user) {
@@ -40,7 +41,7 @@ export class CustomersService {
     //     `User Already Exist with email ${input.email}`,
     //   );
     // }
-    const mutation = `mutation {
+    const mutation: string = `mutation {
       result: addCustomer(input: ${toGraphql(input)}) ${this.output}
     }`;
     return this.gqlClient.send(mutation);
@@ -67,14 +68,23 @@ export class CustomersService {
     return this.gqlClient.send(mutation);
   }
 
-  async list(): Promise<CustomerPaginationList> {
+  async list(params?: any): Promise<CustomerPaginationList> {
     this.logger.log(`Start fetching a list of paginated customers`);
+    this.logger.log(params)
     const query: string = `query {
-      result: customersList {
+      result: customersList(
+        filters: ${toGraphql(params?.filters)},
+        sort_by: ${toGraphql(params?.sort_by)},
+        pagination: ${toGraphql(params?.pagination)}
+      ) {
         pagination ${PAGINATION_OUTPUT}
         data ${this.output}
       }
     }`;
     return this.gqlClient.send(query);
+  }
+
+  async updateLastStep(id: string, lastStep: string): Promise<Customer> {
+    return this.update(id, { last_step: lastStep });
   }
 }

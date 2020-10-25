@@ -1,8 +1,11 @@
-import { Controller, UseGuards, Get } from '@nestjs/common';
+import { Controller, UseGuards, Get, Query } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOkResponse, ApiOperation } from '@nestjs/swagger';
 import { CustomersService } from './customers.service';
-import { AuthGuard } from '@common/index';
+import { AuthGuard, PaginationDTO } from '@common/index';
+import { SortByDTO } from '@common/dtos/sort_by.dto';
+
 import { CustomerPaginationList } from './customer.entity';
+import { CustomerFilterDTO } from './dtos/customer-filter.dto';
 
 @ApiTags('Customers Module')
 @Controller('customers')
@@ -20,7 +23,14 @@ export class CustomerController {
     })
     @ApiOkResponse({ type: CustomerPaginationList, description: 'List of all customers.' })
     // @Permissions('view:users')
-    async list(): Promise<CustomerPaginationList> {
-        return this.customerService.list();
+    async list(@Query() pagination: PaginationDTO, @Query() filters: CustomerFilterDTO, @Query() order: SortByDTO): Promise<CustomerPaginationList> {
+        let sort_by = [];
+        if (order) {
+            sort_by = [{
+                field: order?.sort_by || 'created_on',
+                direction: order?.sort_order || 'desc'
+            }]
+        }
+        return this.customerService.list({ pagination, filters, sort_by });
     }
 }

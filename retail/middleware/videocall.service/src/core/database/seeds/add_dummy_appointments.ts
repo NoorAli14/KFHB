@@ -4,7 +4,6 @@ import {
   GENDER,
   APPOINTMENT_STATUS,
   CREATED_BY,
-  IMAGE_BASE64,
   STATUS,
 } from '@common/constants';
 import { uuidV4 } from '@common/utilities';

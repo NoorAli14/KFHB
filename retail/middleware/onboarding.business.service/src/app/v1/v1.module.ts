@@ -16,7 +16,9 @@ import { AuthModule } from './auth/auth.module';
 import { ComplianceModule } from './compliances/compliances.module';
 import { OtpModule } from './otp/otp.module';
 import { SessionModule } from './sessions/session.module';
+import { DocumentModule } from './documents/document.module';
 import { AttachmentModule } from './attachments/attachment.module';
+
 import { UserModule } from './users/user.module';
 import { AmlModule } from './aml/aml.module';
 
@@ -53,11 +55,12 @@ class BuildServiceModule { }
     GqlClientModule,
     AuthModule,
     SessionModule,
-    AttachmentModule,
+    DocumentModule,
     OtpModule,
     UserModule,
     ComplianceModule,
     AmlModule,
+    AttachmentModule,
     GraphQLGatewayModule.forRootAsync({
       imports: [BuildServiceModule],
       useFactory: async (schema: RegistryService) => ({

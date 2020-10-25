@@ -6,7 +6,7 @@ import {
 } from 'class-validator';
 
 import { Field, InputType } from '@nestjs/graphql';
-import {GENDER, NUMBERS, STATUS} from "@rubix/common";
+import { GENDER, NUMBERS, STATUS } from "@rubix/common";
 const DEVICES: string[] = ['ios', 'andriod'];
 @InputType('CreateCustomerInput')
 export class NewCustomerInput {
@@ -52,6 +52,12 @@ export class NewCustomerInput {
   @IsOptional()
   @MaxLength(255)
   fcm_token_id: string;
+
+  @Field({ nullable: true })
+  @IsString()
+  @IsOptional()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  last_step: string;
 }
 
 @InputType()

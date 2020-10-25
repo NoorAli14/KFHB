@@ -164,11 +164,11 @@ class VideoComponent extends React.Component {
     var context = canvas.getContext("2d");
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
-
+    debugger
     context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
     var data = canvas.toDataURL("image/png");
-
+    const  b64 = data.replace(/^data:image.+;base64,/, '');
     this.downloadURI(data, value);
     context.clearRect(0, 0, canvas.width, canvas.height);
   }

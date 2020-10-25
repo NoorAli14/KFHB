@@ -7,7 +7,7 @@ import {
 } from 'class-validator';
 
 import { Field, InputType } from '@nestjs/graphql';
-import { APPOINTMENT_STATUS, GENDER } from '@common/constants';
+import { APPOINTMENT_STATUS } from '@common/constants';
 
 @InputType()
 export class NewAppointmentInput {
