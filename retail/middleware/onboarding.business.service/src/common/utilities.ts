@@ -66,9 +66,9 @@ export const generateRandomString = (length = 36): string => {
 };
 
 export const formattedHeader = (
-  req: Request,
+  req: any,
   user_id?: string
-): IHEADER => {
+): any => {
   let headers: any = {}
   headers[X_CORRELATION_KEY] = req.get(X_CORRELATION_KEY);
   if (user_id) headers[X_USER_ID] = user_id;
