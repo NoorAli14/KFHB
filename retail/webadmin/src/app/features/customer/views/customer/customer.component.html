@@ -1,0 +1,78 @@
+<div   class="page-container page-layout carded fullwidth inner-scroll">
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg accent"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header accent" style="min-height: 95px !important; height:95px !important; " fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-between center">
+
+            <!-- APP TITLE -->
+            <div class="logo mb-24 mb-md-0" style="flex: 0 1 30%;" fxLayout="row" fxLayoutAlign="start center" >
+                <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+                    people
+                </mat-icon>
+                <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                    Customers
+                </span>
+            </div>
+            <!-- / APP TITLE -->
+
+            <!-- SEARCH -->
+           <div style="flex:1">
+            <app-advance-search (filterChange)="onFilter($event)" [nationalityList]="nationalityList" (filterReset)="onReset()">
+            </app-advance-search>
+           </div>
+           
+            <!-- / SEARCH -->
+
+        
+
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT CARD -->
+        <div class="content-card" fusePerfectScrollbar>
+            <mat-table #table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
+                <!-- COLUMNS AND ROWS-->
+                <ng-container *ngFor="let key of displayedColumns; " [matColumnDef]="key">
+                    <mat-header-cell *matHeaderCellDef [disabled]=" key=='action' || key=='SerialNo' ? true : false " [mat-sort-header]=" key=='action' ? null : key ">{{ key.includes('action') ? 'Action' : camelToSentenceCase(key) }}</mat-header-cell>
+            
+                    <mat-cell *matCellDef="let element; let indexOfelement=index " class="text-elipsis">
+                      <ng-container [ngSwitch]="key">
+                        <span *ngSwitchCase="'action'">
+                            <mat-icon class="hover" (click)="getCustomerDetail(element['id'])" matTooltip="View Detail"color="warn" type="button">fullscreen</mat-icon> 
+                        </span>
+                        <span *ngSwitchCase="'SerialNo'">
+                            {{indexOfelement+1}}
+                        </span>
+                        <span *ngSwitchCase="'status'">
+                            <app-status [status]="element[key]"></app-status>
+                        </span>
+                        <span  *ngSwitchDefault>
+                            <span *ngIf="element[key]; else defaultText">
+                                {{element[key] }}
+                            </span>
+                        </span>
+                    </ng-container>
+                    <ng-template #defaultText>
+                        <app-default-text></app-default-text>
+                    </ng-template>
+                    </mat-cell>
+                </ng-container>
+                <!-- -->
+                <mat-header-row  *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;" [@animate]="{value:'*',params:{y:'100%'}}">
+                </mat-row>
+            
+            </mat-table>
+            <mat-paginator class="mat-paginator-sticky" #paginator [pageIndex]="pagination.page"  (page)="onPageFired($event)" [length]="pagination.total" [pageSize]="pagination.pageSize" showFirstLastButtons [pageSizeOptions]="pageSizeOptions"></mat-paginator>
+       
+        </div>
+        <!-- / CONTENT CARD -->
+    </div>
+    <!-- / CENTER -->
+</div>

@@ -159,3 +159,9 @@ mat-form-field.mat-form-field.mat-form-field-appearance-outline>div.mat-form-fie
 .error-snackbar{
     background: rgb(175, 29, 29) !important;
 }
+
+.mat-paginator-sticky {
+    bottom: 0px;
+    position: sticky;
+    z-index: 10;
+  }
