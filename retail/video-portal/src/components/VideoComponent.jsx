@@ -9,6 +9,7 @@ import {
 import CallReceiveTone from "../assets/ringtones/call-receive.mp3";
 import RingTone from "./RingTone";
 import CustomerDetails from "../containers/CustomerDetails";
+import { showError, showSuccess, showWarning } from "../shared/helper";
 const SDK = window.SDK;
 
 class VideoComponent extends React.Component {
@@ -20,6 +21,7 @@ class VideoComponent extends React.Component {
       videoMuted: false,
       audioMuted: false,
       isLargeScreen: true,
+      screenShotResponse: null,
     };
     this.ringtoneMuteHandler = this.ringtoneMuteHandler.bind(this);
     this.downloadURI = this.downloadURI.bind(this);
@@ -164,26 +166,66 @@ class VideoComponent extends React.Component {
     var context = canvas.getContext("2d");
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
-    debugger
     context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
     var data = canvas.toDataURL("image/png");
-    const  b64 = data.replace(/^data:image.+;base64,/, '');
-    this.downloadURI(data, value);
+    if (data.length < 10) {
+      showWarning(
+        "Call has not established yet to capture the screeshot. Please check your internet and try again later!"
+      );
+      return;
+    }
+    const base64 = data.replace(/^data:image.+;base64,/, "");
+    // this.downloadURI(data, value);
     context.clearRect(0, 0, canvas.width, canvas.height);
+    this.saveScreenShot(value,base64);
+  }
+  saveScreenShot(type,base64) {
+    const token = localStorage.getItem("access-token");
+    const tenantId = localStorage.getItem("tenant");
+    const channelId = localStorage.getItem("channel");
+    let customerId = localStorage.getItem("customerId");
+
+    axios
+      .post(
+        window._env_.RUBIX_BASE_URL +
+          `/onboarding/customers/${customerId}/attachments`,
+        {
+          file_content: base64,
+          attachment_type:type,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": token,
+            "x-channel-id": channelId,
+            "x-tenant-id": tenantId,
+          },
+        }
+      )
+
+      .then((response) => {
+        this.setState({screenShotResponse:response.data})
+        showSuccess("Screen shot saved successfully!");
+      })
+      .catch((error) => {
+        console.log(error);
+        showError("We are unable to process the request!");
+      });
   }
   render() {
     let style = {
       position: "absolute",
       color: "whitesmoke",
     };
-
+    
     let {
       previewElementStatus,
       isLargeScreen,
       ringStatus,
       videoMuted,
       audioMuted,
+      screenShotResponse
     } = this.state;
 
     return (
@@ -328,7 +370,7 @@ class VideoComponent extends React.Component {
               ringtoneHandler={this.ringtoneMuteHandler}
             />
           </div>
-          <CustomerDetails />
+          <CustomerDetails screenShotResponse={screenShotResponse} />
         </div>
       </>
     );

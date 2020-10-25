@@ -15,6 +15,7 @@ import LoginFailed from "../components/LoginFailed";
 import NotFound from "../components/NotFound";
 import EndedCallAlert from "../containers/EndedCallAlert";
 import VideoNotFoundAlert from "../containers/VideoNotFoundAlert";
+import { ToastContainer } from "react-toastify";
 
 const createHistory = require("history").createBrowserHistory;
 export const history = createHistory();
@@ -30,6 +31,7 @@ const AppRouter = () => {
       <EndCallAlert/>
       <EndedCallAlert/>
       <VideoNotFoundAlert />
+      <ToastContainer />
       <Switch>
       {/* <Route exact path="/" component={Login} /> */}
         {/* <PrivateRoute path="/Videocall" component={VideoCall} /> */}
