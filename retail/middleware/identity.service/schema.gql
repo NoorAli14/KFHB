@@ -20,6 +20,7 @@ input CreateCustomerInput {
   device_id: String
   platform: String
   fcm_token_id: String
+  last_step: String
 }
 
 input CreatedOnParams {

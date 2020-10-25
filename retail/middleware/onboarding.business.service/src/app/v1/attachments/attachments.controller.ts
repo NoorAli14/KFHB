@@ -6,6 +6,7 @@ import {
   Get,
   Post,
   Body,
+  Res,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -20,6 +21,7 @@ import { CreateAttachmentDTO } from './attachment.dto';
 // import { AuthGuard, CurrentUser } from '@common/index';
 import { AttachmentsService } from './attachments.service';
 import { AttachmentUploadingInput } from './attachment.interface';
+import { readFileStream } from '@root/src/common/utilities';
 
 @ApiTags('Attachment')
 @ApiBearerAuth()
@@ -83,8 +85,9 @@ export class AttachmentsController {
   async find(
     @Param('id', ParseUUIDPipe) id: string,
     @Param('customer_id', ParseUUIDPipe) customer_id: string,
-  ): Promise<Attachment> {
+    @Res() res: any,
+  ): Promise<any> {
     const response = await this.attachmentService.find(id, customer_id);
-    return response;
+    return readFileStream(response.file_path, res);
   }
 }
