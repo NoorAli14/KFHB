@@ -26,7 +26,7 @@ export class AmlController {
     @HttpCode(HttpStatus.OK)
     async screening(@CurrentUser() customer: Customer): Promise<AML> {
         const result = await this.amlService.screening(customer.id);
-        const lastStep: string = result?.status === AML_STATUSES.CLEAN 
+        const lastStep: string = result?.status === AML_STATUSES.CLEAN
             ? CUSTOMER_LAST_STEPS.RBX_ONB_STEP_AML_SCREENING_SUCCESSFUL
             : CUSTOMER_LAST_STEPS.RBX_ONB_STEP_AML_SCREENING_FAILED;
         await this.customerService.updateLastStep(customer.id, lastStep);
