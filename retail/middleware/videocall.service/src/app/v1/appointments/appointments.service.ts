@@ -29,7 +29,7 @@ export class AppointmentsService {
     private readonly gqlClient: GqlClientService,
     private readonly emailService: EmailService,
     private readonly pushNotificationService: PushNotificationService,
-  ) {}
+  ) { }
 
   private async throw_if_appointment_exist(
     currentUser: ICurrentUser,
@@ -209,7 +209,7 @@ export class AppointmentsService {
           appointment.status === APPOINTMENT_STATUS.SCHEDULED) &&
         diff_in_minutes >= 0 &&
         diff_in_minutes <=
-          Number(this.configService.VCALL.ENV_RBX_CRON_JOB_TIME)
+        Number(this.configService.VCALL.ENV_RBX_CRON_JOB_TIME)
       ) {
         return true;
       }
@@ -261,7 +261,7 @@ export class AppointmentsService {
         result: findCustomerById(id: "${user_id}") {${USER_QUERY}}
     }`;
 
-    return this.gqlClient.client('ENV_RBX_IDX_BASE_URL').send(params);
+    return this.gqlClient.client('ENV_RBX_IDENTITY_SERVER').send(params);
   }
 
   private async check_agent_availability(
@@ -270,9 +270,9 @@ export class AppointmentsService {
   ): Promise<any> {
     const query = `query{
         result: findAvailableAgents(input: ${toGraphQL({
-          call_time,
-          gender,
-        })}){
+      call_time,
+      gender,
+    })}){
         id
         email
         contact_no
