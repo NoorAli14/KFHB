@@ -1,7 +1,9 @@
 import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOkResponse, ApiOperation, ApiCreatedResponse } from '@nestjs/swagger';
 import { UserService } from './users.service';
-import { AuthGuard } from '@common/index';
+import { AuthGuard, CurrentUser, CUSTOMER_LAST_STEPS } from '@common/index';
+import { CustomersService } from '../customers/customers.service';
+
 import { User } from './user.entity';
 import { CheckAvailabilityInput } from './user.dto';
 import { AppointmentsService } from '../appointments/appointments.service';
@@ -15,7 +17,8 @@ import { CreateAppointmentDTO } from '../appointments/appointment.dto';
 export class UsersController {
     constructor(
         private readonly userService: UserService,
-        private readonly appointmentService: AppointmentsService
+        private readonly appointmentService: AppointmentsService,
+        private readonly customerService: CustomersService,
     ) { }
 
     @Get('/available')
@@ -36,7 +39,15 @@ export class UsersController {
         summary: 'Create appointment.',
     })
     @ApiCreatedResponse({ type: Appointment, description: 'Appointment has been successfully created.' })
-    async create(@Body() input: CreateAppointmentDTO): Promise<Appointment> {
-        return this.appointmentService.create(input);
+    async create(@CurrentUser() currentUser: User, @Body() input: CreateAppointmentDTO): Promise<Appointment> {
+        input.user_id = currentUser.id;
+        const result = await this.appointmentService.create(input);
+        if (result) {
+            await this.customerService.updateLastStep(
+                currentUser.id,
+                CUSTOMER_LAST_STEPS.RBX_ONB_STEP_AGENT_VERIFICATION_SCHEDULED,
+            );
+        }
+        return result;
     }
 }

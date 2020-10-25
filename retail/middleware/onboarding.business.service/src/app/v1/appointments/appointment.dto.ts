@@ -31,11 +31,5 @@ export class CreateAppointmentDTO {
   @IsIn(GENDER)
   gender: string;
 
-  @ApiProperty({
-    title: 'User ID',
-    description: 'Unique Id of the user.',
-    required: true,
-  })
-  @IsUUID()
-  user_id: string;
+  user_id?: string;
 }
