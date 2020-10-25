@@ -109,6 +109,8 @@ services:
       - ENV_RBX_BASIC_AUTH_KEY=$ENV_RBX_BASIC_AUTH_KEY
       - ENV_RBX_BASIC_AUTH_SECRET=$ENV_RBX_BASIC_AUTH_SECRET
     restart: always
+    volumes:
+      - ${ENV_RBX_VOLUME_PATH}/videocall.service/uploads:/home/aiondigital/rubix/uploads/
     networks:
       - core_service_network
 
@@ -143,7 +145,7 @@ services:
     restart: always
     networks:
       - core_service_network
-  
+
   #=================================================================
   # Video Call Service
   #=================================================================

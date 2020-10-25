@@ -22,15 +22,10 @@ export class AttachmentsResolver {
   async findAttachment(
     @CurrentUser() currentUser: ICurrentUser,
     @Args('customer_id') customer_id: string,
-    @Args('attachment_id') attachment_id: string,
+    @Args('id') id: string,
     @Fields(Attachment) output: string[],
   ): Promise<Attachment> {
-    return this.attachmentService.find(
-      currentUser,
-      customer_id,
-      attachment_id,
-      output,
-    );
+    return this.attachmentService.find(currentUser, id, customer_id, output);
   }
 
   @Mutation(() => Attachment)
