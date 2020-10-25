@@ -22,7 +22,6 @@ export class NewAttachmentInput {
   @Field()
   @IsNotEmpty()
   @IsString()
-  @IsBase64()
   file_content: string;
 
   @IsOptional()

@@ -55,13 +55,12 @@ describe('Video Call Module (e2e)', () => {
       .send({
         query: `{
           findAttachment(
-            customer_id: "828605C2-7E50-40BC-AA88-C064CE63C155",
-            attachment_type: "passport_id"
+            id: "09cba282-e584-49e6-af8b-2307ab9d19c2",
+            customer_id: "828605C2-7E50-40BC-AA88-C064CE63C155"
           ){${ATTACHMENT_QUERY}}}`,
       })
       .set(headers)
       .expect(({ body }) => {
-        console.log(body, '[][][][][][]');
         const data = body?.data?.findAttachment;
         const attachmentJson: string = JSON.stringify(data);
 
@@ -82,8 +81,8 @@ describe('Video Call Module (e2e)', () => {
       .send({
         query: `{
           findAttachment(
-            customer_id: "828605c2-7e50-9808-aa88-c064ce63c155",
-            attachment_type: "passport_id"
+            id: "828605c2-7e50-9808-aa88-c064ce63c155",
+            customer_id: "828605C2-7E50-40BC-A788-C064CE63C155"
           ){${ATTACHMENT_QUERY}}}`,
       })
       .set(headers)
