@@ -15,5 +15,5 @@ export class FileResponse {
   file_path: string;
 
   @IsString()
-  file_size: number;
+  file_size: string;
 }

@@ -12,7 +12,7 @@ export async function up(knex: Knex): Promise<void> {
     table.uuid('customer_id').notNullable();
 
     table.string('file_name');
-    table.float('file_size');
+    table.string('file_size');
     table.string('file_path');
 
     table.string('attachment_type');

@@ -126,7 +126,7 @@ export class AttachmentsService {
       data: new Buffer(matches[2], 'base64'),
       file_name: fileName,
       file_path: `${ROB_path}/${fileName}`,
-      file_size: calculateImageSize(file_content),
+      file_size: `${calculateImageSize(file_content).toFixed(3)} KB`,
     };
 
     try {

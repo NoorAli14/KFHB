@@ -38,7 +38,7 @@ export class Attachment {
   @Field({ nullable: true })
   @IsNumber()
   @IsNotEmpty()
-  file_size: number;
+  file_size: string;
 
   @Field({ nullable: true })
   @IsString()

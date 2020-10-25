@@ -29,7 +29,7 @@ type Attachment {
   tenant_id: String!
   customer_id: String
   file_name: String
-  file_size: Float
+  file_size: String
   file_path: String
   attachment_type: String
   status: String
