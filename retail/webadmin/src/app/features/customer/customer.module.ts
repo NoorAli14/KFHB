@@ -15,7 +15,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MaterialFormsModule } from '@shared/modules/material-forms/material-forms.module';
 @NgModule({
-  declarations: [CustomerComponent, CustomerDetailComponent,AdvanceSearchComponent],
+  declarations: [CustomerComponent, CustomerDetailComponent, AdvanceSearchComponent],
   imports: [
     CommonModule,
     CustomerRoutingModule,
