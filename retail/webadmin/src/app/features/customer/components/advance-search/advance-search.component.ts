@@ -3,8 +3,8 @@ import {
     camelToSnakeCase,
     cloneDeep,
     getName,
-} from "@shared/helpers/global.helper";
-import { ReferenceService } from "@shared/services/reference/reference.service";
+} from '@shared/helpers/global.helper';
+import { ReferenceService } from '@shared/services/reference/reference.service';
 import {
     Component,
     OnInit,
@@ -13,38 +13,39 @@ import {
     Injector,
     Input,
     SimpleChanges,
-} from "@angular/core";
-import { trigger, transition, style, animate } from "@angular/animations";
-import { FormGroup, FormControl } from "@angular/forms";
-import { map, debounceTime, distinctUntilChanged, skip } from "rxjs/operators";
-import { GENDER_LIST } from "@shared/constants/app.constants";
-import { fuseAnimations } from "@fuse/animations";
-import { BaseComponent } from "@shared/components/base/base.component";
+    AfterContentChecked,
+} from '@angular/core';
+import { trigger, transition, style, animate } from '@angular/animations';
+import { FormGroup, FormControl } from '@angular/forms';
+import { map, debounceTime, distinctUntilChanged, skip } from 'rxjs/operators';
+import { GENDER_LIST } from '@shared/constants/app.constants';
+import { fuseAnimations } from '@fuse/animations';
+import { BaseComponent } from '@shared/components/base/base.component';
 
 @Component({
-    selector: "app-advance-search",
-    templateUrl: "./advance-search.component.html",
-    styleUrls: ["./advance-search.component.scss"],
+    selector: 'app-advance-search',
+    templateUrl: './advance-search.component.html',
+    styleUrls: ['./advance-search.component.scss'],
     animations: [
         fuseAnimations,
-        trigger("slideInOut", [
-            transition(":enter", [
-                style({ transform: "translateY(-3%)" }),
+        trigger('slideInOut', [
+            transition(':enter', [
+                style({ transform: 'translateY(-3%)' }),
                 animate(
-                    "100ms ease-in",
-                    style({ transform: "translateY(0%)" })
+                    '100ms ease-in',
+                    style({ transform: 'translateY(0%)' })
                 ),
             ]),
-            transition(":leave", [
+            transition(':leave', [
                 animate(
-                    "50ms ease-in",
-                    style({ transform: "translateY(-3%)" })
+                    '50ms ease-in',
+                    style({ transform: 'translateY(-3%)' })
                 ),
             ]),
         ]),
     ],
 })
-export class AdvanceSearchComponent extends BaseComponent implements OnInit {
+export class AdvanceSearchComponent extends BaseComponent implements AfterContentChecked, OnInit {
     isAdvance = false;
     searchForm: FormGroup;
     civilId: FormControl;
@@ -61,41 +62,38 @@ export class AdvanceSearchComponent extends BaseComponent implements OnInit {
         this.initForm();
     }
 
-    ngOnInit() {
-        this.civilId = new FormControl("");
+    ngOnInit(): void {
+        this.civilId = new FormControl('');
         this.maxDate = new Date();
         this.maxDate.setDate(this.maxDate.getDate());
         this.initSearch();
-        this.genderList = [...this.genderList, { id: "", name: "All" }];
-        this.filteredNationalities=this.nationalityList;
+        this.genderList = [...this.genderList, { id: '', name: 'All' }];
+        this.filteredNationalities = this.nationalityList;
     }
 
-    openAdvance(status) {
-        this.civilId.setValue("");
+    openAdvance(status): void {
+        this.civilId.setValue('');
         this.isAdvance = status;
     }
 
-    ngOnChanges(changes: SimpleChanges): void {
-        //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
-        //Add '${implements OnChanges}' to the class.
-    }
+  
 
     ngAfterContentChecked(): void {
-        const el = document.querySelectorAll(".mat-form-field-label");
+        const el = document.querySelectorAll('.mat-form-field-label');
         el.forEach((x) => {
-            x["style"].color = "rgba(0, 0, 0, 0.6)";
+            x['style'].color = 'rgba(0, 0, 0, 0.6)';
         });
-        const inputs = document.querySelectorAll(".mat-input-element");
-        const dropdown = document.querySelector(".mat-select-value-text>span");
+        const inputs = document.querySelectorAll('.mat-input-element');
+        const dropdown = document.querySelector('.mat-select-value-text>span');
         if (dropdown) {
-            dropdown["style"].color = "#3c4252";
+            dropdown['style'].color = '#3c4252';
         }
         inputs.forEach((x) => {
-            x["style"].color = "#3c4252";
+            x['style'].color = '#3c4252';
         });
     }
 
-    initSearch() {
+    initSearch(): void {
         this.civilId.valueChanges
             .pipe(
                 skip(1),
@@ -111,7 +109,7 @@ export class AdvanceSearchComponent extends BaseComponent implements OnInit {
             });
     }
 
-    initForm() {
+    initForm(): void  {
         this.searchForm = new FormGroup({
             firstName: new FormControl(),
             email: new FormControl(),
@@ -122,34 +120,34 @@ export class AdvanceSearchComponent extends BaseComponent implements OnInit {
             createdOn: new FormControl(),
             status: new FormControl(),
         });
-        this.searchForm.get("nationality").valueChanges.subscribe((value) => {
+        this.searchForm.get('nationality').valueChanges.subscribe((value) => {
             this.filteredNationalities = this._mapperService.filterData(
                 this.nationalityList,
-                "nationality",
+                'nationality',
                 value
             );
         });
     }
 
-    displayFn = (id: string): string => {
+    displayFn(id): string {
         if (!id) {
-            return "";
+            return '';
         }
-        return getName(id, "nationality", cloneDeep(this.nationalityList));
-    };
+        return getName(id, 'nationality', cloneDeep(this.nationalityList));
+    }
 
-    onReset() {
+    onReset(): void {
         this.isAdvance = false;
         this.filterReset.emit();
         this.searchForm.reset();
     }
 
-    onSubmit() {
+    onSubmit(): void {
         const filters = this.searchForm.value;
         Object.keys(filters).forEach(
             (key) => !filters[key] && delete filters[key]
         );
-        if (!Boolean(filters)) return;
+        if (!Boolean(filters)) { return; }
         this.filterChange.emit(camelToSnakeCase(filters));
         this.isAdvance = false;
     }

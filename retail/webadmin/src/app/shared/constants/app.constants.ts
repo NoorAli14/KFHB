@@ -71,4 +71,4 @@ export const URI = {
     CUSTOMER360: `${ENTITLEMENT}customers`,
 };
 
-export const DEFAULT_IMAGE='assets/images/default.png'
+export const DEFAULT_IMAGE = 'assets/images/not-available.png';
