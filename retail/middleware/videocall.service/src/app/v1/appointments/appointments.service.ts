@@ -6,7 +6,7 @@ import { AppointmentRepository } from '@core/repository';
 
 import { ConfigurationService } from '@common/configuration/configuration.service';
 import { Appointment, UserGQL } from './appointment.model';
-import { APPOINTMENT_STATUS } from '@common/constants';
+import { APPOINTMENT_STATUS, USER_QUERY } from '@common/constants';
 import { GqlClientService } from '@common/libs/gqlclient/gqlclient.service';
 import { EmailService, PushNotificationService } from '@common/connectors';
 
@@ -223,7 +223,7 @@ export class AppointmentsService {
       const notification: iPushNotification = {
         platform: appointment.user.platform,
         device_id: appointment.user.device_id,
-        token: appointment.user.firebase_token,
+        token: appointment.user.fcm_token_id,
         message_title: this.configService.VCALL
           .ENV_RBX_NOTIFICATION_MESSAGE_TITLE,
         message_body: this.configService.VCALL
@@ -258,15 +258,7 @@ export class AppointmentsService {
 
   async get_user_by_id_from_service(user_id: string): Promise<any> {
     const params = `query{
-        result: findCustomerById(id: "${user_id}") {
-        id
-        email
-        contact_no
-        first_name
-        middle_name
-        last_name
-        gender
-      }
+        result: findCustomerById(id: "${user_id}") {${USER_QUERY}}
     }`;
 
     return this.gqlClient.client('ENV_RBX_IDX_BASE_URL').send(params);

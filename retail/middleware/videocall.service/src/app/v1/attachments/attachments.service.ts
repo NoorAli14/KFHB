@@ -18,6 +18,7 @@ import {
   writeFileSync,
 } from '@rubix/common/utilities';
 import { FileResponse } from './interfaces/file-response.interface';
+import { STATUS } from '@rubix/common/constants';
 
 @Injectable()
 export class AttachmentsService {
@@ -35,6 +36,7 @@ export class AttachmentsService {
       {
         customer_id: customer_id,
         tenant_id: currentUser.tenant_id,
+        status: STATUS.ACTIVE,
         deleted_on: null,
       },
       output,

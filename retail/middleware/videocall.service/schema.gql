@@ -79,7 +79,7 @@ type UserGQL {
   last_name: String!
   platform: String!
   device_id: String!
-  firebase_token: String!
+  fcm_token_id: String!
   email: String!
   gender: String!
   date_of_birth: DateTime!

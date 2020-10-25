@@ -14,17 +14,25 @@ export abstract class BaseRepository {
   async list(keys?: string | string[]): Promise<any> {
     return this._connection(this._tableName).select(keys);
   }
-  async create(newObj: Record<string, any>, keys?: string[]): Promise<any> {
-    return this._connection(this._tableName).insert(newObj, keys);
+
+  async create(newObj: { [key: string]: any }, keys: string[], trx?: any) {
+    const _knex: any = trx || this.connection;
+    return _knex(this._tableName)
+      .insert(newObj)
+      .returning(keys);
   }
+
   async update(
-    condition: Record<string, any>,
-    newObj: Record<string, any>,
-    keys?: string[],
-  ): Promise<any> {
-    return this._connection(this._tableName)
+    condition: { [key: string]: any },
+    newObj: { [key: string]: any },
+    columns?: string[],
+    trx?: any,
+  ) {
+    const _knex: any = trx || this.connection;
+    return _knex(this.tableName)
       .where(condition)
-      .update(newObj, keys);
+      .update({ ...newObj, ...{ updated_on: this.connection.fn.now() } })
+      .returning(columns);
   }
 
   async updateByIds(
@@ -81,5 +89,11 @@ export abstract class BaseRepository {
       .select(keys)
       .where(column_name, '>=', start)
       .where(column_name, '<', end);
+  }
+
+  async transaction(): Promise<any> {
+    const trxProvider = this._connection.transactionProvider();
+    const trx = await trxProvider();
+    return trx;
   }
 }
