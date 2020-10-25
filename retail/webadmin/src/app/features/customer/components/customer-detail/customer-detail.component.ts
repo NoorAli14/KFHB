@@ -63,23 +63,23 @@ export class CustomerDetailComponent implements OnInit, AfterContentChecked {
         this.bankingTransaction = data.find((x) => x.results.name === 'KYC');
 
         const _nationalIdDocuments = [
-            { type: 'National Id Back', isExtracted: false },
-            { type: 'National Id Front', isExtracted: false },
-            { type: 'National Id Face', isExtracted: true },
+            { title: 'National Id Back', type:'NATIONAL_ID_BACK_SIDE', isExtracted: false },
+            { title: 'National Id Front',type:'NATIONAL_ID_FRONT_SIDE', isExtracted: false },
+            { title: 'National Id Face', type:'NATIONAL_ID_FRONT_SIDE',isExtracted: true },
         ];
 
         const _passportDocuments = [
-            { type: 'Passport', isExtracted: false },
-            { type: 'Passport Face', isExtracted: true },
+            { title: 'Passport',type:'PASSPORT', isExtracted: false },
+            { title: 'Passport Face',type:'PASSPORT', isExtracted: true },
         ];
 
         this.nationalIdDocuments = _nationalIdDocuments.map((item) => {
             const url = this.previewDocumentUrl(item.type, item.isExtracted);
-            return new ImageItem({ src: url, thumb: url, type:item.type });
+            return new ImageItem({ src: url, thumb: url, title:item.title });
         });
         this.passportDocuments = _passportDocuments.map((item) => {
             const url = this.previewDocumentUrl(item.type, item.isExtracted);
-            return new ImageItem({ src: url, thumb: url ,type:item.type});
+            return new ImageItem({ src: url, thumb: url ,title:item.title});
         });
 
         this.basicLightboxExample(this.passportDocuments);
