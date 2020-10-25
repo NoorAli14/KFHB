@@ -4,9 +4,9 @@ import { UserService } from './users.service';
 import { AuthGuard } from '@common/index';
 import { User } from './user.entity';
 import { CheckAvailabilityInput } from './user.dto';
-import { AppointmentsService } from './appointments/appointments.service';
-import { Appointment } from './appointments/appointment.entity';
-import { CreateAppointmentDTO } from './appointments/appointment.dto';
+import { AppointmentsService } from '../appointments/appointments.service';
+import { Appointment } from '../appointments/appointment.entity';
+import { CreateAppointmentDTO } from '../appointments/appointment.dto';
 
 @ApiTags('Agent Module')
 @Controller('agents')
