@@ -1,4 +1,5 @@
 import { Field, ObjectType, ID } from '@nestjs/graphql';
+import { IDT_PaginationModel } from "@common/models";
 
 @ObjectType()
 export class Customer {
@@ -51,7 +52,7 @@ export class Customer {
   platform: string;
 
   @Field({ nullable: true })
-  next_step: string;
+  last_step: string;
 
   @Field({ nullable: true })
   is_aml_verified: boolean;
@@ -67,6 +68,9 @@ export class Customer {
 
   @Field({ nullable: true })
   status?: string;
+
+  @Field({ nullable: true })
+  fcm_token_id?: string;
 
   @Field({ nullable: true })
   created_on?: string;
@@ -85,4 +89,13 @@ export class Customer {
 
   @Field({ nullable: true })
   deleted_by?: string;
+}
+
+@ObjectType()
+export class CustomerWithPagination {
+  @Field({ nullable: true })
+  pagination: IDT_PaginationModel;
+
+  @Field(() => [Customer], { nullable: true })
+  data: Customer[];
 }

@@ -69,7 +69,7 @@ export class KernelMiddleware {
 
     /** Set HttpHeader is Request Context Lifecycle */
     app.use((req: Request, res: Response, next: NextFunction): void => {
-      setContext('HttpHeaders', formattedHeader(null, req.headers));
+      setContext('HttpHeaders', formattedHeader(req));
       next();
     });
 

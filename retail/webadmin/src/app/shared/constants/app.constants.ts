@@ -49,6 +49,7 @@ export const NATIONALITY_LIST: Array<Select> = [
 
 const ENTITLEMENT = '/api/v1/entitlements/';
 const REFERENCE = '/api/v1/references/';
+const ONBOARDING = '/api/v1/onboarding/';
 
 export const URI = {
     USER_INVITATION: `${ENTITLEMENT}invitations`,
@@ -66,4 +67,8 @@ export const URI = {
     LEAVE_TYPE: `${ENTITLEMENT}leave-types`,
     LEAVES: `${ENTITLEMENT}leaves`,
     COUNTRIES: `${REFERENCE}countries`,
+    CUSTOMERS: `${ONBOARDING}customers`,
+    CUSTOMER360: `${ENTITLEMENT}customers`,
 };
+
+export const DEFAULT_IMAGE = 'assets/images/not-available.png';

@@ -15,3 +15,17 @@ export function createQuery(
     }`;
   return result;
 }
+
+export function createAttachmantQuery(
+  method: string,
+  input: { [key: string]: any },
+  returnkeys: string,
+): string {
+  const result = `
+    mutation {
+      ${method}(input: ${createQueryObject(input)}) {
+       ${returnkeys}
+      }
+    }`;
+  return result;
+}

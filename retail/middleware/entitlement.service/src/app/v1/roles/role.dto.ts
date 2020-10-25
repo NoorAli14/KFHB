@@ -25,7 +25,7 @@ export class RoleInput {
   @IsIn(Object.values(STATUS))
   status?: string;
 
-  @Field(type => [IdsInput], { nullable: true })
+  @Field(() => [IdsInput], { nullable: true })
   permissions?: IdsInput[]; // module_permission_ids
 }
 

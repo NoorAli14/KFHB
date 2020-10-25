@@ -1,7 +1,7 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
-import { Session, Evaluation } from './session.entity';
+import { Injectable, Logger } from '@nestjs/common';
+import { Session } from './session.entity';
 import { GqlClientService, strToBase64 } from '@common/index';
-import { FaceUploadingInput } from '../attachments/attachment.interface';
+import { FaceUploadingInput } from '../documents/document.interface';
 
 @Injectable()
 export class SessionsService {
@@ -43,24 +43,5 @@ export class SessionsService {
         }) ${this.output}
     }`;
     return this.gqlClient.send(mutation);
-  }
-
-  /**
-   *
-   * @param header GQL request headers
-   * @return The Evaluation object
-   */
-  async evaluation(): Promise<Evaluation> {
-    const mutation: string = `mutation {
-      result: evaluation {
-        success
-        status
-        message
-      }
-    }`;
-    const result: any = await this.gqlClient.send(mutation);
-    if (result?.errors)
-      throw new BadRequestException({ errors: result.errors });
-    return result;
   }
 }

@@ -10,6 +10,7 @@ export const SERVICES = {
   'api/v1/entitlements/holidays': { channels: ['RUBIX-DEV-INT'] },
   'api/v1/entitlements/leave-types': { channels: ['RUBIX-DEV-INT'] },
   'api/v1/entitlements/leaves': { channels: ['RUBIX-DEV-INT'] },
+  'api/v1/onboarding/customers': { channels: ['RUBIX-DEV-INT'] },
   'api/v1/onboarding/auth': { channels: ['RUBIX-DEV-INT'] },
   'api/v1/onboarding/sessions': { channels: ['RUBIX-DEV-INT'] },
   'api/v1/onboarding/evaluations': { channels: ['RUBIX-DEV-INT'] },

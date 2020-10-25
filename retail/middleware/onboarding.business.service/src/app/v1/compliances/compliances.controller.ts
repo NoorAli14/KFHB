@@ -4,8 +4,6 @@ import {
   Post,
   UseGuards,
   NotFoundException,
-  ParseUUIDPipe,
-  Param,
   HttpCode,
   HttpStatus,
   Body,
@@ -19,13 +17,14 @@ import {
   ApiNotFoundResponse,
   ApiBody,
 } from '@nestjs/swagger';
-import { AuthGuard, CurrentUser } from '@common/index';
+import { AuthGuard, CurrentUser, CUSTOMER_LAST_STEPS } from '@common/index';
 
 import { Template } from './compliance.entity';
 import { ComplianceService } from './compliances.service';
 import { ComplianceDto } from './compliance.dto';
 import { ITemplateResponse } from './compliance.interface';
 import { Customer } from '../customers/customer.entity';
+import { CustomersService } from '../customers/customers.service';
 @ApiTags('Compliance Module')
 @Controller('compliance')
 @ApiBearerAuth()
@@ -37,7 +36,10 @@ export class CompliancesController {
     KYC: 'KYC',
     FATCA: 'FATCA',
   };
-  constructor(private readonly complianceService: ComplianceService) { }
+  constructor(
+    private readonly complianceService: ComplianceService,
+    private readonly customerService: CustomersService,
+  ) { }
 
   @Get('crs')
   @ApiOperation({
@@ -105,35 +107,89 @@ export class CompliancesController {
     return compliance;
   }
 
-  @Post(':template_id')
+  @Post('fatca')
   @ApiBody({
     description: 'Sets the template properties.',
     type: ComplianceDto,
   })
   @ApiOperation({
-    summary: 'Submit compliance response',
+    summary: 'Submit FATCA response',
     description: 'A successful request returns the HTTP 200 OK status code.',
   })
   @ApiOkResponse({
     type: Template,
-    description: 'Template response has been successfully submitted.',
+    description: 'FATCA response has been successfully submitted.',
   })
   @ApiNotFoundResponse({
     type: Error,
     description: 'Template Not Found.',
   })
   @HttpCode(HttpStatus.OK)
-  async submit(
-    @Param('template_id', ParseUUIDPipe) template_id: string,
-    @CurrentUser() customer: Customer,
-    @Body() input: ComplianceDto,
-  ): Promise<Template> {
+  async submitFatca(@CurrentUser() currentUser: Customer, @Body() input: ComplianceDto): Promise<Template> {
+    return this.submitResponse(this.__template.FATCA, currentUser.id, CUSTOMER_LAST_STEPS.RBX_ONB_STEP_FATCA_SUBMITTED, input);
+  }
+
+  @Post('crs')
+  @ApiBody({
+    description: 'Sets the template properties.',
+    type: ComplianceDto,
+  })
+  @ApiOperation({
+    summary: 'Submit CRS response',
+    description: 'A successful request returns the HTTP 200 OK status code.',
+  })
+  @ApiOkResponse({
+    type: Template,
+    description: 'CRS response has been successfully submitted.',
+  })
+  @ApiNotFoundResponse({
+    type: Error,
+    description: 'Template Not Found.',
+  })
+  @HttpCode(HttpStatus.OK)
+  async submitCRS(@CurrentUser() currentUser: Customer, @Body() input: ComplianceDto): Promise<Template> {
+    return this.submitResponse(this.__template.CRS, currentUser.id, CUSTOMER_LAST_STEPS.RBX_ONB_STEP_CRS_SUBMITTED, input);
+  }
+
+  @Post('kyc')
+  @ApiBody({
+    description: 'Sets the template properties.',
+    type: ComplianceDto,
+  })
+  @ApiOperation({
+    summary: 'Submit KYC response',
+    description: 'A successful request returns the HTTP 200 OK status code.',
+  })
+  @ApiOkResponse({
+    type: Template,
+    description: 'KYC response has been successfully submitted.',
+  })
+  @ApiNotFoundResponse({
+    type: Error,
+    description: 'Template Not Found.',
+  })
+  @HttpCode(HttpStatus.OK)
+  async submitKYC(@CurrentUser() currentUser: Customer, @Body() input: ComplianceDto): Promise<Template> {
+    return this.submitResponse(this.__template.KYC, currentUser.id, CUSTOMER_LAST_STEPS.RBX_ONB_STEP_KYC_SUBMITTED, input);
+  }
+  async submitResponse(name: string, user_id: string, last_step: string, input: ComplianceDto): Promise<Template> {
+    const compliance: Template = await this.complianceService.findOneByName(
+      name,
+    );
+    if (!compliance) throw new NotFoundException(`Template not found.`);
     const params: ITemplateResponse = {
-      template_id: template_id,
-      user_id: customer.id,
+      template_id: compliance.id,
+      user_id: user_id,
       results: input.results,
       remarks: input.remarks,
     };
-    return this.complianceService.submitResponse(params);
+    const result = await this.complianceService.submitResponse(params);
+    if (result) {
+      await this.customerService.updateLastStep(
+        user_id,
+        last_step,
+      );
+    }
+    return result;
   }
 }

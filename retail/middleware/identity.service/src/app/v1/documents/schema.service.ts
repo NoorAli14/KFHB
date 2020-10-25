@@ -1,11 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { join } from 'path';
-// import { SCHEMA } from '@volume/validators/schema.validator';
 import { Validator } from 'jsonschema';
 
 import { CUSTOM_ERROR } from './document.model';
-const { SCHEMA } = require(join(`${process.cwd()}/volumes/validators/schema.validator.js`));
-const { mapper } = require(join(`${process.cwd()}/volumes/mappers/customer.mapper.js`));
+import { SCHEMA } from '@volumes/validators/schema.validator';
+import { mapper } from '@volumes/mappers/customer.mapper'
 
 export interface ISCHEMA_ERROR {
     message: string,
@@ -17,10 +15,11 @@ export interface ISCHEMA_ERROR {
 @Injectable()
 export class SchemaService {
     private readonly logger: Logger = new Logger(SchemaService.name);
-    private schemas: Record<string, any>;
+    // private schemas: Record<string, any>;
     private readonly __validator: Validator = new Validator();
     constructor() {
-        this.schemas = this.makeSchemas(SCHEMA)
+        // this.schemas = this.makeSchemas(SCHEMA);
+        // this.logger.log(this.schemas)
     }
 
     private makeSchemas(properties: Record<string, any>): Record<string, any> {
@@ -40,29 +39,52 @@ export class SchemaService {
         });
         return schemas;
     }
-    getSchema(key: string): Record<string, any> {
-        const schema = this.schemas[key] || {};
+
+    sanitize(key: string, properties: Record<string, any>) {
+        const schemas = this.makeSchemas(properties);
+        const schema = schemas[key] || {};
         return {
             type: "object",
             properties: schema?.properties || {},
             required: schema?.required || [],
         };
     }
+    // getSchema(key: string): Record<string, any> {
+    //     const schema = this.schemas[key] || {};
+    //     return {
+    //         type: "object",
+    //         properties: schema?.properties || {},
+    //         required: schema?.required || [],
+    //     };
+    // }
+    // validate(group: string, data: Record<string, any>): CUSTOM_ERROR {
+    //     this.logger.log(data);
+    //     const schema: Record<string, any> = this.getSchema(group);
+    //     const result = this.__validator.validate(data, schema);
+    //     let response: CUSTOM_ERROR = { valid: true, errors: null };
+    //     if (result.errors.length > 0) {
+    //         response = {
+    //             valid: false,
+    //             errors: this.formatErrors(group, schema, result.errors),
+    //         }
+    //     }
+    //     this.logger.log(`Schema Validation Response: ${JSON.stringify(response, null, 2)}`);
+    //     return response;
+    // }
+
     validate(group: string, data: Record<string, any>): CUSTOM_ERROR {
-        this.logger.log(data);
-        const schema: Record<string, any> = this.getSchema(group);
-        const result = this.__validator.validate(data, schema);
         let response: CUSTOM_ERROR = { valid: true, errors: null };
+        const schemas = SCHEMA(group, data);
+        const sanitizeSchema = this.sanitize(group, schemas);
+        const result = this.__validator.validate(data, sanitizeSchema);
         if (result.errors.length > 0) {
             response = {
                 valid: false,
-                errors: this.formatErrors(group, schema, result.errors),
+                errors: this.formatErrors(group, sanitizeSchema, result.errors),
             }
         }
-        this.logger.log(`Schema Validation Response: ${JSON.stringify(response, null, 2)}`);
         return response;
     }
-
     private formatErrors(group: string, schema: Record<string, any>, errors: Record<string, any>): any {
         const _errors = [];
         const errorCodes: string[] = [];

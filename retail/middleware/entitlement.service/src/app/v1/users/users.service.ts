@@ -25,8 +25,8 @@ export class UserService {
     private workingDaysService: WorkingDaysService,
   ) { }
 
-  async list(output: string[], paginationParams: Record<string, any>): Promise<any> {
-    return this.userDB.listWithPagination(paginationParams, output, { deleted_on: null });
+  async list(current_user: ICurrentUser, output: string[], paginationParams: Record<string, any>): Promise<any> {
+    return this.userDB.listWithPagination(paginationParams, output, { deleted_on: null, tenant_id: current_user.tenant_id });
   }
 
   async findById(currentUser: ICurrentUser, id: string, output?: string[]): Promise<User> {

@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { SESSION_STATUSES } from '@common/index';
-const evaluationStatus: string[] = ['CUSTOMER_SELFIE_MISMATCHED'];
 
 export class Session {
   @ApiProperty({
@@ -64,24 +63,4 @@ export class Session {
 
   @ApiProperty({ required: false })
   updated_by?: string;
-}
-
-export class Evaluation {
-  @ApiProperty({
-    example: true,
-  })
-  success: boolean;
-
-  @ApiProperty({
-    enum: evaluationStatus,
-    example: evaluationStatus[0],
-    description: 'Status of the Evaluation.',
-    required: false,
-  })
-  statuss: string;
-
-  @ApiProperty({
-    required: false,
-  })
-  message?: string;
 }

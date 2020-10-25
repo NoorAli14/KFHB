@@ -1,41 +1,23 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
-import { Attachment } from './attachment.entity';
+import { Injectable, Logger } from '@nestjs/common';
 import { GqlClientService, toGraphql } from '@common/index';
-import {
-  FaceUploadingInput,
-  DocumentUploadingInput,
-  IDocumentProcess,
-} from './attachment.interface';
-
+import { Attachment } from './attachment.entity';
+import { AttachmentUploadingInput } from './attachment.interface';
 @Injectable()
 export class AttachmentsService {
-  private readonly logger = new Logger(AttachmentsService.name)
+  private readonly logger = new Logger(AttachmentsService.name);
   private readonly output: string = `{
-        id
-        session_id
-        processed_data
-        status
-        created_on
-        created_by
-        updated_on
-        updated_by
-    }`;
+    id
+    file_name
+    file_size
+    attachment_type
+    status
+    created_on
+    created_by
+    updated_on
+    updated_by
+  }`;
 
   constructor(private readonly gqlClient: GqlClientService) { }
-
-  /**
-   *
-   * @param header GQL request headers
-   * @param input Upload face Input
-   * @return The attachment object
-   */
-  async uploadLiveness(input: FaceUploadingInput): Promise<Attachment> {
-    // Construct GraphQL request
-    const mutation = `mutation {
-      result: uploadLiveness(input: ${toGraphql(input)}) ${this.output}
-    }`;
-    return this.gqlClient.send(mutation);
-  }
 
   /**
    *
@@ -43,64 +25,58 @@ export class AttachmentsService {
    * @param input Upload document Input
    * @return The attachment object
    */
-  async upload(input: DocumentUploadingInput): Promise<Attachment> {
+  async upload(input: AttachmentUploadingInput): Promise<Attachment> {
+    this.logger.log(`Attachment:: Start uploading [${input.attachment_type}]`);
     // Construct GraphQL request
-    const mutation = `mutation {
-        result: addDocument(input: ${toGraphql(input)}) ${this.output}
+    const mutation: string = `mutation {
+        result: addAttachment(input: ${toGraphql(input)}) ${this.output}
       }`;
     return this.gqlClient.send(mutation);
   }
 
   /**
    *
-   * @param header GQL request headers
-   * @param input Process document Input
-   * @return The attachment object
+   * @param customer_id  The customer unique identifies
+   * @return The attachment array of objects
    */
-  async process(input: IDocumentProcess): Promise<Attachment> {
-    const _output = `{
-      ... on Document {
-        id
-        session_id
-        processed_data
-        status
-        created_on
-        created_by
-        updated_on
-        updated_by
-      }
-      ... on CUSTOM_ERROR {
-        errors {
-          group
-          errorCode
-          field
-          message
-          stack
-          value
-        }
-      }
-    }`;
+  async listByCustomerID(customer_id: string): Promise<Attachment[]> {
+    this.logger.log(
+      `Attachment:: list of attachments by customer ID [${customer_id}]`,
+    );
     // Construct GraphQL request
-    const mutation = `mutation {
-      result: processDocument(input: ${toGraphql(input)}) ${_output}
-    }`;
-    this.logger.log(mutation)
-    const document: any = await this.gqlClient.send(mutation);
-    if (document?.errors)
-      throw new BadRequestException({ errors: document.errors });
-    if (document?.processed_data)
-      document.processed_data = JSON.parse(document.processed_data);
-    return document;
+    const query: string = `query {
+        result: attachmentList(customer_id: "${customer_id}") ${this.output}
+      }`;
+    return this.gqlClient.send(query);
   }
 
-  async preview(input: Record<string, string>): Promise<any> {
+  /**
+   *
+   * @param id The attachment unique identifier
+   * @param customer_id The customer unique identifier
+   * @return The attachment object
+   *
+   */
+
+  async find(id: string, customer_id: string): Promise<Attachment> {
+    this.logger.log(
+      `Attachment:: Fetch attachment for attachment Id [${id}] and customer Id [${customer_id}]`,
+    );
     // Construct GraphQL request
-    const query = `query {
-      result: previewAttachment(
-          input: ${toGraphql(input)}) {
-        image
-      }
-    }`;
+    const query: string = `query {
+        result:  findAttachment(id: "${id}" ,customer_id: "${customer_id}") {
+          id
+          file_name
+          file_size
+          file_path
+          attachment_type
+          status
+          created_on
+          created_by
+          updated_on
+          updated_by
+        }
+      }`;
     return this.gqlClient.send(query);
   }
 }
