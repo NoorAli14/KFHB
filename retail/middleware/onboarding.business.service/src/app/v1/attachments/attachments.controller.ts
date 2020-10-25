@@ -76,10 +76,9 @@ export class AttachmentsController {
   @ApiOperation({
     summary: 'Fetch the attachment for customer',
     description:
-      'A successful request returns the HTTP 200 OK status code and a JSON response body that shows a attachments information.',
+      'A successful request returns the HTTP 200 OK status code and a steam to preview attachment.',
   })
   @ApiOkResponse({
-    type: [Attachment],
     description: 'Fetch the attachment for the customer',
   })
   async find(
