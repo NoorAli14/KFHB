@@ -46,14 +46,13 @@ export class CustomerComponent
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
     displayedColumns = [
-        'SerialNo',
         'firstName',
         'lastName',
         'email',
         'contactNo',
         'nationalIdNo',
         'status',
-        'gender',
+        'createdOn',
         'action',
     ];
 
@@ -129,7 +128,7 @@ export class CustomerComponent
         return {
             limit: CONFIG.PAGE_SIZE,
             page: 1,
-            sort_order: 'asc',
+            sort_order: 'desc',
             sort_by: 'created_on',
         };
     }

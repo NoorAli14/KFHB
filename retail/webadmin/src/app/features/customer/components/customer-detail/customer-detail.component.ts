@@ -63,28 +63,28 @@ export class CustomerDetailComponent implements OnInit, AfterContentChecked {
         this.bankingTransaction = data.find((x) => x.results.name === 'KYC');
 
         const _nationalIdDocuments = [
-            { type: 'NATIONAL_ID_BACK_SIDE', isExtracted: false },
-            { type: 'NATIONAL_ID_FRONT_SIDE', isExtracted: false },
-            { type: 'NATIONAL_ID_FRONT_SIDE', isExtracted: true },
+            { type: 'National Id Back', isExtracted: false },
+            { type: 'National Id Front', isExtracted: false },
+            { type: 'National Id Face', isExtracted: true },
         ];
 
         const _passportDocuments = [
-            { type: 'PASSPORT', isExtracted: false },
-            { type: 'PASSPORT', isExtracted: true },
+            { type: 'Passport', isExtracted: false },
+            { type: 'Passport Face', isExtracted: true },
         ];
 
         this.nationalIdDocuments = _nationalIdDocuments.map((item) => {
             const url = this.previewDocumentUrl(item.type, item.isExtracted);
-            return new ImageItem({ src: url, thumb: url });
+            return new ImageItem({ src: url, thumb: url, type:item.type });
         });
         this.passportDocuments = _passportDocuments.map((item) => {
             const url = this.previewDocumentUrl(item.type, item.isExtracted);
-            return new ImageItem({ src: url, thumb: url });
+            return new ImageItem({ src: url, thumb: url ,type:item.type});
         });
 
         this.basicLightboxExample(this.passportDocuments);
         this.basicLightboxExample(this.nationalIdDocuments);
-
+debugger
         // Load item into different lightbox instance
         // With custom gallery config
         this.withCustomGalleryConfig(
