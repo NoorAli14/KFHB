@@ -38,6 +38,7 @@ export class RequestsListComponent extends BaseComponent implements OnInit {
   pageSizeOptions: Array<number> = CONFIG.PAGE_SIZE_OPTIONS;
   serviceRequests: ServiceRequests[];
   returnUrl: string;
+  id;
   displayedColumns = [
     'requestType',
     'customerRim',
@@ -57,6 +58,16 @@ export class RequestsListComponent extends BaseComponent implements OnInit {
   ngOnInit(): void {
     super.ngOnInit();
     this.getData();
+    this.id = setInterval(() => {
+      console.log('call to the server  at:'+ new Date())
+      this.getData();
+    }, 300000);
+    
+  }
+  ngOnDestroy() {
+    if (this.id) {
+      clearInterval(this.id);
+    }
   }
   getData = () => {
     this._service.getServiceRequests().subscribe(
