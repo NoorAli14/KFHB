@@ -6,7 +6,7 @@ export class AttachmentNotFoundException extends BaseException {
       message: `Attachment Not Found`,
       errorCode: 'VC-1066',
       name: 'ATTACHMENT_NOT_FOUND',
-      developerMessage: `Attachment not found again user Id [${customer_id}] and attachment Id [${id}`,
+      developerMessage: `Attachment not found against user Id [${customer_id}] and attachment Id [${id}`,
     });
   }
 }
