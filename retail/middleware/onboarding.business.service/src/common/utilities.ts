@@ -1,4 +1,5 @@
 import * as path from 'path';
+import * as fs from 'fs';
 import { v4 as uuidV4 } from 'uuid';
 import * as Crypto from 'crypto';
 import { X_CORRELATION_KEY, X_USER_ID, X_TENANT_ID } from './constants';
@@ -74,3 +75,12 @@ export const formattedHeader = (
   _headers[X_TENANT_ID] = headers[X_TENANT_ID];
   return _headers;
 };
+
+/**
+ *
+ * @param path
+ * @param content
+ * helper function to create file inside the folder directory
+ */
+export const readFileStream = (path: string, response: any) =>
+  fs.createReadStream(path).pipe(response);
