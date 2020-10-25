@@ -18,6 +18,7 @@ import {
   writeFileSync,
 } from '@rubix/common/utilities';
 import { FileResponse } from './interfaces/file-response.interface';
+import { STATUS } from '@rubix/common/constants';
 
 @Injectable()
 export class AttachmentsService {
@@ -35,6 +36,7 @@ export class AttachmentsService {
       {
         customer_id: customer_id,
         tenant_id: currentUser.tenant_id,
+        status: STATUS.ACTIVE,
         deleted_on: null,
       },
       output,
@@ -69,7 +71,7 @@ export class AttachmentsService {
   ): Promise<Attachment> {
     const attachment = await this.uploadFile(
       `data:image/png;base64,${input.file_content}`,
-      input.attachment_id,
+      input.attachment_type,
       input.type,
     );
 
@@ -82,7 +84,7 @@ export class AttachmentsService {
       updated_by: currentUser.id,
       customer_id: input.customer_id,
       tenant_id: currentUser.tenant_id,
-      attachment_id: input.attachment_id,
+      attachment_type: input.attachment_type,
     };
 
     const [response] = await this.attachmentDB.create(newAttachment, output);
@@ -95,12 +97,12 @@ export class AttachmentsService {
     type?: string | any,
   ): Promise<FileResponse> {
     const current_date = moment(new Date(), 'YYYY/MM/DD');
-    //check wether ROB_AgentScreenshots folder created or not
+    //check whether ENV_RBX_ATTACHMENT_LOCATION folder created or not
     createDirIfNotExist(
       this.configService.ATTACHMENT.ENV_RBX_ATTACHMENT_LOCATION,
     );
 
-    //check folder created inside ROB_AgentScreenshots or not for current customer
+    //check folder created insideENV_RBX_ATTACHMENT_LOCATION or not for current customer
     const ROB_path = `${
       this.configService.ATTACHMENT.ENV_RBX_ATTACHMENT_LOCATION
     }${current_date.format('YYYY')}${current_date.format('MM')}`;
@@ -124,7 +126,7 @@ export class AttachmentsService {
       data: new Buffer(matches[2], 'base64'),
       file_name: fileName,
       file_path: `${ROB_path}/${fileName}`,
-      file_size: calculateImageSize(file_content),
+      file_size: `${calculateImageSize(file_content).toFixed(3)} KB`,
     };
 
     try {

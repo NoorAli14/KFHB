@@ -22,11 +22,7 @@ export class Attachment {
   })
   readonly file_size: string;
 
-  @ApiProperty({
-    title: 'File path of the attachment',
-    example: 4.9036458333,
-  })
-  readonly file_path: string;
+  readonly file_path?: string;
 
   @ApiProperty({
     enum: Object.values(ATTACHMENT_TYPES),

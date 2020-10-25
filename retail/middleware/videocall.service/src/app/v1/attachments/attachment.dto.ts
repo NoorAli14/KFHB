@@ -17,12 +17,11 @@ export class NewAttachmentInput {
   @Field()
   @IsNotEmpty()
   @IsString()
-  attachment_id: string;
+  attachment_type: string;
 
   @Field()
   @IsNotEmpty()
   @IsString()
-  @IsBase64()
   file_content: string;
 
   @IsOptional()

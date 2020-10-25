@@ -9,8 +9,7 @@ export class AttachmentsService {
     id
     file_name
     file_size
-    file_path
-    attachment_id
+    attachment_type
     status
     created_on
     created_by
@@ -18,7 +17,7 @@ export class AttachmentsService {
     updated_by
   }`;
 
-  constructor(private readonly gqlClient: GqlClientService) {}
+  constructor(private readonly gqlClient: GqlClientService) { }
 
   /**
    *
@@ -27,7 +26,7 @@ export class AttachmentsService {
    * @return The attachment object
    */
   async upload(input: AttachmentUploadingInput): Promise<Attachment> {
-    this.logger.log(`Attachment:: Start uploading [${input.attachment_id}]`);
+    this.logger.log(`Attachment:: Start uploading [${input.attachment_type}]`);
     // Construct GraphQL request
     const mutation: string = `mutation {
         result: addAttachment(input: ${toGraphql(input)}) ${this.output}
@@ -65,7 +64,18 @@ export class AttachmentsService {
     );
     // Construct GraphQL request
     const query: string = `query {
-        result:  findAttachment(id: "${id}" ,customer_id: "${customer_id}") ${this.output}
+        result:  findAttachment(id: "${id}" ,customer_id: "${customer_id}") {
+          id
+          file_name
+          file_size
+          file_path
+          attachment_type
+          status
+          created_on
+          created_by
+          updated_on
+          updated_by
+        }
       }`;
     return this.gqlClient.send(query);
   }

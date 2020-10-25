@@ -1,6 +1,6 @@
 {
-  "name": "nestjs-knex-graphql-starter-kit",
-  "version": "0.0.1",
+  "name": "videocall-service",
+  "version": "0.2.0",
   "description": "",
   "author": "Faizan Ahmad <faizan@aiondigital.com>",
   "private": true,
