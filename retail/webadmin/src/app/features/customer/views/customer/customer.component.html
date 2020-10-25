@@ -39,7 +39,7 @@
             <mat-table #table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
                 <!-- COLUMNS AND ROWS-->
                 <ng-container *ngFor="let key of displayedColumns; " [matColumnDef]="key">
-                    <mat-header-cell *matHeaderCellDef [disabled]=" key=='action' ? true : false " [mat-sort-header]=" key=='action' ? null : key ">{{ key.includes('action') ? 'Action' : camelToSentenceCase(key) }}</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef [disabled]=" key=='action' || key=='SerialNo' ? true : false " [mat-sort-header]=" key=='action' ? null : key ">{{ key.includes('action') ? 'Action' : camelToSentenceCase(key) }}</mat-header-cell>
             
                     <mat-cell *matCellDef="let element; let indexOfelement=index " class="text-elipsis">
                       <ng-container [ngSwitch]="key">

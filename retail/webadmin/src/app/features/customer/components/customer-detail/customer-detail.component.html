@@ -92,7 +92,7 @@
             <mat-tab label="PASSPORT">
                 <div class="tab-content p-24 ">
                     <div class="profile-box info-box general">
-                        <div class="content" fusePerfectScrollbar>
+                        <div class="content"  fusePerfectScrollbar>
                             <div fxLayout="column" fxFlex="48">
 
                                 <div class="info-line">
@@ -160,7 +160,7 @@
             <mat-tab label="FATCA">
                 <div class="tab-content p-24 ">
                     <div class="profile-box info-box general">
-                        <div class="content" fusePerfectScrollbar>
+                        <div class="content" style="flex-direction:column" fusePerfectScrollbar>
                             <ng-container *ngFor="let item of FATCA?.results?.sections">
                                 <div fxLayout="column" fxFlex="100">
                                     <div class="info-line" *ngFor="let question of item.questions">
@@ -174,9 +174,10 @@
                                 <br>
                                 <hr> <br>
                             </ng-container>
-                            <div *ngIf="!FATCA" fxFlex fxLayout="row" fxLayoutAlign="center center">
-                                <strong>There is no data available</strong>
-                            </div>
+                            
+                        </div>
+                        <div *ngIf="!FATCA" fxFlex fxLayout="row" fxLayoutAlign="center center">
+                            <strong>There is no data available</strong>
                         </div>
                     </div>
                 </div>
@@ -198,9 +199,10 @@
                                 <br>
                                 <hr> <br>
                             </ng-container>
-                            <div *ngIf="!bankingTransaction" fxFlex fxLayout="row" fxLayoutAlign="center center">
-                                <strong>There is no data available</strong>
-                            </div>
+                            
+                        </div>
+                        <div *ngIf="!bankingTransaction" fxFlex fxLayout="row" fxLayoutAlign="center center">
+                            <strong>There is no data available</strong>
                         </div>
                     </div>
                 </div>
@@ -208,7 +210,7 @@
             <mat-tab label="AML">
                 <div class="tab-content p-24 ">
                     <div class="profile-box info-box general">
-                        <div class="content" fusePerfectScrollbar>
+                        <div class="content" style="flex-direction:column"  fusePerfectScrollbar>
                             <ng-container *ngFor="let item of amlData?.results?.sections">
                                 <div fxLayout="column" fxFlex="100">
                                     <div class="info-line" *ngFor="let question of item.questions">
@@ -222,9 +224,9 @@
                                 <br>
                                 <hr> <br>
                             </ng-container>
-                            <div *ngIf="!amlData" fxFlex fxLayout="row" fxLayoutAlign="center center">
-                                <strong>There is no data available</strong>
-                            </div>
+                        </div>
+                        <div *ngIf="!amlData" fxFlex fxLayout="row" fxLayoutAlign="center center">
+                            <strong>There is no data available</strong>
                         </div>
                     </div>
                 </div>
