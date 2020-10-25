@@ -69,7 +69,7 @@ type Query {
   findAppointment(appointment_id: String!): Appointment!
   findAppointmentByUserId(user_id: String!): Appointment!
   attachmentList(customer_id: String!): [Attachment!]!
-  findAttachment(attachment_id: String!, customer_id: String!): Attachment!
+  findAttachment(id: String!, customer_id: String!): Attachment!
 }
 
 type UserGQL {

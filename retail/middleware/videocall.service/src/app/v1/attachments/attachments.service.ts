@@ -43,22 +43,21 @@ export class AttachmentsService {
 
   async find(
     currentUser: ICurrentUser,
+    id: string,
     customer_id: string,
-    attachment_id: string,
     output: string[],
   ): Promise<Attachment> {
     const response = await this.attachmentDB.findOne(
       {
+        id: id,
         deleted_on: null,
         customer_id: customer_id,
-        attachment_id: attachment_id,
         tenant_id: currentUser.tenant_id,
       },
       output,
     );
 
-    if (!response)
-      throw new AttachmentNotFoundException(customer_id, attachment_id);
+    if (!response) throw new AttachmentNotFoundException(id);
 
     return response;
   }
