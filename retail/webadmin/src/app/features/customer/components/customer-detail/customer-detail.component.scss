@@ -117,11 +117,18 @@ img {
     margin-right: 16px;
     margin-bottom: 16px;
     border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 
     img {
         height: 100%;
         width: auto;
         max-width: none;
+    }
+    strong{
+        margin-top: 10px;
     }
 }
 .test1{

@@ -235,12 +235,12 @@
                 <div class="tab-content p-24 " fusePerfectScrollbar>
                     <div class="profile-box info-box general">
                         <div class="content">
-
                             <div fxLayout="row wrap" fxLayoutAlign="center center">
                                 <div *ngFor="let item of nationalIdDocuments; index as i">
-                                    <div class="product-image" fxlayout="row" fxLayoutAlign="center center">
+                                    <div class="product-image"  >
                                         <img [lightbox]="i" class="gallery" [gallery]="'nationalIdDocuments'"
                                             [src]="item.data.thumb">
+                                            <strong>{{item.data.type}}</strong>
                                     </div>
                                 </div>
                             </div>
@@ -254,9 +254,10 @@
                         <div class="content">
                             <div fxLayout="row wrap" fxLayoutAlign="center center">
                                 <div *ngFor="let item of passportDocuments; index as i">
-                                    <div class="product-image" fxlayout="row" fxLayoutAlign="center center">
+                                    <div class="product-image"  >
                                         <img [lightbox]="i" class="gallery" [gallery]="'passportDocuments'"
                                             [src]="item.data.thumb">
+                                            <strong>{{item.data.type}}</strong>
                                     </div>
                                 </div>
                             </div>

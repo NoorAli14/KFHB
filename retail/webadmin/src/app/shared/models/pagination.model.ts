@@ -1,6 +1,6 @@
 export class Pagination {
     page: number;
-    pageSize:number;
+    pageSize: number;
     pages: number;
-    total:number
+    total: number;
 }
