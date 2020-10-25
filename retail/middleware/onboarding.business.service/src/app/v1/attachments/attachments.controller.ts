@@ -28,7 +28,7 @@ import { readFileStream } from '@root/src/common/utilities';
 // @UseGuards(AuthGuard)
 @Controller()
 export class AttachmentsController {
-  constructor(private readonly attachmentService: AttachmentsService) {}
+  constructor(private readonly attachmentService: AttachmentsService) { }
 
   @Post('customers/:customer_id/attachments')
   @ApiOperation({
@@ -50,7 +50,7 @@ export class AttachmentsController {
   ): Promise<Attachment> {
     const params: AttachmentUploadingInput = {
       file_content: input.file_content,
-      attachment_id: input.attachment_type,
+      attachment_type: input.attachment_type,
       customer_id,
     };
     return this.attachmentService.upload(params);
