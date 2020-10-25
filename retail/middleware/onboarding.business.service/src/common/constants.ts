@@ -50,7 +50,7 @@ export const AML_STATUSES: { [key: string]: string } = {
 
 export const OTP_STATUSES: { [key: string]: string } = {
   PENDING: 'PENDING',
-  VERIFIED: 'VERIFIED',
+  VERIFIED: 'OTP_VERIFIED',
   NOT_VERIFIED: 'NOT_VERIFIED',
 };
 
