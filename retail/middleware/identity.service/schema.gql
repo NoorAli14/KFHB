@@ -165,7 +165,7 @@ input ProcessDocumentInput {
 }
 
 type Query {
-  customersList(sort_by: [SortingParam!], filters: CustomersFilterParams, pagination: PaginationParams): CustomerWithPagination!
+  customersList(sort_by: SortingParam, filters: CustomersFilterParams, pagination: PaginationParams): CustomerWithPagination!
   findCustomerById(id: String!): Customer!
   previewAttachment(input: PreviewDocumentInput!): PreviewDocument!
 }

@@ -33,7 +33,7 @@ export class CustomersResolver {
       @CurrentUser() currentUser: ICurrentUser,
       @Args('pagination', {nullable: true}) paginationParams: PaginationParams,
       @Args('filters', {nullable: true}) filteringParams: CustomersFilterParams,
-      @Args('sort_by', {nullable: true, type: () => [SortingParam]}) sortingParams: SortingParam[],
+      @Args('sort_by', {nullable: true}) sortingParams: SortingParam,
       @Fields() output: string[]
   ): Promise<CustomerWithPagination> {
     return this.customerService.list(currentUser, paginationParams, filteringParams, sortingParams, output);

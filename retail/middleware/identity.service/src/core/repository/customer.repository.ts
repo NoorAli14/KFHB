@@ -18,15 +18,15 @@ export class CustomerRepository extends BaseRepository {
 
   async list(paginationParams: PaginationParams,
              filteringParams: CustomersFilterParams,
-             sortingParams: SortingParam[],
+             sortingParams: SortingParam,
              condition: Record<string, any>,
              output: string[]): Promise<any> {
     const query_count: QueryBuilder = this.getFilteredQuery(this.connection(this.tableName).where(condition), filteringParams);
     let query_data: QueryBuilder = this.getFilteredQuery(this.connection(this.tableName).where(condition), filteringParams);
-    if(sortingParams?.length > 0){
-      query_data = this.getSortedQuery(query_data, sortingParams);
+    if(sortingParams?.field){
+      query_data = query_data.orderBy(sortingParams.field, sortingParams.direction);
     } else {
-      query_data = this.getSortedQuery(query_data, [{field:"created_on", direction:"desc"}]);
+      query_data = query_data.orderBy("created_on", "desc");
     }
     return super.listWithPagination(query_count, query_data, paginationParams, output)
   }
@@ -42,13 +42,6 @@ export class CustomerRepository extends BaseRepository {
     if(filteringParams.email) query = query.where('email', 'like', `%${filteringParams.email}%`);
     if(filteringParams.created_on)
       query = query.whereBetween('created_on', [filteringParams.created_on.start, filteringParams.created_on.end]);
-    return query;
-  }
-
-  getSortedQuery(query: QueryBuilder, sortingParams: SortingParam[]): QueryBuilder {
-    sortingParams.forEach(function (param) {
-      query = query.orderBy(param.field, param.direction)
-    });
     return query;
   }
 

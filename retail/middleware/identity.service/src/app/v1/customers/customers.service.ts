@@ -19,7 +19,7 @@ export class CustomersService {
   async list(current_user: ICurrentUser,
              paginationParams: PaginationParams,
              filteringParams: CustomersFilterParams,
-             sortingParams: SortingParam[],
+             sortingParams: SortingParam,
              output: string[]): Promise<CustomerWithPagination> {
     if(filteringParams.created_on && (new Date(filteringParams.created_on.start).getTime() > new Date(filteringParams.created_on.end).getTime())){
       throw new CreatedOnStartShouldBeLessThanEndException(filteringParams.created_on.start, filteringParams.created_on.end);

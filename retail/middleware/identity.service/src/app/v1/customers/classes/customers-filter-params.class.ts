@@ -1,5 +1,5 @@
 import {Field, InputType} from "@nestjs/graphql";
-import {IsEmail, IsIn, IsISO8601, IsOptional, IsString, MaxLength} from "class-validator";
+import {IsIn, IsISO8601, IsOptional, IsString, MaxLength} from "class-validator";
 import {NUMBERS, STATUS} from "@rubix/common";
 
 @InputType()
