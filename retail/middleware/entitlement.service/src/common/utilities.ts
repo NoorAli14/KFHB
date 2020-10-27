@@ -31,7 +31,14 @@ export const graphqlKeys = (info: any): string[] => {
 export const graphqlFields = (info: { [key: string]: any }): string[] => {
   let keys = [];
   info.fieldNodes[0].selectionSet.selections.forEach(item => {
-    if (!item.selectionSet) {
+    if (item.name.value == "data"){
+      item.selectionSet.selections.forEach(item => {
+        if (!item.selectionSet) {
+          keys.push(item.name.value);
+        }
+      });
+    }
+    else if (!item.selectionSet) {
       keys.push(item.name.value);
     }
   });
