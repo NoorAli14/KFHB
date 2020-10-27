@@ -17,7 +17,7 @@ export class Module {
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   name?: string;
 
-  @Field()
+  @Field({ nullable: true })
   @IsString()
   @IsOptional()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
