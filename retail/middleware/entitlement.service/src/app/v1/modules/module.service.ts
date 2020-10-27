@@ -11,11 +11,8 @@ export class ModuleService {
 
   async list(
     output: string[],
-    paginationParams: Record<string, any>,
   ): Promise<any> {
-    return this.moduleDB.listWithPagination(paginationParams, output, {
-      parent_id: null,
-    });
+    return this.moduleDB.listWithoutPagination(output);
   }
 
   async findById(id: string, output?: string[]): Promise<Module> {

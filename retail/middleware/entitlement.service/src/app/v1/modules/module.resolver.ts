@@ -29,9 +29,8 @@ export class ModuleResolver {
   @Query(() => [Module])
   async modulesList(
     @Fields() columns: string[],
-    @Context() context: GraphQLExecutionContext,
   ): Promise<Module[]> {
-    return this.moduleService.list(columns, context['req'].query);
+    return this.moduleService.list(columns);
   }
 
   @Query(() => Module)
