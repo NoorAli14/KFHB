@@ -298,7 +298,7 @@ type Query {
 type Role {
   id: ID!
   name: String!
-  description: String!
+  description: String
   tenant_id: String!
   status: String
   created_on: String!
