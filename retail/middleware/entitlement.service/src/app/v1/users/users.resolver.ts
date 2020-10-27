@@ -5,8 +5,6 @@ import {
   Args,
   ResolveField,
   Parent,
-  GraphQLExecutionContext,
-  Context,
 } from '@nestjs/graphql';
 import * as DataLoader from 'dataloader';
 import { Loader } from 'nestjs-dataloader';
@@ -19,20 +17,24 @@ import { Module } from "@app/v1/modules/module.model";
 import { Leave } from "@app/v1/leave/leave.model";
 import { CurrentUser, Fields } from "@common/decorators";
 import { ICurrentUser } from '@common/interfaces';
-import { User } from '@app/v1/users/user.model';
+import {User, UsersWithPagination} from '@app/v1/users/user.model';
 import { UserNotFoundException } from './exceptions';
+import {PaginationParams, SortingParam} from "@common/classes";
+import {UsersFilterParams} from "@app/v1/users/classes";
 
 @Resolver(User)
 export class UsersResolver {
   constructor(private readonly userService: UserService) { }
 
-  @Query(() => [User])
+  @Query(() => UsersWithPagination)
   async usersList(
     @Fields() output: string[],
-    @Context() context: GraphQLExecutionContext,
+    @Args('pagination', {nullable: true}) paginationParams: PaginationParams,
+    @Args('filters', {nullable: true}) filteringParams: UsersFilterParams,
+    @Args('sort_by', {nullable: true}) sortingParams: SortingParam,
     @CurrentUser() currentUser: ICurrentUser
-  ): Promise<User[]> {
-    return this.userService.list(currentUser, output, context['req'].query);
+  ): Promise<UsersWithPagination> {
+    return this.userService.list(currentUser, paginationParams, filteringParams, sortingParams, output);
   }
 
   @Query(() => User)

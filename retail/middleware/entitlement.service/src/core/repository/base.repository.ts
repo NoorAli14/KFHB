@@ -1,4 +1,8 @@
 import { InjectKnex, Knex } from 'nestjs-knex';
+import {QueryBuilder} from "knex";
+import {PaginationParams, SortingParam} from "@common/classes";
+import {NUMBERS} from "@common/constants";
+import {ENT_PaginationModel} from "@common/models";
 export abstract class BaseRepository {
   @InjectKnex() protected readonly _connection: Knex;
   protected _tableName: string;
@@ -13,34 +17,36 @@ export abstract class BaseRepository {
     return this._connection;
   }
 
-  async listWithPagination(paginationParams: Record<string, any>,
-                           keys: string | string[],
-                           condition?: Record<string, any>): Promise<any> {
-    // const perPage = parseInt(String(paginationParams[PAGINATION_PARAMS.PER_PAGE]), 10);
-    // const currentPage = parseInt(String(paginationParams[PAGINATION_PARAMS.PAGE]), 10);
-    // const pagination: PaginationModel = {};
-    // const limitPerPage = perPage || NUMBERS.DEFAULT_PAGE_SIZE;
-    // const page = Math.max(currentPage || 1, 1);
-    // const offset = (page - 1) * limitPerPage;
-    // const total = condition?
-    //   await this._connection(this._tableName).where(condition).count('id as count').first():
-    //   await this._connection(this._tableName).count('id as count').first();
-    // const rows = condition?
-    //   await this._connection(this._tableName).where(condition).offset(offset).limit(limitPerPage).orderBy('created_on', 'desc'):
-    //   await this._connection(this._tableName).offset(offset).limit(limitPerPage).orderBy('created_on', 'desc');
-    // const count = parseInt(String(total.count), 10);
-    // pagination.from= offset;
-    // pagination.to = offset + rows.length;
-    // pagination.total = count;
-    // pagination.perPage = limitPerPage;
-    // pagination.currentPage = page;
-    // pagination.lastPage = Math.ceil(count / limitPerPage);
-    // pagination.offset = offset;
-    // return {pagination: pagination, data: rows};
-    const query = this._connection(this._tableName).select(keys).orderBy('created_on', 'desc');
-    if(condition)
-      return query.where(condition);
-    return query
+  get tableName(): string {
+    return this._tableName;
+  }
+
+  async listWithPagination(
+      countQuery: QueryBuilder,
+      dataQuery: QueryBuilder,
+      paginationParams: PaginationParams,
+      sortingParams: SortingParam,
+      output: string[]): Promise<any> {
+    if(sortingParams?.field){
+      dataQuery = dataQuery.orderBy(sortingParams.field, sortingParams.direction);
+    } else {
+      dataQuery = dataQuery.orderBy("created_on", "desc");
+    }
+    const limitPerPage = (paginationParams?.limit || NUMBERS.DEFAULT_PAGE_SIZE) > NUMBERS.DEFAULT_PAGE_SIZE ?
+        NUMBERS.DEFAULT_PAGE_SIZE :
+        (paginationParams?.limit || NUMBERS.DEFAULT_PAGE_SIZE);
+    const page = Math.max(paginationParams?.page || 1, 1);
+    const offset = (page - 1) * limitPerPage;
+    const total = await countQuery.count('id as count').first();
+    const rows = await dataQuery.offset(offset).limit(limitPerPage).select(output);
+    const count = parseInt(String(total.count), 10);
+    const pagination: ENT_PaginationModel = {
+      total: count,
+      pages: Math.ceil(count / limitPerPage),
+      pageSize: limitPerPage,
+      page: page,
+    };
+    return { pagination: pagination, data: rows };
   }
 
   async create(newObj: Record<string, any>, keys: string[]): Promise<any> {

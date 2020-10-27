@@ -4,6 +4,9 @@ import { BaseRepository } from "./base.repository";
 import { STATUS, TABLE } from "@common/constants";
 import { IdsInput } from "@common/inputs/ids.input";
 import { User } from "@app/v1/users/user.model";
+import {QueryBuilder} from "knex";
+import {UsersFilterParams} from "@app/v1/users/classes";
+import {PaginationParams, SortingParam} from "@common/classes";
 
 @Injectable()
 export class UserRepository extends BaseRepository {
@@ -34,6 +37,29 @@ export class UserRepository extends BaseRepository {
 
   constructor() {
     super(TABLE.USER);
+  }
+
+  async list(paginationParams: PaginationParams,
+             filteringParams: UsersFilterParams,
+             sortingParams: SortingParam,
+             condition: Record<string, any>,
+             output: string[]): Promise<any> {
+    const countQuery: QueryBuilder = this.getFilteredQuery(this.connection(this.tableName).where(condition), filteringParams);
+    const dataQuery: QueryBuilder = this.getFilteredQuery(this.connection(this.tableName).where(condition), filteringParams);
+    return super.listWithPagination(countQuery, dataQuery, paginationParams, sortingParams, output)
+  }
+
+  getFilteredQuery(query: QueryBuilder, filteringParams: UsersFilterParams): QueryBuilder {
+    if(filteringParams.nationality_id) query = query.where('nationality_id', 'like', `%${filteringParams.nationality_id}%`);
+    if(filteringParams.gender) query = query.where('gender', 'like', `%${filteringParams.gender}%`);
+    if(filteringParams.first_name) query = query.where('first_name', 'like', `%${filteringParams.first_name}%`);
+    if(filteringParams.last_name) query = query.where('last_name', 'like', `%${filteringParams.last_name}%`);
+    if(filteringParams.status) query = query.where('status','=', filteringParams.status);
+    if(filteringParams.contact_no) query = query.where('contact_no', 'like', `%${filteringParams.contact_no}%`);
+    if(filteringParams.email) query = query.where('email', 'like', `%${filteringParams.email}%`);
+    if(filteringParams.created_on)
+      query = query.whereBetween('created_on', [filteringParams.created_on.start, filteringParams.created_on.end]);
+    return query;
   }
 
   async update(condition: Record<string, any>,

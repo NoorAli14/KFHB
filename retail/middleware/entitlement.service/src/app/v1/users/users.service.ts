@@ -11,9 +11,12 @@ import { LeavesService } from '@app/v1/leave/leaves.service';
 import { WorkingDaysService } from '@app/v1/working-days/working-days.service';
 import { ICurrentUser } from '@common/interfaces';
 import { CheckAvailabilityInput } from '@app/v1/users/user.dto';
-import { User } from '@app/v1/users/user.model';
+import {User, UsersWithPagination} from '@app/v1/users/user.model';
 import { PasswordMismatchException } from "./exceptions/password-mismatch.exception";
 import { UpdatePasswordInput } from "./user.dto";
+import {PaginationParams, SortingParam} from "@common/classes";
+import {UsersFilterParams} from "@app/v1/users/classes";
+import {CreatedOnStartShouldBeLessThanEndException} from "@common/exceptions";
 
 @Injectable()
 export class UserService {
@@ -25,8 +28,15 @@ export class UserService {
     private workingDaysService: WorkingDaysService,
   ) { }
 
-  async list(current_user: ICurrentUser, output: string[], paginationParams: Record<string, any>): Promise<any> {
-    return this.userDB.listWithPagination(paginationParams, output, { deleted_on: null, tenant_id: current_user.tenant_id });
+  async list(current_user: ICurrentUser,
+             paginationParams: PaginationParams,
+             filteringParams: UsersFilterParams,
+             sortingParams: SortingParam,
+             output: string[]): Promise<UsersWithPagination> {
+    if(filteringParams.created_on && (new Date(filteringParams.created_on.start).getTime() > new Date(filteringParams.created_on.end).getTime())){
+      throw new CreatedOnStartShouldBeLessThanEndException(filteringParams.created_on.start, filteringParams.created_on.end);
+    }
+    return this.userDB.list(paginationParams, filteringParams, sortingParams,{ deleted_on: null, tenant_id: current_user.tenant_id }, output);
   }
 
   async findById(currentUser: ICurrentUser, id: string, output?: string[]): Promise<User> {

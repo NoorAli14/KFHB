@@ -1,26 +1,16 @@
 import { Field, ObjectType } from "@nestjs/graphql";
 
 @ObjectType()
-export class PaginationModel {
+export class ENT_PaginationModel {
+  @Field({ nullable: true })
+  total: number;
 
   @Field({ nullable: true })
-  from?: number;
+  pages: number;
 
   @Field({ nullable: true })
-  to?: number;
+  pageSize: number;
 
   @Field({ nullable: true })
-  total?: number;
-
-  @Field({ nullable: true })
-  perPage?: number;
-
-  @Field({ nullable: true })
-  currentPage?: number;
-
-  @Field({ nullable: true })
-  lastPage?: number;
-
-  @Field({ nullable: true })
-  offset?: number;
+  page: number;
 }

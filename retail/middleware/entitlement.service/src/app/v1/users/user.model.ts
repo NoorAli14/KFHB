@@ -3,7 +3,7 @@ import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Role } from '@app/v1/roles/role.model';
 import { Module } from '@app/v1/modules/module.model';
 import { Leave } from '@app/v1/leave/leave.model';
-import { PaginationModel } from '@common/models';
+import { ENT_PaginationModel } from '@common/models';
 import { Type } from 'class-transformer';
 import {IsBoolean, IsEmail, IsIn, IsOptional, IsString, IsUUID, MaxLength} from "class-validator";
 import {NUMBERS, STATUS} from "@common/constants";
@@ -149,9 +149,9 @@ export class User {
 }
 
 @ObjectType()
-export class UserWithPagination {
+export class UsersWithPagination {
   @Field({ nullable: true })
-  pagination: PaginationModel;
+  pagination: ENT_PaginationModel;
 
   @Field(() => [User], { nullable: true })
   data: User[];
