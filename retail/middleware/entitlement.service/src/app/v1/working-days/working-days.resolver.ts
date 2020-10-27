@@ -19,9 +19,8 @@ export class WorkingDaysResolver {
 
   @Query(() => [WorkingDay])
   async workingDaysList(@Fields() output: string[],
-                        @Context() context: GraphQLExecutionContext,
                         @CurrentUser() current_user: ICurrentUser): Promise<WorkingDay[]> {
-    return this.workingDaysService.list(current_user, output, context['req'].query);
+    return this.workingDaysService.list(current_user, output);
   }
 
   @Query(() => WorkingDay)

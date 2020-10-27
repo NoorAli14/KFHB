@@ -18,8 +18,8 @@ import {STATUS, WEEK_DAYS} from '@common/constants';
 export class WorkingDaysService {
   constructor(private workingDaysRepository: WorkingDaysRepository) {}
 
-  async list(current_user: ICurrentUser, output: string[], paginationParams: Record<string, any>): Promise<WorkingDay[]> {
-    return this.workingDaysRepository.listWithPagination(paginationParams, output,{deleted_on : null, tenant_id: current_user.tenant_id});
+  async list(current_user: ICurrentUser, output: string[]): Promise<WorkingDay[]> {
+    return this.workingDaysRepository.listWithoutPagination(output,{deleted_on : null, tenant_id: current_user.tenant_id});
   }
 
   async findById(current_user: ICurrentUser, id: string, output?: string[]): Promise<WorkingDay> {

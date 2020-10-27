@@ -1,5 +1,5 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
-import {PaginationModel} from '@common/models';
+import {ENT_PaginationModel} from '@common/models';
 import {Type} from 'class-transformer';
 import {IsIn, IsNumber, IsOptional, IsString, IsUUID, Length, Matches, MaxLength, ValidateIf} from "class-validator";
 import {NUMBERS, STATUS, WEEK_DAYS} from "@common/constants";
@@ -92,7 +92,7 @@ export class WorkingDay {
 @ObjectType()
 export class WorkingDayWithPagination {
   @Field({ nullable: true })
-  pagination: PaginationModel;
+  pagination: ENT_PaginationModel;
 
   @Field(() => [WorkingDay], { nullable: true })
   data: WorkingDay[];
