@@ -31,11 +31,10 @@ export class RoleService {
     id: string,
     output?: string[],
   ): Promise<Role> {
-    const result = await this.roleDB.findOne(
+    return await this.roleDB.findOne(
       { tenant_id: currentUser.tenant_id, id: id, deleted_on: null },
       output,
     );
-    return result;
   }
 
   async findByProperty(
@@ -49,8 +48,7 @@ export class RoleService {
     });
     conditions['tenant_id'] = currentUser.tenant_id;
     conditions['deleted_on'] = null;
-    const result = await this.roleDB.findBy(conditions, output);
-    return result;
+    return await this.roleDB.findBy(conditions, output);
   }
 
   async update(

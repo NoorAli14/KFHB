@@ -3,7 +3,6 @@ import {
   Query,
   Mutation,
   Args,
-  Context, GraphQLExecutionContext,
 } from "@nestjs/graphql";
 import { KeyValInput } from "@common/inputs/key-val.input";
 import {WorkingDay} from "@app/v1/working-days/working-day.model";

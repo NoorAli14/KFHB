@@ -2,7 +2,7 @@ import {
   Resolver,
   Query,
   Mutation,
-  Args, Context, GraphQLExecutionContext,
+  Args
 } from "@nestjs/graphql";
 import { KeyValInput } from "@common/inputs/key-val.input";
 import {Leave, LeavesWithPagination} from "@app/v1/leave/leave.model";
