@@ -4,15 +4,25 @@ import { KeyValInput } from '@common/inputs/key-val.input';
 import { HolidayRepository } from '@core/repository/holiday.repository';
 import {ICurrentUser} from '@common/interfaces';
 import {HolidayInput} from '@app/v1/holiday/holiday.dto';
-import {Holiday} from '@app/v1/holiday/holiday.model';
+import {Holiday, HolidaysWithPagination} from '@app/v1/holiday/holiday.model';
 import {STATUS} from '@common/constants';
+import {PaginationParams, SortingParam} from "@common/classes";
+import {CreatedOnStartShouldBeLessThanEndException} from "@common/exceptions";
+import {HolidaysFilterParams} from "@app/v1/holiday/classes";
 
 @Injectable()
 export class HolidaysService {
   constructor(private holidayRepository: HolidayRepository) {}
 
-  async list(current_user: ICurrentUser, output: string[], paginationParams: Record<string, any>): Promise<Holiday[]> {
-    return this.holidayRepository.listWithPagination(paginationParams, output, {deleted_on : null, tenant_id: current_user.tenant_id});
+  async list(current_user: ICurrentUser,
+             paginationParams: PaginationParams,
+             filteringParams: HolidaysFilterParams,
+             sortingParams: SortingParam,
+             output: string[]): Promise<HolidaysWithPagination> {
+    if(filteringParams.created_on && (new Date(filteringParams.created_on.start).getTime() > new Date(filteringParams.created_on.end).getTime())){
+      throw new CreatedOnStartShouldBeLessThanEndException(filteringParams.created_on.start, filteringParams.created_on.end);
+    }
+    return this.holidayRepository.list(paginationParams, filteringParams, sortingParams,{ deleted_on: null, tenant_id: current_user.tenant_id }, output);
   }
 
   async findById(current_user: ICurrentUser, id: string, output?: string[]): Promise<Holiday> {

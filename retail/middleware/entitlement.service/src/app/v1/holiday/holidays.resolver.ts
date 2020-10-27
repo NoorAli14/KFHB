@@ -1,22 +1,28 @@
-import {Resolver, Query, Mutation, Args, Context, GraphQLExecutionContext} from '@nestjs/graphql';
+import {Resolver, Query, Mutation, Args} from '@nestjs/graphql';
 
 import { KeyValInput } from '@common/inputs/key-val.input';
-import {Holiday} from '@app/v1/holiday/holiday.model';
+import {Holiday, HolidaysWithPagination} from '@app/v1/holiday/holiday.model';
 import { HolidaysService } from '@app/v1/holiday/holidays.service';
 import {HolidayCreateInput, HolidayInput} from '@app/v1/holiday/holiday.dto';
 import {CurrentUser, Fields} from '@common/decorators';
 import {ICurrentUser} from '@common/interfaces';
 import {HolidayNotFoundException} from '@app/v1/holiday/exceptions';
+import {PaginationParams, SortingParam} from "@common/classes";
+import {HolidaysFilterParams} from "@app/v1/holiday/classes";
 
 @Resolver(Holiday)
 export class HolidaysResolver {
   constructor(private readonly holidaysService: HolidaysService) {}
 
-  @Query(() => [Holiday])
-  async holidaysList(@Fields() output: string[],
-                     @CurrentUser() current_user: ICurrentUser,
-                     @Context() context: GraphQLExecutionContext): Promise<Holiday[]> {
-    return this.holidaysService.list(current_user, output, context['req'].query);
+  @Query(() => HolidaysWithPagination)
+  async holidaysList(
+      @Fields() output: string[],
+      @Args('pagination', {nullable: true}) paginationParams: PaginationParams,
+      @Args('filters', {nullable: true}) filteringParams: HolidaysFilterParams,
+      @Args('sort_by', {nullable: true}) sortingParams: SortingParam,
+      @CurrentUser() currentUser: ICurrentUser
+  ): Promise<HolidaysWithPagination> {
+    return this.holidaysService.list(currentUser, paginationParams, filteringParams, sortingParams, output);
   }
 
   @Query(() => Holiday)
