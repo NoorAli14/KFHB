@@ -1,5 +1,5 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
-import {PaginationModel} from '@common/models';
+import {ENT_PaginationModel} from '@common/models';
 import {Type} from 'class-transformer';
 import {IsIn, IsOptional, IsString, IsUUID, MaxLength} from "class-validator";
 import {NUMBERS, STATUS} from "@common/constants";
@@ -83,9 +83,9 @@ export class Leave {
 }
 
 @ObjectType()
-export class LeaveWithPagination {
+export class LeavesWithPagination {
   @Field({ nullable: true })
-  pagination: PaginationModel;
+  pagination: ENT_PaginationModel;
 
   @Field(() => [Leave], { nullable: true })
   data: Leave[];

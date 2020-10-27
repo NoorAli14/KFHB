@@ -5,7 +5,7 @@ import {
   Args, Context, GraphQLExecutionContext,
 } from "@nestjs/graphql";
 import { KeyValInput } from "@common/inputs/key-val.input";
-import {Leave} from "@app/v1/leave/leave.model";
+import {Leave, LeavesWithPagination} from "@app/v1/leave/leave.model";
 import {LeavesService} from "@app/v1/leave/leaves.service";
 import {LeaveCreateInput, LeaveInput} from "@app/v1/leave/leave.dto";
 import {CurrentUser, Fields} from '@common/decorators';
@@ -17,6 +17,8 @@ import {ICurrentUser} from '@common/interfaces';
 import {LeaveNotFoundException} from '@app/v1/leave/exceptions';
 import {LeaveTypeNotFoundException} from '@app/v1/leave_type/exceptions';
 import { UserNotFoundException } from "../users/exceptions";
+import {PaginationParams, SortingParam} from "@common/classes";
+import {LeavesFilterParams} from "@app/v1/leave/classes";
 
 @Resolver(Leave)
 export class LeavesResolver {
@@ -24,11 +26,15 @@ export class LeavesResolver {
               private readonly userService: UserService,
               private readonly leave_typeService: LeaveTypeService) {}
 
-  @Query(() => [Leave])
-  async leavesList(@Fields() columns: string[],
-                   @CurrentUser() current_user: ICurrentUser,
-                   @Context() context: GraphQLExecutionContext): Promise<Leave[]> {
-    return this.leavesService.list(current_user, columns, context['req'].query);
+  @Query(() => LeavesWithPagination)
+  async leavesList(
+      @Fields() output: string[],
+      @Args('pagination', {nullable: true}) paginationParams: PaginationParams,
+      @Args('filters', {nullable: true}) filteringParams: LeavesFilterParams,
+      @Args('sort_by', {nullable: true}) sortingParams: SortingParam,
+      @CurrentUser() currentUser: ICurrentUser
+  ): Promise<LeavesWithPagination> {
+    return this.leavesService.list(currentUser, paginationParams, filteringParams, sortingParams, output);
   }
 
   @Query(() => Leave)

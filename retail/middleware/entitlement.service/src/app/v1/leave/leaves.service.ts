@@ -4,15 +4,25 @@ import { KeyValInput } from "@common/inputs/key-val.input";
 import {LeaveRepository} from "@core/repository/leave.repository";
 import {ICurrentUser} from '@common/interfaces';
 import {LeaveInput} from '@app/v1/leave/leave.dto';
-import {Leave} from '@app/v1/leave/leave.model';
+import {Leave, LeavesWithPagination} from '@app/v1/leave/leave.model';
 import {LeaveNotFoundException, LeaveStartDateLessThanEndDateException} from '@app/v1/leave/exceptions';
+import {PaginationParams, SortingParam} from "@common/classes";
+import {CreatedOnStartShouldBeLessThanEndException} from "@common/exceptions";
+import {LeavesFilterParams} from "@app/v1/leave/classes";
 
 @Injectable()
 export class LeavesService {
   constructor(private leaveRepository: LeaveRepository) {}
 
-  async list(current_user: ICurrentUser, output: string[], paginationParams: Record<string, any>): Promise<Leave[]> {
-    return this.leaveRepository.listWithPagination(paginationParams, output,{deleted_on : null, tenant_id: current_user.tenant_id});
+  async list(current_user: ICurrentUser,
+             paginationParams: PaginationParams,
+             filteringParams: LeavesFilterParams,
+             sortingParams: SortingParam,
+             output: string[]): Promise<LeavesWithPagination> {
+    if(filteringParams.created_on && (new Date(filteringParams.created_on.start).getTime() > new Date(filteringParams.created_on.end).getTime())){
+      throw new CreatedOnStartShouldBeLessThanEndException(filteringParams.created_on.start, filteringParams.created_on.end);
+    }
+    return this.leaveRepository.list(paginationParams, filteringParams, sortingParams,{ deleted_on: null, tenant_id: current_user.tenant_id }, output);
   }
 
   async findById(current_user: ICurrentUser, id: string, output?: string[]): Promise<Leave> {
