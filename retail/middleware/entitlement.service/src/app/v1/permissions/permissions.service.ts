@@ -10,9 +10,8 @@ export class PermissionService {
 
   async list(
     output: string[],
-    paginationParams: Record<string, any>,
   ): Promise<any> {
-    return this.permissionDB.listWithPagination(paginationParams, output);
+    return this.permissionDB.listWithoutPagination(output);
   }
 
   async findById(id: string, output?: string[]): Promise<Permission> {

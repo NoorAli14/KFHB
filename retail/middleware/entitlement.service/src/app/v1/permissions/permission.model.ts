@@ -1,5 +1,5 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { PaginationModel } from '@common/models';
+import { ENT_PaginationModel } from '@common/models';
 import {IsOptional, IsString, IsUUID, MaxLength} from "class-validator";
 import {NUMBERS} from "@common/constants";
 
@@ -35,7 +35,7 @@ export class Permission {
 @ObjectType()
 export class PermissionWithPagination {
   @Field({ nullable: true })
-  pagination?: PaginationModel;
+  pagination?: ENT_PaginationModel;
 
   @Field(() => [Permission], { nullable: true })
   data?: Permission[];
