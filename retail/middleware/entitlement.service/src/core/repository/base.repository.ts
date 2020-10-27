@@ -49,6 +49,15 @@ export abstract class BaseRepository {
     return { pagination: pagination, data: rows };
   }
 
+  async listWithoutPagination(
+      keys: string | string[],
+      condition?: Record<string, any>): Promise<any> {
+    const query = this._connection(this._tableName).select(keys).orderBy('created_on', 'desc');
+    if(condition)
+      return query.where(condition);
+    return query
+  }
+
   async create(newObj: Record<string, any>, keys: string[]): Promise<any> {
     return this._connection(this._tableName).insert(newObj, keys);
   }
