@@ -1,4 +1,4 @@
-import {Resolver, Query, Mutation, Args, Context, GraphQLExecutionContext} from '@nestjs/graphql';
+import {Resolver, Query, Mutation, Args} from '@nestjs/graphql';
 
 import { KeyValInput } from '@common/inputs/key-val.input';
 import {CurrentUser, Fields} from '@common/decorators';
@@ -14,9 +14,8 @@ export class Leave_typeResolver {
 
   @Query(() => [LeaveType])
   async leaveTypeList(@Fields() output: string[],
-                      @CurrentUser() current_user: ICurrentUser,
-                      @Context() context: GraphQLExecutionContext): Promise<LeaveType[]> {
-    return this.leave_typeService.list(current_user, output, context['req'].query);
+                      @CurrentUser() current_user: ICurrentUser): Promise<LeaveType[]> {
+    return this.leave_typeService.list(current_user, output);
   }
 
   @Query(() => LeaveType)

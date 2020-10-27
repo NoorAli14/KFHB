@@ -11,8 +11,8 @@ import {LeaveTypeAlreadyExistException} from '@app/v1/leave_type/exceptions';
 export class LeaveTypeService {
   constructor(private leaveTypeRepository: LeaveTypeRepository) {}
 
-  async list(current_user: ICurrentUser, output: string[], paginationParams: Record<string, any>): Promise<LeaveType[]> {
-    return this.leaveTypeRepository.listWithPagination(paginationParams, output, {deleted_on : null, tenant_id: current_user.tenant_id});
+  async list(current_user: ICurrentUser, output: string[]): Promise<LeaveType[]> {
+    return this.leaveTypeRepository.listWithoutPagination(output, {deleted_on : null, tenant_id: current_user.tenant_id});
   }
 
   async findById(current_user: ICurrentUser, id: string, output?: string[]): Promise<LeaveType> {
