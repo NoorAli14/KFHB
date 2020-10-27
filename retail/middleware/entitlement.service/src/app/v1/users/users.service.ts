@@ -33,8 +33,8 @@ export class UserService {
              filteringParams: UsersFilterParams,
              sortingParams: SortingParam,
              output: string[]): Promise<UsersWithPagination> {
-    if(filteringParams.created_on && (new Date(filteringParams.created_on.start).getTime() > new Date(filteringParams.created_on.end).getTime())){
-      throw new CreatedOnStartShouldBeLessThanEndException(filteringParams.created_on.start, filteringParams.created_on.end);
+    if(filteringParams?.created_on && (new Date(filteringParams?.created_on.start).getTime() > new Date(filteringParams?.created_on.end).getTime())){
+      throw new CreatedOnStartShouldBeLessThanEndException(filteringParams?.created_on.start, filteringParams?.created_on.end);
     }
     return this.userDB.list(paginationParams, filteringParams, sortingParams,{ deleted_on: null, tenant_id: current_user.tenant_id }, output);
   }

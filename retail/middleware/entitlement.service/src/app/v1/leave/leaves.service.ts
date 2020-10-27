@@ -19,8 +19,8 @@ export class LeavesService {
              filteringParams: LeavesFilterParams,
              sortingParams: SortingParam,
              output: string[]): Promise<LeavesWithPagination> {
-    if(filteringParams.created_on && (new Date(filteringParams.created_on.start).getTime() > new Date(filteringParams.created_on.end).getTime())){
-      throw new CreatedOnStartShouldBeLessThanEndException(filteringParams.created_on.start, filteringParams.created_on.end);
+    if(filteringParams?.created_on && (new Date(filteringParams?.created_on.start).getTime() > new Date(filteringParams?.created_on.end).getTime())){
+      throw new CreatedOnStartShouldBeLessThanEndException(filteringParams?.created_on.start, filteringParams?.created_on.end);
     }
     return this.leaveRepository.list(paginationParams, filteringParams, sortingParams,{ deleted_on: null, tenant_id: current_user.tenant_id }, output);
   }
