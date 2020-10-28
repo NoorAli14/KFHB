@@ -22,11 +22,13 @@ import {
   ApiBadRequestResponse,
   ApiNotFoundResponse,
 } from '@nestjs/swagger';
-import { AuthGuard, PermissionsGuard, Permissions } from '@common/index';
+import {AuthGuard, PermissionsGuard, Permissions, PaginationDTO, SortByDTO} from '@common/index';
 
 import { RoleService } from './roles.service';
-import { Role } from './role.entity';
+import {Role, RolePaginationList} from './role.entity';
 import { RoleDto, UpdateRoleDto } from './role.dto';
+import {Query} from "@root/node_modules/@nestjs/common";
+import {RoleFilterDto} from "@app/v1/roles/dtos";
 
 @ApiTags('Role')
 @Controller('roles')
@@ -60,13 +62,20 @@ export class RolesController {
   @Get('/')
   @ApiOperation({
     description:
-      'A successful request returns the HTTP 200 OK status code and a JSON response body that shows list of roles information.',
+      'A successful request returns the HTTP 200 OK status code and a JSON response body that shows list of roles information with pagination.',
     summary: 'List of all the roles',
   })
-  @ApiOkResponse({ type: [Role], description: 'List of all the roles.' })
+  @ApiOkResponse({ type: RolePaginationList, description: 'List of all the roles.' })
   @Permissions('view:roles')
-  async list(): Promise<Role[]> {
-    return this.roleService.list();
+  async list(@Query() pagination: PaginationDTO, @Query() filters: RoleFilterDto, @Query() order: SortByDTO): Promise<RolePaginationList> {
+    let sort_by = {};
+    if (order) {
+      sort_by = {
+        field: order?.sort_by || 'created_on',
+        direction: order?.sort_order || 'desc'
+      }
+    }
+    return this.roleService.list({ pagination, filters, sort_by });
   }
 
   @Get(':id')
