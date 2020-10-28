@@ -21,14 +21,9 @@ export class CustomerRepository extends BaseRepository {
              sortingParams: SortingParam,
              condition: Record<string, any>,
              output: string[]): Promise<any> {
-    const query_count: QueryBuilder = this.getFilteredQuery(this.connection(this.tableName).where(condition), filteringParams);
-    let query_data: QueryBuilder = this.getFilteredQuery(this.connection(this.tableName).where(condition), filteringParams);
-    if(sortingParams?.field){
-      query_data = query_data.orderBy(sortingParams.field, sortingParams.direction);
-    } else {
-      query_data = query_data.orderBy("created_on", "desc");
-    }
-    return super.listWithPagination(query_count, query_data, paginationParams, output)
+    const countQuery: QueryBuilder = this.getFilteredQuery(this.connection(this.tableName).where(condition), filteringParams);
+    const dataQuery: QueryBuilder = this.getFilteredQuery(this.connection(this.tableName).where(condition), filteringParams);
+    return super.listWithPagination(countQuery, dataQuery, paginationParams, sortingParams, output)
   }
 
   getFilteredQuery(query: QueryBuilder, filteringParams: CustomersFilterParams): QueryBuilder {

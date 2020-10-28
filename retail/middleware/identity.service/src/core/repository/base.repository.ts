@@ -1,7 +1,7 @@
 import { InjectKnex, Knex } from 'nestjs-knex';
 import { NUMBERS } from "@rubix/common";
 import { IDT_PaginationModel } from "@common/models";
-import {PaginationParams} from "@common/classes";
+import {PaginationParams, SortingParam} from "@common/classes";
 import { QueryBuilder } from "knex";
 
 export abstract class BaseRepository {
@@ -9,17 +9,23 @@ export abstract class BaseRepository {
   private _tableName: string;
 
   async listWithPagination(
-      query_count: QueryBuilder,
-      query_data: QueryBuilder,
+      countQuery : QueryBuilder,
+      dataQuery: QueryBuilder,
       paginationParams: PaginationParams,
+      sortingParams: SortingParam,
       output: string[]): Promise<any> {
+    if(sortingParams?.sort_by){
+      dataQuery = dataQuery.orderBy(sortingParams.sort_by, sortingParams.sort_order);
+    } else {
+      dataQuery = dataQuery.orderBy("created_on", "desc");
+    }
     const limitPerPage = (paginationParams?.limit || NUMBERS.DEFAULT_PAGE_SIZE) > NUMBERS.MAX_PAGE_SIZE ?
       NUMBERS.MAX_PAGE_SIZE :
       (paginationParams?.limit || NUMBERS.DEFAULT_PAGE_SIZE);
     const page = Math.max(paginationParams?.page || 1, 1);
     const offset = (page - 1) * limitPerPage;
-    const total = await query_count.count('id as count').first();
-    const rows = await query_data.offset(offset).limit(limitPerPage).select(output);
+    const total = await countQuery.count('id as count').first();
+    const rows = await dataQuery.offset(offset).limit(limitPerPage).select(output);
     const count = parseInt(String(total.count), 10);
     const pagination: IDT_PaginationModel = {
       total: count,
