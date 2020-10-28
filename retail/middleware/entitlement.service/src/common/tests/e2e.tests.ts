@@ -72,8 +72,8 @@ export function getListWithPaginationQuery(
   };
   const filterParams = {};
   const sortingParam: SortingParam = {
-    field: "created_on",
-    direction: "desc"
+    sort_by: "created_on",
+    sort_order: "desc"
   };
   return `query{
     ${method}(
