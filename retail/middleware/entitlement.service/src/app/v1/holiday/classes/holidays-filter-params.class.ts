@@ -18,12 +18,6 @@ export class HolidaysFilterParams {
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   description: string;
 
-  @Field({ nullable: true })
-  @IsString()
-  @IsOptional()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  remarks: string;
-
   @Field({nullable:true})
   @IsString()
   @IsOptional()

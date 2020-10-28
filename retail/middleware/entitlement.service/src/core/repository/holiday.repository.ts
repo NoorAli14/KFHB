@@ -24,7 +24,6 @@ export class HolidayRepository extends BaseRepository {
 
   getFilteredQuery(query: QueryBuilder, filteringParams: HolidaysFilterParams): QueryBuilder {
     if(filteringParams.description) query = query.where('description', 'like', `%${filteringParams.description}%`);
-    if(filteringParams.remarks) query = query.where('remarks', 'like', `%${filteringParams.remarks}%`);
     if(filteringParams.status) query = query.where('status','=', filteringParams.status);
     if(filteringParams.holiday_date) query = query.where('holiday_date','=', filteringParams.holiday_date);
     if(filteringParams.created_on)
