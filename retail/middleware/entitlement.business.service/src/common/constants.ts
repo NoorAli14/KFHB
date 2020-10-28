@@ -11,6 +11,11 @@ export const USER_STATUSES = {
   ACTIVE: 'ACTIVE',
   INACTIVE: 'INACTIVE',
 };
+export const STATUSES = {
+  PENDING: 'PENDING',
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+};
 export const PAGINATION_OUTPUT = ` {
   total
   pages

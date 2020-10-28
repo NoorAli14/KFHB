@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {CreatedOnDTO, NUMBERS, USER_STATUSES} from '@root/src/common';
+import {CreatedOnDTO, NUMBERS, STATUSES} from '@root/src/common';
 import {IsIn, IsOptional, IsString, IsUUID, MaxLength} from 'class-validator';
 import {Type} from "@root/node_modules/class-transformer";
 import {IsISO8601} from "@root/node_modules/class-validator";
@@ -63,14 +63,14 @@ export class LeaveFilterDto {
     remarks: string;
 
     @ApiProperty({
-        enum: USER_STATUSES,
-        example: USER_STATUSES[0],
+        enum: STATUSES,
+        example: STATUSES[0],
         description: 'Status of the Leave',
         required: false,
     })
     @IsOptional()
     @IsString()
-    @IsIn(Object.keys(USER_STATUSES))
+    @IsIn(Object.keys(STATUSES))
     status: string;
 
     @ApiProperty({

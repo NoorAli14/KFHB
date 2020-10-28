@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {CreatedOnDTO, NUMBERS, USER_STATUSES} from '@root/src/common';
+import {CreatedOnDTO, NUMBERS, STATUSES} from '@root/src/common';
 import {IsIn, IsISO8601, IsOptional, IsString, MaxLength} from 'class-validator';
 import {Type} from "@root/node_modules/class-transformer";
 
@@ -38,14 +38,14 @@ export class HolidayFilterDto {
     remarks: string;
 
     @ApiProperty({
-        enum: USER_STATUSES,
-        example: USER_STATUSES[0],
+        enum: STATUSES,
+        example: STATUSES[0],
         description: 'Status of the Holiday',
         required: false,
     })
     @IsOptional()
     @IsString()
-    @IsIn(Object.keys(USER_STATUSES))
+    @IsIn(Object.keys(STATUSES))
     status: string;
 
     @ApiProperty({
