@@ -75,7 +75,30 @@ export class UserService {
         pagination: ${toGraphql(params?.pagination)}
       ) {
         pagination ${PAGINATION_OUTPUT}
-        data ${this.output}
+        data {
+          id
+          first_name
+          middle_name
+          last_name
+          email
+          contact_no
+          gender
+          nationality_id
+          date_of_birth
+          roles {
+            id
+            name
+            description
+            status
+            created_on
+            created_by
+          }
+          status
+          created_on
+          created_by
+          updated_on
+          updated_by
+        }
       }
     }`;
     return this.gqlClient.send(query);
