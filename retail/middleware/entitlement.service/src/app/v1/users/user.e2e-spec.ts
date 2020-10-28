@@ -3,11 +3,18 @@ import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import {transformAndValidateSync} from "class-transformer-validator";
 
-import {createPayloadObject, getChecksQuery, getDeleteMutation, getMutation, getQuery} from '@common/tests';
+import {
+  createPayloadObject,
+  getChecksQuery,
+  getDeleteMutation,
+  getListWithPaginationQuery,
+  getMutation,
+  getQuery
+} from '@common/tests';
 import {V1Module} from '@app/v1/v1.module';
 import {CheckAvailabilityInput, CreateUserInput, UpdatePasswordInput, UpdateUserInput} from '@app/v1/users/user.dto';
 import {KeyValInput} from '@common/inputs/key-val.input';
-import {User} from "@app/v1/users/user.model";
+import {User, UsersWithPagination} from "@app/v1/users/user.model";
 
 
 describe('User Module (e2e)', () => {
@@ -149,21 +156,21 @@ describe('User Module (e2e)', () => {
     return request(app.getHttpServer())
     .post('/graphql')
     .send({
-      query: getQuery("usersList", "id last_name"),
+      query: getListWithPaginationQuery("usersList", "id last_name"),
     }).set({
           "x-tenant-id": process.env.ENV_RBX_E2E_TENANT_ID,
           "x-user-id": process.env.ENV_RBX_E2E_USER_ID
     })
     .expect(( {body} ) => {
       const user = body?.data?.usersList;
-      expect(user?.length).toBeDefined();
       const user_json: string = JSON.stringify(user);
-      const user_validated: User[] = transformAndValidateSync(
-          User,
+      const user_validated: UsersWithPagination = transformAndValidateSync(
+          UsersWithPagination,
           user_json,
-      ) as User[];
+      ) as UsersWithPagination;
       expect(user_validated).toBeDefined();
-      expect(user_validated).toBeInstanceOf(Array);
+      expect(user_validated).toBeInstanceOf(UsersWithPagination);
+      expect(user_validated.data).toBeInstanceOf(Array);
     })
     .expect(200)
     .end(done);

@@ -3,11 +3,11 @@ import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import {transformAndValidateSync} from "class-transformer-validator";
 
-import {getChecksQuery, getDeleteMutation, getMutation, getQuery} from '@common/tests';
+import {getChecksQuery, getDeleteMutation, getListWithPaginationQuery, getMutation, getQuery} from '@common/tests';
 import {V1Module} from '@app/v1/v1.module';
 import {RoleInput} from '@app/v1/roles/role.dto';
 import {KeyValInput} from '@common/inputs/key-val.input';
-import {Role} from "@app/v1/roles/role.model";
+import {Role, RolesWithPagination} from "@app/v1/roles/role.model";
 
 describe('Role Module (e2e)', () => {
   let app: INestApplication;
@@ -90,21 +90,21 @@ describe('Role Module (e2e)', () => {
     return request(app.getHttpServer())
     .post('/graphql')
     .send({
-      query: getQuery("rolesList", "id name"),
+      query: getListWithPaginationQuery("rolesList", "id name"),
     }).set({
           "x-tenant-id": process.env.ENV_RBX_E2E_TENANT_ID,
           "x-user-id": process.env.ENV_RBX_E2E_USER_ID
     })
     .expect(( {body} ) => {
       const data = body?.data?.rolesList;
-      expect(data?.length).toBeDefined();
       const role_json: string = JSON.stringify(data);
-      const role_validated: Role[] = transformAndValidateSync(
-          Role,
+      const role_validated: RolesWithPagination = transformAndValidateSync(
+          RolesWithPagination,
           role_json,
-      ) as Role[];
+      ) as RolesWithPagination;
       expect(role_validated).toBeDefined();
-      expect(role_validated).toBeInstanceOf(Array);
+      expect(role_validated).toBeInstanceOf(RolesWithPagination);
+      expect(role_validated.data).toBeInstanceOf(Array);
     })
     .expect(200)
     .end(done);

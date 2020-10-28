@@ -3,13 +3,13 @@ import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import {transformAndValidateSync} from "class-transformer-validator";
 
-import {getChecksQuery, getDeleteMutation, getMutation, getQuery} from '@common/tests';
+import {getChecksQuery, getDeleteMutation, getListWithPaginationQuery, getMutation, getQuery} from '@common/tests';
 import {V1Module} from '@app/v1/v1.module';
 import {LeaveInput} from '@app/v1/leave/leave.dto';
 import {KeyValInput} from '@common/inputs/key-val.input';
 import {LeaveTypeInput} from '@app/v1/leave_type/leave_type.dto';
 import {CreateUserInput} from '@app/v1/users/user.dto';
-import {Leave} from "@app/v1/leave/leave.model";
+import {Leave, LeavesWithPagination} from "@app/v1/leave/leave.model";
 
 describe('Leave Module (e2e)', () => {
   let app: INestApplication;
@@ -104,21 +104,21 @@ describe('Leave Module (e2e)', () => {
     return request(app.getHttpServer())
     .post('/graphql')
     .send({
-      query: getQuery("leavesList", "id remarks"),
+      query: getListWithPaginationQuery("leavesList", "id remarks"),
     }).set({
           "x-tenant-id": process.env.ENV_RBX_E2E_TENANT_ID,
           "x-user-id": process.env.ENV_RBX_E2E_USER_ID
     })
     .expect(( {body} ) => {
       const data = body?.data?.leavesList;
-      expect(data?.length).toBeDefined();
       const leave_json: string = JSON.stringify(data);
-      const leave_validated: Leave[] = transformAndValidateSync(
-          Leave,
+      const leave_validated: LeavesWithPagination = transformAndValidateSync(
+          LeavesWithPagination,
           leave_json,
-      ) as Leave[];
+      ) as LeavesWithPagination;
       expect(leave_validated).toBeDefined();
-      expect(leave_validated).toBeInstanceOf(Array);
+      expect(leave_validated).toBeInstanceOf(LeavesWithPagination);
+      expect(leave_validated.data).toBeInstanceOf(Array);
     })
     .expect(200)
     .end(done);

@@ -5,9 +5,9 @@ import {transformAndValidateSync} from "class-transformer-validator";
 
 import { HolidayInput } from '@app/v1/holiday/holiday.dto';
 import {V1Module} from '@app/v1/v1.module';
-import {getChecksQuery, getDeleteMutation, getMutation, getQuery} from '@common/tests';
+import {getChecksQuery, getDeleteMutation, getListWithPaginationQuery, getMutation, getQuery} from '@common/tests';
 import {KeyValInput} from '@common/inputs/key-val.input';
-import {Holiday} from "@app/v1/holiday/holiday.model";
+import {Holiday, HolidaysWithPagination} from "@app/v1/holiday/holiday.model";
 
 describe('Holiday Module (e2e)', () => {
   let app: INestApplication;
@@ -94,21 +94,21 @@ describe('Holiday Module (e2e)', () => {
     return request(app.getHttpServer())
     .post('/graphql')
     .send({
-      query: getQuery("holidaysList", "id remarks"),
+      query: getListWithPaginationQuery("holidaysList", "id remarks")
     }).set({
           "x-tenant-id": process.env.ENV_RBX_E2E_TENANT_ID,
           "x-user-id": process.env.ENV_RBX_E2E_USER_ID
     })
     .expect(( {body} ) => {
       const data = body?.data?.holidaysList;
-      expect(data?.length).toBeDefined();
       const holiday_json: string = JSON.stringify(data);
-      const holiday_validated: Holiday[] = transformAndValidateSync(
-          Holiday,
+      const holiday_validated: HolidaysWithPagination = transformAndValidateSync(
+          HolidaysWithPagination,
           holiday_json,
-      ) as Holiday[];
+      ) as HolidaysWithPagination;
       expect(holiday_validated).toBeDefined();
-      expect(holiday_validated).toBeInstanceOf(Array);
+      expect(holiday_validated).toBeInstanceOf(HolidaysWithPagination);
+      expect(holiday_validated.data).toBeInstanceOf(Array);
     })
     .expect(200)
     .end(done);

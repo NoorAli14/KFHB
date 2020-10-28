@@ -1,4 +1,5 @@
 import {KeyValInput} from '@common/inputs/key-val.input';
+import {PaginationParams, SortingParam} from "@common/classes";
 
 export function createPayloadObject(input: { [key: string]: any }): string {
   return JSON.stringify(input).replace(/\"([^(\")"]+)\":/g, '$1:');
@@ -58,5 +59,36 @@ export function getDeleteMutation(
 ): string {
   return `mutation{
       ${method}(id:"${id}")
+    }`;
+}
+
+export function getListWithPaginationQuery(
+  method: string,
+  return_keys: string
+): string {
+  const paginationParams: PaginationParams = {
+    page: 1,
+    limit: 25
+  };
+  const filterParams = {};
+  const sortingParam: SortingParam = {
+    field: "created_on",
+    direction: "desc"
+  };
+  return `query{
+    ${method}(
+      pagination:${createPayloadObject(paginationParams)},
+      filters:${createPayloadObject(filterParams)},
+      sort_by:${createPayloadObject(sortingParam)}){
+        pagination{
+          total
+          pages
+          pageSize
+          page
+        }
+        data{
+          ${return_keys}
+        }   
+      }
     }`;
 }
