@@ -9,7 +9,7 @@ import {
   UseGuards,
   HttpCode,
   HttpStatus,
-  Post,
+  Post, Query,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -21,10 +21,11 @@ import {
   ApiNotFoundResponse,
   ApiNoContentResponse,
 } from '@nestjs/swagger';
-import { AuthGuard, PermissionsGuard, Permissions } from '@common/index';
-import { Holiday } from './holiday.entity';
+import {AuthGuard, PermissionsGuard, Permissions, PaginationDTO, SortByDTO} from '@common/index';
+import {Holiday, HolidayPaginationList} from './holiday.entity';
 import { CreateHolidayDto, UpdateHolidayDTO } from './holiday.dto';
 import { HolidaysService } from './holidays.service';
+import {HolidayFilterDto} from "@app/v1/holidays/dtos";
 
 @ApiTags('Holidays')
 @Controller('holidays')
@@ -36,16 +37,23 @@ export class HolidaysController {
   @Get('/')
   @ApiOperation({
     description:
-      'A successful request returns the HTTP 200 OK status code and a JSON response body that shows list of holidays information.',
+      'A successful request returns the HTTP 200 OK status code and a JSON response body that shows list of holidays information with pagination.',
     summary: 'List of all holidays.',
   })
   @ApiOkResponse({
-    type: [Holiday],
+    type: HolidayPaginationList,
     description: 'List of all holidays.',
   })
   @Permissions('view:holidays')
-  async list(): Promise<Holiday[]> {
-    return this.holidayService.list();
+  async list(@Query() pagination: PaginationDTO, @Query() filters: HolidayFilterDto, @Query() order: SortByDTO): Promise<HolidayPaginationList> {
+    let sort_by = {};
+    if (order) {
+      sort_by = {
+        field: order?.sort_by || 'created_on',
+        direction: order?.sort_order || 'desc'
+      }
+    }
+    return this.holidayService.list({ pagination, filters, sort_by });
   }
 
   @Post('/')
