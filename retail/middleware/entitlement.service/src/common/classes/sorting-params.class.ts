@@ -5,10 +5,10 @@ import {IsIn, IsString} from "class-validator";
 export class SortingParam {
   @Field()
   @IsString()
-  field: string;
+  sort_by: string;
 
   @Field()
   @IsString()
   @IsIn(["asc", "desc"])
-  direction: string;
+  sort_order: string;
 }

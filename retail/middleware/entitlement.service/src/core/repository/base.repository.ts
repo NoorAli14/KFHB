@@ -27,8 +27,8 @@ export abstract class BaseRepository {
       paginationParams: PaginationParams,
       sortingParams: SortingParam,
       output: string[]): Promise<any> {
-    if(sortingParams?.field){
-      dataQuery = dataQuery.orderBy(sortingParams.field, sortingParams.direction);
+    if(sortingParams?.sort_by){
+      dataQuery = dataQuery.orderBy(sortingParams.sort_by, sortingParams.sort_order);
     } else {
       dataQuery = dataQuery.orderBy("created_on", "desc");
     }
