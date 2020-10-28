@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsOptional, IsDate } from 'class-validator';
 import { USER_STATUSES, GENDER } from '@common/constants';
 import { Module } from '@app/v1/modules/module.entity';
+import {PaginationDTO} from "@common/dtos";
 
 export class User {
   @ApiProperty({
@@ -132,4 +133,20 @@ export class UserWithModule extends User {
     required: false,
   })
   modules?: Module[];
+}
+
+export class UserPaginationList {
+  @ApiProperty({
+    type: [User],
+    description: 'List of all Users.',
+    required: true,
+  })
+  data: User[];
+
+  @ApiProperty({
+    type: PaginationDTO,
+    description: 'Pagination meta data',
+    required: true,
+  })
+  pagination: PaginationDTO;
 }

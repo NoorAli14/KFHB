@@ -3,8 +3,8 @@ import {
   UnprocessableEntityException,
   Logger,
 } from '@nestjs/common';
-import { User } from './user.entity';
-import { GqlClientService, toGraphql } from '@common/index';
+import {User, UserPaginationList} from './user.entity';
+import {GqlClientService, PAGINATION_OUTPUT, toGraphql} from '@common/index';
 import { ChangePasswordDto, UpdateUserDto } from './user.dto';
 
 @Injectable()
@@ -67,31 +67,15 @@ export class UserService {
 
   constructor(private readonly gqlClient: GqlClientService) { }
 
-  async list(): Promise<User[]> {
+  async list(params?: any): Promise<UserPaginationList> {
     const query = `query {
-      result: usersList {
-        id
-        first_name
-        middle_name
-        last_name
-        email
-        contact_no
-        gender
-        nationality_id
-        date_of_birth
-        roles {
-          id
-          name
-          description
-          status
-          created_on
-          created_by
-        }
-        status
-        created_on
-        created_by
-        updated_on
-        updated_by
+      result: usersList(
+        filters: ${toGraphql(params?.filters)},
+        sort_by: ${toGraphql(params?.sort_by)},
+        pagination: ${toGraphql(params?.pagination)}
+      ) {
+        pagination ${PAGINATION_OUTPUT}
+        data ${this.output}
       }
     }`;
     return this.gqlClient.send(query);

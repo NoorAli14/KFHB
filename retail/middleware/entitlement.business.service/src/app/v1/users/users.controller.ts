@@ -20,10 +20,12 @@ import {
   ApiNotFoundResponse,
   ApiNoContentResponse,
 } from '@nestjs/swagger';
-import { AuthGuard, PermissionsGuard, Permissions } from '@common/index';
+import {AuthGuard, PermissionsGuard, Permissions, PaginationDTO, SortByDTO} from '@common/index';
 import { UserService } from './users.service';
-import { User } from './user.entity';
+import {User, UserPaginationList} from './user.entity';
 import { UpdateUserDto } from './user.dto';
+import {Query} from "@root/node_modules/@nestjs/common";
+import {UserFilterDto} from "@app/v1/users/dtos";
 
 @ApiTags('User')
 @Controller('users')
@@ -35,13 +37,20 @@ export class UsersController {
   @Get('/')
   @ApiOperation({
     description:
-      'A successful request returns the HTTP 200 OK status code and a JSON response body that shows list of users information.',
+      'A successful request returns the HTTP 200 OK status code and a JSON response body that shows list of users information with pagination.',
     summary: 'List of all users.',
   })
-  @ApiOkResponse({ type: [User], description: 'List of all users.' })
+  @ApiOkResponse({ type: UserPaginationList, description: 'List of all users.' })
   @Permissions('view:users')
-  async list(): Promise<User[]> {
-    return this.userService.list();
+  async list(@Query() pagination: PaginationDTO, @Query() filters: UserFilterDto, @Query() order: SortByDTO): Promise<UserPaginationList> {
+    let sort_by = {};
+    if (order) {
+      sort_by = {
+        field: order?.sort_by || 'created_on',
+        direction: order?.sort_order || 'desc'
+      }
+    }
+    return this.userService.list({ pagination, filters, sort_by });
   }
 
   @Get(':id')
