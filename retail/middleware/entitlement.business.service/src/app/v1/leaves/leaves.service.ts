@@ -1,7 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { GqlClientService, toGraphql } from '@common/index';
-import { Leave } from './leave.entity';
+import {GqlClientService, PAGINATION_OUTPUT, toGraphql} from '@common/index';
+import {Leave, LeavePaginationList} from './leave.entity';
 import { CreateLeaveDto, UpdateLeaveDto } from './leave.dto';
+import {HolidayPaginationList} from "@app/v1/holidays/holiday.entity";
 
 @Injectable()
 export class LeavesService {
@@ -32,10 +33,17 @@ export class LeavesService {
     return this.gqlClient.send(mutation);
   }
 
-  async list(): Promise<Leave[]> {
-    this.logger.log(`Start fetching list of all leaves`);
+  async list(params?: any): Promise<LeavePaginationList> {
+    this.logger.log(`Start fetching list of all Leaves`);
     const query = `query {
-      result: leavesList ${this.__output}
+      result: leavesList(
+        filters: ${toGraphql(params?.filters)},
+        sort_by: ${toGraphql(params?.sort_by)},
+        pagination: ${toGraphql(params?.pagination)}
+      ) {
+        pagination ${PAGINATION_OUTPUT}
+        data ${this.__output}
+      }
     }`;
     return this.gqlClient.send(query);
   }

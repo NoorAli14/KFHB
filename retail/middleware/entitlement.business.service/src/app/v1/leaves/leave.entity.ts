@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { USER_STATUSES } from '@common/constants';
+import {PaginationDTO} from "@common/dtos";
 
 export class Leave {
   @ApiProperty({
@@ -29,13 +30,13 @@ export class Leave {
     example: '1947-08-14',
     required: true
   })
-  start_date: string
+  start_date: string;
 
   @ApiProperty({
     example: '1947-08-14',
     required: true
   })
-  end_date: string
+  end_date: string;
 
   @ApiProperty({
     required: false,
@@ -68,4 +69,20 @@ export class Leave {
 
   @ApiProperty({ required: false })
   updated_by: string;
+}
+
+export class LeavePaginationList {
+  @ApiProperty({
+    type: [Leave],
+    description: 'List of all Leaves.',
+    required: true,
+  })
+  data: Leave[];
+
+  @ApiProperty({
+    type: PaginationDTO,
+    description: 'Pagination meta data',
+    required: true,
+  })
+  pagination: PaginationDTO;
 }
