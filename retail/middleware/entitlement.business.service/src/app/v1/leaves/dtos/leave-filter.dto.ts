@@ -52,17 +52,6 @@ export class LeaveFilterDto {
     end_date: string;
 
     @ApiProperty({
-        title: 'Remarks',
-        example: 'Approved',
-        description: 'Remarks about the Leave',
-        required: false,
-    })
-    @IsOptional()
-    @IsString()
-    @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-    remarks: string;
-
-    @ApiProperty({
         enum: STATUSES,
         example: STATUSES[0],
         description: 'Status of the Leave',

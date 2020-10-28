@@ -94,7 +94,6 @@ input HolidayInput {
 input HolidaysFilterParams {
   holiday_date: String
   description: String
-  remarks: String
   status: String
   created_on: CreatedOnParams
 }
@@ -154,7 +153,6 @@ input LeavesFilterParams {
   leave_type_id: String
   start_date: String
   end_date: String
-  remarks: String
   status: String
   created_on: CreatedOnParams
 }
@@ -337,8 +335,8 @@ type RolesWithPagination {
 }
 
 input SortingParam {
-  field: String!
-  direction: String!
+  sort_by: String!
+  sort_order: String!
 }
 
 input UpdatePasswordInput {

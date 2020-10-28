@@ -43,7 +43,6 @@ export class LeaveRepository extends BaseRepository {
   getFilteredQuery(query: QueryBuilder, filteringParams: LeavesFilterParams): QueryBuilder {
     if(filteringParams.user_id) query = query.where('user_id', 'like', `%${filteringParams.user_id}%`);
     if(filteringParams.leave_type_id) query = query.where('leave_type_id', 'like', `%${filteringParams.leave_type_id}%`);
-    if(filteringParams.remarks) query = query.where('remarks', 'like', `%${filteringParams.remarks}%`);
     if(filteringParams.status) query = query.where('status','=', filteringParams.status);
     if(filteringParams.start_date) query = query.where('start_date','=', filteringParams.start_date);
     if(filteringParams.end_date) query = query.where('end_date','=', filteringParams.end_date);

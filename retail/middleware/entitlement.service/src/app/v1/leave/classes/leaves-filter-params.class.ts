@@ -33,12 +33,6 @@ export class LeavesFilterParams {
   @IsISO8601({strict: true})
   end_date: string;
 
-  @Field({ nullable: true })
-  @IsString()
-  @IsOptional()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  remarks: string;
-
   @Field({nullable:true})
   @IsString()
   @IsOptional()
