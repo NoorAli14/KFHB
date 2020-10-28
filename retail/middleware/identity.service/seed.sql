@@ -1,0 +1,8 @@
+/* [Identity Service] - 01-seed-documents-type.ts */;
+delete from [IDT_DOCUMENT_TYPE];select @@rowcount;
+
+insert into [IDT_DOCUMENT_TYPE] ([created_by], [is_required], [name], [record_type], [tenant_id], [updated_by]) values ('SYSTEM', true, 'SELFIE', 'FACE', '9013C327-1190-4875-A92A-83ACA9029160', 'SYSTEM'), ('SYSTEM', true, 'LIVENESS', 'FACE', '9013C327-1190-4875-A92A-83ACA9029160', 'SYSTEM'), ('SYSTEM', true, 'PASSPORT', 'DOCUMENT', '9013C327-1190-4875-A92A-83ACA9029160', 'SYSTEM'), ('SYSTEM', true, 'NATIONAL_ID_BACK_SIDE', 'DOCUMENT', '9013C327-1190-4875-A92A-83ACA9029160', 'SYSTEM'), ('SYSTEM', true, 'DRIVING_LICENSE', 'DOCUMENT', '9013C327-1190-4875-A92A-83ACA9029160', 'SYSTEM'), ('SYSTEM', false, 'NATIONAL_ID_FRONT_SIDE', 'DOCUMENT', '9013C327-1190-4875-A92A-83ACA9029160', 'SYSTEM');
+
+
+
+
