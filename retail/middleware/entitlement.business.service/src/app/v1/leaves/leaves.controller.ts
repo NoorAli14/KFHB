@@ -46,14 +46,7 @@ export class LeavesController {
     type: LeavePaginationList,
     description: 'List of all leaves.',
   })
-  async list(@Query() pagination: PaginationDTO, @Query() filters: LeaveFilterDto, @Query() order: SortByDTO): Promise<LeavePaginationList> {
-    let sort_by = {};
-    if (order) {
-      sort_by = {
-        field: order?.sort_by || 'created_on',
-        direction: order?.sort_order || 'desc'
-      }
-    }
+  async list(@Query() pagination: PaginationDTO, @Query() filters: LeaveFilterDto, @Query() sort_by: SortByDTO): Promise<LeavePaginationList> {
     return this.leaveService.list({ pagination, filters, sort_by });
   }
 

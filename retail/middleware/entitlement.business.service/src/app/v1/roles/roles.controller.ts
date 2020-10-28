@@ -67,14 +67,7 @@ export class RolesController {
   })
   @ApiOkResponse({ type: RolePaginationList, description: 'List of all the roles.' })
   @Permissions('view:roles')
-  async list(@Query() pagination: PaginationDTO, @Query() filters: RoleFilterDto, @Query() order: SortByDTO): Promise<RolePaginationList> {
-    let sort_by = {};
-    if (order) {
-      sort_by = {
-        field: order?.sort_by || 'created_on',
-        direction: order?.sort_order || 'desc'
-      }
-    }
+  async list(@Query() pagination: PaginationDTO, @Query() filters: RoleFilterDto, @Query() sort_by: SortByDTO): Promise<RolePaginationList> {
     return this.roleService.list({ pagination, filters, sort_by });
   }
 

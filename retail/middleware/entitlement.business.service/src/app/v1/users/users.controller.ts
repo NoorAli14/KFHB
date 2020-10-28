@@ -42,14 +42,7 @@ export class UsersController {
   })
   @ApiOkResponse({ type: UserPaginationList, description: 'List of all users.' })
   @Permissions('view:users')
-  async list(@Query() pagination: PaginationDTO, @Query() filters: UserFilterDto, @Query() order: SortByDTO): Promise<UserPaginationList> {
-    let sort_by = {};
-    if (order) {
-      sort_by = {
-        field: order?.sort_by || 'created_on',
-        direction: order?.sort_order || 'desc'
-      }
-    }
+  async list(@Query() pagination: PaginationDTO, @Query() filters: UserFilterDto, @Query() sort_by: SortByDTO): Promise<UserPaginationList> {
     return this.userService.list({ pagination, filters, sort_by });
   }
 

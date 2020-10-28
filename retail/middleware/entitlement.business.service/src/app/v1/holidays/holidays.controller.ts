@@ -45,14 +45,7 @@ export class HolidaysController {
     description: 'List of all holidays.',
   })
   @Permissions('view:holidays')
-  async list(@Query() pagination: PaginationDTO, @Query() filters: HolidayFilterDto, @Query() order: SortByDTO): Promise<HolidayPaginationList> {
-    let sort_by = {};
-    if (order) {
-      sort_by = {
-        field: order?.sort_by || 'created_on',
-        direction: order?.sort_order || 'desc'
-      }
-    }
+  async list(@Query() pagination: PaginationDTO, @Query() filters: HolidayFilterDto, @Query() sort_by: SortByDTO): Promise<HolidayPaginationList> {
     return this.holidayService.list({ pagination, filters, sort_by });
   }
 
