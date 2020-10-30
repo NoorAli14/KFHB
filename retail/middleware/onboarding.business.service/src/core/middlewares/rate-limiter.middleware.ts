@@ -3,7 +3,6 @@ import { INestApplication } from '@nestjs/common';
 import { ConfigurationService } from '@common/configuration/configuration.service';
 
 export class RateLimiterMiddleware {
-  
   public static init(
     app: INestApplication,
     config: ConfigurationService,

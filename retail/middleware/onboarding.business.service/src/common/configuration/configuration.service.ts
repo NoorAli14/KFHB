@@ -39,14 +39,8 @@ export class ConfigurationService {
         'ENV_RBX_WEB_RESET_PASSWORD_LINK',
         DEFAULT_ENV.APP.WEB_RESET_PASSWORD_LINK,
       ),
-      BASIC_AUTH_KEY: this.get(
-        'ENV_RBX_BASIC_AUTH_KEY',
-        null,
-      ),
-      BASIC_AUTH_SECRET: this.get(
-        'ENV_RBX_BASIC_AUTH_SECRET',
-        null,
-      ),
+      BASIC_AUTH_KEY: this.get('ENV_RBX_BASIC_AUTH_KEY', null),
+      BASIC_AUTH_SECRET: this.get('ENV_RBX_BASIC_AUTH_SECRET', null),
     };
   }
 
@@ -66,12 +60,13 @@ export class ConfigurationService {
   }
   get JWT() {
     return {
-      EXPIRY_SECONDS: parseInt(this.get('ENV_RBX_JWT_EXPIRY_MINUTES', 0), 10) *
+      EXPIRY_SECONDS:
+        parseInt(this.get('ENV_RBX_JWT_EXPIRY_MINUTES', 0), 10) * 60,
+      REFRESH_EXPIRY_SECONDS:
+        parseInt(this.get('ENV_RBX_JWT_REFRESH_EXPIRY_DAYS', 0), 10) *
+        24 *
+        60 *
         60,
-      REFRESH_EXPIRY_SECONDS: parseInt(
-        this.get('ENV_RBX_JWT_REFRESH_EXPIRY_DAYS', 0),
-        10,
-      ) * 24 * 60 * 60,
       SECRET: this.get('ENV_RBX_JWT_SECRET', null),
       REFRESH_SECRET: this.get('ENV_RBX_JWT_REFRESH_SECRET', null),
       ALGORITHM: this.get('ENV_RBX_JWT_ALGORITHM', 'HS256'),
@@ -132,8 +127,8 @@ export class ConfigurationService {
     return this.IS_DEVELOPMENT
       ? true
       : isTruthy(
-        this.get('ENV_RBX_SWAGGER_ENABLED', DEFAULT_ENV.SWAGGER.ENABLE),
-      );
+          this.get('ENV_RBX_SWAGGER_ENABLED', DEFAULT_ENV.SWAGGER.ENABLE),
+        );
   }
 
   get APPLICATION_HOST(): string {

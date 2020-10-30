@@ -4,13 +4,13 @@ import {
   ExceptionFilter,
   HttpException,
   HttpStatus,
-  Logger
+  Logger,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
-  private readonly logger = new Logger(HttpExceptionFilter.name)
+  private readonly logger = new Logger(HttpExceptionFilter.name);
   catch(error: HttpException | any, host: ArgumentsHost) {
     this.logger.log(error);
     const ctx = host.switchToHttp();

@@ -11,7 +11,7 @@ import { CorrelationMiddleware } from './correlation.middleware';
 import { CorsMiddleware } from './cors.middleware';
 import { formattedHeader } from '@common/utilities';
 import { RequestContextMiddleware, setContext } from '@core/context';
-import { RegistryMiddleware } from "./registry.middleware";
+import { RegistryMiddleware } from './registry.middleware';
 
 export class KernelMiddleware {
   public static init(
@@ -60,8 +60,8 @@ export class KernelMiddleware {
     }
 
     /*
-    * Middleware: Authorize requests based on channels and services
-    */
+     * Middleware: Authorize requests based on channels and services
+     */
     app.use(RegistryMiddleware());
 
     /** Express.js middleware that is responsible for initializing the context for each request. */
