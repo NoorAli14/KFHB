@@ -382,7 +382,7 @@ export async function seed(knex: Knex): Promise<any> {
   return processSeed(knex, false);
 }
 
-export async function  (
+export async function processSeed (
   knex: Knex,
   generateSql = true,
 ): Promise<any> {
