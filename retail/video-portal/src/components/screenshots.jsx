@@ -14,7 +14,7 @@ export class ScreenShots extends React.Component {
 
   setActive = (type) => {
     this.setState({selectBtn:type,selectedPath:null})
-    const selected = this.props.images.find((x) => x.attachment_id === type);
+    const selected = this.props.images.find((x) => x.attachment_type === type);
     if (selected) {
       const path = this.getImageUrl(selected);
       this.setState({selectedPath:path})
