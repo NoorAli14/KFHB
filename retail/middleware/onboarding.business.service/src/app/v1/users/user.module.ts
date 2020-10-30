@@ -10,4 +10,4 @@ import { CustomersService } from '../customers/customers.service';
   controllers: [UsersController],
   providers: [UserService, AppointmentsService, GqlClientService, CustomersService],
 })
-export class UserModule { }
+export class UserModule {}

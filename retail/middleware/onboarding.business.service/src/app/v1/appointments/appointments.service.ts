@@ -18,10 +18,8 @@ export class AppointmentsService {
   constructor(private readonly gqlClient: GqlClientService) {}
 
   async create(input: CreateAppointmentDTO): Promise<Appointment> {
-    this.logger.log(
-      `Appointment:: Start creating the appointment at [${input.call_time}]`,
-    );
-    const mutation: string = `mutation {
+    this.logger.log(`Appointment:: Start creating the appointment at [${input.call_time}]`);
+    const mutation = `mutation {
       result: addAppointment(appointment: ${toGraphql(input)}) ${this.output}
     }`;
     return this.gqlClient.send(mutation);

@@ -20,10 +20,10 @@ export class SessionsService {
     updated_by   
   }`;
 
-  constructor(private readonly gqlClient: GqlClientService) { }
+  constructor(private readonly gqlClient: GqlClientService) {}
 
   async create(): Promise<Session> {
-    const mutation: string = `mutation {
+    const mutation = `mutation {
       result: addSession ${this.output}
     }`;
     return this.gqlClient.send(mutation);
@@ -37,7 +37,7 @@ export class SessionsService {
    */
   async update(input: FaceUploadingInput): Promise<Session> {
     // Construct GraphQL request
-    const mutation: string = `mutation {
+    const mutation = `mutation {
       result: updateSession(input: {
           file: "${strToBase64(input.file)}"
         }) ${this.output}
