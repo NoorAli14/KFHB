@@ -8,7 +8,6 @@ import { GqlClientService } from './gqlclient.service';
       imports: [CommonModule],
       useFactory: async (serviceRegistry: RegistryService) => {
         const service = serviceRegistry.get('CUSTOMER');
-        console.log(`Service is1: ${JSON.stringify(service, null, 2)}`);
         return {
           ...service,
         };
@@ -19,4 +18,4 @@ import { GqlClientService } from './gqlclient.service';
   providers: [GqlClientService],
   exports: [GqlClientService, HttpModule],
 })
-export class GqlClientModule {}
+export class GqlClientModule { }
