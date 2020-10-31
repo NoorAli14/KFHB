@@ -14,10 +14,7 @@ import { RequestContextMiddleware, setContext } from '@core/context';
 import { RegistryMiddleware } from './registry.middleware';
 
 export class KernelMiddleware {
-  public static init(
-    app: INestApplication,
-    config: ConfigurationService,
-  ): INestApplication {
+  public static init(app: INestApplication, config: ConfigurationService): INestApplication {
     /*
      * Middleware: Bind the correlation Id with the request and response header.
      */

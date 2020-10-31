@@ -8,23 +8,17 @@ class NativeEvent {
   public cluster(_cluster): void {
     // Catch cluster listening event...
     _cluster.on('listening', worker =>
-      Logger.log(
-        `Server :: Cluster with ProcessID '${worker.process.pid}' Connected!`,
-      ),
+      Logger.log(`Server :: Cluster with ProcessID '${worker.process.pid}' Connected!`),
     );
 
     // Catch cluster once it is back online event...
     _cluster.on('online', worker =>
-      Logger.log(
-        `Server :: Cluster with ProcessID '${worker.process.pid}' has responded after it was forked! `,
-      ),
+      Logger.log(`Server :: Cluster with ProcessID '${worker.process.pid}' has responded after it was forked! `),
     );
 
     // Catch cluster disconnect event...
     _cluster.on('disconnect', worker =>
-      Logger.log(
-        `Server :: Cluster with ProcessID '${worker.process.pid}' Disconnected!`,
-      ),
+      Logger.log(`Server :: Cluster with ProcessID '${worker.process.pid}' Disconnected!`),
     );
 
     // Catch cluster exit event...
@@ -47,7 +41,7 @@ class NativeEvent {
     // Catch the Process's unhandled-rejection
     process.on('unhandledRejection', (reason, promise) => {
       Logger.log(reason);
-      console.log(promise);
+      Logger.log(promise);
     });
   }
 }

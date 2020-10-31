@@ -3,10 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import { ConfigurationService } from '@common/configuration/configuration.service';
 
 export class RateLimiterMiddleware {
-  public static init(
-    app: INestApplication,
-    config: ConfigurationService,
-  ): INestApplication {
+  public static init(app: INestApplication, config: ConfigurationService): INestApplication {
     app.use(
       rateLimit({
         windowMs: config.RATE_LIMITER.INTERVAL * 60 * 1000, // 15 minutes
