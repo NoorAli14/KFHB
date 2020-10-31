@@ -18,4 +18,4 @@ import { GqlClientService } from './gqlclient.service';
   providers: [GqlClientService],
   exports: [GqlClientService, HttpModule],
 })
-export class GqlClientModule { }
+export class GqlClientModule {}

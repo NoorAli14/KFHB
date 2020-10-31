@@ -10,9 +10,6 @@ export class BasicAuthGuard implements CanActivate {
     const [appKey, appSecret] = Buffer.from(b64auth, 'base64')
       .toString()
       .split(':');
-    return (
-      this.config.APP.BASIC_AUTH_KEY === appKey &&
-      this.config.APP.BASIC_AUTH_SECRET === appSecret
-    );
+    return this.config.APP.BASIC_AUTH_KEY === appKey && this.config.APP.BASIC_AUTH_SECRET === appSecret;
   }
 }
