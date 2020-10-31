@@ -7,6 +7,7 @@ import {
   ApiCreatedResponse,
   ApiBadRequestResponse,
 } from '@nestjs/swagger';
+import { Response } from 'express';
 import { Attachment } from './attachment.entity';
 import { CreateAttachmentDTO } from './attachment.dto';
 import { AuthGuard, PermissionsGuard, Permissions } from '@common/index';
@@ -75,7 +76,7 @@ export class AttachmentsController {
   async find(
     @Param('id', ParseUUIDPipe) id: string,
     @Param('customer_id', ParseUUIDPipe) customer_id: string,
-    @Res() res: any,
+    @Res() res: Response,
   ): Promise<any> {
     const response = await this.attachmentService.find(id, customer_id);
     return readFileStream(response.file_path, res);

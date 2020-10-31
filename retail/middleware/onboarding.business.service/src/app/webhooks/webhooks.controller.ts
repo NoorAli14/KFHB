@@ -1,22 +1,6 @@
-import {
-  Controller,
-  Post,
-  Body,
-  UseGuards,
-  HttpCode,
-  HttpStatus,
-} from '@nestjs/common';
-import {
-  ApiTags,
-  ApiBearerAuth,
-  ApiCreatedResponse,
-  ApiOperation,
-} from '@nestjs/swagger';
-import {
-  AML_STATUSES,
-  BasicAuthGuard,
-  CUSTOMER_LAST_STEPS,
-} from '@common/index';
+import { Controller, Post, Body, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
+import { ApiTags, ApiBearerAuth, ApiCreatedResponse, ApiOperation } from '@nestjs/swagger';
+import { AML_STATUSES, BasicAuthGuard, CUSTOMER_LAST_STEPS } from '@common/index';
 import { WebhooksService } from './webhooks.service';
 import { Appointment } from './webhook.entity';
 import { AMLAlertDTO } from './webhook.dto';
@@ -27,10 +11,7 @@ import { CustomersService } from '../v1/customers/customers.service';
 @ApiBearerAuth()
 @UseGuards(BasicAuthGuard)
 export class WebhooksController {
-  constructor(
-    private readonly webhookService: WebhooksService,
-    private readonly customerService: CustomersService,
-  ) {}
+  constructor(private readonly webhookService: WebhooksService, private readonly customerService: CustomersService) {}
 
   @Post('/aml/alert')
   @ApiOperation({
