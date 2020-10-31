@@ -56,7 +56,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     if (!(await this.redisService.getValue(payload.id))) return;
 
     setContext('HttpHeaders', formattedHeader(request, payload.id));
-    const customer: any = this.findAuthUser(payload);
+    const customer: any = await this.findAuthUser(payload);
 
     if (!customer) throw new UnauthorizedException();
     if (customer?.modules && payload.type != 'customer')

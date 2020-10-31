@@ -71,8 +71,9 @@ export const formattedHeader = (req: Request, user_id?: string): IHEADER => {
   const headers: IHEADER = {
     [X_CORRELATION_KEY]: req.headers?.[X_CORRELATION_KEY] as string,
     [X_TENANT_ID]: (req.headers?.[X_TENANT_ID] || req.query?.[X_TENANT_ID]) as string,
-    [X_USER_ID]: user_id || (req?.user['id'] as string) || null,
   };
+  if (user_id) headers[X_USER_ID] = user_id;
+  if (req?.user) headers[X_USER_ID] = req?.user['id'] as string;
   return headers;
 };
 
