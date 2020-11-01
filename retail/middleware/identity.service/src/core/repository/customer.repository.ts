@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import {TABLE, SESSION_STATUSES} from '@rubix/common/constants';
 import { BaseRepository } from './base.repository';
-import {CustomersFilterParams} from "@app/v1/customers/classes";
+import {CustomersFilterParams} from "@app/v1/customers/dtos";
 import {QueryBuilder} from "knex";
-import {PaginationParams, SortingParam} from "@common/classes";
+import {PaginationParams, SortingParam} from "@common/dtos";
 
 @Injectable()
 export class CustomerRepository extends BaseRepository {

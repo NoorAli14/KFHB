@@ -199,8 +199,8 @@ type Session {
 }
 
 input SortingParam {
-  field: String!
-  direction: String!
+  sort_by: String!
+  sort_order: String!
 }
 
 input UpdateCustomerInput {

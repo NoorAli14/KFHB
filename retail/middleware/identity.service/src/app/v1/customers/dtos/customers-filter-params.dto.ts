@@ -1,19 +1,7 @@
 import {Field, InputType} from "@nestjs/graphql";
-import {IsIn, IsISO8601, IsOptional, IsString, MaxLength} from "class-validator";
+import {IsIn, IsOptional, IsString, MaxLength} from "class-validator";
 import {NUMBERS, STATUS} from "@rubix/common";
-
-@InputType()
-export class CreatedOnParams {
-  @Field()
-  @IsString()
-  @IsISO8601({strict: true})
-  start: string;
-
-  @Field()
-  @IsString()
-  @IsISO8601({strict: true})
-  end: string;
-}
+import {CreatedOnParams} from "@common/dtos";
 
 @InputType()
 export class CustomersFilterParams {
