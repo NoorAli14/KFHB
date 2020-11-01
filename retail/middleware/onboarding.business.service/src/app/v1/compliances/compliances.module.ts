@@ -7,6 +7,6 @@ import { CustomersService } from '../customers/customers.service';
 @Module({
   imports: [GqlClientModule],
   controllers: [CompliancesController],
-  providers: [CompliancesController, ComplianceService, CustomersService,GqlClientService],
+  providers: [CompliancesController, ComplianceService, CustomersService, GqlClientService],
 })
 export class ComplianceModule {}

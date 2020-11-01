@@ -14,7 +14,7 @@ export class RegistryService {
   }
   // Default values just for testing, These values comes through service registry
   get(name: string) {
-    return this.__services.find((service) => service.name === name);
+    return this.__services.find(service => service.name === name);
   }
 
   get services(): any {
@@ -22,7 +22,8 @@ export class RegistryService {
   }
 
   formatUrl(service) {
-    return `${service.is_secure ? 'https' : 'http'}://${process.env.NODE_ENV === 'development' ? 'localhost' : service.host_name}:${service.port
-      }${service.context}`;
+    return `${service.is_secure ? 'https' : 'http'}://${
+      process.env.NODE_ENV === 'development' ? 'localhost' : service.host_name
+    }:${service.port}${service.context}`;
   }
 }

@@ -1,11 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { IOTP_INPUT } from './otp.interface';
-import {
-  GqlClientService,
-  toGraphql,
-  SuccessDto,
-  STATUSES,
-} from '@common/index';
+import { GqlClientService, toGraphql, SuccessDto, STATUSES } from '@common/index';
 import { User } from '../users/user.entity';
 import { VerifyOTPDto } from './otp.dto';
 @Injectable()

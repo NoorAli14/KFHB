@@ -1,8 +1,4 @@
-import {
-  Namespace,
-  createNamespace,
-  getNamespace as _getNamespace,
-} from 'cls-hooked';
+import { Namespace, createNamespace, getNamespace as _getNamespace } from 'cls-hooked';
 import { Request, Response, NextFunction } from 'express';
 
 import { CONTEXT_NAMESPACE_ID, X_CORRELATION_KEY } from '@common/constants';
@@ -40,10 +36,7 @@ export const getContext = (key: string): any => {
  * @param {string} key
  * @param {*} value
  */
-export const setContext = (
-  key: string,
-  value: { [key: string]: any } | string,
-): void => {
+export const setContext = (key: string, value: { [key: string]: any } | string): void => {
   if (__ns && __ns.active) {
     return __ns.set(key, value as any);
   }

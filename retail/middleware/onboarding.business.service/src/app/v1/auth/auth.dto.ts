@@ -1,13 +1,6 @@
-import {
-  IsString,
-  Length,
-  IsEmail,
-  IsOptional,
-  IsNotEmpty,
-  MaxLength,
-} from 'class-validator';
+import { IsString, Length, IsEmail, IsOptional, IsNotEmpty, MaxLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { DEVICES } from '@common/constants'
+import { DEVICES } from '@common/constants';
 
 export class RegisterCustomerDto {
   @ApiProperty({

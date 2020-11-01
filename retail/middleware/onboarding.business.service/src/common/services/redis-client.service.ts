@@ -15,12 +15,7 @@ export class RedisClientService {
     return client;
   }
 
-  async setValue(
-    key: string,
-    value: string,
-    expiryMode?: string | any[],
-    time?: number | string,
-  ): Promise<boolean> {
+  async setValue(key: string, value: string, expiryMode?: string | any[], time?: number | string): Promise<boolean> {
     const result = await this._client.set(key, value, expiryMode, time);
     return result == 'OK';
   }

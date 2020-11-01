@@ -9,7 +9,8 @@ import {
   ConfigurationService,
   X_USER_ID,
   X_TENANT_ID,
-  X_CORRELATION_KEY, RegistryService
+  X_CORRELATION_KEY,
+  RegistryService,
 } from '@common/index';
 
 import { AuthModule } from './auth/auth.module';
@@ -47,7 +48,7 @@ class AuthenticatedDataSource extends RemoteGraphQLDataSource {
   ],
   exports: [GATEWAY_BUILD_SERVICE],
 })
-class BuildServiceModule { }
+class BuildServiceModule {}
 
 @RubixModule({
   imports: [
@@ -87,4 +88,4 @@ class BuildServiceModule { }
     }),
   ],
 })
-export class ModuleV1 { }
+export class ModuleV1 {}
