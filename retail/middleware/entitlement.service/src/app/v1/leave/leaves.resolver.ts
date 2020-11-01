@@ -17,8 +17,8 @@ import {ICurrentUser} from '@common/interfaces';
 import {LeaveNotFoundException} from '@app/v1/leave/exceptions';
 import {LeaveTypeNotFoundException} from '@app/v1/leave_type/exceptions';
 import { UserNotFoundException } from "../users/exceptions";
-import {PaginationParams, SortingParam} from "@common/classes";
-import {LeavesFilterParams} from "@app/v1/leave/classes";
+import {PaginationParams, SortingParam} from "@common/dtos";
+import {LeavesFilterParams} from "@app/v1/leave/dtos";
 
 @Resolver(Leave)
 export class LeavesResolver {

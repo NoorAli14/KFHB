@@ -2,9 +2,9 @@ import { Injectable } from "@nestjs/common";
 
 import { BaseRepository } from "./base.repository";
 import { TABLE } from "@common/constants";
-import {PaginationParams, SortingParam} from "@common/classes";
+import {PaginationParams, SortingParam} from "@common/dtos";
 import {QueryBuilder} from "knex";
-import {HolidaysFilterParams} from "@app/v1/holiday/classes";
+import {HolidaysFilterParams} from "@app/v1/holiday/dtos";
 
 @Injectable()
 export class HolidayRepository extends BaseRepository {
@@ -23,7 +23,6 @@ export class HolidayRepository extends BaseRepository {
   }
 
   getFilteredQuery(query: QueryBuilder, filteringParams: HolidaysFilterParams): QueryBuilder {
-    if(filteringParams.description) query = query.where('description', 'like', `%${filteringParams.description}%`);
     if(filteringParams.status) query = query.where('status','=', filteringParams.status);
     if(filteringParams.holiday_date) query = query.where('holiday_date','=', filteringParams.holiday_date);
     if(filteringParams.created_on)

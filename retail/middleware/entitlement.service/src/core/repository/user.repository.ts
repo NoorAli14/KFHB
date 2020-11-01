@@ -5,8 +5,8 @@ import { STATUS, TABLE } from "@common/constants";
 import { IdsInput } from "@common/inputs/ids.input";
 import { User } from "@app/v1/users/user.model";
 import {QueryBuilder} from "knex";
-import {UsersFilterParams} from "@app/v1/users/classes";
-import {PaginationParams, SortingParam} from "@common/classes";
+import {UsersFilterParams} from "@app/v1/users/dtos";
+import {PaginationParams, SortingParam} from "@common/dtos";
 
 @Injectable()
 export class UserRepository extends BaseRepository {

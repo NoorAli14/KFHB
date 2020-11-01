@@ -1,22 +1,37 @@
 import {Field, InputType} from "@nestjs/graphql";
-import {IsIn, IsISO8601, IsOptional, IsString, MaxLength} from "class-validator";
+import {IsIn, IsISO8601, IsOptional, IsString, IsUUID, MaxLength} from "class-validator";
 import {NUMBERS, STATUS} from "@common/constants";
-import {CreatedOnParams} from "@common/classes";
+import {CreatedOnParams} from "@common/dtos";
 
 @InputType()
-export class HolidaysFilterParams {
+export class LeavesFilterParams {
+  @Field({ nullable: true })
+  @IsString()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  @IsOptional()
+  @IsUUID()
+  user_id: string;
+
+  @Field({ nullable: true })
+  @IsString()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  @IsOptional()
+  @IsUUID()
+  leave_type_id: string;
+
   @Field({ nullable: true })
   @IsString()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsOptional()
   @IsISO8601({strict: true})
-  holiday_date: string;
+  start_date: string;
 
   @Field({ nullable: true })
   @IsString()
-  @IsOptional()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  description: string;
+  @IsOptional()
+  @IsISO8601({strict: true})
+  end_date: string;
 
   @Field({nullable:true})
   @IsString()

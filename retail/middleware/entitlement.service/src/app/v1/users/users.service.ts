@@ -14,8 +14,8 @@ import { CheckAvailabilityInput } from '@app/v1/users/user.dto';
 import {User, UsersWithPagination} from '@app/v1/users/user.model';
 import { PasswordMismatchException } from "./exceptions/password-mismatch.exception";
 import { UpdatePasswordInput } from "./user.dto";
-import {PaginationParams, SortingParam} from "@common/classes";
-import {UsersFilterParams} from "@app/v1/users/classes";
+import {PaginationParams, SortingParam} from "@common/dtos";
+import {UsersFilterParams} from "@app/v1/users/dtos";
 import {CreatedOnStartShouldBeLessThanEndException} from "@common/exceptions";
 
 @Injectable()

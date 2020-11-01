@@ -93,7 +93,6 @@ input HolidayInput {
 
 input HolidaysFilterParams {
   holiday_date: String
-  description: String
   status: String
   created_on: CreatedOnParams
 }
@@ -324,7 +323,6 @@ input RoleInput {
 
 input RolesFilterParams {
   name: String
-  description: String
   status: String
   created_on: CreatedOnParams
 }

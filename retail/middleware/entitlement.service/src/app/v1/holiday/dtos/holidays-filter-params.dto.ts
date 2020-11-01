@@ -1,21 +1,16 @@
 import {Field, InputType} from "@nestjs/graphql";
-import {IsIn, IsOptional, IsString, MaxLength} from "class-validator";
+import {IsIn, IsISO8601, IsOptional, IsString, MaxLength} from "class-validator";
 import {NUMBERS, STATUS} from "@common/constants";
-import {CreatedOnParams} from "@common/classes";
+import {CreatedOnParams} from "@common/dtos";
 
 @InputType()
-export class RolesFilterParams {
-  @Field({nullable:true})
+export class HolidaysFilterParams {
+  @Field({ nullable: true })
   @IsString()
-  @IsOptional()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  name: string;
-
-  @Field({nullable:true})
-  @IsString()
   @IsOptional()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  description: string;
+  @IsISO8601({strict: true})
+  holiday_date: string;
 
   @Field({nullable:true})
   @IsString()

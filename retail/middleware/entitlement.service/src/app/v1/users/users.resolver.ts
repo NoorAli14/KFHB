@@ -19,8 +19,8 @@ import { CurrentUser, Fields } from "@common/decorators";
 import { ICurrentUser } from '@common/interfaces';
 import {User, UsersWithPagination} from '@app/v1/users/user.model';
 import { UserNotFoundException } from './exceptions';
-import {PaginationParams, SortingParam} from "@common/classes";
-import {UsersFilterParams} from "@app/v1/users/classes";
+import {PaginationParams, SortingParam} from "@common/dtos";
+import {UsersFilterParams} from "@app/v1/users/dtos";
 
 @Resolver(User)
 export class UsersResolver {

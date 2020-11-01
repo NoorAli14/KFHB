@@ -5,9 +5,9 @@ import {STATUS, TABLE} from '@common/constants';
 import {IdsInput} from '@common/inputs/ids.input';
 import { Role } from '@app/v1/roles/role.model';
 import { getCurrentTimeStamp } from '@common/utilities';
-import {PaginationParams, SortingParam} from "@common/classes";
+import {PaginationParams, SortingParam} from "@common/dtos";
 import {QueryBuilder} from "knex";
-import {RolesFilterParams} from "@app/v1/roles/classes";
+import {RolesFilterParams} from "@app/v1/roles/dtos";
 
 @Injectable()
 export class RoleRepository extends BaseRepository {
@@ -41,7 +41,6 @@ export class RoleRepository extends BaseRepository {
 
   getFilteredQuery(query: QueryBuilder, filteringParams: RolesFilterParams): QueryBuilder {
     if(filteringParams.name) query = query.where('name', 'like', `%${filteringParams.name}%`);
-    if(filteringParams.description) query = query.where('description', 'like', `%${filteringParams.description}%`);
     if(filteringParams.status) query = query.where('status','=', filteringParams.status);
     if(filteringParams.created_on)
       query = query.whereBetween('created_on', [filteringParams.created_on.start, filteringParams.created_on.end]);

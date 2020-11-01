@@ -1,6 +1,6 @@
 import { InjectKnex, Knex } from 'nestjs-knex';
 import {QueryBuilder} from "knex";
-import {PaginationParams, SortingParam} from "@common/classes";
+import {PaginationParams, SortingParam} from "@common/dtos";
 import {NUMBERS} from "@common/constants";
 import {ENT_PaginationModel} from "@common/models";
 export abstract class BaseRepository {

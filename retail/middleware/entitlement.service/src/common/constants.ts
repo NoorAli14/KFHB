@@ -39,7 +39,6 @@ export const STATUS = {
 export const GENDER = {
   M: 'M',
   F: 'F',
-  O: 'O',
 };
 
 export const PAGINATION_PARAMS = {

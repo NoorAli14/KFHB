@@ -6,9 +6,9 @@ import {ICurrentUser} from '@common/interfaces';
 import {HolidayInput} from '@app/v1/holiday/holiday.dto';
 import {Holiday, HolidaysWithPagination} from '@app/v1/holiday/holiday.model';
 import {STATUS} from '@common/constants';
-import {PaginationParams, SortingParam} from "@common/classes";
+import {PaginationParams, SortingParam} from "@common/dtos";
 import {CreatedOnStartShouldBeLessThanEndException} from "@common/exceptions";
-import {HolidaysFilterParams} from "@app/v1/holiday/classes";
+import {HolidaysFilterParams} from "@app/v1/holiday/dtos";
 
 @Injectable()
 export class HolidaysService {

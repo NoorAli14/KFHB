@@ -3,9 +3,9 @@ import { Injectable } from "@nestjs/common";
 import { BaseRepository } from "./base.repository";
 import { TABLE } from "@common/constants";
 import {Leave} from '@app/v1/leave/leave.model';
-import {PaginationParams, SortingParam} from "@common/classes";
+import {PaginationParams, SortingParam} from "@common/dtos";
 import {QueryBuilder} from "knex";
-import {LeavesFilterParams} from "@app/v1/leave/classes";
+import {LeavesFilterParams} from "@app/v1/leave/dtos";
 
 @Injectable()
 export class LeaveRepository extends BaseRepository {
