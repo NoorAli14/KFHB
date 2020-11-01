@@ -35,12 +35,14 @@ export class LeaveRepository extends BaseRepository {
              sortingParams: SortingParam,
              condition: Record<string, any>,
              output: string[]): Promise<any> {
-    const countQuery: QueryBuilder = this.getFilteredQuery(this.connection(this.tableName).where(condition), filteringParams);
-    const dataQuery: QueryBuilder = this.getFilteredQuery(this.connection(this.tableName).where(condition), filteringParams);
-    return super.listWithPagination(countQuery, dataQuery, paginationParams, sortingParams, output)
+    let dataQuery: QueryBuilder = this.getQuery(condition, filteringParams);
+    const countQuery: QueryBuilder = this.getQuery(condition, filteringParams);
+    dataQuery = dataQuery.orderBy(sortingParams?.sort_by || "created_on", sortingParams?.sort_order || "desc");
+    return super.paginate(dataQuery, countQuery, paginationParams.page, paginationParams.limit, output)
   }
 
-  getFilteredQuery(query: QueryBuilder, filteringParams: LeavesFilterParams): QueryBuilder {
+  getQuery(condition: Record<string, any>, filteringParams: LeavesFilterParams): QueryBuilder {
+    let query: QueryBuilder = this._connection(this._tableName).where(condition);
     if(filteringParams.user_id) query = query.where('user_id', 'like', `%${filteringParams.user_id}%`);
     if(filteringParams.leave_type_id) query = query.where('leave_type_id', 'like', `%${filteringParams.leave_type_id}%`);
     if(filteringParams.status) query = query.where('status','=', filteringParams.status);
