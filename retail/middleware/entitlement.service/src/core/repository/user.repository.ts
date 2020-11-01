@@ -5,8 +5,8 @@ import { STATUS, TABLE } from "@common/constants";
 import { IdsInput } from "@common/inputs/ids.input";
 import { User } from "@app/v1/users/user.model";
 import {QueryBuilder} from "knex";
-import {UsersFilterParams} from "@app/v1/users/classes";
-import {PaginationParams, SortingParam} from "@common/classes";
+import {UsersFilterParams} from "@app/v1/users/dtos";
+import {PaginationParams, SortingParam} from "@common/dtos";
 
 @Injectable()
 export class UserRepository extends BaseRepository {
@@ -44,21 +44,23 @@ export class UserRepository extends BaseRepository {
              sortingParams: SortingParam,
              condition: Record<string, any>,
              output: string[]): Promise<any> {
-    const countQuery: QueryBuilder = this.getFilteredQuery(this.connection(this.tableName).where(condition), filteringParams);
-    const dataQuery: QueryBuilder = this.getFilteredQuery(this.connection(this.tableName).where(condition), filteringParams);
-    return super.listWithPagination(countQuery, dataQuery, paginationParams, sortingParams, output)
+    let dataQuery: QueryBuilder = this.getQuery(condition, filteringParams);
+    const countQuery: QueryBuilder = this.getQuery(condition, filteringParams);
+    dataQuery = dataQuery.orderBy(sortingParams?.sort_by || "created_on", sortingParams?.sort_order || "desc");
+    return super.paginate(dataQuery, countQuery, paginationParams?.page, paginationParams?.limit, output)
   }
 
-  getFilteredQuery(query: QueryBuilder, filteringParams: UsersFilterParams): QueryBuilder {
-    if(filteringParams.nationality_id) query = query.where('nationality_id', 'like', `%${filteringParams.nationality_id}%`);
-    if(filteringParams.gender) query = query.where('gender', 'like', `%${filteringParams.gender}%`);
-    if(filteringParams.first_name) query = query.where('first_name', 'like', `%${filteringParams.first_name}%`);
-    if(filteringParams.last_name) query = query.where('last_name', 'like', `%${filteringParams.last_name}%`);
-    if(filteringParams.status) query = query.where('status','=', filteringParams.status);
-    if(filteringParams.contact_no) query = query.where('contact_no', 'like', `%${filteringParams.contact_no}%`);
-    if(filteringParams.email) query = query.where('email', 'like', `%${filteringParams.email}%`);
-    if(filteringParams.created_on)
-      query = query.whereBetween('created_on', [filteringParams.created_on.start, filteringParams.created_on.end]);
+  getQuery(condition: Record<string, any>, filteringParams: UsersFilterParams): QueryBuilder {
+    let query: QueryBuilder = this._connection(this._tableName).where(condition);
+    if(filteringParams?.nationality_id) query = query.where('nationality_id', 'like', `%${filteringParams.nationality_id}%`);
+    if(filteringParams?.gender) query = query.where('gender', 'like', `%${filteringParams.gender}%`);
+    if(filteringParams?.first_name) query = query.where('first_name', 'like', `%${filteringParams.first_name}%`);
+    if(filteringParams?.last_name) query = query.where('last_name', 'like', `%${filteringParams.last_name}%`);
+    if(filteringParams?.status) query = query.where('status','=', filteringParams.status);
+    if(filteringParams?.contact_no) query = query.where('contact_no', 'like', `%${filteringParams.contact_no}%`);
+    if(filteringParams?.email) query = query.where('email', 'like', `%${filteringParams.email}%`);
+    if(filteringParams?.created_on)
+      query = query.whereBetween('created_on', [filteringParams.created_on?.start, filteringParams.created_on?.end]);
     return query;
   }
 

@@ -17,16 +17,6 @@ export class HolidayFilterDto {
     holiday_date: string;
 
     @ApiProperty({
-        title: 'Description',
-        description: 'Description of the Holiday',
-        required: false,
-    })
-    @IsOptional()
-    @IsString()
-    @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-    description: string;
-
-    @ApiProperty({
         enum: STATUSES,
         example: STATUSES[0],
         description: 'Status of the Holiday',

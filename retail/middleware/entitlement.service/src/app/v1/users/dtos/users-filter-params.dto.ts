@@ -1,39 +1,21 @@
 import {Field, InputType} from "@nestjs/graphql";
-import {IsIn, IsISO8601, IsOptional, IsString, MaxLength} from "class-validator";
-import {NUMBERS, STATUS} from "@rubix/common";
+import {IsIn, IsOptional, IsString, MaxLength} from "class-validator";
+import {GENDER, NUMBERS, STATUS} from "@common/constants";
+import {CreatedOnParams} from "@common/dtos";
 
 @InputType()
-export class CreatedOnParams {
-  @Field()
-  @IsString()
-  @IsISO8601({strict: true})
-  start: string;
-
-  @Field()
-  @IsString()
-  @IsISO8601({strict: true})
-  end: string;
-}
-
-@InputType()
-export class CustomersFilterParams {
+export class UsersFilterParams {
   @Field({nullable:true})
   @IsString()
   @IsOptional()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  national_id_no: string;
+  nationality_id: string;
 
   @Field({nullable:true})
   @IsString()
   @IsOptional()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  @IsIn(Object.keys(GENDER))
   gender: string;
-
-  @Field({nullable:true})
-  @IsString()
-  @IsOptional()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  nationality: string;
 
   @Field({nullable:true})
   @IsString()
@@ -50,7 +32,6 @@ export class CustomersFilterParams {
   @Field({nullable:true})
   @IsString()
   @IsOptional()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsIn(Object.keys(STATUS))
   status: string;
 

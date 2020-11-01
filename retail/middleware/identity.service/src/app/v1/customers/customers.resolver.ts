@@ -21,8 +21,8 @@ import {Customer, CustomerWithPagination} from './customer.model';
 import { CustomersService } from './customers.service';
 import {NewCustomerInput, UpdateCustomerInput} from './customer.dto';
 import {CustomerNotFoundException} from "@app/v1/customers/exceptions";
-import {PaginationParams, SortingParam} from "@common/classes";
-import {CustomersFilterParams} from "@app/v1/customers/classes";
+import {PaginationParams, SortingParam} from "@common/dtos";
+import {CustomersFilterParams} from "@app/v1/customers/dtos";
 
 @Resolver(Customer)
 export class CustomersResolver {

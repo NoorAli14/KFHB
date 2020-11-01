@@ -7,9 +7,9 @@ import { ICurrentUser } from '@common/interfaces';
 import {Role, RolesWithPagination} from './role.model';
 import { BadRequestException, RoleAlreadyExistsException } from './exceptions';
 import { getCurrentTimeStamp } from '@common/utilities';
-import {PaginationParams, SortingParam} from "@common/classes";
+import {PaginationParams, SortingParam} from "@common/dtos";
 import {CreatedOnStartShouldBeLessThanEndException} from "@common/exceptions";
-import {RolesFilterParams} from "@app/v1/roles/classes";
+import {RolesFilterParams} from "@app/v1/roles/dtos";
 
 @Injectable()
 export class RoleService {

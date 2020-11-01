@@ -9,7 +9,6 @@ import { NUMBERS, STATUS } from '@common/constants';
 export class Role {
   @Field(() => ID)
   @IsString()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsUUID()
   id?: string;
 
@@ -26,14 +25,12 @@ export class Role {
 
   @Field()
   @IsString()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsUUID()
   tenant_id?: string;
 
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsIn(Object.keys(STATUS))
   status?: string;
 
@@ -43,7 +40,6 @@ export class Role {
 
   @Field()
   @IsString()
-  @IsUUID()
   created_by?: string;
 
   @Field()
@@ -52,7 +48,6 @@ export class Role {
 
   @Field()
   @IsString()
-  @IsUUID()
   updated_by?: string;
 
   @Field({ nullable: true })
@@ -63,7 +58,6 @@ export class Role {
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
-  @IsUUID()
   deleted_by?: string;
 
   @Field(() => [Module], { nullable: true })

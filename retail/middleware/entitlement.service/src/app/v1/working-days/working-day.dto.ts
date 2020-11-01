@@ -9,7 +9,6 @@ export class WorkingDayInput {
   @IsString()
   @IsOptional()
   @IsIn(Object.keys(WEEK_DAYS))
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   week_day: string;
 
   @Field({ nullable: true })
@@ -42,7 +41,6 @@ export class WorkingDayInput {
   @IsString()
   @IsOptional()
   @IsIn(Object.keys(STATUS))
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   status: string;
 }
 
@@ -50,7 +48,6 @@ export class WorkingDayInput {
 export class WorkingDayCreateInput extends WorkingDayInput {
   @Field()
   @IsString()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsIn(Object.keys(WEEK_DAYS))
   week_day: string;
 

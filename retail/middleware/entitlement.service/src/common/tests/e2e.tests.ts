@@ -1,5 +1,5 @@
 import {KeyValInput} from '@common/inputs/key-val.input';
-import {PaginationParams, SortingParam} from "@common/classes";
+import {PaginationParams, SortingParam} from "@common/dtos";
 
 export function createPayloadObject(input: { [key: string]: any }): string {
   return JSON.stringify(input).replace(/\"([^(\")"]+)\":/g, '$1:');

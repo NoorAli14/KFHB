@@ -8,7 +8,6 @@ import {NUMBERS, STATUS} from "@common/constants";
 export class Holiday {
   @Field(() => ID)
   @IsString()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsUUID()
   id: string;
 
@@ -32,13 +31,11 @@ export class Holiday {
   @IsString()
   @IsOptional()
   @IsUUID()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   tenant_id: string;
 
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsIn(Object.keys(STATUS))
   status: string;
 
@@ -48,7 +45,6 @@ export class Holiday {
 
   @Field()
   @IsString()
-  @IsUUID()
   created_by: string;
 
   @Field()
@@ -57,7 +53,6 @@ export class Holiday {
 
   @Field()
   @IsString()
-  @IsUUID()
   updated_by: string;
 
   @Field({ nullable: true })
@@ -68,7 +63,6 @@ export class Holiday {
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
-  @IsUUID()
   deleted_by: string;
 }
 

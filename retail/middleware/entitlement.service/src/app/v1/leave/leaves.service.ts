@@ -6,9 +6,9 @@ import {ICurrentUser} from '@common/interfaces';
 import {LeaveInput} from '@app/v1/leave/leave.dto';
 import {Leave, LeavesWithPagination} from '@app/v1/leave/leave.model';
 import {LeaveNotFoundException, LeaveStartDateLessThanEndDateException} from '@app/v1/leave/exceptions';
-import {PaginationParams, SortingParam} from "@common/classes";
+import {PaginationParams, SortingParam} from "@common/dtos";
 import {CreatedOnStartShouldBeLessThanEndException} from "@common/exceptions";
-import {LeavesFilterParams} from "@app/v1/leave/classes";
+import {LeavesFilterParams} from "@app/v1/leave/dtos";
 
 @Injectable()
 export class LeavesService {

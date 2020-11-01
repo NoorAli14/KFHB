@@ -18,8 +18,8 @@ import { STATUS } from '@common/constants';
 import { CurrentUser, Fields } from '@common/decorators';
 import { ICurrentUser } from '@common/interfaces';
 import { RoleNotFoundException } from './exceptions';
-import {PaginationParams, SortingParam} from "@common/classes";
-import {RolesFilterParams} from "@app/v1/roles/classes";
+import {PaginationParams, SortingParam} from "@common/dtos";
+import {RolesFilterParams} from "@app/v1/roles/dtos";
 
 @Resolver(Role)
 export class RolesResolver {

@@ -12,7 +12,6 @@ import {NUMBERS, STATUS} from "@common/constants";
 export class HolidayInput {
   @Field({ nullable: true })
   @IsString()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsOptional()
   @IsISO8601({strict: true})
   holiday_date: string;
@@ -32,7 +31,6 @@ export class HolidayInput {
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsIn(Object.keys(STATUS))
   status: string;
 }
@@ -41,7 +39,6 @@ export class HolidayInput {
 export class HolidayCreateInput extends HolidayInput{
   @Field()
   @IsString()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsISO8601({strict: true})
   holiday_date: string;
 }

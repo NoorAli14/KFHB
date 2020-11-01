@@ -7,8 +7,8 @@ import {HolidayCreateInput, HolidayInput} from '@app/v1/holiday/holiday.dto';
 import {CurrentUser, Fields} from '@common/decorators';
 import {ICurrentUser} from '@common/interfaces';
 import {HolidayNotFoundException} from '@app/v1/holiday/exceptions';
-import {PaginationParams, SortingParam} from "@common/classes";
-import {HolidaysFilterParams} from "@app/v1/holiday/classes";
+import {PaginationParams, SortingParam} from "@common/dtos";
+import {HolidaysFilterParams} from "@app/v1/holiday/dtos";
 
 @Resolver(Holiday)
 export class HolidaysResolver {

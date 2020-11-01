@@ -1,21 +1,27 @@
 import {Field, InputType} from "@nestjs/graphql";
 import {IsIn, IsOptional, IsString, MaxLength} from "class-validator";
-import {NUMBERS, STATUS} from "@common/constants";
-import {CreatedOnParams} from "@common/classes";
+import {NUMBERS, STATUS, GENDER} from "@rubix/common";
+import {CreatedOnParams} from "@common/dtos";
 
 @InputType()
-export class UsersFilterParams {
+export class CustomersFilterParams {
   @Field({nullable:true})
   @IsString()
   @IsOptional()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  nationality_id: string;
+  national_id_no: string;
+
+  @Field({nullable:true})
+  @IsString()
+  @IsOptional()
+  @IsIn(Object.values(GENDER))
+  gender: string;
 
   @Field({nullable:true})
   @IsString()
   @IsOptional()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  gender: string;
+  nationality: string;
 
   @Field({nullable:true})
   @IsString()
@@ -32,7 +38,6 @@ export class UsersFilterParams {
   @Field({nullable:true})
   @IsString()
   @IsOptional()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsIn(Object.keys(STATUS))
   status: string;
 

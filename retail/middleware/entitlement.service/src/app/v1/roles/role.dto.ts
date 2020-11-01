@@ -21,7 +21,6 @@ export class RoleInput {
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsIn(Object.values(STATUS))
   status?: string;
 

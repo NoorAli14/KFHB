@@ -16,16 +16,6 @@ export class RoleFilterDto {
     name: string;
 
     @ApiProperty({
-        title: 'Description',
-        description: 'Description about the role',
-        required: false,
-    })
-    @IsOptional()
-    @IsString()
-    @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-    description: string;
-
-    @ApiProperty({
         enum: STATUSES,
         example: STATUSES[0],
         description: 'Status of the role',
