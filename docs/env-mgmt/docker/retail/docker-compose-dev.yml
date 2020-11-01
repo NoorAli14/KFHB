@@ -109,6 +109,8 @@ services:
       - ENV_RBX_BASIC_AUTH_KEY=$ENV_RBX_BASIC_AUTH_KEY
       - ENV_RBX_BASIC_AUTH_SECRET=$ENV_RBX_BASIC_AUTH_SECRET
     restart: always
+    volumes:
+      - ${ENV_RBX_VOLUME_PATH}/videocall.service/uploads:/home/aiondigital/rubix/uploads/
     networks:
       - core_service_network
 
@@ -143,7 +145,7 @@ services:
     restart: always
     networks:
       - core_service_network
-  
+
   #=================================================================
   # Video Call Service
   #=================================================================
@@ -169,6 +171,8 @@ services:
       - ENV_RBX_IDENTITY_SERVER=$ENV_RBX_IDENTITY_SERVER
       - ENV_RBX_REDIS_URL=$ENV_RBX_REDIS_URL
     restart: always
+    volumes:
+      - ${ENV_RBX_VOLUME_PATH}/videocall.service/uploads:/home/aiondigital/rubix/uploads/
     networks:
       - core_service_network
   #=================================================================
@@ -252,6 +256,11 @@ services:
       - ENV_RBX_OTP_LENGTH=$ENV_RBX_OTP_LENGTH
       - ENV_RBX_OTP_PATTERN=$ENV_RBX_OTP_PATTERN
       - ENV_RBX_OTP_STATUS=$ENV_RBX_OTP_STATUS
+      - ENV_RBX_OTP_BY_API=$ENV_RBX_OTP_BY_API
+      - ENV_RBX_OTP_DURATION=$ENV_RBX_OTP_DURATION
+      - ENV_RBX_SMS_API_URL=$ENV_RBX_SMS_API_URL
+      - ENV_RBX_SMS_SENDER=$ENV_RBX_SMS_SENDER
+      - ENV_RBX_OTP_GENERATOR_API=$ENV_RBX_OTP_GENERATOR_API
     restart: always
     networks:
       - core_service_network

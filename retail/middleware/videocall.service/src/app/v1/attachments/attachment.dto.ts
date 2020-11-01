@@ -1,7 +1,12 @@
-import { IsBase64, IsNotEmpty, IsString, IsUUID } from 'class-validator';
+import {
+  IsBase64,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from 'class-validator';
 
 import { Field, InputType } from '@nestjs/graphql';
-import { GraphQLUpload } from 'apollo-server-express';
 
 @InputType()
 export class NewAttachmentInput {
@@ -12,11 +17,15 @@ export class NewAttachmentInput {
   @Field()
   @IsNotEmpty()
   @IsString()
-  attachment_id: string;
+  attachment_type: string;
 
   @Field()
   @IsNotEmpty()
   @IsString()
-  @IsBase64()
   file_content: string;
+
+  @IsOptional()
+  @IsString()
+  @Field({ nullable: true })
+  type?: string;
 }

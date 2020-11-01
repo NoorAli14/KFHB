@@ -3,64 +3,90 @@ import {
   UseGuards,
   ParseUUIDPipe,
   Param,
-  Header,
   Get,
-  Req, Query, Res
+  Post,
+  Body,
+  Res,
 } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
   ApiBearerAuth,
   ApiOkResponse,
+  ApiCreatedResponse,
+  ApiBadRequestResponse,
 } from '@nestjs/swagger';
-import { Request, Response } from 'express';
-import { AuthGuard, CurrentUser } from '@common/index';
+import { Attachment } from './attachment.entity';
+import { CreateAttachmentDTO } from './attachment.dto';
+// import { AuthGuard, CurrentUser } from '@common/index';
 import { AttachmentsService } from './attachments.service';
-import { Customer as User } from '../customers/customer.entity';
+import { AttachmentUploadingInput } from './attachment.interface';
+import { readFileStream } from '@root/src/common/utilities';
 
 @ApiTags('Attachment')
-@Controller('attachments')
 @ApiBearerAuth()
-@UseGuards(AuthGuard)
+// @UseGuards(AuthGuard)
+@Controller()
 export class AttachmentsController {
-  constructor(private readonly documentService: AttachmentsService) { }
+  constructor(private readonly attachmentService: AttachmentsService) { }
 
-  @Get(':id/preview')
+  @Post('customers/:customer_id/attachments')
   @ApiOperation({
-    summary: 'Preview a identity image',
+    summary: 'Upload a customer attachment',
     description:
-      'A successful request returns the HTTP 20O OK status code and a response return a multipart buffer stream.',
+      'A successful request returns the HTTP 201 CREATED status code and a JSON response body that shows attachment information.',
   })
-  @ApiOkResponse({})
-  @Header('Content-Type', 'image/jpeg')
-  async preview(
-    @Param('id', ParseUUIDPipe) id: string,
-    @CurrentUser() currentUser: User,
-    @Res() res: Response,
-    @Query('extracted-image') extracted_image?: boolean,
-  ): Promise<any> {
-    console.log(extracted_image);
-    const params: any = {
-      attachment_id: id,
-      customer_id: currentUser.id,
-      extracted_image: extracted_image || false
+  @ApiCreatedResponse({
+    type: Attachment,
+    description: 'Attachment has been successfully uploaded.',
+  })
+  @ApiBadRequestResponse({
+    type: Error,
+    description: 'Input Validation failed.',
+  })
+  async create(
+    @Body() input: CreateAttachmentDTO,
+    @Param('customer_id', ParseUUIDPipe) customer_id: string,
+  ): Promise<Attachment> {
+    const params: AttachmentUploadingInput = {
+      file_content: input.file_content,
+      attachment_type: input.attachment_type,
+      customer_id,
     };
-    const result = await this.documentService.preview(params);
-    const img: any = Buffer.from(result.image, 'base64');
-    //res.end(img, 'binary');
-    // request.res.setHeader(
-    //   'Content-disposition',
-    //   `inline; filename=${currentUser.id}.jpg`,
-    // );
-    // request.res.setHeader('Content-type', 'image/jpeg');
-    // request.res.set('Content-Type', 'image/jpeg');
+    return this.attachmentService.upload(params);
+  }
 
-    res.writeHead(200, {
-      'Content-Type': 'image/png',
-      'Content-Length': img.length
-    });
+  @Get('customers/:customer_id/attachments')
+  @ApiOperation({
+    summary: 'List of all the attachment by customer ID',
+    description:
+      'A successful request returns the HTTP 200 OK status code and a JSON response body that shows a attachments information.',
+  })
+  @ApiOkResponse({
+    type: [Attachment],
+    description: 'List of all the attachment by customer ID',
+  })
+  async list(
+    @Param('customer_id', ParseUUIDPipe) customer_id: string,
+  ): Promise<Attachment[]> {
+    return this.attachmentService.listByCustomerID(customer_id);
+  }
 
-    res.end(img);
-    return res;
+  @Get('customers/:customer_id/attachments/:id')
+  @ApiOperation({
+    summary: 'Fetch the attachment for customer',
+    description:
+      'A successful request returns the HTTP 200 OK status code and a steam to preview attachment.',
+  })
+  @ApiOkResponse({
+    description: 'Fetch the attachment for the customer',
+  })
+  async find(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Param('customer_id', ParseUUIDPipe) customer_id: string,
+    @Res() res: any,
+  ): Promise<any> {
+    const response = await this.attachmentService.find(id, customer_id);
+    return readFileStream(response.file_path, res);
   }
 }

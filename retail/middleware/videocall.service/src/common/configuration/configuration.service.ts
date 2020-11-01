@@ -171,8 +171,8 @@ export class ConfigurationService {
     return this.IS_DEVELOPMENT
       ? true
       : isTruthy(
-          this.get('ENV_RBX_SWAGGER_ENABLED', DEFAULT_ENV.DATABASE.IS_DEBUG),
-        );
+        this.get('ENV_RBX_SWAGGER_ENABLED', DEFAULT_ENV.DATABASE.IS_DEBUG),
+      );
   }
   get APPLICATION_HOST(): string {
     return this.IS_DEVELOPMENT

@@ -79,7 +79,7 @@ describe('Video Call Module (e2e)', () => {
     return request(app.getHttpServer())
       .post('/graphql')
       .send({
-        query: `{findAppointment(appointment_id: "1b9ed674-7afe-4664-ab8d-50f9de74062a"){${APPOINTMENT_QUERY}}}`,
+        query: `{findAppointment(appointment_id: "b64513c7-1ca5-44b8-aeea-6055eb997c0b"){${APPOINTMENT_QUERY}}}`,
       })
       .set(headers)
       .expect(async ({ body }) => {
@@ -98,8 +98,10 @@ describe('Video Call Module (e2e)', () => {
   });
 
   it('should create and return appoinment object', done => {
+    let date = new Date();
+    date.setMinutes(date.getMinutes() + 30);
     appointment = {
-      call_time: new Date(),
+      call_time: date,
       user_id: '828605C2-7E50-40BC-AA88-C064CE63C155',
     } as NewAppointmentInput;
 
@@ -136,26 +138,19 @@ describe('Video Call Module (e2e)', () => {
         ),
       })
       .set(headers)
-      .expect(async ({ body }) => {
+      .expect(({ body }) => {
         const data = body?.data?.addAppointment;
         const appointmentJson: string = JSON.stringify(data);
-        const transformedResponse: Appointment = (await transformAndValidate(
+        const transformedResponse: Appointment = transformAndValidateSync(
           Appointment,
           appointmentJson,
-        )) as Appointment;
+        ) as Appointment;
         expect(transformedResponse).toBeDefined();
         expect(transformedResponse).toBeInstanceOf(Object);
       })
       .expect(200)
       .end(done);
   });
-
-  const createAppointmentInput: NewAppointmentInput = {
-    call_time: new Date('2020-10-30 12:39:10'),
-    gender: 'M',
-    status: 'SCHEDULED',
-    user_id: uuidV4(),
-  };
 
   it(`should return error, appointment not found `, done => {
     return request(app.getHttpServer())

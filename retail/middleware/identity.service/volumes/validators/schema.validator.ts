@@ -1,4 +1,4 @@
-exports.SCHEMA = [
+const schema = [
   {
     name: "Document Class Code",
     type: "string",
@@ -239,3 +239,12 @@ exports.SCHEMA = [
     groups: ["NATIONAL_ID_BACK_SIDE"],
   },
 ];
+
+export const SCHEMA = (group, processedData): any => {
+  console.log(`Start Validating -> #${group}`);
+  console.log(`Processed Data is -> ${JSON.stringify(processedData, null, 2)}`);
+  if (group === 'NATIONAL_ID_BACK_SIDE' && processedData.nationality === 'Bahraini') {
+    //write your logic here. ....
+  }
+  return schema;
+}

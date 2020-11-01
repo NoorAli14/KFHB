@@ -1,28 +1,60 @@
 import { InjectKnex, Knex } from 'nestjs-knex';
+import { NUMBERS } from "@rubix/common";
+import { IDT_PaginationModel } from "@common/models";
+import {PaginationParams} from "@common/classes";
+import { QueryBuilder } from "knex";
 
 export abstract class BaseRepository {
   @InjectKnex() private readonly _connection: Knex;
   private _tableName: string;
+
+  async listWithPagination(
+      query_count: QueryBuilder,
+      query_data: QueryBuilder,
+      paginationParams: PaginationParams,
+      output: string[]): Promise<any> {
+    const limitPerPage = (paginationParams?.limit || NUMBERS.DEFAULT_PAGE_SIZE) > NUMBERS.MAX_PAGE_SIZE ?
+      NUMBERS.MAX_PAGE_SIZE :
+      (paginationParams?.limit || NUMBERS.DEFAULT_PAGE_SIZE);
+    const page = Math.max(paginationParams?.page || 1, 1);
+    const offset = (page - 1) * limitPerPage;
+    const total = await query_count.count('id as count').first();
+    const rows = await query_data.offset(offset).limit(limitPerPage).select(output);
+    const count = parseInt(String(total.count), 10);
+    const pagination: IDT_PaginationModel = {
+      total: count,
+      pages: Math.ceil(count / limitPerPage),
+      pageSize: limitPerPage,
+      page: page,
+    };
+    return { pagination: pagination, data: rows };
+  }
+
   constructor(tableName: string) {
     this._tableName = tableName;
   }
+
   get tableName(): string {
     return this._tableName;
   }
+
   get connection(): Knex {
     return this._connection;
   }
+
   async findAll(columns: string[], limit?: number): Promise<any> {
-    const qb = this._connection(this._tableName).select(columns);
+    let qb = this._connection(this._tableName).select(columns);
     if (limit) {
-      qb.limit(limit);
+      qb = qb.limit(limit);
     }
-    return qb.limit(10);
+    return qb;
   }
+
   async create(newObj: { [key: string]: any }, keys: string[], trx?: any) {
     const _knex: any = trx || this.connection;
-    return _knex(this._tableName).insert(newObj, keys);
+    return _knex(this._tableName).insert(newObj).returning(keys);
   }
+
   async update(
     condition: { [key: string]: any },
     newObj: { [key: string]: any },
@@ -34,14 +66,15 @@ export abstract class BaseRepository {
       .where(condition)
       .update(
         { ...newObj, ...{ updated_on: this.connection.fn.now() } },
-        columns,
-      );
+      ).returning(columns);
   }
+
   async delete(condition: { [key: string]: any }): Promise<any> {
     return this.connection(this.tableName)
       .where(condition)
       .del();
   }
+
   async findBy(
     condition: { [key: string]: any },
     columns?: string[],
@@ -50,6 +83,7 @@ export abstract class BaseRepository {
       .select(columns)
       .where(condition);
   }
+
   async findOne(
     condition: { [key: string]: any },
     columns?: string[],

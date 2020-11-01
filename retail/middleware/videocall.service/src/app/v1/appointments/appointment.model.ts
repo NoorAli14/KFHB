@@ -30,7 +30,7 @@ export class UserGQL {
   device_id?: string;
 
   @Field()
-  firebase_token?: string;
+  fcm_token_id?: string;
 
   @Field()
   email?: string;

@@ -1,14 +1,16 @@
+import * as moment from 'moment';
 import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { NewAppointmentInput } from './appointment.dto';
 import { AppointmentRepository } from '@core/repository';
 
 import { ConfigurationService } from '@common/configuration/configuration.service';
-import { Appointment } from './appointment.model';
-import * as moment from 'moment';
-import { APPOINTMENT_STATUS } from '@common/constants';
+import { Appointment, UserGQL } from './appointment.model';
+import { APPOINTMENT_STATUS, USER_QUERY } from '@common/constants';
 import { GqlClientService } from '@common/libs/gqlclient/gqlclient.service';
-import { PushNotificationModel } from './push_notification.model';
+import { EmailService, PushNotificationService } from '@common/connectors';
+
+import { iPushNotification } from '@common/connectors/notification/interfaces/push_notification.interface';
 import { toGraphQL } from '@common/utilities';
 import { ICurrentUser } from '@common/interfaces';
 import {
@@ -16,7 +18,6 @@ import {
   AgentNotAvailableException,
   AppointmentNotFoundException,
   MaxAppointLimitReachException,
-  SentNotificationFailedException,
   AppointmentAlreadyExistException,
 } from './exceptions';
 
@@ -26,7 +27,9 @@ export class AppointmentsService {
     private readonly appointmentDB: AppointmentRepository,
     private readonly configService: ConfigurationService,
     private readonly gqlClient: GqlClientService,
-  ) {}
+    private readonly emailService: EmailService,
+    private readonly pushNotificationService: PushNotificationService,
+  ) { }
 
   private async throw_if_appointment_exist(
     currentUser: ICurrentUser,
@@ -106,6 +109,21 @@ export class AppointmentsService {
       },
       output,
     );
+
+    const user = await this.get_user_by_id_from_service(newAppointment.user_id);
+    /**
+     *
+     * Getting email of all available agents
+     * Calling other service to send email to available agent
+     *
+     */
+    this.emailService.send_email_to_agents(
+      available_agents.map((item: UserGQL) => item.email),
+      newAppointment.user_id,
+      `${user.first_name} ${user.last_name}`,
+      newAppointment.call_time,
+    );
+
     return response;
   }
 
@@ -191,7 +209,7 @@ export class AppointmentsService {
           appointment.status === APPOINTMENT_STATUS.SCHEDULED) &&
         diff_in_minutes >= 0 &&
         diff_in_minutes <=
-          Number(this.configService.VCALL.ENV_RBX_CRON_JOB_TIME)
+        Number(this.configService.VCALL.ENV_RBX_CRON_JOB_TIME)
       ) {
         return true;
       }
@@ -202,10 +220,10 @@ export class AppointmentsService {
       console.log('Appointment Coming At:', appointment.call_time);
 
       // Send Push Notification
-      const notification: PushNotificationModel = {
+      const notification: iPushNotification = {
         platform: appointment.user.platform,
         device_id: appointment.user.device_id,
-        token: appointment.user.firebase_token,
+        token: appointment.user.fcm_token_id,
         message_title: this.configService.VCALL
           .ENV_RBX_NOTIFICATION_MESSAGE_TITLE,
         message_body: this.configService.VCALL
@@ -213,7 +231,9 @@ export class AppointmentsService {
         image_url: this.configService.VCALL.ENV_RBX_NOTIFICATION_IMAGE_URL,
       };
 
-      const send_notification = await this.send_push_notification(notification);
+      const send_notification = await this.pushNotificationService.send_push_notification(
+        notification,
+      );
 
       // If success then
       if (send_notification) {
@@ -238,18 +258,10 @@ export class AppointmentsService {
 
   async get_user_by_id_from_service(user_id: string): Promise<any> {
     const params = `query{
-        result: findCustomerById(id: "${user_id}") {
-        id
-        email
-        contact_no
-        first_name
-        middle_name
-        last_name
-        gender
-      }
+        result: findCustomerById(id: "${user_id}") {${USER_QUERY}}
     }`;
 
-    return this.gqlClient.client('ENV_RBX_IDX_BASE_URL').send(params);
+    return this.gqlClient.client('ENV_RBX_IDENTITY_SERVER').send(params);
   }
 
   private async check_agent_availability(
@@ -258,9 +270,9 @@ export class AppointmentsService {
   ): Promise<any> {
     const query = `query{
         result: findAvailableAgents(input: ${toGraphQL({
-          call_time,
-          gender,
-        })}){
+      call_time,
+      gender,
+    })}){
         id
         email
         contact_no
@@ -270,25 +282,5 @@ export class AppointmentsService {
     }`;
 
     return this.gqlClient.client('ENV_RBX_ENTITLEMENT_SERVER').send(query);
-  }
-
-  private async send_push_notification(input: PushNotificationModel) {
-    const mutation = `mutation {
-      result: sendPushNotification(input: ${toGraphQL(input)}) {
-        id
-        platform
-        device_id
-        message_title
-        message_body
-        image_url
-        status
-        created_on
-        created_by
-      }
-    }`;
-
-    return await this.gqlClient
-      .client('ENV_RBX_NOTIFICATION_SERVER')
-      .send(mutation);
   }
 }

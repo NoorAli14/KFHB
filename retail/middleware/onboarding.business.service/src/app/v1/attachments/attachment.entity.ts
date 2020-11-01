@@ -1,30 +1,44 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { DOCUMENT_STATUSES } from '@common/index';
+import { ATTACHMENT_TYPES } from '@common/constants';
+import { IsNotEmpty, IsString, IsIn } from 'class-validator';
 
 export class Attachment {
   @ApiProperty({
-    title: 'Document ID',
+    title: 'Attachment ID',
     example: '3dfdecc1-a616-4817-a841-61d824d82a13',
     description: 'Unique Identifier',
   })
   readonly id: string;
 
   @ApiProperty({
-    title: 'Session ID',
-    example: '7315F39A-CBE5-48D0-BD8C-26E4F8B8A4D2',
-    description: 'Unique Identifier',
+    title: 'File name of the attachment',
+    example: '20201022_1603369982284_passport_id.png',
   })
-  readonly session_id: string;
+  readonly file_name: string;
 
   @ApiProperty({
-    title: 'Processed Data',
+    title: 'File size of the attachment in kb',
+    example: 4.9036458333,
   })
-  readonly processed_data: Record<string, unknown>;
+  readonly file_size: string;
+
+  readonly file_path?: string;
 
   @ApiProperty({
-    enum: DOCUMENT_STATUSES,
-    example: DOCUMENT_STATUSES[0],
-    description: 'Status of the Document.',
+    enum: Object.values(ATTACHMENT_TYPES),
+    example: Object.values(ATTACHMENT_TYPES)[0],
+    description: 'Attachment Type',
+    required: true,
+  })
+  @IsString()
+  @IsNotEmpty()
+  @IsIn(Object.values(ATTACHMENT_TYPES))
+  readonly attachment_id: string;
+
+  @ApiProperty({
+    enum: ['ACTIVE', 'INACTIVE'],
+    example: 'ACTIVE',
+    description: 'Status of the attachment.',
     required: false,
   })
   status: string;
