@@ -8,7 +8,6 @@ import {NUMBERS, STATUS} from "@common/constants";
 export class Module {
   @Field(() => ID)
   @IsString()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsUUID()
   id?: string;
 
@@ -33,7 +32,6 @@ export class Module {
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsIn(Object.keys(STATUS))
   status?: string;
 
@@ -43,7 +41,6 @@ export class Module {
 
   @Field()
   @IsString()
-  @IsUUID()
   created_by?: string;
 
   @Field(() => [Module], { nullable: true })

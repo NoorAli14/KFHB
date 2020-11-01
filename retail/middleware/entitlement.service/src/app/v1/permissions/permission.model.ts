@@ -7,7 +7,6 @@ import {NUMBERS} from "@common/constants";
 export class Permission {
   @Field(() => ID)
   @IsString()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsUUID()
   id?: string;
 
@@ -22,7 +21,6 @@ export class Permission {
 
   @Field()
   @IsString()
-  @IsUUID()
   created_by?: string;
 
   @Field({ nullable: true })

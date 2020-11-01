@@ -8,14 +8,12 @@ import {NUMBERS, STATUS, WEEK_DAYS} from "@common/constants";
 export class WorkingDay {
   @Field(() => ID )
   @IsString()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsUUID()
   id: string;
 
   @Field()
   @IsString()
   @IsIn(Object.keys(WEEK_DAYS))
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   week_day: string;
 
   @Field({ nullable: true })
@@ -48,13 +46,11 @@ export class WorkingDay {
 
   @Field()
   @IsString()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsUUID()
   tenant_id: string;
 
   @Field({ nullable: true })
   @IsString()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsOptional()
   @IsIn(Object.keys(STATUS))
   status: string;
@@ -65,7 +61,6 @@ export class WorkingDay {
 
   @Field()
   @IsString()
-  @IsUUID()
   created_by: string;
 
   @Field()
@@ -74,7 +69,6 @@ export class WorkingDay {
 
   @Field()
   @IsString()
-  @IsUUID()
   updated_by: string;
 
   @Field({ nullable: true })
@@ -85,7 +79,6 @@ export class WorkingDay {
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
-  @IsUUID()
   deleted_by: string;
 }
 

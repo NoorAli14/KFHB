@@ -14,7 +14,6 @@ export class RolesFilterParams {
   @Field({nullable:true})
   @IsString()
   @IsOptional()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsIn(Object.keys(STATUS))
   status: string;
 

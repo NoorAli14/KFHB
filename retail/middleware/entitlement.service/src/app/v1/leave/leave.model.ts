@@ -8,19 +8,16 @@ import {NUMBERS, STATUS} from "@common/constants";
 export class Leave {
   @Field(() => ID)
   @IsString()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsUUID()
   id: string;
 
   @Field()
   @IsString()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsUUID()
   user_id: string;
 
   @Field()
   @IsString()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsUUID()
   leave_type_id: string;
 
@@ -41,7 +38,6 @@ export class Leave {
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsIn(Object.keys(STATUS))
   status: string;
 
@@ -49,7 +45,6 @@ export class Leave {
   @IsString()
   @IsOptional()
   @IsUUID()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   tenant_id: string;
 
   @Field()
@@ -58,7 +53,6 @@ export class Leave {
 
   @Field()
   @IsString()
-  @IsUUID()
   created_by: string;
 
   @Field()
@@ -67,7 +61,6 @@ export class Leave {
 
   @Field()
   @IsString()
-  @IsUUID()
   updated_by: string;
 
   @Field({ nullable: true })
@@ -78,7 +71,6 @@ export class Leave {
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
-  @IsUUID()
   deleted_by: string;
 }
 
