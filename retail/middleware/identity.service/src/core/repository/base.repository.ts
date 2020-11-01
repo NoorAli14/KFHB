@@ -1,39 +1,35 @@
 import { InjectKnex, Knex } from 'nestjs-knex';
-import { NUMBERS } from "@rubix/common";
 import { IDT_PaginationModel } from "@common/models";
-import {PaginationParams, SortingParam} from "@common/dtos";
 import { QueryBuilder } from "knex";
 
 export abstract class BaseRepository {
   @InjectKnex() private readonly _connection: Knex;
   private _tableName: string;
 
-  async listWithPagination(
-      countQuery : QueryBuilder,
-      dataQuery: QueryBuilder,
-      paginationParams: PaginationParams,
-      sortingParams: SortingParam,
-      output: string[]): Promise<any> {
-    if(sortingParams?.sort_by){
-      dataQuery = dataQuery.orderBy(sortingParams.sort_by, sortingParams.sort_order);
-    } else {
-      dataQuery = dataQuery.orderBy("created_on", "desc");
-    }
-    const limitPerPage = (paginationParams?.limit || NUMBERS.DEFAULT_PAGE_SIZE) > NUMBERS.MAX_PAGE_SIZE ?
-      NUMBERS.MAX_PAGE_SIZE :
-      (paginationParams?.limit || NUMBERS.DEFAULT_PAGE_SIZE);
-    const page = Math.max(paginationParams?.page || 1, 1);
+  paginate(
+    dataQuery: QueryBuilder,
+    countQuery: QueryBuilder,
+    page_no: number | undefined,
+    limit: number | undefined,
+    output: string[]): Promise<any> {
+    const limitPerPage = pageSize(limit);
+    const page = Math.max(page_no || 1, 1);
     const offset = (page - 1) * limitPerPage;
-    const total = await countQuery.count('id as count').first();
-    const rows = await dataQuery.offset(offset).limit(limitPerPage).select(output);
-    const count = parseInt(String(total.count), 10);
-    const pagination: IDT_PaginationModel = {
-      total: count,
-      pages: Math.ceil(count / limitPerPage),
-      pageSize: limitPerPage,
-      page: page,
-    };
-    return { pagination: pagination, data: rows };
+    return Promise.all([
+      countQuery.count('id as count').first(),
+      dataQuery.offset(offset).limit(limitPerPage).select(output),
+    ])
+      .then(([total, rows]) => {
+        const count = parseInt(String(total['count']), 10);
+        const pagination: IDT_PaginationModel = {
+          total: count,
+          pages: Math.ceil(count / limitPerPage),
+          pageSize: limitPerPage,
+          page: page,
+        };
+        return { pagination: pagination, data: rows };
+      })
+
   }
 
   constructor(tableName: string) {
@@ -106,3 +102,13 @@ export abstract class BaseRepository {
     return trx;
   }
 }
+
+/**
+ * pageSize number
+ * @param pageSize
+ */
+const pageSize = (pageSize: number): number => {
+  if(!pageSize || pageSize < 1) return parseInt(process.env.ENV_RBX_PAGINATION_PAGE_SIZE) || 25;
+  if(pageSize && pageSize > 100) return 100;
+  return pageSize;
+};
