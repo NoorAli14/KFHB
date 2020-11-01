@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {CreatedOnDTO, NUMBERS, USER_STATUSES} from '@root/src/common';
-import {IsIn, IsOptional, IsString, MaxLength} from 'class-validator';
-import {Type} from "@root/node_modules/class-transformer";
+import { CreatedOnDTO, NUMBERS, USER_STATUSES } from '@root/src/common';
+import { IsIn, IsOptional, IsString, MaxLength } from 'class-validator';
+import { Type } from "class-transformer";
 
 export class UserFilterDto {
     @ApiProperty({

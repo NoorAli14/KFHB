@@ -1,8 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {CreatedOnDTO, NUMBERS, STATUSES} from '@root/src/common';
-import {IsIn, IsOptional, IsString, IsUUID, MaxLength} from 'class-validator';
-import {Type} from "@root/node_modules/class-transformer";
-import {IsISO8601} from "@root/node_modules/class-validator";
+import { CreatedOnDTO, NUMBERS, STATUSES } from '@root/src/common';
+import { IsIn, IsOptional, IsString, IsUUID, MaxLength, IsISO8601 } from 'class-validator';
+import { Type } from "class-transformer";
 
 export class LeaveFilterDto {
     @ApiProperty({
@@ -35,7 +34,7 @@ export class LeaveFilterDto {
     })
     @IsOptional()
     @IsString()
-    @IsISO8601({strict: true})
+    @IsISO8601({ strict: true })
     @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
     start_date: string;
 
@@ -47,7 +46,7 @@ export class LeaveFilterDto {
     })
     @IsOptional()
     @IsString()
-    @IsISO8601({strict: true})
+    @IsISO8601({ strict: true })
     @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
     end_date: string;
 

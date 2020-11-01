@@ -22,13 +22,13 @@ import {
   ApiBadRequestResponse,
   ApiNotFoundResponse,
 } from '@nestjs/swagger';
-import {AuthGuard, PermissionsGuard, Permissions, PaginationDTO, SortByDTO} from '@common/index';
+import { AuthGuard, PermissionsGuard, Permissions, PaginationDTO, SortByDTO } from '@common/index';
 
 import { RoleService } from './roles.service';
-import {Role, RolePaginationList} from './role.entity';
+import { Role, RolePaginationList } from './role.entity';
 import { RoleDto, UpdateRoleDto } from './role.dto';
-import {Query} from "@root/node_modules/@nestjs/common";
-import {RoleFilterDto} from "@app/v1/roles/dtos";
+import { Query } from "@nestjs/common";
+import { RoleFilterDto } from "@app/v1/roles/dtos";
 
 @ApiTags('Role')
 @Controller('roles')

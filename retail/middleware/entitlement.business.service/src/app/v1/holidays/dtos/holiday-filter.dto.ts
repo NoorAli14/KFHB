@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {CreatedOnDTO, NUMBERS, STATUSES} from '@root/src/common';
-import {IsIn, IsISO8601, IsOptional, IsString, MaxLength} from 'class-validator';
-import {Type} from "@root/node_modules/class-transformer";
+import { CreatedOnDTO, NUMBERS, STATUSES } from '@root/src/common';
+import { IsIn, IsISO8601, IsOptional, IsString, MaxLength } from 'class-validator';
+import { Type } from "class-transformer";
 
 export class HolidayFilterDto {
     @ApiProperty({
@@ -12,7 +12,7 @@ export class HolidayFilterDto {
     })
     @IsOptional()
     @IsString()
-    @IsISO8601({strict: true})
+    @IsISO8601({ strict: true })
     @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
     holiday_date: string;
 

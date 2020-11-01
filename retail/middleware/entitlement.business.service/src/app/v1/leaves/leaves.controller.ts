@@ -21,12 +21,12 @@ import {
   ApiNotFoundResponse,
   ApiNoContentResponse,
 } from '@nestjs/swagger';
-import {AuthGuard, PaginationDTO, SortByDTO} from '@common/index';
-import {Leave, LeavePaginationList} from './leave.entity';
+import { AuthGuard, PaginationDTO, SortByDTO } from '@common/index';
+import { Leave, LeavePaginationList } from './leave.entity';
 import { CreateLeaveDto, UpdateLeaveDto } from './leave.dto';
 import { LeavesService } from './leaves.service';
-import {Query} from "@root/node_modules/@nestjs/common";
-import {LeaveFilterDto} from "@app/v1/leaves/dtos";
+import { Query } from "@nestjs/common";
+import { LeaveFilterDto } from "@app/v1/leaves/dtos";
 
 @ApiTags('Leave Module')
 @Controller('leaves')
