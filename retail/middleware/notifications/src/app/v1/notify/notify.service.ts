@@ -3,6 +3,7 @@ import { NotifyRepository } from '@rubix/core/repository/';
 import { Notify } from './notify.model';
 import { DEFAULT_NOTIFY_STATUS } from '@rubix/common/constants';
 import { FirebaseService } from '@rubix/common/connections/firebase/firebase.service';
+import { json } from 'body-parser';
 
 interface iNotifyInput {
   platform: string;
@@ -10,7 +11,7 @@ interface iNotifyInput {
   message_title: string;
   message_body: string;
   image_url: string;
-  playload?: string;
+  payload?: string;
   status: string;
   created_by: string;
   updated_by: string;
@@ -21,8 +22,8 @@ interface iMessageInput {
     body: string;
   };
   token: string;
-  data? : {
-    playload: string
+  data?: {
+    payload: string;
   };
 }
 @Injectable()
@@ -43,6 +44,11 @@ export class NotifyService {
       `Start Sending Push Notification for user ID [${currentUser.id}]`,
     );
 
+    // Converting Base64 to String.
+    let jsonPayload = Buffer.from(notifyOBJ.payload, 'base64').toString('ascii')
+    console.log(typeof(jsonPayload))
+    
+
     const message: iMessageInput = {
       notification: {
         title: notifyOBJ.message_title,
@@ -59,10 +65,10 @@ export class NotifyService {
       token: notifyOBJ.token,
     };
 
-    if(notifyOBJ.playload){
-      message.data= {
-        playload: notifyOBJ.playload
-      }
+    if (notifyOBJ.payload) {
+      message.data = {
+        payload: jsonPayload,
+      };
     }
 
     const promises = [this.firebaseService.send(message)];
@@ -78,8 +84,8 @@ export class NotifyService {
       updated_by: currentUser.id,
     };
 
-    if(notifyOBJ.playload){
-      input.playload = notifyOBJ.playload
+    if (notifyOBJ.payload) {
+      input.payload = jsonPayload;
     }
     promises.push(this.notifyDB.create(input, columns));
     const result = await Promise.all(promises);

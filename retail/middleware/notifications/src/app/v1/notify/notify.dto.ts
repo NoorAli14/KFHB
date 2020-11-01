@@ -30,7 +30,7 @@ export class NotifyInput {
 
   @Field({ nullable: true })
   @IsOptional()
-  @MaxLength(5000)
+  @MaxLength(4000)
   payload?: string;
   
 }
