@@ -1,4 +1,4 @@
-import { Length, IsEnum, IsOptional, MaxLength, IsJSON } from 'class-validator';
+import { Length, IsEnum, IsOptional, MaxLength } from 'class-validator';
 import { Field, InputType } from '@nestjs/graphql';
 import { DEFAULT_NOTIFY_PLATEFORMS } from '@rubix/common/constants';
 

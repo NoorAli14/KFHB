@@ -65,7 +65,6 @@ export class NotifyService {
       notifyOBJ.payload = Buffer.from(notifyOBJ.payload, 'base64').toString(
         'ascii',
       );
-      console.log(typeof notifyOBJ.payload);
 
       // Pushing Payload Object in Notification Object.
       message.data = {
