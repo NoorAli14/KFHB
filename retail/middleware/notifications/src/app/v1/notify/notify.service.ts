@@ -10,6 +10,7 @@ interface iNotifyInput {
   message_title: string;
   message_body: string;
   image_url: string;
+  playload?: string;
   status: string;
   created_by: string;
   updated_by: string;
@@ -20,6 +21,9 @@ interface iMessageInput {
     body: string;
   };
   token: string;
+  data? : {
+    playload: string
+  };
 }
 @Injectable()
 export class NotifyService {
@@ -55,6 +59,12 @@ export class NotifyService {
       token: notifyOBJ.token,
     };
 
+    if(notifyOBJ.playload){
+      message.data= {
+        playload: notifyOBJ.playload
+      }
+    }
+
     const promises = [this.firebaseService.send(message)];
 
     const input: iNotifyInput = {
@@ -67,6 +77,10 @@ export class NotifyService {
       created_by: currentUser.id,
       updated_by: currentUser.id,
     };
+
+    if(notifyOBJ.playload){
+      input.playload = notifyOBJ.playload
+    }
     promises.push(this.notifyDB.create(input, columns));
     const result = await Promise.all(promises);
     return result[1][0];

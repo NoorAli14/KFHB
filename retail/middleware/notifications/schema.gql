@@ -59,6 +59,7 @@ type Notify {
   message_title: String!
   message_body: String!
   image_url: String!
+  payload: String!
   status: String!
   created_on: DateTime!
   created_by: String!
@@ -74,7 +75,8 @@ input NotifyInput {
   token: String!
   message_title: String!
   message_body: String!
-  image_url: String!
+  image_url: String
+  payload: String
 }
 
 type Otp {
