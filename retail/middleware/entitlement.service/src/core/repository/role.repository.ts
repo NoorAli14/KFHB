@@ -37,15 +37,15 @@ export class RoleRepository extends BaseRepository {
     let dataQuery: QueryBuilder = this.getQuery(condition, filteringParams);
     const countQuery: QueryBuilder = this.getQuery(condition, filteringParams);
     dataQuery = dataQuery.orderBy(sortingParams?.sort_by || "created_on", sortingParams?.sort_order || "desc");
-    return super.paginate(dataQuery, countQuery, paginationParams.page, paginationParams.limit, output)
+    return super.paginate(dataQuery, countQuery, paginationParams?.page, paginationParams?.limit, output)
   }
 
   getQuery(condition: Record<string, any>, filteringParams: RolesFilterParams): QueryBuilder {
     let query: QueryBuilder = this._connection(this._tableName).where(condition);
-    if(filteringParams.name) query = query.where('name', 'like', `%${filteringParams.name}%`);
-    if(filteringParams.status) query = query.where('status','=', filteringParams.status);
-    if(filteringParams.created_on)
-      query = query.whereBetween('created_on', [filteringParams.created_on.start, filteringParams.created_on.end]);
+    if(filteringParams?.name) query = query.where('name', 'like', `%${filteringParams.name}%`);
+    if(filteringParams?.status) query = query.where('status','=', filteringParams.status);
+    if(filteringParams?.created_on)
+      query = query.whereBetween('created_on', [filteringParams.created_on?.start, filteringParams.created_on?.end]);
     return query;
   }
 

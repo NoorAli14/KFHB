@@ -24,21 +24,21 @@ export class CustomerRepository extends BaseRepository {
     let dataQuery: QueryBuilder = this.getQuery(condition, filteringParams);
     const countQuery: QueryBuilder = this.getQuery(condition, filteringParams);
     dataQuery = dataQuery.orderBy(sortingParams?.sort_by || "created_on", sortingParams?.sort_order || "desc");
-    return super.paginate(dataQuery, countQuery, paginationParams.page, paginationParams.limit, output)
+    return super.paginate(dataQuery, countQuery, paginationParams?.page, paginationParams?.limit, output)
   }
 
   getQuery(condition: Record<string, any>, filteringParams: CustomersFilterParams): QueryBuilder {
     let query: QueryBuilder = this.connection(this.tableName).where(condition);
-    if(filteringParams.national_id_no) query = query.where('national_id_no', 'like', `%${filteringParams.national_id_no}%`);
-    if(filteringParams.gender) query = query.where('gender', 'like', `%${filteringParams.gender}%`);
-    if(filteringParams.nationality) query = query.where('nationality', 'like', `%${filteringParams.nationality}%`);
-    if(filteringParams.first_name) query = query.where('first_name', 'like', `%${filteringParams.first_name}%`);
-    if(filteringParams.last_name) query = query.where('last_name', 'like', `%${filteringParams.last_name}%`);
-    if(filteringParams.status) query = query.where('status','=', filteringParams.status);
-    if(filteringParams.contact_no) query = query.where('contact_no', 'like', `%${filteringParams.contact_no}%`);
-    if(filteringParams.email) query = query.where('email', 'like', `%${filteringParams.email}%`);
-    if(filteringParams.created_on)
-      query = query.whereBetween('created_on', [filteringParams.created_on.start, filteringParams.created_on.end]);
+    if(filteringParams?.national_id_no) query = query.where('national_id_no', 'like', `%${filteringParams.national_id_no}%`);
+    if(filteringParams?.gender) query = query.where('gender', 'like', `%${filteringParams.gender}%`);
+    if(filteringParams?.nationality) query = query.where('nationality', 'like', `%${filteringParams.nationality}%`);
+    if(filteringParams?.first_name) query = query.where('first_name', 'like', `%${filteringParams.first_name}%`);
+    if(filteringParams?.last_name) query = query.where('last_name', 'like', `%${filteringParams.last_name}%`);
+    if(filteringParams?.status) query = query.where('status','=', filteringParams.status);
+    if(filteringParams?.contact_no) query = query.where('contact_no', 'like', `%${filteringParams.contact_no}%`);
+    if(filteringParams?.email) query = query.where('email', 'like', `%${filteringParams.email}%`);
+    if(filteringParams?.created_on)
+      query = query.whereBetween('created_on', [filteringParams.created_on?.start, filteringParams.created_on?.end]);
     return query;
   }
 
