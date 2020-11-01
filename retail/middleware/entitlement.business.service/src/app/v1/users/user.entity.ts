@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsOptional, IsDate } from 'class-validator';
 import { USER_STATUSES, GENDER } from '@common/constants';
 import { Module } from '@app/v1/modules/module.entity';
-import {PaginationDTO} from "@common/dtos";
+import { PaginationDTO } from "@common/dtos";
 
 export class User {
   @ApiProperty({

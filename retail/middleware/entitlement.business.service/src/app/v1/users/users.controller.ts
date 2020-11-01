@@ -20,12 +20,12 @@ import {
   ApiNotFoundResponse,
   ApiNoContentResponse,
 } from '@nestjs/swagger';
-import {AuthGuard, PermissionsGuard, Permissions, PaginationDTO, SortByDTO} from '@common/index';
+import { AuthGuard, PermissionsGuard, Permissions, PaginationDTO, SortByDTO } from '@common/index';
 import { UserService } from './users.service';
-import {User, UserPaginationList} from './user.entity';
+import { User, UserPaginationList } from './user.entity';
 import { UpdateUserDto } from './user.dto';
-import {Query} from "@root/node_modules/@nestjs/common";
-import {UserFilterDto} from "@app/v1/users/dtos";
+import { Query } from "@nestjs/common";
+import { UserFilterDto } from "@app/v1/users/dtos";
 
 @ApiTags('User')
 @Controller('users')

@@ -64,7 +64,6 @@ class BuildServiceModule { }
     RolesModule,
     ModuleModule,
     PermissionModule,
-    OnboardingModule,
     WorkingDayModule,
     HolidayModule,
     LeaveTypeModule,
