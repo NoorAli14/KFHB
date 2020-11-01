@@ -9,4 +9,4 @@ import { CustomersService } from '../customers/customers.service';
   controllers: [AmlController],
   providers: [AmlService, CustomersService, GqlClientService],
 })
-export class AmlModule { }
+export class AmlModule {}

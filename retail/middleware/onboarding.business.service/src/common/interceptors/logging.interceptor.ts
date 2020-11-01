@@ -1,14 +1,7 @@
-import {
-  ExecutionContext,
-  Injectable,
-  Logger,
-  NestInterceptor,
-  CallHandler,
-} from '@nestjs/common';
+import { ExecutionContext, Injectable, Logger, NestInterceptor, CallHandler } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { X_CORRELATION_KEY } from '@common/index';
-import { getContext } from '@core/context';
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
@@ -24,12 +17,7 @@ export class LoggingInterceptor implements NestInterceptor {
     return next
       .handle()
       .pipe(
-        tap(() =>
-          Logger.log(
-            ` [${request.get(X_CORRELATION_KEY)}] [${Date.now() - now}ms]`,
-            context.getClass().name,
-          ),
-        ),
+        tap(() => Logger.log(` [${request.get(X_CORRELATION_KEY)}] [${Date.now() - now}ms]`, context.getClass().name)),
       );
   }
 }

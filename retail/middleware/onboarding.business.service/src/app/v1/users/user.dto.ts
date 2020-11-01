@@ -1,21 +1,14 @@
-import {
-  IsString,
-  IsOptional,
-  IsEmail,
-  IsNotEmpty,
-  ValidateNested, MaxLength, IsISO8601, IsIn
-} from 'class-validator';
+import { IsString, IsOptional, IsEmail, IsNotEmpty, ValidateNested, MaxLength, IsISO8601, IsIn } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, PartialType, OmitType } from '@nestjs/swagger';
 import { IdsDto } from '@common/dtos';
 import { GENDER } from '@common/constants';
 
-
 export class CheckAvailabilityInput {
   @ApiProperty({
     title: 'Call Time',
     description: 'Current Date and time',
-    example: "2020-10-07T14:48:00.000Z",
+    example: '2020-10-07T14:48:00.000Z',
     required: true,
   })
   @IsString()
@@ -24,7 +17,7 @@ export class CheckAvailabilityInput {
 
   @ApiProperty({
     title: 'Gender',
-    example: "F",
+    example: 'F',
   })
   @IsString()
   @IsOptional()
@@ -113,13 +106,9 @@ export class NewUserDto {
   roles: IdsDto[];
 }
 
-export class UpdateUserDto extends PartialType(
-  OmitType(NewUserDto, ['email'] as const),
-) { }
+export class UpdateUserDto extends PartialType(OmitType(NewUserDto, ['email'] as const)) {}
 
-export class CurrentUserUpdateDto extends PartialType(
-  OmitType(NewUserDto, ['email', 'roles'] as const),
-) {
+export class CurrentUserUpdateDto extends PartialType(OmitType(NewUserDto, ['email', 'roles'] as const)) {
   @ApiProperty({
     title: 'Contact No',
     description: 'Contact No of the user.',

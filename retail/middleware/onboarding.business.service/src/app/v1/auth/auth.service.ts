@@ -1,12 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
-import {
-  X_ACCESS_TOKEN,
-  X_REFRESH_TOKEN,
-  RedisClientService,
-  ConfigurationService,
-} from '@common/index';
+import { X_ACCESS_TOKEN, X_REFRESH_TOKEN, RedisClientService, ConfigurationService } from '@common/index';
 
 @Injectable()
 export class AuthService {
@@ -33,12 +28,7 @@ export class AuthService {
       secret: this.configService.JWT.REFRESH_SECRET,
       expiresIn: `${this.configService.JWT.REFRESH_EXPIRY_SECONDS}s`,
     });
-    await this.redisService.setValue(
-      userId,
-      token,
-      'EX',
-      this.configService.JWT.REFRESH_EXPIRY_SECONDS,
-    );
+    await this.redisService.setValue(userId, token, 'EX', this.configService.JWT.REFRESH_EXPIRY_SECONDS);
     return token;
   }
 
@@ -46,7 +36,7 @@ export class AuthService {
     const payload: Record<string, string> = {
       id: userId,
       tenant: userId,
-      type: 'user',
+      type: 'customer',
     };
     return this.jwtService.sign(payload, {
       secret: this.configService.JWT.SECRET,
