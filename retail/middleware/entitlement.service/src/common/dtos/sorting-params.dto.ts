@@ -1,14 +1,16 @@
-import {Field, InputType} from "@nestjs/graphql";
-import {IsIn, IsString} from "class-validator";
+import { Field, InputType } from '@nestjs/graphql';
+import { IsIn, IsOptional, IsString } from 'class-validator';
 
 @InputType()
 export class SortingParam {
-  @Field()
+  @Field({ nullable: true })
   @IsString()
+  @IsOptional()
   sort_by: string;
 
-  @Field()
+  @Field({ nullable: true })
   @IsString()
-  @IsIn(["asc", "desc"])
+  @IsOptional()
+  @IsIn(['asc', 'desc'])
   sort_order: string;
 }
