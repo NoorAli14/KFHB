@@ -9,4 +9,4 @@ import { CustomersService } from '../v1/customers/customers.service';
   controllers: [WebhooksController],
   providers: [WebhooksService, GqlClientService, CustomersService],
 })
-export class WebhookModule { }
+export class WebhookModule {}

@@ -52,9 +52,7 @@ export default class Server {
     this.app.useGlobalInterceptors(new TransformInterceptor());
     this.app.useGlobalInterceptors(new LoggingInterceptor());
     this.app.useGlobalFilters(new HttpExceptionFilter());
-    this.app.useGlobalPipes(
-      new ValidationPipe({ whitelist: true, transform: true }),
-    );
+    this.app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
     this.app.setGlobalPrefix(this.Config.APP.API_URL_PREFIX);
     this.app.use(cookieParser());
   }
@@ -100,9 +98,7 @@ export default class Server {
    */
   private onStartUp(): void {
     Logger.log(``);
-    Logger.log(
-      `Application start listing on ${this.Config.APPLICATION_HOST}/${this.Config.APP.API_URL_PREFIX}`,
-    );
+    Logger.log(`Application start listing on ${this.Config.APPLICATION_HOST}/${this.Config.APP.API_URL_PREFIX}`);
     Logger.log(``);
     Logger.log('-------------------------------------------------------');
     Logger.log(`Service      : ${this.Config.APP.NAME}`);
@@ -113,9 +109,7 @@ export default class Server {
     //     this.log.debug(`API Info     : ${app.get('host')}:${app.get('port')}${ApiInfo.getRoute()}`);
     // }
     if (this.Config.IS_SWAGGER_ENABLED) {
-      Logger.log(
-        `Swagger      : ${this.Config.APPLICATION_HOST}${this.Config.SWAGGER.ROUTE}`,
-      );
+      Logger.log(`Swagger      : ${this.Config.APPLICATION_HOST}${this.Config.SWAGGER.ROUTE}`);
     }
     Logger.log(`Health Check : ${this.Config.APPLICATION_HOST}/health`);
     // if (Environment.isTruthy(process.env.MONITOR_ENABLED)) {

@@ -1,15 +1,11 @@
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { Document, Evaluation } from './document.entity';
 import { GqlClientService, toGraphql } from '@common/index';
-import {
-  FaceUploadingInput,
-  DocumentUploadingInput,
-  IDocumentProcess,
-} from './document.interface';
+import { FaceUploadingInput, DocumentUploadingInput, IDocumentProcess } from './document.interface';
 
 @Injectable()
 export class DocumentsService {
-  private readonly logger = new Logger(DocumentsService.name)
+  private readonly logger = new Logger(DocumentsService.name);
   private readonly output: string = `{
         id
         session_id
@@ -21,7 +17,7 @@ export class DocumentsService {
         updated_by
     }`;
 
-  constructor(private readonly gqlClient: GqlClientService) { }
+  constructor(private readonly gqlClient: GqlClientService) {}
 
   /**
    *
@@ -84,12 +80,10 @@ export class DocumentsService {
     const mutation = `mutation {
       result: processDocument(input: ${toGraphql(input)}) ${_output}
     }`;
-    this.logger.log(mutation)
+    this.logger.log(mutation);
     const document: any = await this.gqlClient.send(mutation);
-    if (document?.errors)
-      throw new BadRequestException({ errors: document.errors });
-    if (document?.processed_data)
-      document.processed_data = JSON.parse(document.processed_data);
+    if (document?.errors) throw new BadRequestException({ errors: document.errors });
+    if (document?.processed_data) document.processed_data = JSON.parse(document.processed_data);
     return document;
   }
 
@@ -101,7 +95,8 @@ export class DocumentsService {
         image
       }
     }`;
-    return this.gqlClient.send(query);
+    const result = await this.gqlClient.send(query);
+    return Buffer.from(result.image, 'base64');
   }
 
   /**
@@ -110,7 +105,7 @@ export class DocumentsService {
    * @return The Evaluation object
    */
   async evaluation(): Promise<Evaluation> {
-    const mutation: string = `mutation {
+    const mutation = `mutation {
       result: evaluation {
         success
         status
@@ -118,8 +113,7 @@ export class DocumentsService {
       }
     }`;
     const result: any = await this.gqlClient.send(mutation);
-    if (result?.errors)
-      throw new BadRequestException({ errors: result.errors });
+    if (result?.errors) throw new BadRequestException({ errors: result.errors });
     return result;
   }
 }

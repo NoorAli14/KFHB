@@ -41,10 +41,7 @@ import { CreateCustomerInput } from '../customers/customer.interface';
 @ApiTags('Authentication / Authorization Module')
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private readonly customerService: CustomersService,
-    private readonly authService: AuthService,
-  ) { }
+  constructor(private readonly customerService: CustomersService, private readonly authService: AuthService) {}
 
   @Post('refresh-token')
   @ApiOperation({
@@ -63,21 +60,11 @@ export class AuthController {
     type: Error,
   })
   @HttpCode(HttpStatus.OK)
-  async refreshToken(
-    @Headers(X_REFRESH_TOKEN) refresh_token: string,
-    @Req() request: Request,
-  ): Promise<SuccessDto> {
-    if (!refresh_token)
-      throw new BadRequestException(`${X_REFRESH_TOKEN} can't be blank`);
-    const payload: any = await this.authService.validateRefreshToken(
-      refresh_token,
-    );
+  async refreshToken(@Headers(X_REFRESH_TOKEN) refresh_token: string, @Req() request: Request): Promise<SuccessDto> {
+    if (!refresh_token) throw new BadRequestException(`${X_REFRESH_TOKEN} can't be blank`);
+    const payload: any = await this.authService.validateRefreshToken(refresh_token);
     if (!payload) throw new UnauthorizedException();
-    request.res = this.authService.setHeaders(
-      request.res,
-      refresh_token,
-      payload.aud,
-    );
+    request.res = this.authService.setHeaders(request.res, refresh_token, payload.aud);
     return {
       status: 'SUCCESS',
       message: `${X_ACCESS_TOKEN} has been successfully generated.`,
@@ -103,20 +90,14 @@ export class AuthController {
     type: Error,
     description: 'Input Validation failed.',
   })
-  async register(
-    @Req() request: Request,
-    @Body() input: RegisterCustomerDto,
-  ): Promise<Customer> {
-    const params: CreateCustomerInput = { ...input, last_step: CUSTOMER_LAST_STEPS.RBX_ONB_STEP_REG_INITIATED }
+  async register(@Req() request: Request, @Body() input: RegisterCustomerDto): Promise<Customer> {
+    const params: CreateCustomerInput = {
+      ...input,
+      last_step: CUSTOMER_LAST_STEPS.RBX_ONB_STEP_REG_INITIATED,
+    };
     const customer: Customer = await this.customerService.create(params);
-    const refreshToken: string = await this.authService.getRefreshToken(
-      customer.id,
-    );
-    request.res = this.authService.setHeaders(
-      request.res,
-      refreshToken,
-      customer.id,
-    );
+    const refreshToken: string = await this.authService.getRefreshToken(customer.id);
+    request.res = this.authService.setHeaders(request.res, refreshToken, customer.id);
     return customer;
   }
 
@@ -156,30 +137,20 @@ export class AuthController {
     description: 'Input Validation failed.',
   })
   @ApiBearerAuth()
-  async update(
-    @CurrentUser() customer: Customer,
-    @Body() input: CurrentUserUpdateDto,
-  ): Promise<Customer> {
+  async update(@CurrentUser() customer: Customer, @Body() input: CurrentUserUpdateDto): Promise<Customer> {
     return this.customerService.update(customer.id, input);
   }
 
   @Delete('logout')
   @ApiOperation({
-    description:
-      'A successful request returns the HTTP 204 NO CONTENT status code.',
+    description: 'A successful request returns the HTTP 204 NO CONTENT status code.',
     summary: 'Customer Logout',
   })
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   @HttpCode(HttpStatus.NO_CONTENT)
-  async logOut(
-    @Req() request: Request,
-    @CurrentUser() customer: Customer,
-  ): Promise<any> {
-    request.res.setHeader(
-      'Set-Cookie',
-      await this.authService.getCookieForLogOut(customer.id),
-    );
+  async logOut(@Req() request: Request, @CurrentUser() customer: Customer): Promise<any> {
+    request.res.setHeader('Set-Cookie', await this.authService.getCookieForLogOut(customer.id));
     return null;
   }
 }
