@@ -44,11 +44,6 @@ export class NotifyService {
       `Start Sending Push Notification for user ID [${currentUser.id}]`,
     );
 
-    // Converting Base64 to String.
-    let jsonPayload = Buffer.from(notifyOBJ.payload, 'base64').toString('ascii')
-    console.log(typeof(jsonPayload))
-    
-
     const message: iMessageInput = {
       notification: {
         title: notifyOBJ.message_title,
@@ -66,8 +61,15 @@ export class NotifyService {
     };
 
     if (notifyOBJ.payload) {
+      // Converting Base64 to String.
+      notifyOBJ.payload = Buffer.from(notifyOBJ.payload, 'base64').toString(
+        'ascii',
+      );
+      console.log(typeof notifyOBJ.payload);
+
+      // Pushing Payload Object in Notification Object.
       message.data = {
-        payload: jsonPayload,
+        payload: notifyOBJ.payload
       };
     }
 
@@ -85,7 +87,7 @@ export class NotifyService {
     };
 
     if (notifyOBJ.payload) {
-      input.payload = jsonPayload;
+      input.payload = notifyOBJ.payload;
     }
     promises.push(this.notifyDB.create(input, columns));
     const result = await Promise.all(promises);
