@@ -14,9 +14,9 @@
         "gs:reference": "cross-env RBX_SERVICE_NAME=reference.service ts-node --project ../../../retail/middleware/reference.service/tsConfig.json --require ./tsconfig-bootstrap.js index.ts",
         "gs:videocall": "cross-env RBX_SERVICE_NAME=videocall.service ts-node --project ../../../retail/middleware/videocall.service/tsConfig.json --require ./tsconfig-bootstrap.js index.ts",
         "generate:seed:all": "npm run gsd:compliance && npm run gsd:entitlements && npm run gsd:identity && npm run gsd:reference",
-        "gsd:compliance": "cross-env RBX_SERVICE_NAME=compliance.service ts-node --project ../../../retail/middleware/compliance.service/tsConfig.json --require ./tsconfig-bootstrap.js generate-seed.ts",
+        "gsd:compliance": "cross-env RBX_SERVICE_NAME=compliance.service fix=9013C327-1190-4875-A92A-83ACA9029160 ts-node --project ../../../retail/middleware/compliance.service/tsConfig.json --require ./tsconfig-bootstrap.js generate-seed.ts",
         "gsd:entitlements": "cross-env RBX_SERVICE_NAME=entitlement.service ts-node --project ../../../retail/middleware/entitlement.service/tsConfig.json --require ./tsconfig-bootstrap.js generate-seed.ts",
-        "gsd:identity": "cross-env RBX_SERVICE_NAME=identity.service ts-node --project ../../../retail/middleware/identity.service/tsConfig.json --require ./tsconfig-bootstrap.js generate-seed.ts",
+        "gsd:identity": "cross-env RBX_SERVICE_NAME=identity.service ENV_RBX_TENANT_ID=9013C327-1190-4875-A92A-83ACA9029160 ts-node --project ../../../retail/middleware/identity.service/tsConfig.json --require ./tsconfig-bootstrap.js generate-seed.ts",
         "gsd:reference": "cross-env RBX_SERVICE_NAME=reference.service ts-node --project ../../../retail/middleware/reference.service/tsConfig.json --require ./tsconfig-bootstrap.js generate-seed.ts"
     },
     "dependencies": {
