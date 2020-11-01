@@ -31,7 +31,6 @@ function formatModule(module: any, parentId?: string) {
     slug: module?.slug || null,
     status: STATUS.ACTIVE,
     created_by: TEMP_ROLE.SYSTEM,
-    updated_by: TEMP_ROLE.SYSTEM,
   };
   if (parentId) {
     formattedModule['parent_id'] = parentId;
@@ -54,14 +53,12 @@ function formatPermission(permission, moduleId) {
     id: uuidV4(),
     record_type: permission.name,
     created_by: TEMP_ROLE.SYSTEM,
-    updated_by: TEMP_ROLE.SYSTEM,
   };
   permissions.push(formattedPermission);
   const formattedModulePermission = {
     module_id: moduleId,
     permission_id: formattedPermission.id,
     created_by: TEMP_ROLE.SYSTEM,
-    updated_by: TEMP_ROLE.SYSTEM,
   };
   modulePermissions.push(formattedModulePermission);
 }
