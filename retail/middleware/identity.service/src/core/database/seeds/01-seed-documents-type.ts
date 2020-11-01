@@ -12,7 +12,9 @@ export async function processSeed(
   // Formats data according to db
   const documents = SEED_DOCUMENTS_lIST.map(document => {
     return {
-      ...document,
+      name: document.name,
+      record_type: document.record_type,
+      is_required: Number(document.is_required),
       tenant_id: process.env.ENV_RBX_TENANT_ID,
       created_by: CREATED_BY.SYSTEM,
       updated_by: CREATED_BY.SYSTEM,
