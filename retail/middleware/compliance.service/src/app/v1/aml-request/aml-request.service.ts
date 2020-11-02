@@ -25,7 +25,11 @@ export class AmlRequestService {
     private readonly config: ConfigurationService,
   ) {}
 
-  async list(currentUser: ICurrentUser, user_id: string, output: string[]) {
+  async list(
+    currentUser: ICurrentUser,
+    user_id: string,
+    output: string[],
+  ): Promise<AmlRequest[]> {
     return this.amlRequestDB.findBy(
       {
         user_id: user_id,
@@ -94,7 +98,11 @@ export class AmlRequestService {
     return response;
   }
 
-  async create(currentUser: ICurrentUser, input: any, output: string[]) {
+  async create(
+    currentUser: ICurrentUser,
+    input: any,
+    output: string[],
+  ): Promise<AmlRequest> {
     // MOC JSON object start
     const newAmlRequest: any = {
       status: null,
