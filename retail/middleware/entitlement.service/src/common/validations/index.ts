@@ -1,1 +1,1 @@
-export * from './working-day-duration.validation'
+export * from './working-day-duration.validation';

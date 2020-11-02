@@ -6,7 +6,7 @@ export class UserNotFoundException extends BaseException {
       message: 'User Not Found',
       errorCode: 'ENT-1031',
       name: 'USER_NOT_FOUND',
-      developerMessage: `User not found with Id [${user_id}]`
+      developerMessage: `User not found with Id [${user_id}]`,
     });
   }
 }

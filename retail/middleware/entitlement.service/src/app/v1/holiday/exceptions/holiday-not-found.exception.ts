@@ -6,7 +6,7 @@ export class HolidayNotFoundException extends BaseException {
       message: 'Holiday Not Found',
       errorCode: 'ENT-1011',
       name: 'HOLIDAY_NOT_FOUND',
-      developerMessage: `Holiday not found with Id [${holiday_id}]`
+      developerMessage: `Holiday not found with Id [${holiday_id}]`,
     });
   }
 }

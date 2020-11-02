@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { USER_STATUSES } from '@common/constants';
+import {PaginationDTO} from "@common/dtos";
 
 export class Holiday {
   @ApiProperty({
@@ -53,4 +54,20 @@ export class Holiday {
 
   @ApiProperty({ required: false })
   updated_by: string;
+}
+
+export class HolidayPaginationList {
+  @ApiProperty({
+    type: [Holiday],
+    description: 'List of all holidays.',
+    required: true,
+  })
+  data: Holiday[];
+
+  @ApiProperty({
+    type: PaginationDTO,
+    description: 'Pagination meta data',
+    required: true,
+  })
+  pagination: PaginationDTO;
 }

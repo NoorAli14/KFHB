@@ -1,4 +1,4 @@
-import * as Knex from "knex";
+import * as Knex from 'knex';
 import { TABLE, MODULES, TEMP_ROLE, STATUS } from '@common/constants';
 export async function seed(knex: Knex): Promise<any> {
   // Deletes ALL existing entries

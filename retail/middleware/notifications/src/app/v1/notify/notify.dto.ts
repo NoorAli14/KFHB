@@ -1,4 +1,4 @@
-import { Length, IsEnum } from 'class-validator';
+import { Length, IsEnum, IsOptional, MaxLength } from 'class-validator';
 import { Field, InputType } from '@nestjs/graphql';
 import { DEFAULT_NOTIFY_PLATEFORMS } from '@rubix/common/constants';
 
@@ -13,7 +13,7 @@ export class NotifyInput {
   device_id: string;
 
   @Field()
-  token?: string;
+  token: string;
 
   @Field()
   @Length(5, 255)
@@ -23,7 +23,14 @@ export class NotifyInput {
   @Length(5, 255)
   message_body: string;
 
-  @Field()
+  @Field({ nullable: true })
+  @IsOptional()
   @Length(5, 255)
   image_url?: string;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @MaxLength(4000)
+  payload?: string;
+  
 }

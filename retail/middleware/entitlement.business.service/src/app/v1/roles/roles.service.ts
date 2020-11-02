@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { toGraphql, GqlClientService } from '@common/index';
-import { Role } from './role.entity';
+import { toGraphql, GqlClientService, PAGINATION_OUTPUT } from '@common/index';
+import { Role, RolePaginationList } from './role.entity';
 import { RoleDto } from './role.dto';
 
 @Injectable()
@@ -46,9 +46,16 @@ export class RoleService {
     updated_by
   }`;
 
-  async list(): Promise<Role[]> {
-    const query: string = `query {
-      result: rolesList ${this.output}
+  async list(params?: any): Promise<RolePaginationList> {
+    const query = `query {
+      result: rolesList(
+        filters: ${toGraphql(params?.filters)}
+        sort_by: ${toGraphql(params?.sort_by)}
+        pagination: ${toGraphql(params?.pagination)}
+      ) {
+        pagination ${PAGINATION_OUTPUT}
+        data ${this.output}
+      }
     }`;
     return this.gqlClient.send(query);
   }

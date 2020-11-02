@@ -6,7 +6,7 @@ export class WorkingDayStartTimeLessThanEndTimeException extends BaseException {
       message: 'Working Day start time should be less than end time',
       errorCode: 'ENT-1003',
       name: 'WORKING_DAY_START_TIME_LESS_THAN_END_TIME',
-      developerMessage: `Working Day with Id [${working_day_id}] should have start-time-local [${start_time}] less than end-time-local [${end_time}]`
+      developerMessage: `Working Day with Id [${working_day_id}] should have start-time-local [${start_time}] less than end-time-local [${end_time}]`,
     });
   }
 }

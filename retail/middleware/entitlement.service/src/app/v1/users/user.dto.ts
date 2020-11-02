@@ -1,12 +1,20 @@
-import { Field, InputType } from "@nestjs/graphql";
-import {IsBoolean, IsEmail, IsIn, IsISO8601, IsOptional, IsString, MaxLength} from "class-validator";
+import { Field, InputType } from '@nestjs/graphql';
+import {
+  IsBoolean,
+  IsEmail,
+  IsIn,
+  IsISO8601,
+  IsOptional,
+  IsString,
+  MaxLength,
+} from 'class-validator';
 
-import {NUMBERS, STATUS} from "@common/constants";
-import {IdsInput} from "@common/inputs/ids.input";
+import { GENDER, NUMBERS, STATUS } from '@common/constants';
+import { IdsInput } from '@common/inputs/ids.input';
 
 @InputType()
 export class UpdateUserInput {
-  @Field({nullable: true})
+  @Field({ nullable: true })
   @IsString()
   @IsEmail()
   @IsOptional()
@@ -40,7 +48,7 @@ export class UpdateUserInput {
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  @IsIn(Object.values(GENDER))
   gender?: string;
 
   @Field({ nullable: true })
@@ -57,7 +65,7 @@ export class UpdateUserInput {
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
-  @IsISO8601({strict: true})
+  @IsISO8601({ strict: true })
   date_of_birth?: string;
 
   @Field({ nullable: true })
@@ -69,7 +77,6 @@ export class UpdateUserInput {
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsIn(Object.values(STATUS))
   status?: string;
 
@@ -102,7 +109,7 @@ export class UpdateUserInput {
 }
 
 @InputType()
-export class CreateUserInput extends UpdateUserInput{
+export class CreateUserInput extends UpdateUserInput {
   @Field()
   @IsString()
   @IsEmail()
@@ -127,13 +134,12 @@ export class UpdatePasswordInput {
 export class CheckAvailabilityInput {
   @Field()
   @IsString()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  @IsISO8601({strict: true})
+  @IsISO8601({ strict: true })
   call_time: string;
 
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  @IsIn(Object.values(GENDER))
   gender?: string;
 }

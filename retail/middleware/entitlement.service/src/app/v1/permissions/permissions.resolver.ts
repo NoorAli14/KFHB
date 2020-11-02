@@ -19,11 +19,8 @@ export class PermissionsResolver {
   constructor(private readonly permissionService: PermissionService) {}
 
   @Query(() => [Permission])
-  async permissionsList(
-    @Fields() columns: string[],
-    @Context() context: GraphQLExecutionContext,
-  ): Promise<Permission[]> {
-    return this.permissionService.list(columns, context['req'].query);
+  async permissionsList(@Fields() columns: string[]): Promise<Permission[]> {
+    return this.permissionService.list(columns);
   }
 
   @Query(() => Permission)
