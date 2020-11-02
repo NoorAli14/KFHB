@@ -14,13 +14,13 @@ import { AmlResponse } from '../aml-response/aml-response-model';
 import { Loader } from 'nestjs-dataloader';
 import DataLoader from '../../../lib/dataloader';
 import { AmlResponseLoader } from '@core/dataloaders/aml-response.loader';
-import { AmlRequestNotFoundException } from './exceptions'
+import { AmlRequestNotFoundException } from './exceptions';
 import { AlmRequestAlertInput } from './aml-request-dto';
-import { AML_REQUEST_STATUSES } from '@common/constants'
+import { AML_REQUEST_STATUSES } from '@common/constants';
 
 @Resolver(AmlRequest)
 export class AmlRequestResolver {
-  constructor(private readonly almRequestService: AmlRequestService) { }
+  constructor(private readonly almRequestService: AmlRequestService) {}
 
   @Query(() => [AmlRequest])
   async amlListByUserId(
@@ -50,7 +50,18 @@ export class AmlRequestResolver {
     const amlRequest = await this.almRequestService.getAmlRequestByUserId(
       currentUser,
       user_id,
-      ['id', 'aml_text', 'tenant_id', 'request_reference', 'status', 'user_id', 'created_by', 'created_on', 'updated_by', 'updated_on'],
+      [
+        'id',
+        'aml_text',
+        'tenant_id',
+        'request_reference',
+        'status',
+        'user_id',
+        'created_by',
+        'created_on',
+        'updated_by',
+        'updated_on',
+      ],
     );
 
     if (!amlRequest) {
@@ -58,7 +69,18 @@ export class AmlRequestResolver {
       const amlRequest = await this.almRequestService.create(
         currentUser,
         user,
-        ['id', 'aml_text', 'tenant_id', 'request_reference', 'status', 'user_id', 'created_by', 'created_on', 'updated_by', 'updated_on'],
+        [
+          'id',
+          'aml_text',
+          'tenant_id',
+          'request_reference',
+          'status',
+          'user_id',
+          'created_by',
+          'created_on',
+          'updated_by',
+          'updated_on',
+        ],
       );
       return this.almRequestService.triggerAml(amlRequest, output);
     }
@@ -76,11 +98,22 @@ export class AmlRequestResolver {
   ): Promise<AmlRequest> {
     const amlRequest: AmlRequest = await this.almRequestService.getAmlRequestByReferenceNo(
       input.reference_no,
-      ['id', 'aml_text', 'tenant_id', 'request_reference', 'status', 'user_id', 'created_by', 'created_on', 'updated_by', 'updated_on'],
+      [
+        'id',
+        'aml_text',
+        'tenant_id',
+        'request_reference',
+        'status',
+        'user_id',
+        'created_by',
+        'created_on',
+        'updated_by',
+        'updated_on',
+      ],
     );
 
     if (!amlRequest) {
-      throw new AmlRequestNotFoundException()
+      throw new AmlRequestNotFoundException();
     }
 
     if (amlRequest?.status === AML_REQUEST_STATUSES.SUSPECT) {

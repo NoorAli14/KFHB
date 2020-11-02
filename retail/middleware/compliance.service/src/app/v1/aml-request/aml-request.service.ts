@@ -1,13 +1,17 @@
 import { Injectable, HttpService, Logger } from '@nestjs/common';
-import { AmlRequestRepository } from '@core/repository/aml-request-repository';
-import { AmlResponseRepository } from '@core/repository/aml-response-repository';
 import { map } from 'rxjs/operators';
-import { ConfigurationService } from '@common/configuration/configuration.service'
+import { ConfigurationService } from '@common/configuration/configuration.service';
 import { ICurrentUser } from '@common/interfaces';
 import { HttpHeaders } from '@core/context';
-import { AmlRequest } from './aml.request.model'
-import { AML_REQUEST_STATUSES, CREATED_BY } from '@common/constants'
+import { AmlRequest } from './aml.request.model';
+import { AML_REQUEST_STATUSES, CREATED_BY } from '@common/constants';
 import { AlmRequestAlertInput } from './aml-request-dto';
+import {
+  AmlRequestRepository,
+  AmlResponseRepository,
+  TemplateResponsesRepository,
+} from '@root/src/core/repository';
+import { TemplateResponseNotFoundException } from './exceptions';
 // import { GqlClientService, toGraphql } from '@common/index';
 
 @Injectable()
@@ -17,8 +21,9 @@ export class AmlRequestService {
     private readonly http: HttpService,
     private readonly amlRequestDB: AmlRequestRepository,
     private readonly amlResponseDB: AmlResponseRepository,
-    private readonly config: ConfigurationService
-  ) { }
+    private readonly TemplateResponseDB: TemplateResponsesRepository,
+    private readonly config: ConfigurationService,
+  ) {}
 
   async list(currentUser: ICurrentUser, user_id: string, output: string[]) {
     return this.amlRequestDB.findBy(
@@ -109,14 +114,33 @@ export class AmlRequestService {
 
   async triggerAml(amlRequest: any, output: string[]): Promise<any> {
     const user = JSON.parse(amlRequest.aml_text);
+
+    //Get user templates details
+    const templateResponse = await this.TemplateResponseDB.findOne(
+      {
+        user_id: amlRequest.user_id,
+        // tenant_id: amlRequest.tenant_id,
+        deleted_on: null,
+      },
+      output,
+    );
+
+    // Check template response exist against the user or not
+    if (!templateResponse)
+      throw new TemplateResponseNotFoundException(amlRequest.user_id);
+
+    //Decode kyc response from base64 string
+    const kycInfo = new Buffer('SmF2YVNjcmlwdA==', 'base64').toString();
+
     const amlScreening = await this.http
       .post(process.env.ENV_RBX_AML_BASE_URL, {
         user: user,
         reference_no: amlRequest.request_reference,
+        kycInfo: JSON.parse(kycInfo),
       })
       .pipe(map(res => res.data))
       .toPromise();
-    this.logger.log(amlScreening)
+    this.logger.log(amlScreening);
     const [response] = await this.amlRequestDB.update(
       { id: amlRequest.id },
       { status: amlScreening.status },
@@ -137,13 +161,22 @@ export class AmlRequestService {
     return response;
   }
 
-  async amlAlert(input: AlmRequestAlertInput, output: string[]): Promise<AmlRequest> {
+  async amlAlert(
+    input: AlmRequestAlertInput,
+    output: string[],
+  ): Promise<AmlRequest> {
     const [response] = await this.amlRequestDB.update(
       {
         request_reference: input.reference_no,
         deleted_on: null,
       },
-      { status: input.response_code == this.config.AML.SUCCESS_CODE ? AML_REQUEST_STATUSES.CLEAN : AML_REQUEST_STATUSES.BLOCK, updated_by: CREATED_BY.API },
+      {
+        status:
+          input.response_code == this.config.AML.SUCCESS_CODE
+            ? AML_REQUEST_STATUSES.CLEAN
+            : AML_REQUEST_STATUSES.BLOCK,
+        updated_by: CREATED_BY.API,
+      },
       output,
     );
     return response;
