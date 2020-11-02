@@ -53,6 +53,7 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
   letterType: any;
   requestType: any;
   customerRIM: any;
+  completionLetterType: any;
   constructor(public _matDialog: MatDialog, injector: Injector,
     private _serviceRequestsService: ServiceRequestsService,
     private activatedRoute: ActivatedRoute) {
@@ -77,8 +78,10 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
         this.letterType = response.data.letterType;
         this.requestType = response.data.requestType;
         this.customerRIM = response.data.customerRim;
+        this.completionLetterType = response.data.completionLetterType;
         const responseDocument = response.data.documents;
-        for (let i = 0; i < responseDocument.length; i++) {
+        for (let i = 0; i < responseDocument.length; i++) 
+        {
           this.documents.push(responseDocument[i])
         }
         this.updateGrid(this.documents);
@@ -160,7 +163,7 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
   }
 
   checkType(extention): void {
-    if (extention.includes('.')){
+    if (extention.includes('.')) {
       extention = extention.split('.')[1];
     }
     let lowerExtention = extention.toLowerCase();

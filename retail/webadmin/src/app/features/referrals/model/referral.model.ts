@@ -4,14 +4,14 @@ export class Referral extends BaseModel {
     nameOfReferringCustomer: string;
     nameOfReferredCustomer: string;
     referringCustomerEmail: string;
-    referringCustomerMobileNo: boolean;
+    referringCustomerMobileNo: string;
     rimOfReferringCustomer: string;
     dateOfAccountOpening: string;
     referredCustomerEmail: string;
     referredCustomerMobileNo: string;
     rimOfReferredCustomer: string;
     dateOfJazeelRegistration: string;
-    customerOpenedAccount: string;
+    customerOpenedAccount: boolean;
 }
 
 

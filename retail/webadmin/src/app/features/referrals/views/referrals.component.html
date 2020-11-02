@@ -24,20 +24,23 @@
         </div>
         <div class="content-card" fusePerfectScrollbar>
             <app-message-box [type]="errorType" [message]="responseMessage"></app-message-box>
-            <mat-table #table matSort matSortActive="dateOfAccountOpening​" matSortDirection="asc" matSortDisableClear
+            <mat-table #table matSort matSortActive="dateOfAccountOpening​" matSortDirection="desc" matSortDisableClear
                 [dataSource]="dataSource">
                 <ng-container *ngFor="let key of displayedColumns" [matColumnDef]="key">
                     }
                     <mat-header-cell class="text-left" *matHeaderCellDef mat-sort-header>
                         {{camelToSentenceCase(key) }}</mat-header-cell>
-                    <mat-cell  *matCellDef="let element; let i = dataIndex" class="pl-24" >
-                        <span *ngIf="element[(key)]; else defaultText" style="width:100%;word-wrap: break-word;" >
+                    <mat-cell *matCellDef="let element; let i = dataIndex" class="pl-24">
+                        <span *ngIf="element[(key)] && element[(key)]!=null; else defaultText" style="width:100%;word-wrap: break-word;">
                             <ng-container>
-                                {{ key.includes('date') ?(element[(key)]| date: "dd-MM-yyyy"): element[(key)] }}
+                                {{ key.includes('date') ?(element[(key)]| date: "dd-MM-yyyy"):
+                                 !element[(key)]?'No':element[(key)]==yes?'Yes':element[(key)] }}
                             </ng-container>
                         </span>
                         <ng-template #defaultText>
-                            <app-default-text></app-default-text>
+                            <ng-container>
+                                Null
+                            </ng-container>
                         </ng-template>
                     </mat-cell>
                 </ng-container>
