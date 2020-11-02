@@ -80,7 +80,8 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
         this.customerRIM = response.data.customerRim;
         this.completionLetterType = response.data.completionLetterType;
         const responseDocument = response.data.documents;
-        for (let i = 0; i < responseDocument.length; i++) {
+        for (let i = 0; i < responseDocument.length; i++) 
+        {
           this.documents.push(responseDocument[i])
         }
         this.updateGrid(this.documents);
