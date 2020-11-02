@@ -13,8 +13,8 @@ export class RoleService {
     getModules(): Observable< any> {
         return this._networkService.getAll(URI.MODULE);
     }
-    getRoles(): Observable< any> {
-        return this._networkService.getAll(URI.ROLE);
+    getRoles(queryParams): Observable< any> {
+        return this._networkService.getAll(`${URI.ROLE}?${queryParams}`);
     }
     createRole(model: Role): Observable< any> {
         return this._networkService.post(URI.ROLE, model);
@@ -25,9 +25,9 @@ export class RoleService {
     deleteRole(id: string): Observable< any> {
         return this._networkService.onDelete(`${URI.ROLE}/${id}`);
     }
-    forkRolesData(): Observable< any> {
+    forkRolesData(params): Observable< any> {
         return forkJoin([
-            this.getRoles(),
+            this.getRoles(params),
             this.getModules(),
             this.getPermissions(),
         ]);
