@@ -4,26 +4,41 @@ import { RoleRepository } from '@core/repository/role.repository';
 import { STATUS } from '@common/constants';
 import { KeyValInput } from '@common/inputs/key-val.input';
 import { ICurrentUser } from '@common/interfaces';
-import {Role, RolesWithPagination} from './role.model';
+import { Role, RolesWithPagination } from './role.model';
 import { BadRequestException, RoleAlreadyExistsException } from './exceptions';
 import { getCurrentTimeStamp } from '@common/utilities';
-import {PaginationParams, SortingParam} from "@common/dtos";
-import {CreatedOnStartShouldBeLessThanEndException} from "@common/exceptions";
-import {RolesFilterParams} from "@app/v1/roles/dtos";
+import { PaginationParams, SortingParam } from '@common/dtos';
+import { CreatedOnStartShouldBeLessThanEndException } from '@common/exceptions';
+import { RolesFilterParams } from '@app/v1/roles/dtos';
 
 @Injectable()
 export class RoleService {
   constructor(private roleDB: RoleRepository) {}
 
-  async list(current_user: ICurrentUser,
-             paginationParams: PaginationParams,
-             filteringParams: RolesFilterParams,
-             sortingParams: SortingParam,
-             output: string[]): Promise<RolesWithPagination> {
-    if(filteringParams?.created_on && (new Date(filteringParams?.created_on.start).getTime() > new Date(filteringParams?.created_on.end).getTime())){
-      throw new CreatedOnStartShouldBeLessThanEndException(filteringParams?.created_on.start, filteringParams?.created_on.end);
+  async list(
+    current_user: ICurrentUser,
+    paginationParams: PaginationParams,
+    filteringParams: RolesFilterParams,
+    sortingParams: SortingParam,
+    output: string[],
+  ): Promise<RolesWithPagination> {
+    if (
+      filteringParams?.created_on &&
+      new Date(filteringParams?.created_on.start).getTime() >
+        new Date(filteringParams?.created_on.end).getTime()
+    ) {
+      throw new CreatedOnStartShouldBeLessThanEndException(
+        filteringParams?.created_on.start,
+        filteringParams?.created_on.end,
+      );
     }
-    return this.roleDB.list(paginationParams, filteringParams, sortingParams,{ deleted_on: null, tenant_id: current_user.tenant_id }, output);
+    return this.roleDB.list(
+      paginationParams,
+      filteringParams,
+      sortingParams,
+      { deleted_on: null, tenant_id: current_user.tenant_id },
+      output,
+    );
   }
 
   async findById(

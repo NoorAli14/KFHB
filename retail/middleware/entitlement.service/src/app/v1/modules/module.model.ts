@@ -1,8 +1,8 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Permission } from '@app/v1/permissions/permission.model';
 import { ENT_PaginationModel } from '@common/models';
-import {IsIn, IsOptional, IsString, IsUUID, MaxLength} from "class-validator";
-import {NUMBERS, STATUS} from "@common/constants";
+import { IsIn, IsOptional, IsString, IsUUID, MaxLength } from 'class-validator';
+import { NUMBERS, STATUS } from '@common/constants';
 
 @ObjectType()
 export class Module {

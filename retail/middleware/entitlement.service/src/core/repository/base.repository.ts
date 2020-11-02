@@ -1,12 +1,12 @@
 import { InjectKnex, Knex } from 'nestjs-knex';
-import {QueryBuilder} from "knex";
-import {ENT_PaginationModel} from "@common/models";
+import { QueryBuilder } from 'knex';
+import { ENT_PaginationModel } from '@common/models';
 export abstract class BaseRepository {
   @InjectKnex() protected readonly _connection: Knex;
   protected _tableName: string;
   protected _timestamps: boolean;
 
-  constructor(tableName: string, timestamps=true) {
+  constructor(tableName: string, timestamps = true) {
     this._tableName = tableName;
     this._timestamps = timestamps;
   }
@@ -24,34 +24,38 @@ export abstract class BaseRepository {
     countQuery: QueryBuilder,
     page_no: number | undefined,
     limit: number | undefined,
-    output: string[]): Promise<any> {
+    output: string[],
+  ): Promise<any> {
     const limitPerPage = pageSize(limit);
     const page = Math.max(page_no || 1, 1);
     const offset = (page - 1) * limitPerPage;
     return Promise.all([
       countQuery.count('id as count').first(),
-      dataQuery.offset(offset).limit(limitPerPage).select(output),
-    ])
-      .then(([total, rows]) => {
-        const count = parseInt(String(total['count']), 10);
-        const pagination: ENT_PaginationModel = {
-          total: count,
-          pages: Math.ceil(count / limitPerPage),
-          pageSize: limitPerPage,
-          page: page,
-        };
-        return { pagination: pagination, data: rows };
-      })
-
+      dataQuery
+        .offset(offset)
+        .limit(limitPerPage)
+        .select(output),
+    ]).then(([total, rows]) => {
+      const count = parseInt(String(total['count']), 10);
+      const pagination: ENT_PaginationModel = {
+        total: count,
+        pages: Math.ceil(count / limitPerPage),
+        pageSize: limitPerPage,
+        page: page,
+      };
+      return { pagination: pagination, data: rows };
+    });
   }
 
   listWithoutPagination(
-      keys: string | string[],
-      condition?: Record<string, any>): Promise<any> {
-    const query = this._connection(this._tableName).select(keys).orderBy('created_on', 'desc');
-    if(condition)
-      return query.where(condition);
-    return query
+    keys: string | string[],
+    condition?: Record<string, any>,
+  ): Promise<any> {
+    const query = this._connection(this._tableName)
+      .select(keys)
+      .orderBy('created_on', 'desc');
+    if (condition) return query.where(condition);
+    return query;
   }
 
   create(newObj: Record<string, any>, keys: string[]): Promise<any> {
@@ -65,8 +69,8 @@ export abstract class BaseRepository {
   ): Promise<any> {
     if (this._timestamps) input.updated_on = this._connection.fn.now();
     return this._connection(this._tableName)
-        .where(condition)
-        .update(input, output);
+      .where(condition)
+      .update(input, output);
   }
 
   delete(condition: Record<string, any>): Promise<any> {
@@ -88,10 +92,14 @@ export abstract class BaseRepository {
       .first();
   }
 
-  markAsDelete(tenant_id: string, current_user_id: string, record_id: string): Promise<any> {
+  markAsDelete(
+    tenant_id: string,
+    current_user_id: string,
+    record_id: string,
+  ): Promise<any> {
     const condition = {
       id: record_id,
-      tenant_id: tenant_id
+      tenant_id: tenant_id,
     };
     const input = {
       deleted_on: this._connection.fn.now(),
@@ -108,7 +116,8 @@ export abstract class BaseRepository {
  * @param pageSize
  */
 const pageSize = (pageSize: number): number => {
-  if(!pageSize || pageSize < 1) return parseInt(process.env.ENV_RBX_PAGINATION_PAGE_SIZE) || 25;
-  if(pageSize && pageSize > 100) return 100;
+  if (!pageSize || pageSize < 1)
+    return parseInt(process.env.ENV_RBX_PAGINATION_PAGE_SIZE) || 25;
+  if (pageSize && pageSize > 100) return 100;
   return pageSize;
 };

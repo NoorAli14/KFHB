@@ -1,7 +1,14 @@
-import { Field, InputType } from "@nestjs/graphql";
-import {IsIn, IsISO8601, IsOptional, IsString, IsUUID, MaxLength} from "class-validator";
+import { Field, InputType } from '@nestjs/graphql';
+import {
+  IsIn,
+  IsISO8601,
+  IsOptional,
+  IsString,
+  IsUUID,
+  MaxLength,
+} from 'class-validator';
 
-import {NUMBERS, STATUS} from "@common/constants";
+import { NUMBERS, STATUS } from '@common/constants';
 
 @InputType()
 export class LeaveInput {
@@ -20,13 +27,13 @@ export class LeaveInput {
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
-  @IsISO8601({strict: true})
+  @IsISO8601({ strict: true })
   start_date: string;
 
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
-  @IsISO8601({strict: true})
+  @IsISO8601({ strict: true })
   end_date: string;
 
   @Field({ nullable: true })
@@ -56,11 +63,11 @@ export class LeaveCreateInput extends LeaveInput {
 
   @Field()
   @IsString()
-  @IsISO8601({strict: true})
+  @IsISO8601({ strict: true })
   start_date: string;
 
   @Field()
   @IsString()
-  @IsISO8601({strict: true})
+  @IsISO8601({ strict: true })
   end_date: string;
 }

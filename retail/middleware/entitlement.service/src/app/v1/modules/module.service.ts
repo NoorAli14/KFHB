@@ -9,9 +9,7 @@ import { Module } from './module.model';
 export class ModuleService {
   constructor(private moduleDB: ModuleRepository) {}
 
-  async list(
-    output: string[],
-  ): Promise<any> {
+  async list(output: string[]): Promise<any> {
     return this.moduleDB.listWithoutPagination(output);
   }
 

@@ -8,9 +8,7 @@ import { Permission } from './permission.model';
 export class PermissionService {
   constructor(private permissionDB: PermissionRepository) {}
 
-  async list(
-    output: string[],
-  ): Promise<any> {
+  async list(output: string[]): Promise<any> {
     return this.permissionDB.listWithoutPagination(output);
   }
 

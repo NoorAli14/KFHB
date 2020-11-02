@@ -1,19 +1,20 @@
-import { Field, InputType } from "@nestjs/graphql";
+import { Field, InputType } from '@nestjs/graphql';
 import {
-  IsIn, IsISO8601,
+  IsIn,
+  IsISO8601,
   IsOptional,
   IsString,
-  MaxLength
-} from "class-validator";
+  MaxLength,
+} from 'class-validator';
 
-import {NUMBERS, STATUS} from "@common/constants";
+import { NUMBERS, STATUS } from '@common/constants';
 
 @InputType()
 export class HolidayInput {
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
-  @IsISO8601({strict: true})
+  @IsISO8601({ strict: true })
   holiday_date: string;
 
   @Field({ nullable: true })
@@ -36,9 +37,9 @@ export class HolidayInput {
 }
 
 @InputType()
-export class HolidayCreateInput extends HolidayInput{
+export class HolidayCreateInput extends HolidayInput {
   @Field()
   @IsString()
-  @IsISO8601({strict: true})
+  @IsISO8601({ strict: true })
   holiday_date: string;
 }

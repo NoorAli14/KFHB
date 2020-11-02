@@ -24,8 +24,8 @@ export const NUMBERS = {
 };
 
 export const HEADER_NAMES = {
-  X_USER_ID: "x-user-id",
-  X_TENANT_ID: "x-tenant-id",
+  X_USER_ID: 'x-user-id',
+  X_TENANT_ID: 'x-tenant-id',
 };
 
 export const DATE_FORMAT = 'YYYY-MM-DD';
@@ -196,7 +196,7 @@ export const MODULES = [
           },
           {
             name: 'edit',
-          }
+          },
         ],
       },
     ],

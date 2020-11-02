@@ -9,32 +9,43 @@ import {
 import * as DataLoader from 'dataloader';
 import { Loader } from 'nestjs-dataloader';
 
-import { UserService } from "@app/v1/users/users.service";
-import { CreateUserInput, UpdateUserInput, UpdatePasswordInput, CheckAvailabilityInput } from "@app/v1/users/user.dto";
-import { Role } from "@app/v1/roles/role.model";
-import { KeyValInput } from "@common/inputs/key-val.input";
-import { Module } from "@app/v1/modules/module.model";
-import { Leave } from "@app/v1/leave/leave.model";
-import { CurrentUser, Fields } from "@common/decorators";
+import { UserService } from '@app/v1/users/users.service';
+import {
+  CreateUserInput,
+  UpdateUserInput,
+  UpdatePasswordInput,
+  CheckAvailabilityInput,
+} from '@app/v1/users/user.dto';
+import { Role } from '@app/v1/roles/role.model';
+import { KeyValInput } from '@common/inputs/key-val.input';
+import { Module } from '@app/v1/modules/module.model';
+import { Leave } from '@app/v1/leave/leave.model';
+import { CurrentUser, Fields } from '@common/decorators';
 import { ICurrentUser } from '@common/interfaces';
-import {User, UsersWithPagination} from '@app/v1/users/user.model';
+import { User, UsersWithPagination } from '@app/v1/users/user.model';
 import { UserNotFoundException } from './exceptions';
-import {PaginationParams, SortingParam} from "@common/dtos";
-import {UsersFilterParams} from "@app/v1/users/dtos";
+import { PaginationParams, SortingParam } from '@common/dtos';
+import { UsersFilterParams } from '@app/v1/users/dtos';
 
 @Resolver(User)
 export class UsersResolver {
-  constructor(private readonly userService: UserService) { }
+  constructor(private readonly userService: UserService) {}
 
   @Query(() => UsersWithPagination)
   async usersList(
     @Fields() output: string[],
-    @Args('pagination', {nullable: true}) paginationParams: PaginationParams,
-    @Args('filters', {nullable: true}) filteringParams: UsersFilterParams,
-    @Args('sort_by', {nullable: true}) sortingParams: SortingParam,
-    @CurrentUser() currentUser: ICurrentUser
+    @Args('pagination', { nullable: true }) paginationParams: PaginationParams,
+    @Args('filters', { nullable: true }) filteringParams: UsersFilterParams,
+    @Args('sort_by', { nullable: true }) sortingParams: SortingParam,
+    @CurrentUser() currentUser: ICurrentUser,
   ): Promise<UsersWithPagination> {
-    return this.userService.list(currentUser, paginationParams, filteringParams, sortingParams, output);
+    return this.userService.list(
+      currentUser,
+      paginationParams,
+      filteringParams,
+      sortingParams,
+      output,
+    );
   }
 
   @Query(() => User)
@@ -49,8 +60,10 @@ export class UsersResolver {
   }
 
   @Query(() => [User])
-  async findAvailableAgents(@Args('input') input: CheckAvailabilityInput,
-    @CurrentUser() current_user: ICurrentUser): Promise<User[]> {
+  async findAvailableAgents(
+    @Args('input') input: CheckAvailabilityInput,
+    @CurrentUser() current_user: ICurrentUser,
+  ): Promise<User[]> {
     return this.userService.findAvailableAgents(current_user, input);
   }
 
@@ -77,7 +90,12 @@ export class UsersResolver {
       ['id', 'password_digest'],
     );
     if (!user) throw new UserNotFoundException(currentUser.id);
-    return this.userService.updateUserPassword(currentUser, user, input, output);
+    return this.userService.updateUserPassword(
+      currentUser,
+      user,
+      input,
+      output,
+    );
   }
 
   @Query(() => [User])
@@ -105,9 +123,7 @@ export class UsersResolver {
     @Fields() output: string[],
     @CurrentUser() currentUser: ICurrentUser,
   ): Promise<User> {
-    const user: User = await this.userService.findById(currentUser, id, [
-      'id',
-    ]);
+    const user: User = await this.userService.findById(currentUser, id, ['id']);
     if (!user) throw new UserNotFoundException(id);
     return this.userService.update(currentUser, id, input, output);
   }
@@ -117,30 +133,35 @@ export class UsersResolver {
     @Args('id') id: string,
     @CurrentUser() currentUser: ICurrentUser,
   ): Promise<boolean> {
-    const user: User = await this.userService.findById(currentUser, id, [
-      'id',
-    ]);
+    const user: User = await this.userService.findById(currentUser, id, ['id']);
     if (!user) throw new UserNotFoundException(id);
     return this.userService.delete(currentUser, id);
   }
 
   @ResolveField('roles', () => [Role])
-  async getRoles(@Parent() user: User,
-    @Loader('RolesDataLoader') rolesLoader: DataLoader<Role['id'], Role>): Promise<any> {
+  async getRoles(
+    @Parent() user: User,
+    @Loader('RolesDataLoader') rolesLoader: DataLoader<Role['id'], Role>,
+  ): Promise<any> {
     if (!user.id) return [];
     return rolesLoader.load(user.id);
   }
 
   @ResolveField('modules', () => [Module])
-  async getModules(@Parent() user: User,
-    @Loader('ModulesDataLoaderByUser') modulesLoader: DataLoader<Module['id'], Module>): Promise<any> {
+  async getModules(
+    @Parent() user: User,
+    @Loader('ModulesDataLoaderByUser')
+    modulesLoader: DataLoader<Module['id'], Module>,
+  ): Promise<any> {
     if (!user.id) return [];
     return modulesLoader.load(user.id);
   }
 
   @ResolveField('leaves', () => [Leave])
-  async getLeaves(@Parent() user: User,
-    @Loader('LeavesDataLoader') leavesLoader: DataLoader<Leave['id'], Leave>): Promise<any> {
+  async getLeaves(
+    @Parent() user: User,
+    @Loader('LeavesDataLoader') leavesLoader: DataLoader<Leave['id'], Leave>,
+  ): Promise<any> {
     if (!user.id) return [];
     return leavesLoader.load(user.id);
   }

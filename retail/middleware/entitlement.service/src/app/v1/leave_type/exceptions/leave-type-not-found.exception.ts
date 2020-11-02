@@ -6,7 +6,7 @@ export class LeaveTypeNotFoundException extends BaseException {
       message: 'Leave Type Not Found',
       errorCode: 'ENT-1031',
       name: 'LEAVE_TYPE_NOT_FOUND',
-      developerMessage: `Leave-Type not found with Id [${leave_type_id}]`
+      developerMessage: `Leave-Type not found with Id [${leave_type_id}]`,
     });
   }
 }

@@ -1,7 +1,16 @@
-import { Field, InputType } from "@nestjs/graphql";
-import {IsIn, IsNumber, IsOptional, IsString, Length, Matches, MaxLength, ValidateIf} from "class-validator";
+import { Field, InputType } from '@nestjs/graphql';
+import {
+  IsIn,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Length,
+  Matches,
+  MaxLength,
+  ValidateIf,
+} from 'class-validator';
 
-import {NUMBERS, STATUS, WEEK_DAYS} from "@common/constants";
+import { NUMBERS, STATUS, WEEK_DAYS } from '@common/constants';
 
 @InputType()
 export class WorkingDayInput {
@@ -13,15 +22,15 @@ export class WorkingDayInput {
 
   @Field({ nullable: true })
   @IsString()
-  @ValidateIf(o => o.full_day==0)
-  @Length(4,4)
+  @ValidateIf(o => o.full_day == 0)
+  @Length(4, 4)
   @Matches(/^[0-9]*$/)
   start_time_local: string;
 
   @Field({ nullable: true })
   @IsString()
-  @ValidateIf(o => o.full_day==0)
-  @Length(4,4)
+  @ValidateIf(o => o.full_day == 0)
+  @Length(4, 4)
   @Matches(/^[0-9]*$/)
   end_time_local: string;
 

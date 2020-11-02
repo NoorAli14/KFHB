@@ -19,9 +19,7 @@ export class PermissionsResolver {
   constructor(private readonly permissionService: PermissionService) {}
 
   @Query(() => [Permission])
-  async permissionsList(
-    @Fields() columns: string[],
-  ): Promise<Permission[]> {
+  async permissionsList(@Fields() columns: string[]): Promise<Permission[]> {
     return this.permissionService.list(columns);
   }
 

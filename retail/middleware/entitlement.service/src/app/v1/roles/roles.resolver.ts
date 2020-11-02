@@ -10,7 +10,7 @@ import * as DataLoader from 'dataloader';
 import { Loader } from 'nestjs-dataloader';
 
 import { RoleService } from '@app/v1/roles/roles.service';
-import {Role, RolesWithPagination} from '@app/v1/roles/role.model';
+import { Role, RolesWithPagination } from '@app/v1/roles/role.model';
 import { RoleCreateInput, RoleInput } from '@app/v1/roles/role.dto';
 import { KeyValInput } from '@common/inputs/key-val.input';
 import { Module } from '@app/v1/modules/module.model';
@@ -18,8 +18,8 @@ import { STATUS } from '@common/constants';
 import { CurrentUser, Fields } from '@common/decorators';
 import { ICurrentUser } from '@common/interfaces';
 import { RoleNotFoundException } from './exceptions';
-import {PaginationParams, SortingParam} from "@common/dtos";
-import {RolesFilterParams} from "@app/v1/roles/dtos";
+import { PaginationParams, SortingParam } from '@common/dtos';
+import { RolesFilterParams } from '@app/v1/roles/dtos';
 
 @Resolver(Role)
 export class RolesResolver {
@@ -27,13 +27,19 @@ export class RolesResolver {
 
   @Query(() => RolesWithPagination)
   async rolesList(
-      @Fields() output: string[],
-      @Args('pagination', {nullable: true}) paginationParams: PaginationParams,
-      @Args('filters', {nullable: true}) filteringParams: RolesFilterParams,
-      @Args('sort_by', {nullable: true}) sortingParams: SortingParam,
-      @CurrentUser() currentUser: ICurrentUser
+    @Fields() output: string[],
+    @Args('pagination', { nullable: true }) paginationParams: PaginationParams,
+    @Args('filters', { nullable: true }) filteringParams: RolesFilterParams,
+    @Args('sort_by', { nullable: true }) sortingParams: SortingParam,
+    @CurrentUser() currentUser: ICurrentUser,
   ): Promise<RolesWithPagination> {
-    return this.roleService.list(currentUser, paginationParams, filteringParams, sortingParams, output);
+    return this.roleService.list(
+      currentUser,
+      paginationParams,
+      filteringParams,
+      sortingParams,
+      output,
+    );
   }
 
   @Query(() => Role)

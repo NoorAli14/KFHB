@@ -5,8 +5,16 @@ import { Module } from '@app/v1/modules/module.model';
 import { Leave } from '@app/v1/leave/leave.model';
 import { ENT_PaginationModel } from '@common/models';
 import { Type } from 'class-transformer';
-import { IsBoolean, IsEmail, IsIn, IsOptional, IsString, IsUUID, MaxLength } from "class-validator";
-import { GENDER, NUMBERS, STATUS } from "@common/constants";
+import {
+  IsBoolean,
+  IsEmail,
+  IsIn,
+  IsOptional,
+  IsString,
+  IsUUID,
+  MaxLength,
+} from 'class-validator';
+import { GENDER, NUMBERS, STATUS } from '@common/constants';
 
 @ObjectType()
 export class User {

@@ -1,8 +1,8 @@
-import { Field, ID, ObjectType } from "@nestjs/graphql";
-import {ENT_PaginationModel} from '@common/models';
-import {Type} from 'class-transformer';
-import {IsIn, IsOptional, IsString, IsUUID, MaxLength} from "class-validator";
-import {NUMBERS, STATUS} from "@common/constants";
+import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { ENT_PaginationModel } from '@common/models';
+import { Type } from 'class-transformer';
+import { IsIn, IsOptional, IsString, IsUUID, MaxLength } from 'class-validator';
+import { NUMBERS, STATUS } from '@common/constants';
 
 @ObjectType()
 export class LeaveType {

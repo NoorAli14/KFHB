@@ -27,9 +27,7 @@ export class ModuleResolver {
   constructor(private readonly moduleService: ModuleService) {}
 
   @Query(() => [Module])
-  async modulesList(
-    @Fields() columns: string[],
-  ): Promise<Module[]> {
+  async modulesList(@Fields() columns: string[]): Promise<Module[]> {
     return this.moduleService.list(columns);
   }
 
@@ -104,7 +102,10 @@ export class ModuleResolver {
     return this.getData(module, subModulesLoader);
   }
 
-  async getData(module: Module, loader: DataLoader<Module['id'], Module>): Promise<any> {
+  async getData(
+    module: Module,
+    loader: DataLoader<Module['id'], Module>,
+  ): Promise<any> {
     if (!module.id) return [];
     let input: any = module.id;
     if (module['role_id']) {
