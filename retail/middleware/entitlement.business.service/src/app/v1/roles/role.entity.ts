@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {Module} from '@app/v1/modules/module.entity';
 import {ROLE_STATUSES} from '@common/constants';
+import {PaginationDTO} from "@common/dtos";
 
 export class Role {
   @ApiProperty({
@@ -51,4 +52,20 @@ export class Role {
     description: 'timestamp with time zone',
   })
   deleted_on?: Date;
+}
+
+export class RolePaginationList {
+  @ApiProperty({
+    type: [Role],
+    description: 'List of all Roles.',
+    required: true,
+  })
+  data: Role[];
+
+  @ApiProperty({
+    type: PaginationDTO,
+    description: 'Pagination meta data',
+    required: true,
+  })
+  pagination: PaginationDTO;
 }

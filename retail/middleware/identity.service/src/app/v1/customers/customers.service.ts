@@ -3,10 +3,10 @@ import { IdentityService } from '@rubix/common/connectors';
 import { CustomerRepository } from '@rubix/core';
 import {Customer, CustomerWithPagination} from './customer.model';
 import {ICurrentUser} from "@rubix/common";
-import {CustomersFilterParams} from "@app/v1/customers/classes";
+import {CustomersFilterParams} from "@app/v1/customers/dtos";
 import {CreatedOnStartShouldBeLessThanEndException} from "@app/v1/customers/exceptions/created-on-start-should-be-less-than-end";
 import {UpdateCustomerInput} from "@app/v1/customers/customer.dto";
-import {PaginationParams, SortingParam} from "@common/classes";
+import {PaginationParams, SortingParam} from "@common/dtos";
 
 @Injectable()
 export class CustomersService {
@@ -19,7 +19,7 @@ export class CustomersService {
   async list(current_user: ICurrentUser,
              paginationParams: PaginationParams,
              filteringParams: CustomersFilterParams,
-             sortingParams: SortingParam[],
+             sortingParams: SortingParam,
              output: string[]): Promise<CustomerWithPagination> {
     if(filteringParams.created_on && (new Date(filteringParams.created_on.start).getTime() > new Date(filteringParams.created_on.end).getTime())){
       throw new CreatedOnStartShouldBeLessThanEndException(filteringParams.created_on.start, filteringParams.created_on.end);

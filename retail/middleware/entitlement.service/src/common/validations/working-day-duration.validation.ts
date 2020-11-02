@@ -1,18 +1,21 @@
-import {ValidatorConstraint, ValidatorConstraintInterface} from "class-validator";
+import {
+  ValidatorConstraint,
+  ValidatorConstraintInterface,
+} from 'class-validator';
 
-@ValidatorConstraint({ name: "workingDayDurationValidation", async: false })
-export class WorkingDayDurationValidation implements ValidatorConstraintInterface {
-
+@ValidatorConstraint({ name: 'workingDayDurationValidation', async: false })
+export class WorkingDayDurationValidation
+  implements ValidatorConstraintInterface {
   validate(time: string): boolean {
     const t = parseInt(time);
     return t >= 0 && t < 2359;
   }
 
-  defaultMessage(): string { // here you can provide default error message if validation failed
-    return "Time ($value) must be between 0000 and 2359!"
+  defaultMessage(): string {
+    // here you can provide default error message if validation failed
+    return 'Time ($value) must be between 0000 and 2359!';
   }
 }
-
 
 // import {registerDecorator, ValidationOptions, ValidationArguments} from "class-validator";
 //

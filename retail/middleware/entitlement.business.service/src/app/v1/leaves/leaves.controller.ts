@@ -21,10 +21,12 @@ import {
   ApiNotFoundResponse,
   ApiNoContentResponse,
 } from '@nestjs/swagger';
-import { AuthGuard } from '@common/index';
-import { Leave } from './leave.entity';
+import { AuthGuard, PaginationDTO, SortByDTO } from '@common/index';
+import { Leave, LeavePaginationList } from './leave.entity';
 import { CreateLeaveDto, UpdateLeaveDto } from './leave.dto';
 import { LeavesService } from './leaves.service';
+import { Query } from "@nestjs/common";
+import { LeaveFilterDto } from "@app/v1/leaves/dtos";
 
 @ApiTags('Leave Module')
 @Controller('leaves')
@@ -37,15 +39,15 @@ export class LeavesController {
   @Get('/')
   @ApiOperation({
     description:
-      'A successful request returns the HTTP 200 OK status code and a JSON response body that shows list of holidays information.',
+      'A successful request returns the HTTP 200 OK status code and a JSON response body that shows list of holidays information with pagination.',
     summary: 'List of all holidays.',
   })
   @ApiOkResponse({
-    type: [Leave],
+    type: LeavePaginationList,
     description: 'List of all leaves.',
   })
-  async list(): Promise<Leave[]> {
-    return this.leaveService.list();
+  async list(@Query() pagination: PaginationDTO, @Query() filters: LeaveFilterDto, @Query() sort_by: SortByDTO): Promise<LeavePaginationList> {
+    return this.leaveService.list({ pagination, filters, sort_by });
   }
 
   @Post('/')

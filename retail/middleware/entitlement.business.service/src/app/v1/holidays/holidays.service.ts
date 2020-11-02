@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { GqlClientService, toGraphql } from '@common/index';
-import { Holiday } from './holiday.entity';
+import { GqlClientService, PAGINATION_OUTPUT, toGraphql } from '@common/index';
+import { Holiday, HolidayPaginationList } from './holiday.entity';
 import { CreateHolidayDto, UpdateHolidayDTO } from './holiday.dto';
 
 @Injectable()
@@ -30,10 +30,17 @@ export class HolidaysService {
     return this.gqlClient.send(mutation);
   }
 
-  async list(): Promise<Holiday[]> {
+  async list(params?: any): Promise<HolidayPaginationList> {
     this.logger.log(`Start fetching list of all holidays`);
     const query = `query {
-      result: holidaysList ${this.__output}
+      result: holidaysList(
+        filters: ${toGraphql(params?.filters)}
+        sort_by: ${toGraphql(params?.sort_by)}
+        pagination: ${toGraphql(params?.pagination)}
+      ) {
+        pagination ${PAGINATION_OUTPUT}
+        data ${this.__output}
+      }
     }`;
     return this.gqlClient.send(query);
   }

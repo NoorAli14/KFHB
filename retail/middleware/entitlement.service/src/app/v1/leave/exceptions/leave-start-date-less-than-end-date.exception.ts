@@ -6,7 +6,7 @@ export class LeaveStartDateLessThanEndDateException extends BaseException {
       message: 'Leave start date should be less than end date',
       errorCode: 'ENT-1022',
       name: 'LEAVE_START_DATE_LESS_THAN_END_DATE',
-      developerMessage: `Leave with Id [${leave_id}] should have start-date [${start_date}] less than end-date [${end_date}]`
+      developerMessage: `Leave with Id [${leave_id}] should have start-date [${start_date}] less than end-date [${end_date}]`,
     });
   }
 }
