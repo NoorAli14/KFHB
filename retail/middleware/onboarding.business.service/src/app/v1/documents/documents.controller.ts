@@ -21,32 +21,35 @@ import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
 } from '@nestjs/swagger';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 
-import { AuthGuard, CurrentUser, CUSTOMER_LAST_STEPS, DOCUMENT_STATUSES, DOCUMENT_TYPES, EVALUATION_STATUSES } from '@common/index';
+import {
+  AuthGuard,
+  CurrentUser,
+  CUSTOMER_LAST_STEPS,
+  DOCUMENT_STATUSES,
+  DOCUMENT_TYPES,
+  EVALUATION_STATUSES,
+  PermissionsGuard,
+  Permissions,
+} from '@common/index';
 import { DocumentsService } from './documents.service';
 import { Document, Evaluation } from './document.entity';
 import { UploadDocumentDTO } from './document.dto';
-import {
-  DocumentUploadingInput,
-  IDocumentProcess,
-} from './document.interface';
+import { DocumentUploadingInput, IDocumentProcess } from './document.interface';
 import { CustomersService } from '../customers/customers.service';
 import { User } from '../users/user.entity';
 
 @ApiTags('Documents Uploading & Processing Module')
-@Controller('documents')
 @ApiBearerAuth()
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, PermissionsGuard)
+@Controller()
 export class DocumentsController {
   private readonly logger: Logger = new Logger(DocumentsController.name);
 
-  constructor(
-    private readonly documentService: DocumentsService,
-    private readonly customerService: CustomersService,
-  ) { }
+  constructor(private readonly documentService: DocumentsService, private readonly customerService: CustomersService) {}
 
-  @Post('nationality-id-front/upload')
+  @Post('documents/nationality-id-front/upload')
   @ApiOperation({
     summary: 'Upload a national ID front side',
     description:
@@ -60,19 +63,14 @@ export class DocumentsController {
     type: Error,
     description: 'Input Validation failed.',
   })
-  async uploadNationIdFront(
-    @CurrentUser() currentUser: User,
-    @Body() input: UploadDocumentDTO,
-  ): Promise<Document> {
-    this.logger.log(
-      `Start ${DOCUMENT_TYPES.NATIONAL_ID_FRONT_SIDE} uploading. ...`,
-    );
+  async uploadNationIdFront(@CurrentUser() currentUser: User, @Body() input: UploadDocumentDTO): Promise<Document> {
+    this.logger.log(`Start ${DOCUMENT_TYPES.NATIONAL_ID_FRONT_SIDE} uploading. ...`);
     const params: DocumentUploadingInput = {
       file: input.file,
       type: DOCUMENT_TYPES.NATIONAL_ID_FRONT_SIDE,
     };
     const result = await this.documentService.upload(params);
-    if(result?.status === DOCUMENT_STATUSES.PROCESSING) {
+    if (result?.status === DOCUMENT_STATUSES.PROCESSING) {
       await this.customerService.updateLastStep(
         currentUser.id,
         CUSTOMER_LAST_STEPS.RBX_ONB_STEP_NATIONAL_ID_FRONT_UPLOADED,
@@ -81,7 +79,7 @@ export class DocumentsController {
     return result;
   }
 
-  @Post('nationality-id-front/process')
+  @Post('documents/nationality-id-front/process')
   @ApiOperation({
     summary: 'Process a national ID front side',
     description:
@@ -101,7 +99,7 @@ export class DocumentsController {
       type: DOCUMENT_TYPES.NATIONAL_ID_FRONT_SIDE,
     };
     const result = await this.documentService.process(params);
-    if(result?.status === DOCUMENT_STATUSES.PROCESSED) {
+    if (result?.status === DOCUMENT_STATUSES.PROCESSED) {
       await this.customerService.updateLastStep(
         currentUser.id,
         CUSTOMER_LAST_STEPS.RBX_ONB_STEP_NATIONAL_ID_FRONT_PROCESSED,
@@ -110,7 +108,7 @@ export class DocumentsController {
     return result;
   }
 
-  @Post('nationality-id-back/upload')
+  @Post('documents/nationality-id-back/upload')
   @ApiOperation({
     summary: 'Upload a national ID back side',
     description:
@@ -124,16 +122,13 @@ export class DocumentsController {
     type: Error,
     description: 'Input Validation failed.',
   })
-  async uploadNationIdBack(
-    @CurrentUser() currentUser: User,
-    @Body() input: UploadDocumentDTO,
-  ): Promise<Document> {
+  async uploadNationIdBack(@CurrentUser() currentUser: User, @Body() input: UploadDocumentDTO): Promise<Document> {
     const params: DocumentUploadingInput = {
       file: input.file,
       type: DOCUMENT_TYPES.NATIONAL_ID_BACK_SIDE,
     };
     const result = await this.documentService.upload(params);
-    if(result?.status === DOCUMENT_STATUSES.PROCESSING) {
+    if (result?.status === DOCUMENT_STATUSES.PROCESSING) {
       await this.customerService.updateLastStep(
         currentUser.id,
         CUSTOMER_LAST_STEPS.RBX_ONB_STEP_NATIONAL_ID_BACK_UPLOADED,
@@ -142,7 +137,7 @@ export class DocumentsController {
     return result;
   }
 
-  @Post('nationality-id-back/process')
+  @Post('documents/nationality-id-back/process')
   @ApiOperation({
     summary: 'Process a national ID back side',
     description:
@@ -162,7 +157,7 @@ export class DocumentsController {
       type: DOCUMENT_TYPES.NATIONAL_ID_BACK_SIDE,
     };
     const result = await this.documentService.process(params);
-    if(result?.status === DOCUMENT_STATUSES.PROCESSED) {
+    if (result?.status === DOCUMENT_STATUSES.PROCESSED) {
       await this.customerService.updateLastStep(
         currentUser.id,
         CUSTOMER_LAST_STEPS.RBX_ONB_STEP_NATIONAL_ID_BACK_PROCESSED,
@@ -171,7 +166,7 @@ export class DocumentsController {
     return result;
   }
 
-  @Post('passport/upload')
+  @Post('documents/passport/upload')
   @ApiOperation({
     summary: 'Upload a passport',
     description:
@@ -185,25 +180,19 @@ export class DocumentsController {
     type: Error,
     description: 'Input Validation failed.',
   })
-  async uploadPassport(
-    @CurrentUser() currentUser: User,
-    @Body() input: UploadDocumentDTO,
-  ): Promise<Document> {
+  async uploadPassport(@CurrentUser() currentUser: User, @Body() input: UploadDocumentDTO): Promise<Document> {
     const params: DocumentUploadingInput = {
       file: input.file,
       type: DOCUMENT_TYPES.PASSPORT,
     };
     const result = await this.documentService.upload(params);
-    if(result?.status === DOCUMENT_STATUSES.PROCESSING) {
-      await this.customerService.updateLastStep(
-        currentUser.id,
-        CUSTOMER_LAST_STEPS.RBX_ONB_STEP_PASSPORT_UPLOADED,
-      );
+    if (result?.status === DOCUMENT_STATUSES.PROCESSING) {
+      await this.customerService.updateLastStep(currentUser.id, CUSTOMER_LAST_STEPS.RBX_ONB_STEP_PASSPORT_UPLOADED);
     }
     return result;
   }
 
-  @Post('passport/process')
+  @Post('documents/passport/process')
   @ApiOperation({
     summary: 'Process a passport',
     description:
@@ -223,16 +212,13 @@ export class DocumentsController {
       type: DOCUMENT_TYPES.PASSPORT,
     };
     const result = await this.documentService.process(params);
-    if(result?.status === DOCUMENT_STATUSES.PROCESSED) {
-      await this.customerService.updateLastStep(
-        currentUser.id,
-        CUSTOMER_LAST_STEPS.RBX_ONB_STEP_PASSPORT_PROCESSED,
-      );
+    if (result?.status === DOCUMENT_STATUSES.PROCESSED) {
+      await this.customerService.updateLastStep(currentUser.id, CUSTOMER_LAST_STEPS.RBX_ONB_STEP_PASSPORT_PROCESSED);
     }
     return result;
   }
 
-  @Post('driving-license/upload')
+  @Post('documents/driving-license/upload')
   @ApiOperation({
     summary: 'Upload a Driving License',
     description:
@@ -246,16 +232,13 @@ export class DocumentsController {
     type: Error,
     description: 'Input Validation failed.',
   })
-  async uploadDrivingLicense(
-    @CurrentUser() currentUser: User,
-    @Body() input: UploadDocumentDTO,
-  ): Promise<Document> {
+  async uploadDrivingLicense(@CurrentUser() currentUser: User, @Body() input: UploadDocumentDTO): Promise<Document> {
     const params: DocumentUploadingInput = {
       file: input.file,
       type: DOCUMENT_TYPES.DRIVING_LICENSE,
     };
     const result = await this.documentService.upload(params);
-    if(result?.status === DOCUMENT_STATUSES.PROCESSING) {
+    if (result?.status === DOCUMENT_STATUSES.PROCESSING) {
       await this.customerService.updateLastStep(
         currentUser.id,
         CUSTOMER_LAST_STEPS.RBX_ONB_STEP_DRIVING_LICENCE_UPLOADED,
@@ -264,7 +247,7 @@ export class DocumentsController {
     return result;
   }
 
-  @Post('driving-license/process')
+  @Post('documents/driving-license/process')
   @ApiOperation({
     summary: 'Process a driving license',
     description:
@@ -284,7 +267,7 @@ export class DocumentsController {
       type: DOCUMENT_TYPES.DRIVING_LICENSE,
     };
     const result = await this.documentService.process(params);
-    if(result?.status === DOCUMENT_STATUSES.PROCESSED) {
+    if (result?.status === DOCUMENT_STATUSES.PROCESSED) {
       await this.customerService.updateLastStep(
         currentUser.id,
         CUSTOMER_LAST_STEPS.RBX_ONB_STEP_DRIVING_LICENCE_PROCESSED,
@@ -293,7 +276,7 @@ export class DocumentsController {
     return result;
   }
 
-  @Post('verification')
+  @Post('documents/verification')
   @ApiOperation({
     summary: 'Perform Documents Verification',
     description:
@@ -310,7 +293,7 @@ export class DocumentsController {
   @HttpCode(HttpStatus.OK)
   async evaluation(@CurrentUser() currentUser: User): Promise<Evaluation> {
     const result = await this.documentService.evaluation();
-    if(result?.status === EVALUATION_STATUSES.MATCH) {
+    if (result?.status === EVALUATION_STATUSES.MATCH) {
       await this.customerService.updateLastStep(currentUser.id, CUSTOMER_LAST_STEPS.RBX_ONB_STEP_DOCUMENTS_MATCHED);
     } else if (result?.status === EVALUATION_STATUSES.MISMATCH) {
       await this.customerService.updateLastStep(currentUser.id, CUSTOMER_LAST_STEPS.RBX_ONB_STEP_DOCUMENTS_MISMATCHED);
@@ -318,7 +301,7 @@ export class DocumentsController {
     return result;
   }
 
-  @Get(':id/preview')
+  @Get('documents/:id/preview')
   @ApiOperation({
     summary: 'Preview a identity image',
     description:
@@ -332,28 +315,45 @@ export class DocumentsController {
     @Res() res: Response,
     @Query('extracted-image') extracted_image?: boolean,
   ): Promise<any> {
-    console.log(extracted_image);
     const params: any = {
       attachment_id: id,
       customer_id: currentUser.id,
-      extracted_image: extracted_image || false
+      extracted_image: extracted_image || false,
     };
-    const result = await this.documentService.preview(params);
-    const img: any = Buffer.from(result.image, 'base64');
-    //res.end(img, 'binary');
-    // request.res.setHeader(
-    //   'Content-disposition',
-    //   `inline; filename=${currentUser.id}.jpg`,
-    // );
-    // request.res.setHeader('Content-type', 'image/jpeg');
-    // request.res.set('Content-Type', 'image/jpeg');
-
+    const img = await this.documentService.preview(params);
     res.writeHead(200, {
       'Content-Type': 'image/png',
-      'Content-Length': img.length
+      'Content-Length': img.length,
+    });
+    res.end(img);
+  }
+
+  @Get('customers/:customer_id/documents/:id/preview')
+  @ApiOperation({
+    summary: 'Preview a identity image',
+    description:
+      'A successful request returns the HTTP 200 OK status code and a response return a multipart buffer stream.',
+  })
+  @ApiOkResponse({})
+  @Header('Content-Type', 'image/jpeg')
+  @Permissions('attend:video')
+  async previewDoc(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Param('customer_id', ParseUUIDPipe) customer_id: string,
+    @Res() res: Response,
+    @Query('extracted-image') extracted_image?: boolean,
+  ): Promise<any> {
+    const params: any = {
+      attachment_id: id,
+      customer_id: customer_id,
+      extracted_image: extracted_image || false,
+    };
+    const img = await this.documentService.preview(params);
+    res.writeHead(200, {
+      'Content-Type': 'image/png',
+      'Content-Length': img.length,
     });
 
     res.end(img);
-    return res;
   }
 }

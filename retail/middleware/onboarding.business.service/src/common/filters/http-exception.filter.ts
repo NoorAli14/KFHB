@@ -1,17 +1,10 @@
-import {
-  ArgumentsHost,
-  Catch,
-  ExceptionFilter,
-  HttpException,
-  HttpStatus,
-  Logger
-} from '@nestjs/common';
+import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus, Logger } from '@nestjs/common';
 import { Request, Response } from 'express';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
-  private readonly logger = new Logger(HttpExceptionFilter.name)
-  catch(error: HttpException | any, host: ArgumentsHost) {
+  private readonly logger = new Logger(HttpExceptionFilter.name);
+  catch(error: HttpException | any, host: ArgumentsHost): void {
     this.logger.log(error);
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
@@ -21,9 +14,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     this.logger.log(error);
     if (status === HttpStatus.UNAUTHORIZED) {
       if (typeof error.response !== 'string') {
-        error.response['message'] =
-          error.response.message ||
-          'You do not have permission to access this resource';
+        error.response['message'] = error.response.message || 'You do not have permission to access this resource';
       }
     }
     response.status(status).json({
