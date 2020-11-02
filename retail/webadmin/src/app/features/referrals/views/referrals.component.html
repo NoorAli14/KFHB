@@ -31,10 +31,10 @@
                     <mat-header-cell class="text-left" *matHeaderCellDef mat-sort-header>
                         {{camelToSentenceCase(key) }}</mat-header-cell>
                     <mat-cell *matCellDef="let element; let i = dataIndex" class="pl-24">
-                        <span *ngIf="element[(key)] && element[(key)]!=null; else defaultText" style="width:100%;word-wrap: break-word;">
+                        <span *ngIf="element[(key)]!=null; else defaultText" style="width:100%;word-wrap: break-word;">
                             <ng-container>
                                 {{ key.includes('date') ?(element[(key)]| date: "dd-MM-yyyy"):
-                                 !element[(key)]?'No':element[(key)]==yes?'Yes':element[(key)] }}
+                                element[(key)]==false?'No':element[(key)]==true?'Yes':element[(key)] }}
                             </ng-container>
                         </span>
                         <ng-template #defaultText>
