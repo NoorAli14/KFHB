@@ -21,11 +21,11 @@ import {
   ApiNotFoundResponse,
   ApiNoContentResponse,
 } from '@nestjs/swagger';
-import {AuthGuard, PermissionsGuard, Permissions, PaginationDTO, SortByDTO} from '@common/index';
-import {Holiday, HolidayPaginationList} from './holiday.entity';
+import { AuthGuard, PermissionsGuard, Permissions, PaginationDTO, SortByDTO } from '@common/index';
+import { Holiday, HolidayPaginationList } from './holiday.entity';
 import { CreateHolidayDto, UpdateHolidayDTO } from './holiday.dto';
 import { HolidaysService } from './holidays.service';
-import {HolidayFilterDto} from "@app/v1/holidays/dtos";
+import { HolidayFilterDto } from "@app/v1/holidays/dtos";
 
 @ApiTags('Holidays')
 @Controller('holidays')

@@ -3,8 +3,8 @@ import {
   UnprocessableEntityException,
   Logger,
 } from '@nestjs/common';
-import {User, UserPaginationList} from './user.entity';
-import {GqlClientService, PAGINATION_OUTPUT, toGraphql} from '@common/index';
+import { User, UserPaginationList } from './user.entity';
+import { GqlClientService, PAGINATION_OUTPUT, toGraphql } from '@common/index';
 import { ChangePasswordDto, UpdateUserDto } from './user.dto';
 
 @Injectable()
@@ -70,8 +70,8 @@ export class UserService {
   async list(params?: any): Promise<UserPaginationList> {
     const query = `query {
       result: usersList(
-        filters: ${toGraphql(params?.filters)},
-        sort_by: ${toGraphql(params?.sort_by)},
+        filters: ${toGraphql(params?.filters)}
+        sort_by: ${toGraphql(params?.sort_by)}
         pagination: ${toGraphql(params?.pagination)}
       ) {
         pagination ${PAGINATION_OUTPUT}
@@ -187,10 +187,6 @@ export class UserService {
     input: UpdateUserDto,
   ): Promise<User> {
     this.logger.log(`Start updating user with ID [${id}]`);
-    // const user: User = await this.findOne(id, `{id}`);
-    // if (!user) {
-    //   throw new NotFoundException('User Not Found');
-    // }
     const mutation = `mutation {
       result: updateUser(id: "${id}", input: ${toGraphql(input)}) ${this.output}
     }`;
@@ -199,11 +195,6 @@ export class UserService {
 
   async delete(id: string): Promise<boolean> {
     this.logger.log(`Start deleting user with ID [${id}]`);
-
-    // const user: User = await this.findOne(header, id, `{id}`);
-    // if (!user) {
-    //   throw new NotFoundException('User Not Found');
-    // }
     const mutation = `mutation {
       result: deleteUser(id: "${id}") 
     }`;

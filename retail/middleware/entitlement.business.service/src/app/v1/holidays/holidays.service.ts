@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
-import {GqlClientService, PAGINATION_OUTPUT, toGraphql} from '@common/index';
-import {Holiday, HolidayPaginationList} from './holiday.entity';
+import { GqlClientService, PAGINATION_OUTPUT, toGraphql } from '@common/index';
+import { Holiday, HolidayPaginationList } from './holiday.entity';
 import { CreateHolidayDto, UpdateHolidayDTO } from './holiday.dto';
 
 @Injectable()
@@ -34,8 +34,8 @@ export class HolidaysService {
     this.logger.log(`Start fetching list of all holidays`);
     const query = `query {
       result: holidaysList(
-        filters: ${toGraphql(params?.filters)},
-        sort_by: ${toGraphql(params?.sort_by)},
+        filters: ${toGraphql(params?.filters)}
+        sort_by: ${toGraphql(params?.sort_by)}
         pagination: ${toGraphql(params?.pagination)}
       ) {
         pagination ${PAGINATION_OUTPUT}
