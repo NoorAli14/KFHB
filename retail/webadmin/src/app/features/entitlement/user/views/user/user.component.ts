@@ -31,8 +31,11 @@ import {
     ConfirmDialogComponent,
 } from '@shared/components/confirm-dialog/confirm-dialog.component';
 import { UserDetailComponent } from '../../components/user-detail/user-detail.component';
-import { takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map, skip, takeUntil } from 'rxjs/operators';
 import { MESSAGES } from '@shared/constants/messages.constant';
+import { Pagination } from '@shared/models/pagination.model';
+    import * as QueryString from 'query-string';
+
 
 @Component({
     selector: 'app-user',
@@ -50,12 +53,13 @@ export class UserComponent extends BaseComponent implements OnInit {
     pageSizeOptions: Array<number> = CONFIG.PAGE_SIZE_OPTIONS;
     nationalities: any[];
     displayedColumns = ['firstName', 'lastName', 'email', 'createdOn', 'status', 'action'];
-
+    pagination: Pagination;
     dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
 
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: false }) sort: MatSort;
-
+    config: object;
+    control: FormControl;
     constructor(
         public _matDialog: MatDialog,
         private _service: UserService,
@@ -66,17 +70,45 @@ export class UserComponent extends BaseComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.getData();
+        this.config = this.initParams();
+        this.getData(this.config);
+        this.pagination = new Pagination();
+        this.control=new FormControl();
+        this.initSearch();
+    }
+    initParams(): object{
+        return {
+            limit: CONFIG.PAGE_SIZE,
+            page: 1,
+            sort_order: 'desc',
+            sort_by: 'created_on',
+        };
+    }
+    getQueryString(params): string {
+        return QueryString.stringify(params);
     }
 
-    getData(): void {
+    createQueryObject(params): any {
+        return {
+            ...this.config,
+            ...params,
+        };
+    }
+    getData(params): void {
+        const queryParams = QueryString.stringify(
+            this.createQueryObject(params)
+        );
         this._service
-            .forkUserData()
+            .forkUserData(queryParams)
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe(
                 (response) => {
-                    [this.users, this.roles, this.nationalities] = response;
-                    this.updateGrid(this.users);
+                    this.users=  response[0].data;
+                    this.pagination=response[0].pagination;
+                    this.roles= response[1].data;
+                    this.nationalities=response[2];
+                    this.pagination.page = this.pagination.page - 1;
+                    this.dataSource = new MatTableDataSource(this.users);
                 },
                 (response) => {
                     this._notifier.error(MESSAGES.UNKNOWN);
@@ -158,7 +190,6 @@ export class UserComponent extends BaseComponent implements OnInit {
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe(
                 (response) => {
-                   
                     this._notifier.success(MESSAGES.INVITE_RESENT);
                 },
                 (response) => {
@@ -174,7 +205,7 @@ export class UserComponent extends BaseComponent implements OnInit {
                 (response) => {
                     const data = this.dataSource.data;
                     data.unshift(response);
-                    this.updateGrid(data);
+                    this.dataSource = new MatTableDataSource(data);
                     this._matDialog.closeAll();
                     this._notifier.success(MESSAGES.CREATED('User'));
                 },
@@ -199,7 +230,7 @@ export class UserComponent extends BaseComponent implements OnInit {
                         (x) => x.id === model.id
                     );
                     this.users[index] = response;
-                    this.updateGrid(this.users);
+                    this.dataSource = new MatTableDataSource(this.users);
                     this._matDialog.closeAll();
                 },
                 (response) => {
@@ -217,7 +248,8 @@ export class UserComponent extends BaseComponent implements OnInit {
                         (x) => x.id === id
                     );
                     this.users.splice(index, 1);
-                    this.updateGrid(this.users);
+   
+                    this.dataSource = new MatTableDataSource(this.users);
                     this._notifier.success(MESSAGES.DELETED('User'));
                 },
                 (response) => {
@@ -225,9 +257,29 @@ export class UserComponent extends BaseComponent implements OnInit {
                 }
             );
     }
-    updateGrid(data): void {
-        this.dataSource.data = data;
+
+    initSearch(): void {
+        this.control.valueChanges
+            .pipe(
+                skip(1),
+                map((value: any) => {
+                    return value;
+                }),
+                debounceTime(400),
+                distinctUntilChanged()
+            )
+            .subscribe((text: string) => {
+                this.getData({first_name: text})
+            });
+    }
+    ngAfterViewInit(): void {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+    }
+    sortData(e): void {
+        this.getData({ sort_order: e.direction ? e.direction : 'asc', sort_by: camelToSnakeCaseText(e.active) });
+    }
+    onPageFired(data): void {
+        this.getData({ page: data['pageIndex'] + 1, limit: data['pageSize'] });
     }
 }

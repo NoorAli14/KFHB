@@ -25,9 +25,6 @@ import { MaterialFormsModule } from '@shared/modules/material-forms/material-for
     GalleryModule,
     LightboxModule,
     MaterialFormsModule,
-    MatTabsModule,
-    MatSortModule,
-    MatAutocompleteModule
   ]
 })
 export class CustomerModule { }

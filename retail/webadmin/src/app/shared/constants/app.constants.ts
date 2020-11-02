@@ -68,7 +68,7 @@ export const URI = {
     LEAVES: `${ENTITLEMENT}leaves`,
     COUNTRIES: `${REFERENCE}countries`,
     CUSTOMERS: `${ONBOARDING}customers`,
-    CUSTOMER360: `${ENTITLEMENT}customers`,
+    CUSTOMER360: `${ONBOARDING}customers`,
 };
 
 export const DEFAULT_IMAGE = 'assets/images/not-available.png';
