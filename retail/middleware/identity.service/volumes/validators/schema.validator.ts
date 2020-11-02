@@ -1,18 +1,18 @@
-const schema = [
-  {
-    name: "Document Class Code",
-    type: "string",
-    required: false,
-  },
+const __SCHEMA = [
   {
     name: "Issuing State Code",
     type: "string",
     pattern: "^[A-Z]*$", // Regex: Only uppercase letter allowed
-    groups: ["NATIONAL_ID_BACK_SIDE", "PASSPORT"],
+    groups: ["NATIONAL_ID_FRONT_SIDE", "NATIONAL_ID_BACK_SIDE", "PASSPORT"],
+    required: true,
     context: {
       pattern: {
         errorCode: "IDT-1001",
         message: "Only uppercase letters allowed",
+      },
+      required: {
+        errorCode: "IDT-1041",
+        message: "Issuing State Code can't be blank",
       },
     },
   },
@@ -33,12 +33,13 @@ const schema = [
       },
     },
   },
+  // Not in case of UAE Front Side.
   {
     name: "Date Of Expiry",
     type: "string",
     format: "date", // Only date format valid: 1992-12-04
     required: true,
-    groups: ["NATIONAL_ID_BACK_SIDE", "PASSPORT"],
+    groups: ["NATIONAL_ID_FRONT_SIDE", "NATIONAL_ID_BACK_SIDE", "PASSPORT"],
     context: {
       format: {
         errorCode: "IDT-1002",
@@ -50,6 +51,8 @@ const schema = [
       },
     },
   },
+
+  // In case of Kuwait, DOB will be on front side.
   {
     name: "Date Of Birth",
     type: "string",
@@ -67,12 +70,14 @@ const schema = [
       },
     },
   },
+  // Personal Number Only will Come for Bahrain and Kuwait
+
   {
     name: "Personal Number",
     type: "string",
     pattern: "^[0-9()-.s]+$", // Only string numbers are allowed
     required: true,
-    groups: [""],
+    groups: [],
     context: {
       required: {
         errorCode: "IDT-1006",
@@ -152,12 +157,14 @@ const schema = [
       },
     },
   },
+
+  // In case of Bahrain, it's on FrontSide
   {
     name: "Surname And Given Names",
     type: "string",
     pattern: "^[a-zA-Z][a-zA-Z\\s]*$", // Only letters and spaces are allowed
     required: true,
-    groups: ["NATIONAL_ID_BACK_SIDE"],
+    groups: ["NATIONAL_ID_BACK_SIDE", "NATIONAL_ID_FRONT_SIDE"],
     context: {
       required: {
         errorCode: "IDT-1014",
@@ -186,12 +193,14 @@ const schema = [
       },
     },
   },
+  // Only Comes in case of Kuwait and UAE.
+
   {
     name: "Optional Data",
     type: "string",
     pattern: "^[a-zA-Z0-9]*$", // Regex for Alphanumeric
     required: true,
-    groups: ["NATIONAL_ID_BACK_SIDE"],
+    groups: [],
     context: {
       required: {
         errorCode: "IDT-1018",
@@ -203,12 +212,14 @@ const schema = [
       },
     },
   },
+
+  // In Case Of Bahrain & Kuwait, it's on Front Side.
   {
     name: "Issuing State Name",
     type: "string",
     pattern: "^[a-zA-Z][a-zA-Z\\s]*$", // Only letters and spaces are allowed
     required: true,
-    groups: ["NATIONAL_ID_BACK_SIDE", "PASSPORT"],
+    groups: ["NATIONAL_ID_FRONT_SIDE", "NATIONAL_ID_BACK_SIDE", "PASSPORT"],
     context: {
       required: {
         errorCode: "IDT-1020",
@@ -238,13 +249,119 @@ const schema = [
     required: true,
     groups: ["NATIONAL_ID_BACK_SIDE"],
   },
+  {
+    name: "Identity Card Number",
+    type: "string",
+    pattern: "^[0-9()-.s]+$", // Only string numbers are allowed
+    required: true,
+    groups: [],
+    context: {
+      required: {
+        errorCode: "IDT-1033",
+        message: "Identity Card Number can't be blank",
+      },
+      pattern: {
+        errorCode: "IDT-1034",
+        message: "Only number letters are allowed",
+      },
+    },
+  },
+  {
+    name: "Passport Number",
+    type: "string",
+    pattern: "^[a-zA-Z0-9]*$", // Regex for Alphanumeric
+    required: true,
+    groups: [],
+    context: {
+      required: {
+        errorCode: "IDT-1035",
+        message: "Passport Number can't be blank",
+      },
+      pattern: {
+        errorCode: "IDT-1036",
+        message: "Only alphanumeric letters are allowed",
+      },
+    },
+  }
 ];
 
-export const SCHEMA = (group, processedData): any => {
+export const SCHEMA = (group, processedData) => {
   console.log(`Start Validating -> #${group}`);
   console.log(`Processed Data is -> ${JSON.stringify(processedData, null, 2)}`);
-  if (group === 'NATIONAL_ID_BACK_SIDE' && processedData.nationality === 'Bahraini') {
-    //write your logic here. ....
+  let schema = __SCHEMA;
+  if (group === 'NATIONAL_ID_FRONT_SIDE') {
+    if (processedData['Issuing State Code'] === 'OMN') {
+
+      const document_number = schema.find(s => s.name === 'Document Number');
+      document_number.groups = ["NATIONAL_ID_FRONT_SIDE"]
+
+      const age = schema.find(s => s.name === 'Age');
+      age.groups = ["NATIONAL_ID_FRONT_SIDE"]
+
+      const date_of_birth = schema.find(s => s.name === 'Date Of Birth');
+      date_of_birth.groups = ["NATIONAL_ID_FRONT_SIDE"]
+
+      schema = schema.filter(s => s.name != "Surname And Given Names");
+
+    } else if (processedData['Issuing State Code'] === 'BHR') {
+
+      const personal_number = schema.find(s => s.name === 'Personal Number');
+      personal_number.groups = ["NATIONAL_ID_FRONT_SIDE"]
+
+      const nationality = schema.find(s => s.name === 'Nationality');
+      nationality.groups = ["NATIONAL_ID_FRONT_SIDE"]
+
+    } else if (processedData['Issuing State Code'] === 'ARE') {
+
+
+      schema = schema.filter(s => s.name != "Date Of Expiry");
+
+      const idNumber = schema.find(s => s.name === 'Identity Card Number');
+      idNumber.groups = ["NATIONAL_ID_FRONT_SIDE"]
+
+      const nationality = schema.find(s => s.name === 'Nationality');
+      nationality.groups = ["NATIONAL_ID_FRONT_SIDE"]
+
+    } else if (processedData['Issuing State Code'] === 'KWT') {
+
+      const personal_number = schema.find(s => s.name === 'Personal Number');
+      personal_number.groups = ["NATIONAL_ID_FRONT_SIDE"]
+
+      const date_of_birth = schema.find(s => s.name === 'Date Of Birth');
+      date_of_birth.groups = ["NATIONAL_ID_FRONT_SIDE"]
+
+      const nationality = schema.find(s => s.name === 'Nationality');
+      nationality.groups = ["NATIONAL_ID_FRONT_SIDE"]
+
+      const sex = schema.find(s => s.name === 'Sex');
+      sex.groups = ["NATIONAL_ID_FRONT_SIDE"]
+
+      const age = schema.find(s => s.name === 'Age');
+      age.groups = ["NATIONAL_ID_FRONT_SIDE"]
+
+      const passport_number = schema.find(s => s.name === 'Passport Number');
+      passport_number.groups = ["NATIONAL_ID_FRONT_SIDE"]
+
+    }
   }
-  return schema;
+  else if (group === 'NATIONAL_ID_BACK_SIDE') {
+    if (processedData['Issuing State Code'] === 'OMN') {
+      // Some Conditions
+
+    } else if (processedData['Issuing State Code'] === 'BHR') {
+      // Some Conditions
+    } else if (processedData['Issuing State Code'] === 'ARE') {
+
+      const optional_data = schema.find(s => s.name === 'Optional Data');
+      optional_data.groups = ["NATIONAL_ID_BACK_SIDE"]
+
+    } else if (processedData['Issuing State Code'] === 'KWT') {
+
+      const optional_data = schema.find(s => s.name === 'Optional Data');
+      optional_data.groups = ["NATIONAL_ID_BACK_SIDE"]
+    }
+  }
+  const _schema = schema.filter(s => s.groups.includes(group));
+  console.log(JSON.stringify(_schema, null, 2));
+  return _schema;
 }
