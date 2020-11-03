@@ -23,11 +23,15 @@ const PATH_SCHEMA_OUTPUT = `./${DIR_OUTPUT}/${FILENAME_SCHEMA_OUTPUT}`;
     for (let file of migrationFiles) {
       const filename = file.normalize();
       console.log(`Processing [${filename}]`);
-
+      
       // Parse date from migration filename
       const comment = `/* [${RBX_SERVICE_NAME}] - ${filename} */\r\n`;
-      scripts +=
-        comment + (await getSQL(knex, `${DIR_SEED}/${filename}`)) + "\r\n\n\n";
+      // Read migration file query into string
+      let query = await getSQL(knex, `${DIR_SEED}/${filename}`);
+      // Format query
+      query = query.replace(/\), \(/gi, '),\n(');
+      query = query.replace(/\) values \(/gi, ')\nvalues (');
+      scripts += comment + query + "\r\n\n\n";
     }
 
     // write the generate schema to the output file
