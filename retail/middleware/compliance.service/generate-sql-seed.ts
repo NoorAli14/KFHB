@@ -18,7 +18,7 @@ import { DBConfigurationService } from '@rubix/common/configuration/dbconfigurat
     const db = require('knex')(dbConfig.databaseConfig());
 
     // Truncate all existing data in a file
-    // await fs.promises.truncate('schema.sql', 0);
+    await fs.promises.truncate('seed.sql', 0);
 
     // Loop through all the existing migrations files
     for (let filename of filenames) {
@@ -28,7 +28,10 @@ import { DBConfigurationService } from '@rubix/common/configuration/dbconfigurat
       // const date = filename.split('_')[0];
 
       // Read migration file query into string
-      const query = await getSQL(db, `${seedsDir}/${filename}`);
+      let query = await getSQL(db, `${seedsDir}/${filename}`);
+      // Format query
+      query = query.replace(/\), \(/gi, '),\n(');
+      query = query.replace(/\) values \(/gi, ')\nvalues (');
 
       // Add comment in seed file
       const comment = `/* [${dbConfig.APP.NAME}] - ${filename} */`;
