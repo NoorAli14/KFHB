@@ -14,7 +14,7 @@ export function up(knex: Knex): any {
     table.timestamp('created_on').defaultTo(knex.fn.now());
     table.string('created_by').notNullable();
     table.timestamp('updated_on').defaultTo(knex.fn.now());
-    table.string('updated_by').notNullable();
+    table.string('updated_by');
 
     // table.foreign('user_id').references(`${TABLE.USER}.id`).onDelete('CASCADE');
     // table.foreign('tenent_id').references(`${TABLE.USER}.id`).onDelete('CASCADE');
