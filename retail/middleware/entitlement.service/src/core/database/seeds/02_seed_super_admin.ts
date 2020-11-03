@@ -43,9 +43,6 @@ export async function processSeed(
     user_id: userParams.id,
     role_id: roleParams.id,
   };
-  // Deletes ALL existing entries
-  const deleteRoles = () => knex(TABLE.ROLE).del();
-  const deleteUsers = () => knex(TABLE.USER).del();
   // Insert Data into DB
   const insertUser = () => knex(TABLE.USER).insert(userParams);
   const insertRole = () => knex(TABLE.ROLE).insert(roleParams);
@@ -58,8 +55,6 @@ export async function processSeed(
 
   if (generateSql) {
     let sql = '';
-    sql += `${deleteRoles().toString()};\r\n\n`;
-    sql += `${deleteUsers().toString()};\r\n\n`;
     sql += `${insertUser().toString()};\r\n\n`;
     sql += `${insertRole().toString()};\r\n\n`;
     sql += `${insertUserRole().toString()};\r\n\n`;
@@ -67,8 +62,6 @@ export async function processSeed(
     return sql;
   }
 
-  await deleteRoles();
-  await deleteUsers();
   await insertUser();
   await insertRole();
   await insertUserRole();

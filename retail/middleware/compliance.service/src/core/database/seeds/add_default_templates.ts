@@ -386,8 +386,6 @@ export async function processSeed (
   knex: Knex,
   generateSql = true,
 ): Promise<any> {
-  // Deletes ALL existing entries
-  const deleteTemplate = () => knex(TABLE.TEMPLATE).del();
 
   const insertTemplates = () =>
     knex(TABLE.TEMPLATE).insert(
@@ -427,15 +425,13 @@ export async function processSeed (
 
   if (generateSql) {
     let sql = '';
-    sql += `${deleteTemplate().toString()};\r\n\n`;
     sql += `${insertTemplates().toString()};\r\n\n`;
     sql += `${insertSections().toString()};\r\n\n`;
     sql += `${insertQuestions().toString()};\r\n\n`;
     sql += `${insertOptions().toString()};\r\n\n`;
-    return sql;
+    return sql; 
   }
 
-  await deleteTemplate();
   return Promise.all([
     insertTemplates(),
     insertSections(),

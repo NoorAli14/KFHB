@@ -24,19 +24,14 @@ export async function processSeed(
       updated_by: UPDATED_BY.SYSTEM,
     };
   });
-  // Deletes ALL existing entries
-  const deleteCountries = () => knex(TABLE.COUNTRY).del();
   // Insert Data into DB
   const insertCountries = () =>
     knex(TABLE.COUNTRY).insert(formattedCountries);
 
   if (generateSql) {
     let sql = '';
-    sql += `${deleteCountries().toString()};\r\n\n`;
     sql += `${insertCountries().toString()};\r\n\n`;
     return sql;
   }
-
-  await deleteCountries();
   return insertCountries();
 }

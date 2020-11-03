@@ -20,18 +20,14 @@ export async function processSeed(
       updated_by: CREATED_BY.SYSTEM,
     };
   });
-  // Deletes ALL existing entries
-  const deleteDocuments = () => knex(TABLE.DOCUMENT_TYPE).del();
   // Insert Data into DB
   const insertDocuments = () => knex(TABLE.DOCUMENT_TYPE).insert(documents);
 
   if (generateSql) {
     let sql = '';
-    sql += `${deleteDocuments().toString()};\r\n\n`;
     sql += `${insertDocuments().toString()};\r\n\n`;
     return sql;
   }
 
-  await deleteDocuments();
-  return knex(TABLE.DOCUMENT_TYPE).insert(documents);
+  return insertDocuments();
 }

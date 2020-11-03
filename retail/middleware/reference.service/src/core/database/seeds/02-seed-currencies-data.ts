@@ -21,19 +21,15 @@ export async function seed(knex: Knex): Promise<any> {
             updated_by: UPDATED_BY.SYSTEM,
         }
     });
-    // Deletes ALL existing entries
-    const deleteCurrencies = () =>  knex(TABLE.CURRENCY).del();
     // Insert Data into DB
     const insertCurrencies = () =>
     knex(TABLE.CURRENCY).insert(formattedCurrencies);
   
     if (generateSql) {
       let sql = '';
-      sql += `${deleteCurrencies().toString()};\r\n\n`;
       sql += `${insertCurrencies().toString()};\r\n\n`;
       return sql;
     }
   
-    await deleteCurrencies();
     return insertCurrencies();
   }
