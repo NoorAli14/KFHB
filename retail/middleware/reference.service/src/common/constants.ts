@@ -25,6 +25,6 @@ export const UPDATED_BY = {
   API: 'API',
 };
 
-export const DATABASE_MIGRATION_TABLE_NAME = 'RUBIX_MIGRATION_REFERENCE';
+export const DATABASE_MIGRATION_TABLE_NAME = 'RUBIX_REFERENCE_MIGRATIONS';
 export const DATABASE_MIGRATION_DIRECTORY = 'src/core/database/migrations';
 export const DATABASE_SEED_DIRECTORY = 'src/core/database/seeds';
