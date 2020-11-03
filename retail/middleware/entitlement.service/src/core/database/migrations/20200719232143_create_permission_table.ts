@@ -7,11 +7,11 @@ export function up(knex: Knex): any {
         table.timestamp('created_on', { useTz: true }).defaultTo(knex.fn.now()).notNullable();
         table.string('created_by').notNullable();
 
-        //index
-        table.index(['record_type'], `${TABLE.PERMISSION}_RECORD_TYPE_INDEX`);
-    });
+    //index
+    table.index(['record_type'], `${TABLE.PERMISSION}_RECORD_TYPE_INDEX`);
+  });
 }
 
 export async function down(knex: Knex): Promise<any> {
-    return knex.schema.dropTable(TABLE.PERMISSION);
+  return knex.schema.dropTable(TABLE.PERMISSION);
 }

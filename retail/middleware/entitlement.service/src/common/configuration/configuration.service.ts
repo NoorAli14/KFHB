@@ -19,7 +19,7 @@ export const DEFAULT_ENV: iConfig = {
     HOST: 'http://127.0.0.1',
     API_URL_PREFIX: '/api/v1',
     INVITATION_TOKEN_EXPIRY: 240,
-    PASSWORD_RESET_TOKEN_EXPIRY: 240
+    PASSWORD_RESET_TOKEN_EXPIRY: 240,
   },
   DATABASE: {
     USERNAME: '',
@@ -62,8 +62,20 @@ export class ConfigurationService {
       VERSION: this.get('ENV_RBX_APP_VERSION', DEFAULT_ENV.APP.VERSION),
       HOST: this.get('ENV_RBX_HOST', DEFAULT_ENV.APP.HOST),
       PORT: parseInt(this.get('ENV_RBX_PORT', DEFAULT_ENV.APP.PORT), 10),
-      INVITATION_TOKEN_EXPIRY: parseInt(this.get('ENV_RBX_INVITATION_TOKEN_EXPIRY', DEFAULT_ENV.APP.INVITATION_TOKEN_EXPIRY), 10),
-      PASSWORD_RESET_TOKEN_EXPIRY: parseInt(this.get('ENV_RBX_PASSWORD_RESET_TOKEN_EXPIRY', DEFAULT_ENV.APP.PASSWORD_RESET_TOKEN_EXPIRY), 10),
+      INVITATION_TOKEN_EXPIRY: parseInt(
+        this.get(
+          'ENV_RBX_INVITATION_TOKEN_EXPIRY',
+          DEFAULT_ENV.APP.INVITATION_TOKEN_EXPIRY,
+        ),
+        10,
+      ),
+      PASSWORD_RESET_TOKEN_EXPIRY: parseInt(
+        this.get(
+          'ENV_RBX_PASSWORD_RESET_TOKEN_EXPIRY',
+          DEFAULT_ENV.APP.PASSWORD_RESET_TOKEN_EXPIRY,
+        ),
+        10,
+      ),
     };
   }
 
@@ -114,8 +126,8 @@ export class ConfigurationService {
     return this.IS_DEVELOPMENT
       ? true
       : isTruthy(
-        this.get('ENV_RBX_SWAGGER_ENABLED', DEFAULT_ENV.DATABASE.IS_DEBUG),
-      );
+          this.get('ENV_RBX_SWAGGER_ENABLED', DEFAULT_ENV.DATABASE.IS_DEBUG),
+        );
   }
   get APPLICATION_HOST(): string {
     return this.IS_DEVELOPMENT

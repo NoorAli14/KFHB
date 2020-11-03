@@ -15,5 +15,5 @@ export function up(knex: Knex): any {
 }
 
 export async function down(knex: Knex): Promise<any> {
-    return knex.schema.dropTable(TABLE.USER_ROLE);
+  return knex.schema.dropTable(TABLE.USER_ROLE);
 }

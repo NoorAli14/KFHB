@@ -17,7 +17,7 @@ export function up(knex: Knex): any {
     table.string('created_by').notNullable();
 
     //composite unique
-    table.unique(['module_id', 'permission_id'])
+    table.unique(['module_id', 'permission_id']);
   });
 }
 

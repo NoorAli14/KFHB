@@ -27,11 +27,8 @@ export class ModuleResolver {
   constructor(private readonly moduleService: ModuleService) {}
 
   @Query(() => [Module])
-  async modulesList(
-    @Fields() columns: string[],
-    @Context() context: GraphQLExecutionContext,
-  ): Promise<Module[]> {
-    return this.moduleService.list(columns, context['req'].query);
+  async modulesList(@Fields() columns: string[]): Promise<Module[]> {
+    return this.moduleService.list(columns);
   }
 
   @Query(() => Module)
@@ -87,25 +84,28 @@ export class ModuleResolver {
     return this.moduleService.delete(id);
   }
 
-  @ResolveField('permissions', returns => [Permission])
+  @ResolveField('permissions', () => [Permission])
   async getPermissions(
     @Parent() module: Module,
     @Loader('PermissionsDataLoader')
     permissionsLoader: DataLoader<Permission['id'], Permission>,
-  ) {
+  ): Promise<any> {
     return this.getData(module, permissionsLoader);
   }
 
-  @ResolveField('sub_modules', returns => [Module])
+  @ResolveField('sub_modules', () => [Module])
   async getSubModules(
     @Parent() module: Module,
     @Loader('SubModulesDataLoader')
     subModulesLoader: DataLoader<Module['id'], Module>,
-  ) {
+  ): Promise<any> {
     return this.getData(module, subModulesLoader);
   }
 
-  async getData(module: Module, loader: any): Promise<any> {
+  async getData(
+    module: Module,
+    loader: DataLoader<Module['id'], Module>,
+  ): Promise<any> {
     if (!module.id) return [];
     let input: any = module.id;
     if (module['role_id']) {

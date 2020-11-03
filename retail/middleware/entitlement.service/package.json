@@ -1,6 +1,6 @@
 {
   "name": "user-management-service",
-  "version": "0.0.1",
+  "version": "0.3.0",
   "description": "",
   "author": "Faizan Ahmad <faizan@aiondigital.com>",
   "private": true,
@@ -78,8 +78,9 @@
     "eslint": "7.1.0",
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-import": "^2.20.1",
-    "husky": "^4.2.5",
+    "husky": "^4.3.0",
     "jest": "26.0.1",
+    "lint-staged": "^10.5.0",
     "npm-check-updates": "^7.0.1",
     "prettier": "^1.19.1",
     "rimraf": "^3.0.2",
@@ -91,6 +92,15 @@
     "typescript": "^3.7.4"
   },
   "husky": {
-    "hooks": {}
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.ts": [
+      "npm run format",
+      "eslint --fix --max-warnings 1",
+      "git add"
+    ]
   }
 }

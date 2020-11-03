@@ -7,7 +7,6 @@ export class UpdateHolidayDTO {
     example: '1947-08-14',
   })
   @IsString()
-  @MaxLength(255)
   @IsOptional()
   @Matches(/([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/)
   holiday_date: string;
@@ -37,7 +36,6 @@ export class CreateHolidayDto extends UpdateHolidayDTO {
     required: true
   })
   @IsString()
-  @MaxLength(10)
   @IsNotEmpty()
   @Matches(/([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/)
   holiday_date: string;

@@ -84,7 +84,6 @@ export class CustomerDetailComponent implements OnInit, AfterContentChecked {
 
         this.basicLightboxExample(this.passportDocuments);
         this.basicLightboxExample(this.nationalIdDocuments);
-debugger
         // Load item into different lightbox instance
         // With custom gallery config
         this.withCustomGalleryConfig(
@@ -119,7 +118,7 @@ debugger
         const document = this.data.documents.find((x) => x.name === type);
         if (!document) { return DEFAULT_IMAGE; }
 
-        let url = `/entitlements/customers/${customerId}/documents/${document.id}/preview?x-access-token=${token}&x-tenant-id=${tenantId}&x-channel-id=${channelId}`;
+        let url = `/onboarding/customers/${customerId}/documents/${document.id}/preview?x-access-token=${token}&x-tenant-id=${tenantId}&x-channel-id=${channelId}`;
         if (isExtracted) {
             url = `${url}&extracted-image=true`;
         }

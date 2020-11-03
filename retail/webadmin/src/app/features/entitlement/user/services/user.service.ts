@@ -20,8 +20,8 @@ export class UserService {
     getUserById(id: string): Observable< any> {
         return this._networkService.getById(`${URI.USER}/${id}`);
     }
-    getUsers(): Observable<any> {
-        return this._networkService.getAll(URI.USER);
+    getUsers(queryParams): Observable<any> {
+        return this._networkService.getAll(`${URI.USER}?${queryParams}`);
     }
     getRoles(): Observable<any> {
         return this._networkService.getAll(URI.ROLE);
@@ -32,7 +32,7 @@ export class UserService {
     deleteUser(id: string): Observable< any> {
         return this._networkService.onDelete(`${URI.USER}/${id}`);
     }
-    forkUserData(): Observable< Array<any>> {
-        return forkJoin([this.getUsers(), this.getRoles(), this._refService.getCountries()]);
+    forkUserData(params): Observable< Array<any>> {
+        return forkJoin([this.getUsers(params), this.getRoles(), this._refService.getCountries()]);
     }
 }

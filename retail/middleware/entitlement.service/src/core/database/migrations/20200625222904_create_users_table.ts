@@ -20,7 +20,10 @@ export function up(knex: Knex): any {
     table.timestamp('password_reset_token_expiry', { useTz: true });
     table.string('invitation_token');
     table.timestamp('invitation_token_expiry', { useTz: true });
-    table.timestamp('created_on', { useTz: true }).defaultTo(knex.fn.now()).notNullable();
+    table
+      .timestamp('created_on', { useTz: true })
+      .defaultTo(knex.fn.now())
+      .notNullable();
     table.string('created_by').notNullable();
     table.timestamp('updated_on', { useTz: true }).defaultTo(knex.fn.now());
     table.string('updated_by');
@@ -36,7 +39,10 @@ export function up(knex: Knex): any {
     table.index(['contact_no'], `${TABLE.USER}_CONTACT_NO_INDEX`);
     table.index(['is_owner'], `${TABLE.USER}_IS_OWNER_INDEX`);
     table.index(['tenant_id'], `${TABLE.USER}_TENANT_ID_INDEX`);
-    table.index(['password_reset_token'], `${TABLE.USER}_PASSWORD_RESET_TOKEN_INDEX`);
+    table.index(
+      ['password_reset_token'],
+      `${TABLE.USER}_PASSWORD_RESET_TOKEN_INDEX`,
+    );
     table.index(['invitation_token'], `${TABLE.USER}_INVITATION_TOKEN_INDEX`);
     table.index(['deleted_on'], `${TABLE.USER}_DELETED_ON_INDEX`);
   });

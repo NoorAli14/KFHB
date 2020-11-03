@@ -165,7 +165,7 @@ input ProcessDocumentInput {
 }
 
 type Query {
-  customersList(sort_by: [SortingParam!], filters: CustomersFilterParams, pagination: PaginationParams): CustomerWithPagination!
+  customersList(sort_by: SortingParam, filters: CustomersFilterParams, pagination: PaginationParams): CustomerWithPagination!
   findCustomerById(id: String!): Customer!
   previewAttachment(input: PreviewDocumentInput!): PreviewDocument!
 }
@@ -199,8 +199,8 @@ type Session {
 }
 
 input SortingParam {
-  field: String!
-  direction: String!
+  sort_by: String
+  sort_order: String
 }
 
 input UpdateCustomerInput {

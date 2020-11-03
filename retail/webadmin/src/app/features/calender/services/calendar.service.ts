@@ -26,8 +26,8 @@ export class CalendarService {
         return this._networkService.onDelete(`${URI.WORKING_DAYS}/${id}`);
     }
 
-    getHolidays(): Observable<any> {
-        return this._networkService.getAll(URI.HOLIDAYS);
+    getHolidays(queryParams): Observable<any> {
+        return this._networkService.getAll(`${URI.HOLIDAYS}?${queryParams}`);
     }
     createHoliday(model: Holiday): Observable<any> {
         return this._networkService.post(URI.HOLIDAYS, model);
@@ -39,9 +39,8 @@ export class CalendarService {
         return this._networkService.onDelete(`${URI.HOLIDAYS}/${id}`);
     }
 
-
-    getLeaves(): Observable<any> {
-        return this._networkService.getAll(URI.LEAVES);
+    getLeaves(queryParams): Observable<any> {
+        return this._networkService.getAll(`${URI.LEAVES}?${queryParams}`);
     }
     createLeave(model: Leave): Observable<any> {
         return this._networkService.post(URI.LEAVES, model);
@@ -52,8 +51,8 @@ export class CalendarService {
     deleteLeave(id: string): Observable<any> {
         return this._networkService.onDelete(`${URI.LEAVES}/${id}`);
     }
-    forkLeaveData(): Observable<any> {
-        return forkJoin([this._networkService.getAll(URI.LEAVES), this.getLeaveType(), this.getUsers()]);
+    forkLeaveData(params): Observable<any> {
+        return forkJoin([this.getLeaves(params), this.getLeaveType(), this.getUsers()]);
     }
 
     getLeaveType(): Observable<any> {

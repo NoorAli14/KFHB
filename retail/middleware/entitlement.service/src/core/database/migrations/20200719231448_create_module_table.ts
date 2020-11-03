@@ -9,13 +9,13 @@ export function up(knex: Knex): any {
         table.timestamp('created_on', { useTz: true }).defaultTo(knex.fn.now()).notNullable();
         table.string('created_by').notNullable();
 
-        //index
-        table.index(['name'], `${TABLE.MODULE}_NAME_INDEX`);
-        table.index(['status'], `${TABLE.MODULE}_STATUS_INDEX`);
-        table.index(['parent_id'], `${TABLE.MODULE}_PARENT_ID_INDEX`);
-    });
+    //index
+    table.index(['name'], `${TABLE.MODULE}_NAME_INDEX`);
+    table.index(['status'], `${TABLE.MODULE}_STATUS_INDEX`);
+    table.index(['parent_id'], `${TABLE.MODULE}_PARENT_ID_INDEX`);
+  });
 }
 
 export async function down(knex: Knex): Promise<any> {
-    return knex.schema.dropTable(TABLE.MODULE);
+  return knex.schema.dropTable(TABLE.MODULE);
 }

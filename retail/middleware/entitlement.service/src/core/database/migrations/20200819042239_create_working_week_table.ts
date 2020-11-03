@@ -21,8 +21,14 @@ export function up(knex: Knex): any {
     table.index(['week_day'], `${TABLE.WORKING_WEEK}_WEEK_DAY_INDEX`);
     table.index(['status'], `${TABLE.WORKING_WEEK}_STATUS_INDEX`);
     table.index(['tenant_id'], `${TABLE.WORKING_WEEK}_TENANT_ID_INDEX`);
-    table.index(['start_time_local'], `${TABLE.WORKING_WEEK}_START_TIME_LOCAL_INDEX`);
-    table.index(['end_time_local'], `${TABLE.WORKING_WEEK}_END_TIME_LOCAL_INDEX`);
+    table.index(
+      ['start_time_local'],
+      `${TABLE.WORKING_WEEK}_START_TIME_LOCAL_INDEX`,
+    );
+    table.index(
+      ['end_time_local'],
+      `${TABLE.WORKING_WEEK}_END_TIME_LOCAL_INDEX`,
+    );
     table.index(['deleted_on'], `${TABLE.WORKING_WEEK}_DELETED_ON_INDEX`);
   });
 }

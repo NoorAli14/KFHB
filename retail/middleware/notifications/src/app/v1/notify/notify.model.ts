@@ -21,6 +21,9 @@ export class Notify {
   image_url?: string;
 
   @Field()
+  payload?: string;
+
+  @Field()
   status: string;
 
   @Field()

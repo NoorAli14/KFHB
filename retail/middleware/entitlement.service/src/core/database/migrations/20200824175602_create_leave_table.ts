@@ -18,8 +18,14 @@ export function up(knex: Knex): any {
     table.string('deleted_by');
 
     //foreign key
-    table.foreign('user_id').references(`${TABLE.USER}.id`).onDelete('CASCADE');
-    table.foreign('leave_type_id').references(`${TABLE.LEAVE_TYPE}.id`).onDelete('CASCADE');
+    table
+      .foreign('user_id')
+      .references(`${TABLE.USER}.id`)
+      .onDelete('CASCADE');
+    table
+      .foreign('leave_type_id')
+      .references(`${TABLE.LEAVE_TYPE}.id`)
+      .onDelete('CASCADE');
 
     //index
     table.index(['start_date'], `${TABLE.LEAVE}_START_DATE_INDEX`);

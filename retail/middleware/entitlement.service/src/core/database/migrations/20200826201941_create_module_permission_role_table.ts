@@ -15,7 +15,6 @@ export function up(knex: Knex): any {
     //composite primary key
     table.primary(['module_permission_id', 'role_id']);
   });
-
 }
 
 export async function down(knex: Knex): Promise<any> {

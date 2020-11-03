@@ -6,7 +6,7 @@ export class LeaveTypeAlreadyExistException extends BaseException {
       message: 'Leave Type already exists',
       errorCode: 'ENT-1032',
       name: 'LEAVE_TYPE_ALREADY_EXIST',
-      developerMessage: `Leave-Type already exists with Id [${leave_type_id}]`
+      developerMessage: `Leave-Type already exists with Id [${leave_type_id}]`,
     });
   }
 }

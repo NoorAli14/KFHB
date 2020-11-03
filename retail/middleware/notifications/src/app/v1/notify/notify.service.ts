@@ -3,6 +3,7 @@ import { NotifyRepository } from '@rubix/core/repository/';
 import { Notify } from './notify.model';
 import { DEFAULT_NOTIFY_STATUS } from '@rubix/common/constants';
 import { FirebaseService } from '@rubix/common/connections/firebase/firebase.service';
+import { json } from 'body-parser';
 
 interface iNotifyInput {
   platform: string;
@@ -10,6 +11,7 @@ interface iNotifyInput {
   message_title: string;
   message_body: string;
   image_url: string;
+  payload?: string;
   status: string;
   created_by: string;
   updated_by: string;
@@ -20,6 +22,9 @@ interface iMessageInput {
     body: string;
   };
   token: string;
+  data?: {
+    payload: string;
+  };
 }
 @Injectable()
 export class NotifyService {
@@ -55,6 +60,18 @@ export class NotifyService {
       token: notifyOBJ.token,
     };
 
+    if (notifyOBJ.payload) {
+      // Converting Base64 to String.
+      notifyOBJ.payload = Buffer.from(notifyOBJ.payload, 'base64').toString(
+        'ascii',
+      );
+
+      // Pushing Payload Object in Notification Object.
+      message.data = {
+        payload: notifyOBJ.payload
+      };
+    }
+
     const promises = [this.firebaseService.send(message)];
 
     const input: iNotifyInput = {
@@ -67,6 +84,10 @@ export class NotifyService {
       created_by: currentUser.id,
       updated_by: currentUser.id,
     };
+
+    if (notifyOBJ.payload) {
+      input.payload = notifyOBJ.payload;
+    }
     promises.push(this.notifyDB.create(input, columns));
     const result = await Promise.all(promises);
     return result[1][0];

@@ -6,7 +6,7 @@ export class LeaveNotFoundException extends BaseException {
       message: 'Leave Not Found',
       errorCode: 'ENT-1021',
       name: 'LEAVE_NOT_FOUND',
-      developerMessage: `Leave not found with Id [${leave_id}]`
+      developerMessage: `Leave not found with Id [${leave_id}]`,
     });
   }
 }

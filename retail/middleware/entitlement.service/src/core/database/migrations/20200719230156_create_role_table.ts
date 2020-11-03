@@ -14,14 +14,14 @@ export function up(knex: Knex): any {
         table.timestamp('deleted_on', { useTz: true });
         table.string('deleted_by');
 
-        //index
-        table.index(['name'], `${TABLE.ROLE}_NAME_INDEX`);
-        table.index(['status'], `${TABLE.ROLE}_STATUS_INDEX`);
-        table.index(['tenant_id'], `${TABLE.ROLE}_TENANT_ID_INDEX`);
-        table.index(['deleted_on'], `${TABLE.ROLE}_DELETED_ON_INDEX`);
-    });
+    //index
+    table.index(['name'], `${TABLE.ROLE}_NAME_INDEX`);
+    table.index(['status'], `${TABLE.ROLE}_STATUS_INDEX`);
+    table.index(['tenant_id'], `${TABLE.ROLE}_TENANT_ID_INDEX`);
+    table.index(['deleted_on'], `${TABLE.ROLE}_DELETED_ON_INDEX`);
+  });
 }
 
 export async function down(knex: Knex): Promise<any> {
-    return knex.schema.dropTable(TABLE.ROLE);
+  return knex.schema.dropTable(TABLE.ROLE);
 }
