@@ -27,6 +27,11 @@
                     <mat-icon>search</mat-icon>
                     <input type="text" placeholder="Search for a user" matInput [formControl]="control" [matAutocomplete]="auto">
                     <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn">
+                        <mat-option>
+                            <a class="user" value=""  (click)="onSelectUser()">
+                                Reset Filter
+                            </a>
+                        </mat-option>
                         <mat-option *ngFor="let item of filteredUser" [value]="item.id">
                             <a class="user" (click)="onSelectUser(item)"
                                 *ngIf="item.firstName && item.lastName">{{item.firstName + ' ' +  item.lastName}}
@@ -34,7 +39,6 @@
                             <{{ item.email}}>
                         </mat-option>
                     </mat-autocomplete>
-                    <!-- <input [formControl]="control" placeholder="Search for a user"> -->
                 </div>
             </div>
             <!-- / SEARCH -->

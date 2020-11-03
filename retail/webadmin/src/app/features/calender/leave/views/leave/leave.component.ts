@@ -222,8 +222,12 @@ export class LeaveComponent extends BaseComponent implements OnInit {
     updateGrid(data): void {
         this.dataSource.data = data;
     }
-    onSelectUser(user) {
-        this.getData({ userId: user.id });
+    onSelectUser(user?) {
+        if (user) {
+            this.getData({ user_id: user.id });
+            return;
+        }
+        this.getData({});
     }
     initSearch(): void {
         this.control.valueChanges.subscribe((value) => {
