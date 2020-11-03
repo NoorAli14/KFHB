@@ -1,6 +1,6 @@
 import * as Knex from 'knex';
 import { TABLE, DATABASE_UUID_METHOD } from '@rubix/common/constants';
-export async function up(knex: Knex): Promise<any> {
+export function up(knex: Knex): any {
   return knex.schema.createTable(TABLE.USER, table => {
     table.uuid('id').primary().defaultTo(knex.raw(DATABASE_UUID_METHOD));
     table.string('first_name');
