@@ -12,6 +12,7 @@ import {
   TemplateResponsesRepository,
 } from '@root/src/core/repository';
 import { TemplateResponseNotFoundException } from './exceptions';
+import { base64ToStr } from '@root/src/common/utilities';
 // import { GqlClientService, toGraphql } from '@common/index';
 
 @Injectable()
@@ -138,7 +139,7 @@ export class AmlRequestService {
       throw new TemplateResponseNotFoundException(amlRequest.user_id);
 
     //Decode kyc response from base64 string
-    const kycInfo = new Buffer('SmF2YVNjcmlwdA==', 'base64').toString();
+    const kycInfo = base64ToStr(templateResponse.results);
 
     const amlScreening = await this.http
       .post(process.env.ENV_RBX_AML_BASE_URL, {

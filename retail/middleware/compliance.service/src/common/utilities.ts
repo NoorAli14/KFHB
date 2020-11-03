@@ -79,3 +79,8 @@ export const formattedHeader = (req: Request, user_id?: string): IHEADER => {
     req.query?.[X_TENANT_ID]) as string;
   return headers;
 };
+
+export const base64ToStr = (data: string): any => {
+  const buff: Buffer = new Buffer(data, 'base64');
+  return buff.toString('ascii');
+};
