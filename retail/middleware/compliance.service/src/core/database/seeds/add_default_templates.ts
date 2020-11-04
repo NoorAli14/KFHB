@@ -72,6 +72,43 @@ export async function seed(knex: Knex): Promise<void> {
       section_id: sections[0].id,
       tenant_id: process.env.ENV_RBX_TENANT_ID,
     },
+
+    {
+      id: uuidV4(),
+      title: 'Internal Transfers to KFHB Accounts',
+      title_ar: 'Internal Transfers to KFHB Accounts',
+      type: 'checkbox',
+      rules: '{required: true}',
+      section_id: sections[1].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+    {
+      id: uuidV4(),
+      title: 'Outgoing International Transfers',
+      title_ar: 'Outgoing International Transfers',
+      type: 'checkbox',
+      rules: '{required: true}',
+      section_id: sections[1].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+    {
+      id: uuidV4(),
+      title: 'Transfers to other banks in Bahrain',
+      title_ar: 'Transfers to other banks in Bahrain',
+      type: 'checkbox',
+      rules: '{required: true}',
+      section_id: sections[1].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+    {
+      id: uuidV4(),
+      title: 'Incoming International Transfers',
+      title_ar: 'Incoming International Transfers',
+      type: 'checkbox',
+      rules: '{required: true}',
+      section_id: sections[1].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
   ];
 
   const options: any[] = [
@@ -103,7 +140,6 @@ export async function seed(knex: Knex): Promise<void> {
       question_id: questions[0].id,
       tenant_id: process.env.ENV_RBX_TENANT_ID,
     },
-
     {
       id: uuidV4(),
       name: 'High',
@@ -132,7 +168,6 @@ export async function seed(knex: Knex): Promise<void> {
       question_id: questions[2].id,
       tenant_id: process.env.ENV_RBX_TENANT_ID,
     },
-
     {
       id: uuidV4(),
       name: 'High',
@@ -145,6 +180,63 @@ export async function seed(knex: Knex): Promise<void> {
       name: 'Low',
       name_ar: 'Low',
       question_id: questions[3].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+
+    {
+      id: uuidV4(),
+      name: 'High',
+      name_ar: 'High',
+      question_id: questions[4].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+    {
+      id: uuidV4(),
+      name: 'Low',
+      name_ar: 'Low',
+      question_id: questions[4].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+    {
+      id: uuidV4(),
+      name: 'High',
+      name_ar: 'High',
+      question_id: questions[5].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+    {
+      id: uuidV4(),
+      name: 'Low',
+      name_ar: 'Low',
+      question_id: questions[5].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+    {
+      id: uuidV4(),
+      name: 'High',
+      name_ar: 'High',
+      question_id: questions[6].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+    {
+      id: uuidV4(),
+      name: 'Low',
+      name_ar: 'Low',
+      question_id: questions[6].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+    {
+      id: uuidV4(),
+      name: 'High',
+      name_ar: 'High',
+      question_id: questions[7].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+    {
+      id: uuidV4(),
+      name: 'Low',
+      name_ar: 'Low',
+      question_id: questions[7].id,
       tenant_id: process.env.ENV_RBX_TENANT_ID,
     },
   ];
