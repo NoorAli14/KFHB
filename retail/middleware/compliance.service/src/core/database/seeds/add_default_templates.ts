@@ -13,6 +13,12 @@ export async function seed(knex: Knex): Promise<void> {
       name_ar: 'Banking Transactions',
       tenant_id: process.env.ENV_RBX_TENANT_ID,
     },
+    {
+      id: uuidV4(),
+      name: 'FATCA & CRS',
+      name_ar: 'FATCA & CRS',
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
   ];
 
   const sections: any[] = [
@@ -29,8 +35,16 @@ export async function seed(knex: Knex): Promise<void> {
       name: 'Retrieving data. Wait a few seconds and try to cut or copy again.',
       name_ar:
         'Retrieving data. Wait a few seconds and try to cut or copy again.',
-      level: 'level 2',
+      level: 'level 1',
       template_id: templates[0].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+    {
+      id: uuidV4(),
+      name: 'Individual Certification',
+      name_ar: 'Individual Certification',
+      level: 'level 1',
+      template_id: templates[1].id,
       tenant_id: process.env.ENV_RBX_TENANT_ID,
     },
   ];
@@ -107,6 +121,44 @@ export async function seed(knex: Knex): Promise<void> {
       type: 'checkbox',
       rules: '{required: true}',
       section_id: sections[1].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+    {
+      id: uuidV4(),
+      title: 'Are you a US Citizen?',
+      title_ar: 'Are you a US Citizen?',
+      type: 'checkbox',
+      rules: '{required: true}',
+      section_id: sections[2].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+    {
+      id: uuidV4(),
+      title: 'Are you a US Tax Resident?',
+      title_ar: 'Are you a US Tax Resident?',
+      type: 'checkbox',
+      rules: '{required: true}',
+      section_id: sections[2].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+    {
+      id: uuidV4(),
+      title: 'Were you born in the US?',
+      title_ar: 'Were you born in the US?',
+      type: 'checkbox',
+      rules: '{required: true}',
+      section_id: sections[2].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+    {
+      id: uuidV4(),
+      title:
+        'Are you a tax resident in any other country other than the Kingdom of Bahrain or US?',
+      title_ar:
+        'Are you a tax resident in any other country other than the Kingdom of Bahrain or US?',
+      type: 'checkbox',
+      rules: '{required: true}',
+      section_id: sections[2].id,
       tenant_id: process.env.ENV_RBX_TENANT_ID,
     },
   ];
@@ -237,6 +289,63 @@ export async function seed(knex: Knex): Promise<void> {
       name: 'Low',
       name_ar: 'Low',
       question_id: questions[7].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+
+    {
+      id: uuidV4(),
+      name: 'Yes',
+      name_ar: 'Yes',
+      question_id: questions[8].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+    {
+      id: uuidV4(),
+      name: 'No',
+      name_ar: 'No',
+      question_id: questions[8].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+    {
+      id: uuidV4(),
+      name: 'Yes',
+      name_ar: 'Yes',
+      question_id: questions[9].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+    {
+      id: uuidV4(),
+      name: 'No',
+      name_ar: 'No',
+      question_id: questions[9].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+    {
+      id: uuidV4(),
+      name: 'Yes',
+      name_ar: 'Yes',
+      question_id: questions[10].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+    {
+      id: uuidV4(),
+      name: 'No',
+      name_ar: 'No',
+      question_id: questions[10].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+    {
+      id: uuidV4(),
+      name: 'Yes',
+      name_ar: 'Yes',
+      question_id: questions[11].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+    {
+      id: uuidV4(),
+      name: 'No',
+      name_ar: 'No',
+      question_id: questions[11].id,
       tenant_id: process.env.ENV_RBX_TENANT_ID,
     },
   ];
