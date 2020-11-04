@@ -375,6 +375,7 @@ type User {
   date_of_birth: DateTime
   nationality_id: String
   status: String
+  entity_id: String
   created_on: String!
   created_by: String!
   updated_on: String!

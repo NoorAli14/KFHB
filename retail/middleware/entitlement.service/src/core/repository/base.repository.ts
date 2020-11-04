@@ -96,11 +96,13 @@ export abstract class BaseRepository {
     tenant_id: string,
     current_user_id: string,
     record_id: string,
+    entity_id?: string,
   ): Promise<any> {
     const condition = {
       id: record_id,
       tenant_id: tenant_id,
     };
+    if (entity_id) condition['entity_id'] = entity_id;
     const input = {
       deleted_on: this._connection.fn.now(),
       deleted_by: current_user_id,
