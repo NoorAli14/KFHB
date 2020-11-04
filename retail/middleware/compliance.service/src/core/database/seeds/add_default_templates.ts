@@ -19,6 +19,12 @@ export async function seed(knex: Knex): Promise<void> {
       name_ar: 'FATCA & CRS',
       tenant_id: process.env.ENV_RBX_TENANT_ID,
     },
+    {
+      id: uuidV4(),
+      name: 'KYC (Know Your Customer)',
+      name_ar: 'KYC (Know Your Customer)',
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
   ];
 
   const sections: any[] = [
@@ -42,9 +48,17 @@ export async function seed(knex: Knex): Promise<void> {
     {
       id: uuidV4(),
       name: 'Individual Certification',
-      name_ar: 'Individual Certification',
+      name_ar: 'Individual Certification',
       level: 'level 1',
       template_id: templates[1].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+    {
+      id: uuidV4(),
+      name: 'Personal Details',
+      name_ar: 'Personal Details',
+      level: 'level 1',
+      template_id: templates[2].id,
       tenant_id: process.env.ENV_RBX_TENANT_ID,
     },
   ];
@@ -86,7 +100,6 @@ export async function seed(knex: Knex): Promise<void> {
       section_id: sections[0].id,
       tenant_id: process.env.ENV_RBX_TENANT_ID,
     },
-
     {
       id: uuidV4(),
       title: 'Internal Transfers to KFHB Accounts',
@@ -159,6 +172,42 @@ export async function seed(knex: Knex): Promise<void> {
       type: 'checkbox',
       rules: '{required: true}',
       section_id: sections[2].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+    {
+      id: uuidV4(),
+      title: 'Highest Education Degree',
+      title_ar: 'Highest Education Degree',
+      type: 'dropdown',
+      rules: '{required: true}',
+      section_id: sections[3].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+    {
+      id: uuidV4(),
+      title: 'Source of Funds',
+      title_ar: 'Source of Funds',
+      type: 'dropdown',
+      rules: '{required: true}',
+      section_id: sections[3].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+    {
+      id: uuidV4(),
+      title: 'Are you Politically Exposed?',
+      title_ar: 'Are you Politically Exposed?',
+      type: 'checkbox',
+      rules: '{required: true}',
+      section_id: sections[3].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+    {
+      id: uuidV4(),
+      title: 'Country of Birth',
+      title_ar: 'Country of Birth',
+      type: 'dropdown',
+      rules: '{required: true}',
+      section_id: sections[3].id,
       tenant_id: process.env.ENV_RBX_TENANT_ID,
     },
   ];
@@ -234,7 +283,6 @@ export async function seed(knex: Knex): Promise<void> {
       question_id: questions[3].id,
       tenant_id: process.env.ENV_RBX_TENANT_ID,
     },
-
     {
       id: uuidV4(),
       name: 'High',
@@ -291,7 +339,6 @@ export async function seed(knex: Knex): Promise<void> {
       question_id: questions[7].id,
       tenant_id: process.env.ENV_RBX_TENANT_ID,
     },
-
     {
       id: uuidV4(),
       name: 'Yes',
@@ -346,6 +393,97 @@ export async function seed(knex: Knex): Promise<void> {
       name: 'No',
       name_ar: 'No',
       question_id: questions[11].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+    {
+      id: uuidV4(),
+      name: 'Primary',
+      name_ar: 'Primary',
+      question_id: questions[12].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+    {
+      id: uuidV4(),
+      name: 'Intermediary',
+      name_ar: 'Intermediary',
+      question_id: questions[12].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+    {
+      id: uuidV4(),
+      name: 'Secondary',
+      name_ar: 'Secondary',
+      question_id: questions[12].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+    {
+      id: uuidV4(),
+      name: 'Diplomatic Area',
+      name_ar: 'Diplomatic Area',
+      question_id: questions[12].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+    {
+      id: uuidV4(),
+      name: 'Post Graduate',
+      name_ar: 'Post Graduate',
+      question_id: questions[12].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+    {
+      id: uuidV4(),
+      name: 'Business',
+      name_ar: 'Business',
+      question_id: questions[13].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+    {
+      id: uuidV4(),
+      name: 'Parents / Spouse',
+      name_ar: 'Parents / Spouse',
+      question_id: questions[13].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+    {
+      id: uuidV4(),
+      name: 'Rental',
+      name_ar: 'Rental',
+      question_id: questions[13].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+    {
+      id: uuidV4(),
+      name: 'Salary',
+      name_ar: 'Salary',
+      question_id: questions[13].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+    {
+      id: uuidV4(),
+      name: 'Saving',
+      name_ar: 'Saving',
+      question_id: questions[13].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+    {
+      id: uuidV4(),
+      name: 'Other',
+      name_ar: 'Other',
+      question_id: questions[13].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+    {
+      id: uuidV4(),
+      name: 'Yes',
+      name_ar: 'Yes',
+      question_id: questions[14].id,
+      tenant_id: process.env.ENV_RBX_TENANT_ID,
+    },
+    {
+      id: uuidV4(),
+      name: 'No',
+      name_ar: 'No',
+      question_id: questions[14].id,
       tenant_id: process.env.ENV_RBX_TENANT_ID,
     },
   ];
