@@ -85,6 +85,15 @@ export class NewUserDto {
   gender?: string;
 
   @ApiProperty({
+    title: 'Entity ID',
+    description: 'ID of the entity with which the User is associated.',
+    required: false,
+  })
+  @IsString()
+  @IsOptional()
+  entity_id?: string;
+
+  @ApiProperty({
     type: [IdsDto],
     description: 'List of role IDs.',
     required: false,

@@ -6,6 +6,7 @@ import {
   IsISO8601,
   IsOptional,
   IsString,
+  IsUUID,
   MaxLength,
 } from 'class-validator';
 
@@ -106,6 +107,12 @@ export class UpdateUserInput {
 
   @Field(() => [IdsInput], { nullable: true })
   roles: IdsInput[];
+
+  @Field({ nullable: true })
+  @IsString()
+  @IsUUID()
+  @IsOptional()
+  entity_id: string;
 }
 
 @InputType()

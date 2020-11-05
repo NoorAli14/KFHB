@@ -44,6 +44,7 @@ input CreateUserInput {
   password_reset_token: String
   password_reset_token_expiry: String
   roles: [IdsInput!]
+  entity_id: String
 }
 
 """
@@ -359,6 +360,7 @@ input UpdateUserInput {
   password_reset_token: String
   password_reset_token_expiry: String
   roles: [IdsInput!]
+  entity_id: String
 }
 
 type User {
