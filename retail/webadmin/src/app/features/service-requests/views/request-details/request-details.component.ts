@@ -68,7 +68,6 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
   getData = () => {
     this._serviceRequestsService.getServiceRequestsById(this.id).subscribe(
       (response) => {
-        console.log(response);
         this.serviceRequest = {
           id: response.data.id,
           status: response.data.status,
