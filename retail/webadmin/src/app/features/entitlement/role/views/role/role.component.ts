@@ -106,9 +106,9 @@ export class RoleComponent extends BaseComponent implements OnInit {
             .subscribe(
                 (response) => {
                     this.roles = response[0];
-                    const modules = response[1];
+                    this.modules = response[1];
                     this.permissions = response[2];
-                    this.modules = this._mapperService.makeModulesFlat(modules);
+                    // this.modules = this._mapperService.makeModulesFlat(modules);
                    
                 },
                 (response) => {
@@ -226,7 +226,7 @@ export class RoleComponent extends BaseComponent implements OnInit {
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe(
                 (response) => {
-                    const index = this.roles.findIndex((x) => x.id === id);
+                    const index = this.roles['data'].findIndex((x) => x.id === id);
                     const clone = cloneDeep(this.roles);
                     clone["data"].splice(index, 1);
                     this.roles = clone;
