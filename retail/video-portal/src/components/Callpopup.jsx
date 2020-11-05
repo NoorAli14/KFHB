@@ -231,8 +231,19 @@ class Callpopup extends React.Component {
                         <div className="income-call-container" >
                             <div className="income-call-block">
                                 {callDetails.map(cd => {
+                                    let gender; 
+                                    let name;
+                                    const details= cd.customerName.split(':');
+                                    if(details && details.length>1){
+                                        name= details[0];
+                                        gender= details[1].trim();
+                                    }
+                                     
                                     return <div className="income-call" >
-                                        <span>{cd.customerName}</span>
+                                        <div style={{display:'flex', flexDirection:'column'}}>
+                                        <p>Caller Name: {name}</p>
+                                        <p>Agent Preference: {gender=='M' ? 'Male' : (gender=='F' ? 'Female' : 'None')}</p>
+                                        </div>
                                         <div className="">
                                             <i><AcceptCall onClick={isAttended? "": () => this.attendCallHandler(cd.callId, cd.type, cd.callerSocketId)} /></i>
                                             <i><RejectCall onClick={() => this.declineCallHandler(cd.callId, cd.callerName, cd.callerSocketId, cd.fromSocketId)} /></i>

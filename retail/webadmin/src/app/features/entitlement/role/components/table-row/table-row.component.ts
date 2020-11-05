@@ -59,7 +59,7 @@ import * as QueryString from "query-string";
     ],
 })
 export class TableRowComponent extends BaseComponent implements OnChanges {
-    @Input() roles: any[];
+    @Input() roles: any;
     @Input() displayedColumns: string[];
     @Input() permissions: string[];
     @Output() delete = new EventEmitter();
@@ -79,11 +79,11 @@ export class TableRowComponent extends BaseComponent implements OnChanges {
     }
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.roles.currentValue !== changes.roles.previousValue) {
-            if (this.roles.length > 0) {
+            if (this.roles.data && this.roles.data.length > 0) {
                 this.pagination = this.roles["pagination"];
                 this.pagination.page = this.pagination.page - 1;
             }
-            this.dataSource = new MatTableDataSource(this.roles["data"]);
+            this.dataSource = new MatTableDataSource(this.roles.data);
         }
     }
 
