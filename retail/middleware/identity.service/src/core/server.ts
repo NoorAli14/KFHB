@@ -1,14 +1,17 @@
 import { NestFactory } from '@nestjs/core';
 import { Transport } from '@nestjs/microservices';
-import { INestApplication, ValidationPipe, Logger } from '@nestjs/common';
-import { ApplicationModule } from '@rubix/app/index';
-import { CommonModule } from '@rubix/common/common.module';
-import { LoggingInterceptor } from '@rubix/common/interceptors/';
-import { HttpExceptionFilter } from '@rubix/common/filters/http-exception.filter';
-import { ConfigurationService } from '@rubix/common/configuration/configuration.service';
-import { KernelMiddleware } from '@rubix/core/middlewares/index';
 import * as bodyParser from 'body-parser';
-
+import { INestApplication, ValidationPipe, Logger, ValidationError } from '@nestjs/common';
+import { ApplicationModule } from '@rubix/app/index';
+import { KernelMiddleware } from '@rubix/core/middlewares/index';
+import {
+  CommonModule,
+  ConfigurationService,
+  HttpExceptionFilter,
+  LoggingInterceptor,
+  ValidationException,
+  ValidationExceptionFilter,
+} from '@common/index';
 class Server {
   private _app: INestApplication;
   private _config: ConfigurationService;
@@ -46,8 +49,10 @@ class Server {
     // Registering Hooks, logger, validators, pipes and Exception / Error Handlers
     this.app.enableShutdownHooks();
     this.app.useGlobalInterceptors(new LoggingInterceptor());
-    this.app.useGlobalFilters(new HttpExceptionFilter());
-    this.app.useGlobalPipes(new ValidationPipe({ transform: true }));
+    this.app.useGlobalFilters(new HttpExceptionFilter(), new ValidationExceptionFilter());
+    this.app.useGlobalPipes(new ValidationPipe({
+      exceptionFactory: (errors: ValidationError[] | any[]) => new ValidationException(errors)
+    }));
     this.app.setGlobalPrefix(this.Config.APP.API_URL_PREFIX);
   }
 

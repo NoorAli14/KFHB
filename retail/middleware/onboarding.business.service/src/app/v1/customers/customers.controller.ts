@@ -1,11 +1,11 @@
 import { Controller, UseGuards, Get, Query, ParseUUIDPipe, Param } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOkResponse, ApiOperation, ApiNotFoundResponse } from '@nestjs/swagger';
-import { CustomersService } from './customers.service';
 import { AuthGuard, PaginationDTO, PermissionsGuard, Permissions } from '@common/index';
 import { SortByDTO } from '@common/dtos/sort_by.dto';
 
 import { Customer, CustomerPaginationList } from './customer.entity';
 import { CustomerFilterDTO } from './dtos/customer-filter.dto';
+import { CustomersService } from './customers.service';
 
 @ApiTags('Customers Module')
 @Controller('customers')
