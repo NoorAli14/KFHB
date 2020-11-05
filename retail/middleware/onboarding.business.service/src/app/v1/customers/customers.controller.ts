@@ -28,17 +28,8 @@ export class CustomerController {
     async list(
         @Query() pagination: PaginationDTO,
         @Query() filters: CustomerFilterDTO,
-        @Query() order: SortByDTO,
+        @Query() sort_by: SortByDTO,
     ): Promise<CustomerPaginationList> {
-        let sort_by = [];
-        if (order) {
-            sort_by = [
-                {
-                    field: order?.sort_by || 'created_on',
-                    direction: order?.sort_order || 'desc',
-                },
-            ];
-        }
         return this.customerService.list({ pagination, filters, sort_by });
     }
 
@@ -56,7 +47,7 @@ export class CustomerController {
         type: Error,
         description: 'Customer Not Found.',
     })
-    @Permissions('attend:video')
+    @Permissions('attend:video', 'view:customers')
     async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<Customer> {
         return this.customerService.find360(id);
     }

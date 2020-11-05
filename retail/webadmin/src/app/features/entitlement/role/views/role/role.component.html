@@ -25,7 +25,7 @@
             <div class="search-wrapper mx-32 mx-md-0" >
                 <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
                     <mat-icon>search</mat-icon>
-                    <input  name="roleName" placeholder="Search for a role">
+                    <input [formControl]="control"  name="roleName" placeholder="Search by role name">
                 </div>
             </div>
             <!-- / SEARCH -->
@@ -41,7 +41,7 @@
 
         <!-- CONTENT CARD -->
         <div class="content-card" fusePerfectScrollbar>
-            <app-table-row (delete)="confirmDialog($event)"  (edit)="onEditHandler($event)" [roles]="roles" [permissions]="permissions" [displayedColumns]="displayedColumns"  >
+            <app-table-row (delete)="confirmDialog($event)" (change)="getData($event)"  (edit)="onEditHandler($event)" [roles]="roles" [permissions]="permissions" [displayedColumns]="displayedColumns"  >
             </app-table-row>
         </div>
         <!-- / CONTENT CARD -->
