@@ -36,7 +36,7 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
   username: FormControl;
   pageSize: number = CONFIG.PAGE_SIZE;
   pageSizeOptions: Array<number> = CONFIG.PAGE_SIZE_OPTIONS;
-  serviceRequests: ServiceRequests[];
+  serviceRequest: ServiceRequests;
   displayedColumns = [
     'title',
     'viewUpload&DownloadPDF',
@@ -46,14 +46,9 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
-  status: any;
   serviceRequestForm: FormGroup;
   btnDisable = false;
-  comments: any;
-  letterType: any;
-  requestType: any;
-  customerRIM: any;
-  completionLetterType: any;
+  disabled = false;
   constructor(public _matDialog: MatDialog, injector: Injector,
     private _serviceRequestsService: ServiceRequestsService,
     private activatedRoute: ActivatedRoute) {
@@ -73,16 +68,25 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
   getData = () => {
     this._serviceRequestsService.getServiceRequestsById(this.id).subscribe(
       (response) => {
-        this.serviceRequests = response.data;
-        this.status = response.data.status;
-        this.letterType = response.data.letterType;
-        this.requestType = response.data.requestType;
-        this.customerRIM = response.data.customerRim;
-        this.completionLetterType = response.data.completionLetterType;
+        this.serviceRequest = {
+          id: response.data.id,
+          status: response.data.status,
+          customerRim: response.data.customerRim,
+          date: response.data.created_on,
+          comments: response.data.comments,
+          letterType: response.data.letterType,
+          requestType: response.data.requestType,
+          completionLetterType: response.data.completionLetterType,
+          result: response.data.result,
+          result2: response.data.result,
+          documents: response.data.documents,
+        };
+        this.serviceRequestForm.patchValue({
+          comments: response.data.comments
+        });
         const responseDocument = response.data.documents;
-        for (let i = 0; i < responseDocument.length; i++) 
-        {
-          this.documents.push(responseDocument[i])
+        for (let i = 0; i < responseDocument.length; i++) {
+          this.documents.push(responseDocument[i]);
         }
         this.updateGrid(this.documents);
         if (response.data.status != 'Pending') {
@@ -105,7 +109,8 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
       .pipe()
       .subscribe(
         (response) => {
-          this.status = status;
+          this.serviceRequest.status = status;
+          this.serviceRequest.comments = this.serviceRequestForm.value.comments;
           this.btnDisable = true;
         },
         (response) => super.onError(response)
