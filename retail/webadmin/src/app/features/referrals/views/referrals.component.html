@@ -31,16 +31,25 @@
                     <mat-header-cell class="text-left" *matHeaderCellDef mat-sort-header>
                         {{camelToSentenceCase(key) }}</mat-header-cell>
                     <mat-cell *matCellDef="let element; let i = dataIndex" class="pl-24">
-                        <span *ngIf="element[(key)]!=null; else defaultText" style="width:100%;word-wrap: break-word;">
-                            <ng-container>
-                                {{ key.includes('date') ?(element[(key)]| date: "dd-MM-yyyy"):
-                                element[(key)]==false?'No':element[(key)]==true?'Yes':element[(key)] }}
+                        <span style="width:100%;word-wrap: break-word;">
+                            <ng-container [ngSwitch]="key">
+                                <span  *ngSwitchCase="'customerOpenedAccount'">
+                                    <span fxLayoutAlign="center center" class="text-truncate  p-4 green-800 "
+                                        *ngIf="element[key]==1; else noTemplate">Yes</span>
+                                    <ng-template #noTemplate>
+                                        <span fxLayoutAlign="center center" class="  text-truncat p-4 orange-500">
+                                            No</span>
+                                    </ng-template>
+                                </span>
+                                <span *ngSwitchDefault>
+                                    <span *ngIf="element[key]; else defaultText">
+                                        {{ key.includes('date') ?(element[(key)]| date: "dd-MM-yyyy"):element[(key)]}}
+                                    </span>
+                                </span>
                             </ng-container>
                         </span>
                         <ng-template #defaultText>
-                            <ng-container>
-                                Null
-                            </ng-container>
+                            <app-default-text></app-default-text>
                         </ng-template>
                     </mat-cell>
                 </ng-container>

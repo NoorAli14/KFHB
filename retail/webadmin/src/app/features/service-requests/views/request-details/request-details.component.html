@@ -14,119 +14,150 @@
             </div>
         </div>
         <div class="content-card " fusePerfectScrollbar>
-            <div class="text-left mb-24 ">
-                <div fxLayout="column" fxFlex="32">
-                    <div class="info-line p-24">
-                        <div class="title text-bold">Request Type</div>
-                        <div class="info">{{requestType}}</div>
-                    </div>
-                </div>
-                <div fxLayout="column"
-                 fxFlex="{{letterType && requestType.includes('Order') || 
-                 letterType && requestType.includes('Letter')?32:0}}">
-                    <div class="info-line p-24">
-                        <div class="title text-bold">
-                            {{letterType && requestType.includes('Order')?'Order Type'
-                            :letterType && requestType.includes('Letter') ?'Letter Type':''}}
-                        </div>
-                        <div class="info"> 
-                            {{letterType && requestType.includes('Order') || letterType && requestType.includes('Letter')?letterType:''}}
+            <div>
+                <div fxLayout="row wrap" fxFlex="100">
+                    <div fxLayout="column" fxFlex="32">
+                        <div class="info-line p-24">
+                            <div class="title text-bold">Request Type</div>
+                            <div class="info" *ngIf="serviceRequest?.requestType; else defaultText">
+                                {{serviceRequest.requestType}}</div>
                         </div>
                     </div>
-                </div>
-                <div  *ngIf='completionLetterType' fxLayout="column" fxFlex="32">
-                    <div class="info-line p-24">
-                        <div class="title text-bold">Completion Letter Type</div>
-                        <div class="info">{{completionLetterType}}</div>
+                    <div fxLayout="column" fxFlex="32" *ngIf="serviceRequest?.letterType &&  (serviceRequest?.requestType.includes('Letter') 
+                || serviceRequest?.requestType.includes('Order'))">
+                        <div class="info-line p-24">
+                            <div class="title text-bold">{{serviceRequest.letterType
+                         && serviceRequest.requestType.includes('Order')?'Order Type'
+                        :serviceRequest.letterType && serviceRequest.requestType.includes('Letter') ?'Letter Type':''}}
+                            </div>
+                            <div class="info">
+                                {{serviceRequest.letterType && serviceRequest.requestType.includes('Order') ||
+                          serviceRequest.letterType && serviceRequest.requestType.includes('Letter')?serviceRequest.letterType:
+                          ''}}</div>
+                        </div>
                     </div>
-                </div>
-                <div fxLayout="column" fxFlex="32">
-                    <div class="info-line p-24">
-                        <div class="title text-bold">Customer RIM</div>
-                        <div class="info" *ngIf='customerRIM; else defaultText '>{{customerRIM}}</div>
+                    <div fxLayout="column" fxFlex="32" *ngIf="serviceRequest?.completionLetterType">
+                        <div class="info-line p-24">
+                            <div class="title text-bold">Completion Letter Type </div>
+                            <div class="info">{{serviceRequest.completionLetterType}}</div>
+                        </div>
                     </div>
-                    <ng-template #defaultText>
-                        <ng-container>
-                            Null
-                        </ng-container>
-                    </ng-template>
+                    <div fxLayout="column" fxFlex="32">
+                        <div class="info-line p-24">
+                            <div class="title text-bold">Customer RIM </div>
+                            <div class="info" *ngIf="serviceRequest?.customerRim;else defaultText">
+                                {{serviceRequest.customerRim}}</div>
+                        </div>
+                    </div>
+                    <div fxLayout="column" fxFlex="32">
+                        <div class="info-line p-24">
+                            <div class="title text-bold">Status</div>
+                            <div class="info" *ngIf="serviceRequest?.status;else defaultText"
+                                [ngClass]='serviceRequest?.status=="Approved"?"green-fg":serviceRequest?.status=="Rejected"?"red-fg":"yellow-800-fg"'>
+                                {{serviceRequest.status}}
+                            </div>
+                        </div>
+                    </div>
+                    <div fxLayout="column" fxFlex="32">
+                        <div class="info-line p-24">
+                            <div class="title text-bold">Comments</div>
+                            <div class="info" *ngIf="serviceRequest?.comments;else defaultText">
+                                {{serviceRequest.comments}}
+                            </div>
+                        </div>
+                    </div>
+                    <div fxLayout="column" fxFlex="32" *ngIf='serviceRequest?.result2 && serviceRequest.result2.type'>
+                        <div class="info-line p-24">
+                            <div class="title text-bold" *ngIf='serviceRequest.result2.type'>
+                                {{serviceRequest.result2.type.includes('Mobile')?'New Mobile No':'New Email Address'}}
+                            </div>
+                            <div class="info" *ngIf='serviceRequest.result2.new'>
+                                {{serviceRequest.result2.new}}
+                            </div>
+                        </div>
+                    </div>
+                    <div fxLayout="row wrap" fxFlex="100" *ngIf="serviceRequest?.result.length>0 ">
+                        <div  fxFlex="32" *ngFor='let item of serviceRequest?.result; let i = index'>
+                            <div *ngIf="!item.imageType">
+                                <div class="info-line p-24" *ngIf='item.status && item.title'>
+                                    <div class="title text-bold">{{item.title.includes('Select')?
+                                        item.title.replace('Select',''):item.title}}</div>
+                                    <div class="info">
+                                        {{item.result}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
-                
-                <div fxLayout="column" fxFlex="32">
-                    <div class="info-line p-24">
-                        <div class="title text-bold">Status</div>
-                        <div class="info"
-                            [ngClass]='status=="Approved"?"green-fg":status=="Rejected"?"red-fg":"yellow-800-fg"'>
-                            {{status}}
-                        </div>
-                    </div>
-                </div>
+
+                <ng-template #defaultText>
+                    <app-default-text></app-default-text>
+                </ng-template>
             </div>
-            <app-message-box [type]="errorType" [message]="responseMessage"></app-message-box>
-            <div *ngIf='documents.length>0'>
-                <mat-table #table matSort matSortActive="requestDate" matSortDirection="asc" matSortDisableClear
-                    [dataSource]="dataSource">
-                    <ng-container *ngFor="let key of displayedColumns" [matColumnDef]="key">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header>
-                            {{ key.includes('viewUpload&DownloadPDF') ? 'View & Download' : camelToSentenceCase(key) }}
-                        </mat-header-cell>
-                        <mat-cell *matCellDef="let element; let i = dataIndex">
-                            <span *ngIf="!key.includes('viewUpload&DownloadPDF'); else viewDownloadPDF">
-                                <span *ngIf="element[key]; else defaultText">
-                                    <ng-container *ngIf="camelToSnakeCase(key)">
-                                        {{element[key]}}
-                                    </ng-container>
-                                </span>
+
+        <app-message-box [type]="errorType" [message]="responseMessage"></app-message-box>
+        <div *ngIf='serviceRequest?.documents.length>0'>
+            <mat-table #table matSort   matSortDirection="asc" matSortDisableClear
+                [dataSource]="dataSource">
+                <ng-container *ngFor="let key of displayedColumns" [matColumnDef]="key">
+                    <mat-header-cell     *matHeaderCellDef mat-sort-header>
+                        {{ key.includes('viewUpload&DownloadPDF') ? 'View & Download' : camelToSentenceCase(key) }}
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element; let i = dataIndex">
+                        <span *ngIf="!key.includes('viewUpload&DownloadPDF'); else viewDownloadPDF">
+                            <span  *ngIf="element[key]; else defaultText">
+                                <ng-container *ngIf="camelToSnakeCase(key)">
+                                    {{element[key]}}
+                                </ng-container>
                             </span>
+                        </span>
 
-                            <ng-template #viewDownloadPDF>
-                                <mat-icon type="button" (click)="downlaodDocument(element.image,element.type)"
-                                    class="secondary-text" matTooltip="Download Document">save_alt</mat-icon>
-                                &nbsp;&nbsp;
-                                <mat-icon type="button" (click)="viewDocument(element.image,element.type)"
-                                    class="secondary-text" matTooltip="View Document">remove_red_eye</mat-icon>
-                            </ng-template>
-                        </mat-cell>
-                    </ng-container>
-                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                    <mat-row *matRowDef="let row; columns: displayedColumns;"
-                        [@animate]="{value:'*',params:{y:'100%'}}">
-                    </mat-row>
-                </mat-table>
-            </div>
-            <form class="p-24 mx-24" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0" name="modulesForm" novalidate
-                [formGroup]="serviceRequestForm">
-                <mat-form-field class="mt-24" appearance="outline" fxFlex="48">
-                    <mat-label>Comment</mat-label>
-                    <input matInput formControlName="comments" [attr.disabled]='btnDisable' />
-                    <mat-icon matSuffix class="secondary-text">comment</mat-icon>
-                    <mat-error>
-                        <app-mat-error [control]="serviceRequestForm.get('comments')"></app-mat-error>
-                    </mat-error>
-                </mat-form-field>
-                <div fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row"
-                    fxLayoutAlign.gt-sm="space-between right">
-                    <div class="logo  mb-md-0" fxLayout="row" fxLayoutAlign="start center">
-                    </div>
-                    <div class="d-flex justify-content-end ">
-                        <button mat-raised-button color="accent" (click)="confirmDialog('Approved')"
-                            [ngClass]='status=="Approved"?!btnDisable?"light-green":"green-500-bg green-50-fg":"fuse-white"'
-                            [disabled]='btnDisable' class="add-product-button    mt-md-0">
-                            <span>COMPLETED</span>
-                        </button>
-                        &nbsp;
-                        <button mat-raised-button color="accent" (click)="confirmDialog('Rejected')"
-                            [ngClass]='status=="Rejected"?!btnDisable?"red":"red-500-bg red-50-fg":"fuse-white"'
-                            [disabled]='btnDisable' class="add-product-button   mt-md-0">
-                            <span>REJECTED</span>
-                        </button>
-                    </div>
-                </div>
-            </form>
+                        <ng-template #viewDownloadPDF>
+                            <mat-icon type="button" (click)="downlaodDocument(element.image,element.type)"
+                                class="secondary-text" matTooltip="Download Document">save_alt</mat-icon>
+                            &nbsp;&nbsp;
+                            <mat-icon type="button" (click)="viewDocument(element.image,element.type)"
+                                class="secondary-text" matTooltip="View Document">remove_red_eye</mat-icon>
+                        </ng-template>
+                    </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"
+                    [@animate]="{value:'*',params:{y:'100%'}}">
+                </mat-row>
+            </mat-table>
         </div>
-        <ng-template #defaultText>
-            <app-default-text></app-default-text>
-        </ng-template>
+        <form class="p-24 mx-24" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0" name="modulesForm" novalidate
+            [formGroup]="serviceRequestForm">
+            <mat-form-field   class="my-24" appearance="outline" *ngIf='serviceRequest?.status=="Pending"' fxFlex="48">
+                <mat-label>Comment</mat-label>
+                <input matInput formControlName="comments"  />
+                <mat-icon matSuffix class="secondary-text">comment</mat-icon>
+                <mat-error>
+                    <app-mat-error [control]="serviceRequestForm.get('comments')"></app-mat-error>
+                </mat-error>
+            </mat-form-field>
+            <div fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row"
+                fxLayoutAlign.gt-sm="space-between right">
+                <div class="logo  mb-md-0" fxLayout="row" fxLayoutAlign="start center">
+                </div>
+                <div class="d-flex justify-content-end my-24">
+                    <button mat-raised-button color="accent" (click)="confirmDialog('Approved')"
+                        [ngClass]='serviceRequest?.status=="Approved"?!btnDisable?"light-green":"green-500-bg green-50-fg":"fuse-white"'
+                        [disabled]='btnDisable' class="add-product-button    mt-md-0">
+                        <span>COMPLETED</span>
+                    </button>
+                    &nbsp;
+                    <button mat-raised-button color="accent" (click)="confirmDialog('Rejected')"
+                        [ngClass]='serviceRequest?.status=="Rejected"?!btnDisable?"red":"red-500-bg red-50-fg":"fuse-white"'
+                        [disabled]='btnDisable' class="add-product-button   mt-md-0">
+                        <span>REJECTED</span>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
     </div>
 </div>
