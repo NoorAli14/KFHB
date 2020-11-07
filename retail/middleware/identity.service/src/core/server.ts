@@ -9,8 +9,7 @@ import {
   ConfigurationService,
   HttpExceptionFilter,
   LoggingInterceptor,
-  ValidationException,
-  ValidationExceptionFilter,
+  ValidationException
 } from '@common/index';
 class Server {
   private _app: INestApplication;
@@ -49,7 +48,7 @@ class Server {
     // Registering Hooks, logger, validators, pipes and Exception / Error Handlers
     this.app.enableShutdownHooks();
     this.app.useGlobalInterceptors(new LoggingInterceptor());
-    this.app.useGlobalFilters(new HttpExceptionFilter(), new ValidationExceptionFilter());
+    this.app.useGlobalFilters(new HttpExceptionFilter());
     this.app.useGlobalPipes(new ValidationPipe({
       exceptionFactory: (errors: ValidationError[] | any[]) => new ValidationException(errors)
     }));
