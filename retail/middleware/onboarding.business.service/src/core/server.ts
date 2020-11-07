@@ -11,6 +11,7 @@ import {
   TransformInterceptor,
   ValidationException,
   ValidationExceptionFilter,
+  GqlExceptionFilter
 } from '@common/index';
 
 import { KernelMiddleware } from '@core/middlewares/index';
@@ -53,7 +54,7 @@ export default class Server {
     this.app.enableShutdownHooks();
     this.app.useGlobalInterceptors(new TransformInterceptor());
     this.app.useGlobalInterceptors(new LoggingInterceptor());
-    this.app.useGlobalFilters(new HttpExceptionFilter(), new ValidationExceptionFilter());
+    this.app.useGlobalFilters(new HttpExceptionFilter(), new ValidationExceptionFilter(), new GqlExceptionFilter());
     // this.app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
     this.app.useGlobalPipes(new ValidationPipe({
       exceptionFactory: (errors: ValidationError[] | any[]) => new ValidationException(errors)

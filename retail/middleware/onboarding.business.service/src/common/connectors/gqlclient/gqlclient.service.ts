@@ -3,7 +3,7 @@ import { map, timeout, catchError } from 'rxjs/operators';
 import { TimeoutError, throwError } from 'rxjs';
 import { HttpHeaders } from '@core/context';
 import { ConfigurationService } from '@common/configuration/configuration.service';
-import { ValidationException } from '../../exceptions';
+import { ValidationException, GqlException } from '../../exceptions';
 
 @Injectable()
 export class GqlClientService {
@@ -26,36 +26,36 @@ export class GqlClientService {
       .pipe(
         map(response => {
           if (response.data?.errors) {
-            this.logger.log(`GQL Error1: ${JSON.stringify(response.data.errors, null, 2)}`);
             const err: any = response.data?.errors[0].extensions;
-            if (err.exception?.name === "INPUT_VALIDATION_ERROR") throw new ValidationException(err.exception?.response)
-            let __err: any = {
-              message: err.exception.message,
-              stacktrace: err.exception?.stacktrace,
-            };
-            if (err.exception?.response) {
-              __err = {
-                message: err.exception?.response.message || err.exception?.message,
-                error: err.exception.response.error,
-              };
-              if (process.env.NODE_ENV != 'production') {
-                __err['context'] = {
-                  serviceName: err?.serviceName,
-                  developerMessage: err?.query,
-                };
-              }
-            }
-            throw new HttpException(
-              __err,
-              err.exception?.response?.status || err.exception?.status || HttpStatus.INTERNAL_SERVER_ERROR,
-            );
+            if (err.exception?.name === "INPUT_VALIDATION_ERROR") throw new ValidationException(err.exception?.response);
+            throw new GqlException(err);
+            // if (err.exception?.name)
+            // let __err: any = {
+            //   message: err.exception.message,
+            //   stacktrace: err.exception?.stacktrace,
+            // };
+            // if (err.exception?.response) {
+            //   __err = {
+            //     message: err.exception?.response.message || err.exception?.message,
+            //     error: err.exception.response.error,
+            //   };
+            //   if (process.env.NODE_ENV != 'production') {
+            //     __err['context'] = {
+            //       serviceName: err?.serviceName,
+            //       developerMessage: err?.query,
+            //     };
+            //   }
+            // }
+            // throw new HttpException(
+            //   __err,
+            //   err.exception?.response?.status || err.exception?.status || HttpStatus.INTERNAL_SERVER_ERROR,
+            // );
             // return throwError(err.exception);
           }
           return response.data?.data?.result || response.data?.data;
         }),
         timeout(5000),
         catchError(err => {
-          this.logger.log(`GQL Error2: ${JSON.stringify(err, null, 2)}`);
           if (err instanceof TimeoutError) {
             return throwError(new RequestTimeoutException());
           }
