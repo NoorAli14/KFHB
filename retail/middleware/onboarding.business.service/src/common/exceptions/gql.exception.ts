@@ -12,7 +12,7 @@ export class GqlException extends HttpException {
         super(null, err.exception.status);
     }
 
-    get errors(): any {
+    get errors(): IError[] {
         return this.err.exception.response;
     }
     get name(): string {
