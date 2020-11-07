@@ -1,6 +1,6 @@
 import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus, Logger } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { ValidationException } from '../exceptions';
+import { ValidationException } from '@common/exceptions';
 
 @Catch(ValidationException)
 export class ValidationExceptionFilter implements ExceptionFilter {
@@ -15,9 +15,9 @@ export class ValidationExceptionFilter implements ExceptionFilter {
         response.status(status).json({
             statusCode: status,
             name: 'INPUT_VALIDATION_ERROR',
-            errors: exception?.errors || [],
+            errors: exception.errors || [],
             timestamp: new Date().toISOString(),
-            path: request ? request.url : null,
+            path: request?.url || null,
         });
     }
 }
