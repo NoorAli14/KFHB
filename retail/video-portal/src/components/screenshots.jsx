@@ -5,11 +5,11 @@ export class ScreenShots extends React.Component {
     super(props);
     this.state = {
       selectedPath: "",
-      selectBtn:'NATIONAL_ID_SCREENSHOT'
+      selectBtn:'NATIONAL_ID_FRONT_SIDE_SCREENSHOT'
     };
   }
   componentDidMount() {
-    this.setActive('NATIONAL_ID_SCREENSHOT')
+    this.setActive('NATIONAL_ID_FRONT_SIDE_SCREENSHOT')
   }
 
   setActive = (type) => {
@@ -43,11 +43,19 @@ export class ScreenShots extends React.Component {
             }}
           >
             <a
-             className={`image-btns ${selectBtn==='NATIONAL_ID_SCREENSHOT'?'active-btn' :''}`}
+             className={`image-btns ${selectBtn==='NATIONAL_ID_FRONT_SIDE_SCREENSHOT'?'active-btn' :''}`}
 
-              onClick={() => this.setActive("NATIONAL_ID_SCREENSHOT")}
+              onClick={() => this.setActive("NATIONAL_ID_FRONT_SIDE_SCREENSHOT")}
             >
-              Civil Id
+              Civil Id Front
+            </a>{" "}
+            &nbsp;&nbsp;
+            <a
+             className={`image-btns ${selectBtn==='NATIONAL_ID_BACK_SIDE_SCREENSHOT'?'active-btn' :''}`}
+
+              onClick={() => this.setActive("NATIONAL_ID_BACK_SIDE_SCREENSHOT")}
+            >
+              Civil Id Back
             </a>{" "}
             &nbsp;&nbsp;
             <a
@@ -78,7 +86,7 @@ export class ScreenShots extends React.Component {
               justifyContent: "center",
             }}
           >
-            <img style={{ maxHeight: "250px" }} src={selectedPath} />
+            <img style={{  }} src={selectedPath} />
           </div>
         </div>
       </div>
