@@ -55,7 +55,6 @@ export default class Server {
     this.app.useGlobalInterceptors(new TransformInterceptor());
     this.app.useGlobalInterceptors(new LoggingInterceptor());
     this.app.useGlobalFilters(new HttpExceptionFilter(), new ValidationExceptionFilter(), new GqlExceptionFilter());
-    // this.app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
     this.app.useGlobalPipes(new ValidationPipe({
       exceptionFactory: (errors: ValidationError[] | any[]) => new ValidationException(errors)
     }));

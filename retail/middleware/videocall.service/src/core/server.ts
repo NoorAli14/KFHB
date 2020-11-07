@@ -54,7 +54,8 @@ class Server {
         exceptionFactory: (errors: ValidationError[] | any[]) =>
           new ValidationException(errors),
       }),
-    ); this.app.setGlobalPrefix(this.Config.APP.API_URL_PREFIX);
+    );
+    this.app.setGlobalPrefix(this.Config.APP.API_URL_PREFIX);
   }
 
   /** Microservices use the TCP transport layer by default and other options are:
