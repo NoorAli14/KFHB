@@ -10,4 +10,4 @@ export * from './dtos/';
 export * from './filters/';
 export * from './interceptors';
 export * from './interfaces/';
-export * from './exceptions';
+export * from './exceptions/';

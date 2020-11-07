@@ -83,6 +83,14 @@ export class User {
   nationality_id?: string;
 
   @ApiProperty({
+    title: 'Entity ID',
+    description: 'Entity Id of the user.',
+    required: false,
+  })
+  @IsOptional()
+  entity_id?: string;
+
+  @ApiProperty({
     enum: USER_STATUSES,
     example: USER_STATUSES[0],
     description: 'Status of the user.',

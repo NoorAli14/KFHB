@@ -1,3 +1,5 @@
+import { X_CORRELATION_KEY, X_ENTITY_ID, X_TENANT_ID, X_USER_ID } from '../constants';
+
 export * from './configuration.interface';
 export interface ISERVICE {
   name: string;
@@ -5,7 +7,8 @@ export interface ISERVICE {
 }
 
 export interface IHEADER {
-  'x-user-id'?: string;
-  'x-tenant-id': string;
-  'x-correlation-id': string;
+  [X_ENTITY_ID]?: string;
+  [X_USER_ID]?: string;
+  [X_TENANT_ID]: string;
+  [X_CORRELATION_KEY]: string;
 }

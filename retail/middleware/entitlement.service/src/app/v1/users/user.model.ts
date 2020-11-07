@@ -93,6 +93,12 @@ export class User {
   @IsIn(Object.values(STATUS))
   status: string;
 
+  @Field({ nullable: true })
+  @IsString()
+  @IsUUID()
+  @IsOptional()
+  entity_id: string;
+
   @Field()
   @IsString()
   created_on: string;

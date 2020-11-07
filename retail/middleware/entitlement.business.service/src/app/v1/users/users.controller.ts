@@ -114,4 +114,31 @@ export class UsersController {
   ): Promise<any> {
     return this.userService.delete(id);
   }
+
+  @Put(':id/link/:entity_id')
+  @ApiBody({ description: 'Associates user with the specified Entity ID.' })
+  @ApiOperation({
+    summary: 'Associate a user with Entity ID',
+    description:
+      'A successful request returns the HTTP 200 OK status code and a JSON response body that shows user information.',
+  })
+  @ApiOkResponse({
+    type: User,
+    description: 'User has been successfully associated.',
+  })
+  @ApiBadRequestResponse({
+    type: Error,
+    description: 'Input Validation failed.',
+  })
+  @ApiNotFoundResponse({
+    type: Error,
+    description: 'User Not Found.',
+  })
+  @Permissions('edit:users')
+  async updateEntityID(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Param('entity_id', ParseUUIDPipe) entity_id: string,
+  ): Promise<User> {
+    return this.userService.update(id, { entity_id });
+  }
 }

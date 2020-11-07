@@ -6,6 +6,7 @@ import {
   IsISO8601,
   IsOptional,
   IsString,
+  IsUUID,
   MaxLength,
 } from 'class-validator';
 
@@ -19,93 +20,99 @@ export class UpdateUserInput {
   @IsEmail()
   @IsOptional()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  email?: string;
+  email: string;
 
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  contact_no?: string;
+  contact_no: string;
 
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  first_name?: string;
+  first_name: string;
 
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  middle_name?: string;
+  middle_name: string;
 
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  last_name?: string;
+  last_name: string;
 
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
   @IsIn(Object.values(GENDER))
-  gender?: string;
+  gender: string;
 
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  password?: string;
+  password: string;
 
   @Field({ nullable: true })
   @IsOptional()
   @IsBoolean()
-  is_owner?: boolean;
+  is_owner: boolean;
 
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
   @IsISO8601({ strict: true })
-  date_of_birth?: string;
+  date_of_birth: string;
 
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
   @MaxLength(NUMBERS.NATIONALITY_ID_LENGTH)
-  nationality_id?: string;
+  nationality_id: string;
 
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
   @IsIn(Object.values(STATUS))
-  status?: string;
+  status: string;
 
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  invitation_token?: string;
+  invitation_token: string;
 
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  invitation_token_expiry?: string;
+  invitation_token_expiry: string;
 
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  password_reset_token?: string;
+  password_reset_token: string;
 
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  password_reset_token_expiry?: string;
+  password_reset_token_expiry: string;
 
   @Field(() => [IdsInput], { nullable: true })
-  roles?: IdsInput[];
+  roles: IdsInput[];
+
+  @Field({ nullable: true })
+  @IsString()
+  @IsUUID()
+  @IsOptional()
+  entity_id: string;
 }
 
 @InputType()
@@ -141,5 +148,5 @@ export class CheckAvailabilityInput {
   @IsString()
   @IsOptional()
   @IsIn(Object.values(GENDER))
-  gender?: string;
+  gender: string;
 }

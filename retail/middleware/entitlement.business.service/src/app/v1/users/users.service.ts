@@ -20,6 +20,7 @@ export class UserService {
     gender
     nationality_id
     date_of_birth
+    entity_id
     roles {
       id
       name
@@ -85,6 +86,7 @@ export class UserService {
           gender
           nationality_id
           date_of_birth
+          entity_id
           roles {
             id
             name
