@@ -1,6 +1,6 @@
 {
   "name": "rubix-complaince-service",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "",
   "author": "Faizan Ahmad <faizan@aiondigital.com>",
   "private": true,
@@ -78,6 +78,7 @@
     "eslint-plugin-import": "^2.20.1",
     "husky": "^4.3.0",
     "jest": "26.0.1",
+    "lint-staged": "^10.5.0",
     "npm-check-updates": "^7.1.1",
     "prettier": "^1.19.1",
     "rimraf": "^3.0.2",
@@ -88,8 +89,20 @@
     "tsconfig-paths": "^3.9.0",
     "typescript": "^3.7.4"
   },
+  "engines": {
+    "node": ">=14.15.0"
+  },
   "husky": {
-    "hooks": {}
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.ts": [
+      "npm run format",
+      "eslint --fix --max-warnings 1",
+      "git add"
+    ]
   },
   "jest": {
     "moduleFileExtensions": [

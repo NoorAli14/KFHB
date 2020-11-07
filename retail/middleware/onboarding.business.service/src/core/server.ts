@@ -1,5 +1,5 @@
 import { Transport } from '@nestjs/microservices';
-import { INestApplication, ValidationPipe, Logger } from '@nestjs/common';
+import { INestApplication, ValidationPipe, Logger, ValidationError } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
 import * as bodyParser from 'body-parser';
 
@@ -9,6 +9,9 @@ import {
   HttpExceptionFilter,
   LoggingInterceptor,
   TransformInterceptor,
+  ValidationException,
+  ValidationExceptionFilter,
+  GqlExceptionFilter
 } from '@common/index';
 
 import { KernelMiddleware } from '@core/middlewares/index';
@@ -51,8 +54,10 @@ export default class Server {
     this.app.enableShutdownHooks();
     this.app.useGlobalInterceptors(new TransformInterceptor());
     this.app.useGlobalInterceptors(new LoggingInterceptor());
-    this.app.useGlobalFilters(new HttpExceptionFilter());
-    this.app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
+    this.app.useGlobalFilters(new HttpExceptionFilter(), new ValidationExceptionFilter(), new GqlExceptionFilter());
+    this.app.useGlobalPipes(new ValidationPipe({
+      exceptionFactory: (errors: ValidationError[] | any[]) => new ValidationException(errors)
+    }));
     this.app.setGlobalPrefix(this.Config.APP.API_URL_PREFIX);
     this.app.use(cookieParser());
   }

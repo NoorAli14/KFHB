@@ -39,9 +39,10 @@ export class CustomerDetailComponent implements OnInit, AfterContentChecked {
        this.initData();
     }
     initData(): void{
-        const data = this.data.templates.map((item) => {
+        let data = this.data.templates?.map((item) => {
             return { ...item, results: JSON.parse(atob(item.results)) };
         });
+        data= data ? data : [];
         const civilIdBackProcessData =
             this.data.documents.length > 0
                 ? this.data.documents.find(
