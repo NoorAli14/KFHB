@@ -139,6 +139,6 @@ export class UsersController {
     @Param('id', ParseUUIDPipe) id: string,
     @Param('entity_id', ParseUUIDPipe) entity_id: string,
   ): Promise<User> {
-    return this.userService.update(id, {entity_id: entity_id});
+    return this.userService.update(id, { entity_id });
   }
 }

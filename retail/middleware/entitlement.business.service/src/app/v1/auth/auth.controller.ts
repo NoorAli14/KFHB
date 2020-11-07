@@ -78,6 +78,7 @@ export class AuthController {
       request.res,
       refresh_token,
       payload.aud,
+      payload.entity_id,
     );
     return {
       status: 'SUCCESS',
@@ -108,11 +109,13 @@ export class AuthController {
   async login(@Req() request: Request, @CurrentUser() user: User): Promise<User> {
     const refreshToken: string = await this.authService.getRefreshToken(
       user.id,
+      user.entity_id
     );
     request.res = this.authService.setHeaders(
       request.res,
       refreshToken,
       user.id,
+      user.entity_id
     );
     return user;
   }
