@@ -408,32 +408,46 @@ class CustomerDetails extends React.Component {
                 </>
               </TabPanel>
 
-              <TabPanel></TabPanel>
               <TabPanel>
-                <FatcaTemplate template={fatcaTemplate} />
+
+              <div className="details" ></div>
+
+              </TabPanel>
+              <TabPanel>
+              <div className="details" >
+              <FatcaTemplate template={fatcaTemplate} />
                 <CRSTemplate />
+
+              </div>
+               
               </TabPanel>
-              <TabPanel>
+              <TabPanel><div className="details" >
+
                 <BankingTransaction template={bankingTransactionTemplate} />
+              </div>
               </TabPanel>
               <TabPanel>
+              <div className="details" >
                 <AMLCheck aml={amlCheck} />
+              </div>
               </TabPanel>
               <TabPanel>
+              <div className="details" >
                 <RemarksTab />
+              </div>
               </TabPanel>
             </Tabs>
           </div>
           <div className="customerbasic-details">
             <Tabs>
-              <TabList>
+              <TabList >
                 <Tab>ID Card</Tab>
                 <Tab>Passport</Tab>
                 <Tab>Additional Data</Tab>
                 <Tab>Screen shots</Tab>
               </TabList>
 
-              <TabPanel>
+              <TabPanel >
                 <div className="details">
                   <div style={{width:'100%', display: 'flex', justifyContent: 'center'}}>
                     <a className={`image-btns ${nationalIdActive==='nationalIdFace'?'active-btn' :''}`}  onClick={()=>this.setImageActive('nationalIdFace')} style={{cursor:'pointer'}} >Face Image</a> &nbsp;&nbsp;
@@ -472,7 +486,7 @@ class CustomerDetails extends React.Component {
                 </div>
               </TabPanel>
 
-              <TabPanel>
+              <TabPanel >
                  <div className="details" >
                   <div style={{width:'100%', display: 'flex', justifyContent: 'center'}}>
                       <a className={`image-btns ${passportActive==='passport'?'active-btn' :''}`}  onClick={()=>this.setPassportActive('passport')} style={{cursor:'pointer'}}>Passport</a> &nbsp;&nbsp;
@@ -490,9 +504,12 @@ class CustomerDetails extends React.Component {
                   </div>
                 </div>
               </TabPanel>
-              <TabPanel></TabPanel>
-              <TabPanel>
-                <ScreenShots images={screenShotImages} />
+              <TabPanel > <div className="details" ></div></TabPanel>
+              <TabPanel >
+              <div className="details" >
+              <ScreenShots images={screenShotImages} />
+              </div>
+                
               </TabPanel>
             </Tabs>
           </div>
