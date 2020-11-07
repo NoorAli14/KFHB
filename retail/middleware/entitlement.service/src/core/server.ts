@@ -12,7 +12,7 @@ import { LoggingInterceptor } from '@common/interceptors/';
 import { HttpExceptionFilter } from '@common/filters/http-exception.filter';
 import { ConfigurationService } from '@common/configuration/configuration.service';
 import { KernelMiddleware } from '@core/middlewares/index';
-import { ValidationException } from '@common/exceptions';
+import { ValidationException } from '@common/exceptions/';
 class Server {
   private _app: INestApplication;
   private _config: ConfigurationService;
