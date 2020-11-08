@@ -32,17 +32,16 @@ const templates: any[] = [
 const sections: any[] = [
   {
     id: uuidV4(),
-    name: 'What are the anticipated cash transactions on your account',
-    name_ar: 'What are the anticipated cash transactions on your account',
+    name: 'What are the anticipated cash transactions on your account?',
+    name_ar: 'What are the anticipated cash transactions on your account?',
     level: 'level 1',
     template_id: templates[0].id,
     tenant_id: process.env.ENV_RBX_TENANT_ID,
   },
   {
     id: uuidV4(),
-    name: 'Retrieving data. Wait a few seconds and try to cut or copy again.',
-    name_ar:
-      'Retrieving data. Wait a few seconds and try to cut or copy again.',
+    name: 'What are the anticipated transfer transactions on your account?',
+    name_ar: 'What are the anticipated transfer transactions on your account?',
     level: 'level 1',
     template_id: templates[0].id,
     tenant_id: process.env.ENV_RBX_TENANT_ID,
@@ -114,9 +113,9 @@ const sections: any[] = [
   {
     id: uuidV4(),
     name:
-      'Please explain in the following boxes why you are unable to obtain a TIN if you selected reason Babove.',
+      'Please explain in the following boxes why you are unable to obtain a TIN if you selected reason B above.',
     name_ar:
-      'Please explain in the following boxes why you are unable to obtain a TIN if you selected reason Babove.',
+      'Please explain in the following boxes why you are unable to obtain a TIN if you selected reason B above.',
     level: 'level 1',
     template_id: templates[2].id,
     tenant_id: process.env.ENV_RBX_TENANT_ID,
@@ -852,8 +851,8 @@ const options: any[] = [
   },
   {
     id: uuidV4(),
-    name: 'House Wife',
-    name_ar: 'House Wife',
+    name: 'Housewife',
+    name_ar: 'Housewife',
     question_id: questions[16].id,
     tenant_id: process.env.ENV_RBX_TENANT_ID,
   },
