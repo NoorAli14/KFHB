@@ -107,6 +107,7 @@ export class AmlRequestService {
     // MOC JSON object start
     const newAmlRequest: any = {
       remarks: null,
+      status: AML_REQUEST_STATUSES.PENDING,
       user_id: input.id,
       created_by: currentUser.id,
       updated_by: currentUser.id,
