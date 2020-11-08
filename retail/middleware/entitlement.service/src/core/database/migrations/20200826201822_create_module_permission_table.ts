@@ -1,11 +1,8 @@
 import * as Knex from 'knex';
-import { DATABASE_UUID_METHOD, TABLE } from '@common/constants';
-export async function up(knex: Knex): Promise<any> {
+import { TABLE, DATABASE_UUID_METHOD } from '@common/index';
+export function up(knex: Knex): any {
   return knex.schema.createTable(TABLE.MODULE_PERMISSION, table => {
-    table
-      .uuid('id')
-      .primary()
-      .defaultTo(knex.raw(DATABASE_UUID_METHOD));
+    table.uuid('id').primary().defaultTo(DATABASE_UUID_METHOD(knex));
     table
       .uuid('module_id')
       .references('id')

@@ -46,8 +46,6 @@ export class DBConfigurationService extends ConfigurationService {
         return this.MSSQL;
       case 'pg':
         return this.PG;
-      case 'mysql':
-        return this.MYSQL;
       case 'oracledb':
         return this.ORACLE;
       default:
@@ -78,8 +76,10 @@ export class DBConfigurationService extends ConfigurationService {
       user: this.DATABASE.USERNAME,
       database: this.DATABASE.DB_NAME,
       host: this.DATABASE.HOST,
+      port: this.DATABASE.PORT,
       connectionTimeoutMillis: this.DATABASE.TIMEOUT,
       password: this.DATABASE.DB_PASS,
+      ssl: true,
     };
   }
 
@@ -98,19 +98,6 @@ export class DBConfigurationService extends ConfigurationService {
         this.DATABASE.DB_NAME +
         ')))',
       debug: this.DATABASE.IS_DEBUG,
-    };
-  }
-
-  private get MYSQL(): Knex.MySqlConnectionConfig {
-    return {
-      host: this.DATABASE.HOST,
-      port: this.DATABASE.PORT,
-      user: this.DATABASE.USERNAME,
-      password: this.DATABASE.DB_PASS,
-      database: this.DATABASE.DB_NAME,
-      timezone: this.DATABASE.TIMEZONE,
-      connectTimeout: this.DATABASE.TIMEOUT,
-      insecureAuth: false,
     };
   }
 }

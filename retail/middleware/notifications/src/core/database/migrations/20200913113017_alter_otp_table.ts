@@ -1,7 +1,7 @@
 import * as Knex from 'knex';
-import { TABLE } from '@common/constants';
+import { TABLE } from '@rubix/common';
 
-export async function up(knex: Knex): Promise<any> {
+export function up(knex: Knex): any {
   return knex.schema.alterTable(TABLE.OTP, table => {
     table.dropColumn('mobile_no');
     table.dropColumn('email');
