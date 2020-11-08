@@ -9,6 +9,7 @@ export const CurrentUser = createParamDecorator(
     return {
       id: req.headers[HEADER_NAMES.X_USER_ID],
       tenant_id: req.headers[HEADER_NAMES.X_TENANT_ID],
+      entity_id: req.headers[HEADER_NAMES.X_ENTITY_ID],
     };
   },
 );

@@ -10,6 +10,7 @@ import {
   X_USER_ID,
   X_TENANT_ID,
   X_CORRELATION_KEY,
+  X_ENTITY_ID,
 } from '@common/index';
 
 import { AuthModule } from './auth/auth.module';
@@ -28,10 +29,12 @@ import { RegistryService } from '@common/services'
 
 class AuthenticatedDataSource extends RemoteGraphQLDataSource {
   async willSendRequest({ request, context }) {
-    const { userId, tenantId, correlationId } = context;
+    const { userId, tenantId, correlationId, entityId } = context;
     request.http.headers.set(X_USER_ID, userId);
     request.http.headers.set(X_TENANT_ID, tenantId);
     request.http.headers.set(X_CORRELATION_KEY, correlationId);
+    request.http.headers.set(X_ENTITY_ID, entityId);
+
   }
 }
 
@@ -80,6 +83,7 @@ class BuildServiceModule { }
             userId: req.headers[X_USER_ID],
             tenantId: req.headers[X_TENANT_ID],
             correlationId: req.headers[X_CORRELATION_KEY],
+            entityId: req.headers[X_ENTITY_ID],
           }),
           // ... Apollo server options
           cors: true,

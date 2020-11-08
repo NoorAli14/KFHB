@@ -27,8 +27,9 @@ export class AuthService {
       return false;
     }
   }
-  async getRefreshToken(userId: string): Promise<string> {
-    const payload = { aud: userId, type: 'user' };
+  async getRefreshToken(userId: string, entityId?: string): Promise<string> {
+    let payload = { aud: userId, type: 'user' };
+    if (entityId) payload['entity_id'] = entityId;
     const token: string = this.jwtService.sign(payload, {
       secret: this.configService.JWT.REFRESH_SECRET,
       expiresIn: `${this.configService.JWT.REFRESH_EXPIRY_SECONDS}s`,
@@ -42,8 +43,9 @@ export class AuthService {
     return token;
   }
 
-  getToken(userId: string): string {
-    const payload = { id: userId, type: 'user' };
+  getToken(userId: string, entityId?: string): string {
+    let payload = { id: userId, type: 'user' };
+    if (entityId) payload['entity_id'] = entityId;
     return this.jwtService.sign(payload, {
       secret: this.configService.JWT.SECRET,
       expiresIn: `${this.configService.JWT.EXPIRY_SECONDS}s`,
@@ -59,8 +61,8 @@ export class AuthService {
     return `${X_ACCESS_TOKEN}=; HttpOnly; Path=/; Max-Age=0`;
   }
 
-  setHeaders(res: Response, refresh_token: string, userId: string): Response {
-    const token: string = this.getToken(userId);
+  setHeaders(res: Response, refresh_token: string, userId: string, entityId?: string): Response {
+    const token: string = this.getToken(userId, entityId);
     res.setHeader(X_REFRESH_TOKEN, refresh_token);
     res.setHeader(X_ACCESS_TOKEN, token);
     res.setHeader('Set-Cookie', this.getCookieWithJwtToken(token));
