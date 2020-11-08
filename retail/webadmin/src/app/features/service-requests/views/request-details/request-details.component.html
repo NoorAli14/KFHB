@@ -78,7 +78,7 @@
                     </div>
                     <div fxLayout="row wrap" fxFlex="100" *ngIf="serviceRequest?.result.length>0 ">
                         <div  fxFlex="32" *ngFor='let item of serviceRequest?.result; let i = index'>
-                            <div *ngIf="!item.imageType">
+                            <div *ngIf="!item.imageType && item.type!='Base64'">
                                 <div class="info-line p-24" *ngIf='item.status && item.title'>
                                     <div class="title text-bold">{{item.title.includes('Select')?
                                         item.title.replace('Select',''):item.title}}</div>
