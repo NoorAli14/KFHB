@@ -21,6 +21,9 @@ export class MapperService {
         }
         return this.sidebar;
     }
+    removeParent(modules){
+        return modules.filter(x=>x.parent_id);
+    }
     private makeFlat(modules: any[]): void {
         modules.forEach((item) => {
             item.parent = item.parent_id ? item.parent_id : 'N/A';

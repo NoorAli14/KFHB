@@ -9,10 +9,10 @@ import { Loader } from 'nestjs-dataloader';
 import { SectionLoaderForTemplate } from '@core/dataloaders';
 import DataLoader from '../../../lib/dataloader';
 import { ICurrentUser } from '@common/interfaces';
-
+import { TemplateNotFoundException } from './exceptions'
 @Resolver(Template)
 export class TemplatesResolver {
-  constructor(private readonly templateService: TemplatesService) {}
+  constructor(private readonly templateService: TemplatesService) { }
 
   @ResolveField(() => [Section])
   async sections(
@@ -38,7 +38,9 @@ export class TemplatesResolver {
     @Args('name') name: string,
     @Fields(Template) output: string[],
   ): Promise<Template> {
-    return this.templateService.findByName(currentUser, name, output);
+    const template = await this.templateService.findByName(currentUser, name, output);
+    if (!template) throw new TemplateNotFoundException(name)
+    return template;
   }
 
   @Query(() => Template)
