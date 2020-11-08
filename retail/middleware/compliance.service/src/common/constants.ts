@@ -43,6 +43,7 @@ export const AML_REQUEST_STATUSES = {
   CLEAN: 'CLEAN',
   SUSPECT: 'SUSPECT',
   BLOCK: 'BLOCK',
+  PENDING: 'PENDING',
 };
 
 export const OPTION_QUERY = `id name name_ar status created_on created_by updated_on updated_by`;

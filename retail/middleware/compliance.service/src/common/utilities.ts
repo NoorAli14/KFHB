@@ -23,7 +23,7 @@ export const toGraphql = (input: { [key: string]: any }): string => {
 };
 
 export const uuidV4 = (): string => {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
     const r = (Math.random() * 16) | 0,
       v = c == 'x' ? r : (r & 0x3) | 0x8;
     return v.toString(16);
@@ -73,12 +73,17 @@ export const generateRandomString = (length: number): string => {
 };
 
 export const formattedHeader = (req: Request, user_id?: string): IHEADER => {
-  let headers: any = {};
+  const headers: any = {};
   headers[X_CORRELATION_KEY] = req.get(X_CORRELATION_KEY);
   headers[X_USER_ID] = req.get(X_USER_ID);
   headers[X_TENANT_ID] = (req.headers?.[X_TENANT_ID] ||
     req.query?.[X_TENANT_ID]) as string;
   return headers;
+};
+
+export const base64ToStr = (data: string): any => {
+  const buff: Buffer = new Buffer(data, 'base64');
+  return buff.toString('ascii');
 };
 
 /**
