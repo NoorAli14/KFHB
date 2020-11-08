@@ -139,7 +139,7 @@ export class AmlRequestService {
       throw new TemplateResponseNotFoundException(amlRequest.user_id);
 
     //Decode kyc response from base64 string
-    const kycInfo = base64ToStr(templateResponse.results);
+    const kycInfo = JSON.parse(base64ToStr(templateResponse.results));
 
     const amlScreening = await this.http
       .post(process.env.ENV_RBX_AML_BASE_URL, {
