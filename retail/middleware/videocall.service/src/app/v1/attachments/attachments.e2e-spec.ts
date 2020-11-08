@@ -90,7 +90,7 @@ describe('Video Call Module (e2e)', () => {
         const { errors } = body;
         expect(errors).toBeDefined();
         expect(errors).toBeInstanceOf(Array);
-        expect(errors[0].message).toEqual('Attachment Not Found');
+        expect(errors[0].message).toEqual('Attachment not found');
       })
       .end(done)
       .expect(200);
