@@ -173,11 +173,10 @@ type Query {
 union Result = Document | CUSTOM_ERROR
 
 type SCHEMA_ERROR {
-  group: String!
-  errorCode: String
+  name: String
   message: String!
   field: String
-  stack: String
+  developerMessage: String
   value: String
 }
 
