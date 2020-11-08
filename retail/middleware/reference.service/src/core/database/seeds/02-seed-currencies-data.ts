@@ -3,8 +3,13 @@ import { TABLE, CREATED_BY, UPDATED_BY } from '@rubix/common/constants';
 import { currencies } from "@common/assets/currencies";
 
 export async function seed(knex: Knex): Promise<any> {
-    // Deletes ALL existing entries
-    await knex(TABLE.CURRENCY).del();
+    return processSeed(knex, false);
+  }
+  
+  export async function processSeed(
+    knex: Knex,
+    generateSql = true,
+  ): Promise<any> {
     // Formats data according to db
     const formattedCurrencies = Object.entries(currencies).map(([key, currency]) => {
         return {
@@ -16,6 +21,15 @@ export async function seed(knex: Knex): Promise<any> {
             updated_by: UPDATED_BY.SYSTEM,
         }
     });
-    // Inserts data to db in bulk
-    await knex.batchInsert(TABLE.CURRENCY, formattedCurrencies);
-};
+    // Insert Data into DB
+    const insertCurrencies = () =>
+    knex(TABLE.CURRENCY).insert(formattedCurrencies);
+  
+    if (generateSql) {
+      let sql = '';
+      sql += `${insertCurrencies().toString()};\r\n\n`;
+      return sql;
+    }
+  
+    return insertCurrencies();
+  }

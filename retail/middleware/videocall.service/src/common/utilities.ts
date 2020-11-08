@@ -1,3 +1,4 @@
+import { NotImplementedException } from '@nestjs/common';
 import * as fs from 'fs';
 import { Request } from 'express';
 import * as path from 'path';
@@ -28,7 +29,7 @@ export function graphqlFields(info: Record<string, unknown>): string[] {
 }
 
 export function uuidV4(): string {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
     const r = (Math.random() * 16) | 0,
       v = c == 'x' ? r : (r & 0x3) | 0x8;
     return v.toString(16);
@@ -103,22 +104,39 @@ export const formattedHeader = (req: Request): IHEADER => {
 };
 
 /**
- *
- * @param path
- * Helper function to create directory if not exist
+ * DATABASE UUID GENERATION
+ * @param knex
  */
-export const createDirIfNotExist = (path: string): void => {
-  if (!fs.existsSync(path)) {
-    fs.mkdirSync(path);
+export const DATABASE_UUID_METHOD = (knex): any => {
+  switch (knex.client.config.client) {
+    case 'pg':
+      return knex.raw('uuid_generate_v4()');
+    case 'mssql':
+      return knex.raw('NEWID()');
+    case 'oracledb':
+      return '';
+    default:
+      throw new NotImplementedException(
+        `Database type ['${process.env.ENV_RBX_DB_DIALECT}'] not supported`,
+      );
   }
+};
+/**
+* @param path
+ * Helper function to create directory if not exist
+   * /
+export const createDirIfNotExist = (path: string): void => {
+ if (!fs.existsSync(path)) {
+   fs.mkdirSync(path);
+ }
 };
 
 /**
- *
- * @param path
- * @param content
- * helper function to create file inside the folder directory
- */
+*
+* @param path
+* @param content
+* helper function to create file inside the folder directory
+*/
 export const writeFileSync = (path: string, content: Buffer): void => {
   fs.writeFileSync(path, content, 'utf8');
 };

@@ -1,9 +1,9 @@
 import * as Knex from 'knex';
-import { TABLE, DATABASE_UUID_METHOD, STATUS } from '@rubix/common/constants';
+import { TABLE, DATABASE_UUID_METHOD, STATUS } from '@rubix/common/';
 
-export async function up(knex: Knex): Promise<any> {
+export function up(knex: Knex): any {
   return knex.schema.createTable(TABLE.CURRENCY, table => {
-    table.uuid('id').primary().defaultTo(knex.raw(DATABASE_UUID_METHOD));
+    table.uuid('id').primary().defaultTo(DATABASE_UUID_METHOD(knex));
     table.string('name');
     table.string('iso_code');
     table.integer('numeric_code');

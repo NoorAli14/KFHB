@@ -1,19 +1,19 @@
-export const TABLE = {
+
+export const TABLE: { [key: string]: string } = {
   SESSION: 'IDT_SESSION',
   DOCUMENT_TYPE: 'IDT_DOCUMENT_TYPE',
   CUSTOMER: 'IDT_CUSTOMER',
   SESSION_REFERENCE: 'IDT_SESSION_REFERENCE',
 };
 
-export const DATABASE_UUID_METHOD: string = 'NEWID()';
-export const DATABASE_MIGRATION_TABLE_NAME: string =
+export const DATABASE_MIGRATION_TABLE_NAME =
   'RUBIX_IDENTITY_MIGRATIONS';
-export const DATABASE_MIGRATION_DIRECTORY: string =
+export const DATABASE_MIGRATION_DIRECTORY =
   'src/core/database/migrations';
-export const DATABASE_SEED_DIRECTORY: string = 'src/core/database/seeds';
-export const X_USER_ID: string = 'x-user-id';
-export const X_TENANT_ID: string = 'x-tenant-id';
-export const X_CORRELATION_KEY: string = 'x-correlation-id';
+export const DATABASE_SEED_DIRECTORY = 'src/core/database/seeds';
+export const X_USER_ID = 'x-user-id';
+export const X_TENANT_ID = 'x-tenant-id';
+export const X_CORRELATION_KEY = 'x-correlation-id';
 
 export const DOCUMENT_TYPES = {
   SELFIE: 'SELFIE',

@@ -1,7 +1,6 @@
 import * as Knex from 'knex';
-import { TABLE } from '@common/constants';
-
-export async function up(knex: Knex): Promise<any> {
+import { TABLE } from '@common/index';
+export function up(knex: Knex): any {
   return knex.schema.table(TABLE.USER, table => {
     table.dropIndex(['username'], `${TABLE.USER}_USERNAME_INDEX`);
 

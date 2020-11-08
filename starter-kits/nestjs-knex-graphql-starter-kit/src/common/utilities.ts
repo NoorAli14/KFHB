@@ -1,5 +1,8 @@
 import * as path from 'path';
 import * as glob from 'glob';
+import * as Knex from 'knex';
+
+import { NotImplementedException } from '@nestjs/common';
 
 // requires all the files which conform to the given pattern and returns the list of defaults exports
 export const requireDefaults = (pattern: string): any => {
@@ -63,4 +66,23 @@ export const generateRandomString = (length: number): string => {
     .toString(36)
     .replace(/[^a-zA-Z0-9]+/g, '')
     .substr(0, length);
+};
+
+/**
+ * DATABASE UUID GENERATION
+ * @param knex
+ */
+export const DATABASE_UUID_METHOD = (knex: Knex): any => {
+  switch (knex.client.config.client) {
+    case 'pg':
+      return knex.raw('uuid_generate_v4()');
+    case 'mssql':
+      return knex.raw('NEWID()');
+    case 'oracledb':
+      return '';
+    default:
+      throw new NotImplementedException(
+        `Database type ['${process.env.ENV_RBX_DB_DIALECT}'] not supported`,
+      );
+  }
 };
