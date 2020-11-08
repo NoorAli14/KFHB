@@ -13,13 +13,13 @@ export class CommentRepository extends BaseRepository {
       .table(this.tableName)
       .whereIn('post_id', postIDs)
       .select('*');
-      const commentLookups = {};
-      comments.forEach(comment => {
-        if (!commentLookups[comment.post_id]) {
-          commentLookups[comment.post_id] = [];
-        }
-        commentLookups[comment.post_id].push(comment);
-      });
-      return postIDs.map(postID => commentLookups[postID]);
+    const commentLookups = {};
+    comments.forEach(comment => {
+      if (!commentLookups[comment.post_id]) {
+        commentLookups[comment.post_id] = [];
+      }
+      commentLookups[comment.post_id].push(comment);
+    });
+    return postIDs.map(postID => commentLookups[postID]);
   }
 }

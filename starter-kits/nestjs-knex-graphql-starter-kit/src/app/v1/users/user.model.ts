@@ -22,7 +22,6 @@ export class User {
   @Field(() => [Post])
   posts?: Post[];
 
-  
   @Field(() => [Comment])
   comments?: Comment[];
 

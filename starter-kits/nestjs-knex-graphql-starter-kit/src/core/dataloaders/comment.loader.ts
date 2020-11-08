@@ -6,9 +6,8 @@ import { Comment } from '@rubix/app/v1/comments/comment.model';
 
 @Injectable()
 export class CommentLoader implements NestDataLoader<string, Comment> {
+  constructor(private readonly commentDB: CommentRepository) {}
 
-  constructor(private readonly commentDB: CommentRepository) { }
-  
   generateDataLoader(): DataLoader<string, Comment> {
     return new DataLoader<string, Comment>(postIDs =>
       this.commentDB.findByPostIdsLoader(postIDs),

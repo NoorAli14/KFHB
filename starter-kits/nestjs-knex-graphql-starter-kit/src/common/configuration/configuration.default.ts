@@ -1,6 +1,4 @@
-import {
-  iConfig,
-} from '@rubix/common/interfaces/configuration.interface';
+import { iConfig } from '@rubix/common/interfaces/configuration.interface';
 export const DEFAULT_ENV: iConfig = {
   APP: {
     NAME: 'Admin Business Service',
