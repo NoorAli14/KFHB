@@ -40,7 +40,6 @@ export class RegisterCustomerDto {
   @Length(3, 96, {
     message: 'Email must be between 3 to 30 characters',
     context: {
-      errorCode: 1003,
       developerNote: 'The validated string must contain 32 or more characters.',
     },
   })
