@@ -20,7 +20,6 @@ import { ModuleModule } from './modules/modules.module';
 import { UserModule } from './users/users.module';
 import { InvitationModule } from './invitations/invitation.module';
 import { ForgotPasswordModule } from './forgot_passwords/forgot_password.module';
-import { OnboardingModule } from './onboarding/onboarding.module';
 import { WorkingDayModule } from './working-days/working-day.module';
 import { HolidayModule } from './holidays/holiday.module';
 import { LeaveModule } from './leaves/leave.module';
