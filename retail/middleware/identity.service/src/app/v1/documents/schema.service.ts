@@ -97,8 +97,9 @@ export class SchemaService {
                 if (!errorCodes.includes(_err.errorCode)) {
                     errorCodes.push(_err.errorCode as string);
                     _errors.push({
-                        group,
-                        ..._err,
+                        // group,
+                        message: _err.message,
+                        name: `${err.schema.name}_${err.name}`.toUpperCase().replace(/\s/g, '_'),
                         field: err.schema.name,
                         stack: err.stack,
                         value: err.instance,
@@ -110,8 +111,9 @@ export class SchemaService {
                 if (!errorCodes.includes(_err.errorCode)) {
                     errorCodes.push(_err.errorCode as string);
                     _errors.push({
-                        group,
-                        ..._err,
+                        // group,
+                        message: _err.message,
+                        name: `${err.argument}_${err.name}`.toUpperCase().replace(/\s/g, '_'),
                         field: err.argument,
                         stack: err.stack,
                         value:
@@ -120,7 +122,8 @@ export class SchemaService {
                 }
             } else {
                 _errors.push({
-                    group, stack: err.stack,
+                    // group,
+                    stack: err.stack,
                     message: err.message,
                     field: err?.schema?.name,
                     value: err.instance?.[err?.schema?.name] || err?.instance
