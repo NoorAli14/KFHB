@@ -119,7 +119,10 @@ export class AmlRequestResolver {
       throw new AmlRequestNotFoundException();
     }
 
-    if (amlRequest?.status === AML_REQUEST_STATUSES.SUSPECT) {
+    if (
+      amlRequest?.status === AML_REQUEST_STATUSES.SUSPECT ||
+      amlRequest?.status === AML_REQUEST_STATUSES.PENDING
+    ) {
       return this.almRequestService.amlAlert(input, output);
     }
     return amlRequest;
