@@ -135,12 +135,11 @@ export class AmlRequestService {
     );
 
     // Check template response exist against the user or not
-    // if (!templateResponse)
-    //   throw new TemplateResponseNotFoundException(amlRequest.user_id);
+    if (!templateResponse)
+      throw new TemplateResponseNotFoundException(amlRequest.user_id);
 
     //Decode kyc response from base64 string
-    const kycInfo =
-      (templateResponse && base64ToStr(templateResponse.results)) || {};
+    const kycInfo = base64ToStr(templateResponse.results);
 
     const amlScreening = await this.http
       .post(process.env.ENV_RBX_AML_BASE_URL, {
