@@ -4,7 +4,6 @@ export class NotCreatedException extends BaseException {
   constructor(id?: string | any) {
     super(HttpStatus.BAD_REQUEST, {
       message: `Unable to create or save attachment`,
-      errorCode: 'VC-1068',
       name: 'ATTACHMENT_NOT_CREATED',
       developerMessage: `Unable to create or save attachment: [${id}]`,
     });

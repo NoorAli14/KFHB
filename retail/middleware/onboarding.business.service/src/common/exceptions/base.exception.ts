@@ -2,7 +2,6 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 interface IError {
     name: string;
     message: string;
-    errorCode?: string;
     developerMessage?: string;
 }
 export class BaseException extends HttpException {
