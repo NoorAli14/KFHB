@@ -4,7 +4,7 @@ import { ConfigurationService } from '@common/configuration/configuration.servic
 import { ICurrentUser } from '@common/interfaces';
 import { HttpHeaders } from '@core/context';
 import { AmlRequest } from './aml.request.model';
-import { AML_REQUEST_STATUSES, CREATED_BY } from '@common/constants';
+import { AML_REQUEST_STATUSES, CREATED_BY, STATUSES } from '@common/constants';
 import { AlmRequestAlertInput } from './aml-request-dto';
 import {
   AmlRequestRepository,
@@ -22,7 +22,7 @@ export class AmlRequestService {
     private readonly http: HttpService,
     private readonly amlRequestDB: AmlRequestRepository,
     private readonly amlResponseDB: AmlResponseRepository,
-    private readonly TemplateResponseDB: TemplateResponsesRepository,
+    private readonly templateResponseDB: TemplateResponsesRepository,
     private readonly config: ConfigurationService,
   ) {}
 
@@ -124,42 +124,43 @@ export class AmlRequestService {
   async triggerAml(amlRequest: any, output: string[]): Promise<any> {
     const user = JSON.parse(amlRequest.aml_text);
 
-    //Get user templates details
-    const templateResponse = await this.TemplateResponseDB.findOne(
+    // Get user templates details
+    const templateResponse = await this.templateResponseDB.findOne(
       {
         user_id: amlRequest.user_id,
-        // tenant_id: amlRequest.tenant_id,
+        status: STATUSES.ACTIVE,
         deleted_on: null,
       },
-      output,
+      ['id', 'results', 'status', 'user_id'],
     );
 
     // Check template response exist against the user or not
-    if (!templateResponse)
-      throw new TemplateResponseNotFoundException(amlRequest.user_id);
+    // if (!templateResponse)
+    //   throw new TemplateResponseNotFoundException(amlRequest.user_id);
 
     //Decode kyc response from base64 string
-    const kycInfo = base64ToStr(templateResponse.results);
+    const kycInfo =
+      (templateResponse && base64ToStr(templateResponse.results)) || {};
 
     const amlScreening = await this.http
       .post(process.env.ENV_RBX_AML_BASE_URL, {
         user: user,
         reference_no: amlRequest.request_reference,
-        kycInfo: JSON.parse(kycInfo),
+        kycInfo: kycInfo,
       })
       .pipe(map(res => res.data))
       .toPromise();
     this.logger.log(amlScreening);
     const [response] = await this.amlRequestDB.update(
       { id: amlRequest.id },
-      { status: amlScreening.status },
+      { status: amlScreening.data.status },
       output,
     );
 
     await this.amlResponseDB.create(
       {
         request_id: response.id,
-        status: amlScreening.status,
+        status: amlScreening.data.status,
         created_by: response.created_by,
         updated_by: response.updated_by,
         response_text: JSON.stringify(amlScreening),
