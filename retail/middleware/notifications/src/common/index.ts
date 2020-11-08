@@ -7,3 +7,4 @@ export * from './decorators/';
 export * from './interceptors';
 export * from './interfaces/';
 export * from './tests/';
+export * from './exceptions/';

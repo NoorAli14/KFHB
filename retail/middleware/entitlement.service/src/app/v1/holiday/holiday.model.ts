@@ -1,14 +1,13 @@
-import { Field, ID, ObjectType } from "@nestjs/graphql";
-import {PaginationModel} from '@common/models';
-import {Type} from 'class-transformer';
-import {IsIn, IsOptional, IsString, IsUUID, MaxLength} from "class-validator";
-import {NUMBERS, STATUS} from "@common/constants";
+import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { ENT_PaginationModel } from '@common/models';
+import { Type } from 'class-transformer';
+import { IsIn, IsOptional, IsString, IsUUID, MaxLength } from 'class-validator';
+import { NUMBERS, STATUS } from '@common/constants';
 
 @ObjectType()
 export class Holiday {
   @Field(() => ID)
   @IsString()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsUUID()
   id: string;
 
@@ -32,13 +31,11 @@ export class Holiday {
   @IsString()
   @IsOptional()
   @IsUUID()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   tenant_id: string;
 
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsIn(Object.keys(STATUS))
   status: string;
 
@@ -48,7 +45,6 @@ export class Holiday {
 
   @Field()
   @IsString()
-  @IsUUID()
   created_by: string;
 
   @Field()
@@ -57,7 +53,6 @@ export class Holiday {
 
   @Field()
   @IsString()
-  @IsUUID()
   updated_by: string;
 
   @Field({ nullable: true })
@@ -68,14 +63,13 @@ export class Holiday {
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
-  @IsUUID()
   deleted_by: string;
 }
 
 @ObjectType()
-export class HolidayWithPagination {
+export class HolidaysWithPagination {
   @Field({ nullable: true })
-  pagination: PaginationModel;
+  pagination: ENT_PaginationModel;
 
   @Field(() => [Holiday], { nullable: true })
   data: Holiday[];

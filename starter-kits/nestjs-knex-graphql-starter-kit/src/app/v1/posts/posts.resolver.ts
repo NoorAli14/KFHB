@@ -18,10 +18,7 @@ import { NewPostInput, UpdatePostInput } from './post.dto';
 
 @Resolver(Post)
 export class PostsResolver {
-
-  constructor(
-    private readonly postService: PostsService,
-  ) {}
+  constructor(private readonly postService: PostsService) {}
 
   @ResolveField(() => [Comment])
   comments(
@@ -45,9 +42,12 @@ export class PostsResolver {
   }
 
   @Query(() => Post)
-  async findPost(@Args('id', ParseUUIDPipe) id: string, @Fields() columns: string[]): Promise<Post> {
+  async findPost(
+    @Args('id', ParseUUIDPipe) id: string,
+    @Fields() columns: string[],
+  ): Promise<Post> {
     const post: Post = await this.postService.findById(id, columns);
-    if(!post) {
+    if (!post) {
       throw new NotFoundException('Post not found');
     }
     return post;
@@ -56,7 +56,7 @@ export class PostsResolver {
   @Mutation(() => Post)
   addPost(
     @Args('input') input: NewPostInput,
-    @Fields() columns: string[]
+    @Fields() columns: string[],
   ): Promise<Post> {
     return this.postService.create(input, columns);
   }
@@ -65,7 +65,7 @@ export class PostsResolver {
   updatePost(
     @Args('id', ParseUUIDPipe) id: string,
     @Args('input') input: UpdatePostInput,
-    @Fields() columns: string[]
+    @Fields() columns: string[],
   ): Promise<Post> {
     return this.postService.update(id, input, columns);
   }
@@ -73,7 +73,7 @@ export class PostsResolver {
   @Mutation(() => Boolean)
   async deletePost(@Args('id', ParseUUIDPipe) id: string): Promise<boolean> {
     const post: Post = await this.postService.findById(id, ['id']);
-    if(!post) {
+    if (!post) {
       throw new NotFoundException('Post not found');
     }
     return this.postService.delete(id);

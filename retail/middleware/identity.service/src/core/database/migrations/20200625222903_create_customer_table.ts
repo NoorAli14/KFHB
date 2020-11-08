@@ -1,11 +1,11 @@
 import * as Knex from 'knex';
 import { TABLE, DATABASE_UUID_METHOD } from '@rubix/common';
-export async function up(knex: Knex): Promise<any> {
+export function up(knex: Knex): any {
   return knex.schema.createTable(TABLE.CUSTOMER, table => {
     table
       .uuid('id')
       .primary()
-      .defaultTo(knex.raw(DATABASE_UUID_METHOD));
+      .defaultTo(DATABASE_UUID_METHOD(knex));
 
     table.string('first_name');
     table.string('middle_name');

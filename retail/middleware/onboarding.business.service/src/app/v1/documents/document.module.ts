@@ -12,4 +12,4 @@ import { CustomersService } from '../customers/customers.service';
   controllers: [FacesController, DocumentsController],
   providers: [GqlClientService, DocumentsService, SessionsService, CustomersService],
 })
-export class DocumentModule { }
+export class DocumentModule {}

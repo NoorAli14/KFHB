@@ -1,14 +1,13 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Permission } from '@app/v1/permissions/permission.model';
-import { PaginationModel } from '@common/models';
-import {IsIn, IsOptional, IsString, IsUUID, MaxLength} from "class-validator";
-import {NUMBERS, STATUS} from "@common/constants";
+import { ENT_PaginationModel } from '@common/models';
+import { IsIn, IsOptional, IsString, IsUUID, MaxLength } from 'class-validator';
+import { NUMBERS, STATUS } from '@common/constants';
 
 @ObjectType()
 export class Module {
   @Field(() => ID)
   @IsString()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsUUID()
   id?: string;
 
@@ -17,7 +16,7 @@ export class Module {
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   name?: string;
 
-  @Field()
+  @Field({ nullable: true })
   @IsString()
   @IsOptional()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
@@ -33,7 +32,6 @@ export class Module {
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsIn(Object.keys(STATUS))
   status?: string;
 
@@ -43,7 +41,6 @@ export class Module {
 
   @Field()
   @IsString()
-  @IsUUID()
   created_by?: string;
 
   @Field(() => [Module], { nullable: true })
@@ -58,7 +55,7 @@ export class Module {
 @ObjectType()
 export class ModuleWithPagination {
   @Field({ nullable: true })
-  pagination?: PaginationModel;
+  pagination?: ENT_PaginationModel;
 
   @Field(() => [Module], { nullable: true })
   data?: Module[];

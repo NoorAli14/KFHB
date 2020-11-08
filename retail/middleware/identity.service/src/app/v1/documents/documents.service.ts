@@ -122,7 +122,7 @@ export class DocumentsService {
             visualZone: this.identityService.sanitize(processedData.visualZone),
           };
           _input.processed_data = JSON.stringify(sanitizeData);
-          result = this.schema.validate(input.type, sanitizeData?.mrz);
+          result = this.schema.validate(input.type, input.type === 'NATIONAL_ID_FRONT_SIDE' ? sanitizeData?.visualZone : sanitizeData?.mrz);
           if (!result.valid) {
             _input.status = DOCUMENT_STATUSES.FAILED;
           }
@@ -139,7 +139,7 @@ export class DocumentsService {
       return sessionRef;
     } else if (reference?.status === DOCUMENT_STATUSES.FAILED && reference?.processed_data) {
       const data = JSON.parse(reference.processed_data)
-      const result = this.schema.validate(input.type, data.mrz);
+      const result = this.schema.validate(input.type, input.type === 'NATIONAL_ID_FRONT_SIDE' ? data?.visualZone : data?.mrz);
       if (!result.valid) {
         return result;
       }

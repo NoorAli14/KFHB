@@ -20,10 +20,12 @@ import {
   ApiNotFoundResponse,
   ApiNoContentResponse,
 } from '@nestjs/swagger';
-import { AuthGuard, PermissionsGuard, Permissions } from '@common/index';
+import { AuthGuard, PermissionsGuard, Permissions, PaginationDTO, SortByDTO } from '@common/index';
 import { UserService } from './users.service';
-import { User } from './user.entity';
+import { User, UserPaginationList } from './user.entity';
 import { UpdateUserDto } from './user.dto';
+import { Query } from "@nestjs/common";
+import { UserFilterDto } from "@app/v1/users/dtos";
 
 @ApiTags('User')
 @Controller('users')
@@ -35,13 +37,13 @@ export class UsersController {
   @Get('/')
   @ApiOperation({
     description:
-      'A successful request returns the HTTP 200 OK status code and a JSON response body that shows list of users information.',
+      'A successful request returns the HTTP 200 OK status code and a JSON response body that shows list of users information with pagination.',
     summary: 'List of all users.',
   })
-  @ApiOkResponse({ type: [User], description: 'List of all users.' })
+  @ApiOkResponse({ type: UserPaginationList, description: 'List of all users.' })
   @Permissions('view:users')
-  async list(): Promise<User[]> {
-    return this.userService.list();
+  async list(@Query() pagination: PaginationDTO, @Query() filters: UserFilterDto, @Query() sort_by: SortByDTO): Promise<UserPaginationList> {
+    return this.userService.list({ pagination, filters, sort_by });
   }
 
   @Get(':id')
@@ -111,5 +113,32 @@ export class UsersController {
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<any> {
     return this.userService.delete(id);
+  }
+
+  @Put(':id/link/:entity_id')
+  @ApiBody({ description: 'Associates user with the specified Entity ID.' })
+  @ApiOperation({
+    summary: 'Associate a user with Entity ID',
+    description:
+      'A successful request returns the HTTP 200 OK status code and a JSON response body that shows user information.',
+  })
+  @ApiOkResponse({
+    type: User,
+    description: 'User has been successfully associated.',
+  })
+  @ApiBadRequestResponse({
+    type: Error,
+    description: 'Input Validation failed.',
+  })
+  @ApiNotFoundResponse({
+    type: Error,
+    description: 'User Not Found.',
+  })
+  @Permissions('edit:users')
+  async updateEntityID(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Param('entity_id', ParseUUIDPipe) entity_id: string,
+  ): Promise<User> {
+    return this.userService.update(id, { entity_id });
   }
 }

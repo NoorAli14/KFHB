@@ -165,7 +165,7 @@ input ProcessDocumentInput {
 }
 
 type Query {
-  customersList(sort_by: [SortingParam!], filters: CustomersFilterParams, pagination: PaginationParams): CustomerWithPagination!
+  customersList(sort_by: SortingParam, filters: CustomersFilterParams, pagination: PaginationParams): CustomerWithPagination!
   findCustomerById(id: String!): Customer!
   previewAttachment(input: PreviewDocumentInput!): PreviewDocument!
 }
@@ -173,11 +173,10 @@ type Query {
 union Result = Document | CUSTOM_ERROR
 
 type SCHEMA_ERROR {
-  group: String!
-  errorCode: String
+  name: String
   message: String!
   field: String
-  stack: String
+  developerMessage: String
   value: String
 }
 
@@ -199,8 +198,8 @@ type Session {
 }
 
 input SortingParam {
-  field: String!
-  direction: String!
+  sort_by: String
+  sort_order: String
 }
 
 input UpdateCustomerInput {

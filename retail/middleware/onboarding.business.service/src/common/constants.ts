@@ -9,7 +9,7 @@ export const ROLE_STATUSES: string[] = ['ACTIVE', 'INACTIVE'];
 export const USER_STATUSES: { [key: string]: string } = {
   PENDING: 'PENDING',
   LOCKED: 'LOCKED',
-  COMPLETED: 'COMPLETED'
+  COMPLETED: 'COMPLETED',
 };
 
 export const GENDER: string[] = ['M', 'F'];
@@ -25,7 +25,7 @@ export const DOCUMENT_TYPES: { [key: string]: string } = {
 
 export const SELFIE_SUB_TYPES: { [key: string]: string } = {
   SELFIE: 'SELFIE',
-  DEVICE_REGISTRATION: 'DEVICE_REGISTRATION'
+  DEVICE_REGISTRATION: 'DEVICE_REGISTRATION',
 };
 
 export const DOCUMENT_STATUSES = {
@@ -39,7 +39,7 @@ export const DOCUMENT_STATUSES = {
 export const EVALUATION_STATUSES = {
   MATCH: 'MATCH',
   MISMATCH: 'MISMATCH',
-  CUSTOMER_SELFIE_MISMATCHED: 'CUSTOMER_SELFIE_MISMATCHED'
+  CUSTOMER_SELFIE_MISMATCHED: 'CUSTOMER_SELFIE_MISMATCHED',
 };
 
 export const AML_STATUSES: { [key: string]: string } = {
@@ -70,12 +70,11 @@ export const STATUSES: { [key: string]: string } = {
   FAILED: 'FAILED',
 };
 
-export const CONTEXT_NAMESPACE_ID =
-  'a6a29a6f-6747-4b5f-b99f-07ee96e32f88';
+export const CONTEXT_NAMESPACE_ID = 'a6a29a6f-6747-4b5f-b99f-07ee96e32f88';
 export const DAY_FORMAT = 'MM/DD/YYYY';
 export const HOUR_FORMAT = 'HH';
 export const DAY_WITH_HOUR_FORMAT = 'MM/DD/YYYY HH';
-export const PAGINATION_OUTPUT: string = ` {
+export const PAGINATION_OUTPUT = ` {
   total
   pages
   pageSize
@@ -83,7 +82,13 @@ export const PAGINATION_OUTPUT: string = ` {
 }`;
 export const DEVICES: string[] = ['ios', 'andriod'];
 
-export const ATTACHMENT_TYPES: string[] = ['PASSPORT_SCREENSHOT', 'ADDRESS_SCREENSHOT', 'NATIONAL_ID_FRONT_SIDE_SCREENSHOT', 'NATIONAL_ID_BACK_SIDE_SCREENSHOT', 'VISA_SCREENSHOT'];
+export const ATTACHMENT_TYPES: string[] = [
+  'PASSPORT_SCREENSHOT',
+  'ADDRESS_SCREENSHOT',
+  'NATIONAL_ID_FRONT_SIDE_SCREENSHOT',
+  'NATIONAL_ID_BACK_SIDE_SCREENSHOT',
+  'VISA_SCREENSHOT',
+];
 export const CUSTOMER_LAST_STEPS = {
   RBX_ONB_STEP_REG_INITIATED: 'RBX_ONB_STEP_REG_INITIATED',
   RBX_ONB_STEP_SELFIE_UPLOADED: 'RBX_ONB_STEP_SELFIE_UPLOADED',

@@ -1,1 +1,1 @@
-export * from "./e2e.tests"
+export * from './e2e.tests';

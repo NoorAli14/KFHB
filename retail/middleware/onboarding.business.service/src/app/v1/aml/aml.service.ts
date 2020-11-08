@@ -1,4 +1,3 @@
-
 import { Injectable, Logger } from '@nestjs/common';
 import { GqlClientService } from '@common/index';
 import { AML } from './aml.entity';
@@ -16,11 +15,11 @@ export class AmlService {
     updated_by
   }`;
 
-  constructor(private readonly gqlClient: GqlClientService) { }
+  constructor(private readonly gqlClient: GqlClientService) {}
 
   async screening(user_id: string): Promise<AML> {
-    this.logger.log(`Aml:: Start aml screening for customer [${user_id}]`)
-    const mutation: string = `mutation {
+    this.logger.log(`Aml:: Start aml screening for customer [${user_id}]`);
+    const mutation = `mutation {
       result: amlScreening(user_id: "${user_id}") ${this.output}
     }`;
     return this.gqlClient.send(mutation);

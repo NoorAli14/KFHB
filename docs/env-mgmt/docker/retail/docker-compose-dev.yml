@@ -143,6 +143,8 @@ services:
       - ENV_RBX_IDENTITYX_EVALUATION_POLICY=$ENV_RBX_IDENTITYX_EVALUATION_POLICY
       - NODE_TLS_REJECT_UNAUTHORIZED=$NODE_TLS_REJECT_UNAUTHORIZED
     restart: always
+    volumes:
+      - ${ENV_RBX_VOLUME_PATH}/identity.service:/home/aiondigital/rubix/volumes/
     networks:
       - core_service_network
 

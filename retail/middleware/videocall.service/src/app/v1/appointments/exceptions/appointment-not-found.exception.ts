@@ -4,7 +4,6 @@ export class AppointmentNotFoundException extends BaseException {
   constructor(from_time?: string | any, to_time?: string | any) {
     super(HttpStatus.NOT_FOUND, {
       message: `Appointment not found`,
-      errorCode: 'VC-1063',
       name: 'APPOINTMENT_NOT_FOUND',
       developerMessage: `Appointment not found during [${from_time}] to [${to_time}]`,
     });

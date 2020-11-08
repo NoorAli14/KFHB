@@ -24,8 +24,9 @@ export const NUMBERS = {
 };
 
 export const HEADER_NAMES = {
-  X_USER_ID: "x-user-id",
-  X_TENANT_ID: "x-tenant-id",
+  X_USER_ID: 'x-user-id',
+  X_TENANT_ID: 'x-tenant-id',
+  X_ENTITY_ID: 'x-entity-id',
 };
 
 export const DATE_FORMAT = 'YYYY-MM-DD';
@@ -39,7 +40,6 @@ export const STATUS = {
 export const GENDER = {
   M: 'M',
   F: 'F',
-  O: 'O',
 };
 
 export const PAGINATION_PARAMS = {
@@ -197,7 +197,7 @@ export const MODULES = [
           },
           {
             name: 'edit',
-          }
+          },
         ],
       },
     ],
@@ -239,7 +239,6 @@ export const MESSAGES = {
   PASSWORD_MISMATCH: 'Current password did not match',
 };
 
-export const DATABASE_UUID_METHOD = 'NEWID()';
 export const DATABASE_MIGRATION_TABLE_NAME = 'RUBIX_ENTITLEMENT_MIGRATIONS';
 export const DATABASE_MIGRATION_DIRECTORY = 'src/core/database/migrations';
 export const DATABASE_SEED_DIRECTORY = 'src/core/database/seeds';

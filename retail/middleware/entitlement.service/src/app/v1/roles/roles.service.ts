@@ -4,23 +4,41 @@ import { RoleRepository } from '@core/repository/role.repository';
 import { STATUS } from '@common/constants';
 import { KeyValInput } from '@common/inputs/key-val.input';
 import { ICurrentUser } from '@common/interfaces';
-import { Role } from './role.model';
+import { Role, RolesWithPagination } from './role.model';
 import { BadRequestException, RoleAlreadyExistsException } from './exceptions';
 import { getCurrentTimeStamp } from '@common/utilities';
+import { PaginationParams, SortingParam } from '@common/dtos';
+import { CreatedOnStartShouldBeLessThanEndException } from '@common/exceptions';
+import { RolesFilterParams } from '@app/v1/roles/dtos';
 
 @Injectable()
 export class RoleService {
   constructor(private roleDB: RoleRepository) {}
 
   async list(
-    currentUser: ICurrentUser,
+    current_user: ICurrentUser,
+    paginationParams: PaginationParams,
+    filteringParams: RolesFilterParams,
+    sortingParams: SortingParam,
     output: string[],
-    paginationParams: Record<string, any>,
-  ): Promise<any> {
-    return this.roleDB.listWithPagination(paginationParams, output, {
-      deleted_on: null,
-      tenant_id: currentUser.tenant_id
-    });
+  ): Promise<RolesWithPagination> {
+    if (
+      filteringParams?.created_on &&
+      new Date(filteringParams?.created_on.start).getTime() >
+        new Date(filteringParams?.created_on.end).getTime()
+    ) {
+      throw new CreatedOnStartShouldBeLessThanEndException(
+        filteringParams?.created_on.start,
+        filteringParams?.created_on.end,
+      );
+    }
+    return this.roleDB.list(
+      paginationParams,
+      filteringParams,
+      sortingParams,
+      { deleted_on: null, tenant_id: current_user.tenant_id },
+      output,
+    );
   }
 
   async findById(
@@ -28,11 +46,10 @@ export class RoleService {
     id: string,
     output?: string[],
   ): Promise<Role> {
-    const result = await this.roleDB.findOne(
+    return await this.roleDB.findOne(
       { tenant_id: currentUser.tenant_id, id: id, deleted_on: null },
       output,
     );
-    return result;
   }
 
   async findByProperty(
@@ -46,8 +63,7 @@ export class RoleService {
     });
     conditions['tenant_id'] = currentUser.tenant_id;
     conditions['deleted_on'] = null;
-    const result = await this.roleDB.findBy(conditions, output);
-    return result;
+    return await this.roleDB.findBy(conditions, output);
   }
 
   async update(

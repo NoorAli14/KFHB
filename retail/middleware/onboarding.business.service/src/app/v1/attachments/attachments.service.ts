@@ -17,7 +17,7 @@ export class AttachmentsService {
     updated_by
   }`;
 
-  constructor(private readonly gqlClient: GqlClientService) { }
+  constructor(private readonly gqlClient: GqlClientService) {}
 
   /**
    *
@@ -28,7 +28,7 @@ export class AttachmentsService {
   async upload(input: AttachmentUploadingInput): Promise<Attachment> {
     this.logger.log(`Attachment:: Start uploading [${input.attachment_type}]`);
     // Construct GraphQL request
-    const mutation: string = `mutation {
+    const mutation = `mutation {
         result: addAttachment(input: ${toGraphql(input)}) ${this.output}
       }`;
     return this.gqlClient.send(mutation);
@@ -40,11 +40,9 @@ export class AttachmentsService {
    * @return The attachment array of objects
    */
   async listByCustomerID(customer_id: string): Promise<Attachment[]> {
-    this.logger.log(
-      `Attachment:: list of attachments by customer ID [${customer_id}]`,
-    );
+    this.logger.log(`Attachment:: list of attachments by customer ID [${customer_id}]`);
     // Construct GraphQL request
-    const query: string = `query {
+    const query = `query {
         result: attachmentList(customer_id: "${customer_id}") ${this.output}
       }`;
     return this.gqlClient.send(query);
@@ -59,11 +57,9 @@ export class AttachmentsService {
    */
 
   async find(id: string, customer_id: string): Promise<Attachment> {
-    this.logger.log(
-      `Attachment:: Fetch attachment for attachment Id [${id}] and customer Id [${customer_id}]`,
-    );
+    this.logger.log(`Attachment:: Fetch attachment for attachment Id [${id}] and customer Id [${customer_id}]`);
     // Construct GraphQL request
-    const query: string = `query {
+    const query = `query {
         result:  findAttachment(id: "${id}" ,customer_id: "${customer_id}") {
           id
           file_name

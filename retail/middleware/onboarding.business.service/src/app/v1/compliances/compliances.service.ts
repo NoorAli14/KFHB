@@ -6,7 +6,7 @@ import { ITemplateResponse } from './compliance.interface';
 export class ComplianceService {
   private readonly logger = new Logger(ComplianceService.name);
 
-  constructor(private readonly gqlClient: GqlClientService) { }
+  constructor(private readonly gqlClient: GqlClientService) {}
 
   private _output = `{
     id
@@ -41,22 +41,22 @@ export class ComplianceService {
   }`;
 
   async findOneByName(name: string): Promise<Template> {
-    this.logger.log(`Compliance:: Find template by name [${name}]`)
-    const query: string = `query {
+    this.logger.log(`Compliance:: Find template by name [${name}]`);
+    const query = `query {
       result: findTemplateByName(name: "${name}") ${this._output}
     }`;
     return this.gqlClient.send(query);
   }
 
   async submitResponse(input: ITemplateResponse): Promise<any> {
-    Logger.log(`Compliance:: submit template response by customer [${input.user_id}]`)
+    Logger.log(`ComplianceService::submitResponse submit template response by customer [${input.user_id}]`);
     const params: { [key: string]: string } = {
       template_id: input.template_id,
       user_id: input.user_id,
       remarks: input.remarks,
       results: `${strToBase64(JSON.stringify(input.results))}`,
     };
-    const mutation: string = `mutation {
+    const mutation = `mutation {
       result: addTemplateResponse(input: ${toGraphql(params)}) {
         id
         remarks

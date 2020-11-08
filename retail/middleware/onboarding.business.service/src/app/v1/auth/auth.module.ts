@@ -4,6 +4,7 @@ import { PassportModule } from '@nestjs/passport';
 
 import { CustomerModule } from '@app/v1/customers/customer.module';
 import { CustomersService } from '@app/v1/customers/customers.service';
+import { UserService } from '@app/v1/users/users.service';
 
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
@@ -32,13 +33,14 @@ import {
       inject: [ConfigurationService],
       useFactory: async (configService: ConfigurationService) => ({
         secret: configService.JWT.SECRET,
-        algorithm: configService.JWT.ALGORITHM
+        algorithm: configService.JWT.ALGORITHM,
       }),
     }),
   ],
   controllers: [AuthController],
   providers: [
     CustomersService,
+    UserService,
     AuthService,
     GqlClientService,
     LocalStrategy,
@@ -48,4 +50,4 @@ import {
   ],
   exports: [PassportModule, LocalStrategy, AuthService],
 })
-export class AuthModule { }
+export class AuthModule {}

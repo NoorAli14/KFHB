@@ -22,6 +22,11 @@ input CheckAvailabilityInput {
   gender: String
 }
 
+input CreatedOnParams {
+  start: String!
+  end: String!
+}
+
 input CreateUserInput {
   email: String!
   contact_no: String
@@ -39,12 +44,20 @@ input CreateUserInput {
   password_reset_token: String
   password_reset_token_expiry: String
   roles: [IdsInput!]
+  entity_id: String
 }
 
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+type ENT_PaginationModel {
+  total: Float
+  pages: Float
+  pageSize: Float
+  page: Float
+}
 
 input ForgotPasswordInput {
   email: String!
@@ -77,6 +90,17 @@ input HolidayInput {
   description: String
   remarks: String
   status: String
+}
+
+input HolidaysFilterParams {
+  holiday_date: String
+  status: String
+  created_on: CreatedOnParams
+}
+
+type HolidaysWithPagination {
+  pagination: ENT_PaginationModel
+  data: [Holiday!]
 }
 
 input IdsInput {
@@ -124,6 +148,20 @@ input LeaveInput {
   status: String
 }
 
+input LeavesFilterParams {
+  user_id: String
+  leave_type_id: String
+  start_date: String
+  end_date: String
+  status: String
+  created_on: CreatedOnParams
+}
+
+type LeavesWithPagination {
+  pagination: ENT_PaginationModel
+  data: [Leave!]
+}
+
 type LeaveType {
   id: ID!
   name: String!
@@ -155,7 +193,7 @@ input LoginInput {
 type Module {
   id: ID!
   name: String!
-  slug: String!
+  slug: String
   parent_id: String
   status: String
   created_on: String!
@@ -208,14 +246,9 @@ type Mutation {
   deleteLeaveType(id: String!): Boolean!
 }
 
-type PaginationModel {
-  from: Float
-  to: Float
-  total: Float
-  perPage: Float
-  currentPage: Float
-  lastPage: Float
-  offset: Float
+input PaginationParams {
+  page: Float
+  limit: Float
 }
 
 type Permission {
@@ -231,11 +264,11 @@ input PermissionInput {
 }
 
 type Query {
-  usersList: [User!]!
+  usersList(sort_by: SortingParam, filters: UsersFilterParams, pagination: PaginationParams): UsersWithPagination!
   findUserById(id: String!): User!
   findAvailableAgents(input: CheckAvailabilityInput!): [User!]!
   findUserBy(checks: [KeyValInput!]!): [User!]!
-  rolesList: [Role!]!
+  rolesList(sort_by: SortingParam, filters: RolesFilterParams, pagination: PaginationParams): RolesWithPagination!
   findRoleById(id: String!): Role!
   findRoleBy(checks: [KeyValInput!]!): [Role!]!
   modulesList: [Module!]!
@@ -249,10 +282,10 @@ type Query {
   workingDaysList: [WorkingDay!]!
   findWorkingDayById(id: String!): WorkingDay!
   findWorkingDayBy(checks: [KeyValInput!]!): [WorkingDay!]!
-  holidaysList: [Holiday!]!
+  holidaysList(sort_by: SortingParam, filters: HolidaysFilterParams, pagination: PaginationParams): HolidaysWithPagination!
   findHolidayById(id: String!): Holiday!
   findHolidayBy(checks: [KeyValInput!]!): [Holiday!]!
-  leavesList: [Leave!]!
+  leavesList(sort_by: SortingParam, filters: LeavesFilterParams, pagination: PaginationParams): LeavesWithPagination!
   findLeaveById(id: String!): Leave!
   findLeaveBy(checks: [KeyValInput!]!): [Leave!]!
   leaveTypeList: [LeaveType!]!
@@ -263,7 +296,7 @@ type Query {
 type Role {
   id: ID!
   name: String!
-  description: String!
+  description: String
   tenant_id: String!
   status: String
   created_on: String!
@@ -289,6 +322,22 @@ input RoleInput {
   permissions: [IdsInput!]
 }
 
+input RolesFilterParams {
+  name: String
+  status: String
+  created_on: CreatedOnParams
+}
+
+type RolesWithPagination {
+  pagination: ENT_PaginationModel
+  data: [Role!]
+}
+
+input SortingParam {
+  sort_by: String
+  sort_order: String
+}
+
 input UpdatePasswordInput {
   current_password: String!
   new_password: String!
@@ -311,15 +360,16 @@ input UpdateUserInput {
   password_reset_token: String
   password_reset_token_expiry: String
   roles: [IdsInput!]
+  entity_id: String
 }
 
 type User {
   id: ID!
   email: String!
   contact_no: String
-  first_name: String!
+  first_name: String
   middle_name: String
-  last_name: String!
+  last_name: String
   password_digest: String
   gender: String
   is_owner: Boolean
@@ -327,6 +377,7 @@ type User {
   date_of_birth: DateTime
   nationality_id: String
   status: String
+  entity_id: String
   created_on: String!
   created_by: String!
   updated_on: String!
@@ -340,6 +391,22 @@ type User {
   password_reset_token: String
   password_reset_token_expiry: DateTime
   leaves: [Leave!]!
+}
+
+input UsersFilterParams {
+  nationality_id: String
+  gender: String
+  first_name: String
+  last_name: String
+  status: String
+  contact_no: String
+  email: String
+  created_on: CreatedOnParams
+}
+
+type UsersWithPagination {
+  pagination: ENT_PaginationModel
+  data: [User!]
 }
 
 type WorkingDay {

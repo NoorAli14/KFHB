@@ -9,15 +9,8 @@ import {
   Body,
   Logger,
 } from '@nestjs/common';
-import {
-  ApiTags,
-  ApiOperation,
-  ApiBearerAuth,
-  ApiOkResponse,
-  ApiNotFoundResponse,
-  ApiBody,
-} from '@nestjs/swagger';
-import { AuthGuard, CurrentUser, CUSTOMER_LAST_STEPS } from '@common/index';
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiOkResponse, ApiNotFoundResponse, ApiBody } from '@nestjs/swagger';
+import { AuthGuard, CurrentUser, CUSTOMER_LAST_STEPS, PermissionsGuard } from '@common/index';
 
 import { Template } from './compliance.entity';
 import { ComplianceService } from './compliances.service';
@@ -28,7 +21,7 @@ import { CustomersService } from '../customers/customers.service';
 @ApiTags('Compliance Module')
 @Controller('compliance')
 @ApiBearerAuth()
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, PermissionsGuard)
 export class CompliancesController {
   private readonly logger = new Logger(CompliancesController.name);
   private readonly __template: any = {
@@ -56,11 +49,7 @@ export class CompliancesController {
     description: 'Template Not Found.',
   })
   async crs(): Promise<Template> {
-    const compliance: Template = await this.complianceService.findOneByName(
-      this.__template.CRS,
-    );
-    if (!compliance) throw new NotFoundException(`Template not found.`);
-    return compliance;
+    return this.complianceService.findOneByName(this.__template.CRS);
   }
 
   @Get('kyc')
@@ -78,11 +67,8 @@ export class CompliancesController {
     description: 'Template Not Found.',
   })
   async kyc(): Promise<Template> {
-    const compliance: Template = await this.complianceService.findOneByName(
-      this.__template.KYC,
-    );
-    if (!compliance) throw new NotFoundException(`Template not found.`);
-    return compliance;
+    return this.complianceService.findOneByName(this.__template.KYC);
+
   }
 
   @Get('fatca')
@@ -100,11 +86,7 @@ export class CompliancesController {
     description: 'Template Not Found.',
   })
   async fatca(): Promise<Template> {
-    const compliance: Template = await this.complianceService.findOneByName(
-      this.__template.FATCA,
-    );
-    if (!compliance) throw new NotFoundException(`Template not found.`);
-    return compliance;
+    return this.complianceService.findOneByName(this.__template.FATCA);
   }
 
   @Post('fatca')
@@ -126,7 +108,12 @@ export class CompliancesController {
   })
   @HttpCode(HttpStatus.OK)
   async submitFatca(@CurrentUser() currentUser: Customer, @Body() input: ComplianceDto): Promise<Template> {
-    return this.submitResponse(this.__template.FATCA, currentUser.id, CUSTOMER_LAST_STEPS.RBX_ONB_STEP_FATCA_SUBMITTED, input);
+    return this.submitResponse(
+      this.__template.FATCA,
+      currentUser.id,
+      CUSTOMER_LAST_STEPS.RBX_ONB_STEP_FATCA_SUBMITTED,
+      input,
+    );
   }
 
   @Post('crs')
@@ -148,7 +135,12 @@ export class CompliancesController {
   })
   @HttpCode(HttpStatus.OK)
   async submitCRS(@CurrentUser() currentUser: Customer, @Body() input: ComplianceDto): Promise<Template> {
-    return this.submitResponse(this.__template.CRS, currentUser.id, CUSTOMER_LAST_STEPS.RBX_ONB_STEP_CRS_SUBMITTED, input);
+    return this.submitResponse(
+      this.__template.CRS,
+      currentUser.id,
+      CUSTOMER_LAST_STEPS.RBX_ONB_STEP_CRS_SUBMITTED,
+      input,
+    );
   }
 
   @Post('kyc')
@@ -170,25 +162,25 @@ export class CompliancesController {
   })
   @HttpCode(HttpStatus.OK)
   async submitKYC(@CurrentUser() currentUser: Customer, @Body() input: ComplianceDto): Promise<Template> {
-    return this.submitResponse(this.__template.KYC, currentUser.id, CUSTOMER_LAST_STEPS.RBX_ONB_STEP_KYC_SUBMITTED, input);
+    return this.submitResponse(
+      this.__template.KYC,
+      currentUser.id,
+      CUSTOMER_LAST_STEPS.RBX_ONB_STEP_KYC_SUBMITTED,
+      input,
+    );
   }
   async submitResponse(name: string, user_id: string, last_step: string, input: ComplianceDto): Promise<Template> {
-    const compliance: Template = await this.complianceService.findOneByName(
-      name,
-    );
+    const compliance: Template = await this.complianceService.findOneByName(name);
     if (!compliance) throw new NotFoundException(`Template not found.`);
     const params: ITemplateResponse = {
       template_id: compliance.id,
-      user_id: user_id,
+      user_id,
       results: input.results,
       remarks: input.remarks,
     };
     const result = await this.complianceService.submitResponse(params);
     if (result) {
-      await this.customerService.updateLastStep(
-        user_id,
-        last_step,
-      );
+      await this.customerService.updateLastStep(user_id, last_step);
     }
     return result;
   }
