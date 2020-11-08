@@ -17,7 +17,7 @@ export class DocumentsService {
         updated_by
     }`;
 
-  constructor(private readonly gqlClient: GqlClientService) {}
+  constructor(private readonly gqlClient: GqlClientService) { }
 
   /**
    *
@@ -67,11 +67,10 @@ export class DocumentsService {
       }
       ... on CUSTOM_ERROR {
         errors {
-          group
-          errorCode
-          field
+          name
           message
-          stack
+          developerMessage
+          field
           value
         }
       }
@@ -82,7 +81,7 @@ export class DocumentsService {
     }`;
     this.logger.log(mutation);
     const document: any = await this.gqlClient.send(mutation);
-    if (document?.errors) throw new BadRequestException({ errors: document.errors });
+    if (document?.errors) throw new BadRequestException({ errors: document.errors, name: 'MRZ_VALIDATION_ERROR' });
     if (document?.processed_data) document.processed_data = JSON.parse(document.processed_data);
     return document;
   }
@@ -113,7 +112,7 @@ export class DocumentsService {
       }
     }`;
     const result: any = await this.gqlClient.send(mutation);
-    if (result?.errors) throw new BadRequestException({ errors: result.errors });
+    if (result?.errors) throw new BadRequestException({ errors: result.errors, name: 'DOCUMENT_EVALUATION_ERROR' });
     return result;
   }
 }
