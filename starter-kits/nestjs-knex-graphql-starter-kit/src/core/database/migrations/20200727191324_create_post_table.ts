@@ -1,11 +1,11 @@
 import * as Knex from 'knex';
-import { TABLE, DATABASE_UUID_METHOD } from '@rubix/common/constants';
-export function up(knex: Knex): any {
+import { TABLE, DATABASE_UUID_METHOD } from '@rubix/common/';
+export const up = (knex: Knex): any => {
   return knex.schema.createTable(TABLE.POST, table => {
     table
       .uuid('id')
       .primary()
-      .defaultTo(knex.raw(DATABASE_UUID_METHOD));
+      .defaultTo(DATABASE_UUID_METHOD(knex));
     table.text('description');
     table
       .uuid('user_id')
@@ -15,8 +15,8 @@ export function up(knex: Knex): any {
     table.timestamp('created_on').defaultTo(knex.fn.now());
     table.timestamp('updated_on').defaultTo(knex.fn.now());
   });
-}
+};
 
-export async function down(knex: Knex): Promise<any> {
+export const down = (knex: Knex): any => {
   return knex.schema.dropTable(TABLE.POST);
-}
+};

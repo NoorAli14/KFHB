@@ -58,6 +58,8 @@ class Server {
     );
     this.app.useGlobalPipes(
       new ValidationPipe({
+        transform: true,
+        whitelist: true,
         exceptionFactory: (errors: ValidationError[] | any[]) =>
           new ValidationException(errors),
       }),

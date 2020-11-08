@@ -69,7 +69,7 @@ export const graphqlFields = (info: { [key: string]: any }, data: { [key: string
     });
   } else {
     info.fieldNodes[0].selectionSet.selections.forEach(item => {
-      if (item.name.value == "data"){
+      if (item.name.value == "data") {
         item.selectionSet.selections.forEach(item => {
           if (!item.selectionSet) {
             keys.push(item.name.value);
@@ -131,7 +131,7 @@ export const generateRandomString = (length = 36): string => {
  * DATABASE UUID GENERATION
  * @param knex
  */
-export const DATABASE_UUID_METHOD = (knex): any => {
+export const DATABASE_UUID_METHOD = (knex: any): any => {
   switch (knex.client.config.client) {
     case 'pg':
       return knex.raw('uuid_generate_v4()');

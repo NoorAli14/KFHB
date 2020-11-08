@@ -50,6 +50,8 @@ class Server {
     this.app.useGlobalInterceptors(new LoggingInterceptor());
     this.app.useGlobalFilters(new HttpExceptionFilter());
     this.app.useGlobalPipes(new ValidationPipe({
+      transform: true,
+      whitelist: true,
       exceptionFactory: (errors: ValidationError[] | any[]) => new ValidationException(errors)
     }));
     this.app.setGlobalPrefix(this.Config.APP.API_URL_PREFIX);
