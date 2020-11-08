@@ -32,7 +32,7 @@ export class CompliancesController {
   constructor(
     private readonly complianceService: ComplianceService,
     private readonly customerService: CustomersService,
-  ) {}
+  ) { }
 
   @Get('crs')
   @ApiOperation({
@@ -49,9 +49,7 @@ export class CompliancesController {
     description: 'Template Not Found.',
   })
   async crs(): Promise<Template> {
-    const compliance: Template = await this.complianceService.findOneByName(this.__template.CRS);
-    if (!compliance) throw new NotFoundException(`Template not found.`);
-    return compliance;
+    return this.complianceService.findOneByName(this.__template.CRS);
   }
 
   @Get('kyc')
@@ -69,9 +67,8 @@ export class CompliancesController {
     description: 'Template Not Found.',
   })
   async kyc(): Promise<Template> {
-    const compliance: Template = await this.complianceService.findOneByName(this.__template.KYC);
-    if (!compliance) throw new NotFoundException(`Template not found.`);
-    return compliance;
+    return this.complianceService.findOneByName(this.__template.KYC);
+
   }
 
   @Get('fatca')
@@ -89,9 +86,7 @@ export class CompliancesController {
     description: 'Template Not Found.',
   })
   async fatca(): Promise<Template> {
-    const compliance: Template = await this.complianceService.findOneByName(this.__template.FATCA);
-    if (!compliance) throw new NotFoundException(`Template not found.`);
-    return compliance;
+    return this.complianceService.findOneByName(this.__template.FATCA);
   }
 
   @Post('fatca')

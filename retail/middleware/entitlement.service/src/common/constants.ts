@@ -26,6 +26,7 @@ export const NUMBERS = {
 export const HEADER_NAMES = {
   X_USER_ID: 'x-user-id',
   X_TENANT_ID: 'x-tenant-id',
+  X_ENTITY_ID: 'x-entity-id',
 };
 
 export const DATE_FORMAT = 'YYYY-MM-DD';

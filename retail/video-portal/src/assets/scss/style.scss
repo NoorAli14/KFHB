@@ -554,10 +554,14 @@ table {
   margin: 25px 15px 0 2%;
   overflow: auto;
   .react-tabs {
+    position: relative;
     .react-tabs__tab-list {
       border-bottom: none;
       margin-bottom: 0;
       background-color: #f3f3f3;
+      position: absolute;
+      width: 100%;
+      z-index: 1;
       .react-tabs__tab {
         background: #0c9899;
         border: 1px solid transparent;
@@ -577,9 +581,13 @@ table {
       justify-content: space-between;
       background: #fff;
       border: 1px solid #e6e6e6;
+      
+      position: relative;
+    top: 35px;
       .details {
         flex: 1;
         position: relative;
+        min-height: 400px;
         .close {
           position: absolute;
           width: 17px;
@@ -909,7 +917,7 @@ table {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      width: 320px;
+      width:400px;
       padding: 10px 30px;
       margin-top: 5px;
       background-color: #fff;
@@ -1307,4 +1315,13 @@ textarea {
       }
     }
   }
+}
+
+.tab-body{
+  position: relative;
+  top: 36px;
+
+}
+.tab-head{
+  position: absolute;
 }

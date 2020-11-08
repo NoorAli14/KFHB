@@ -62,10 +62,11 @@ class CustomerDetails extends React.Component {
 
         let customerId = localStorage.getItem("customerId");
         if (customerId) {
+          // customerId='34A8F400-23F0-445F-A20C-5407BDC1C6FC'
           axios
             .get(
               window._env_.RUBIX_BASE_URL +
-                `/entitlements/customers/${customerId}`,
+                `/onboarding/customers/${customerId}`,
               {
                 headers: {
                   "Content-Type": "application/json",
@@ -78,7 +79,7 @@ class CustomerDetails extends React.Component {
             .then((res) => {
               console.log(res);
 
-              const data = res.data.templates.map((item) => {
+              const data = res.data?.templates?.map((item) => {
                 return { ...item, results: JSON.parse(atob(item.results)) };
               });
               if (data && data.length > 0) {
@@ -103,19 +104,19 @@ class CustomerDetails extends React.Component {
                 customer: res.data,
                 passportFace:
                   window._env_.RUBIX_BASE_URL +
-                  `/entitlements/customers/${customerId}/documents/${passportId}/preview?x-access-token=${token}&x-tenant-id=${tenantId}&x-channel-id=${channelId}&extracted-image=true`,
+                  `/onboarding/customers/${customerId}/documents/${passportId}/preview?x-access-token=${token}&x-tenant-id=${tenantId}&x-channel-id=${channelId}&extracted-image=true`,
                 passportImage:
                   window._env_.RUBIX_BASE_URL +
-                  `/entitlements/customers/${customerId}/documents/${passportId}/preview?x-access-token=${token}&x-tenant-id=${tenantId}&x-channel-id=${channelId}`,
+                  `/onboarding/customers/${customerId}/documents/${passportId}/preview?x-access-token=${token}&x-tenant-id=${tenantId}&x-channel-id=${channelId}`,
                 civilIdImageBack:
                   window._env_.RUBIX_BASE_URL +
-                  `/entitlements/customers/${customerId}/documents/${civilIdBackId}/preview?x-access-token=${token}&x-tenant-id=${tenantId}&x-channel-id=${channelId}`,
+                  `/onboarding/customers/${customerId}/documents/${civilIdBackId}/preview?x-access-token=${token}&x-tenant-id=${tenantId}&x-channel-id=${channelId}`,
                 civilIdImageFront:
                   window._env_.RUBIX_BASE_URL +
-                  `/entitlements/customers/${customerId}/documents/${civilIdFrontId}/preview?x-access-token=${token}&x-tenant-id=${tenantId}&x-channel-id=${channelId}`,
+                  `/onboarding/customers/${customerId}/documents/${civilIdFrontId}/preview?x-access-token=${token}&x-tenant-id=${tenantId}&x-channel-id=${channelId}`,
                 faceImage:
                   window._env_.RUBIX_BASE_URL +
-                  `/entitlements/customers/${customerId}/documents/${civilIdFrontId}/preview?x-access-token=${token}&x-tenant-id=${tenantId}&x-channel-id=${channelId}&extracted-image=true`,
+                  `/onboarding/customers/${customerId}/documents/${civilIdFrontId}/preview?x-access-token=${token}&x-tenant-id=${tenantId}&x-channel-id=${channelId}&extracted-image=true`,
                 amlCheck: res.data.amlResponses,
               });
             })
@@ -407,32 +408,46 @@ class CustomerDetails extends React.Component {
                 </>
               </TabPanel>
 
-              <TabPanel></TabPanel>
               <TabPanel>
-                <FatcaTemplate template={fatcaTemplate} />
+
+              <div className="details" ></div>
+
+              </TabPanel>
+              <TabPanel>
+              <div className="details" >
+              <FatcaTemplate template={fatcaTemplate} />
                 <CRSTemplate />
+
+              </div>
+               
               </TabPanel>
-              <TabPanel>
+              <TabPanel><div className="details" >
+
                 <BankingTransaction template={bankingTransactionTemplate} />
+              </div>
               </TabPanel>
               <TabPanel>
+              <div className="details" >
                 <AMLCheck aml={amlCheck} />
+              </div>
               </TabPanel>
               <TabPanel>
+              <div className="details" >
                 <RemarksTab />
+              </div>
               </TabPanel>
             </Tabs>
           </div>
           <div className="customerbasic-details">
             <Tabs>
-              <TabList>
+              <TabList >
                 <Tab>ID Card</Tab>
                 <Tab>Passport</Tab>
                 <Tab>Additional Data</Tab>
                 <Tab>Screen shots</Tab>
               </TabList>
 
-              <TabPanel>
+              <TabPanel >
                 <div className="details">
                   <div style={{width:'100%', display: 'flex', justifyContent: 'center'}}>
                     <a className={`image-btns ${nationalIdActive==='nationalIdFace'?'active-btn' :''}`}  onClick={()=>this.setImageActive('nationalIdFace')} style={{cursor:'pointer'}} >Face Image</a> &nbsp;&nbsp;
@@ -471,7 +486,7 @@ class CustomerDetails extends React.Component {
                 </div>
               </TabPanel>
 
-              <TabPanel>
+              <TabPanel >
                  <div className="details" >
                   <div style={{width:'100%', display: 'flex', justifyContent: 'center'}}>
                       <a className={`image-btns ${passportActive==='passport'?'active-btn' :''}`}  onClick={()=>this.setPassportActive('passport')} style={{cursor:'pointer'}}>Passport</a> &nbsp;&nbsp;
@@ -489,9 +504,12 @@ class CustomerDetails extends React.Component {
                   </div>
                 </div>
               </TabPanel>
-              <TabPanel></TabPanel>
-              <TabPanel>
-                <ScreenShots images={screenShotImages} />
+              <TabPanel > <div className="details" ></div></TabPanel>
+              <TabPanel >
+              <div className="details" >
+              <ScreenShots images={screenShotImages} />
+              </div>
+                
               </TabPanel>
             </Tabs>
           </div>

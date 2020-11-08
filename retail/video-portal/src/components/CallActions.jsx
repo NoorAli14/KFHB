@@ -175,7 +175,8 @@ class CallActions extends React.Component {
         </div>
           {isLargeScreen && (
              <div style={{display: 'flex', width:'100%', justifyContent: 'center'}}>
-             <button onClick={()=>takePicture('NATIONAL_ID_SCREENSHOT')} style={{height:'30px', width:'90px', marginRight:'5px'}}>ID Card</button>
+             <button onClick={()=>takePicture('NATIONAL_ID_FRONT_SIDE_SCREENSHOT')} style={{height:'30px', width:'90px', marginRight:'5px'}}>Civil Id Front</button>
+             <button onClick={()=>takePicture('NATIONAL_ID_BACK_SIDE_SCREENSHOT')} style={{height:'30px', width:'90px', marginRight:'5px'}}>Civil Id Back</button>
              <button onClick={()=>takePicture('PASSPORT_SCREENSHOT')}  style={{height:'30px', width:'90px', marginRight:'5px'}}>Passport</button>
              <button onClick={()=>takePicture('ADDRESS_SCREENSHOT')}  style={{height:'30px', width:'90px', marginRight:'5px'}}>Address</button>
              <button onClick={()=>takePicture('VISA_SCREENSHOT')}  style={{height:'30px', width:'90px', marginRight:'5px'}}>Visa Page</button>

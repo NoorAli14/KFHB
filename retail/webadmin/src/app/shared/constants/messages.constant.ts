@@ -17,6 +17,7 @@ export const MESSAGES = {
     INVITATION_ACCEPTED: () => `Your profile updated successfully. Login to continue. ${getRandomNumber()}`,
     CUSTOM: (message) => `${message}`,
     EXISTS: (type) => `${type} already exists. `,
+    INVALID_DATE:`Date is invalid`,
 };
 const getRandomNumber = () => {
     return Math.floor(Math.random() * 11);
