@@ -152,14 +152,14 @@ export class AmlRequestService {
     this.logger.log(amlScreening);
     const [response] = await this.amlRequestDB.update(
       { id: amlRequest.id },
-      { status: amlScreening.data.status },
+      { status: amlScreening.status },
       output,
     );
 
     await this.amlResponseDB.create(
       {
         request_id: response.id,
-        status: amlScreening.data.status,
+        status: amlScreening.status,
         created_by: response.created_by,
         updated_by: response.updated_by,
         response_text: JSON.stringify(amlScreening),
