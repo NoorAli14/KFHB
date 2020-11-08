@@ -106,7 +106,6 @@ export class AmlRequestService {
   ): Promise<AmlRequest> {
     // MOC JSON object start
     const newAmlRequest: any = {
-      status: null,
       remarks: null,
       user_id: input.id,
       created_by: currentUser.id,

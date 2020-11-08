@@ -85,7 +85,10 @@ export class AmlRequestResolver {
       return this.almRequestService.triggerAml(amlRequest, output);
     }
 
-    if (amlRequest?.status === AML_REQUEST_STATUSES.SUSPECT) {
+    if (
+      amlRequest?.status === AML_REQUEST_STATUSES.SUSPECT ||
+      amlRequest?.status === AML_REQUEST_STATUSES.PENDING
+    ) {
       return this.almRequestService.triggerAml(amlRequest, output);
     }
     return amlRequest;

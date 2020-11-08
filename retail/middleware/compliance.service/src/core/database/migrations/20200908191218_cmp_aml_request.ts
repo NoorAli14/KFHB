@@ -1,5 +1,9 @@
 import * as Knex from 'knex';
-import { TABLE, DATABASE_UUID_METHOD } from '@common/constants';
+import {
+  TABLE,
+  DATABASE_UUID_METHOD,
+  AML_REQUEST_STATUSES,
+} from '@common/constants';
 
 export async function up(knex: Knex): Promise<void> {
   return knex.schema.createTable(TABLE.AML_REQUEST, table => {
@@ -15,7 +19,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string('request_reference');
 
     table.string('remarks');
-    table.string('status');
+    table.string('status').defaultTo(AML_REQUEST_STATUSES.PENDING);
 
     table.timestamp('created_on', { useTz: true }).defaultTo(knex.fn.now());
     table.string('created_by');
