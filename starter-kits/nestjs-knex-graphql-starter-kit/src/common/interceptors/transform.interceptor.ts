@@ -19,8 +19,6 @@ export class TransformInterceptor<T>
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const response = context.switchToHttp().getResponse();
     if (response.statusCode > 300) return next.handle();
-    return next.handle().pipe(
-      map(result => result.data),
-    );
+    return next.handle().pipe(map(result => result.data));
   }
 }

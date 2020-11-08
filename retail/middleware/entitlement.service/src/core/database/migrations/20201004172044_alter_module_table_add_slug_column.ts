@@ -1,7 +1,6 @@
 import * as Knex from 'knex';
-import { TABLE } from '@common/constants';
-
-export async function up(knex: Knex): Promise<any> {
+import { TABLE } from '@common/index';
+export function up(knex: Knex): any {
   return knex.schema.table(TABLE.MODULE, table => {
     table.string('slug');
     table.index(['slug'], `${TABLE.MODULE}_SLUG_INDEX`);

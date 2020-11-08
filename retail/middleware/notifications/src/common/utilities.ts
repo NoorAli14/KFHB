@@ -1,6 +1,7 @@
 import * as path from 'path';
 import * as glob from 'glob';
 import * as randomize from 'randomatic';
+import { NotImplementedException } from '@nestjs/common';
 
 // requires all the files which conform to the given pattern and returns the list of defaults exports
 export const requireDefaults = (pattern: string): any => {
@@ -66,7 +67,7 @@ export const generateRandomString = (length: number): string => {
     .substr(0, length);
 };
 
-export const redomize = async (opts: any = {pattern: "", length: null}): Promise<string> => {
+export const redomize = async (opts: any = { pattern: "", length: null }): Promise<string> => {
   const otp = randomize(opts.pattern, opts.length);
   return otp;
 }
@@ -77,3 +78,22 @@ export const calculateDuration = (date: Date): number => {
   diff = Math.abs(Math.round(diff));
   return diff;
 }
+
+/**
+ * DATABASE UUID GENERATION
+ * @param knex
+ */
+export const DATABASE_UUID_METHOD = (knex): any => {
+  switch (knex.client.config.client) {
+    case 'pg':
+      return knex.raw('uuid_generate_v4()');
+    case 'mssql':
+      return knex.raw('NEWID()');
+    case 'oracledb':
+      return '';
+    default:
+      throw new NotImplementedException(
+        `Database type ['${process.env.ENV_RBX_DB_DIALECT}'] not supported`,
+      );
+  }
+};

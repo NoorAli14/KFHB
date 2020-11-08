@@ -1,12 +1,12 @@
-import { DATABASE_UUID_METHOD, STATUS, TABLE } from '@common/constants';
+import { DATABASE_UUID_METHOD, STATUS, TABLE } from '@rubix/common/';
 import * as Knex from 'knex';
 
-export async function up(knex: Knex): Promise<void> {
+export function up(knex: Knex) {
   return knex.schema.createTable(TABLE.ATTACHMENT, table => {
     table
       .uuid('id')
       .primary()
-      .defaultTo(knex.raw(DATABASE_UUID_METHOD()));
+      .defaultTo(DATABASE_UUID_METHOD(knex));
 
     table.uuid('tenant_id').notNullable();
     table.uuid('customer_id').notNullable();

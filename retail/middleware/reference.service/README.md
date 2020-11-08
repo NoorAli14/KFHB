@@ -156,7 +156,7 @@ We now want to build out the `users` `posts` `commentrs` tables using some of th
 ```javascript
 import * as Knex from 'knex';
 import { TABLE, DATABASE_UUID_METHOD } from '@rubix/common/constants';
-export async function up(knex: Knex): Promise<any> {
+export function up(knex: Knex): any {
   return knex.schema.createTable(TABLE.USER, table => {
     table.uuid('id').primary().defaultTo(knex.raw(DATABASE_UUID_METHOD));
     table.string('first_name');
@@ -168,7 +168,7 @@ export async function up(knex: Knex): Promise<any> {
   });
 }
 
-export async function down(knex: Knex): Promise<any> {
+export function down(knex: Knex): Promise<any> {
   return knex.schema.dropTable(TABLE.USER);
 }
 ```
@@ -182,7 +182,7 @@ $ npm run migrate:make create_post_table
 ```javascript
 import * as Knex from 'knex';
 import { TABLE, DATABASE_UUID_METHOD } from '@rubix/common/constants';
-export async function up(knex: Knex): Promise<any> {
+export function up(knex: Knex): any {
   return knex.schema.createTable(TABLE.POST, table => {
     table
       .uuid('id')
@@ -213,7 +213,7 @@ $ npm run migrate:make create_comment_table
 ```javascript
 import * as Knex from 'knex';
 import { TABLE, DATABASE_UUID_METHOD } from '@rubix/common/constants';
-export async function up(knex: Knex): Promise<any> {
+export function up(knex: Knex): any {
   return knex.schema.createTable(TABLE.COMMENT, table => {
     table
       .uuid('id')
