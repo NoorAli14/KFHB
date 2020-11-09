@@ -9,8 +9,8 @@ export class FirebaseService {
     admin.initializeApp({
       credential: admin.credential.cert({
         clientEmail: this._config.FIREBASE.CLIENT_EMAIL,
-        privateKey: this._config.FIREBASE.PRIVATE_KEY,
-        projectId: this._config.FIREBASE.PROJECT_ID.replace(/\\n/g, '\n'),
+        privateKey: this._config.FIREBASE.PRIVATE_KEY.replace(/\\n/g, '\n'),
+        projectId: this._config.FIREBASE.PROJECT_ID,
       }),
     });
   }
