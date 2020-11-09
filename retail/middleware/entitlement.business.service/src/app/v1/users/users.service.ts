@@ -121,6 +121,7 @@ export class UserService {
 
   async findOne(id: string, output?: string): Promise<User> {
     const _output: string = output ? output : this.output;
+    this.logger.log(`Find user by id [${id}]`);
     const query = `query {
       result: findUserById(id: "${id}") ${_output}
     }`;
