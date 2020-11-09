@@ -21,7 +21,7 @@ export class PermissionsGuard implements CanActivate {
         }
         const permissions: string[] = context.getArgs()[0].permissions;
         const hasPermission = () =>
-            routePermissions.every(routePermission =>
+            routePermissions.some(routePermission =>
                 permissions.includes(routePermission),
             );
 
