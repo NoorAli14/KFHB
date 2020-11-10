@@ -28,12 +28,12 @@
                     <input type="text" placeholder="Search for a user" matInput [formControl]="control" [matAutocomplete]="auto">
                     <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn">
                         <mat-option>
-                            <a class="user" value=""  (click)="onSelectUser()">
+                            <a class="select-a" value=""  (click)="onSelectUser()">
                                 Reset Filter
                             </a>
                         </mat-option>
                         <mat-option *ngFor="let item of filteredUser" [value]="item.id">
-                            <a class="user" (click)="onSelectUser(item)"
+                            <a class="select-a" (click)="onSelectUser(item)"
                                 *ngIf="item.firstName && item.lastName">{{item.firstName + ' ' +  item.lastName}}
                             </a>
                             <{{ item.email}}>
@@ -58,7 +58,7 @@
                 <mat-spinner></mat-spinner>
             </div> -->
             <app-message-box [type]="errorType" [message]="responseMessage"></app-message-box>
-            <mat-table #table matSort matSortActive="createdOn" matSortDirection="desc"
+            <mat-table #table matSort matSortActive="startDate" matSortDirection="desc"
                 (matSortChange)="sortData($event)" [dataSource]="dataSource">
                 <!-- COLUMNS AND ROWS-->
                 <ng-container *ngFor="let key of displayedColumns" [matColumnDef]="key">

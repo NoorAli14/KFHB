@@ -82,7 +82,7 @@ export class HolidayComponent extends BaseComponent implements OnInit {
             limit: CONFIG.PAGE_SIZE,
             page: 1,
             sort_order: "desc",
-            sort_by: "created_on",
+            sort_by: "holiday_date",
         };
     }
     getQueryString(params): string {
