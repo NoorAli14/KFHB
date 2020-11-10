@@ -18,7 +18,6 @@ import {
     ImageSize,
 } from "@ngx-gallery/core";
 import { AuthenticationService } from "@shared/services/auth/authentication.service";
-import { debug } from "console";
 @Component({
     selector: "app-customer-detail",
     templateUrl: "./customer-detail.component.html",
@@ -180,7 +179,7 @@ export class CustomerDetailComponent implements OnInit, AfterContentChecked {
             return DEFAULT_IMAGE;
         }
 
-        let url = `/onboarding/customers/${customerId}/documents/${document.id}/preview?x-access-token=${token}&x-tenant-id=${tenantId}&x-channel-id=${channelId}`;
+        let url = `/onboarding/customers/${customerId}/attachments/${document.id}/preview?x-access-token=${token}&x-tenant-id=${tenantId}&x-channel-id=${channelId}`;
         if (isExtracted) {
             url = `${url}&extracted-image=true`;
         }
