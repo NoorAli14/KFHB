@@ -287,7 +287,7 @@ const getSchema = () => {
   ];
 };
 
-const SCHEMA = (group, processedData) => {
+exports.SCHEMA = (group, processedData) => {
   console.log(`Start Validating -> #${group}`);
   console.log(`Processed Data is -> ${JSON.stringify(processedData, null, 2)}`);
   let schema = getSchema();
@@ -353,5 +353,3 @@ const SCHEMA = (group, processedData) => {
   console.log(JSON.stringify(_schema, null, 2));
   return _schema;
 };
-
-module.exports = SCHEMA;
