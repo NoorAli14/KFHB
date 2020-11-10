@@ -1,3 +1,6 @@
+import { MESSAGES } from "@shared/constants/messages.constant";
+import { isArray } from "lodash";
+
 export const cloneDeep = (value) => {
     return JSON.parse(JSON.stringify(value));
 };
@@ -63,6 +66,24 @@ export const camelToSentenceCase = (text) => {
 };
 
 
-export const removeRandom = (text) => {
-    return text.replace(/\d+/g, '');
+export const extractErrorString = (response) => {
+    if (response.errors && !isArray(response.errors)) {
+        return response.errors.message;
+    } else if (response.errors && isArray(response.errors)) {
+        return response.errors[0].message;
+    } else {
+        return MESSAGES.UNKNOWN;
+    }
+};
+const daysOfWeek = [
+    "SUNDAY",
+    "MONDAY",
+    "TUESDAY",
+    "WEDNESDAY",
+    "THURSDAY",
+    "FRIDAY",
+    "SATURDAY",
+];
+export const sortWeekDays = (a, b) => {
+    return daysOfWeek.indexOf(a.weekDay) - daysOfWeek.indexOf(b.weekDay); // basic sort function that compares the indexes of the two days
 };
