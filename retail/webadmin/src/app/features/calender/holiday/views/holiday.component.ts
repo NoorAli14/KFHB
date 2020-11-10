@@ -106,9 +106,7 @@ export class HolidayComponent extends BaseComponent implements OnInit {
                 this.pagination = response.pagination;
                 this.pagination.page = this.pagination.page - 1;
             },
-            (error) => {
-                this._notifier.error(MESSAGES.UNKNOWN);
-            }
+            (response) => super.onError(response)
         );
     }
     openDialog(data): void {
@@ -138,9 +136,7 @@ export class HolidayComponent extends BaseComponent implements OnInit {
                 this._matDialog.closeAll();
                 this._notifier.success(MESSAGES.CREATED("Holiday"));
             },
-            (response) => {
-                this._notifier.error(MESSAGES.UNKNOWN);
-            }
+            (response) => super.onError(response)
         );
     };
 
@@ -156,9 +152,7 @@ export class HolidayComponent extends BaseComponent implements OnInit {
                 this.dataSource = new MatTableDataSource(this.holidays);
                 this._matDialog.closeAll();
             },
-            (response) => {
-                this._notifier.error(MESSAGES.UNKNOWN);
-            }
+            (response) => super.onError(response)
         );
     };
     confirmDialog(id): void {
@@ -187,9 +181,7 @@ export class HolidayComponent extends BaseComponent implements OnInit {
                 this.dataSource = new MatTableDataSource(this.holidays);
                 this._notifier.success(MESSAGES.DELETED("Holiday"));
             },
-            (response) => {
-                this._notifier.error(MESSAGES.UNKNOWN);
-            }
+            (response) => super.onError(response)
         );
     };
     camelToSentenceCase = (text: string): string => {

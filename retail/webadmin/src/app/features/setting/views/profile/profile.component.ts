@@ -57,10 +57,7 @@ export class ProfileComponent extends BaseComponent implements OnInit {
                 (response) => {
                     this.nationalities = response;
                 },
-                (response) => {
-                    this._notifier.error(MESSAGES.UNKNOWN);
-                }
-            );
+                (response) => super.onError(response))
     }
     onUpdateProfile(data): void {
         data = camelToSnakeCase(data);
@@ -74,10 +71,7 @@ export class ProfileComponent extends BaseComponent implements OnInit {
                     this._matDialog.closeAll();
                     this._notifier.success( MESSAGES.UPDATED('Profile'));
                 },
-                (response) => {
-                    this._notifier.error(MESSAGES.UNKNOWN);
-                }
-            );
+                (response) => super.onError(response))
     }
     onUpdatePassword(data): void {
         this._settingService
@@ -91,9 +85,6 @@ export class ProfileComponent extends BaseComponent implements OnInit {
                         this._notifier.success( MESSAGES.UPDATED('Password'));
                     }
                 },
-                (response) => {
-                    this._notifier.error(MESSAGES.UNKNOWN);
-                }
-            );
+                (response) => super.onError(response))
     }
 }
