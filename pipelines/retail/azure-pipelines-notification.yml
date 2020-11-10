@@ -16,7 +16,7 @@ variables:
   dockerRegistryServiceConnection: 'e11b76b8-024b-445d-b872-aaba976b9e8b'
   imageRepository: 'rubixnotifications'
   containerRegistry: 'testdaon.azurecr.io'
-  dockerfilePath: '$(Build.SourcesDirectory)/retail/middleware/notifications/Dockerfile'
+  dockerfilePath: '$(Build.SourcesDirectory)/retail/middleware/notification.service/Dockerfile'
   tag: '$(Build.BuildId)'
   tagLatest: $(Build.SourceBranchName)_latest
   
