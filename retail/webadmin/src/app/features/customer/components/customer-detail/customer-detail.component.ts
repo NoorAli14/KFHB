@@ -1,33 +1,43 @@
-import { DEFAULT_IMAGE } from './../../../../shared/constants/app.constants';
-import { snakeToCamelObject } from '@shared/helpers/global.helper';
-import { AfterContentChecked, Component, Inject, OnInit, ViewEncapsulation } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { environment } from '@env/environment';
-import { fuseAnimations } from '@fuse/animations';
+import { DEFAULT_IMAGE } from "./../../../../shared/constants/app.constants";
+import { snakeToCamelObject } from "@shared/helpers/global.helper";
+import {
+    AfterContentChecked,
+    Component,
+    Inject,
+    OnInit,
+    ViewEncapsulation,
+} from "@angular/core";
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { environment } from "@env/environment";
+import { fuseAnimations } from "@fuse/animations";
 import {
     Gallery,
     GalleryItem,
     ImageItem,
     ThumbnailsPosition,
     ImageSize,
-} from '@ngx-gallery/core';
-import { AuthenticationService } from '@shared/services/auth/authentication.service';
+} from "@ngx-gallery/core";
+import { AuthenticationService } from "@shared/services/auth/authentication.service";
+import { debug } from 'console';
 @Component({
-    selector: 'app-customer-detail',
-    templateUrl: './customer-detail.component.html',
-    styleUrls: ['./customer-detail.component.scss'],
+    selector: "app-customer-detail",
+    templateUrl: "./customer-detail.component.html",
+    styleUrls: ["./customer-detail.component.scss"],
     animations: fuseAnimations,
     encapsulation: ViewEncapsulation.None,
 })
 export class CustomerDetailComponent implements OnInit, AfterContentChecked {
     nationalIdDocuments: GalleryItem[];
     passportDocuments: GalleryItem[];
+    screenShots: GalleryItem[];
     FATCA: any;
     amlData: any;
     bankingTransaction: any;
     passportProcessed: any;
     civilIdBackProcessed: any;
     customer: any;
+    customerReponse: any;
+    screenShotsResponse: any;
     constructor(
         public gallery: Gallery,
         public matDialogRef: MatDialogRef<CustomerDetailComponent>,
@@ -36,70 +46,128 @@ export class CustomerDetailComponent implements OnInit, AfterContentChecked {
     ) {}
 
     ngOnInit(): void {
-       this.initData();
+        this.customerReponse = this.data[0];
+        this.screenShotsResponse = this.data[1];
+        this.initData();
     }
-    initData(): void{
-        let data = this.data.templates?.map((item) => {
+    initData(): void {
+        let data = this.customerReponse.templates?.map((item) => {
             return { ...item, results: JSON.parse(atob(item.results)) };
         });
-        data= data ? data : [];
+        data = data ? data : [];
         const civilIdBackProcessData =
-            this.data.documents.length > 0
-                ? this.data.documents.find(
-                      (x) => x.name === 'NATIONAL_ID_BACK_SIDE'
+            this.customerReponse.documents.length > 0
+                ? this.customerReponse.documents.find(
+                      (x) => x.name === "NATIONAL_ID_BACK_SIDE"
                   )
                 : null;
         this.civilIdBackProcessed = civilIdBackProcessData
             ? JSON.parse(civilIdBackProcessData.processed_data)?.mrz
             : null;
         const passportProcessData =
-            this.data.documents.length > 0
-                ? this.data.documents.find((x) => x.name === 'PASSPORT')
+            this.customerReponse.documents.length > 0
+                ? this.customerReponse.documents.find(
+                      (x) => x.name === "PASSPORT"
+                  )
                 : null;
         this.passportProcessed = passportProcessData
             ? JSON.parse(passportProcessData.processed_data)?.mrz
             : null;
-        this.customer = snakeToCamelObject(this.data);
-        this.FATCA = data.find((x) => x.results.name === 'FATCA');
-        this.bankingTransaction = data.find((x) => x.results.name === 'KYC');
+        this.customer = snakeToCamelObject(this.customerReponse);
+        this.FATCA = data.find((x) => x.results.name === "FATCA");
+        this.bankingTransaction = data.find((x) => x.results.name === "KYC");
 
         const _nationalIdDocuments = [
-            { title: 'National Id Back', type:'NATIONAL_ID_BACK_SIDE', isExtracted: false },
-            { title: 'National Id Front',type:'NATIONAL_ID_FRONT_SIDE', isExtracted: false },
-            { title: 'National Id Face', type:'NATIONAL_ID_FRONT_SIDE',isExtracted: true },
+            {
+                title: "National Id Back",
+                type: "NATIONAL_ID_BACK_SIDE",
+                isExtracted: false,
+            },
+            {
+                title: "National Id Front",
+                type: "NATIONAL_ID_FRONT_SIDE",
+                isExtracted: false,
+            },
+            {
+                title: "National Id Face",
+                type: "NATIONAL_ID_FRONT_SIDE",
+                isExtracted: true,
+            },
         ];
 
         const _passportDocuments = [
-            { title: 'Passport',type:'PASSPORT', isExtracted: false },
-            { title: 'Passport Face',type:'PASSPORT', isExtracted: true },
+            { title: "Passport", type: "PASSPORT", isExtracted: false },
+            { title: "Passport Face", type: "PASSPORT", isExtracted: true },
+        ];
+        const _screenShots = [
+            {
+                title: "Civil Id Front",
+                id: this.findScreenShotType(
+                    "NATIONAL_ID_FRONT_SIDE_SCREENSHOT"
+                ),
+            },
+            {
+                title: "Civil Id Back",
+                id: this.findScreenShotType("NATIONAL_ID_BACK_SIDE_SCREENSHOT"),
+            },
+            {
+                title: "Passport",
+                id: this.findScreenShotType("PASSPORT_SCREENSHOT"),
+            },
+            {
+                title: "Address",
+                id: this.findScreenShotType("ADDRESS_SCREENSHOT"),
+            },
+            { title: "Visa", id: this.findScreenShotType("VISA_SCREENSHOT") },
         ];
 
         this.nationalIdDocuments = _nationalIdDocuments.map((item) => {
             const url = this.previewDocumentUrl(item.type, item.isExtracted);
-            return new ImageItem({ src: url, thumb: url, title:item.title });
+            return new ImageItem({ src: url, thumb: url, title: item.title });
         });
+
         this.passportDocuments = _passportDocuments.map((item) => {
             const url = this.previewDocumentUrl(item.type, item.isExtracted);
-            return new ImageItem({ src: url, thumb: url ,title:item.title});
+            return new ImageItem({ src: url, thumb: url, title: item.title });
+        });
+        this.screenShots = _screenShots.map((item) => {
+            const url = this.previewScreenShotUrl(item.id);
+            return new ImageItem({ src: url, thumb: url, title: item.title });
         });
 
         this.basicLightboxExample(this.passportDocuments);
         this.basicLightboxExample(this.nationalIdDocuments);
+        this.basicLightboxExample(this.screenShots);
+
         // Load item into different lightbox instance
         // With custom gallery config
         this.withCustomGalleryConfig(
-            'passportDocuments',
+            "passportDocuments",
             this.passportDocuments
         );
         this.withCustomGalleryConfig(
-            'nationalIdDocuments',
+            "screenshots",
+            this.screenShots
+        );
+
+        this.withCustomGalleryConfig(
+            "nationalIdDocuments",
             this.nationalIdDocuments
         );
     }
+
+    findScreenShotType(type) {
+        const data = this.screenShotsResponse.find(
+            (x) => x.attachment_type == type
+        );
+        if (data) {
+            return data.id;
+        }
+    }
     ngAfterContentChecked(): void {
-        const el = document.querySelectorAll('.g-image-item');
+        const el = document.querySelectorAll(".g-image-item");
         el.forEach((x) => {
-            x['style'].backgroundSize = 'contain';
+            x["style"].backgroundSize = "contain";
         });
     }
     basicLightboxExample(items): void {
@@ -114,15 +182,28 @@ export class CustomerDetailComponent implements OnInit, AfterContentChecked {
         const tenantId = environment.TENANT_ID;
         const channelId = environment.CHANNEL_ID;
         const token = this.authService.accessToken;
-        const customerId = this.data.id;
+        const customerId = this.customerReponse.id;
 
-        const document = this.data.documents.find((x) => x.name === type);
-        if (!document) { return DEFAULT_IMAGE; }
+        const document = this.customerReponse.documents.find(
+            (x) => x.name === type
+        );
+        if (!document) {
+            return DEFAULT_IMAGE;
+        }
 
-        let url = `/onboarding/customers/${customerId}/documents/${document.id}/preview?x-access-token=${token}&x-tenant-id=${tenantId}&x-channel-id=${channelId}`;
+        let url = `/onboarding/customers/${customerId}/attachments/${document.id}/preview?x-access-token=${token}&x-tenant-id=${tenantId}&x-channel-id=${channelId}`;
         if (isExtracted) {
             url = `${url}&extracted-image=true`;
         }
+        return this.getUrl(url);
+    }
+    previewScreenShotUrl(attachmentId) {
+        const tenantId = environment.TENANT_ID;
+        const channelId = environment.CHANNEL_ID;
+        const token = this.authService.accessToken;
+        const customerId = this.customerReponse.id;
+
+        let url = `/onboarding/customers/${customerId}/attachments/${attachmentId}?x-access-token=${token}&x-tenant-id=${tenantId}&x-channel-id=${channelId}`;
         return this.getUrl(url);
     }
     withCustomGalleryConfig(element, images): void {

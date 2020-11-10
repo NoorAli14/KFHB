@@ -145,9 +145,9 @@ export class CustomerComponent
         });
     }
     getCustomerDetail(id): void {
-        // id = "34A8F400-23F0-445F-A20C-5407BDC1C6FC";
+         id = "34A8F400-23F0-445F-A20C-5407BDC1C6FC";
         this._service
-            .getCustomerById(id)
+            .forkCustomer360(id)
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe(
                 (response) => {
