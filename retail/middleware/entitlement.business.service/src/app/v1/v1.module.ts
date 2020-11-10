@@ -32,8 +32,7 @@ class AuthenticatedDataSource extends RemoteGraphQLDataSource {
     request.http.headers.set(X_USER_ID, userId);
     request.http.headers.set(X_TENANT_ID, tenantId);
     request.http.headers.set(X_CORRELATION_KEY, correlationId);
-    request.http.headers.set(X_ENTITY_ID, entityId);
-
+    if (entityId) request.http.headers.set(X_ENTITY_ID, entityId);
   }
 }
 

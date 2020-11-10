@@ -73,9 +73,7 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
                 this.dataSource.paginator = this.paginator;
                 this.dataSource.sort = this.sort;
             },
-            (response) => {
-                this._notifier.error(MESSAGES.UNKNOWN);
-            }
+            (response) => super.onError(response)
         );
     }
     convertData(item): object {
@@ -129,9 +127,7 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
                 this._matDialog.closeAll();
                 this._notifier.success(MESSAGES.CREATED('Working Day'));
             },
-            (response) => {
-                this._notifier.error(MESSAGES.UNKNOWN);
-            }
+            (response) => super.onError(response)
         );
     }
    
@@ -147,9 +143,7 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
                 this.updateGrid(this.workingDays);
                 this._matDialog.closeAll();
             },
-            (response) => {
-                this._notifier.error(MESSAGES.UNKNOWN);
-            }
+            (response) => super.onError(response)
         );
     }
     confirmDialog(type, id): void {
@@ -176,9 +170,7 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
                 this.updateGrid(this.workingDays);
                 this._notifier.success(MESSAGES.DELETED('Working Day'));
             },
-            (response) => {
-                this._notifier.error(MESSAGES.UNKNOWN);
-            }
+            (response) => super.onError(response)
         );
     }
     camelToSentenceCase(text): string  {
