@@ -64,8 +64,8 @@ export class RoleComponent extends BaseComponent implements OnInit {
         return {
             limit: CONFIG.PAGE_SIZE,
             page: 1,
-            sort_order: "desc",
-            sort_by: "created_on",
+            sort_order: "asc",
+            sort_by: "name",
         };
     }
     initSearch(): void {

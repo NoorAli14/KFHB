@@ -62,6 +62,7 @@ export class InvitationComponent extends BaseComponent implements OnInit {
     }
  
     ngOnInit(): void {
+        debugger
         this.invitationForm = new FormGroup({
             id: new FormControl(),
             firstName: new FormControl('', [Validators.required]),
