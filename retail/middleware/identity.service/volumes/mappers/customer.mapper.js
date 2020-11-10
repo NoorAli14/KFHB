@@ -136,7 +136,7 @@
 //     }
 // };
 
-const mapper = (documents) => {
+exports.mapper = (documents) => {
     const data = {
         first_name: documents['NATIONAL_ID_FRONT_SIDE']['mrz']['Surname'],
         middle_name: '',
@@ -166,5 +166,3 @@ const mapper = (documents) => {
         data: data
     }
 }
-
-module.exports = mapper;
