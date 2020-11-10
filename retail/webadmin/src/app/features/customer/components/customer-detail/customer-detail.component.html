@@ -278,6 +278,9 @@
                                 </div>
                             </div>
                         </div>
+                        <div *ngIf="screenShots.length<1" fxFlex fxLayout="row" fxLayoutAlign="center center">
+                            <strong>There are no screenshots available</strong>
+                        </div>
                     </div>
                 </div>
             </mat-tab>

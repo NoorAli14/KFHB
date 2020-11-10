@@ -18,7 +18,7 @@ import {
     ImageSize,
 } from "@ngx-gallery/core";
 import { AuthenticationService } from "@shared/services/auth/authentication.service";
-import { debug } from 'console';
+import { debug } from "console";
 @Component({
     selector: "app-customer-detail",
     templateUrl: "./customer-detail.component.html",
@@ -38,6 +38,7 @@ export class CustomerDetailComponent implements OnInit, AfterContentChecked {
     customer: any;
     customerReponse: any;
     screenShotsResponse: any;
+    screenShotsMapped = [];
     constructor(
         public gallery: Gallery,
         public matDialogRef: MatDialogRef<CustomerDetailComponent>,
@@ -99,27 +100,18 @@ export class CustomerDetailComponent implements OnInit, AfterContentChecked {
             { title: "Passport", type: "PASSPORT", isExtracted: false },
             { title: "Passport Face", type: "PASSPORT", isExtracted: true },
         ];
-        const _screenShots = [
-            {
-                title: "Civil Id Front",
-                id: this.findScreenShotType(
-                    "NATIONAL_ID_FRONT_SIDE_SCREENSHOT"
-                ),
-            },
-            {
-                title: "Civil Id Back",
-                id: this.findScreenShotType("NATIONAL_ID_BACK_SIDE_SCREENSHOT"),
-            },
-            {
-                title: "Passport",
-                id: this.findScreenShotType("PASSPORT_SCREENSHOT"),
-            },
-            {
-                title: "Address",
-                id: this.findScreenShotType("ADDRESS_SCREENSHOT"),
-            },
-            { title: "Visa", id: this.findScreenShotType("VISA_SCREENSHOT") },
-        ];
+        this.findScreenShotType(
+            "Civil Id Front",
+            "NATIONAL_ID_FRONT_SIDE_SCREENSHOT"
+        );
+        this.findScreenShotType(
+            "Civil Id Back",
+            "NATIONAL_ID_BACK_SIDE_SCREENSHOT"
+        );
+
+        this.findScreenShotType("Passport", "PASSPORT_SCREENSHOT");
+        this.findScreenShotType("Address", "ADDRESS_SCREENSHOT");
+        this.findScreenShotType("Visa", "VISA_SCREENSHOT");
 
         this.nationalIdDocuments = _nationalIdDocuments.map((item) => {
             const url = this.previewDocumentUrl(item.type, item.isExtracted);
@@ -130,7 +122,7 @@ export class CustomerDetailComponent implements OnInit, AfterContentChecked {
             const url = this.previewDocumentUrl(item.type, item.isExtracted);
             return new ImageItem({ src: url, thumb: url, title: item.title });
         });
-        this.screenShots = _screenShots.map((item) => {
+        this.screenShots = this.screenShotsMapped.map((item) => {
             const url = this.previewScreenShotUrl(item.id);
             return new ImageItem({ src: url, thumb: url, title: item.title });
         });
@@ -145,10 +137,7 @@ export class CustomerDetailComponent implements OnInit, AfterContentChecked {
             "passportDocuments",
             this.passportDocuments
         );
-        this.withCustomGalleryConfig(
-            "screenshots",
-            this.screenShots
-        );
+        this.withCustomGalleryConfig("screenshots", this.screenShots);
 
         this.withCustomGalleryConfig(
             "nationalIdDocuments",
@@ -156,12 +145,12 @@ export class CustomerDetailComponent implements OnInit, AfterContentChecked {
         );
     }
 
-    findScreenShotType(type) {
+    findScreenShotType(title, type) {
         const data = this.screenShotsResponse.find(
             (x) => x.attachment_type == type
         );
         if (data) {
-            return data.id;
+            this.screenShotsMapped.push({ id: data.id, title });
         }
     }
     ngAfterContentChecked(): void {
@@ -191,7 +180,7 @@ export class CustomerDetailComponent implements OnInit, AfterContentChecked {
             return DEFAULT_IMAGE;
         }
 
-        let url = `/onboarding/customers/${customerId}/attachments/${document.id}/preview?x-access-token=${token}&x-tenant-id=${tenantId}&x-channel-id=${channelId}`;
+        let url = `/onboarding/customers/${customerId}/documents/${document.id}/preview?x-access-token=${token}&x-tenant-id=${tenantId}&x-channel-id=${channelId}`;
         if (isExtracted) {
             url = `${url}&extracted-image=true`;
         }
