@@ -115,9 +115,7 @@ export class LeaveComponent extends BaseComponent implements OnInit {
 
                 this.pagination.page = this.pagination.page - 1;
             },
-            (error) => {
-                this._notifier.error(MESSAGES.UNKNOWN);
-            }
+            (response) => super.onError(response)
         );
     }
     getLeaveType(id): string {
@@ -159,9 +157,7 @@ export class LeaveComponent extends BaseComponent implements OnInit {
                 this._matDialog.closeAll();
                 this._notifier.success(MESSAGES.CREATED("Leave"));
             },
-            (response) => {
-                this._notifier.error(MESSAGES.UNKNOWN);
-            }
+            (response) => super.onError(response)
         );
     }
 
@@ -177,9 +173,7 @@ export class LeaveComponent extends BaseComponent implements OnInit {
                 this.updateGrid(this.leaves);
                 this._matDialog.closeAll();
             },
-            (response) => {
-                this._notifier.error(MESSAGES.UNKNOWN);
-            }
+            (response) => super.onError(response)
         );
     }
     confirmDialog(type, id): void {
@@ -208,9 +202,7 @@ export class LeaveComponent extends BaseComponent implements OnInit {
                 this.updateGrid(this.leaves);
                 this._notifier.success(MESSAGES.DELETED("Leave"));
             },
-            (response) => {
-                this._notifier.error(MESSAGES.UNKNOWN);
-            }
+            (response) => super.onError(response)
         );
     }
     camelToSentenceCase(text): string {
