@@ -64,8 +64,8 @@ export class RoleComponent extends BaseComponent implements OnInit {
         return {
             limit: CONFIG.PAGE_SIZE,
             page: 1,
-            sort_order: "desc",
-            sort_by: "created_on",
+            sort_order: "asc",
+            sort_by: "name",
         };
     }
     initSearch(): void {
@@ -106,10 +106,7 @@ export class RoleComponent extends BaseComponent implements OnInit {
                         response[1]
                     );
                 },
-                (response) => {
-                    this._notifier.error(MESSAGES.UNKNOWN);
-                }
-            );
+                (response) => super.onError(response))
     }
 
     openDialog(data, modules): void {
@@ -188,10 +185,7 @@ export class RoleComponent extends BaseComponent implements OnInit {
                     this.roles = clone;
                     this._matDialog.closeAll();
                 },
-                (response) => {
-                    this._notifier.error(MESSAGES.UNKNOWN);
-                }
-            );
+                (response) => super.onError(response))
     }
 
     editRole(model: Role): void {
@@ -210,10 +204,7 @@ export class RoleComponent extends BaseComponent implements OnInit {
                     this.roles = clone;
                     this._matDialog.closeAll();
                 },
-                (response) => {
-                    this._notifier.error(MESSAGES.UNKNOWN);
-                }
-            );
+                (response) => super.onError(response))
     }
     onDelete(id: string): void {
         this._roleService
@@ -229,9 +220,6 @@ export class RoleComponent extends BaseComponent implements OnInit {
                     this.roles = clone;
                     this._notifier.success(MESSAGES.DELETED("Role"));
                 },
-                (response) => {
-                    this._notifier.error(MESSAGES.UNKNOWN);
-                }
-            );
+                (response) => super.onError(response))
     }
 }

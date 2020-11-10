@@ -42,7 +42,7 @@
         <!-- CONTENT CARD -->
         <div class="content-card" fusePerfectScrollbar>
            
-            <mat-table #table matSort  matSortActive="createdOn" matSortDirection="desc" (matSortChange)="sortData($event)" [dataSource]="dataSource">
+            <mat-table #table matSort  matSortActive="firstName" matSortDirection="asc" (matSortChange)="sortData($event)" [dataSource]="dataSource">
                 <!-- COLUMNS AND ROWS-->
                 <ng-container *ngFor="let key of displayedColumns" [matColumnDef]="key">
                     <mat-header-cell *matHeaderCellDef [disabled]=" key=='action'  ? true : false " [mat-sort-header]=" key=='action' ? null : key ">{{ key.includes('action') ? 'Action' : camelToSentenceCase(key) }}</mat-header-cell>

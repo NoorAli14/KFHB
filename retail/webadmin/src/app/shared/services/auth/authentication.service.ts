@@ -54,8 +54,7 @@ export class AuthenticationService {
                     this.refreshToken = response.headers.get('x-refresh-token');
                     this.userService.setData(response.body);
                     return response.body;
-                }),
-                catchError(this.errorHandler)
+                })
             );
     }
     forgotPassword(model: Login): Observable<any> {
@@ -95,10 +94,6 @@ export class AuthenticationService {
         return this.network.getAll(`${URI.FORGOT_PASSWORD}/${token}`, {
             headers: this.getPublicHeader(),
         });
-    }
-
-    errorHandler(response): Observable<any> {
-        return observableThrowError(response.error || 'Server Error');
     }
     getDecodeToken = () => {
         const token = this.accessToken;

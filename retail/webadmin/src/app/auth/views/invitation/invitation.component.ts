@@ -1,3 +1,4 @@
+import { extractErrorString } from './../../../shared/helpers/global.helper';
 import { Component, OnInit, Injector } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { User } from '@feature/entitlement/models/user.model';
@@ -62,6 +63,7 @@ export class InvitationComponent extends BaseComponent implements OnInit {
     }
  
     ngOnInit(): void {
+        debugger
         this.invitationForm = new FormGroup({
             id: new FormControl(),
             firstName: new FormControl('', [Validators.required]),
@@ -131,14 +133,10 @@ export class InvitationComponent extends BaseComponent implements OnInit {
                     this.nationalityList = response[1];
                     this.filteredNationalities = response[1];
                 },
-                ({ error }) => {
+                (response) => {
                     this.errorType = 'error';
-                    if (error.statusCode === 404) {
-                        this.errorType = 'warning';
-                        this.responseMessage = MESSAGES.INVALID_INVITATION();
-                    } else {
-                        this.responseMessage = MESSAGES.UNKNOWN;
-                    }
+                    const message = extractErrorString(response);
+                    this.responseMessage=MESSAGES.CUSTOM(message);
                 }
             );
     }
