@@ -70,7 +70,6 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
             (response) => {
                 this.workingDays = snakeToCamelArray(response);
                 this.workingDays=  this.workingDays.sort(sortWeekDays)
-                debugger
                 this.workingDays = this.workingDays.map((x) => this.convertData(x));
                 this.dataSource = new MatTableDataSource(this.workingDays);
                 this.dataSource.paginator = this.paginator;
