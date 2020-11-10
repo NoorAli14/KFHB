@@ -1,9 +1,13 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Validator } from 'jsonschema';
+import { join } from 'path';
 
 import { CUSTOM_ERROR } from './document.model';
-import { SCHEMA } from '@volumes/validators/schema.validator';
-import { mapper } from '@volumes/mappers/customer.mapper'
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { SCHEMA } = require(join(process.cwd(), 'volumes', 'validators', 'schema.validator.js'));
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { mapper } = require(join(process.cwd(), 'volumes', 'mappers', 'customer.mapper.js'));
 
 export interface ISCHEMA_ERROR {
     message: string,
@@ -23,7 +27,7 @@ export class SchemaService {
     }
 
     private makeSchemas(properties: Record<string, any>): Record<string, any> {
-        let schemas = {};
+        const schemas = {};
         properties.forEach((property) => {
             if (property.groups && property.groups.length > 0) {
                 property.groups.forEach((group) => {

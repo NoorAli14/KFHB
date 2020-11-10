@@ -1,8 +1,8 @@
 {
   "name": "onboarding-business-service",
-  "version": "0.3.0",
-  "description": "",
-  "author": "",
+  "version": "0.4.0",
+  "description": "The orchestration service to handle the full retail onboarding flow, exposed through REST APIs.",
+  "author": "Faizan AH <faizan@aiondigital.com>",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
