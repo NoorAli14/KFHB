@@ -2,7 +2,10 @@ import * as Knex from 'knex';
 import { TABLE, DATABASE_UUID_METHOD } from '@common/index';
 export function up(knex: Knex): any {
   return knex.schema.createTable(TABLE.USER, table => {
-    table.uuid('id').primary().defaultTo(DATABASE_UUID_METHOD(knex));
+    table
+      .uuid('id')
+      .primary()
+      .defaultTo(DATABASE_UUID_METHOD(knex));
     table.uuid('tenant_id').notNullable();
     table.string('username');
     table.string('first_name');
