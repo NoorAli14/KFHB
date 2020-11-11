@@ -1,3 +1,4 @@
+import { sortWeekDays } from './../../../../../shared/helpers/global.helper';
 import { MODULES } from './../../../../../shared/constants/app.constants';
 import {
     Component,
@@ -68,6 +69,7 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
         this._service.getWorkingDays().subscribe(
             (response) => {
                 this.workingDays = snakeToCamelArray(response);
+                this.workingDays=  this.workingDays.sort(sortWeekDays)
                 this.workingDays = this.workingDays.map((x) => this.convertData(x));
                 this.dataSource = new MatTableDataSource(this.workingDays);
                 this.dataSource.paginator = this.paginator;
