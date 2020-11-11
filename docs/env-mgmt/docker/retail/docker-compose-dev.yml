@@ -299,10 +299,8 @@ services:
     image: testdaon.azurecr.io/rubixintegrationlayerkfhb:develop_latest
     container_name: rubix_rubixintegrationlayerkfhb
     environment:
-      - ENV_RBX_PORT=3001
       - ENV_RBX_TZ=$ENV_RBX_TZ
-      - ENV_RBX_APP_NAME=$ENV_RBX_APP_NAME
-      - ENV_RBX_IS_MOCK=$ENV_RBX_IS_MOCK
+      - ENV_RBX_IS_MOCK=true
       - ENV_RBX_CORE_BANKING_USER_NAME=$ENV_RBX_CORE_BANKING_USER_NAME
       - ENV_RBX_CORE_BANKING_PASSWORD=$ENV_RBX_CORE_BANKING_PASSWORD
       - ENV_RBX_CORE_BANKING_BASE_URL=$ENV_RBX_CORE_BANKING_BASE_URL
