@@ -8,10 +8,12 @@ import {
   IsString,
   IsUUID,
   MaxLength,
+  ValidateNested,
 } from 'class-validator';
 
 import { GENDER, NUMBERS, STATUS } from '@common/constants';
 import { IdsInput } from '@common/inputs/ids.input';
+import { Type } from 'class-transformer';
 
 @InputType()
 export class UpdateUserInput {
@@ -106,6 +108,8 @@ export class UpdateUserInput {
   password_reset_token_expiry: string;
 
   @Field(() => [IdsInput], { nullable: true })
+  @ValidateNested({ each: true })
+  @Type(() => IdsInput)
   roles: IdsInput[];
 
   @Field({ nullable: true })

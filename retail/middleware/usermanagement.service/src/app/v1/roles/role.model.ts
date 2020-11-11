@@ -4,6 +4,7 @@ import { Module } from '@app/v1/modules/module.model';
 import { ENT_PaginationModel } from '@common/models';
 import { IsIn, IsOptional, IsString, IsUUID, MaxLength } from 'class-validator';
 import { NUMBERS, STATUS } from '@common/constants';
+import { Type } from 'class-transformer';
 
 @ObjectType()
 export class Role {
@@ -62,14 +63,17 @@ export class Role {
 
   @Field(() => [Module], { nullable: true })
   @IsOptional()
+  @Type(() => Module)
   modules?: Module[];
 }
 
 @ObjectType()
 export class RolesWithPagination {
   @Field({ nullable: true })
+  @Type(() => ENT_PaginationModel)
   pagination: ENT_PaginationModel;
 
   @Field(() => [Role], { nullable: true })
+  @Type(() => Role)
   data: Role[];
 }
