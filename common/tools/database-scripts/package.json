@@ -11,7 +11,7 @@
         "gs:compliance": "cross-env RBX_SERVICE_NAME=compliance.service ts-node --project ../../../retail/middleware/compliance.service/tsConfig.json --require ./tsconfig-bootstrap.js index.ts",
         "gs:usermanagement": "cross-env RBX_SERVICE_NAME=usermanagement.service ts-node --project ../../../retail/middleware/usermanagement.service/tsConfig.json --require ./tsconfig-bootstrap.js index.ts",
         "gs:identity": "cross-env RBX_SERVICE_NAME=identity.service ts-node --project ../../../retail/middleware/identity.service/tsConfig.json --require ./tsconfig-bootstrap.js index.ts",
-        "gs:notifications": "cross-env RBX_SERVICE_NAME=notifications ts-node --project ../../../retail/middleware/notifications/tsConfig.json --require ./tsconfig-bootstrap.js index.ts",
+        "gs:notification": "cross-env RBX_SERVICE_NAME=notification.service ts-node --project ../../../retail/middleware/notification.service/tsConfig.json --require ./tsconfig-bootstrap.js index.ts",
         "gs:reference": "cross-env RBX_SERVICE_NAME=reference.service ts-node --project ../../../retail/middleware/reference.service/tsConfig.json --require ./tsconfig-bootstrap.js index.ts",
         "gs:videocall": "cross-env RBX_SERVICE_NAME=videocall.service ts-node --project ../../../retail/middleware/videocall.service/tsConfig.json --require ./tsconfig-bootstrap.js index.ts",
         "generate:seed:all": "npm run gsd:compliance && npm run gsd:usermanagement && npm run gsd:identity && npm run gsd:reference",
