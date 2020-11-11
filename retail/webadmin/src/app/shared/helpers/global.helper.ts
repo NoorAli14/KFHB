@@ -62,6 +62,9 @@ export const camelToSentenceCase = (text) => {
     return finalResult;
 };
 
+export const removeRandom = (text) => {
+    return text.replace(/\d+/g, '');
+};
 
 export const removeRandom = (text) => {
     return text.replace(/\d+/g, '');
