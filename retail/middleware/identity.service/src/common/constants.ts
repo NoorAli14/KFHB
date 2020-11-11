@@ -1,3 +1,4 @@
+
 export const TABLE: { [key: string]: string } = {
   SESSION: 'IDT_SESSION',
   DOCUMENT_TYPE: 'IDT_DOCUMENT_TYPE',
@@ -5,15 +6,14 @@ export const TABLE: { [key: string]: string } = {
   SESSION_REFERENCE: 'IDT_SESSION_REFERENCE',
 };
 
-export const DATABASE_UUID_METHOD: string = 'NEWID()';
-export const DATABASE_MIGRATION_TABLE_NAME: string =
+export const DATABASE_MIGRATION_TABLE_NAME =
   'RUBIX_IDENTITY_MIGRATIONS';
-export const DATABASE_MIGRATION_DIRECTORY: string =
+export const DATABASE_MIGRATION_DIRECTORY =
   'src/core/database/migrations';
-export const DATABASE_SEED_DIRECTORY: string = 'src/core/database/seeds';
-export const X_USER_ID: string = 'x-user-id';
-export const X_TENANT_ID: string = 'x-tenant-id';
-export const X_CORRELATION_KEY: string = 'x-correlation-id';
+export const DATABASE_SEED_DIRECTORY = 'src/core/database/seeds';
+export const X_USER_ID = 'x-user-id';
+export const X_TENANT_ID = 'x-tenant-id';
+export const X_CORRELATION_KEY = 'x-correlation-id';
 
 export const DOCUMENT_TYPES = {
   SELFIE: 'SELFIE',
@@ -75,4 +75,36 @@ export const DOCUMENT_STATUSES: { [key: string]: string } = {
 export const CREATED_BY: { [key: string]: string } = {
   API: 'API',
   SYSTEM: 'SYSTEM',
+};
+
+export const PAGINATION_PARAMS = {
+  PAGE: 'page',
+  LIMIT: 'limit',
+  NATIONAL_ID_NO: 'national_id_no',
+  GENDER: 'gender',
+  NATIONALITY: 'nationality',
+  FIRST_NAME: 'first_name',
+  LAST_NAME: 'last_name',
+  STATUS: 'status',
+  CONTACT_NO: 'contact_no',
+  EMAIL: 'email',
+  CREATED_ON_START: 'created_on?start',
+  CREATED_ON_END: 'end',
+};
+
+export const NUMBERS = {
+  DEFAULT_PAGE_SIZE: 25,
+  MAX_PAGE_SIZE: 100,
+  MAX_COLUMN_LENGTH: 255,
+};
+
+export const GENDER = {
+  M: 'M',
+  F: 'F',
+};
+
+export const STATUS = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  PENDING: 'PENDING',
 };

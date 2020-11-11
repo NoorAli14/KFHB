@@ -1,13 +1,6 @@
-import {
-  IsString,
-  Length,
-  IsEmail,
-  IsOptional,
-  IsNotEmpty,
-  MaxLength,
-} from 'class-validator';
+import { IsString, Length, IsEmail, IsOptional, IsNotEmpty, MaxLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-const DEVICES: string[] = ['ios', 'andriod'];
+import { DEVICES } from '@common/constants';
 
 export class RegisterCustomerDto {
   @ApiProperty({
@@ -47,7 +40,6 @@ export class RegisterCustomerDto {
   @Length(3, 96, {
     message: 'Email must be between 3 to 30 characters',
     context: {
-      errorCode: 1003,
       developerNote: 'The validated string must contain 32 or more characters.',
     },
   })
@@ -83,4 +75,14 @@ export class RegisterCustomerDto {
   @IsNotEmpty()
   @MaxLength(10)
   platform: string;
+
+  @ApiProperty({
+    title: 'FCM Token Id',
+    description: 'FCM Token Id',
+    required: true,
+  })
+  @IsNotEmpty()
+  @IsString()
+  @MaxLength(255)
+  fcm_token_id: string;
 }

@@ -5,6 +5,9 @@
 trigger:
 - master
 
+# Disable pipeline for pull requets
+pr: none
+
 resources:
 - repo: self
 
@@ -13,7 +16,7 @@ variables:
   dockerRegistryServiceConnection: 'e11b76b8-024b-445d-b872-aaba976b9e8b'
   imageRepository: 'rubixusermgmt'
   containerRegistry: 'testdaon.azurecr.io'
-  dockerfilePath: '$(Build.SourcesDirectory)/retail/middleware/entitlement.service/Dockerfile'
+  dockerfilePath: '$(Build.SourcesDirectory)/retail/middleware/usermanagement.service/Dockerfile'
   tag: '$(Build.BuildId)'
   tagLatest: $(Build.SourceBranchName)_latest
   

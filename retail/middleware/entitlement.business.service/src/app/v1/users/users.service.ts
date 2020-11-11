@@ -3,8 +3,8 @@ import {
   UnprocessableEntityException,
   Logger,
 } from '@nestjs/common';
-import { User } from './user.entity';
-import { GqlClientService, toGraphql } from '@common/index';
+import { User, UserPaginationList } from './user.entity';
+import { GqlClientService, PAGINATION_OUTPUT, toGraphql } from '@common/index';
 import { ChangePasswordDto, UpdateUserDto } from './user.dto';
 
 @Injectable()
@@ -15,12 +15,12 @@ export class UserService {
     first_name
     middle_name
     last_name
-    username
     email
     contact_no
     gender
     nationality_id
     date_of_birth
+    entity_id
     roles {
       id
       name
@@ -32,10 +32,12 @@ export class UserService {
     modules {
         id
         name
+        slug
         parent_id
         sub_modules {
           id
           name
+          slug
           parent_id
           permissions {
             id
@@ -66,32 +68,39 @@ export class UserService {
 
   constructor(private readonly gqlClient: GqlClientService) { }
 
-  async list(): Promise<User[]> {
+  async list(params?: any): Promise<UserPaginationList> {
     const query = `query {
-      result: usersList {
-        id
-        first_name
-        middle_name
-        last_name
-        username
-        email
-        contact_no
-        gender
-        nationality_id
-        date_of_birth
-        roles {
+      result: usersList(
+        filters: ${toGraphql(params?.filters)}
+        sort_by: ${toGraphql(params?.sort_by)}
+        pagination: ${toGraphql(params?.pagination)}
+      ) {
+        pagination ${PAGINATION_OUTPUT}
+        data {
           id
-          name
-          description
+          first_name
+          middle_name
+          last_name
+          email
+          contact_no
+          gender
+          nationality_id
+          date_of_birth
+          entity_id
+          roles {
+            id
+            name
+            description
+            status
+            created_on
+            created_by
+          }
           status
           created_on
           created_by
+          updated_on
+          updated_by
         }
-        status
-        created_on
-        created_by
-        updated_on
-        updated_by
       }
     }`;
     return this.gqlClient.send(query);
@@ -112,6 +121,7 @@ export class UserService {
 
   async findOne(id: string, output?: string): Promise<User> {
     const _output: string = output ? output : this.output;
+    this.logger.log(`Find user by id [${id}]`);
     const query = `query {
       result: findUserById(id: "${id}") ${_output}
     }`;
@@ -180,10 +190,6 @@ export class UserService {
     input: UpdateUserDto,
   ): Promise<User> {
     this.logger.log(`Start updating user with ID [${id}]`);
-    // const user: User = await this.findOne(id, `{id}`);
-    // if (!user) {
-    //   throw new NotFoundException('User Not Found');
-    // }
     const mutation = `mutation {
       result: updateUser(id: "${id}", input: ${toGraphql(input)}) ${this.output}
     }`;
@@ -192,11 +198,6 @@ export class UserService {
 
   async delete(id: string): Promise<boolean> {
     this.logger.log(`Start deleting user with ID [${id}]`);
-
-    // const user: User = await this.findOne(header, id, `{id}`);
-    // if (!user) {
-    //   throw new NotFoundException('User Not Found');
-    // }
     const mutation = `mutation {
       result: deleteUser(id: "${id}") 
     }`;

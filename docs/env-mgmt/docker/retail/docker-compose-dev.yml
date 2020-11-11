@@ -48,6 +48,24 @@ services:
       - ENV_RBX_APP_SECRET=$ENV_RBX_APP_SECRET
       - ENV_RBX_CHANNEL_ID=$ENV_RBX_CHANNEL_ID
       - ENV_RBX_TENANT_ID=$ENV_RBX_TENANT_ID
+      - ENV_RBX_VIDEO_URL=$ENV_RBX_VIDEO_URL
+    restart: always
+    networks:
+      - core_service_network
+  #=================================================================
+  # Video Call Portal Service
+  #=================================================================
+  video-portal:
+    image: videoportal:dev
+    container_name: video_portal
+    environment:
+      - REACT_APP_IV=$REACT_APP_IV
+      - REACT_APP_BASE_URL=$REACT_APP_BASE_URL
+      - REACT_APP_SIGNAL_SERVER=$REACT_APP_SIGNAL_SERVER
+      - REACT_APP_XMPP_HOST=$REACT_APP_XMPP_HOST
+      - RUBIX_BASE_URL=$RUBIX_BASE_URL
+      - REACT_APP_XMPP_PORT=$REACT_APP_XMPP_PORT
+      - REACT_APP_SSL=$REACT_APP_SSL
     restart: always
     networks:
       - core_service_network
@@ -98,6 +116,8 @@ services:
       - ENV_RBX_BASIC_AUTH_KEY=$ENV_RBX_BASIC_AUTH_KEY
       - ENV_RBX_BASIC_AUTH_SECRET=$ENV_RBX_BASIC_AUTH_SECRET
     restart: always
+    volumes:
+      - ${ENV_RBX_VOLUME_PATH}/videocall.service/uploads:/home/aiondigital/rubix/uploads/
     networks:
       - core_service_network
 
@@ -130,14 +150,16 @@ services:
       - ENV_RBX_IDENTITYX_EVALUATION_POLICY=$ENV_RBX_IDENTITYX_EVALUATION_POLICY
       - NODE_TLS_REJECT_UNAUTHORIZED=$NODE_TLS_REJECT_UNAUTHORIZED
     restart: always
+    volumes:
+      - ${ENV_RBX_VOLUME_PATH}/identity.service:/home/aiondigital/rubix/volumes/
     networks:
       - core_service_network
-  
+
   #=================================================================
   # Video Call Service
   #=================================================================
   retail-videocall:
-    image: rubixretailvediocall:dev
+    image: rubixretailvideocall:dev
     container_name: retail_videocall
     environment:
       - ENV_RBX_PORT=4020
@@ -158,6 +180,8 @@ services:
       - ENV_RBX_IDENTITY_SERVER=$ENV_RBX_IDENTITY_SERVER
       - ENV_RBX_REDIS_URL=$ENV_RBX_REDIS_URL
     restart: always
+    volumes:
+      - ${ENV_RBX_VOLUME_PATH}/videocall.service/uploads:/home/aiondigital/rubix/uploads/
     networks:
       - core_service_network
   #=================================================================
@@ -178,6 +202,9 @@ services:
       - ENV_RBX_DB_DEBUG=$ENV_RBX_DB_DEBUG
       - ENV_RBX_GRAPHQL_DEBUG=$ENV_RBX_GRAPHQL_DEBUG
       - ENV_RBX_GRAPHQL_PLAYGROUND=$ENV_RBX_GRAPHQL_PLAYGROUND
+      - ENV_RBX_AML_BASE_URL=$ENV_RBX_AML_BASE_URL
+      - ENV_RBX_IDX_BASE_URL=$ENV_RBX_IDX_BASE_URL
+      - ENV_RBX_AML_SUCCESS_CODE=$ENV_RBX_AML_SUCCESS_CODE
     restart: always
     networks:
       - core_service_network
@@ -235,6 +262,14 @@ services:
       - ENV_RBX_FIREBASE_PROJECT_ID=$ENV_RBX_FIREBASE_PROJECT_ID
       - ENV_RBX_HTTP_TIMEOUT=$ENV_RBX_HTTP_TIMEOUT
       - ENV_RBX_HTTP_MAX_REDIRECTS=$ENV_RBX_HTTP_MAX_REDIRECTS
+      - ENV_RBX_OTP_LENGTH=$ENV_RBX_OTP_LENGTH
+      - ENV_RBX_OTP_PATTERN=$ENV_RBX_OTP_PATTERN
+      - ENV_RBX_OTP_STATUS=$ENV_RBX_OTP_STATUS
+      - ENV_RBX_OTP_BY_API=$ENV_RBX_OTP_BY_API
+      - ENV_RBX_OTP_DURATION=$ENV_RBX_OTP_DURATION
+      - ENV_RBX_SMS_API_URL=$ENV_RBX_SMS_API_URL
+      - ENV_RBX_SMS_SENDER=$ENV_RBX_SMS_SENDER
+      - ENV_RBX_OTP_GENERATOR_API=$ENV_RBX_OTP_GENERATOR_API
     restart: always
     networks:
       - core_service_network

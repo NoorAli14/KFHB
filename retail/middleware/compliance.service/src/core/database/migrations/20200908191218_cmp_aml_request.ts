@@ -1,12 +1,13 @@
 import * as Knex from 'knex';
-import { TABLE, DATABASE_UUID_METHOD } from '@common/constants';
+import { TABLE, AML_REQUEST_STATUSES } from '@common/constants';
+import { DATABASE_UUID_METHOD } from '@common/utilities';
 
-export async function up(knex: Knex): Promise<void> {
+export function up(knex: Knex) {
   return knex.schema.createTable(TABLE.AML_REQUEST, table => {
     table
       .uuid('id')
       .primary()
-      .defaultTo(knex.raw(DATABASE_UUID_METHOD()));
+      .defaultTo(DATABASE_UUID_METHOD(knex));
 
     table.uuid('tenant_id').notNullable();
     table.uuid('user_id').notNullable();
@@ -15,7 +16,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string('request_reference');
 
     table.string('remarks');
-    table.string('status');
+    table.string('status').defaultTo(AML_REQUEST_STATUSES.PENDING);
 
     table.timestamp('created_on', { useTz: true }).defaultTo(knex.fn.now());
     table.string('created_by');

@@ -22,16 +22,18 @@ import {
   ApiBadRequestResponse,
   ApiNotFoundResponse,
 } from '@nestjs/swagger';
-import { AuthGuard } from '@common/index';
+import { AuthGuard, PermissionsGuard, Permissions, PaginationDTO, SortByDTO } from '@common/index';
 
 import { RoleService } from './roles.service';
-import { Role } from './role.entity';
+import { Role, RolePaginationList } from './role.entity';
 import { RoleDto, UpdateRoleDto } from './role.dto';
+import { Query } from "@nestjs/common";
+import { RoleFilterDto } from "@app/v1/roles/dtos";
 
 @ApiTags('Role')
 @Controller('roles')
 @ApiBearerAuth()
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, PermissionsGuard)
 export class RolesController {
   constructor(private readonly roleService: RoleService) { }
 
@@ -50,6 +52,7 @@ export class RolesController {
     type: Error,
     description: 'Input Validation failed.',
   })
+  @Permissions('create:roles')
   async create(
     @Body() input: RoleDto,
   ): Promise<Role> {
@@ -59,12 +62,13 @@ export class RolesController {
   @Get('/')
   @ApiOperation({
     description:
-      'A successful request returns the HTTP 200 OK status code and a JSON response body that shows list of roles information.',
+      'A successful request returns the HTTP 200 OK status code and a JSON response body that shows list of roles information with pagination.',
     summary: 'List of all the roles',
   })
-  @ApiOkResponse({ type: [Role], description: 'List of all the roles.' })
-  async list(): Promise<Role[]> {
-    return this.roleService.list();
+  @ApiOkResponse({ type: RolePaginationList, description: 'List of all the roles.' })
+  @Permissions('view:roles')
+  async list(@Query() pagination: PaginationDTO, @Query() filters: RoleFilterDto, @Query() sort_by: SortByDTO): Promise<RolePaginationList> {
+    return this.roleService.list({ pagination, filters, sort_by });
   }
 
   @Get(':id')
@@ -81,6 +85,7 @@ export class RolesController {
     type: Error,
     description: 'Role Not Found.',
   })
+  @Permissions('view:roles')
   async findOne(
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<Role> {
@@ -106,6 +111,7 @@ export class RolesController {
     type: Error,
     description: 'Role Not Found.',
   })
+  @Permissions('edit:roles')
   async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() roleDto: UpdateRoleDto,
@@ -125,6 +131,7 @@ export class RolesController {
     description: 'Role Not Found.',
   })
   @HttpCode(HttpStatus.NO_CONTENT)
+  @Permissions('delete:roles')
   async delete(
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<any> {

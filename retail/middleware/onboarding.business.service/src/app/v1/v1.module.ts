@@ -9,17 +9,19 @@ import {
   ConfigurationService,
   X_USER_ID,
   X_TENANT_ID,
-  X_CORRELATION_KEY, RegistryService
+  X_CORRELATION_KEY,
+  RegistryService,
 } from '@common/index';
 
 import { AuthModule } from './auth/auth.module';
 import { ComplianceModule } from './compliances/compliances.module';
 import { OtpModule } from './otp/otp.module';
 import { SessionModule } from './sessions/session.module';
+import { DocumentModule } from './documents/document.module';
 import { AttachmentModule } from './attachments/attachment.module';
+
 import { UserModule } from './users/user.module';
 import { AmlModule } from './aml/aml.module';
-import { AppointmentModule } from './appointments/appointment.module';
 
 class AuthenticatedDataSource extends RemoteGraphQLDataSource {
   async willSendRequest({ request, context }) {
@@ -46,7 +48,7 @@ class AuthenticatedDataSource extends RemoteGraphQLDataSource {
   ],
   exports: [GATEWAY_BUILD_SERVICE],
 })
-class BuildServiceModule { }
+class BuildServiceModule {}
 
 @RubixModule({
   imports: [
@@ -54,12 +56,12 @@ class BuildServiceModule { }
     GqlClientModule,
     AuthModule,
     SessionModule,
-    AttachmentModule,
+    DocumentModule,
     OtpModule,
     UserModule,
     ComplianceModule,
     AmlModule,
-    AppointmentModule,
+    AttachmentModule,
     GraphQLGatewayModule.forRootAsync({
       imports: [BuildServiceModule],
       useFactory: async (schema: RegistryService) => ({
@@ -86,4 +88,4 @@ class BuildServiceModule { }
     }),
   ],
 })
-export class ModuleV1 { }
+export class ModuleV1 {}

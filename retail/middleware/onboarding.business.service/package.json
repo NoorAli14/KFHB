@@ -1,8 +1,8 @@
 {
   "name": "onboarding-business-service",
-  "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "version": "0.4.0",
+  "description": "The orchestration service to handle the full retail onboarding flow, exposed through REST APIs.",
+  "author": "Faizan AH <faizan@aiondigital.com>",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -27,12 +27,12 @@
     "@apollo/gateway": "^0.20.0",
     "@nestjs/common": "^7.0.0",
     "@nestjs/core": "^7.0.0",
-    "@nestjs/graphql": "^7.5.1",
+    "@nestjs/graphql": "^7.7.0",
     "@nestjs/jwt": "^7.1.0",
     "@nestjs/microservices": "^7.3.2",
     "@nestjs/passport": "^7.1.0",
     "@nestjs/platform-express": "^7.0.0",
-    "@nestjs/swagger": "^4.5.11",
+    "@nestjs/swagger": "^4.6.1",
     "@nestjs/terminus": "^7.0.1",
     "apollo-server-express": "^2.15.1",
     "class-transformer": "^0.2.3",
@@ -76,8 +76,9 @@
     "eslint": "7.1.0",
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-import": "^2.20.1",
-    "husky": "^4.2.5",
+    "husky": "^4.3.0",
     "jest": "26.0.1",
+    "lint-staged": "^10.5.0",
     "npm-check-updates": "^7.0.1",
     "prettier": "^1.19.1",
     "rimraf": "^3.0.2",
@@ -87,6 +88,9 @@
     "ts-node": "^8.6.2",
     "tsconfig-paths": "^3.9.0",
     "typescript": "^3.7.4"
+  },
+  "engines": {
+    "node": ">=14.15.0"
   },
   "jest": {
     "moduleFileExtensions": [
@@ -101,5 +105,17 @@
     },
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.ts": [
+      "npm run format",
+      "eslint --fix --max-warnings 1",
+      "git add"
+    ]
   }
 }

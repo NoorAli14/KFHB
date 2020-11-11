@@ -1,6 +1,7 @@
 import * as path from 'path';
 import * as glob from 'glob';
 import { v4 as uuidV4 } from 'uuid';
+import { NotImplementedException } from '@nestjs/common';
 
 /**
  * Generate v4 uuid string
@@ -72,4 +73,23 @@ export const generateRandomString = (length: number): string => {
     .toString(36)
     .replace(/[^a-zA-Z0-9]+/g, '')
     .substr(0, length);
+};
+
+/**
+ * DATABASE UUID GENERATION
+ * @param knex
+ */
+export const DATABASE_UUID_METHOD = (knex): any => {
+  switch (knex.client.config.client) {
+    case 'pg':
+      return knex.raw('uuid_generate_v4()');
+    case 'mssql':
+      return knex.raw('NEWID()');
+    case 'oracledb':
+      return '';
+    default:
+      throw new NotImplementedException(
+        `Database type ['${process.env.ENV_RBX_DB_DIALECT}'] not supported`,
+      );
+  }
 };

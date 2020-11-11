@@ -1,12 +1,15 @@
 import { NestFactory } from '@nestjs/core';
 import { Transport } from '@nestjs/microservices';
-import { INestApplication, ValidationPipe, Logger } from '@nestjs/common';
+import { INestApplication, ValidationPipe, Logger, ValidationError } from '@nestjs/common';
 import { ApplicationModule } from '@app/index';
 import { CommonModule } from '@common/common.module';
 import { LoggingInterceptor } from '@common/interceptors/';
 import { HttpExceptionFilter } from '@common/filters/http-exception.filter';
 import { ConfigurationService } from '@common/configuration/configuration.service';
 import { KernelMiddleware } from '@core/middlewares/index';
+import * as bodyParser from 'body-parser';
+import { ValidationException } from '@rubix/common/exceptions';
+
 class Server {
   private _app: INestApplication;
   private _config: ConfigurationService;
@@ -33,6 +36,8 @@ class Server {
    */
   private mountMiddlewares(): void {
     this._app = KernelMiddleware.init(this.app, this.Config);
+    this._app.use(bodyParser.json({ limit: '50mb' }));
+    this._app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
   }
 
   /**
@@ -44,7 +49,14 @@ class Server {
     // this.app.useGlobalInterceptors(new TransformInterceptor());
     this.app.useGlobalInterceptors(new LoggingInterceptor());
     this.app.useGlobalFilters(new HttpExceptionFilter());
-    this.app.useGlobalPipes(new ValidationPipe());
+    this.app.useGlobalPipes(
+      new ValidationPipe({
+        transform: true,
+        whitelist: true,
+        exceptionFactory: (errors: ValidationError[] | any[]) =>
+          new ValidationException(errors),
+      }),
+    );
     this.app.setGlobalPrefix(this.Config.APP.API_URL_PREFIX);
   }
 

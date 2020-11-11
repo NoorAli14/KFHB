@@ -16,7 +16,6 @@ export class AML {
   @IsOptional()
   request_reference: string;
 
-
   @ApiProperty({
     enum: ['CLEAN', 'SUSPECT', 'BLOCK'],
     example: 'CLEAN',

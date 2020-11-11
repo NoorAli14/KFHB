@@ -216,23 +216,10 @@ export const setIncomingCallDetails = function (detail, randomNumber) {
         callId: key,
         fromSocketId
     }
+    console.log('---------------incomingCallDetails-----------------')
+    console.log(incomingCallDetails)
+    localStorage.setItem('customerId',customerId)
     localStorage.setItem('incomingCallDetails', JSON.stringify(incomingCallDetails))
-
-    // setTimeout(()=>{
-    //     if (localStorage.getItem('callStatus') !== "ON_GOING") {
-    //         let msg = {
-    //             "messageType": "call",
-    //             "callStatus": "self_decline_call",
-    //             "fromSocketId" : fromSocketId,
-    //             "callerSocketId": callerSocketId,
-    //             "callerName":callerName,
-    //             "callId": key
-    //         }
-    //         store.dispatch(callEnded(msg));
-    //         console.log("call Id",msg)
-    //     }
-    // },60000)
-    
 }
 
 export const updateIncomingCallDetails = function (calls) {

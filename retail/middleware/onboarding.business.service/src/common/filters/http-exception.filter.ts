@@ -3,38 +3,33 @@ import {
   Catch,
   ExceptionFilter,
   HttpException,
-  HttpStatus,
-  Logger
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
-  private readonly logger = new Logger(HttpExceptionFilter.name)
-  catch(error: HttpException | any, host: ArgumentsHost) {
-    this.logger.log(error);
+  catch(exception: HttpException | any, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
-    const status = error.getStatus();
-
-    this.logger.log(error);
-    if (status === HttpStatus.UNAUTHORIZED) {
-      if (typeof error.response !== 'string') {
-        error.response['message'] =
-          error.response.message ||
-          'You do not have permission to access this resource';
-      }
+    const status = exception.getStatus();
+    if (exception?.response?.name && exception?.response?.errors) {
+      response.status(status).json({
+        statusCode: status,
+        name: exception.response.name,
+        errors: exception.response.errors || [],
+        timestamp: new Date().toISOString(),
+        path: request?.url || null,
+      });
+    } else {
+      response.status(status).json({
+        statusCode: status,
+        name: exception.name || exception.response.name,
+        errors: exception.response || [],
+        timestamp: new Date().toISOString(),
+        path: request?.url || null,
+      });
     }
-    response.status(status).json({
-      statusCode: status,
-      error: error?.response?.name || error?.name,
-      message: error?.response?.message || error?.message,
-      errors: error?.response?.errors || null,
-      context: error?.response?.context,
-      stacktrace: error?.response?.stacktrace,
-      timestamp: new Date().toISOString(),
-      path: request ? request.url : null,
-    });
+
   }
 }

@@ -1,14 +1,16 @@
+import * as moment from 'moment';
 import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { NewAppointmentInput } from './appointment.dto';
 import { AppointmentRepository } from '@core/repository';
 
 import { ConfigurationService } from '@common/configuration/configuration.service';
-import { Appointment } from './appointment.model';
-import * as moment from 'moment';
-import { APPOINTMENT_STATUS } from '@common/constants';
+import { Appointment, UserGQL } from './appointment.model';
+import { APPOINTMENT_STATUS, USER_QUERY } from '@common/constants';
 import { GqlClientService } from '@common/libs/gqlclient/gqlclient.service';
-import { PushNotificationModel } from './push_notification.model';
+import { EmailService, PushNotificationService } from '@common/connectors';
+
+import { iPushNotification } from '@common/connectors/notification/interfaces/push_notification.interface';
 import { toGraphQL } from '@common/utilities';
 import { ICurrentUser } from '@common/interfaces';
 import {
@@ -16,7 +18,6 @@ import {
   AgentNotAvailableException,
   AppointmentNotFoundException,
   MaxAppointLimitReachException,
-  SentNotificationFailedException,
   AppointmentAlreadyExistException,
 } from './exceptions';
 
@@ -26,6 +27,8 @@ export class AppointmentsService {
     private readonly appointmentDB: AppointmentRepository,
     private readonly configService: ConfigurationService,
     private readonly gqlClient: GqlClientService,
+    private readonly emailService: EmailService,
+    private readonly pushNotificationService: PushNotificationService,
   ) {}
 
   private async throw_if_appointment_exist(
@@ -106,6 +109,21 @@ export class AppointmentsService {
       },
       output,
     );
+
+    const user = await this.get_user_by_id_from_service(newAppointment.user_id);
+    /**
+     *
+     * Getting email of all available agents
+     * Calling other service to send email to available agent
+     *
+     */
+    this.emailService.send_email_to_agents(
+      available_agents.map((item: UserGQL) => item.email),
+      newAppointment.user_id,
+      `${user.first_name} ${user.last_name}`,
+      newAppointment.call_time,
+    );
+
     return response;
   }
 
@@ -148,149 +166,6 @@ export class AppointmentsService {
   async findByIds(ids: readonly string[]): Promise<Appointment> {
     return this.appointmentDB.findByIds(ids);
   }
-  /** 
-   * 
-   * 
-   * Commented the day end cron job, as we are doing on demand base  
-   * 
-   * 
-  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
-  async every_midnight_cron(): Promise<void> {
-    console.log('Cron is running at Midnight.');
-
-    // Get all Appointments for today.
-    const start_date_time = moment();
-    const end_date_time = moment(start_date_time).add(1, 'days');
-    // Add a day to filter only 1 day appointments
-    // end_date_time.setDate(end_date_time.getDate() + 1);
-
-    // Take only dates to put filter on start of the day
-    const start_date = start_date_time.toISOString().split('T')[0];
-    const end_date = end_date_time.toISOString().split('T')[0];
-
-    const appointments: Appointment[] = await this.appointmentDB.between(
-      'call_time',
-      start_date,
-      end_date,
-    );
-
-    if (appointments && appointments.length <= 0)
-      throw new NoAppointmentTodayException(start_date, end_date);
-
-    // Save all these in Redis instance
-    const redis_client = await this.redisService.getClient(
-      this.configService.REDIS.name,
-    );
-
-    const redis_response = await redis_client.set(
-      process.env.ENV_RBX_REDIS_KEY,
-      JSON.stringify(appointments),
-    );
-
-    // Update Appointment status to QUEUED when saved in Redis
-    if (redis_response == null) {
-      // Send Priority Exception Message
-      throw new NoAppointmentTodayException(start_date, end_date);
-    } else {
-      const appointment_ids: string[] = appointments.map(appointment => {
-        // Update DB status to Queued
-        return appointment.id;
-      });
-
-      await this.appointmentDB.updateByIds(
-        appointment_ids,
-        {
-          status: APPOINTMENT_STATUS.QUEUED,
-        },
-        ['id'],
-      );
-    }
-  }
-  */
-
-  // *   *   *   *   *   *
-  // |   |   |   |   |   |
-  // |   |   |   |   |   day of week
-  // |   |   |   |   month
-  // |   |   |   day of month
-  // |   |   hour
-  // |   minute
-  // second (optional)
-  // @Cron('0 */1 * * * *')
-  // async cron_to_send_push_notification(): Promise<void> {
-  //   console.log('Cron job is running every 15 minute.');
-  //   const redis_client = await this.redisService.getClient(
-  //     this.configService.REDIS.name,
-  //   );
-
-  //   const key_result = await redis_client.get(process.env.ENV_RBX_REDIS_KEY);
-  //   if (!key_result) {
-  //     return;
-  //   }
-
-  //   const appointments: Appointment[] = JSON.parse(key_result);
-
-  //   // Filter the appointments under 15 minutes from Date.now()
-  //   const appointments_coming = appointments.filter(appointment => {
-  //     const diff_in_minutes = Math.round(
-  //       moment.utc(appointment.call_time).diff(moment.utc(), 'minutes', true),
-  //     );
-
-  //     if (
-  //       appointment.status === APPOINTMENT_STATUS.QUEUED &&
-  //       diff_in_minutes >= 0 &&
-  //       diff_in_minutes <=
-  //         Number(
-  //           this.configService.get(
-  //             'ENV_RBX_MINUTES_BEFORE_CALL_TO_SEND_NOTIFICATION',
-  //           ),
-  //         )
-  //     ) {
-  //       return true;
-  //     }
-  //   });
-
-  //   // Send Push Notification through the Notification Service.
-  //   appointments_coming.forEach(async appointment => {
-  //     console.log('Appointment Coming At:', appointment.call_time);
-
-  //     // Send Push Notification
-  //     const notification: PushNotificationModel = {
-  //       platform: appointment.user.platform,
-  //       device_id: appointment.user.device_id,
-  //       token: appointment.user.firebase_token,
-  //       message_title: 'Dummy: until get from Business Team.',
-  //       message_body: 'Dummy: until get from Business Team.',
-  //       image_url: 'http://lorempixel.com/400/200',
-  //     };
-
-  //     await this.send_push_notification(notification);
-
-  //     // If success then
-  //     if (true) {
-  //       // Update Entry in Redis and Database with Status=Notification.
-  //       // This is a Reference Object, So changing this item will update the List object as well.
-  //       appointment.status = APPOINTMENT_STATUS.NOTIFICATION;
-
-  //       // Updating in DB
-  //       await this.appointmentDB.update(
-  //         { id: appointment.id },
-  //         {
-  //           status: APPOINTMENT_STATUS.NOTIFICATION,
-  //         },
-  //         ['id'],
-  //       );
-  //     }
-  //   });
-
-  //   // Update only if there is any Notification Sent.
-  //   if (appointments_coming.length > 0) {
-  //     const redis_response = redis_client.set(
-  //       process.env.ENV_RBX_REDIS_KEY,
-  //       JSON.stringify(appointments),
-  //     );
-  //   }
-  // }
 
   // *   *   *   *   *   *
   // |   |   |   |   |   |
@@ -321,8 +196,7 @@ export class AppointmentsService {
       ['id', 'call_time', 'gender', 'status'],
     );
 
-    if (appointments && appointments.length <= 0)
-      throw new AppointmentNotFoundException(start_date_time, end_date_time);
+    if (appointments && appointments.length <= 0) return;
 
     // Filter the appointments under 15 minutes from Date.now()
     const appointments_coming = appointments.filter(appointment => {
@@ -346,10 +220,10 @@ export class AppointmentsService {
       console.log('Appointment Coming At:', appointment.call_time);
 
       // Send Push Notification
-      const notification: PushNotificationModel = {
+      const notification: iPushNotification = {
         platform: appointment.user.platform,
         device_id: appointment.user.device_id,
-        token: appointment.user.firebase_token,
+        token: appointment.user.fcm_token_id,
         message_title: this.configService.VCALL
           .ENV_RBX_NOTIFICATION_MESSAGE_TITLE,
         message_body: this.configService.VCALL
@@ -357,7 +231,9 @@ export class AppointmentsService {
         image_url: this.configService.VCALL.ENV_RBX_NOTIFICATION_IMAGE_URL,
       };
 
-      const send_notification = await this.send_push_notification(notification);
+      const send_notification = await this.pushNotificationService.send_push_notification(
+        notification,
+      );
 
       // If success then
       if (send_notification) {
@@ -374,26 +250,18 @@ export class AppointmentsService {
           },
           ['id'],
         );
-      } else {
-        throw new SentNotificationFailedException(appointment.user.id);
-      }
+      } // else {
+      //throw new SentNotificationFailedException(appointment.user.id);
+      //}
     });
   }
 
   async get_user_by_id_from_service(user_id: string): Promise<any> {
     const params = `query{
-        result: findCustomerById(id: "${user_id}") {
-        id
-        email
-        contact_no
-        first_name
-        middle_name
-        last_name
-        gender
-      }
+        result: findCustomerById(id: "${user_id}"){${USER_QUERY}}
     }`;
 
-    return this.gqlClient.client('ENV_RBX_IDX_BASE_URL').send(params);
+    return this.gqlClient.client('ENV_RBX_IDENTITY_SERVER').send(params);
   }
 
   private async check_agent_availability(
@@ -414,25 +282,5 @@ export class AppointmentsService {
     }`;
 
     return this.gqlClient.client('ENV_RBX_ENTITLEMENT_SERVER').send(query);
-  }
-
-  private async send_push_notification(input: PushNotificationModel) {
-    const mutation = `mutation {
-      result: sendPushNotification(input: ${toGraphQL(input)}) {
-        id
-        platform
-        device_id
-        message_title
-        message_body
-        image_url
-        status
-        created_on
-        created_by
-      }
-    }`;
-
-    return await this.gqlClient
-      .client('ENV_RBX_NOTIFICATION_SERVER')
-      .send(mutation);
   }
 }

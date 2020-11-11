@@ -10,6 +10,10 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
+# SQL Scripts
+schema.sql
+seed.sql
+
 # OS
 .DS_Store
 
@@ -35,3 +39,6 @@ lerna-debug.log*
 
 # Application .gitignore
 .env
+
+# Ignore assets (upload) folder
+/uploads

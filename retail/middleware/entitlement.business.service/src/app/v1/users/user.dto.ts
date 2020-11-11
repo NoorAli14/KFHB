@@ -4,7 +4,7 @@ import {
   IsEmail,
   IsNotEmpty,
   ValidateNested,
-  Matches,
+  Matches, IsISO8601
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, PartialType, OmitType } from '@nestjs/swagger';
@@ -85,6 +85,15 @@ export class NewUserDto {
   gender?: string;
 
   @ApiProperty({
+    title: 'Entity ID',
+    description: 'ID of the entity with which the User is associated.',
+    required: false,
+  })
+  @IsString()
+  @IsOptional()
+  entity_id?: string;
+
+  @ApiProperty({
     type: [IdsDto],
     description: 'List of role IDs.',
     required: false,
@@ -96,7 +105,7 @@ export class NewUserDto {
 
 export class UpdateUserDto extends PartialType(
   OmitType(NewUserDto, ['email'] as const),
-) {}
+) { }
 
 export class CurrentUserUpdateDto extends PartialType(
   OmitType(NewUserDto, ['email', 'roles'] as const),
@@ -113,9 +122,11 @@ export class CurrentUserUpdateDto extends PartialType(
   @ApiProperty({
     title: 'Date of Birth',
     description: 'Date of Birth of user.',
+    example: '1993-12-04',
     required: false,
   })
   @IsString()
+  @IsISO8601({ strict: true })
   date_of_birth?: string;
 
   @ApiProperty({

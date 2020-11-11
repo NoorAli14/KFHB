@@ -15,7 +15,7 @@
       "@rubix/*": [
         "./src/*"
       ],
-      "@volume/*": [
+      "@volumes/*": [
         "volumes/*"
       ],
       "@common/*": [

@@ -194,8 +194,8 @@ export class IdentityService {
   }
 
   sanitize(keys: { [key: string]: any }): { [key: string]: any } {
-    let data = {};
-    for (var key in keys) {
+    const data = {};
+    for (const key in keys) {
       if (keys.hasOwnProperty(key)) {
         data[keys[key].name] = keys[key].value;
       }

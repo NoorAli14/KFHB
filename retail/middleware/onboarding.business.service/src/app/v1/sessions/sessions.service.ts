@@ -1,7 +1,7 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
-import { Session, Evaluation } from './session.entity';
+import { Injectable, Logger } from '@nestjs/common';
+import { Session } from './session.entity';
 import { GqlClientService, strToBase64 } from '@common/index';
-import { FaceUploadingInput } from '../attachments/attachment.interface';
+import { FaceUploadingInput } from '../documents/document.interface';
 
 @Injectable()
 export class SessionsService {
@@ -20,10 +20,10 @@ export class SessionsService {
     updated_by   
   }`;
 
-  constructor(private readonly gqlClient: GqlClientService) { }
+  constructor(private readonly gqlClient: GqlClientService) {}
 
   async create(): Promise<Session> {
-    const mutation: string = `mutation {
+    const mutation = `mutation {
       result: addSession ${this.output}
     }`;
     return this.gqlClient.send(mutation);
@@ -37,30 +37,11 @@ export class SessionsService {
    */
   async update(input: FaceUploadingInput): Promise<Session> {
     // Construct GraphQL request
-    const mutation: string = `mutation {
+    const mutation = `mutation {
       result: updateSession(input: {
           file: "${strToBase64(input.file)}"
         }) ${this.output}
     }`;
     return this.gqlClient.send(mutation);
-  }
-
-  /**
-   *
-   * @param header GQL request headers
-   * @return The Evaluation object
-   */
-  async evaluation(): Promise<Evaluation> {
-    const mutation: string = `mutation {
-      result: evaluation {
-        success
-        status
-        message
-      }
-    }`;
-    const result: any = await this.gqlClient.send(mutation);
-    if (result?.errors)
-      throw new BadRequestException({ errors: result.errors });
-    return result;
   }
 }

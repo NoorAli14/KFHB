@@ -9,7 +9,7 @@ import {
   UseGuards,
   HttpCode,
   HttpStatus,
-  Post,
+  Post, Query,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -21,30 +21,32 @@ import {
   ApiNotFoundResponse,
   ApiNoContentResponse,
 } from '@nestjs/swagger';
-import { AuthGuard } from '@common/index';
-import { Holiday } from './holiday.entity';
+import { AuthGuard, PermissionsGuard, Permissions, PaginationDTO, SortByDTO } from '@common/index';
+import { Holiday, HolidayPaginationList } from './holiday.entity';
 import { CreateHolidayDto, UpdateHolidayDTO } from './holiday.dto';
 import { HolidaysService } from './holidays.service';
+import { HolidayFilterDto } from "@app/v1/holidays/dtos";
 
 @ApiTags('Holidays')
 @Controller('holidays')
 @ApiBearerAuth()
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, PermissionsGuard)
 export class HolidaysController {
   constructor(private readonly holidayService: HolidaysService) { }
 
   @Get('/')
   @ApiOperation({
     description:
-      'A successful request returns the HTTP 200 OK status code and a JSON response body that shows list of holidays information.',
+      'A successful request returns the HTTP 200 OK status code and a JSON response body that shows list of holidays information with pagination.',
     summary: 'List of all holidays.',
   })
   @ApiOkResponse({
-    type: [Holiday],
+    type: HolidayPaginationList,
     description: 'List of all holidays.',
   })
-  async list(): Promise<Holiday[]> {
-    return this.holidayService.list();
+  @Permissions('view:holidays')
+  async list(@Query() pagination: PaginationDTO, @Query() filters: HolidayFilterDto, @Query() sort_by: SortByDTO): Promise<HolidayPaginationList> {
+    return this.holidayService.list({ pagination, filters, sort_by });
   }
 
   @Post('/')
@@ -65,6 +67,7 @@ export class HolidaysController {
     type: Error,
     description: 'Input Validation failed.',
   })
+  @Permissions('create:holidays')
   async create(
     @Body() input: CreateHolidayDto,
   ): Promise<Holiday> {
@@ -85,6 +88,7 @@ export class HolidaysController {
     type: Error,
     description: 'Holiday Not Found.',
   })
+  @Permissions('view:holidays')
   async findOne(
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<Holiday> {
@@ -113,6 +117,7 @@ export class HolidaysController {
     type: Error,
     description: 'Holiday Not Found.',
   })
+  @Permissions('edit:holidays')
   async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() input: UpdateHolidayDTO,
@@ -134,6 +139,7 @@ export class HolidaysController {
     description: 'Holiday Not Found.',
   })
   @HttpCode(HttpStatus.NO_CONTENT)
+  @Permissions('delete:holidays')
   async delete(
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<any> {

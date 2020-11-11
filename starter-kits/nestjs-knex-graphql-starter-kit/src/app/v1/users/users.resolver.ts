@@ -4,12 +4,12 @@ import {
   Mutation,
   Args,
   ResolveField,
-  Parent
+  Parent,
 } from '@nestjs/graphql';
 import { ParseUUIDPipe, NotFoundException } from '@nestjs/common';
 import * as DataLoader from 'dataloader';
 import { Loader } from 'nestjs-dataloader';
-import { Fields } from "@rubix/common/decorators";
+import { Fields } from '@rubix/common/decorators';
 import { Post } from '@rubix/app/v1/posts/post.model';
 import { User } from './user.model';
 import { UserService } from './users.service';
@@ -38,7 +38,7 @@ export class UsersResolver {
     @Fields() columns: string[],
   ): Promise<User> {
     const user: User = await this.userService.findById(id, columns);
-    if(!user) {
+    if (!user) {
       throw new NotFoundException('User not found');
     }
     return user;
@@ -64,7 +64,7 @@ export class UsersResolver {
   @Mutation(() => Boolean)
   async deleteUser(@Args('id', ParseUUIDPipe) id: string): Promise<boolean> {
     const user: User = await this.userService.findById(id, ['id']);
-    if(!user) {
+    if (!user) {
       throw new NotFoundException('User not found');
     }
     return this.userService.delete(id);

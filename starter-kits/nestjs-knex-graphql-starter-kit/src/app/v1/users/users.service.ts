@@ -16,14 +16,17 @@ export class UserService {
 
   async update(
     id: string,
-    userOBJ: {[key: string]: any},
+    userOBJ: { [key: string]: any },
     columns?: string[],
   ): Promise<User> {
     const [user] = await this.userDB.update({ id }, userOBJ, columns);
     return user;
   }
 
-  async create(userOBJ: {[key: string]: any}, columns?: string[]): Promise<User> {
+  async create(
+    userOBJ: { [key: string]: any },
+    columns?: string[],
+  ): Promise<User> {
     const [user] = await this.userDB.create(userOBJ, columns);
     return user;
   }
@@ -31,5 +34,4 @@ export class UserService {
   async delete(id: string): Promise<boolean> {
     return await this.userDB.delete({ id });
   }
-  
 }

@@ -1,4 +1,10 @@
-import { IsEnum, IsUUID, IsOptional } from 'class-validator';
+import {
+  IsEnum,
+  IsUUID,
+  IsOptional,
+  IsNotEmpty,
+  IsString,
+} from 'class-validator';
 
 import { Field, InputType } from '@nestjs/graphql';
 import { APPOINTMENT_STATUS } from '@common/constants';
@@ -6,15 +12,19 @@ import { APPOINTMENT_STATUS } from '@common/constants';
 @InputType()
 export class NewAppointmentInput {
   @Field()
+  @IsNotEmpty()
   call_time: Date;
 
+  @IsString()
+  @IsOptional()
   @Field({ nullable: true })
   @IsEnum(['M', 'F'])
-  @IsOptional()
   gender: string;
 
-  @Field(() => APPOINTMENT_STATUS, { nullable: true })
+  @IsString()
   @IsOptional()
+  @Field({ nullable: true })
+  @IsEnum(Object.keys(APPOINTMENT_STATUS))
   status: string;
 
   @Field()

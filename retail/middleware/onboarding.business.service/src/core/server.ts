@@ -1,5 +1,5 @@
 import { Transport } from '@nestjs/microservices';
-import { INestApplication, ValidationPipe, Logger } from '@nestjs/common';
+import { INestApplication, ValidationPipe, Logger, ValidationError } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
 import * as bodyParser from 'body-parser';
 
@@ -9,6 +9,9 @@ import {
   HttpExceptionFilter,
   LoggingInterceptor,
   TransformInterceptor,
+  ValidationException,
+  ValidationExceptionFilter,
+  GqlExceptionFilter
 } from '@common/index';
 
 import { KernelMiddleware } from '@core/middlewares/index';
@@ -51,10 +54,12 @@ export default class Server {
     this.app.enableShutdownHooks();
     this.app.useGlobalInterceptors(new TransformInterceptor());
     this.app.useGlobalInterceptors(new LoggingInterceptor());
-    this.app.useGlobalFilters(new HttpExceptionFilter());
-    this.app.useGlobalPipes(
-      new ValidationPipe({ whitelist: true, transform: true }),
-    );
+    this.app.useGlobalFilters(new HttpExceptionFilter(), new ValidationExceptionFilter(), new GqlExceptionFilter());
+    this.app.useGlobalPipes(new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      exceptionFactory: (errors: ValidationError[] | any[]) => new ValidationException(errors)
+    }));
     this.app.setGlobalPrefix(this.Config.APP.API_URL_PREFIX);
     this.app.use(cookieParser());
   }
@@ -100,9 +105,7 @@ export default class Server {
    */
   private onStartUp(): void {
     Logger.log(``);
-    Logger.log(
-      `Application start listing on ${this.Config.APPLICATION_HOST}/${this.Config.APP.API_URL_PREFIX}`,
-    );
+    Logger.log(`Application start listing on ${this.Config.APPLICATION_HOST}/${this.Config.APP.API_URL_PREFIX}`);
     Logger.log(``);
     Logger.log('-------------------------------------------------------');
     Logger.log(`Service      : ${this.Config.APP.NAME}`);
@@ -113,9 +116,7 @@ export default class Server {
     //     this.log.debug(`API Info     : ${app.get('host')}:${app.get('port')}${ApiInfo.getRoute()}`);
     // }
     if (this.Config.IS_SWAGGER_ENABLED) {
-      Logger.log(
-        `Swagger      : ${this.Config.APPLICATION_HOST}${this.Config.SWAGGER.ROUTE}`,
-      );
+      Logger.log(`Swagger      : ${this.Config.APPLICATION_HOST}${this.Config.SWAGGER.ROUTE}`);
     }
     Logger.log(`Health Check : ${this.Config.APPLICATION_HOST}/health`);
     // if (Environment.isTruthy(process.env.MONITOR_ENABLED)) {

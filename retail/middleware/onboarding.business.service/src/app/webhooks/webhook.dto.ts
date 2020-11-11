@@ -1,15 +1,11 @@
-import {
-  IsNumberString,
-  IsString,
-  MaxLength,
-} from 'class-validator';
+import { IsNumberString, IsString, MaxLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class AMLAlertDTO {
   @ApiProperty({
     title: 'Reference No',
     description: 'AML request reference no',
-    example: "1581795827563",
+    example: '1581795827563',
     required: true,
   })
   @IsNumberString()
@@ -18,7 +14,7 @@ export class AMLAlertDTO {
   @ApiProperty({
     title: 'Reference code',
     description: 'AML request reference code',
-    example: "0000",
+    example: '0000',
     required: true,
   })
   @IsString()

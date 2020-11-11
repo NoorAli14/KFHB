@@ -53,16 +53,14 @@ export class PreviewDocument {
 @ObjectType()
 export class SCHEMA_ERROR {
 
-  @Field()
-  group: string;
   @Field({ nullable: true })
-  errorCode: string;
+  name: string;
   @Field()
   message: string;
   @Field({ nullable: true })
   field?: string;
   @Field({ nullable: true })
-  stack: string;
+  developerMessage: string;
   @Field({ nullable: true })
   value?: string;
 }

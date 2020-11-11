@@ -19,6 +19,13 @@ input CreateCustomerInput {
   contact_no: String
   device_id: String
   platform: String
+  fcm_token_id: String
+  last_step: String
+}
+
+input CreatedOnParams {
+  start: String!
+  end: String!
 }
 
 type CUSTOM_ERROR {
@@ -43,12 +50,13 @@ type Customer {
   nationality_code: String
   device_id: String
   platform: String
-  next_step: String
+  last_step: String
   is_aml_verified: Boolean
   is_email_verified: Boolean
   is_contact_no_verified: Boolean
   is_evaluation_verified: Boolean
   status: String
+  fcm_token_id: String
   created_on: String
   created_by: String
   updated_on: String
@@ -56,6 +64,23 @@ type Customer {
   deleted_on: String
   deleted_by: String
   documents: [Document!]!
+}
+
+input CustomersFilterParams {
+  national_id_no: String
+  gender: String
+  nationality: String
+  first_name: String
+  last_name: String
+  status: String
+  contact_no: String
+  email: String
+  created_on: CreatedOnParams
+}
+
+type CustomerWithPagination {
+  pagination: IDT_PaginationModel
+  data: [Customer!]
 }
 
 """
@@ -102,14 +127,27 @@ type Face {
   deleted_on: DateTime!
 }
 
+type IDT_PaginationModel {
+  total: Float
+  pages: Float
+  pageSize: Float
+  page: Float
+}
+
 type Mutation {
   addSession: Session!
   updateSession(input: UploadFaceInput!): Session!
   evaluation: EVALUATION_RESPONSE!
   addCustomer(input: CreateCustomerInput!): Customer!
+  updateCustomer(input: UpdateCustomerInput!, id: String!): Customer!
   uploadLiveness(input: UploadFaceInput!): Face!
   addDocument(input: UploadDocumentInput!): Document!
   processDocument(input: ProcessDocumentInput!): Result!
+}
+
+input PaginationParams {
+  page: Float
+  limit: Float
 }
 
 type PreviewDocument {
@@ -127,6 +165,7 @@ input ProcessDocumentInput {
 }
 
 type Query {
+  customersList(sort_by: SortingParam, filters: CustomersFilterParams, pagination: PaginationParams): CustomerWithPagination!
   findCustomerById(id: String!): Customer!
   previewAttachment(input: PreviewDocumentInput!): PreviewDocument!
 }
@@ -134,11 +173,10 @@ type Query {
 union Result = Document | CUSTOM_ERROR
 
 type SCHEMA_ERROR {
-  group: String!
-  errorCode: String
+  name: String
   message: String!
   field: String
-  stack: String
+  developerMessage: String
   value: String
 }
 
@@ -157,6 +195,28 @@ type Session {
   created_on: DateTime!
   updated_by: String!
   updated_on: DateTime!
+}
+
+input SortingParam {
+  sort_by: String
+  sort_order: String
+}
+
+input UpdateCustomerInput {
+  first_name: String
+  middle_name: String
+  last_name: String
+  gender: String
+  date_of_birth: String
+  last_step: String
+  status: String
+  contact_no: String
+  nationality: String
+  nationality_code: String
+  is_aml_verified: Boolean
+  is_email_verified: Boolean
+  is_evaluation_verified: Boolean
+  is_contact_no_verified: Boolean
 }
 
 input UploadDocumentInput {

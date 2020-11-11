@@ -553,21 +553,26 @@ table {
   width: 90%;
   margin: 25px 15px 0 2%;
   overflow: auto;
-  height: 96vh;
   .react-tabs {
+    position: relative;
     .react-tabs__tab-list {
       border-bottom: none;
       margin-bottom: 0;
+      background-color: #f3f3f3;
+      position: absolute;
+      width: 100%;
+      z-index: 1;
       .react-tabs__tab {
-        background: #f3f3f3;
+        background: #0c9899;
         border: 1px solid transparent;
-        color: #404040;
-        border-radius: 0;
+        color: white;
+    border-radius: 0;
       }
       .react-tabs__tab.react-tabs__tab--selected {
-        background: #009899;
-        border: 1px solid #009899;
-        color: #fff;
+        background: #ffffff;
+        border-top: 2px solid #009899;
+        color: #129899;
+        font-weight: 900;
       }
     }
     .react-tabs__tab-panel {
@@ -575,11 +580,14 @@ table {
       flex-wrap: wrap;
       justify-content: space-between;
       background: #fff;
-      box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.16);
       border: 1px solid #e6e6e6;
+      
+      position: relative;
+    top: 35px;
       .details {
         flex: 1;
         position: relative;
+        min-height: 400px;
         .close {
           position: absolute;
           width: 17px;
@@ -621,7 +629,7 @@ table {
           label {
             display: block;
             font-size: 14px;
-            color: #ababab;
+            color: #009899;
           }
           a {
             display: block;
@@ -637,6 +645,20 @@ table {
           }
         }
       }
+
+      .image-btns {
+        background: #ccc;
+        cursor: pointer;
+        color: black;
+        padding: 10px;
+        border-radius: 3px;
+    }
+    .image-btns.active {
+      background: #095656 !important;
+      -webkit-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.25);
+      -moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.25);
+      box-shadow: 2px 5px 5px 0px rgba(0,0,0,0.25);
+  }
 
       .basic-details {
         width: 48%;
@@ -666,7 +688,6 @@ table {
     }
     .react-tabs__tab-panel.react-tabs__tab-panel--selected {
       padding: 15px 15px;
-      min-height: 80vh;
     }
   }
 }
@@ -739,7 +760,7 @@ table {
 /* videocall design */
 .grid-container {
   width: 100%;
-  padding: 60px 0px 0px 0px;
+  padding: 0px 0px 0px 0px;
   display: flex;
   .videocall {
     height: 550px;
@@ -896,7 +917,7 @@ table {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      width: 320px;
+      width:400px;
       padding: 10px 30px;
       margin-top: 5px;
       background-color: #fff;
@@ -1159,8 +1180,14 @@ table {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
-	width: 100%;
+  width: 100%;
+  border-bottom: 1px solid #00000017;
+  margin-bottom: 2%;
   }
+
+  strong {
+    color: #009899;
+}
   
   .c-column {
     display: flex;
@@ -1168,7 +1195,7 @@ table {
     justify-content: space-between;
     flex-basis: 100%;
     flex: 50%;
-    margin-bottom: 29px;
+    margin-bottom: 6px;
     padding: 5px 21px;
   }
   .crs-row {
@@ -1201,12 +1228,13 @@ table {
     align-items: center;
   }
 .crs-td input[type=text]{
-    width: 100%;
-    border-color: #CCCCCC;
-    height: 30px;
-    background-color: #FFFFFF;
-    color: #000000;
-    border-radius: 0px;
+  width: 100%;
+  border: 1px solid #e2dbdb;
+  padding-left: 3%;
+  height: 30px;
+  background-color: #FFFFFF;
+  color: #000000;
+  border-radius: 0px;
 }
 .title-label{
   color: #009899;
@@ -1221,6 +1249,22 @@ table {
   flex-direction: column;
   width: 50%;
   align-items: flex-start;
+}
+select {
+  border: 1px solid #d4d1d1;
+  border-radius: 2px;
+}
+textarea {
+  border: 1px solid #d4d1d1;
+  border-radius: 2px;
+}
+
+.submit-btn {
+    background: #069899;
+    cursor: pointer;
+    color: white;
+    border-radius: 3px;
+    border: none;
 }
 /* Not Found style Ends */
 
@@ -1271,4 +1315,13 @@ table {
       }
     }
   }
+}
+
+.tab-body{
+  position: relative;
+  top: 36px;
+
+}
+.tab-head{
+  position: absolute;
 }

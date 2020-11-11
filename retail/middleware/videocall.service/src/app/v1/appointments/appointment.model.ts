@@ -1,8 +1,16 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { PLATFORMS } from '@common/constants';
+import { APPOINTMENT_STATUS, GENDER, PLATFORMS } from '@common/constants';
+import {
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUUID,
+  MaxLength,
+} from 'class-validator';
 
 @ObjectType()
-export class User {
+export class UserGQL {
   @Field()
   id?: string;
 
@@ -22,7 +30,7 @@ export class User {
   device_id?: string;
 
   @Field()
-  firebase_token?: string;
+  fcm_token_id?: string;
 
   @Field()
   email?: string;
@@ -52,25 +60,49 @@ export class User {
 @ObjectType()
 export class Appointment {
   @Field()
+  @IsUUID()
   id: string;
 
   @Field({ nullable: true })
-  call_time: Date;
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(255)
+  call_time: string;
 
   @Field({ nullable: true })
-  gender: string;
+  @IsString()
+  @IsOptional()
+  @IsEnum(Object.keys(GENDER))
+  @MaxLength(25)
+  gender?: string;
 
   @Field({ nullable: true })
+  @IsString()
+  @MaxLength(25)
+  @IsOptional()
+  @IsEnum(Object.keys(Object.keys(APPOINTMENT_STATUS)))
   status: string;
 
-  user_id?: string;
+  user_id: string;
 
-  @Field(() => User) // Will get this field from another service using ResolveField function.
-  user?: User;
-
-  @Field()
-  created_on: Date;
+  @Field(() => UserGQL) // Will get this field from another service using ResolveField function.
+  user?: UserGQL;
 
   @Field()
-  updated_on: Date;
+  @IsNotEmpty()
+  created_on: string;
+
+  @Field()
+  @IsNotEmpty()
+  @IsString()
+  created_by: string;
+
+  @Field()
+  @IsNotEmpty()
+  updated_on: string;
+
+  @Field()
+  @IsNotEmpty()
+  @IsString()
+  updated_by: string;
 }

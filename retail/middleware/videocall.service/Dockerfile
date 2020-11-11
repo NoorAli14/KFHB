@@ -8,7 +8,7 @@
 # Stage 01: Building nodejs service
 #=================================================================
 # Using latest LTS version running on alpine
-FROM node:12.18.4-alpine AS builder
+FROM node:14.15.0-alpine3.11 AS builder
 
 COPY package.json package-lock.json ./
 
@@ -24,7 +24,7 @@ RUN npm run build
 # Stage 02: Installing production Dependencies
 #=================================================================
 # Using latest LTS version running on alpine
-FROM node:12.18.4-alpine AS node_modules
+FROM node:14.15.0-alpine3.11 AS node_modules
 
 COPY package.json package-lock.json ./
 
@@ -35,7 +35,7 @@ RUN npm install --only=production --silent
 # Master Stage
 #=================================================================
 # Using latest LTS version running on alpine
-FROM node:12.18.4-alpine
+FROM node:14.15.0-alpine3.11
 
 # Will remain same for all containers.
 # Version will be changed during CI/CD process
@@ -102,7 +102,7 @@ ENV ENV_RBX_HOST=${PORT} \
     ENV_RBX_NOTIFICATION_SERVER= \
     ENV_RBX_ENTITLEMENT_SERVER= \
     ENV_RBX_IDENTITY_SERVER= \
-    ENV_RBX_REDIS_URL=
+    ENV_RBX_REDIS_URL= 
 
 # Set user node for future commands
 USER $USER

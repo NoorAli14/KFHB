@@ -36,7 +36,9 @@ export class NetworkService {
     post(url: string, model: any, options?): Observable<any> {
         const endPoint = `${createUrl(url)}`;
         return this.http
-            .post<any[]>(endPoint, model, options);
+            .post<any[]>(endPoint, model, options) .pipe(
+                catchError(this.errorHandler)
+            );
     }
 
     onUpdate(url: string, model: any, options?): Observable<any> {
@@ -53,8 +55,8 @@ export class NetworkService {
             .pipe(catchError(this.errorHandlerMessage));
     }
 
-    errorHandler(error: HttpErrorResponse): Observable<any> {
-        return observableThrowError(error);
+    errorHandler(response: HttpErrorResponse): Observable<any> {
+        return observableThrowError(response.error || 'Internal Server Error');
     }
 
     errorHandlerMessage(error: HttpErrorResponse): Observable<any> {
