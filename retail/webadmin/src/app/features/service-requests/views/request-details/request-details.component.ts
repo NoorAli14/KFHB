@@ -153,6 +153,7 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
     downloadLink.download = fileName;
     downloadLink.click();
 
+    
   }
   viewDocument(data, extention): void {
     this.checkType(extention)
