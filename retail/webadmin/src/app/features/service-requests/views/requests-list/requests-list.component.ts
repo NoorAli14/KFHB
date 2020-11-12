@@ -118,7 +118,7 @@ export class RequestsListComponent extends BaseComponent implements OnInit {
     const date = new Date();
     const linkSource = 'data:application/excel;base64,' + data;
     const downloadLink = document.createElement('a');
-    const fileName = 'REPORT' + date.getDate() + '.' + date.getMonth() + 1 + '.' + date.getFullYear() + '.xlsx';
+    const fileName = 'Service_Requests_Report_' + date.getDate() + '.' + date.getMonth() + 1 + '.' + date.getFullYear() + '.xlsx';
     downloadLink.href = linkSource;
     downloadLink.download = fileName;
     downloadLink.click();

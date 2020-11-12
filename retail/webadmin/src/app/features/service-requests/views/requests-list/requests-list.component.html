@@ -23,10 +23,10 @@
         </div>
         <div class="content-card" fusePerfectScrollbar>
             <app-message-box [type]="errorType" [message]="responseMessage"></app-message-box>
-            <mat-table #table matSort matSortActive="requestDate" matSortDirection="asc" matSortDisableClear
+            <mat-table #table matSort matSortActive="requestDate" matSortDirection="desc" matSortDisableClear
                 [dataSource]="dataSource">
                 <ng-container *ngFor="let key of displayedColumns" [matColumnDef]="key">
-                    <mat-header-cell *matHeaderCellDef  [mat-sort-header]="key.includes('requestDate') || key.includes('date')?key:null" [disabled]="!key.includes('status') && !key.includes('requestDate')? true : false " >
+                    <mat-header-cell *matHeaderCellDef  [mat-sort-header]="!key.includes('action')?key:null" [disabled]="key.includes('action')? true : false " >
                         {{ key.includes('action') ? 'Action' : camelToSentenceCase(key) }}</mat-header-cell>
                     <mat-cell *matCellDef="let element; let i = dataIndex" class="pl-24">
                             <ng-container [ngSwitch]="key">
@@ -60,7 +60,7 @@
                         </span>
                     </ng-container>
                         <ng-template #defaultText>
-                            <app-default-text></app-default-text>
+                            <app-default-text>Null</app-default-text>
                         </ng-template>
                         <ng-template #date>
                             {{element[camelToSnakeCase(key)] | date:'mediumDate'}}
