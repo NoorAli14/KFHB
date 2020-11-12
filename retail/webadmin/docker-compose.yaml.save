@@ -1,0 +1,11 @@
+version: "3.7"
+services:
+  loyalty:
+    image: jazeel_webadminfrontend:1.0.0
+    build: .
+    container_name: jazeel_frontend
+    wenetworks:
+      - aiondigital
+networks:
+  aiondigital:
+    external: true
