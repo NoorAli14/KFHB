@@ -1,4 +1,4 @@
-import { isUUID } from "./../../../../../shared/helpers/global.helper";
+import { isUUID } from "@shared/helpers/global.helper";
 import { Leave } from "./../../../models/leave.model";
 import {
     Component,
@@ -32,7 +32,7 @@ import { fuseAnimations } from "@fuse/animations";
 import { MODULES } from "@shared/constants/app.constants";
 import { Pagination } from "@shared/models/pagination.model";
 import { FormControl } from "@angular/forms";
-import { skip, map, debounceTime, distinctUntilChanged } from "rxjs/operators";
+import {  debounceTime, distinctUntilChanged } from "rxjs/operators";
 import * as QueryString from "query-string";
 
 @Component({
@@ -215,7 +215,6 @@ export class LeaveComponent extends BaseComponent implements OnInit {
         this.dataSource.data = data;
     }
     onSelectUser(id?) {
-        debugger;
         if (id) {
             this.getData({ user_id: id });
         } else this.getData({});

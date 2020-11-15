@@ -1,5 +1,4 @@
 import { snakeToCamelArray } from "@shared/helpers/global.helper";
-import { REGEX } from "@config/index";
 import {
     Component,
     EventEmitter,
@@ -18,10 +17,9 @@ import { BaseComponent } from "@shared/components/base/base.component";
 import { DATE_FORMAT, MODULES } from "@shared/constants/app.constants";
 import {
     camelToSnakeCase,
-    regexValidator,
 } from "@shared/helpers/global.helper";
 import * as moment from "moment";
-import { debounceTime, distinctUntilChanged, map, skip } from "rxjs/operators";
+import { debounceTime, distinctUntilChanged,  } from "rxjs/operators";
 import * as QueryString from "query-string";
 import { CalendarService } from "@feature/calender/services/calendar.service";
 
