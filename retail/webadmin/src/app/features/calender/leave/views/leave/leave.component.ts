@@ -105,7 +105,6 @@ export class LeaveComponent extends BaseComponent implements OnInit {
             (response) => {
                 this.leaves = snakeToCamelArray(response[0].data);
                 this.pagination = response[0].pagination;
-
                 this.leaveTypes = snakeToCamelArray(response[1]);
                 this.users = snakeToCamelArray(response[2].data);
                 this.filteredUser = [...this.users];

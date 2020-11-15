@@ -1,3 +1,4 @@
+import { REGEX } from "@config/index";
 import {
     Component,
     EventEmitter,
@@ -18,6 +19,7 @@ import {
     camelToSnakeCase,
     cloneDeep,
     getName,
+    regexValidator,
 } from "@shared/helpers/global.helper";
 import * as moment from "moment";
 import { takeUntil, filter } from "rxjs/operators";
@@ -61,11 +63,11 @@ export class LeaveFormComponent
             id: new FormControl(this.data.leave.id),
             startDate: new FormControl(this.data.leave.startDate, [
                 Validators.required,
-                this.confirmPasswordValidator.bind(this),
+                this.validateDate.bind(this),
             ]),
             endDate: new FormControl(this.data.leave.endDate, [
                 Validators.required,
-                this.confirmPasswordValidator.bind(this),
+                this.validateDate.bind(this),
             ]),
             leaveTypeId: new FormControl(this.data.leave.leaveTypeId, [
                 Validators.required,
@@ -75,6 +77,7 @@ export class LeaveFormComponent
             ]),
             userId: new FormControl(this.data.leave.userId, [
                 Validators.required,
+                regexValidator(new RegExp(REGEX.UUID), { uuid: true }),
             ]),
         });
         this.isAdmin = this._authUserService.User?.roles?.find(
@@ -107,7 +110,8 @@ export class LeaveFormComponent
         const user = this.users.find((item) => item.id === id);
         return user ? `${user.firstName} ${user.lastName}` : "";
     };
-    confirmPasswordValidator(control: FormControl): { [s: string]: boolean } {
+
+    validateDate(control: FormControl): { [s: string]: boolean } {
         if (
             this.leaveForm &&
             this.leaveForm.controls.endDate.value &&
@@ -130,6 +134,7 @@ export class LeaveFormComponent
     }
     onSubmit(): void {
         let model = { ...this.leaveForm.value };
+        debugger;
         model.startDate = moment(model.startDate).format(DATE_FORMAT);
         model.endDate = moment(model.endDate).format(DATE_FORMAT);
         model = camelToSnakeCase(model);

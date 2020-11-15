@@ -23,7 +23,9 @@ export class NetworkService {
         }
         return this.http
             .get<any>(endPoint, options)
-            .pipe(catchError(this.errorHandler));
+            .pipe(
+                catchError(this.errorHandler)
+            );
     }
 
     getById(url): Observable<any> {
@@ -45,14 +47,18 @@ export class NetworkService {
         const endPoint = `${createUrl(url)}`;
         return this.http
             .put<any[]>(endPoint, model, options)
-            .pipe(catchError(this.errorHandlerMessage));
+            .pipe(
+                catchError(this.errorHandler)
+            );
     }
 
     onDelete(url: string, options?): Observable<any> {
         const endPoint = `${createUrl(url)}`;
         return this.http
             .delete<any[]>(endPoint, options)
-            .pipe(catchError(this.errorHandlerMessage));
+            .pipe(
+                catchError(this.errorHandler)
+            );
     }
 
     errorHandler(response: HttpErrorResponse): Observable<any> {

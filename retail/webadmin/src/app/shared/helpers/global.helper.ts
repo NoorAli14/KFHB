@@ -1,5 +1,6 @@
-import { MESSAGES } from '@shared/constants/messages.constant';
-import { isArray } from 'lodash';
+import { AbstractControl, ValidationErrors, ValidatorFn } from "@angular/forms";
+import { MESSAGES } from "@shared/constants/messages.constant";
+import { isArray } from "lodash";
 
 export const cloneDeep = (value) => {
     return JSON.parse(JSON.stringify(value));
@@ -77,3 +78,29 @@ export const extractErrorString = (response) => {
         return MESSAGES.UNKNOWN;
     }
 };
+const daysOfWeek = [
+    "SUNDAY",
+    "MONDAY",
+    "TUESDAY",
+    "WEDNESDAY",
+    "THURSDAY",
+    "FRIDAY",
+    "SATURDAY",
+];
+export const sortWeekDays = (a, b) => {
+    return daysOfWeek.indexOf(a.weekDay) - daysOfWeek.indexOf(b.weekDay); // basic sort function that compares the indexes of the two days
+};
+
+export const regexValidator = (
+    regex: RegExp,
+    error: ValidationErrors
+): ValidatorFn => {
+    return (control: AbstractControl): { [key: string]: any } => {
+        if (!control.value) {
+            return null;
+        }
+        const valid = regex.test(control.value);
+        return valid ? null : error;
+    };
+};
+
