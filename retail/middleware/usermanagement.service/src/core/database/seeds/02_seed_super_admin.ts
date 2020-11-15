@@ -1,15 +1,15 @@
-import * as Knex from "knex";
-import {TABLE, TEMP_ROLE, STATUS} from '@common/constants';
-import { uuidV4 } from "@rubix/common";
+import * as Knex from 'knex';
+import { TABLE, TEMP_ROLE, STATUS } from '@common/constants';
+import { uuidV4 } from '@rubix/common';
 export async function seed(knex: Knex): Promise<any> {
   // Deletes ALL existing entries
-  // await 
-  // await 
+  // await
+  // await
 
   // const role_id = await create_role(knex);
-  // const user = await 
+  // const user = await
 
-  // return 
+  // return
   return processSeed(knex, false);
 }
 
@@ -26,10 +26,11 @@ export async function processSeed(
     email: 'admin@rubix.com',
     status: STATUS.ACTIVE,
     is_owner: 1,
-    password_digest: "$2b$10$F1rbUkfVYVBlvDgsHuttaOb2ekp9HOmfoyVZmWXxw8flbSlu.8HLm",
-    date_of_birth: "1970-01-01",
+    password_digest:
+      '$2b$10$F1rbUkfVYVBlvDgsHuttaOb2ekp9HOmfoyVZmWXxw8flbSlu.8HLm',
+    date_of_birth: '1970-01-01',
     created_by: TEMP_ROLE.SYSTEM,
-    updated_by: TEMP_ROLE.SYSTEM
+    updated_by: TEMP_ROLE.SYSTEM,
   };
   const roleParams = {
     id: uuidV4(),
@@ -37,7 +38,7 @@ export async function processSeed(
     status: STATUS.ACTIVE,
     tenant_id: process.env.ENV_RBX_TENANT_ID,
     created_by: TEMP_ROLE.SYSTEM,
-    updated_by: TEMP_ROLE.SYSTEM
+    updated_by: TEMP_ROLE.SYSTEM,
   };
   const userRoleParams = {
     user_id: userParams.id,
@@ -47,7 +48,10 @@ export async function processSeed(
   const insertUser = () => knex(TABLE.USER).insert(userParams);
   const insertRole = () => knex(TABLE.ROLE).insert(roleParams);
   const insertUserRole = () => knex(TABLE.USER_ROLE).insert(userRoleParams);
-  const insertModulePermissionRole = () => knex.raw(`INSERT INTO [${TABLE.MODULE_PERMISSION_ROLE}] ([role_id], [module_permission_id]) (SELECT '${roleParams.id}', id FROM [${TABLE.MODULE_PERMISSION}])`);
+  const insertModulePermissionRole = () =>
+    knex.raw(
+      `INSERT INTO [${TABLE.MODULE_PERMISSION_ROLE}] ([role_id], [module_permission_id]) (SELECT '${roleParams.id}', id FROM [${TABLE.MODULE_PERMISSION}])`,
+    );
   // const insertModulePermissionRole = () => knex(TABLE.MODULE_PERMISSION_ROLE).insert({
   //   module_permission_id: modules_permissions[i].id,
   //   role_id: role[0].id || role[0]
@@ -67,4 +71,3 @@ export async function processSeed(
   await insertUserRole();
   return insertModulePermissionRole();
 }
-

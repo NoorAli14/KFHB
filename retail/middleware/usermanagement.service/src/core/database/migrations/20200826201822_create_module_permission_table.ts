@@ -2,7 +2,10 @@ import * as Knex from 'knex';
 import { TABLE, DATABASE_UUID_METHOD } from '@common/index';
 export function up(knex: Knex): any {
   return knex.schema.createTable(TABLE.MODULE_PERMISSION, table => {
-    table.uuid('id').primary().defaultTo(DATABASE_UUID_METHOD(knex));
+    table
+      .uuid('id')
+      .primary()
+      .defaultTo(DATABASE_UUID_METHOD(knex));
     table
       .uuid('module_id')
       .references('id')

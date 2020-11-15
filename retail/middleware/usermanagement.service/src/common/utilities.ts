@@ -2,6 +2,7 @@ import * as path from 'path';
 import * as Crypto from 'crypto';
 import { DATE_FORMAT, HEADER_NAMES } from '@common/constants';
 import * as moment from 'moment';
+import * as Knex from 'knex';
 import { NotImplementedException } from '@nestjs/common';
 
 /**
@@ -124,10 +125,10 @@ export const addMinutes = (minutes: number): Date => {
 
 export const getCurrentTimeStamp = (): string => {
   return moment().format();
-}
+};
 
 export const uuidV4 = (): string => {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
     const r = (Math.random() * 16) | 0,
       v = c == 'x' ? r : (r & 0x3) | 0x8;
     return v.toString(16);
@@ -138,7 +139,7 @@ export const uuidV4 = (): string => {
  * DATABASE UUID GENERATION
  * @param knex
  */
-export const DATABASE_UUID_METHOD = (knex): any => {
+export const DATABASE_UUID_METHOD = (knex: Knex): any => {
   switch (knex.client.config.client) {
     case 'pg':
       return knex.raw('uuid_generate_v4()');

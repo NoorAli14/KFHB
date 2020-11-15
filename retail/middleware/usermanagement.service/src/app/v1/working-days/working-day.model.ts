@@ -95,8 +95,10 @@ export class WorkingDay {
 @ObjectType()
 export class WorkingDayWithPagination {
   @Field({ nullable: true })
+  @Type(() => ENT_PaginationModel)
   pagination: ENT_PaginationModel;
 
   @Field(() => [WorkingDay], { nullable: true })
+  @Type(() => WorkingDay)
   data: WorkingDay[];
 }
