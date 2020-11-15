@@ -92,7 +92,7 @@
                     </button>
                     &nbsp;&nbsp;&nbsp;
                     <button appPermission [permissions]="userPermissions" [type]="data.leave.id ? 'edit' : 'create'"
-                        type="submit"  class="submit-button" mat-raised-button
+                        type="submit" [disabled]="leaveForm.invalid" class="submit-button" mat-raised-button
                         color="accent" aria-label="Send Message">
                         Submit
                     </button>

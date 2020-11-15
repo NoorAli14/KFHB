@@ -134,7 +134,6 @@ export class LeaveFormComponent
     }
     onSubmit(): void {
         let model = { ...this.leaveForm.value };
-        debugger;
         model.startDate = moment(model.startDate).format(DATE_FORMAT);
         model.endDate = moment(model.endDate).format(DATE_FORMAT);
         model = camelToSnakeCase(model);
