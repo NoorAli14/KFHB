@@ -253,12 +253,12 @@ export class SessionsService {
   }
 
   findMismatchedDocument(evaluation, documents): MISMATCHED_DOCUMENT | boolean {
-    const regex: RegExp = /\/documents\/([^\/]+)\/?$/g;
+    const regex = /\/documents\/([^\/]+)\/?$/g;
     const __documents: { [key: string]: object } = {};
-    for (let document of documents) {
+    for (const document of documents) {
       __documents[document.attachable_id] = document;
     }
-    for (let item of evaluation.results.items) {
+    for (const item of evaluation.results.items) {
       if (
         item?.claimFace?.subtype === 'LIVENESS_FRAME_BLINK' &&
         item.result !== 'MATCH'

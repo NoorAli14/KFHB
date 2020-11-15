@@ -66,15 +66,15 @@ export const camelToSentenceCase = (text) => {
 };
 
 export const removeRandom = (text) => {
-    return text.replace(/\d+/g, "");
+    return text.replace(/\d+/g, '');
 };
 
 export const extractErrorString = (response) => {
-    if (response.errors &&  !isArray(response.errors)) {
+    if (response.errors && !isArray(response.errors)) {
         return response.errors.message;
-    } else if (response.errors &&  isArray(response.errors)) {
+    } else if (response.errors && isArray(response.errors)) {
         return response.errors[0].message;
-    }else {
+    } else {
         return MESSAGES.UNKNOWN;
     }
 };
@@ -104,3 +104,14 @@ export const regexValidator = (
     };
 };
 
+export const isUUID = (uuid) => {
+    let s: any = "" + uuid;
+
+    s = s.match(
+        "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    );
+    if (s === null) {
+        return false;
+    }
+    return true;
+};

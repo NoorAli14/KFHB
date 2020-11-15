@@ -124,8 +124,8 @@ export class CustomerComponent
         return {
             limit: CONFIG.PAGE_SIZE,
             page: 1,
-            sort_order: "desc",
-            sort_by: "created_on",
+            sort_order: 'asc',
+            sort_by: 'first_name'
         };
     }
     onReset(): void {
@@ -145,7 +145,7 @@ export class CustomerComponent
         });
     }
     getCustomerDetail(id): void {
-         id = "34A8F400-23F0-445F-A20C-5407BDC1C6FC";
+        //  id = "34A8F400-23F0-445F-A20C-5407BDC1C6FC";
         this._service
             .forkCustomer360(id)
             .pipe(takeUntil(this._unsubscribeAll))
