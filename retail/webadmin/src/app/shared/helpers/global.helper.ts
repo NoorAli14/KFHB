@@ -1,4 +1,4 @@
-import { ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms';
+import { AbstractControl, ValidationErrors, ValidatorFn } from "@angular/forms";
 import { MESSAGES } from "@shared/constants/messages.constant";
 import { isArray } from "lodash";
 

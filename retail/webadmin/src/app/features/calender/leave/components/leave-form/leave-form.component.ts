@@ -1,4 +1,4 @@
-import { snakeToCamelArray } from "@shared/helpers/global.helper";
+import { REGEX } from "@config/index";
 import {
     Component,
     EventEmitter,
@@ -17,6 +17,8 @@ import { BaseComponent } from "@shared/components/base/base.component";
 import { DATE_FORMAT, MODULES } from "@shared/constants/app.constants";
 import {
     camelToSnakeCase,
+    regexValidator,
+    snakeToCamelArray,
 } from "@shared/helpers/global.helper";
 import * as moment from "moment";
 import { debounceTime, distinctUntilChanged,  } from "rxjs/operators";
@@ -63,11 +65,11 @@ export class LeaveFormComponent
             id: new FormControl(this.data.leave.id),
             startDate: new FormControl(this.data.leave.startDate, [
                 Validators.required,
-                this.confirmPasswordValidator.bind(this),
+                this.validateDate.bind(this),
             ]),
             endDate: new FormControl(this.data.leave.endDate, [
                 Validators.required,
-                this.confirmPasswordValidator.bind(this),
+                this.validateDate.bind(this),
             ]),
             leaveTypeId: new FormControl(this.data.leave.leaveTypeId, [
                 Validators.required,
@@ -77,6 +79,7 @@ export class LeaveFormComponent
             ]),
             userId: new FormControl(this.data.leave.userId, [
                 Validators.required,
+                regexValidator(new RegExp(REGEX.UUID), { uuid: true }),
             ]),
         });
         this.isAdmin = this._authUserService.User?.roles?.find(
@@ -113,7 +116,8 @@ export class LeaveFormComponent
         const user = this.filteredUser.find((item) => item.id === id);
         return user ? `${user.firstName} ${user.lastName}` : "";
     };
-    confirmPasswordValidator(control: FormControl): { [s: string]: boolean } {
+
+    validateDate(control: FormControl): { [s: string]: boolean } {
         if (
             this.leaveForm &&
             this.leaveForm.controls.endDate.value &&
