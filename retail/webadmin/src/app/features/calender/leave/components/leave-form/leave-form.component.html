@@ -56,7 +56,7 @@
                                 {{ item.name }}
                             </mat-option>
                         </mat-select>
-                       
+
                         <mat-error>
                             <app-mat-error [control]="leaveForm.get('leaveTypeId')"></app-mat-error>
                         </mat-error>
@@ -68,7 +68,9 @@
                             [matAutocomplete]="auto">
                         <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn">
                             <mat-option *ngFor="let item of filteredUser" [value]="item.id">
-                            <span *ngIf="item.firstName && item.lastName">{{item.firstName + ' ' +  item.lastName}}  </span>    <{{ item.email}}>
+                                <span *ngIf="item.firstName && item.lastName">{{item.firstName + ' ' +  item.lastName}}
+                                </span>
+                                <{{ item.email}}>
                             </mat-option>
                         </mat-autocomplete>
                         <mat-icon matSuffix class="secondary-text">person</mat-icon>

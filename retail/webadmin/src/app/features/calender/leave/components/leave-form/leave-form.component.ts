@@ -1,3 +1,5 @@
+import { snakeToCamelArray } from "@shared/helpers/global.helper";
+import { REGEX } from "@config/index";
 import {
     Component,
     EventEmitter,
@@ -16,11 +18,12 @@ import { BaseComponent } from "@shared/components/base/base.component";
 import { DATE_FORMAT, MODULES } from "@shared/constants/app.constants";
 import {
     camelToSnakeCase,
-    cloneDeep,
-    getName,
+    regexValidator,
 } from "@shared/helpers/global.helper";
 import * as moment from "moment";
-import { takeUntil, filter } from "rxjs/operators";
+import { debounceTime, distinctUntilChanged, map, skip } from "rxjs/operators";
+import * as QueryString from "query-string";
+import { CalendarService } from "@feature/calender/services/calendar.service";
 
 @Component({
     selector: "app-leave-form",
@@ -41,7 +44,8 @@ export class LeaveFormComponent
     constructor(
         public matDialogRef: MatDialogRef<LeaveFormComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
-        injector: Injector
+        injector: Injector,
+        private _service: CalendarService
     ) {
         super(injector, MODULES.LEAVES);
         super.ngOnInit();
@@ -87,24 +91,28 @@ export class LeaveFormComponent
                 .get("userId")
                 .setValue(this._authUserService.User.id);
         }
-        this.leaveForm.get("userId").valueChanges.subscribe((value) => {
-            const filterValue = value?.toLowerCase();
-            this.filteredUser = this.users.filter((option) => {
-                return (
-                    option["firstName"]?.toLowerCase().indexOf(filterValue) ===
-                        0 ||
-                    option["lastName"]?.toLowerCase().indexOf(filterValue) ===
-                        0 ||
-                    option["email"]?.toLowerCase().indexOf(filterValue) === 0
-                );
+        this.leaveForm
+            .get("userId")
+            .valueChanges.pipe(
+                debounceTime(400),
+                distinctUntilChanged()
+            )
+            .subscribe((value) => {
+                const filterValue = value?.toLowerCase();
+                this.filteredUser = [];
+                const queryParams = QueryString.stringify({
+                    first_name: filterValue,
+                });
+                this._service.getUsers(queryParams).subscribe((response) => {
+                    this.filteredUser = snakeToCamelArray(response.data);
+                });
             });
-        });
     }
     displayFn = (id: string): string => {
         if (!id) {
             return;
         }
-        const user = this.users.find((item) => item.id === id);
+        const user = this.filteredUser.find((item) => item.id === id);
         return user ? `${user.firstName} ${user.lastName}` : "";
     };
     confirmPasswordValidator(control: FormControl): { [s: string]: boolean } {
@@ -135,6 +143,7 @@ export class LeaveFormComponent
         model = camelToSnakeCase(model);
         this.sendResponse.emit(model);
     }
+
     ngOnDestroy(): void {
         this._unsubscribeAll.next();
         this._unsubscribeAll.complete();

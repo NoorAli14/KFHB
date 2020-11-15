@@ -58,8 +58,7 @@ export class CalendarService {
     getLeaveType(): Observable<any> {
         return this._networkService.getAll(URI.LEAVE_TYPE);
     }
-    getUsers(): Observable<any> {
-        return this._networkService.getAll(URI.USER);
+    getUsers(queryParams?): Observable<any> {
+        return this._networkService.getAll(`${URI.USER}?${queryParams}`);
     }
-   
 }
