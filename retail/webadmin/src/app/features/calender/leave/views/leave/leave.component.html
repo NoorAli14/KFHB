@@ -26,14 +26,14 @@
                 <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
                     <mat-icon>search</mat-icon>
                     <input type="text" placeholder="Search for a user" matInput [formControl]="control" [matAutocomplete]="auto">
-                    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn">
-                        <mat-option>
-                            <a class="select-a" value=""  (click)="onSelectUser()">
+                    <mat-autocomplete (optionSelected)="onSelectUser($event.option.value)" autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn">
+                        <mat-option *ngIf="filteredUser && filteredUser.length>0">
+                            <a class="user" value=""  >
                                 Reset Filter
                             </a>
                         </mat-option>
                         <mat-option *ngFor="let item of filteredUser" [value]="item.id">
-                            <a class="select-a" (click)="onSelectUser(item)"
+                            <a class="user"     
                                 *ngIf="item.firstName && item.lastName">{{item.firstName + ' ' +  item.lastName}}
                             </a>
                             <{{ item.email}}>

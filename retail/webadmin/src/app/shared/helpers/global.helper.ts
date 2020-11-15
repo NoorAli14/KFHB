@@ -1,3 +1,4 @@
+import { ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms';
 import { MESSAGES } from "@shared/constants/messages.constant";
 import { isArray } from "lodash";
 
@@ -88,4 +89,29 @@ const daysOfWeek = [
 ];
 export const sortWeekDays = (a, b) => {
     return daysOfWeek.indexOf(a.weekDay) - daysOfWeek.indexOf(b.weekDay); // basic sort function that compares the indexes of the two days
+};
+
+export const regexValidator = (
+    regex: RegExp,
+    error: ValidationErrors
+): ValidatorFn => {
+    return (control: AbstractControl): { [key: string]: any } => {
+        if (!control.value) {
+            return null;
+        }
+        const valid = regex.test(control.value);
+        return valid ? null : error;
+    };
+};
+
+export const isUUID = (uuid) => {
+    let s: any = "" + uuid;
+
+    s = s.match(
+        "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    );
+    if (s === null) {
+        return false;
+    }
+    return true;
 };
