@@ -127,10 +127,12 @@ export class User {
 
   @Field(() => [Role], { nullable: true })
   @IsOptional()
+  @Type(() => Role)
   roles: Role[];
 
   @Field(() => [Module], { nullable: true })
   @IsOptional()
+  @Type(() => Module)
   modules: Module[];
 
   @Field({ nullable: true })
@@ -155,14 +157,17 @@ export class User {
 
   @Field(() => [Leave], { nullable: true })
   @IsOptional()
+  @Type(() => Leave)
   leaves: Leave[];
 }
 
 @ObjectType()
 export class UsersWithPagination {
   @Field({ nullable: true })
+  @Type(() => ENT_PaginationModel)
   pagination: ENT_PaginationModel;
 
   @Field(() => [User], { nullable: true })
+  @Type(() => User)
   data: User[];
 }
