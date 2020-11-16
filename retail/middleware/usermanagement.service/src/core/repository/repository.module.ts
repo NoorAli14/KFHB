@@ -5,6 +5,7 @@ import { DBConfigurationService } from '@common/configuration/dbconfiguration.se
 import {
   HolidayRepository,
   LeaveRepository,
+  SystemAuditLogRepository,
   UserRepository,
   WorkingDaysRepository,
 } from '@core/repository/';
@@ -22,6 +23,7 @@ const repos: any = [
   HolidayRepository,
   LeaveRepository,
   LeaveTypeRepository,
+  SystemAuditLogRepository,
 ];
 
 @Module({
