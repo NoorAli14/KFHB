@@ -29,7 +29,7 @@ export function graphqlFields(info: Record<string, unknown>): string[] {
 }
 
 export function uuidV4(): string {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
     const r = (Math.random() * 16) | 0,
       v = c == 'x' ? r : (r & 0x3) | 0x8;
     return v.toString(16);
@@ -122,21 +122,23 @@ export const DATABASE_UUID_METHOD = (knex): any => {
   }
 };
 /**
-* @param path
+ *
+ * @param path
  * Helper function to create directory if not exist
-   * /
+ *
+ **/
 export const createDirIfNotExist = (path: string): void => {
- if (!fs.existsSync(path)) {
-   fs.mkdirSync(path);
- }
+  if (!fs.existsSync(path)) {
+    fs.mkdirSync(path);
+  }
 };
 
 /**
-*
-* @param path
-* @param content
-* helper function to create file inside the folder directory
-*/
+ *
+ * @param path
+ * @param content
+ * helper function to create file inside the folder directory
+ */
 export const writeFileSync = (path: string, content: Buffer): void => {
   fs.writeFileSync(path, content, 'utf8');
 };

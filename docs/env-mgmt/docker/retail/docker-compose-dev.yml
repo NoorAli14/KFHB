@@ -299,6 +299,23 @@ services:
     networks:
       - core_service_network
 
+  #=================================================================
+  # AML Integration Layer
+  #=================================================================
+  rubix-rubixintegrationlayerkfhb:
+    image: testdaon.azurecr.io/rubixintegrationlayerkfhb:develop_latest
+    container_name: rubix_rubixintegrationlayerkfhb
+    environment:
+      - ENV_RBX_TZ=$ENV_RBX_TZ
+      - ENV_RBX_IS_MOCK=true
+      - ENV_RBX_CORE_BANKING_USER_NAME=$ENV_RBX_CORE_BANKING_USER_NAME
+      - ENV_RBX_CORE_BANKING_PASSWORD=$ENV_RBX_CORE_BANKING_PASSWORD
+      - ENV_RBX_CORE_BANKING_BASE_URL=$ENV_RBX_CORE_BANKING_BASE_URL
+
+    restart: always
+    networks:
+      - core_service_network
+
 networks:
   core_service_network:
     driver: bridge

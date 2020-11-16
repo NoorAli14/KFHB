@@ -2,9 +2,9 @@ import * as Knex from 'knex';
 import { TABLE, MODULES, TEMP_ROLE, STATUS } from '@common/constants';
 import { uuidV4 } from '@rubix/common';
 
-let modules = [];
-let permissions = [];
-let modulePermissions = [];
+const modules = [];
+const permissions = [];
+const modulePermissions = [];
 
 export async function seed(knex: Knex): Promise<any> {
   return processSeed(knex, false);
