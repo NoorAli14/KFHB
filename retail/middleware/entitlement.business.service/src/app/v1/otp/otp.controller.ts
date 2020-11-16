@@ -30,7 +30,7 @@ import { VerifyOTPDto } from './otp.dto';
 export class OtpController {
   constructor(private readonly otpService: OtpService) {}
 
-  @Post('/otp/send')
+  @Post('/send')
   @ApiOperation({
     summary: 'Send otp',
     description:
@@ -45,11 +45,11 @@ export class OtpController {
     description: 'Input Validation failed.',
   })
   @HttpCode(HttpStatus.OK)
-  async send_sms_otp(@CurrentUser() currentUser: User): Promise<SuccessDto> {
+  async send_otp(@CurrentUser() currentUser: User): Promise<SuccessDto> {
     return this.otpService.send(currentUser, DELIVERY_MODES.BOTH);
   }
 
-  @Post('/otp/verify')
+  @Post('/verify')
   @ApiOperation({
     summary: 'Verify otp',
     description:
