@@ -86,6 +86,10 @@ export class RoleFormComponent extends BaseComponent implements OnDestroy, OnIni
                 permissions = permissions.concat(data);
             }
         });
+        if(permissions.filter(x=>!x._deleted).length<1){
+            this._notifier.warning('Must select atleast one module to continue.');
+            return;
+        }
         model.permissions = permissions;
         this.sendResponse.emit(model);
     }
