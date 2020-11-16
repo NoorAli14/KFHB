@@ -43,11 +43,6 @@ export const GENDER = {
   F: 'F',
 };
 
-export const PAGINATION_PARAMS = {
-  PAGE: 'page',
-  PER_PAGE: 'perPage',
-};
-
 export const TEMP_ROLE = {
   ADMIN: 'ADMIN',
   AGENT: 'AGENT',
@@ -238,6 +233,35 @@ export const MESSAGES = {
   ROLE_EXISTS: 'Role with this name already exists',
   WEEK_DAY_EXISTS: 'Week day already exists',
   PASSWORD_MISMATCH: 'Current password did not match',
+};
+
+export const SYSTEM_AUDIT_CODES = {
+  USER_LOGIN: 'USER_LOGIN',
+  PASSWORD_RESET: 'PASSWORD_RESET',
+  USER_CREATED: 'USER_CREATED',
+  USER_MODIFIED: 'USER_MODIFIED',
+  USER_LOGOUT: 'USER_LOGOUT', // not used yet
+  INVALID_PASSWORD: 'INVALID_PASSWORD', // not used yet
+  PASSWORD_CHANGE: 'PASSWORD_CHANGE', // newly added
+};
+
+export const SYSTEM_AUDIT_LOG_STRINGS = {
+  LOGIN_SUCCESS: 'Logged in Successfully',
+  LOGIN_FAILED: 'Login attempt failed',
+  USER_LOGOUT: 'Logged out successfully',
+  PASSWORD_RESET_SUCCESS: 'Password reset successfully',
+  PASSWORD_RESET_FAILED_WRONG_TOKEN: 'Password reset failed due to wrong token',
+  PASSWORD_RESET_FAILED_TIMED_OUT_TOKEN:
+    'Password reset failed due to timed-out token',
+  PASSWORD_RESET_REQUEST_SUCCESS:
+    'Successfully made request for password reset',
+  PASSWORD_RESET_REQUEST_FAILED: 'Password reset request failed',
+  INVITATION_TOKEN_RESET: 'Invitation token reset',
+  PASSWORD_CHANGE_FAILED:
+    'Password change failed due to wrong current password',
+  PASSWORD_CHANGE_SUCCESS: 'Password changed successfully',
+  USER_CREATED: 'User created successfully',
+  USER_MODIFIED: 'User modified successfully',
 };
 
 export const DATABASE_MIGRATION_TABLE_NAME = 'RUBIX_ENTITLEMENT_MIGRATIONS';

@@ -2,7 +2,13 @@ import { Injectable } from '@nestjs/common';
 
 import { UserRepository } from '@core/repository/';
 import { Encrypter } from '@common/encrypter';
-import { NUMBERS, STATUS, TABLE } from '@common/constants';
+import {
+  NUMBERS,
+  STATUS,
+  SYSTEM_AUDIT_CODES,
+  SYSTEM_AUDIT_LOG_STRINGS,
+  TABLE,
+} from '@common/constants';
 import { KeyValInput } from '@common/inputs/key-val.input';
 import {
   addMinutes,
@@ -21,6 +27,7 @@ import { UpdatePasswordInput } from './user.dto';
 import { PaginationParams, SortingParam } from '@common/dtos';
 import { UsersFilterParams } from '@app/v1/users/dtos';
 import { CreatedOnStartShouldBeLessThanEndException } from '@common/exceptions';
+import { SystemAuditLogService } from '@app/v1/system-audit-log/system-audit-log.service';
 
 @Injectable()
 export class UserService {
@@ -31,6 +38,7 @@ export class UserService {
     private holidaysService: HolidaysService,
     private leavesService: LeavesService,
     private workingDaysService: WorkingDaysService,
+    private systemAuditLogService: SystemAuditLogService,
   ) {}
 
   async list(
@@ -86,7 +94,13 @@ export class UserService {
         this.configService.APP.INVITATION_TOKEN_EXPIRY,
       ),
     };
-    return this.update(currentUser, id, input, output);
+    return this.update(
+      currentUser,
+      id,
+      input,
+      output,
+      SYSTEM_AUDIT_LOG_STRINGS.INVITATION_TOKEN_RESET,
+    );
   }
 
   async findByProperty(
@@ -108,7 +122,8 @@ export class UserService {
     currentUser: ICurrentUser,
     id: string,
     userObj: Record<string, any>,
-    output?: string[],
+    output: string[],
+    eventString?: string,
   ): Promise<User> {
     if (userObj.password) {
       userObj.password_digest = this.encrypter.encryptPassword(
@@ -128,6 +143,11 @@ export class UserService {
     if (currentUser.entity_id)
       whereCondition['entity_id'] = currentUser.entity_id;
     const [result] = await this.userDB.update(whereCondition, userObj, output);
+    await this.systemAuditLogService.create(currentUser.tenant_id, {
+      audit_code: SYSTEM_AUDIT_CODES.USER_MODIFIED,
+      audit_text: eventString || SYSTEM_AUDIT_LOG_STRINGS.USER_MODIFIED,
+      user_id: id,
+    });
     return result;
   }
 
@@ -157,6 +177,11 @@ export class UserService {
     };
     if (currentUser.entity_id) newUser['entity_id'] = currentUser.entity_id;
     const [result] = await this.userDB.create(newUser, output);
+    await this.systemAuditLogService.create(currentUser.tenant_id, {
+      audit_code: SYSTEM_AUDIT_CODES.USER_CREATED,
+      audit_text: SYSTEM_AUDIT_LOG_STRINGS.USER_CREATED,
+      user_id: result.id,
+    });
     return result;
   }
 
@@ -182,11 +207,21 @@ export class UserService {
         user.password_digest,
       )
     ) {
+      await this.systemAuditLogService.create(currentUser.tenant_id, {
+        audit_code: SYSTEM_AUDIT_CODES.PASSWORD_CHANGE,
+        audit_text: SYSTEM_AUDIT_LOG_STRINGS.PASSWORD_CHANGE_FAILED,
+        user_id: user.id,
+      });
       throw new PasswordMismatchException(user.id);
     }
     const userObj = {
       password_digest: this.encrypter.encryptPassword(input.new_password),
     };
+    await this.systemAuditLogService.create(currentUser.tenant_id, {
+      audit_code: SYSTEM_AUDIT_CODES.PASSWORD_CHANGE,
+      audit_text: SYSTEM_AUDIT_LOG_STRINGS.PASSWORD_CHANGE_SUCCESS,
+      user_id: user.id,
+    });
     return this.update(currentUser, user.id, userObj, output);
   }
 
