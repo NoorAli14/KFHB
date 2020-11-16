@@ -44,7 +44,7 @@ export class RoleFormComponent extends BaseComponent implements OnDestroy, OnIni
      
         this.roleForm = new FormGroup({
             id: new FormControl(this.data.role.id),
-            name: new FormControl(this.data.role.name, [Validators.required]),
+            name: new FormControl(this.data.role.name, [Validators.required, Validators.minLength(3), Validators.maxLength(96)]),
             description: new FormControl(this.data.role.description, [
                 Validators.required,
             ]),

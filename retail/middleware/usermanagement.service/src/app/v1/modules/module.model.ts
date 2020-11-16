@@ -3,6 +3,7 @@ import { Permission } from '@app/v1/permissions/permission.model';
 import { ENT_PaginationModel } from '@common/models';
 import { IsIn, IsOptional, IsString, IsUUID, MaxLength } from 'class-validator';
 import { NUMBERS, STATUS } from '@common/constants';
+import { Type } from 'class-transformer';
 
 @ObjectType()
 export class Module {
@@ -45,18 +46,22 @@ export class Module {
 
   @Field(() => [Module], { nullable: true })
   @IsOptional()
+  @Type(() => Module)
   sub_modules?: Module[];
 
   @Field(() => [Permission], { nullable: true })
   @IsOptional()
+  @Type(() => Permission)
   permissions?: Permission[];
 }
 
 @ObjectType()
 export class ModuleWithPagination {
   @Field({ nullable: true })
+  @Type(() => ENT_PaginationModel)
   pagination?: ENT_PaginationModel;
 
   @Field(() => [Module], { nullable: true })
+  @Type(() => Module)
   data?: Module[];
 }

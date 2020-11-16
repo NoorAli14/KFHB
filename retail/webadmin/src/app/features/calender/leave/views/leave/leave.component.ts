@@ -1,3 +1,4 @@
+import { isUUID } from "@shared/helpers/global.helper";
 import { Leave } from "./../../../models/leave.model";
 import {
     Component,
@@ -31,7 +32,7 @@ import { fuseAnimations } from "@fuse/animations";
 import { MODULES } from "@shared/constants/app.constants";
 import { Pagination } from "@shared/models/pagination.model";
 import { FormControl } from "@angular/forms";
-import { skip, map, debounceTime, distinctUntilChanged } from "rxjs/operators";
+import {  debounceTime, distinctUntilChanged } from "rxjs/operators";
 import * as QueryString from "query-string";
 
 @Component({
@@ -105,10 +106,8 @@ export class LeaveComponent extends BaseComponent implements OnInit {
             (response) => {
                 this.leaves = snakeToCamelArray(response[0].data);
                 this.pagination = response[0].pagination;
-
                 this.leaveTypes = snakeToCamelArray(response[1]);
                 this.users = snakeToCamelArray(response[2].data);
-                this.filteredUser = [...this.users];
                 this.dataSource = new MatTableDataSource(
                     snakeToCamelArray(this.leaves)
                 );
@@ -214,32 +213,31 @@ export class LeaveComponent extends BaseComponent implements OnInit {
     updateGrid(data): void {
         this.dataSource.data = data;
     }
-    onSelectUser(user?) {
-        if (user) {
-            this.getData({ user_id: user.id });
-            return;
-        }
-        this.getData({});
+    onSelectUser(id?) {
+        if (id) {
+            this.getData({ user_id: id });
+        } else this.getData({});
     }
     initSearch(): void {
-        this.control.valueChanges.subscribe((value) => {
-            const filterValue = value?.toLowerCase();
-            this.filteredUser = this.users.filter((option) => {
-                return (
-                    option["firstName"]?.toLowerCase().indexOf(filterValue) ===
-                        0 ||
-                    option["lastName"]?.toLowerCase().indexOf(filterValue) ===
-                        0 ||
-                    option["email"]?.toLowerCase().indexOf(filterValue) === 0
-                );
+        this.control.valueChanges
+            .pipe(debounceTime(400), distinctUntilChanged())
+            .subscribe((value) => {
+                const filterValue = value?.toLowerCase();
+                if (isUUID(filterValue)) return;
+                this.filteredUser = [];
+                const queryParams = QueryString.stringify({
+                    first_name: filterValue,
+                });
+                this._service.getUsers(queryParams).subscribe((response) => {
+                    this.filteredUser = snakeToCamelArray(response.data);
+                });
             });
-        });
     }
     displayFn = (id: string): string => {
         if (!id) {
             return;
         }
-        const user = this.users.find((item) => item.id === id);
+        const user = this.filteredUser.find((item) => item.id === id);
         return user ? `${user.firstName} ${user.lastName}` : "";
     };
     ngAfterViewInit(): void {

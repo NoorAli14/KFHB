@@ -2,6 +2,7 @@ import * as path from 'path';
 import * as Crypto from 'crypto';
 import { DATE_FORMAT, HEADER_NAMES } from '@common/constants';
 import * as moment from 'moment';
+import * as Knex from 'knex';
 import { NotImplementedException } from '@nestjs/common';
 import * as Knex from 'knex';
 

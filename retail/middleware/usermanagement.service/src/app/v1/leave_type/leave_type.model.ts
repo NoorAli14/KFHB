@@ -57,8 +57,10 @@ export class LeaveType {
 @ObjectType()
 export class LeaveTypeWithPagination {
   @Field({ nullable: true })
+  @Type(() => ENT_PaginationModel)
   pagination: ENT_PaginationModel;
 
   @Field(() => [LeaveType], { nullable: true })
+  @Type(() => LeaveType)
   data: LeaveType[];
 }
