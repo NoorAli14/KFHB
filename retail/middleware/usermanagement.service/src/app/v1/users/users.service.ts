@@ -20,12 +20,12 @@ import { HolidaysService } from '@app/v1/holiday/holidays.service';
 import { LeavesService } from '@app/v1/leave/leaves.service';
 import { WorkingDaysService } from '@app/v1/working-days/working-days.service';
 import { ICurrentUser } from '@common/interfaces';
-import { CheckAvailabilityInput } from '@app/v1/users/user.dto';
-import { User, UsersWithPagination } from '@app/v1/users/user.model';
+import { CheckAvailabilityInput } from './user.dto';
+import { User, UsersWithPagination } from './user.model';
 import { PasswordMismatchException } from './exceptions/password-mismatch.exception';
 import { UpdatePasswordInput } from './user.dto';
 import { PaginationParams, SortingParam } from '@common/dtos';
-import { UsersFilterParams } from '@app/v1/users/dtos';
+import { UsersFilterParams } from './dtos';
 import { CreatedOnStartShouldBeLessThanEndException } from '@common/exceptions';
 import { SystemAuditLogService } from '@app/v1/system-audit-log/system-audit-log.service';
 

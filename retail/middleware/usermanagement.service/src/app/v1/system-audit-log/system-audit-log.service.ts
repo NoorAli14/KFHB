@@ -3,13 +3,12 @@ import { Injectable } from '@nestjs/common';
 import { ICurrentUser } from '@common/interfaces';
 import { PaginationParams, SortingParam } from '@common/dtos';
 import { CreatedOnStartShouldBeLessThanEndException } from '@common/exceptions';
-import { SALFilterParams } from '@app/v1/system-audit-log/dtos';
+import { SALFilterParams } from './dtos';
 import {
   SALWithPagination,
   SystemAuditLog,
 } from '@app/v1/system-audit-log/system-audit-log.model';
 import { SystemAuditLogRepository } from '@core/repository/';
-import { TEMP_ROLE } from '@rubix/common';
 import { SystemAuditLogInput } from '@app/v1/system-audit-log/system-audit-log.dto';
 
 @Injectable()

@@ -3,12 +3,9 @@ import { Resolver, Query, Args } from '@nestjs/graphql';
 import { CurrentUser, Fields } from '@common/decorators';
 import { ICurrentUser } from '@common/interfaces';
 import { PaginationParams, SortingParam } from '@common/dtos';
-import {
-  SALWithPagination,
-  SystemAuditLog,
-} from '@app/v1/system-audit-log/system-audit-log.model';
-import { SALFilterParams } from '@app/v1/system-audit-log/dtos';
-import { SystemAuditLogService } from '@app/v1/system-audit-log/system-audit-log.service';
+import { SALWithPagination, SystemAuditLog } from './system-audit-log.model';
+import { SALFilterParams } from './dtos';
+import { SystemAuditLogService } from './system-audit-log.service';
 
 @Resolver(SystemAuditLog)
 export class SystemAuditLogResolver {

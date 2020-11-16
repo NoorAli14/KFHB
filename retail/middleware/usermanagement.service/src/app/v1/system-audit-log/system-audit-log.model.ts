@@ -23,7 +23,7 @@ export class SystemAuditLog {
 
   @Field()
   @IsString()
-  @IsIn(Object.keys(SYSTEM_AUDIT_CODES))
+  @IsIn(Object.values(SYSTEM_AUDIT_CODES))
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   audit_code: string;
 
