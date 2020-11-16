@@ -15,28 +15,14 @@ services:
   retail-gateway:
     image: rubixgateway:dev
     container_name: retail_gateway
-    environment:
-      - ENV_RBX_NGINX_SERVER_NAME=$ENV_RBX_NGINX_SERVER_NAME
-      - ENV_RBX_PORTAL_HOST=$ENV_RBX_PORTAL_HOST
-      - ENV_RBX_PORTAL_PORT=$ENV_RBX_PORTAL_PORT
-      - ENV_RBX_ENTITLEMENT_HOST=$ENV_RBX_ENTITLEMENT_HOST
-      - ENV_RBX_ENTITLEMENT_PORT=$ENV_RBX_ENTITLEMENT_PORT
-      - ENV_RBX_ONBOARDING_HOST=$ENV_RBX_ONBOARDING_HOST
-      - ENV_RBX_ONBOARDING_PORT=$ENV_RBX_ONBOARDING_PORT
-      - ENV_RBX_REFERENCE_HOST=$ENV_RBX_REFERENCE_HOST
-      - ENV_RBX_REFERENCE_PORT=$ENV_RBX_REFERENCE_PORT
-      - ENV_RBX_NGINX_MAX_BODY=$ENV_RBX_NGINX_MAX_BODY
-    volumes: 
-      - type: bind
-        source: ${ENV_RBX_VOLUME_PATH}/gateway.service/config/
-        target: /etc/nginx/conf.d/
+    volumes:
+      - ${ENV_RBX_VOLUME_PATH}/gateway.service/certs:/home/aiondigital/rubix/certs/
+      - ${ENV_RBX_VOLUME_PATH}/gateway.service/domain.conf:/home/aiondigital/rubix/nginx/domain.conf
     networks:
       - core_service_network
     ports:
-      - 80:80
-      - 8080:8080
-      - 8443:8443
-      - 443:8444
+      - 80:8080
+      - 443:8443
   #=================================================================
   # Admin Web Portal Service
   #=================================================================
