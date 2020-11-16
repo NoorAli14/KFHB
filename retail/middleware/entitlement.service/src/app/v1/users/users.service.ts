@@ -31,7 +31,7 @@ export class UserService {
     private holidaysService: HolidaysService,
     private leavesService: LeavesService,
     private workingDaysService: WorkingDaysService,
-  ) {}
+  ) { }
 
   async list(
     current_user: ICurrentUser,
@@ -43,7 +43,7 @@ export class UserService {
     if (
       filteringParams?.created_on &&
       new Date(filteringParams?.created_on.start).getTime() >
-        new Date(filteringParams?.created_on.end).getTime()
+      new Date(filteringParams?.created_on.end).getTime()
     ) {
       throw new CreatedOnStartShouldBeLessThanEndException(
         filteringParams?.created_on.start,
@@ -66,7 +66,7 @@ export class UserService {
     id: string,
     output?: string[],
   ): Promise<User> {
-    const condition = { deleted_on: null, tenant_id: currentUser.tenant_id };
+    const condition = { id, deleted_on: null, tenant_id: currentUser.tenant_id };
     if (currentUser.entity_id) condition['entity_id'] = currentUser.entity_id;
     return this.userDB.findOne(condition, output);
   }
