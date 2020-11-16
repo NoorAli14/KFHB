@@ -115,10 +115,7 @@ export class InvitationComponent extends BaseComponent implements OnInit {
                         this.router.navigateByUrl('/auth/login');
                     }, 1000);
                 },
-                (error) => {
-                    this.errorType = 'error';
-                    this.responseMessage = MESSAGES.UNKNOWN;
-                }
+                (response)=>super.onError(response)
             );
     }
     getUserByToken = (token): void => {
@@ -132,11 +129,6 @@ export class InvitationComponent extends BaseComponent implements OnInit {
                     this.nationalityList = response[1];
                     this.filteredNationalities = response[1];
                 },
-                (response) => {
-                    this.errorType = 'error';
-                    const message = extractErrorString(response);
-                    this.responseMessage=MESSAGES.CUSTOM(message);
-                }
-            );
+                (response)=>super.onError(response))
     }
 }

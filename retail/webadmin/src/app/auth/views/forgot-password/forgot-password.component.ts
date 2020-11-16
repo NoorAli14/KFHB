@@ -57,11 +57,6 @@ export class ForgotPasswordComponent extends BaseComponent implements OnInit {
                     this.errorType = "success";
                     this.responseMessage = MESSAGES.PASSWORD_RESET_SENT();
                 },
-                (response) => {
-                    this.errorType = 'error';
-                    const message = extractErrorString(response);
-                    this.responseMessage=MESSAGES.CUSTOM(message);
-                }
-            );
+                (response)=>super.onError(response))
     };
 }

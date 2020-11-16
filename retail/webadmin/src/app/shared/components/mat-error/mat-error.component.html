@@ -6,11 +6,11 @@
         >Email is invalid!</ng-container
     >
     <ng-container *ngIf="control.errors.maxlength"
-        >Field required Length:
+        >Max field required length:
         {{ control.errors.maxlength.requiredLength }}</ng-container
     >
     <ng-container *ngIf="control.errors.minlength"
-        >Field required Length:
+        >Min field required length:
         {{ control.errors.minlength.requiredLength }}</ng-container
     >
     <ng-container *ngIf="control.errors.passwordNotMatch"
@@ -27,6 +27,10 @@
     >
     <ng-container *ngIf="control.errors.compareDate"
         >End date must be greater than start date.
+        </ng-container
+    >
+    <ng-container *ngIf="control.hasError('uuid')"
+        >This user does not exist
         </ng-container
     >
 </ng-container>
