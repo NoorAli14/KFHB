@@ -7,24 +7,44 @@ export const X_TENANT_ID = 'x-tenant-id';
 export const X_ENTITY_ID = 'x-entity-id';
 export const MODULE_STATUSES = ['ACTIVE', 'INACTIVE'];
 export const ROLE_STATUSES = ['ACTIVE', 'INACTIVE'];
+
 export const USER_STATUSES = {
   PENDING: 'PENDING',
   ACTIVE: 'ACTIVE',
   INACTIVE: 'INACTIVE',
 };
+
 export const STATUSES = {
   PENDING: 'PENDING',
   ACTIVE: 'ACTIVE',
   INACTIVE: 'INACTIVE',
 };
+
+export const SEND_STATUSES: { [key: string]: string } = {
+  SUCCESS: 'SUCCESS',
+  FAILED: 'FAILED',
+};
+
+export const OTP_STATUSES: { [key: string]: string } = {
+  PENDING: 'PENDING',
+  VERIFIED: 'OTP_VERIFIED',
+  NOT_VERIFIED: 'NOT_VERIFIED',
+};
+
 export const PAGINATION_OUTPUT = ` {
   total
   pages
   pageSize
   page
 }`;
-export const CONTEXT_NAMESPACE_ID =
-  'a6a29a6f-6747-4b5f-b99f-07ee96e32f00';
+
+export const DELIVERY_MODES: { [key: string]: string } = {
+  EMAIL: 'email',
+  MOBILE: 'mobile',
+  BOTH: 'both',
+};
+
+export const CONTEXT_NAMESPACE_ID = 'a6a29a6f-6747-4b5f-b99f-07ee96e32f00';
 export const GENDER = ['M', 'F'];
 export const PASSWORD_REGEX = /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;
 export const NUMBERS = {
