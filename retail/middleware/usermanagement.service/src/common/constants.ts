@@ -54,6 +54,24 @@ export const TEMP_ROLE = {
   SUPER_ADMIN: 'SUPER ADMIN',
 };
 
+export const PERMISSIONS = [
+  {
+    name: 'view',
+  },
+  {
+    name: 'edit',
+  },
+  {
+    name: 'delete',
+  },
+  {
+    name: 'create',
+  },
+  {
+    name: 'attend',
+  },
+]
+
 export const MODULES = [
   {
     name: 'Entitlement',
