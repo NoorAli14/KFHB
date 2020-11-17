@@ -69,8 +69,10 @@ export class Holiday {
 @ObjectType()
 export class HolidaysWithPagination {
   @Field({ nullable: true })
+  @Type(() => ENT_PaginationModel)
   pagination: ENT_PaginationModel;
 
   @Field(() => [Holiday], { nullable: true })
+  @Type(() => Holiday)
   data: Holiday[];
 }
