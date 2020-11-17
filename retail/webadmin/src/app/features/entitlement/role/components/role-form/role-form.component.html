@@ -11,7 +11,7 @@
                     settings_applications
                 </mat-icon>
                 <span class="logo-text" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
-                    Roles
+                  {{data.role.id ? 'Edit' : 'New'}}  Role
                 </span>
             </div>
             <button
@@ -36,7 +36,6 @@
         novalidate
         [formGroup]="roleForm"
     >
-    <app-message-box [type]="errorType" [message]="responseMessage"></app-message-box>
         <br>
         <div
             fxLayout="row wrap"

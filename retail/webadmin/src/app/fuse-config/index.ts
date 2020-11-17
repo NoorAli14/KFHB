@@ -23,20 +23,20 @@ export const fuseConfig: FuseConfig = {
             position: 'left',
             variant: 'vertical-style-1'
         },
-        toolbar: {
+        toolbar  : {
             customBackgroundColor: false,
-            background: 'fuse-white-500',
-            hidden: false,
-            position: 'below-static'
+            background           : 'fuse-white-500',
+            hidden               : false,
+            position             : 'below-static'
         },
-        footer: {
+        footer   : {
             customBackgroundColor: true,
-            background: 'fuse-navy-90',
-            hidden: false,
-            position: 'below-fixed'
+            background           : 'fuse-navy-900',
+            hidden               : false,
+            position             : 'below-fixed'
         },
         sidepanel: {
-            hidden: false,
+            hidden  : false,
             position: 'right'
         }
     }

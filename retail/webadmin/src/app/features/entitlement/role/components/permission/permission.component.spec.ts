@@ -19,7 +19,5 @@ describe('PermissionComponent', () => {
     fixture.detectChanges();
   });
 
-  // it('should create', () => {
-  //   expect(component).toBeTruthy();
-  // });
+
 });

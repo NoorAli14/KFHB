@@ -14,6 +14,7 @@ import { User } from '@feature/entitlement/models/user.model';
 import { UpdateProfileComponent } from './update-profile.component';
 import { of } from 'rxjs';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { NotifierService } from '@shared/services/notifier/notifier.service';
 
 describe('UpdateProfileComponent', async () => {
     let component: UpdateProfileComponent;
@@ -22,10 +23,12 @@ describe('UpdateProfileComponent', async () => {
     let helper: DOMHelper<UpdateProfileComponent>;
     let model;
     let matDialogRefMock: any;
+    let notifierServiceMock: any;
     beforeEach(async(() => {
         injectorMock = jasmine.createSpyObj('Injector', ['get']);
         matDialogRefMock = jasmine.createSpyObj('MatDialogRef', ['close']);
-      
+        notifierServiceMock = jasmine.createSpyObj('NotifierService', ['success', 'error']);
+
         TestBed.configureTestingModule({
             declarations: [UpdateProfileComponent],
             imports: [
@@ -48,6 +51,10 @@ describe('UpdateProfileComponent', async () => {
                         user: new User(),
                         roles: [],
                     },
+                },
+                {
+                    provide: NotifierService,
+                    useValue: notifierServiceMock,
                 },
                 {
                     provide: Injector,

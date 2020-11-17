@@ -1,3 +1,4 @@
+import { extractErrorString } from './../../../shared/helpers/global.helper';
 import { Component, OnDestroy, OnInit, ViewEncapsulation, Injector } from '@angular/core';
 import {
     FormBuilder,
@@ -85,7 +86,7 @@ export class ResetPasswordComponent extends BaseComponent implements OnInit {
         this._authService.resetPassword(model, this.token).pipe(takeUntil(this._unsubscribeAll)).subscribe(
             (response) => {
                  this.errorType = 'success';
-                 this.responseMessage = MESSAGES.PASSWORD_UPDATED();
+                 this.responseMessage = MESSAGES.PASSWORD_UPDATED;
             },
            (response => super.onError(response))
         );
@@ -95,9 +96,10 @@ export class ResetPasswordComponent extends BaseComponent implements OnInit {
             (response) => {
 
             },
-            (error) => {
-                 this.errorType = 'error';
-                 this.responseMessage = MESSAGES.INVALID_RESET_TOKEN();
+            (response) => {
+                this.errorType = 'error';
+                const message = extractErrorString(response);
+                this.responseMessage=MESSAGES.CUSTOM(message);
             }
         );
     }
