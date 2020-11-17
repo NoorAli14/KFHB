@@ -67,6 +67,7 @@ export const CUSTOMER_STATUSES: { [key: string]: string } = {
 export const DOCUMENT_STATUSES: { [key: string]: string } = {
   PENDING: 'PENDING',
   PROCESSING: 'PROCESSING',
+  QUEUED: 'PROCESSING',
   PROCESSED: 'PROCESSED',
   FAILED: 'FAILED',
   ARCHIVED: 'ARCHIVED',
