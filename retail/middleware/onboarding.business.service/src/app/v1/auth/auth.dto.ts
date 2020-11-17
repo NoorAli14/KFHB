@@ -1,6 +1,6 @@
-import { IsString, Length, IsEmail, IsOptional, IsNotEmpty, MaxLength } from 'class-validator';
+import { IsString, IsEmail, IsOptional, IsNotEmpty, MaxLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { DEVICES } from '@common/constants';
+import {DEVICES, NUMBERS} from '@common/constants';
 
 export class RegisterCustomerDto {
   @ApiProperty({
@@ -10,7 +10,7 @@ export class RegisterCustomerDto {
     required: false,
   })
   @IsOptional()
-  @MaxLength(255)
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   first_name: string;
 
   @ApiProperty({
@@ -19,7 +19,7 @@ export class RegisterCustomerDto {
     required: false,
   })
   @IsOptional()
-  @MaxLength(255)
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   middle_name: string;
 
   @ApiProperty({
@@ -29,7 +29,7 @@ export class RegisterCustomerDto {
     required: false,
   })
   @IsOptional()
-  @MaxLength(255)
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   last_name: string;
 
   @ApiProperty({
@@ -37,12 +37,7 @@ export class RegisterCustomerDto {
     example: 'faizan@aiondigital.com',
     description: 'Customer email address.',
   })
-  @Length(3, 96, {
-    message: 'Email must be between 3 to 30 characters',
-    context: {
-      developerNote: 'The validated string must contain 32 or more characters.',
-    },
-  })
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsEmail()
   email: string;
 
@@ -52,7 +47,7 @@ export class RegisterCustomerDto {
     required: false,
   })
   @IsOptional()
-  @MaxLength(20)
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   contact_no: string;
 
   @ApiProperty({
@@ -62,7 +57,7 @@ export class RegisterCustomerDto {
   })
   @IsNotEmpty()
   @IsString()
-  @MaxLength(255)
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   device_id: string;
 
   @ApiProperty({
@@ -73,7 +68,7 @@ export class RegisterCustomerDto {
   })
   @IsString()
   @IsNotEmpty()
-  @MaxLength(10)
+  @MaxLength(NUMBERS.PLATEFORM_LENGTH)
   platform: string;
 
   @ApiProperty({
@@ -83,6 +78,6 @@ export class RegisterCustomerDto {
   })
   @IsNotEmpty()
   @IsString()
-  @MaxLength(255)
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   fcm_token_id: string;
 }

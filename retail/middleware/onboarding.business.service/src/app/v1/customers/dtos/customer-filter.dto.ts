@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { GENDER, USER_STATUSES } from '@root/src/common';
 import { IsIn, IsISO8601, IsOptional, IsString, MaxLength } from 'class-validator';
+import { GENDER, NUMBERS, USER_STATUSES } from "@common/constants";
 
 export class CustomerFilterDTO {
   @ApiProperty({
@@ -11,7 +11,7 @@ export class CustomerFilterDTO {
   })
   @IsOptional()
   @IsString()
-  @MaxLength(128)
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   first_name: string;
 
   @ApiProperty({
@@ -21,7 +21,7 @@ export class CustomerFilterDTO {
   })
   @IsOptional()
   @IsString()
-  @MaxLength(128)
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   middle_name: string;
 
   @ApiProperty({
@@ -32,7 +32,7 @@ export class CustomerFilterDTO {
   })
   @IsOptional()
   @IsString()
-  @MaxLength(128)
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   last_name: string;
 
   @ApiProperty({
@@ -42,7 +42,6 @@ export class CustomerFilterDTO {
     required: false,
   })
   @IsString()
-  @MaxLength(20)
   @IsOptional()
   @IsISO8601({ strict: true })
   date_of_birth: string;
@@ -55,7 +54,7 @@ export class CustomerFilterDTO {
   })
   @IsOptional()
   @IsString()
-  @MaxLength(128)
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   email: string;
 
   @ApiProperty({
@@ -75,6 +74,7 @@ export class CustomerFilterDTO {
   })
   @IsOptional()
   @IsString()
+  @IsIn(GENDER)
   gender: string;
 
   @ApiProperty({
@@ -85,7 +85,7 @@ export class CustomerFilterDTO {
   })
   @IsString()
   @IsOptional()
-  @MaxLength(20)
+  @MaxLength(NUMBERS.NATIONALITY_ID_LENGTH)
   national_id_no: string;
 
   @ApiProperty({
@@ -95,7 +95,6 @@ export class CustomerFilterDTO {
     required: false,
   })
   @IsString()
-  @MaxLength(20)
   @IsOptional()
   @IsISO8601({ strict: true })
   national_id_expiry: string;
@@ -107,6 +106,7 @@ export class CustomerFilterDTO {
     required: false,
   })
   @IsOptional()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsString()
   nationality: string;
 
@@ -118,6 +118,7 @@ export class CustomerFilterDTO {
   })
   @IsOptional()
   @IsString()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   nationality_code: string;
 
   @ApiProperty({
@@ -127,6 +128,7 @@ export class CustomerFilterDTO {
   })
   @IsOptional()
   @IsString()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   last_step: string;
 
   @ApiProperty({

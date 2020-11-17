@@ -2,9 +2,9 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   IsString,
   IsOptional,
-  Length,
+  MaxLength,
 } from 'class-validator';
-import {MODULE_STATUSES} from '@common/constants';
+import {MODULE_STATUSES, NUMBERS} from '@common/constants';
 import {Permission} from '@app/v1/permissions/permission.entity';
 
 export class Module {
@@ -20,9 +20,7 @@ export class Module {
     description: 'Name of the module',
     required: true
   })
-  @Length(3, 30, {
-    message: "Name must be between 3 to 96 characters"
-  })
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   name: string;
 
   @ApiProperty({
