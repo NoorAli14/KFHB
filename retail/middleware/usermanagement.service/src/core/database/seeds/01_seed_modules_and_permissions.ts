@@ -64,7 +64,6 @@ function formatPermission(permission, moduleId) {
   const formattedPermission = permissions.find(
     permissionObj => permissionObj.record_type === permission.name,
   );
-  console.log("formatPermission -> formattedPermission", formattedPermission)
   const formattedModulePermission = {
     module_id: moduleId,
     permission_id: formattedPermission.id,
