@@ -1,3 +1,4 @@
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockComponent } from 'ng-mocks';
@@ -9,6 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { UserFormComponent } from '@feature/entitlement/user/components/user-form/user-form.component';
 import { HolidayComponent } from './holiday.component';
 import { CalendarService } from '@feature/calender/services/calendar.service';
+import { NotifierService } from '@shared/services/notifier/notifier.service';
 
 describe('HolidayComponent', async () => {
     let component: HolidayComponent;
@@ -17,12 +19,16 @@ describe('HolidayComponent', async () => {
     let injectorMock: any;
     let calendarServiceMock: any;
     let helper: DOMHelper<HolidayComponent>;
+    let notifierServiceMock: any;
+    let matSnackBarMock: any;
     const dialogRefSpyObj = jasmine.createSpyObj({ afterClosed : of({}), close: null });
     dialogRefSpyObj.componentInstance = { body: '' };
     beforeEach(async(() => {
         injectorMock = jasmine.createSpyObj('Injector', ['get']);
         matDialogMock = jasmine.createSpyObj('MatDialog', ['open', 'closeAll']);
-     
+        notifierServiceMock = jasmine.createSpyObj('NotifierService', ['success', 'error']);
+        matSnackBarMock = jasmine.createSpyObj('MatSnackBar', ['open']);
+
         calendarServiceMock = jasmine.createSpyObj(
             'CalendarService',
             ['getHolidays', 'createHoliday', 'editHoliday', 'deleteHoliday']
@@ -43,8 +49,16 @@ describe('HolidayComponent', async () => {
                     useValue: calendarServiceMock,
                 },
                 {
+                    provide: MatSnackBar,
+                    useValue: matSnackBarMock,
+                },
+                {
                     provide: MatDialog,
                     useValue: matDialogMock,
+                },
+                {
+                    provide: NotifierService,
+                    useValue: notifierServiceMock,
                 },
                 {
                     provide: Injector,

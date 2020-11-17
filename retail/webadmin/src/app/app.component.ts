@@ -120,7 +120,7 @@ export class AppComponent extends UnsubscribeOnDestroyAdapter implements OnInit,
                 title: 'Features',
                 translate: 'FEATURES.TITLE',
                 type: 'group',
-              //  children: modules,
+                children: modules,
             };
             this.navigation = this.checkIfRootEmpty(modules)
                 ? modules

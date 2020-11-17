@@ -1,3 +1,4 @@
+import { extractErrorString } from './../../../shared/helpers/global.helper';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnInit, ViewEncapsulation, Injector } from '@angular/core';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
@@ -61,17 +62,14 @@ export class LoginComponent extends BaseComponent implements OnInit {
                 this.responseMessage = MESSAGES.LOGGED_IN();
                 setTimeout(() => {
                     this.router.navigateByUrl(
-                        this.returnUrl ? this.returnUrl : '/ent/user'
+                        this.returnUrl ? this.returnUrl : '/dashboard'
                     );
                 }, 1000);
             },
             (response) => {
                 this.errorType = 'error';
-                if (response.statusCode === 401) {
-                    this.responseMessage = MESSAGES.INVALID_CREDENTIAL();
-                } else {
-                    this.responseMessage = MESSAGES.UNKNOWN();
-                }
+                const message = extractErrorString(response);
+                this.responseMessage=MESSAGES.CUSTOM(message);
             }
         );
     }

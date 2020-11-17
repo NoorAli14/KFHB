@@ -13,6 +13,7 @@ import { By } from '@angular/platform-browser';
 import { of } from 'rxjs';
 import { DOMHelper } from 'testing/dom.helper';
 import { ForgotPasswordComponent } from './forgot-password.component';
+import { NotifierService } from '@shared/services/notifier/notifier.service';
 
 describe('ForgotPasswordComponent', async () => {
     let component: ForgotPasswordComponent;
@@ -21,11 +22,12 @@ describe('ForgotPasswordComponent', async () => {
     let authenticationMock: any;
     let injectorMock: any;
     let helper: DOMHelper<ForgotPasswordComponent>;
-
+    let notifierServiceMock: any;
     beforeEach(async(() => {
         fuseConfigServiceMock = jasmine.createSpyObj('FuseConfigService', [
             'config',
         ]);
+        notifierServiceMock = jasmine.createSpyObj('NotifierService', ['success', 'error']);
         injectorMock = jasmine.createSpyObj('Injector', ['get']);
 
         authenticationMock = jasmine.createSpyObj('AuthenticationService', [
@@ -42,6 +44,10 @@ describe('ForgotPasswordComponent', async () => {
                 {
                     provide: AuthenticationService,
                     useValue: authenticationMock,
+                },
+                {
+                    provide: NotifierService,
+                    useValue: notifierServiceMock,
                 },
                 {
                     provide: Injector,

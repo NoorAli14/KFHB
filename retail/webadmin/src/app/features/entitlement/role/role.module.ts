@@ -10,9 +10,7 @@ import { RoleFormComponent } from './components/role-form/role-form.component';
 import { TableRowComponent } from './components/table-row/table-row.component';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { MaterialModule } from '@shared/modules/material/material.module';
-import { MatFormFieldModule, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSortModule } from '@angular/material/sort';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 
 
 @NgModule({
@@ -29,18 +27,10 @@ import { MatSortModule } from '@angular/material/sort';
         FuseSidebarModule,
         FuseSharedModule,
         MaterialModule,
-        MatSortModule,
-        MatFormFieldModule,
-        MatInputModule,
     ],
-    exports: [
-        MatFormFieldModule,
-        MatInputModule
-    ],
-    
     providers: [
-    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
-],
+      { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
+    ],
     entryComponents: [RoleFormComponent]
 })
-export class RoleModule { }
+export class RoleModule {}

@@ -1,4 +1,4 @@
-<div class="page-container page-layout carded fullwidth inner-scroll">
+<div id="profile" class="page-container page-layout carded fullwidth inner-scroll">
     <!-- TOP BACKGROUND -->
     <div class="top-bg accent"></div>
     <!-- / TOP BACKGROUND -->
@@ -9,54 +9,54 @@
             fxLayoutAlign.gt-sm="space-between center">
             <!-- TITLE -->
             <div class="logo mb-24 mb-md-0" fxLayout="row" fxLayoutAlign="start center">
-                <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
-                    person
-                </mat-icon>
+                <img
+                class="profile-image avatar "
+                src="assets/images/avatars/user-circle.svg"
+                [@animate]="{
+                    value: '*',
+                    params: { delay: '50ms', scale: '0.2' }
+                }"
+            />
                 <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
                     <div fxLayout="column" fxLayoutAlign="start start">
-                        <div
-                            class="name"
-                            [@animate]="{
+                        <div class="name" [@animate]="{
                                 value: '*',
                                 params: { delay: '100ms', x: '-25px' }
-                            }"
-                        >
-                           <span *ngIf="currentUser.firstName || currentUser.lastName; else username"> {{currentUser?.firstName + ' ' + currentUser?.lastName}}</span>
+                            }">
+                            <span *ngIf="currentUser.firstName || currentUser.lastName; else username">
+                                {{currentUser?.firstName + ' ' + currentUser?.lastName}}</span>
                             <ng-template #username>
                                 <app-default-text></app-default-text>
                             </ng-template>
                         </div>
-                       
-                    </div>                </span>
+                        <div fxLayout="row" fxLayoutAlign="start start">
+                            <!-- <mat-icon class="s-16 status online"></mat-icon> -->
+                            <span class="status-1">{{currentUser?.status}}</span>
+                        </div>
+                    </div>
+                </span>
             </div>
             <!-- / TITLE -->
             <!-- ADD BUTTON -->
-            <div
-            class="actions"
-            fxLayout="row"
-            fxLayoutAlign="end center"
-            [@animate]="{ value: '*', params: { delay: '200ms' } }"
-        >
-            <button mat-raised-button (click)="openDialog()" class="btn-update fuse-white mt-24 mt-md-0">
-                <span>UPDATE PROFILE</span>
-            </button>
+            <div class="actions" fxLayout="row" fxLayoutAlign="end center"
+                [@animate]="{ value: '*', params: { delay: '200ms' } }">
+                <button mat-raised-button (click)="openDialog()" class="btn-update fuse-white mt-24 mt-md-0">
+                    <span>UPDATE PROFILE</span>
+                </button>
             </div>
             <!-- / ADD BUTTON -->
         </div>
         <!-- / HEADER -->
         <!-- CONTENT CARD -->
         <div class="content-card" fusePerfectScrollbar>
-            <div fxLayout="row" class="pt-24 pr-24" fxLayoutAlign="end end">
-                <mat-icon class="s-20 pr-10 status online"></mat-icon>
-                <span class="status-1">{{currentUser.status}}</span>
-            </div>
+            
             <mat-tab-group dynamicHeight="true">
                 <mat-tab label="Profile">
                     <app-about [nationalities]="nationalities" [user]="currentUser"></app-about>
                 </mat-tab>
                 <mat-tab label="Security">
                     <app-update-password [errorType]="errorType" [responseMessage]="responseMessage"
-                        (submit)="onUpdatePassword($event)"></app-update-password>
+                        (update)="onUpdatePassword($event)"></app-update-password>
                 </mat-tab>
             </mat-tab-group>
 
@@ -64,5 +64,4 @@
         </div>
         <!-- / CONTENT CARD -->
     </div>
-    <!-- / CENTER -->
 </div>

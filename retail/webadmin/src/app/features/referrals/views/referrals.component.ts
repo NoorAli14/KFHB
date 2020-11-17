@@ -95,4 +95,5 @@ export class ReferralsComponent extends BaseComponent implements OnInit {
   public doFilter = (value: string) => {
     this.dataSource.filter = value.trim().toLocaleLowerCase();
   }
+  
 }

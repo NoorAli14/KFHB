@@ -1,6 +1,6 @@
 import { URI } from '@shared/constants/app.constants';
 import { Injectable } from '@angular/core';
-import { NetworkService } from '@shared/services/network/network.service';
+import { ApiService } from '@shared/services/network/api.service';
 import { environment } from '../../../../environments/environment';
 import { Observable } from 'rxjs';
 
@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
     providedIn: 'root',
 })
 export class ServiceRequestsService {
-    constructor(private _networkService: NetworkService) { }
+    constructor(private _networkService: ApiService) { }
     getServiceRequests(): Observable<any> {
         return this._networkService.getAll(environment.API_BASE_URL_2, URI.SERVICE_REQUEST_LIST);
     }

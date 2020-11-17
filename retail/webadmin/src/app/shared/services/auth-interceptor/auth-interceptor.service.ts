@@ -80,7 +80,7 @@ export class AuthInterceptorService implements HttpInterceptor {
         }
     }
     refreshToken(): Observable<any> {
-        const endPoint = `${createUrl(environment.API_BASE_URL, URI.REFRESH)}`;
+        const endPoint = `${createUrl(URI.REFRESH)}`;
         return this.http.post(endPoint, null, { observe: 'response' });
     }
     getHttpOption(refreshing, baseUrl?): any {

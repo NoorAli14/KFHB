@@ -16,7 +16,7 @@ export class UpdatePasswordComponent extends BaseComponent implements OnInit {
     updatePasswordForm: FormGroup;
     @Input() responseMessage: string;
     @Input() errorType: string;
-    @Output() submit: EventEmitter<any> = new EventEmitter();
+    @Output() update: EventEmitter<any> = new EventEmitter();
     constructor(
         injector: Injector
         ) {
@@ -45,6 +45,6 @@ export class UpdatePasswordComponent extends BaseComponent implements OnInit {
     onSubmit(): void {
         let model = { ...this.updatePasswordForm.value };
         model = camelToSnakeCase(model);
-        this.submit.emit(model);
+        this.update.emit(model);
     }
 }
