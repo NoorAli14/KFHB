@@ -4,12 +4,12 @@ import {
   IsEmail,
   IsNotEmpty,
   ValidateNested,
-  Matches, IsISO8601
+  Matches, IsISO8601, MaxLength
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, PartialType, OmitType } from '@nestjs/swagger';
 import { IdsDto } from '@common/dtos';
-import { GENDER, PASSWORD_REGEX } from '@common/constants';
+import {GENDER, NUMBERS, PASSWORD_REGEX} from '@common/constants';
 
 export class ChangePasswordDto {
   @ApiProperty({
@@ -135,6 +135,6 @@ export class CurrentUserUpdateDto extends PartialType(
     required: false,
   })
   @IsString()
-  // @MaxLength(36)
+  @MaxLength(NUMBERS.NATIONALITY_ID_LENGTH)
   nationality_id: string;
 }

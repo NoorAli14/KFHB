@@ -29,4 +29,5 @@ export const GENDER = ['M', 'F'];
 export const PASSWORD_REGEX = /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;
 export const NUMBERS = {
   MAX_COLUMN_LENGTH: 255,
+  NATIONALITY_ID_LENGTH: 36,
 };
