@@ -1,0 +1,293 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar class="mat-accent m-0">
+        <mat-toolbar-row fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+            <div class="logo mb-24 mb-md-0" fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon mr-12" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+                    person
+                </mat-icon>
+                <span class="logo-text" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                   <span *ngIf="civilIdBackProcessed"> {{civilIdBackProcessed['Surname And Given Names']}}</span>
+                </span>
+            </div>
+            <button mat-icon-button (click)="matDialogRef.close()" aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <div mat-dialog-content class="p-24 m-0" style="max-height: 83vh !important">
+        <mat-tab-group>
+            <mat-tab label="CIVIL ID">
+                <div class="tab-content p-24 ">
+                    <div class="profile-box info-box general">
+                        <div class="content" fusePerfectScrollbar>
+                            <div fxLayout="column" fxFlex="48">
+
+                                <div class="info-line">
+                                    <div class="title">First Name</div>
+                                    <div class="info"
+                                        *ngIf="civilIdBackProcessed && civilIdBackProcessed.Surname ; else defaultText">
+                                        {{civilIdBackProcessed.Surname }}</div>
+                                </div>
+                                <div class="info-line">
+                                    <div class="title">Full Name</div>
+                                    <div class="info"
+                                        *ngIf="civilIdBackProcessed && civilIdBackProcessed['Surname And Given Names'] ; else defaultText">
+                                        {{civilIdBackProcessed['Surname And Given Names']}}</div>
+                                </div>
+
+                                <div class="info-line">
+                                    <div class="title">Mobile Number</div>
+                                    <div class="info" *ngIf="customer.contactNo ; else defaultText">
+                                        {{customer.contactNo}}</div>
+                                </div>
+                                <div class="info-line">
+                                    <div class="title">Gender</div>
+                                    <div class="info"
+                                        *ngIf="civilIdBackProcessed && civilIdBackProcessed.Sex ; else defaultText">
+                                        {{civilIdBackProcessed.Sex}}</div>
+                                </div>
+                                <div class="info-line">
+                                    <div class="title">Date Of Expiry</div>
+                                    <div class="info"
+                                        *ngIf="civilIdBackProcessed && civilIdBackProcessed['Date Of Expiry'] ; else defaultText">
+                                        {{civilIdBackProcessed['Date Of Expiry']}}</div>
+                                </div>
+                            </div>
+                            <div fxLayout="column" fxFlex="48">
+                                <div class="info-line">
+                                    <div class="title">Last Name</div>
+                                    <div class="info"
+                                        *ngIf="civilIdBackProcessed && civilIdBackProcessed['Given Names'] ; else defaultText">
+                                        {{civilIdBackProcessed['Given Names'] }}</div>
+                                </div>
+                                <div class="info-line">
+                                    <div class="title">Email</div>
+                                    <div class="info" *ngIf="customer.email ; else defaultText">
+                                        {{customer.email }}</div>
+                                </div>
+
+                                <div class="info-line">
+                                    <div class="title">Birth Date</div>
+                                    <div class="info"
+                                        *ngIf="civilIdBackProcessed && civilIdBackProcessed['Date Of Birth'] ; else defaultText">
+                                        {{civilIdBackProcessed['Date Of Birth']}}</div>
+                                </div>
+                                <div class="info-line">
+                                    <div class="title">Status</div>
+                                    <div class="info"
+                                        *ngIf="civilIdBackProcessed && civilIdBackProcessed['status'] ; else defaultText">
+                                        {{civilIdBackProcessed['status']}}
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </mat-tab>
+            <mat-tab label="PASSPORT">
+                <div class="tab-content p-24 ">
+                    <div class="profile-box info-box general">
+                        <div class="content"  fusePerfectScrollbar>
+                            <div fxLayout="column" fxFlex="48">
+
+                                <div class="info-line">
+                                    <div class="title">First Name</div>
+                                    <div class="info"
+                                        *ngIf="passportProcessed && passportProcessed['Given Names'] ; else defaultText">
+                                        {{passportProcessed['Given Names'] }}</div>
+                                </div>
+                                <div class="info-line">
+                                    <div class="title">Full Name</div>
+                                    <div class="info"
+                                        *ngIf="passportProcessed && passportProcessed['Surname And Given Names'] ; else defaultText">
+                                        {{passportProcessed['Surname And Given Names']}}</div>
+                                </div>
+                                <div class="info-line">
+                                    <div class="title">Birth Date</div>
+                                    <div class="info"
+                                        *ngIf="passportProcessed && passportProcessed['Date Of Birth'] ; else defaultText">
+                                        {{passportProcessed['Date Of Birth']}}</div>
+                                </div>
+                                <div class="info-line">
+                                    <div class="title">Age</div>
+                                    <div class="info"
+                                        *ngIf="passportProcessed && passportProcessed.Age ; else defaultText">
+                                        {{passportProcessed.Age}}</div>
+                                </div>
+                                <div class="info-line">
+                                    <div class="title">Issuing State</div>
+                                    <div class="info"
+                                        *ngIf="passportProcessed && passportProcessed['Issuing State Name'] ; else defaultText">
+                                        {{passportProcessed['Issuing State Name']}}</div>
+                                </div>
+
+                            </div>
+                            <div fxLayout="column" fxFlex="48">
+                                <div class="info-line">
+                                    <div class="title">Last Name</div>
+                                    <div class="info"
+                                        *ngIf="passportProcessed && passportProcessed['Surname'] ; else defaultText">
+                                        {{passportProcessed['Surname'] }}</div>
+                                </div>
+                                <div class="info-line">
+                                    <div class="title">Gender</div>
+                                    <div class="info"
+                                        *ngIf="passportProcessed && passportProcessed.Sex ; else defaultText">
+                                        {{passportProcessed.Sex}}</div>
+                                </div>
+                                <div class="info-line">
+                                    <div class="title">Date Of Expiry</div>
+                                    <div class="info"
+                                        *ngIf="passportProcessed && passportProcessed['Date Of Expiry'] ; else defaultText">
+                                        {{passportProcessed['Date Of Expiry']}}</div>
+                                </div>
+                                <div class="info-line">
+                                    <div class="title">Document Number</div>
+                                    <div class="info"
+                                        *ngIf="passportProcessed && passportProcessed['Document Number'] ; else defaultText">
+                                        {{passportProcessed['Document Number'] }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab label="FATCA">
+                <div class="tab-content p-24 ">
+                    <div class="profile-box info-box general">
+                        <div class="content" style="flex-direction:column" fusePerfectScrollbar>
+                            <ng-container *ngFor="let item of FATCA?.results?.sections">
+                                <div fxLayout="column" fxFlex="100">
+                                    <div class="info-line" *ngFor="let question of item.questions">
+                                        <div class="quest"><strong>Question:</strong> &nbsp;{{question.title}} </div>
+                                        <div class="info">
+                                            <strong>Answer: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong> <span
+                                                *ngIf="question.answer ; else defaultText">{{question.answer}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <hr> <br>
+                            </ng-container>
+                            
+                        </div>
+                        <div *ngIf="!FATCA" fxFlex fxLayout="row" fxLayoutAlign="center center">
+                            <strong>There is no data available</strong>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab label="BANKING TRANSACTION">
+                <div class="tab-content p-24 ">
+                    <div class="profile-box info-box general">
+                        <div class="content" style="flex-direction:column" fusePerfectScrollbar>
+                            <ng-container *ngFor="let item of bankingTransaction?.results?.sections">
+                                <div fxLayout="column" fxFlex="100">
+                                    <div class="info-line" *ngFor="let question of item.questions">
+                                        <div class="quest"><strong>Question:</strong> &nbsp;{{question.title}} </div>
+                                        <div class="info">
+                                            <strong>Answer: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong> <span
+                                                *ngIf="question.answer ; else defaultText">{{question.answer}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <hr> <br>
+                            </ng-container>
+                            
+                        </div>
+                        <div *ngIf="!bankingTransaction" fxFlex fxLayout="row" fxLayoutAlign="center center">
+                            <strong>There is no data available</strong>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab label="AML">
+                <div class="tab-content p-24 ">
+                    <div class="profile-box info-box general">
+                        <div class="content" style="flex-direction:column"  fusePerfectScrollbar>
+                            <ng-container *ngFor="let item of amlData?.results?.sections">
+                                <div fxLayout="column" fxFlex="100">
+                                    <div class="info-line" *ngFor="let question of item.questions">
+                                        <div class="quest"><strong>Question:</strong> &nbsp;{{question.title}} </div>
+                                        <div class="info">
+                                            <strong>Answer: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong> <span
+                                                *ngIf="question.answer ; else defaultText">{{question.answer}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <hr> <br>
+                            </ng-container>
+                        </div>
+                        <div *ngIf="!amlData" fxFlex fxLayout="row" fxLayoutAlign="center center">
+                            <strong>There is no data available</strong>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab label="CIVIL ID DOCUMENT">
+                <div class="tab-content p-24 " fusePerfectScrollbar>
+                    <div class="profile-box info-box general">
+                        <div class="content">
+                            <div fxLayout="row wrap" fxLayoutAlign="center center">
+                                <div *ngFor="let item of nationalIdDocuments; index as i">
+                                    <div class="product-image"  >
+                                        <img [lightbox]="i" class="gallery" [gallery]="'nationalIdDocuments'"
+                                            [src]="item.data.thumb">
+                                            <strong>{{item.data.title}}</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab label="PASSPORT DOCUMENT">
+                <div class="tab-content p-24 " fusePerfectScrollbar>
+                    <div class="profile-box info-box general">
+                        <div class="content">
+                            <div fxLayout="row wrap" fxLayoutAlign="center center">
+                                <div *ngFor="let item of passportDocuments; index as i">
+                                    <div class="product-image"  >
+                                        <img [lightbox]="i" class="gallery" [gallery]="'passportDocuments'"
+                                            [src]="item.data.thumb">
+                                            <strong>{{item.data.title}}</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab label="SCREENSHOTS">
+                <div class="tab-content p-24 " fusePerfectScrollbar>
+                    <div class="profile-box info-box general">
+                        <div class="content">
+                            <div fxLayout="row wrap" fxLayoutAlign="center center">
+                                <div *ngFor="let item of screenShots; index as i">
+                                    <div class="product-image"  >
+                                        <img [lightbox]="i" class="gallery" [gallery]="'screenshots'"
+                                            [src]="item.data.thumb">
+                                            <strong>{{item.data.title}}</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="screenShots.length<1" fxFlex fxLayout="row" fxLayoutAlign="center center">
+                            <strong>There are no screenshots available</strong>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+</div>
+
+<ng-template #defaultText>
+    <app-default-text></app-default-text>
+</ng-template>

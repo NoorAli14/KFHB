@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { UserFormComponent } from '@feature/entitlement/user/components/user-form/user-form.component';
 import { CalendarService } from '@feature/calender/services/calendar.service';
 import { LeaveComponent } from './leave.component';
+import { NotifierService } from '@shared/services/notifier/notifier.service';
 
 describe('LeaveComponent', async () => {
     let component: LeaveComponent;
@@ -19,10 +20,13 @@ describe('LeaveComponent', async () => {
     let helper: DOMHelper<LeaveComponent>;
     const dialogRefSpyObj = jasmine.createSpyObj({ afterClosed : of({}), close: null });
     dialogRefSpyObj.componentInstance = { body: '' };
+    
+    let notifierServiceMock: any;
     beforeEach(async(() => {
         injectorMock = jasmine.createSpyObj('Injector', ['get']);
         matDialogMock = jasmine.createSpyObj('MatDialog', ['open', 'closeAll']);
-     
+        notifierServiceMock = jasmine.createSpyObj('NotifierService', ['success', 'error']);
+
         calendarServiceMock = jasmine.createSpyObj(
             'CalendarService',
             ['forkLeaveData', 'createWorkingDay', 'editWorkingDay', 'deleteWorkingDay']
@@ -41,6 +45,10 @@ describe('LeaveComponent', async () => {
                 {
                     provide: CalendarService,
                     useValue: calendarServiceMock,
+                },
+                {
+                    provide: NotifierService,
+                    useValue: notifierServiceMock,
                 },
                 {
                     provide: MatDialog,

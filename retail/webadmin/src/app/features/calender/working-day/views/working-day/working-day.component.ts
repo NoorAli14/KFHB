@@ -1,3 +1,4 @@
+import { sortWeekDays } from './../../../../../shared/helpers/global.helper';
 import { MODULES } from './../../../../../shared/constants/app.constants';
 import {
     Component,
@@ -40,11 +41,10 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
     workingDays: any[];
     displayedColumns = [
         'weekDay',
-        'startTimeLocal',
-        'endTimeLocal',
+        'startTime',
+        'endTime',
         'fullDay',
         'remarks',
-        'status',
         'actions',
     ];
     pageSize: number = CONFIG.PAGE_SIZE;
@@ -69,14 +69,13 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
         this._service.getWorkingDays().subscribe(
             (response) => {
                 this.workingDays = snakeToCamelArray(response);
+                this.workingDays=  this.workingDays.sort(sortWeekDays)
                 this.workingDays = this.workingDays.map((x) => this.convertData(x));
                 this.dataSource = new MatTableDataSource(this.workingDays);
                 this.dataSource.paginator = this.paginator;
                 this.dataSource.sort = this.sort;
             },
-            (error) => {
-                console.log(error);
-            }
+            (response) => super.onError(response)
         );
     }
     convertData(item): object {
@@ -96,9 +95,7 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
                 hasBackdrop: true,
             })
             .componentInstance.sendResponse.subscribe((response) => {
-                if (!response) {
-                    this._errorEmitService.emit('', '');
-                } else if (response.id) {
+                 if (response.id) {
                     _this.editWorkingDay(response);
                 } else {
                     _this.createWorkingDay(response);
@@ -129,46 +126,30 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
                 const data: any = this.dataSource.data;
                 data.unshift(this.convertData(snakeToCamelObject(response)));
                 this.updateGrid(data);
-                this.errorType = 'success';
-                this.responseMessage = MESSAGES.CREATED('Working Day');
                 this._matDialog.closeAll();
-                this.hideMessage();
+                this._notifier.success(MESSAGES.CREATED('Working Day'));
             },
-            (response) => {
-                if (response.error && response.error.statusCode === 409) {
-                    this._errorEmitService.emit(MESSAGES.EXISTS('Working day'), 'error');
-                } else {
-                    this._errorEmitService.emit(MESSAGES.UNKNOWN(), 'error');
-                }
-            }
+            (response) => super.onError(response)
         );
     }
-    hideMessage(): void  {
-        setTimeout(() => {
-            this.responseMessage = '';
-        }, 2000);
-    }
+   
     editWorkingDay(model: WorkingDay): void  {
         this._service.editWorkingDay(model.id, model).subscribe(
             (response) => {
-                this.errorType = 'success';
-                this.responseMessage = MESSAGES.UPDATED('Working Day');
+                this._notifier.success(MESSAGES.UPDATED('Working Day'));
                 const index = this.dataSource.data.findIndex(
                     (x) => x.id === model.id
                 );
-                this.hideMessage();
                 const mapped: any = this.convertData(snakeToCamelObject(response));
                 this.workingDays[index] = mapped;
                 this.updateGrid(this.workingDays);
                 this._matDialog.closeAll();
             },
-            (response) => {
-                this._errorEmitService.emit(MESSAGES.UNKNOWN(), 'error');
-            }
+            (response) => super.onError(response)
         );
     }
     confirmDialog(type, id): void {
-        const message = MESSAGES.REMOVE_CONFIRMATION();
+        const message = MESSAGES.REMOVE_CONFIRMATION;
         const dialogData = new ConfirmDialogModel('Confirm Action', message);
         const dialogRef = this._matDialog.open(ConfirmDialogComponent, {
             data: dialogData,
@@ -189,9 +170,7 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
                 const index = this.dataSource.data.findIndex((x) => x.id === id);
                 this.workingDays.splice(index, 1);
                 this.updateGrid(this.workingDays);
-                this.errorType = 'success';
-                this.hideMessage();
-                this.responseMessage = MESSAGES.DELETED('Working Day');
+                this._notifier.success(MESSAGES.DELETED('Working Day'));
             },
             (response) => super.onError(response)
         );

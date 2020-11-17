@@ -11,19 +11,20 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { LeaveFormComponent } from './leave-form.component';
 import { Leave } from '@feature/calender/models/leave.model';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { NotifierService } from '@shared/services/notifier/notifier.service';
 
 describe('LeaveFormComponent', async () => {
-    let component: LeaveFormComponent;
-    let fixture: ComponentFixture<LeaveFormComponent>;
     let injectorMock: any;
-    let helper: DOMHelper<LeaveFormComponent>;
-    let model;
     let matDialogRefMock: any;
     let authUserServiceMock: any;
+    let notifierServiceMock: any;
+
     beforeEach(async(() => {
         injectorMock = jasmine.createSpyObj('Injector', ['get']);
         matDialogRefMock = jasmine.createSpyObj('MatDialogRef', ['close']);
         authUserServiceMock = jasmine.createSpyObj('AuthUserService', ['User']);
+        notifierServiceMock = jasmine.createSpyObj('NotifierService', ['success', 'error']);
+
         authUserServiceMock.User.and.returnValue(
           of({roles: []})
       );
@@ -47,6 +48,10 @@ describe('LeaveFormComponent', async () => {
                       leaveTypes: [],
                       users: []
                     },
+                },
+                {
+                    provide: NotifierService,
+                    useValue: notifierServiceMock,
                 },
                 {
                     provide: Injector,

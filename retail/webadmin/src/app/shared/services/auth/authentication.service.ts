@@ -16,7 +16,6 @@ import { StorageService } from '../storage/storage.service';
 import * as jwt_decode from 'jwt-decode';
 import { ReferenceService } from '../reference/reference.service';
 import { HttpHeaders } from '@angular/common/http';
-import { environment } from '../../../../environments/environment';
 @Injectable({
     providedIn: 'root',
 })
@@ -26,26 +25,26 @@ export class AuthenticationService {
         private userService: AuthUserService,
         private storage: StorageService,
         private _refService: ReferenceService
-    ) { }
+    ) {}
 
-    get accessToken(): any {
+  public  get accessToken(): any {
         return this.storage.getItem(APP_CONST.ACCESS_TOKEN);
     }
 
-    set accessToken(token) {
+    public  set accessToken(token) {
         this.storage.setItem(APP_CONST.ACCESS_TOKEN, token);
     }
 
     get refreshToken(): any {
         return this.storage.getItem(APP_CONST.REFRESH_TOKEN);
     }
-    set refreshToken(token) {
+    set refreshToken(token){
         this.storage.setItem(APP_CONST.REFRESH_TOKEN, token);
     }
-
+   
     login(model: Login): Observable<any> {
         return this.network
-            .post(environment.API_BASE_URL, URI.LOGIN, model, {
+            .post(URI.LOGIN, model, {
                 headers: this.getPublicHeader(),
                 observe: 'response',
             })
@@ -55,13 +54,11 @@ export class AuthenticationService {
                     this.refreshToken = response.headers.get('x-refresh-token');
                     this.userService.setData(response.body);
                     return response.body;
-                }),
-                catchError(this.errorHandler)
-                
+                })
             );
     }
     forgotPassword(model: Login): Observable<any> {
-        return this.network.post(environment.API_BASE_URL, URI.FORGOT_PASSWORD, model, {
+        return this.network.post(URI.FORGOT_PASSWORD, model, {
             headers: this.getPublicHeader(),
         });
     }
@@ -71,7 +68,7 @@ export class AuthenticationService {
     }
     getUserByToken(token): Observable<any> {
         return forkJoin([
-            this.network.getAll(`${environment.API_BASE_URL}`, `${URI.USER_INVITATION}/${token}`, null, {
+            this.network.getAll(`${URI.USER_INVITATION}/${token}`, null, {
                 headers: this.getPublicHeader(),
             }),
             this._refService.getCountries(),
@@ -79,28 +76,24 @@ export class AuthenticationService {
     }
     resetPassword(model: Login, token): Observable<any> {
         return this.network.onUpdate(
-            `${environment.API_BASE_URL}`, `${URI.FORGOT_PASSWORD}/${token}`,
+            `${URI.FORGOT_PASSWORD}/${token}`,
             model,
-            { headers: this.getPublicHeader() }
+            { headers: this.getPublicHeader()}
         );
     }
     logout(): Observable<any> {
-        return this.network.onDelete(`${environment.API_BASE_URL}`, `${URI.LOGOUT}`, { headers: this.getPublicHeader() });
+        return this.network.onDelete(`${URI.LOGOUT}`, { headers: this.getPublicHeader()});
     }
 
     updateInvitation(model, token): Observable<any> {
-        return this.network.onUpdate(`${environment.API_BASE_URL}`, `${URI.USER_INVITATION}/${token}`, model, {
+        return this.network.onUpdate(`${URI.USER_INVITATION}/${token}`, model, {
             headers: this.getPublicHeader(),
         });
     }
     getTokenStatus(token): Observable<any> {
-        return this.network.getAll(`${environment.API_BASE_URL}`, `${URI.FORGOT_PASSWORD}/${token}`, {
+        return this.network.getAll(`${URI.FORGOT_PASSWORD}/${token}`, {
             headers: this.getPublicHeader(),
         });
-    }
-
-    errorHandler(response): Observable<any> {
-        return observableThrowError(response.error || 'Server Error');
     }
     getDecodeToken = () => {
         const token = this.accessToken;
