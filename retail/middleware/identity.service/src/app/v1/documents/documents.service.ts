@@ -1,18 +1,17 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import {
-  SessionRepository,
   CustomerRepository,
   DocumentTypeRepository,
   SessionReferenceRepository,
 } from '@rubix/core';
-import { CUSTOM_ERROR, Document, PreviewDocument, SCHEMA_ERROR } from './document.model';
+import { CUSTOM_ERROR, Document, PreviewDocument } from './document.model';
 import { IdentityService } from '@rubix/common/connectors';
 import {
   DOCUMENT_STATUSES,
   ICurrentUser,
   DOCUMENT_TYPES,
 } from '@rubix/common/';
-import { SchemaService, ISCHEMA_ERROR } from './schema.service';
+import { SchemaService } from './schema.service';
 import { SessionNotFoundException } from '@app/v1/sessions/exceptions/';
 import { DocumentNotFoundException } from './exceptions/';
 @Injectable()
@@ -22,7 +21,6 @@ export class DocumentsService {
     private readonly identityService: IdentityService,
     private readonly documentTypeDB: DocumentTypeRepository,
     private readonly sessionReferenceDB: SessionReferenceRepository,
-    private readonly sessionDB: SessionRepository,
     private readonly customerDB: CustomerRepository,
     private readonly schema: SchemaService
   ) { }
@@ -37,7 +35,7 @@ export class DocumentsService {
       this.customerDB.getRecentSession(currentUser.tenant_id, currentUser.id),
     ]);
     if (!document)
-      throw new DocumentNotFoundException();
+      throw new DocumentNotFoundException(input.type);
     if (!customerSession)
       throw new SessionNotFoundException();
     const identityDocument: any = await this.identityService.createDocument(
@@ -94,10 +92,10 @@ export class DocumentsService {
 
     if (!reference) {
       this.logger.log(`Document not exit with customer ID [${currentUser.id}]`)
-      throw new DocumentNotFoundException();
+      throw new DocumentNotFoundException(input.type);
     }
     if (reference?.status === DOCUMENT_STATUSES.PROCESSING) {
-      const status: any = await this.identityService.getDocument(
+      const document: any = await this.identityService.getDocument(
         reference.target_user_id,
         reference.check_id,
         reference.attachable_id,
@@ -105,12 +103,12 @@ export class DocumentsService {
       const _input: { [key: string]: any } = {
         updated_by: customerSession.id,
         status:
-          DOCUMENT_STATUSES[status?.processingStatus] ||
+          DOCUMENT_STATUSES[document?.processingStatus] ||
           DOCUMENT_STATUSES.FAILED,
         processed_data: null
       };
       let result: CUSTOM_ERROR = { valid: true, errors: null }
-      if (status?.processingStatus === DOCUMENT_STATUSES.PROCESSED) {
+      if (document?.processingStatus === DOCUMENT_STATUSES.PROCESSED) {
         const processedData: any = await this.identityService.getServerProcessedOCRSensitiveData(
           reference.target_user_id,
           reference.check_id,

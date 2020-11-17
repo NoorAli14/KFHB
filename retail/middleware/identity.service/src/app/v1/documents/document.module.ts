@@ -3,7 +3,6 @@ import { IdentityModule, IdentityService } from '@rubix/common/connectors';
 
 import {
   RepositoryModule,
-  SessionRepository,
   CustomerRepository,
   DocumentTypeRepository,
   SessionReferenceRepository,
@@ -15,7 +14,6 @@ import { SchemaService } from './schema.service';
   imports: [RepositoryModule, IdentityModule],
   providers: [
     DocumentsService,
-    SessionRepository,
     CustomerRepository,
     DocumentsResolver,
     IdentityService,

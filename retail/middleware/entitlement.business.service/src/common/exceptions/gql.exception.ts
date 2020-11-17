@@ -3,8 +3,8 @@ interface IError {
     name: string;
     message: string;
     developerMessage?: string;
-    field: string;
-    value: string;
+    field?: string;
+    value?: string;
 }
 
 export class GqlException extends HttpException {
@@ -13,10 +13,17 @@ export class GqlException extends HttpException {
     }
 
     get errors(): IError[] {
+        if (this.err.exception?.name === 'ConnectionError') {
+            return [{
+                name: this.err.exception?.name,
+                message: `Database connectivity error`,
+                developerMessage: this.err.exception.originalError.message
+            }]
+        }
         return this.err.exception.response;
     }
     get name(): string {
-        return this.err.exception.name;
+        return this.err.exception?.name || this.err.exception?.code || this.err.exception?.response?.code;
     }
     get serviceName(): string {
         return this.err.serviceName;
