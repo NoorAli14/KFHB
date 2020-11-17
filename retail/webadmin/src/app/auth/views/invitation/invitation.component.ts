@@ -1,3 +1,4 @@
+import { extractErrorString } from './../../../shared/helpers/global.helper';
 import { Component, OnInit, Injector } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { User } from '@feature/entitlement/models/user.model';
@@ -114,10 +115,7 @@ export class InvitationComponent extends BaseComponent implements OnInit {
                         this.router.navigateByUrl('/auth/login');
                     }, 1000);
                 },
-                (error) => {
-                    this.errorType = 'error';
-                    this.responseMessage = MESSAGES.UNKNOWN;
-                }
+                (response)=>super.onError(response)
             );
     }
     getUserByToken = (token): void => {
@@ -131,15 +129,6 @@ export class InvitationComponent extends BaseComponent implements OnInit {
                     this.nationalityList = response[1];
                     this.filteredNationalities = response[1];
                 },
-                ({ error }) => {
-                    this.errorType = 'error';
-                    if (error.statusCode === 404) {
-                        this.errorType = 'warning';
-                        this.responseMessage = MESSAGES.INVALID_INVITATION();
-                    } else {
-                        this.responseMessage = MESSAGES.UNKNOWN;
-                    }
-                }
-            );
+                (response)=>super.onError(response))
     }
 }

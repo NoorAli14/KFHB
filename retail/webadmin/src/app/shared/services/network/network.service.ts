@@ -23,7 +23,9 @@ export class NetworkService {
         }
         return this.http
             .get<any>(endPoint, options)
-            .pipe(catchError(this.errorHandler));
+            .pipe(
+                catchError(this.errorHandler)
+            );
     }
 
     getById(url): Observable<any> {
@@ -36,25 +38,31 @@ export class NetworkService {
     post(url: string, model: any, options?): Observable<any> {
         const endPoint = `${createUrl(url)}`;
         return this.http
-            .post<any[]>(endPoint, model, options);
+            .post<any[]>(endPoint, model, options) .pipe(
+                catchError(this.errorHandler)
+            );
     }
 
     onUpdate(url: string, model: any, options?): Observable<any> {
         const endPoint = `${createUrl(url)}`;
         return this.http
             .put<any[]>(endPoint, model, options)
-            .pipe(catchError(this.errorHandlerMessage));
+            .pipe(
+                catchError(this.errorHandler)
+            );
     }
 
     onDelete(url: string, options?): Observable<any> {
         const endPoint = `${createUrl(url)}`;
         return this.http
             .delete<any[]>(endPoint, options)
-            .pipe(catchError(this.errorHandlerMessage));
+            .pipe(
+                catchError(this.errorHandler)
+            );
     }
 
-    errorHandler(error: HttpErrorResponse): Observable<any> {
-        return observableThrowError(error);
+    errorHandler(response: HttpErrorResponse): Observable<any> {
+        return observableThrowError(response.error || 'Internal Server Error');
     }
 
     errorHandlerMessage(error: HttpErrorResponse): Observable<any> {

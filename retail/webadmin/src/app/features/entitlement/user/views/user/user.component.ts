@@ -80,8 +80,8 @@ export class UserComponent extends BaseComponent implements OnInit {
         return {
             limit: CONFIG.PAGE_SIZE,
             page: 1,
-            sort_order: 'desc',
-            sort_by: 'created_on',
+            sort_order: 'asc',
+            sort_by: 'first_name',
         };
     }
     getQueryString(params): string {
@@ -110,10 +110,7 @@ export class UserComponent extends BaseComponent implements OnInit {
                     this.pagination.page = this.pagination.page - 1;
                     this.dataSource = new MatTableDataSource(this.users);
                 },
-                (response) => {
-                    this._notifier.error(MESSAGES.UNKNOWN);
-                }
-            );
+                (response) => super.onError(response))
     }
 
     camelToSnakeCase(text): void {
@@ -149,8 +146,7 @@ export class UserComponent extends BaseComponent implements OnInit {
                 (response) => {
                     this.openUserDetailModal(response);
                 },
-                (response) => super.onError(response)
-            );
+                (response) => super.onError(response))
     }
     openUserDetailModal(response): void {
         response.modules = this._mapperService.makeModulesFlat(response.modules);
@@ -192,10 +188,7 @@ export class UserComponent extends BaseComponent implements OnInit {
                 (response) => {
                     this._notifier.success(MESSAGES.INVITE_RESENT);
                 },
-                (response) => {
-                    this._notifier.error(MESSAGES.UNKNOWN);
-                }
-            );
+                (response) => super.onError(response))
     }
     createUser(model: User): void {
         this._service
@@ -209,14 +202,8 @@ export class UserComponent extends BaseComponent implements OnInit {
                     this._matDialog.closeAll();
                     this._notifier.success(MESSAGES.CREATED('User'));
                 },
-                ({ error }) => {
-                    if (error.statusCode === 422) {
-                        this._notifier.error(MESSAGES.EXISTS('User with this email'));
-                    } else {
-                        this._notifier.error(MESSAGES.UNKNOWN);
-                    }
-                }
-            );
+                (response) => super.onError(response))
+
     }
   
     editUser(model: User): void {
@@ -233,9 +220,7 @@ export class UserComponent extends BaseComponent implements OnInit {
                     this.dataSource = new MatTableDataSource(this.users);
                     this._matDialog.closeAll();
                 },
-                (response) => {
-                    this._notifier.error(MESSAGES.UNKNOWN);
-                }
+                (response) => super.onError(response)
             );
     }
     deleteUser(id: string): void {
@@ -252,9 +237,7 @@ export class UserComponent extends BaseComponent implements OnInit {
                     this.dataSource = new MatTableDataSource(this.users);
                     this._notifier.success(MESSAGES.DELETED('User'));
                 },
-                (response) => {
-                    this._notifier.error(MESSAGES.UNKNOWN);
-                }
+                (response) => super.onError(response)
             );
     }
 

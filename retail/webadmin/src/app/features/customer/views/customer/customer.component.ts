@@ -1,10 +1,10 @@
-import { camelToSnakeCaseText } from './../../../../shared/helpers/global.helper';
-import { CustomerService } from './../../customer.service';
+import { camelToSnakeCaseText } from "./../../../../shared/helpers/global.helper";
+import { CustomerService } from "./../../customer.service";
 import {
     camelToSentenceCase,
     snakeToCamelArray,
-} from '@shared/helpers/global.helper';
-import { CustomerDetailComponent } from './../../components/customer-detail/customer-detail.component';
+} from "@shared/helpers/global.helper";
+import { CustomerDetailComponent } from "./../../components/customer-detail/customer-detail.component";
 import {
     AfterViewInit,
     Component,
@@ -12,24 +12,24 @@ import {
     OnInit,
     ViewChild,
     ViewEncapsulation,
-} from '@angular/core';
-import { BaseComponent } from '@shared/components/base/base.component';
-import { MatDialog } from '@angular/material/dialog';
-import { MODULES } from '@shared/constants/app.constants';
-import { fuseAnimations } from '@fuse/animations';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { CONFIG } from '@config/index';
-import { takeUntil } from 'rxjs/operators';
-import { MESSAGES } from '@shared/constants/messages.constant';
-import { Pagination } from '@shared/models/pagination.model';
-import * as QueryString from 'query-string';
-import { ReferenceService } from '@shared/services/reference/reference.service';
+} from "@angular/core";
+import { BaseComponent } from "@shared/components/base/base.component";
+import { MatDialog } from "@angular/material/dialog";
+import { MODULES } from "@shared/constants/app.constants";
+import { fuseAnimations } from "@fuse/animations";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatSort } from "@angular/material/sort";
+import { MatTableDataSource } from "@angular/material/table";
+import { CONFIG } from "@config/index";
+import { takeUntil } from "rxjs/operators";
+import { MESSAGES } from "@shared/constants/messages.constant";
+import { Pagination } from "@shared/models/pagination.model";
+import * as QueryString from "query-string";
+import { ReferenceService } from "@shared/services/reference/reference.service";
 @Component({
-    selector: 'app-customer',
-    templateUrl: './customer.component.html',
-    styleUrls: ['./customer.component.scss'],
+    selector: "app-customer",
+    templateUrl: "./customer.component.html",
+    styleUrls: ["./customer.component.scss"],
     animations: fuseAnimations,
     encapsulation: ViewEncapsulation.None,
 })
@@ -46,14 +46,14 @@ export class CustomerComponent
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
     displayedColumns = [
-        'firstName',
-        'lastName',
-        'email',
-        'contactNo',
-        'nationalIdNo',
-        'status',
-        'createdOn',
-        'action',
+        "firstName",
+        "lastName",
+        "email",
+        "contactNo",
+        "nationalIdNo",
+        "status",
+        "createdOn",
+        "action",
     ];
 
     constructor(
@@ -90,11 +90,9 @@ export class CustomerComponent
     }
 
     getCountries(): void {
-        this._refService.getCountries().subscribe(
-            (response) => {
-                this.nationalityList = response;
-            }
-        );
+        this._refService.getCountries().subscribe((response) => {
+            this.nationalityList = response;
+        });
     }
 
     getData(params): void {
@@ -111,25 +109,23 @@ export class CustomerComponent
                     this.dataSource = new MatTableDataSource(this.customers);
                     this.pagination.page = this.pagination.page - 1;
                 },
-                (response) => {
-                    this._notifier.error(MESSAGES.UNKNOWN);
-                }
+                (response) => super.onError(response)
             );
     }
     onPageFired(data): void {
-        this.getData({ page: data['pageIndex'] + 1, limit: data['pageSize'] });
+        this.getData({ page: data["pageIndex"] + 1, limit: data["pageSize"] });
     }
 
     onFilter(form): void {
-        this.config = {...this.config, ...form};
+        this.config = { ...this.config, ...form };
         this.getData(form);
     }
-    initParams(): object{
+    initParams(): object {
         return {
             limit: CONFIG.PAGE_SIZE,
             page: 1,
-            sort_order: 'desc',
-            sort_by: 'created_on',
+            sort_order: 'asc',
+            sort_by: 'first_name'
         };
     }
     onReset(): void {
@@ -145,24 +141,25 @@ export class CustomerComponent
             data: data,
             disableClose: true,
             hasBackdrop: true,
-            panelClass: 'app-customer-detail',
+            panelClass: "app-customer-detail",
         });
     }
     getCustomerDetail(id): void {
-        // id = "34A8F400-23F0-445F-A20C-5407BDC1C6FC";
+        //  id = "34A8F400-23F0-445F-A20C-5407BDC1C6FC";
         this._service
-            .getCustomerById(id)
+            .forkCustomer360(id)
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe(
                 (response) => {
                     this.openDialog(response);
                 },
-                (response) => {
-                    this._notifier.error(MESSAGES.UNKNOWN);
-                }
+                (response) => super.onError(response)
             );
     }
     sortData(e): void {
-        this.getData({ sort_order: e.direction ? e.direction : 'asc', sort_by: camelToSnakeCaseText(e.active) });
+        this.getData({
+            sort_order: e.direction ? e.direction : "asc",
+            sort_by: camelToSnakeCaseText(e.active),
+        });
     }
 }

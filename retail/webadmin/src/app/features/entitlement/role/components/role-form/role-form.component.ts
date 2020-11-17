@@ -44,7 +44,7 @@ export class RoleFormComponent extends BaseComponent implements OnDestroy, OnIni
      
         this.roleForm = new FormGroup({
             id: new FormControl(this.data.role.id),
-            name: new FormControl(this.data.role.name, [Validators.required]),
+            name: new FormControl(this.data.role.name, [Validators.required, Validators.minLength(3), Validators.maxLength(96)]),
             description: new FormControl(this.data.role.description, [
                 Validators.required,
             ]),
@@ -86,6 +86,10 @@ export class RoleFormComponent extends BaseComponent implements OnDestroy, OnIni
                 permissions = permissions.concat(data);
             }
         });
+        if(permissions.filter(x=>!x._deleted).length<1){
+            this._notifier.warning('Must select atleast one module to continue.');
+            return;
+        }
         model.permissions = permissions;
         this.sendResponse.emit(model);
     }

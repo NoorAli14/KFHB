@@ -1,6 +1,7 @@
-import {IsOptional, Length} from 'class-validator';
+import {IsOptional, MaxLength} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import {IdsDto} from '@common/dtos'
+import {NUMBERS} from "@rubix/common";
 
 export class ModuleDto {
  @ApiProperty({
@@ -8,9 +9,7 @@ export class ModuleDto {
     description: 'Name of the module',
     required: true
   })
-  @Length(3, 30, {
-    message: "Name must be between 3 to 96 characters"
-  })
+ @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   name: string;
 
   @ApiProperty({

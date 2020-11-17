@@ -1,7 +1,7 @@
 {
   "name": "identity-service",
-  "version": "0.3.0",
-  "description": "",
+  "version": "0.4.0",
+  "description": "To process customer documents and face images using IdentityX backend services.",
   "author": "Faizan Ahmad <faizan@aiondigital.com>",
   "private": true,
   "license": "UNLICENSED",

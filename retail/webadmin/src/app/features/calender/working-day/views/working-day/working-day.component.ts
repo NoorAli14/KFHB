@@ -1,3 +1,4 @@
+import { sortWeekDays } from './../../../../../shared/helpers/global.helper';
 import { MODULES } from './../../../../../shared/constants/app.constants';
 import {
     Component,
@@ -68,14 +69,13 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
         this._service.getWorkingDays().subscribe(
             (response) => {
                 this.workingDays = snakeToCamelArray(response);
+                this.workingDays=  this.workingDays.sort(sortWeekDays)
                 this.workingDays = this.workingDays.map((x) => this.convertData(x));
                 this.dataSource = new MatTableDataSource(this.workingDays);
                 this.dataSource.paginator = this.paginator;
                 this.dataSource.sort = this.sort;
             },
-            (response) => {
-                this._notifier.error(MESSAGES.UNKNOWN);
-            }
+            (response) => super.onError(response)
         );
     }
     convertData(item): object {
@@ -129,9 +129,7 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
                 this._matDialog.closeAll();
                 this._notifier.success(MESSAGES.CREATED('Working Day'));
             },
-            (response) => {
-                this._notifier.error(MESSAGES.UNKNOWN);
-            }
+            (response) => super.onError(response)
         );
     }
    
@@ -147,9 +145,7 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
                 this.updateGrid(this.workingDays);
                 this._matDialog.closeAll();
             },
-            (response) => {
-                this._notifier.error(MESSAGES.UNKNOWN);
-            }
+            (response) => super.onError(response)
         );
     }
     confirmDialog(type, id): void {
@@ -176,9 +172,7 @@ export class WorkingDayComponent extends BaseComponent implements OnInit {
                 this.updateGrid(this.workingDays);
                 this._notifier.success(MESSAGES.DELETED('Working Day'));
             },
-            (response) => {
-                this._notifier.error(MESSAGES.UNKNOWN);
-            }
+            (response) => super.onError(response)
         );
     }
     camelToSentenceCase(text): string  {
