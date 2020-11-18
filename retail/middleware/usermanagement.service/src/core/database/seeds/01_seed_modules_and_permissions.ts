@@ -1,5 +1,11 @@
 import * as Knex from 'knex';
-import { TABLE, MODULES, TEMP_ROLE, STATUS } from '@common/constants';
+import {
+  TABLE,
+  MODULES,
+  PERMISSIONS,
+  TEMP_ROLE,
+  STATUS,
+} from '@common/constants';
 import { uuidV4 } from '@rubix/common';
 
 const modules = [];
@@ -11,6 +17,14 @@ export async function seed(knex: Knex): Promise<any> {
 }
 
 function formatSeedData() {
+  PERMISSIONS.forEach(permission => {
+    const formattedPermission = {
+      id: uuidV4(),
+      record_type: permission.name,
+      created_by: TEMP_ROLE.SYSTEM,
+    };
+    permissions.push(formattedPermission);
+  });
   MODULES.forEach(module => {
     formatModule(module);
   });
@@ -41,12 +55,15 @@ function formatModule(module: any, parentId?: string) {
 }
 
 function formatPermission(permission, moduleId) {
-  const formattedPermission = {
-    id: uuidV4(),
-    record_type: permission.name,
-    created_by: TEMP_ROLE.SYSTEM,
-  };
-  permissions.push(formattedPermission);
+  // const formattedPermission = {
+  //   id: uuidV4(),
+  //   record_type: permission.name,
+  //   created_by: TEMP_ROLE.SYSTEM,
+  // };
+  // permissions.push(formattedPermission);
+  const formattedPermission = permissions.find(
+    permissionObj => permissionObj.record_type === permission.name,
+  );
   const formattedModulePermission = {
     module_id: moduleId,
     permission_id: formattedPermission.id,
