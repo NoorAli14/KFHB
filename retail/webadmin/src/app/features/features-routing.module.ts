@@ -15,8 +15,24 @@ const routes: Routes = [
     loadChildren: () => import('./calender/calender.module').then(m => m.CalenderModule)
   },
   {
-    path: 'setting',
+     path: 'setting',
     loadChildren: () => import('./setting/setting.module').then(m => m.SettingModule)
+  },
+  {
+    path: 'error',
+    loadChildren: () => import('./error/error.module').then(m => m.ErrorModule)
+  },
+  {
+    path: 'video',
+    loadChildren: () => import('./video/video.module').then(m => m.VideoModule)
+  },
+  {
+    path: 'dashboard',
+    loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule)
+  },
+  {
+    path: 'customer',
+    loadChildren: () => import('./customer/customer.module').then(m => m.CustomerModule)
   },
   {
     path: 'referrals',
@@ -27,16 +43,12 @@ const routes: Routes = [
     loadChildren: () => import('./service-requests/service-requests.module').then(m => m.ServiceRequestModule)
   },
   {
-    path: 'error',
-    loadChildren: () => import('./error/error.module').then(m => m.ErrorModule)
-  },
-  {
     path: '**', redirectTo: 'error'
   }
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
+    imports: [RouterModule.forChild(routes)],
+    exports: [RouterModule],
 })
-export class FeaturesRoutingModule { }
+export class FeaturesRoutingModule {}

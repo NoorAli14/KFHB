@@ -14,6 +14,7 @@ export const environment = {
     API_BASE_URL_2: 'https://aionj2middlewaredev.westindia.cloudapp.azure.com:8080',
     CHANNEL_ID: 'RUBIX-DEV-INT',
     TENANT_ID: '9013C327-1190-4875-A92A-83ACA9029160',
+    VIDEO_URL: 'https://rubix-dev01.conduit-aiondigital.com:8443',
     hmr: false,
 };
 

@@ -13,6 +13,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
 import { of, throwError } from 'rxjs';
 import { DOMHelper } from 'testing/dom.helper';
+import { NotifierService } from '@shared/services/notifier/notifier.service';
 
 describe('LoginComponent', async () => {
     let component: LoginComponent;
@@ -22,10 +23,13 @@ describe('LoginComponent', async () => {
     let injectorMock: any;
     let helper: DOMHelper<LoginComponent>;
     let model: any;
+    let notifierServiceMock: any;
     beforeEach(async(() => {
         fuseConfigServiceMock = jasmine.createSpyObj('FuseConfigService', [
             'config',
         ]);
+        notifierServiceMock = jasmine.createSpyObj('NotifierService', ['success', 'error']);
+
         injectorMock = jasmine.createSpyObj('Injector', ['get']);
 
         authenticationMock = jasmine.createSpyObj('AuthenticationService', [
@@ -47,6 +51,11 @@ describe('LoginComponent', async () => {
                     provide: AuthenticationService,
                     useValue: authenticationMock,
                 },
+                
+{
+    provide: NotifierService,
+    useValue: notifierServiceMock,
+},
                 {
                     provide: Injector,
                     useValue: injectorMock,

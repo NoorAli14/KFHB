@@ -9,24 +9,16 @@ import { SharedModule } from '@shared/shared.module';
 import { MaterialModule } from '@shared/modules/material/material.module';
 import { UserDetailComponent } from './components/user-detail/user-detail.component';
 import { DetailItemComponent } from './components/detail-item/detail-item.component';
-import { MatSortModule } from '@angular/material/sort';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
     declarations: [UserComponent, UserFormComponent, UserDetailComponent, DetailItemComponent],
     entryComponents: [UserFormComponent],
     imports: [
         CommonModule,
+        UserRoutingModule,
         SharedModule,
         FuseSharedModule,
-        UserRoutingModule,
-        MaterialModule,
-        MatSortModule,
-        MatFormFieldModule,
-        MatInputModule,
+        MaterialModule
     ],
-    exports: [
-        MatFormFieldModule,
-        MatInputModule]})
+})
 export class UserModule {}

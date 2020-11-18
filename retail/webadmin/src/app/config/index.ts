@@ -17,8 +17,8 @@ export const ngxUiLoaderConfig: NgxUiLoaderConfig = {
   };
   
 export const CONFIG = {
-    PAGE_SIZE: 10,
-    PAGE_SIZE_OPTIONS: [10, 20, 30]
+    PAGE_SIZE: 25,
+    PAGE_SIZE_OPTIONS: [25, 50, 75]
   };
 
 

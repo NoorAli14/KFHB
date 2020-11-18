@@ -1,4 +1,5 @@
 .nav {
+
     .nav-subheader {
         display: flex;
         align-items: center;
@@ -27,6 +28,7 @@
     }
 
     .nav-item {
+
         .nav-link {
             text-decoration: none !important;
             display: flex;
@@ -70,6 +72,7 @@
             }
 
             &.active {
+
                 .nav-link-icon {
                     opacity: 1;
                 }
@@ -99,7 +102,9 @@
             display: block;
 
             > .children {
+
                 > .nav-item {
+
                     > .nav-link,
                     &.nav-group > .group-title,
                     &.nav-group > .group-items > .nav-item > .nav-link {
@@ -107,7 +112,9 @@
                     }
 
                     > .children {
+
                         > .nav-item {
+
                             > .nav-link,
                             &.nav-group > .group-title,
                             &.nav-group > .group-items > .nav-item > .nav-link {
@@ -118,9 +125,11 @@
                 }
             }
         }
+
     }
 
     > .nav-item {
+
         &.nav-collapsable {
             background: transparent;
             transition: background 200ms ease-in-out;
@@ -132,7 +141,9 @@
     }
 
     > .nav-group {
+
         > .group-items {
+
             > .nav-collapsable {
                 background: transparent;
                 transition: background 200ms ease-in-out;
@@ -145,7 +156,9 @@
     }
 
     &.vertical {
+
         .nav-group {
+
             .group-title {
                 text-transform: uppercase;
             }
@@ -157,6 +170,7 @@
         flex-direction: row;
 
         .nav-item {
+
             &.nav-collapsable {
                 position: relative;
 
@@ -183,6 +197,7 @@
         }
 
         > .nav-item {
+
             > .nav-link {
                 height: 56px;
             }
@@ -209,16 +224,19 @@
     // Material 2 style
     &.material2,
     .material2 & {
+
         .nav-subheader {
             height: 40px;
         }
 
         .nav-group {
+
             > .group-title {
                 height: 40px;
             }
         }
         .nav-item {
+
             .nav-link {
                 height: 40px;
                 padding: 0 12px 0 24px;

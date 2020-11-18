@@ -1,0 +1,135 @@
+@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
+
+@import "src/@fuse/scss/fuse";
+
+app-customer-detail {
+    // Profile boxes
+    .profile-box {
+        border-radius: 4px;
+        overflow: hidden;
+        margin-bottom: 16px;
+        @include mat-elevation(2);
+
+        header {
+            padding: 16px;
+
+            .title {
+                font-size: 17px;
+            }
+
+            .more {
+                cursor: pointer;
+            }
+        }
+
+        .content {
+            flex-direction: column;padding: 20px;    min-height: 400px;max-height: 400px;
+        }
+
+        footer {
+            padding: 8px;
+            border-top: 1px solid;
+        }
+
+        &.info-box {
+            .info-line {
+                margin-bottom: 24px;
+
+                .title {
+                    font-size: 15px;
+                    font-weight: 600;
+                    padding-bottom: 4px;
+                }
+                .quest {
+                    font-size: 15px;
+                    
+                    padding-bottom: 4px;
+                }
+
+                .info {
+                }
+
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
+        }
+    }
+}
+.app-customer-detail {
+    @include media-breakpoint("xs") {
+        width: 100%;
+    }
+
+    @include media-breakpoint("gt-xs") {
+        width: 80%;
+    }
+
+    .mat-dialog-container {
+        padding: 0;
+    }
+
+    .dialog-content-wrapper {
+        max-height: 200vh;
+        display: flex;
+        flex-direction: column;
+    }
+}
+.tab-height {
+    height: 400px;
+}
+.container {
+    display: flex;
+    // flex-wrap: wrap;
+    justify-content: center;
+
+    .gallery {
+        // width: 190px;
+        // height: 130px;
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        margin: 5px;
+    }
+}
+
+.g-overlay {
+    min-width: 320px;
+}
+
+gallery {
+    font-size: 16px;
+}
+
+img {
+    width: 150px;
+}
+
+.lightbox-example,
+.gallerize-example {
+    margin: 2em;
+}
+
+.product-image {
+    width: 265px;
+    height: 160px;
+    margin-right: 16px;
+    margin-bottom: 16px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    img {
+        height: 100%;
+        width: auto;
+        max-width: none;
+    }
+    strong{
+        margin-top: 10px;
+    }
+}
+.test1{
+    background-size: 'contain' !important;
+}

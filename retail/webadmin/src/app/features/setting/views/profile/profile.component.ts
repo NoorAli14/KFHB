@@ -46,11 +46,7 @@ export class ProfileComponent extends BaseComponent implements OnInit {
                 hasBackdrop: true,
             })
             .componentInstance.sendResponse.subscribe((response) => {
-                if (!response) {
-                    this._errorEmitService.emit('', '');
-                } else {
-                    _this.onUpdateProfile(response);
-                }
+                _this.onUpdateProfile(response);
             });
     }
     getData(): void {
@@ -61,8 +57,7 @@ export class ProfileComponent extends BaseComponent implements OnInit {
                 (response) => {
                     this.nationalities = response;
                 },
-                (response) => super.onError(response)
-            );
+                (response) => super.onError(response))
     }
     onUpdateProfile(data): void {
         data = camelToSnakeCase(data);
@@ -74,12 +69,9 @@ export class ProfileComponent extends BaseComponent implements OnInit {
                     this._authUserService.User = response;
                     this.currentUser = this._authUserService.User;
                     this._matDialog.closeAll();
-                    this._errorEmitService.emit('', '');
+                    this._notifier.success( MESSAGES.UPDATED('Profile'));
                 },
-                (response) => {
-                    this._errorEmitService.emit(MESSAGES.UNKNOWN(), 'error');
-                }
-            );
+                (response) => super.onError(response))
     }
     onUpdatePassword(data): void {
         this._settingService
@@ -88,14 +80,11 @@ export class ProfileComponent extends BaseComponent implements OnInit {
             .subscribe(
                 (response) => {
                     if (response.status === 'FAILED'){
-                        this.responseMessage = MESSAGES.CUSTOM(response.message);
-                        this.errorType = 'error';
+                        this._notifier.error(response.message);
                     }else{
-                        this.errorType = 'success';
-                        this.responseMessage = MESSAGES.UPDATED('Password');
+                        this._notifier.success( MESSAGES.UPDATED('Password'));
                     }
                 },
-                (response) => super.onError(response)
-            );
+                (response) => super.onError(response))
     }
 }

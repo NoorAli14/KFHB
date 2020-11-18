@@ -118,6 +118,24 @@ export class FuseNavigationService {
 
             // return;
         }
+        // Add to the registry
+        const customFunctionNavItem = {
+            id: 'custom-function',
+            title: 'Custom Function',
+            type: 'group',
+            icon: 'settings',
+            children: [
+                {
+                    id: 'customize',
+                    title: 'Customize',
+                    type: 'item',
+                    icon: 'settings',
+                    function: () => {
+                        this.toggleSidebarOpen('themeOptionsPanel');
+                    },
+                },
+            ],
+        };
         const refferalsItem = {
             id: 'referrals',
             title: 'Referrals',
@@ -141,24 +159,6 @@ export class FuseNavigationService {
             navigation.push(serviceRequestsItem);
         }
 
-        // Add to the registry
-        const customFunctionNavItem = {
-            id: 'custom-function',
-            title: 'Custom Function',
-            type: 'group',
-            icon: 'settings',
-            children: [
-                {
-                    id: 'customize',
-                    title: 'Customize',
-                    type: 'item',
-                    icon: 'settings',
-                    function: () => {
-                        this.toggleSidebarOpen('themeOptionsPanel');
-                    },
-                },
-            ],
-        };
         const find = navigation.find((x) => x.id === 'custom-function');
         if (!find) {
             // navigation.push(customFunctionNavItem);

@@ -1,7 +1,11 @@
 import { Select } from './../models/common.model';
 import { environment } from '@env/environment';
 const VERSION = '';
-export function createUrl(baseUrl, actionName: string): string {
+export function createUrl(actionName: string): string {
+    return `${environment.API_BASE_URL}${actionName}${VERSION}`;
+}
+
+export function createUrl2(baseUrl, actionName: string): string {
     return `${baseUrl}${actionName}${VERSION}`;
 }
 
@@ -53,6 +57,7 @@ const ENTITLEMENT = '/api/v1/entitlements/';
 const REFERENCE = '/api/v1/references/';
 const SERVICEREQUEST = '/requests/api/v1/service/request/';
 const REFERRALREQUEST = '/customers/api/v1/customers/';
+const ONBOARDING = '/api/v1/onboarding/';
 
 export const URI = {
     USER_INVITATION: `${ENTITLEMENT}invitations`,
@@ -70,11 +75,16 @@ export const URI = {
     LEAVE_TYPE: `${ENTITLEMENT}leave-types`,
     LEAVES: `${ENTITLEMENT}leaves`,
     COUNTRIES: `${REFERENCE}countries`,
-    SERVICE_REQUEST_LIST: `${SERVICEREQUEST}user/all`,
+    CUSTOMERS: `${ONBOARDING}customers`,
+    CUSTOMER360: `${ONBOARDING}customers`,
+     SERVICE_REQUEST_LIST: `${SERVICEREQUEST}user/all`,
     SERVICE_REQUEST_DETAILS: `${SERVICEREQUEST}`,
     SERVICE_REQUEST_UBDATE_STATUS: `${SERVICEREQUEST}status/update`,
     SERVICE_REQUEST_REPORT: `${SERVICEREQUEST}excel/report`,
     REFERRAL: `${REFERRALREQUEST}referral`,
     REFERRAL_TRANSACTIONS: `${REFERRALREQUEST}referral/transactions`,
     REFERRAL_TRANSACTIONS_REPORT: `${REFERRALREQUEST}referral/transactions/excel/report`
+
 };
+
+export const DEFAULT_IMAGE = 'assets/images/not-available.png';
