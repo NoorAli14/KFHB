@@ -20,7 +20,7 @@ export const NUMBERS = {
   TOKEN_LENGTH: 64,
   MAX_COLUMN_LENGTH: 255,
   LEAVE_DURATION_LENGTH: 10,
-  NATIONALITY_ID_LENGTH: 96,
+  NATIONALITY_ID_LENGTH: 36,
   DEFAULT_PAGE_SIZE: 25,
 };
 
@@ -49,6 +49,24 @@ export const TEMP_ROLE = {
   SYSTEM: 'SYSTEM',
   SUPER_ADMIN: 'SUPER ADMIN',
 };
+
+export const PERMISSIONS = [
+  {
+    name: 'view',
+  },
+  {
+    name: 'edit',
+  },
+  {
+    name: 'delete',
+  },
+  {
+    name: 'create',
+  },
+  {
+    name: 'attend',
+  },
+]
 
 export const MODULES = [
   {

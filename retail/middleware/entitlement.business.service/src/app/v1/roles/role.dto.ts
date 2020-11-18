@@ -1,22 +1,20 @@
 import {
   IsNotEmpty,
-  Length,
   IsString,
   ValidateNested,
-  IsOptional
+  IsOptional, MaxLength
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { IdsDto } from '@common/dtos';
 import { Type } from 'class-transformer';
+import {NUMBERS} from "@rubix/common";
 
 export class RoleDto {
   @ApiProperty({
     example: 'Manager',
     description: 'Name of the role',
   })
-  @Length(3, 30, {
-    message: 'Name must be between 3 to 96 characters',
-  })
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsString()
   @IsNotEmpty()
   name: string;
@@ -42,9 +40,7 @@ export class UpdateRoleDto extends RoleDto {
     example: 'Manager',
     description: 'Name of the role',
   })
-  @Length(3, 30, {
-    message: 'Name must be between 3 to 96 characters',
-  })
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsString()
   @IsOptional()
   name: string;

@@ -2,7 +2,7 @@ import { IsString, IsOptional, IsEmail, IsNotEmpty, ValidateNested, MaxLength, I
 import { Type } from 'class-transformer';
 import { ApiProperty, PartialType, OmitType } from '@nestjs/swagger';
 import { IdsDto } from '@common/dtos';
-import { GENDER } from '@common/constants';
+import { GENDER, NUMBERS } from '@common/constants';
 
 export class CheckAvailabilityInput {
   @ApiProperty({
@@ -55,6 +55,7 @@ export class NewUserDto {
   })
   @IsOptional()
   @IsString()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   first_name?: string;
 
   @ApiProperty({
@@ -64,6 +65,7 @@ export class NewUserDto {
   })
   @IsString()
   @IsOptional()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   middle_name?: string;
 
   @ApiProperty({
@@ -74,6 +76,7 @@ export class NewUserDto {
   })
   @IsString()
   @IsOptional()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   last_name?: string;
 
   @ApiProperty({
@@ -83,6 +86,7 @@ export class NewUserDto {
     required: true,
   })
   @IsEmail()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   email: string;
 
   @ApiProperty({
@@ -94,6 +98,7 @@ export class NewUserDto {
   })
   @IsString()
   @IsOptional()
+  @IsIn(GENDER)
   gender?: string;
 
   @ApiProperty({
@@ -116,6 +121,7 @@ export class CurrentUserUpdateDto extends PartialType(OmitType(NewUserDto, ['ema
   })
   @IsString()
   @IsNotEmpty()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   contact_no?: string;
 
   @ApiProperty({
@@ -124,6 +130,7 @@ export class CurrentUserUpdateDto extends PartialType(OmitType(NewUserDto, ['ema
     required: false,
   })
   @IsString()
+  @IsISO8601({ strict: true })
   date_of_birth?: string;
 
   @ApiProperty({
@@ -132,6 +139,6 @@ export class CurrentUserUpdateDto extends PartialType(OmitType(NewUserDto, ['ema
     required: false,
   })
   @IsString()
-  // @MaxLength(36)
+  @MaxLength(NUMBERS.NATIONALITY_ID_LENGTH)
   nationality_id: string;
 }

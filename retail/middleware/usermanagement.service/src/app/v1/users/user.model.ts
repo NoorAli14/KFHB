@@ -83,7 +83,7 @@ export class User {
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
-  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  @MaxLength(NUMBERS.NATIONALITY_ID_LENGTH)
   nationality_id: string;
 
   @Field({ nullable: true })

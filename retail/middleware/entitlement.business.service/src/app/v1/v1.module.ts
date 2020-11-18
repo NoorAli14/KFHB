@@ -24,7 +24,8 @@ import { WorkingDayModule } from './working-days/working-day.module';
 import { HolidayModule } from './holidays/holiday.module';
 import { LeaveModule } from './leaves/leave.module';
 import { LeaveTypeModule } from './leave-types/leave-type.module';
-import { RegistryService } from '@common/services'
+import { RegistryService } from '@common/services';
+import { OtpModule } from './otp/otp.module';
 
 class AuthenticatedDataSource extends RemoteGraphQLDataSource {
   async willSendRequest({ request, context }) {
@@ -45,14 +46,15 @@ class AuthenticatedDataSource extends RemoteGraphQLDataSource {
     {
       provide: GATEWAY_BUILD_SERVICE,
       useFactory: AuthenticatedDataSource => {
-        return ({ url }): AuthenticatedDataSource => new AuthenticatedDataSource({ url });
+        return ({ url }): AuthenticatedDataSource =>
+          new AuthenticatedDataSource({ url });
       },
       inject: [AuthenticatedDataSource],
     },
   ],
   exports: [GATEWAY_BUILD_SERVICE],
 })
-class BuildServiceModule { }
+class BuildServiceModule {}
 
 @RubixModule({
   imports: [
@@ -69,6 +71,7 @@ class BuildServiceModule { }
     HolidayModule,
     LeaveTypeModule,
     LeaveModule,
+    OtpModule,
     GraphQLGatewayModule.forRootAsync({
       imports: [CommonModule, BuildServiceModule],
       useFactory: async (schema: RegistryService) => ({
@@ -96,4 +99,4 @@ class BuildServiceModule { }
     }),
   ],
 })
-export class ModuleV1 { }
+export class ModuleV1 {}

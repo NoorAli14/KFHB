@@ -4,6 +4,15 @@
 * You must have at the least `Reader` permission in the Aion's Azure subscription for your Active Directory user.
 * You must have downloaded and installed [Azure CLI tool](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli).
 
+## Setup your Azure CLI
+If you have never used Azure CLI, you'll have to set it up first, as shown below:
+
+```
+az login
+```
+
+This will briefly open up your web browser to authenticate you with MS Active Directory. Once that is done, the command prompt would show you user details, and you are good to go.
+
 ## Login to Azure container registry
 There are various ways to authenticate with the registry, but the recommended way is to use Azure CLI's `az acr login` as shown below.
 
