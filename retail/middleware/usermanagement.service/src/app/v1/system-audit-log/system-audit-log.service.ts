@@ -48,7 +48,7 @@ export class SystemAuditLogService {
     output?: string[],
   ): Promise<SystemAuditLog> {
     newObj['tenant_id'] = tenant_id;
-    const [result] = await this.systemAuditLogRepository.create(newObj, output);
+    const [result] = await this.systemAuditLogRepository.create(newObj, output || ['id', 'created_on']);
     return result;
   }
 }

@@ -35,13 +35,12 @@ export class LoginService {
       await this.systemAuditLogService.create(tenant.id, {
         audit_code: SYSTEM_AUDIT_CODES.USER_LOGIN,
         audit_text:
-          SYSTEM_AUDIT_LOG_STRINGS.LOGIN_SUCCESS + ` with email ${input.email}`,
-        user_id: user.id,
+          SYSTEM_AUDIT_LOG_STRINGS.LOGIN_SUCCESS + ` with email ${input.email}`
       });
       return user;
     }
     await this.systemAuditLogService.create(tenant.id, {
-      audit_code: SYSTEM_AUDIT_CODES.USER_LOGIN,
+      audit_code: SYSTEM_AUDIT_CODES.INVALID_PASSWORD,
       audit_text:
         SYSTEM_AUDIT_LOG_STRINGS.LOGIN_FAILED + ` with email ${input.email}`,
     });

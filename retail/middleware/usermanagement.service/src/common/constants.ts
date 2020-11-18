@@ -66,7 +66,7 @@ export const PERMISSIONS = [
   {
     name: 'attend',
   },
-]
+];
 
 export const MODULES = [
   {
@@ -258,9 +258,8 @@ export const SYSTEM_AUDIT_CODES = {
   PASSWORD_RESET: 'PASSWORD_RESET',
   USER_CREATED: 'USER_CREATED',
   USER_MODIFIED: 'USER_MODIFIED',
+  INVALID_PASSWORD: 'INVALID_PASSWORD',
   USER_LOGOUT: 'USER_LOGOUT', // not used yet
-  INVALID_PASSWORD: 'INVALID_PASSWORD', // not used yet
-  PASSWORD_CHANGE: 'PASSWORD_CHANGE', // newly added
 };
 
 export const SYSTEM_AUDIT_LOG_STRINGS = {
@@ -268,9 +267,9 @@ export const SYSTEM_AUDIT_LOG_STRINGS = {
   LOGIN_FAILED: 'Login attempt failed',
   USER_LOGOUT: 'Logged out successfully',
   PASSWORD_RESET_SUCCESS: 'Password reset successfully',
-  PASSWORD_RESET_FAILED_WRONG_TOKEN: 'Password reset failed due to wrong token',
+  PASSWORD_RESET_FAILED_WRONG_TOKEN: 'Password reset attempt failed due to wrong token',
   PASSWORD_RESET_FAILED_TIMED_OUT_TOKEN:
-    'Password reset failed due to timed-out token',
+    'Password reset attempt failed due to timed-out token',
   PASSWORD_RESET_REQUEST_SUCCESS:
     'Successfully made request for password reset',
   PASSWORD_RESET_REQUEST_FAILED: 'Password reset request failed',

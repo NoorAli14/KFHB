@@ -99,7 +99,7 @@ export class UserService {
       id,
       input,
       output,
-      SYSTEM_AUDIT_LOG_STRINGS.INVITATION_TOKEN_RESET,
+      SYSTEM_AUDIT_LOG_STRINGS.INVITATION_TOKEN_RESET + ` of user ${id}`,
     );
   }
 
@@ -145,8 +145,8 @@ export class UserService {
     const [result] = await this.userDB.update(whereCondition, userObj, output);
     await this.systemAuditLogService.create(currentUser.tenant_id, {
       audit_code: SYSTEM_AUDIT_CODES.USER_MODIFIED,
-      audit_text: eventString || SYSTEM_AUDIT_LOG_STRINGS.USER_MODIFIED,
-      user_id: id,
+      audit_text: eventString || ( SYSTEM_AUDIT_LOG_STRINGS.USER_MODIFIED + ` of id ${id} `),
+      user_id: currentUser.id,
     });
     return result;
   }
@@ -179,8 +179,8 @@ export class UserService {
     const [result] = await this.userDB.create(newUser, output);
     await this.systemAuditLogService.create(currentUser.tenant_id, {
       audit_code: SYSTEM_AUDIT_CODES.USER_CREATED,
-      audit_text: SYSTEM_AUDIT_LOG_STRINGS.USER_CREATED,
-      user_id: result.id,
+      audit_text: SYSTEM_AUDIT_LOG_STRINGS.USER_CREATED + ` of id ${result.id}`,
+      user_id: currentUser.id,
     });
     return result;
   }
@@ -208,9 +208,9 @@ export class UserService {
       )
     ) {
       await this.systemAuditLogService.create(currentUser.tenant_id, {
-        audit_code: SYSTEM_AUDIT_CODES.PASSWORD_CHANGE,
-        audit_text: SYSTEM_AUDIT_LOG_STRINGS.PASSWORD_CHANGE_FAILED,
-        user_id: user.id,
+        audit_code: SYSTEM_AUDIT_CODES.INVALID_PASSWORD,
+        audit_text: SYSTEM_AUDIT_LOG_STRINGS.PASSWORD_CHANGE_FAILED + ` of user ${user.id}`,
+        user_id: currentUser.id,
       });
       throw new PasswordMismatchException(user.id);
     }
@@ -218,9 +218,9 @@ export class UserService {
       password_digest: this.encrypter.encryptPassword(input.new_password),
     };
     await this.systemAuditLogService.create(currentUser.tenant_id, {
-      audit_code: SYSTEM_AUDIT_CODES.PASSWORD_CHANGE,
-      audit_text: SYSTEM_AUDIT_LOG_STRINGS.PASSWORD_CHANGE_SUCCESS,
-      user_id: user.id,
+      audit_code: SYSTEM_AUDIT_CODES.PASSWORD_RESET,
+      audit_text: SYSTEM_AUDIT_LOG_STRINGS.PASSWORD_CHANGE_SUCCESS + ` of user ${user.id}`,
+      user_id: currentUser.id,
     });
     return this.update(currentUser, user.id, userObj, output);
   }
