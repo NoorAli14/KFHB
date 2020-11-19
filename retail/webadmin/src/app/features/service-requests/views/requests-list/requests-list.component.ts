@@ -1,6 +1,6 @@
 import { BaseComponent } from '@shared/components/base/base.component';
 import { CONFIG } from '../../../../config';
-import { Component, OnInit, ViewEncapsulation, ViewChild, Injector } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ViewChild, Injector, OnDestroy } from '@angular/core';
 import { fuseAnimations } from '@fuse/animations';
 import { MatDialog } from '@angular/material/dialog';
 import { ServiceRequests } from '@feature/service-requests/models/service-requests.model';
@@ -58,16 +58,6 @@ export class RequestsListComponent extends BaseComponent implements OnInit {
   ngOnInit(): void {
     super.ngOnInit();
     this.getData();
-    this.id = setInterval(() => {
-      console.log('call to the server  at:'+ new Date())
-      this.getData();
-    }, 300000);
-    
-  }
-  ngOnDestroy() {
-    if (this.id) {
-      clearInterval(this.id);
-    }
   }
   getData = () => {
     this._service.getServiceRequests().subscribe(
@@ -123,5 +113,4 @@ export class RequestsListComponent extends BaseComponent implements OnInit {
     downloadLink.download = fileName;
     downloadLink.click();
   }
-
 }

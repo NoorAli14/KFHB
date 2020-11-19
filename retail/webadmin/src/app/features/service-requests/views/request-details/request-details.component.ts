@@ -49,17 +49,12 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
   serviceRequestForm: FormGroup;
   btnDisable = false;
   disabled = false;
-  constructor(public _matDialog: MatDialog, injector: Injector,
-    private _serviceRequestsService: ServiceRequestsService,
-    private activatedRoute: ActivatedRoute) {
+  constructor(public _matDialog: MatDialog, injector: Injector, private _serviceRequestsService: ServiceRequestsService, private activatedRoute: ActivatedRoute) {
     super(injector);
   }
-
   ngOnInit(): void {
     super.ngOnInit();
-    this.activatedRoute.params.subscribe(paramsId => {
-      this.id = paramsId.id;
-    });
+    this.activatedRoute.params.subscribe(paramsId => { this.id = paramsId.id; });
     this.getData();
     this.serviceRequestForm = new FormGroup({
       comments: new FormControl('', []),
@@ -137,7 +132,6 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
       }
     });
   }
-
   updateGrid(data): void {
     this.dataSource.data = data;
     this.dataSource.paginator = this.paginator;
@@ -153,7 +147,7 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
     downloadLink.download = fileName;
     downloadLink.click();
 
-    
+
   }
   viewDocument(data, extention): void {
     this.checkType(extention)
@@ -167,7 +161,6 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
     var fileURL = URL.createObjectURL(file);
     window.open(fileURL);
   }
-
   checkType(extention): void {
     if (extention.includes('.')) {
       extention = extention.split('.')[1];
