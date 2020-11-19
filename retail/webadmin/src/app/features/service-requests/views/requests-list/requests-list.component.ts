@@ -30,7 +30,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   animations: fuseAnimations,
   encapsulation: ViewEncapsulation.None,
 })
-export class RequestsListComponent extends BaseComponent implements OnInit, OnDestroy {
+export class RequestsListComponent extends BaseComponent implements OnInit {
   dialogRef: any;
   userPermissions: any[];
   username: FormControl;
@@ -58,11 +58,6 @@ export class RequestsListComponent extends BaseComponent implements OnInit, OnDe
   ngOnInit(): void {
     super.ngOnInit();
     this.getData();
-  }
-  ngOnDestroy(): void {
-    if (this.id) {
-      clearInterval(this.id);
-    }
   }
   getData = () => {
     this._service.getServiceRequests().subscribe(
@@ -118,5 +113,4 @@ export class RequestsListComponent extends BaseComponent implements OnInit, OnDe
     downloadLink.download = fileName;
     downloadLink.click();
   }
-
 }
