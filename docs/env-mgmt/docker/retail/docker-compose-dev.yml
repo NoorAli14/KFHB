@@ -16,8 +16,9 @@ services:
     image: rubixgateway:dev
     container_name: retail_gateway
     volumes:
-      - ${ENV_RBX_VOLUME_PATH}/gateway.service/certs:/home/aiondigital/rubix/certs/
-      - ${ENV_RBX_VOLUME_PATH}/gateway.service/domain.conf:/home/aiondigital/rubix/nginx/domain.conf
+      - ${ENV_RBX_VOLUME_PATH}/gateway.service/domain.conf:/etc/nginx/conf.d/domain.conf
+      - ${ENV_RBX_VOLUME_PATH}/gateway.service/certs/fullchain.pem:/etc/nginx/domainssl/domain.crt
+      - ${ENV_RBX_VOLUME_PATH}/gateway.service/certs/private.key:/etc/nginx/domainssl/domain.key
     networks:
       - core_service_network
     ports:
