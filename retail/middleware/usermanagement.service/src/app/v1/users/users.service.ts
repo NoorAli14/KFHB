@@ -124,6 +124,7 @@ export class UserService {
     userObj: Record<string, any>,
     output: string[],
     eventString?: string,
+    eventHeading?: string,
   ): Promise<User> {
     if (userObj.password) {
       userObj.password_digest = this.encrypter.encryptPassword(
@@ -144,7 +145,7 @@ export class UserService {
       whereCondition['entity_id'] = currentUser.entity_id;
     const [result] = await this.userDB.update(whereCondition, userObj, output);
     await this.systemAuditLogService.create(currentUser.tenant_id, {
-      audit_code: SYSTEM_AUDIT_CODES.USER_MODIFIED,
+      audit_code: eventHeading || SYSTEM_AUDIT_CODES.USER_MODIFIED,
       audit_text: eventString || ( SYSTEM_AUDIT_LOG_STRINGS.USER_MODIFIED + ` of id ${id} `),
       user_id: currentUser.id,
     });
@@ -192,6 +193,11 @@ export class UserService {
       id,
       currentUser.entity_id,
     );
+    await this.systemAuditLogService.create(currentUser.tenant_id, {
+      audit_code: SYSTEM_AUDIT_CODES.USER_DELETED,
+      audit_text: SYSTEM_AUDIT_LOG_STRINGS.USER_DELETED + ` of id ${id}`,
+      user_id: currentUser.id,
+    });
     return !!result;
   }
 
@@ -217,12 +223,14 @@ export class UserService {
     const userObj = {
       password_digest: this.encrypter.encryptPassword(input.new_password),
     };
-    await this.systemAuditLogService.create(currentUser.tenant_id, {
-      audit_code: SYSTEM_AUDIT_CODES.PASSWORD_RESET,
-      audit_text: SYSTEM_AUDIT_LOG_STRINGS.PASSWORD_CHANGE_SUCCESS + ` of user ${user.id}`,
-      user_id: currentUser.id,
-    });
-    return this.update(currentUser, user.id, userObj, output);
+    return this.update(
+      currentUser,
+      user.id,
+      userObj,
+      output,
+      SYSTEM_AUDIT_LOG_STRINGS.PASSWORD_CHANGE_SUCCESS + ` of user ${user.id}`,
+      SYSTEM_AUDIT_CODES.PASSWORD_RESET
+    );
   }
 
   async findAvailableAgents(

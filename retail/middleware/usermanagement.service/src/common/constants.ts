@@ -259,6 +259,7 @@ export const SYSTEM_AUDIT_CODES = {
   USER_CREATED: 'USER_CREATED',
   USER_MODIFIED: 'USER_MODIFIED',
   INVALID_PASSWORD: 'INVALID_PASSWORD',
+  USER_DELETED: 'USER_DELETED', // newly added
   USER_LOGOUT: 'USER_LOGOUT', // not used yet
 };
 
@@ -279,6 +280,7 @@ export const SYSTEM_AUDIT_LOG_STRINGS = {
   PASSWORD_CHANGE_SUCCESS: 'Password changed successfully',
   USER_CREATED: 'User created successfully',
   USER_MODIFIED: 'User modified successfully',
+  USER_DELETED: 'User deleted successfully',
 };
 
 export const DATABASE_MIGRATION_TABLE_NAME = 'RUBIX_ENTITLEMENT_MIGRATIONS';
