@@ -32,7 +32,7 @@ export class GqlClientService {
           }
           return response.data?.data?.result || response.data?.data;
         }),
-        timeout(5000),
+        timeout(this.config.APP.HTTP_TIMEOUT),
         catchError(err => {
           if (err instanceof TimeoutError) {
             return throwError(new RequestTimeoutException());
