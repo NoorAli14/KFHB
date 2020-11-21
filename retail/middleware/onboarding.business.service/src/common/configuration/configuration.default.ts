@@ -5,6 +5,7 @@ export const DEFAULT_ENV: iConfig = {
     DESCRIPTION: '',
     VERSION: '1.0.0',
     PORT: null,
+    HTTP_TIMEOUT: 5000,
     HOST: '',
     ENVIRONMENT: 'development',
     API_URL_PREFIX: '/api/v1/',
