@@ -101,8 +101,8 @@ export abstract class BaseRepository {
     const condition = {
       id: record_id,
       tenant_id: tenant_id,
-      entity_id: entity_id || null
     };
+    if (entity_id) condition['entity_id'] = entity_id;
     const input = {
       deleted_on: this._connection.fn.now(),
       deleted_by: current_user_id,

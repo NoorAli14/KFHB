@@ -52,9 +52,9 @@ export class UserService {
     }
     const condition = {
       deleted_on: null,
-      tenant_id: current_user.tenant_id,
-      entity_id: current_user.entity_id || null
+      tenant_id: current_user.tenant_id
     };
+    if (current_user.entity_id) condition['entity_id'] = current_user.entity_id;
     return this.userDB.list(
       paginationParams,
       filteringParams,
@@ -72,9 +72,9 @@ export class UserService {
     const condition = {
       id,
       deleted_on: null,
-      tenant_id: currentUser.tenant_id,
-      entity_id: currentUser.entity_id || null
+      tenant_id: currentUser.tenant_id
     };
+    if (currentUser.entity_id) condition['entity_id'] = currentUser.entity_id;
     return this.userDB.findOne(condition, output);
   }
 
@@ -103,7 +103,7 @@ export class UserService {
     });
     conditions['tenant_id'] = currentUser.tenant_id;
     conditions['deleted_on'] = null;
-    conditions['entity_id'] = currentUser.entity_id || null;
+    if (currentUser.entity_id) conditions['entity_id'] = currentUser.entity_id;
     return this.userDB.findBy(conditions, output);
   }
 
@@ -126,9 +126,9 @@ export class UserService {
     const whereCondition = {
       id: id,
       deleted_on: null,
-      tenant_id: currentUser.tenant_id,
-      entity_id: currentUser.entity_id || null
+      tenant_id: currentUser.tenant_id
     };
+    if (currentUser.entity_id) whereCondition['entity_id'] = currentUser.entity_id;
     const [result] = await this.userDB.update(whereCondition, userObj, output);
     return result;
   }
@@ -154,10 +154,10 @@ export class UserService {
         this.configService.APP.INVITATION_TOKEN_EXPIRY,
       ),
       tenant_id: currentUser.tenant_id,
-      entity_id: currentUser.entity_id || null,
       created_by: currentUser.id,
       updated_by: currentUser.id,
     };
+    if (currentUser.entity_id) newUser['entity_id'] = currentUser.entity_id;
     const [result] = await this.userDB.create(newUser, output);
     return result;
   }
@@ -220,7 +220,7 @@ export class UserService {
       if (input.gender) {
         conditions[`${TABLE.USER}.gender`] = input.gender;
       }
-      conditions[`${TABLE.USER}.entity_id`] = current_user.entity_id || null;
+      if (current_user.entity_id) conditions[`${TABLE.USER}.entity_id`] = current_user.entity_id;
       return this.userDB.listExcludedUsers(userIds, conditions);
     } else {
       return [];
