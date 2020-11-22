@@ -9,7 +9,7 @@ import { ServiceRequestsService } from '@feature/service-requests/services/servi
 import { FormControl } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { takeUntil } from "rxjs/operators";
+import { takeUntil } from 'rxjs/operators';
 import { MatSort } from '@angular/material/sort';
 import {
   camelToSentenceCase,
