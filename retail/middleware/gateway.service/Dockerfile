@@ -1,11 +1,13 @@
+# ################################################################
+# Docker file for wrapping nodejs service components
+# Copyright 2020-21 AionDigital
+# ################################################################
+
+# Using latest nginx LTS version running on alpine
 FROM nginx:alpine
 
-COPY ./nginx/entrypoint-nginx.sh /
+# copying default nginx configs
+COPY ./nginx/domain.conf /etc/nginx/conf.d/default.conf
 
-RUN set -ex && \
-	apk add --no-cache bash && \
-	chmod +x /entrypoint-nginx.sh
-
-COPY ./nginx/domain.conf /etc/nginx/conf.d/vhost.template
-
-CMD [ "/bin/bash", "/entrypoint-nginx.sh"]
+# Run the nginx service on container startup.
+CMD ["nginx", "-g", "daemon off;"]
