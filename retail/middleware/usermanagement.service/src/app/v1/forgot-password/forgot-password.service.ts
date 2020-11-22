@@ -76,7 +76,8 @@ export class ForgotPasswordService {
       audit_code: SYSTEM_AUDIT_CODES.PASSWORD_RESET,
       audit_text:
         SYSTEM_AUDIT_LOG_STRINGS.PASSWORD_RESET_REQUEST_SUCCESS +
-        ` with email ${input.email}`
+        ` with email ${input.email}`,
+      user_id: user.id
     });
     return result;
   }
@@ -117,14 +118,16 @@ export class ForgotPasswordService {
       );
       await this.systemAuditLogService.create(tenant.id, {
         audit_code: SYSTEM_AUDIT_CODES.PASSWORD_RESET,
-        audit_text: SYSTEM_AUDIT_LOG_STRINGS.PASSWORD_RESET_SUCCESS + ` of user ${user.id}`
+        audit_text: SYSTEM_AUDIT_LOG_STRINGS.PASSWORD_RESET_SUCCESS + ` of user ${user.id}`,
+        user_id: user.id
       });
       return result;
     } else {
       await this.systemAuditLogService.create(tenant.id, {
         audit_code: SYSTEM_AUDIT_CODES.PASSWORD_RESET,
         audit_text:
-          SYSTEM_AUDIT_LOG_STRINGS.PASSWORD_RESET_FAILED_TIMED_OUT_TOKEN
+          SYSTEM_AUDIT_LOG_STRINGS.PASSWORD_RESET_FAILED_TIMED_OUT_TOKEN,
+        user_id: user.id
       });
       throw new TokenInvalidOrExpiredException(input.password_reset_token);
     }
