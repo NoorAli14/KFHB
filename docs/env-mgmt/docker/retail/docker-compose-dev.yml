@@ -78,6 +78,7 @@ services:
       - ENV_RBX_WEB_ONBOARDING_LINK=$ENV_RBX_WEB_ONBOARDING_LINK
       - ENV_RBX_WEB_RESET_PASSWORD_LINK=$ENV_RBX_WEB_RESET_PASSWORD_LINK
       - ENV_RBX_REDIS_URL=$ENV_RBX_REDIS_URL
+      - ENV_RBX_HTTP_TIMEOUT=$ENV_RBX_HTTP_TIMEOUT
     restart: always
     networks:
       - core_service_network
@@ -103,6 +104,7 @@ services:
       - ENV_RBX_REDIS_URL=$ENV_RBX_REDIS_URL
       - ENV_RBX_BASIC_AUTH_KEY=$ENV_RBX_BASIC_AUTH_KEY
       - ENV_RBX_BASIC_AUTH_SECRET=$ENV_RBX_BASIC_AUTH_SECRET
+      - ENV_RBX_HTTP_TIMEOUT=$ENV_RBX_HTTP_TIMEOUT
     restart: always
     volumes:
       - ${ENV_RBX_VOLUME_PATH}/videocall.service/uploads:/home/aiondigital/rubix/uploads/
