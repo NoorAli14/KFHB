@@ -6,8 +6,8 @@ import { ValidationException } from '@common/exceptions';
 export class ValidationExceptionFilter implements ExceptionFilter {
     private readonly logger = new Logger(ValidationExceptionFilter.name);
     catch(exception: ValidationException | any, host: ArgumentsHost): void {
-        if (Array.isArray(exception['response'])) {
-            exception['response'].map(validationError => {
+        if (Array.isArray(exception['__errors'])) {
+            exception['__errors'].map(validationError => {
                 const property: string = validationError['property'];
                 if (property?.includes('_')) {
                     const constraints = validationError['constraints'];
