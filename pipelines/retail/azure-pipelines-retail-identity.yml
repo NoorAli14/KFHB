@@ -13,7 +13,7 @@ resources:
 
 variables:
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: 'e11b76b8-024b-445d-b872-aaba976b9e8b'
+  dockerRegistryServiceConnection: '76498237-6ffd-4497-92bb-6730789de17c'
   imageRepository: 'rubixretailidentity'
   containerRegistry: 'testdaon.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/retail/middleware/identity.service/Dockerfile'
