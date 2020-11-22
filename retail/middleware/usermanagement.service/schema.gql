@@ -291,6 +291,7 @@ type Query {
   leaveTypeList: [LeaveType!]!
   findLeaveTypeById(id: String!): LeaveType!
   findLeaveTypeBy(checks: [KeyValInput!]!): [LeaveType!]!
+  systemAuditLogList(sort_by: SortingParam, filters: SALFilterParams, pagination: PaginationParams): SALWithPagination!
 }
 
 type Role {
@@ -333,9 +334,31 @@ type RolesWithPagination {
   data: [Role!]
 }
 
+input SALFilterParams {
+  audit_code: String
+  audit_text: String
+  user_id: String
+  created_on: CreatedOnParams
+}
+
+type SALWithPagination {
+  pagination: ENT_PaginationModel
+  data: [SystemAuditLog!]
+}
+
 input SortingParam {
   sort_by: String
   sort_order: String
+}
+
+type SystemAuditLog {
+  id: ID!
+  tenant_id: String!
+  user_id: String
+  audit_code: String!
+  audit_text: String
+  created_on: String!
+  created_by: String!
 }
 
 input UpdatePasswordInput {

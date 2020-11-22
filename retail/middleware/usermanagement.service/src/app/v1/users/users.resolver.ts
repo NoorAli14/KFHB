@@ -9,23 +9,23 @@ import {
 import * as DataLoader from 'dataloader';
 import { Loader } from 'nestjs-dataloader';
 
-import { UserService } from '@app/v1/users/users.service';
+import { UserService } from './users.service';
 import {
   CreateUserInput,
   UpdateUserInput,
   UpdatePasswordInput,
   CheckAvailabilityInput,
-} from '@app/v1/users/user.dto';
+} from './user.dto';
 import { Role } from '@app/v1/roles/role.model';
 import { KeyValInput } from '@common/inputs/key-val.input';
 import { Module } from '@app/v1/modules/module.model';
 import { Leave } from '@app/v1/leave/leave.model';
 import { CurrentUser, Fields } from '@common/decorators';
 import { ICurrentUser } from '@common/interfaces';
-import { User, UsersWithPagination } from '@app/v1/users/user.model';
+import { User, UsersWithPagination } from './user.model';
 import { UserNotFoundException } from './exceptions';
 import { PaginationParams, SortingParam } from '@common/dtos';
-import { UsersFilterParams } from '@app/v1/users/dtos';
+import { UsersFilterParams } from './dtos';
 
 @Resolver(User)
 export class UsersResolver {

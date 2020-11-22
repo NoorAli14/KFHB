@@ -6,3 +6,4 @@ export * from './permission.repository';
 export * from './working-days.repository';
 export * from './holiday.repository';
 export * from './leave.repository';
+export * from './system-audit-log.repository';

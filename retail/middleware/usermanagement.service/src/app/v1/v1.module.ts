@@ -15,6 +15,7 @@ import { WorkingDaysModule } from '@app/v1/working-days/working-days.module';
 import { HolidaysModule } from '@app/v1/holiday/holidays.module';
 import { LeavesModule } from '@app/v1/leave/leaves.module';
 import { Leave_typeModule } from '@app/v1/leave_type/leave_type.module';
+import { SystemAuditLogModule } from '@app/v1/system-audit-log/system-audit-log.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { Leave_typeModule } from '@app/v1/leave_type/leave_type.module';
     HolidaysModule,
     LeavesModule,
     Leave_typeModule,
+    SystemAuditLogModule,
     GraphQLFederationModule.forRootAsync({
       imports: [CommonModule],
       useFactory: async (configService: ConfigurationService) => ({

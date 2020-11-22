@@ -2,7 +2,13 @@ import { Injectable } from '@nestjs/common';
 
 import { UserRepository } from '@core/repository/';
 import { Encrypter } from '@common/encrypter';
-import { NUMBERS, STATUS, TABLE } from '@common/constants';
+import {
+  NUMBERS,
+  STATUS,
+  SYSTEM_AUDIT_CODES,
+  SYSTEM_AUDIT_LOG_STRINGS,
+  TABLE,
+} from '@common/constants';
 import { KeyValInput } from '@common/inputs/key-val.input';
 import {
   addMinutes,
@@ -14,13 +20,14 @@ import { HolidaysService } from '@app/v1/holiday/holidays.service';
 import { LeavesService } from '@app/v1/leave/leaves.service';
 import { WorkingDaysService } from '@app/v1/working-days/working-days.service';
 import { ICurrentUser } from '@common/interfaces';
-import { CheckAvailabilityInput } from '@app/v1/users/user.dto';
-import { User, UsersWithPagination } from '@app/v1/users/user.model';
+import { CheckAvailabilityInput } from './user.dto';
+import { User, UsersWithPagination } from './user.model';
 import { PasswordMismatchException } from './exceptions/password-mismatch.exception';
 import { UpdatePasswordInput } from './user.dto';
 import { PaginationParams, SortingParam } from '@common/dtos';
-import { UsersFilterParams } from '@app/v1/users/dtos';
+import { UsersFilterParams } from './dtos';
 import { CreatedOnStartShouldBeLessThanEndException } from '@common/exceptions';
+import { SystemAuditLogService } from '@app/v1/system-audit-log/system-audit-log.service';
 
 @Injectable()
 export class UserService {
@@ -31,7 +38,8 @@ export class UserService {
     private holidaysService: HolidaysService,
     private leavesService: LeavesService,
     private workingDaysService: WorkingDaysService,
-  ) { }
+    private systemAuditLogService: SystemAuditLogService,
+  ) {}
 
   async list(
     current_user: ICurrentUser,
@@ -43,7 +51,7 @@ export class UserService {
     if (
       filteringParams?.created_on &&
       new Date(filteringParams?.created_on.start).getTime() >
-      new Date(filteringParams?.created_on.end).getTime()
+        new Date(filteringParams?.created_on.end).getTime()
     ) {
       throw new CreatedOnStartShouldBeLessThanEndException(
         filteringParams?.created_on.start,
@@ -89,7 +97,13 @@ export class UserService {
         this.configService.APP.INVITATION_TOKEN_EXPIRY,
       ),
     };
-    return this.update(currentUser, id, input, output);
+    return this.update(
+      currentUser,
+      id,
+      input,
+      output,
+      SYSTEM_AUDIT_LOG_STRINGS.INVITATION_TOKEN_RESET + ` of user ${id}`,
+    );
   }
 
   async findByProperty(
@@ -111,7 +125,9 @@ export class UserService {
     currentUser: ICurrentUser,
     id: string,
     userObj: Record<string, any>,
-    output?: string[],
+    output: string[],
+    eventString?: string,
+    eventHeading?: string,
   ): Promise<User> {
     if (userObj.password) {
       userObj.password_digest = this.encrypter.encryptPassword(
@@ -130,6 +146,11 @@ export class UserService {
       entity_id: currentUser.entity_id || null
     };
     const [result] = await this.userDB.update(whereCondition, userObj, output);
+    await this.systemAuditLogService.create(currentUser.tenant_id, {
+      audit_code: eventHeading || SYSTEM_AUDIT_CODES.USER_MODIFIED,
+      audit_text: eventString || ( SYSTEM_AUDIT_LOG_STRINGS.USER_MODIFIED + ` of id ${id} `),
+      user_id: currentUser.id,
+    });
     return result;
   }
 
@@ -159,6 +180,11 @@ export class UserService {
       updated_by: currentUser.id,
     };
     const [result] = await this.userDB.create(newUser, output);
+    await this.systemAuditLogService.create(currentUser.tenant_id, {
+      audit_code: SYSTEM_AUDIT_CODES.USER_CREATED,
+      audit_text: SYSTEM_AUDIT_LOG_STRINGS.USER_CREATED + ` of id ${result.id}`,
+      user_id: currentUser.id,
+    });
     return result;
   }
 
@@ -169,6 +195,11 @@ export class UserService {
       id,
       currentUser.entity_id,
     );
+    await this.systemAuditLogService.create(currentUser.tenant_id, {
+      audit_code: SYSTEM_AUDIT_CODES.USER_DELETED,
+      audit_text: SYSTEM_AUDIT_LOG_STRINGS.USER_DELETED + ` of id ${id}`,
+      user_id: currentUser.id,
+    });
     return !!result;
   }
 
@@ -184,12 +215,24 @@ export class UserService {
         user.password_digest,
       )
     ) {
+      await this.systemAuditLogService.create(currentUser.tenant_id, {
+        audit_code: SYSTEM_AUDIT_CODES.INVALID_PASSWORD,
+        audit_text: SYSTEM_AUDIT_LOG_STRINGS.PASSWORD_CHANGE_FAILED + ` of user ${user.id}`,
+        user_id: currentUser.id,
+      });
       throw new PasswordMismatchException(user.id);
     }
     const userObj = {
       password_digest: this.encrypter.encryptPassword(input.new_password),
     };
-    return this.update(currentUser, user.id, userObj, output);
+    return this.update(
+      currentUser,
+      user.id,
+      userObj,
+      output,
+      SYSTEM_AUDIT_LOG_STRINGS.PASSWORD_CHANGE_SUCCESS + ` of user ${user.id}`,
+      SYSTEM_AUDIT_CODES.PASSWORD_UPDATED
+    );
   }
 
   async findAvailableAgents(
