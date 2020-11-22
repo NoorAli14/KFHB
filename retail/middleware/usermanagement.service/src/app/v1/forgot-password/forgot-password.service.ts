@@ -1,7 +1,12 @@
 import { Injectable } from '@nestjs/common';
 
 import { Encrypter } from '@common/encrypter';
-import { NUMBERS, STATUS } from '@common/constants';
+import {
+  NUMBERS,
+  STATUS,
+  SYSTEM_AUDIT_CODES,
+  SYSTEM_AUDIT_LOG_STRINGS,
+} from '@common/constants';
 import {
   ChangePasswordInput,
   ForgotPasswordInput,
@@ -17,6 +22,7 @@ import { UserRepository } from '@core/repository';
 import { TokenInvalidOrExpiredException } from './exceptions';
 import { User } from '../users/user.model';
 import { UserNotFoundException } from '../users/exceptions';
+import { SystemAuditLogService } from '@app/v1/system-audit-log/system-audit-log.service';
 
 @Injectable()
 export class ForgotPasswordService {
@@ -24,6 +30,7 @@ export class ForgotPasswordService {
     private readonly userDB: UserRepository,
     private readonly encrypter: Encrypter,
     private readonly configService: ConfigurationService,
+    private readonly systemAuditLogService: SystemAuditLogService,
   ) {}
 
   async verifyAndGetToken(
@@ -36,7 +43,15 @@ export class ForgotPasswordService {
       input.email,
       ['id', 'tenant_id'],
     );
-    if (!user) throw new UserNotFoundException(input.email);
+    if (!user) {
+      await this.systemAuditLogService.create(tenant.id, {
+        audit_code: SYSTEM_AUDIT_CODES.FORGET_PASSWORD_REQUEST,
+        audit_text:
+          SYSTEM_AUDIT_LOG_STRINGS.PASSWORD_RESET_REQUEST_FAILED +
+          ` with email ${input.email}`,
+      });
+      throw new UserNotFoundException(input.email);
+    }
     const hash = generateRandomString(NUMBERS.TOKEN_LENGTH);
     const updateParams = {
       password_reset_token: hash,
@@ -44,7 +59,7 @@ export class ForgotPasswordService {
         this.configService.APP.INVITATION_TOKEN_EXPIRY,
       ),
       updated_by: user.id,
-      updated_on: getCurrentTimeStamp(), // TODO: use knex timestamps
+      updated_on: getCurrentTimeStamp(),
     };
     const whereCondition = {
       id: user.id,
@@ -57,6 +72,13 @@ export class ForgotPasswordService {
       updateParams,
       output,
     );
+    await this.systemAuditLogService.create(tenant.id, {
+      audit_code: SYSTEM_AUDIT_CODES.FORGET_PASSWORD_REQUEST,
+      audit_text:
+        SYSTEM_AUDIT_LOG_STRINGS.PASSWORD_RESET_REQUEST_SUCCESS +
+        ` with email ${input.email}`,
+      user_id: user.id
+    });
     return result;
   }
 
@@ -70,10 +92,13 @@ export class ForgotPasswordService {
       input.password_reset_token,
       ['id', 'password_reset_token_expiry'],
     );
-    if (!user)
+    if (!user) {
+      await this.systemAuditLogService.create(tenant.id, {
+        audit_code: SYSTEM_AUDIT_CODES.PASSWORD_UPDATE_FAILED,
+        audit_text: SYSTEM_AUDIT_LOG_STRINGS.PASSWORD_RESET_FAILED_WRONG_TOKEN,
+      });
       throw new TokenInvalidOrExpiredException(input.password_reset_token);
-
-    // todo  - user momentjs and write util methods
+    }
     if (user?.password_reset_token_expiry?.getTime() > new Date().getTime()) {
       const updateParams = {
         password_digest: this.encrypter.encryptPassword(input.password),
@@ -91,8 +116,19 @@ export class ForgotPasswordService {
         updateParams,
         output,
       );
+      await this.systemAuditLogService.create(tenant.id, {
+        audit_code: SYSTEM_AUDIT_CODES.PASSWORD_UPDATED,
+        audit_text: SYSTEM_AUDIT_LOG_STRINGS.PASSWORD_RESET_SUCCESS + ` of user ${user.id}`,
+        user_id: user.id
+      });
       return result;
     } else {
+      await this.systemAuditLogService.create(tenant.id, {
+        audit_code: SYSTEM_AUDIT_CODES.PASSWORD_UPDATE_FAILED,
+        audit_text:
+          SYSTEM_AUDIT_LOG_STRINGS.PASSWORD_RESET_FAILED_TIMED_OUT_TOKEN,
+        user_id: user.id
+      });
       throw new TokenInvalidOrExpiredException(input.password_reset_token);
     }
   }

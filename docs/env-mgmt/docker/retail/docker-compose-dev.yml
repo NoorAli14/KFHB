@@ -15,21 +15,16 @@ services:
   retail-gateway:
     image: rubixgateway:dev
     container_name: retail_gateway
-    environment:
-      - ENV_RBX_NGINX_SERVER_NAME=$ENV_RBX_NGINX_SERVER_NAME
-      - ENV_RBX_PORTAL_HOST=$ENV_RBX_PORTAL_HOST
-      - ENV_RBX_PORTAL_PORT=$ENV_RBX_PORTAL_PORT
-      - ENV_RBX_ENTITLEMENT_HOST=$ENV_RBX_ENTITLEMENT_HOST
-      - ENV_RBX_ENTITLEMENT_PORT=$ENV_RBX_ENTITLEMENT_PORT
-      - ENV_RBX_ONBOARDING_HOST=$ENV_RBX_ONBOARDING_HOST
-      - ENV_RBX_ONBOARDING_PORT=$ENV_RBX_ONBOARDING_PORT
-      - ENV_RBX_REFERENCE_HOST=$ENV_RBX_REFERENCE_HOST
-      - ENV_RBX_REFERENCE_PORT=$ENV_RBX_REFERENCE_PORT
-      - ENV_RBX_NGINX_MAX_BODY=$ENV_RBX_NGINX_MAX_BODY
+    volumes:
+      - ${ENV_RBX_VOLUME_PATH}/gateway.service/domain.conf:/etc/nginx/conf.d/default.conf
+      - ${ENV_RBX_VOLUME_PATH}/gateway.service/certs/fullchain.pem:/etc/nginx/domainssl/domain.crt
+      - ${ENV_RBX_VOLUME_PATH}/gateway.service/certs/private.key:/etc/nginx/domainssl/domain.key
     networks:
       - core_service_network
     ports:
       - 80:80
+      - 443:443
+      - 8443:8443
   #=================================================================
   # Admin Web Portal Service
   #=================================================================
@@ -83,6 +78,7 @@ services:
       - ENV_RBX_WEB_ONBOARDING_LINK=$ENV_RBX_WEB_ONBOARDING_LINK
       - ENV_RBX_WEB_RESET_PASSWORD_LINK=$ENV_RBX_WEB_RESET_PASSWORD_LINK
       - ENV_RBX_REDIS_URL=$ENV_RBX_REDIS_URL
+      - ENV_RBX_HTTP_TIMEOUT=$ENV_RBX_HTTP_TIMEOUT
     restart: always
     networks:
       - core_service_network
@@ -108,6 +104,7 @@ services:
       - ENV_RBX_REDIS_URL=$ENV_RBX_REDIS_URL
       - ENV_RBX_BASIC_AUTH_KEY=$ENV_RBX_BASIC_AUTH_KEY
       - ENV_RBX_BASIC_AUTH_SECRET=$ENV_RBX_BASIC_AUTH_SECRET
+      - ENV_RBX_HTTP_TIMEOUT=$ENV_RBX_HTTP_TIMEOUT
     restart: always
     volumes:
       - ${ENV_RBX_VOLUME_PATH}/videocall.service/uploads:/home/aiondigital/rubix/uploads/
