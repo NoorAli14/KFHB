@@ -19,6 +19,7 @@ export interface iAPP {
   VERSION?: string;
   /** The port number of the http server to listen on. */
   PORT: number;
+  HTTP_TIMEOUT: number;
   HOST?: string;
   API_URL_PREFIX: string;
   API_INFO_ROUTE?: string;
