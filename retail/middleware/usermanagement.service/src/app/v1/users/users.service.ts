@@ -231,7 +231,7 @@ export class UserService {
       userObj,
       output,
       SYSTEM_AUDIT_LOG_STRINGS.PASSWORD_CHANGE_SUCCESS + ` of user ${user.id}`,
-      SYSTEM_AUDIT_CODES.PASSWORD_RESET
+      SYSTEM_AUDIT_CODES.PASSWORD_UPDATED
     );
   }
 
