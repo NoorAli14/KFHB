@@ -80,11 +80,11 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
           comments: response.data.comments
         });
         const responseDocument = response.data.documents;
-        for (let i = 0; i < responseDocument.length; i++) {
-          this.documents.push(responseDocument[i]);
-        }
+        responseDocument.forEach(element => {
+          this.documents.push(element);
+        });
         this.updateGrid(this.documents);
-        if (response.data.status != 'Pending') {
+        if (response.data.status !== 'Pending') {
           this.btnDisable = true;
         }
       },
@@ -150,24 +150,24 @@ export class RequestDetailsComponent extends BaseComponent implements OnInit {
 
   }
   viewDocument(data, extention): void {
-    this.checkType(extention)
-    var byteCharacters = atob(data);
-    var byteNumbers = new Array(byteCharacters.length);
-    for (var i = 0; i < byteCharacters.length; i++) {
+    this.checkType(extention);
+    const byteCharacters = atob(data);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
       byteNumbers[i] = byteCharacters.charCodeAt(i);
     }
-    var byteArray = new Uint8Array(byteNumbers);
-    var file = new Blob([byteArray], { type: this.contentType });
-    var fileURL = URL.createObjectURL(file);
+    const byteArray = new Uint8Array(byteNumbers);
+    const file = new Blob([byteArray], { type: this.contentType });
+    const fileURL = URL.createObjectURL(file);
     window.open(fileURL);
   }
   checkType(extention): void {
     if (extention.includes('.')) {
       extention = extention.split('.')[1];
     }
-    let lowerExtention = extention.toLowerCase();
+    const lowerExtention = extention.toLowerCase();
     if (lowerExtention === 'png' || lowerExtention === 'jpg' || lowerExtention === 'jpeg') {
-      this.contentType = 'image/' + extention + ';base64'
+      this.contentType = 'image/' + extention + ';base64';
     }
     else {
       this.contentType = 'application/' + extention + ';base64';

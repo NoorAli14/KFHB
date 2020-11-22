@@ -5,7 +5,7 @@ import { FuseSharedModule } from '@fuse/shared.module';
 import { SharedModule } from '@shared/shared.module';
 import { MaterialModule } from '@shared/modules/material/material.module';
 import { RequestDetailsComponent } from './request-details.component';
-import { MaterialFormsModule } from "@shared/modules/material-forms/material-forms.module";
+import { MaterialFormsModule } from '@shared/modules/material-forms/material-forms.module';
 import { MatTabsModule } from '@angular/material/tabs';
 @NgModule({
     declarations: [RequestDetailsComponent],
