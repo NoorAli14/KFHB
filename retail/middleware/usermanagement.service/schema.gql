@@ -244,6 +244,7 @@ type Mutation {
   addLeaveType(input: LeaveTypeCreateInput!): LeaveType!
   updateLeaveType(input: LeaveTypeInput!, id: String!): LeaveType!
   deleteLeaveType(id: String!): Boolean!
+  addSystemAuditLog(input: SystemAuditLogInput!): SystemAuditLog!
 }
 
 input PaginationParams {
@@ -359,6 +360,12 @@ type SystemAuditLog {
   audit_text: String
   created_on: String!
   created_by: String!
+}
+
+input SystemAuditLogInput {
+  user_id: String
+  audit_code: String!
+  audit_text: String
 }
 
 input UpdatePasswordInput {
