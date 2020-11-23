@@ -16,6 +16,7 @@ import {
   CommonModule,
   ConfigurationService,
 } from '@common/index';
+import {SystemAuditLogService} from "@app/v1/system-audit-log/system-audit-log.service";
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import {
     ConfigurationService,
     JwtStrategy,
     RedisClientService,
+    SystemAuditLogService,
   ],
   exports: [PassportModule, LocalStrategy, AuthService],
 })
