@@ -44,6 +44,22 @@ export const DELIVERY_MODES: { [key: string]: string } = {
   BOTH: 'both',
 };
 
+export const SYSTEM_AUDIT_CODES = {
+  USER_LOGIN: 'USER_LOGIN',
+  USER_CREATED: 'USER_CREATED',
+  USER_MODIFIED: 'USER_MODIFIED',
+  INVALID_PASSWORD: 'INVALID_PASSWORD',
+  PASSWORD_UPDATED: 'PASSWORD_UPDATED',
+  PASSWORD_UPDATE_FAILED: 'PASSWORD_UPDATE_FAILED',
+  FORGET_PASSWORD_REQUEST: 'FORGET_PASSWORD_REQUEST',
+  USER_DELETED: 'USER_DELETED',
+  USER_LOGOUT: 'USER_LOGOUT', // not used yet
+};
+
+export const SYSTEM_AUDIT_LOG_STRINGS = {
+  LOGOUT_SUCCESS: 'Logged out Successfully',
+};
+
 export const CONTEXT_NAMESPACE_ID = 'a6a29a6f-6747-4b5f-b99f-07ee96e32f00';
 export const GENDER = ['M', 'F'];
 export const PASSWORD_REGEX = /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;

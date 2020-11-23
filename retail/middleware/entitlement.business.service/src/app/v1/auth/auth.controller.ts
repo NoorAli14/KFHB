@@ -28,7 +28,7 @@ import {
   X_REFRESH_TOKEN,
   AuthGuard,
   CurrentUser,
-  SuccessDto
+  SuccessDto, SYSTEM_AUDIT_CODES, SYSTEM_AUDIT_LOG_STRINGS
 } from '@common/index';
 import { UserService } from '@app/v1/users/users.service';
 import {
@@ -38,6 +38,7 @@ import {
 import { User } from '@app/v1/users/user.entity';
 import { LocalAuthGuard } from './localAuth.guard';
 import { AuthService } from './auth.service';
+import {SystemAuditLogService} from "@app/v1/system-audit-log/system-audit-log.service";
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -45,6 +46,7 @@ export class AuthController {
   constructor(
     private readonly userService: UserService,
     private readonly authService: AuthService,
+    private readonly systemAuditLogService: SystemAuditLogService,
   ) { }
 
   @Post('refresh-token')
@@ -204,6 +206,11 @@ export class AuthController {
       'Set-Cookie',
       await this.authService.getCookieForLogOut(user.id),
     );
+    await this.systemAuditLogService.create({
+      audit_code: SYSTEM_AUDIT_CODES.USER_LOGOUT,
+      audit_text: `${SYSTEM_AUDIT_LOG_STRINGS.LOGOUT_SUCCESS} with email ${user.email}`,
+      user_id: user.id
+    });
     return null;
   }
 }

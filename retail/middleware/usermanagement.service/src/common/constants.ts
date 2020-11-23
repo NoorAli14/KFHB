@@ -216,6 +216,26 @@ export const MODULES = [
       },
     ],
   },
+  {
+    name: 'System Management',
+    slug: 'system-management',
+    permissions: [
+      {
+        name: 'view',
+      },
+    ],
+    sub_modules: [
+      {
+        name: 'System Audit Log',
+        slug: 'system-audit-log',
+        permissions: [
+          {
+            name: 'view',
+          }
+        ],
+      }
+    ],
+  },
 ];
 
 export const WEEK_DAYS = {
