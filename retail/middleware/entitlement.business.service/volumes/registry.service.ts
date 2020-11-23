@@ -11,6 +11,7 @@ export const SERVICES = {
   'api/v1/entitlements/leave-types': { channels: ['RUBIX-DEV-INT'] },
   'api/v1/entitlements/leaves': { channels: ['RUBIX-DEV-INT'] },
   'api/v1/entitlements/otp': { channels: ['RUBIX-DEV-INT'] },
+  'api/v1/entitlements/audit': { channels: ['RUBIX-DEV-INT'] },
   'api/v1/onboarding/auth': { channels: ['RUBIX-DEV-INT'] },
   'api/v1/onboarding/sessions': { channels: ['RUBIX-DEV-INT'] },
   'api/v1/onboarding/evaluations': { channels: ['RUBIX-DEV-INT'] },
