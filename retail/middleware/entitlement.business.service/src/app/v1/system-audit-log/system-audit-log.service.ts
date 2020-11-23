@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import {GqlClientService, PAGINATION_OUTPUT, toGraphql} from '@common/index';
 import {SALPaginationList, SystemAuditLog} from "./system-audit-log.entity";
-import {SystemAuditLogDTO} from "./system-audit-log";
+import {SystemAuditLogDTO} from "./system-audit-log.dto";
 
 @Injectable()
 export class SystemAuditLogService {
