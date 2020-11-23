@@ -9,6 +9,23 @@ export const navigation: FuseNavigation[] = [
         type     : 'group',
         children : [
             {
+                id       : 'system-management',
+                title    : 'SYSTEM MANAGEMENET',
+                translate: 'FEATURES.SYSTEM_MANAGEMENT.TITLE',
+                type     : 'collapsable',
+                icon     : 'assignment_ind',
+                children : [
+                    {
+                        id       : 'logs',
+                        title    : 'Logs',
+                        translate: 'FEATURES.SYSTEM_MANAGEMENT.LOGS.TITLE',
+                        type     : 'item',
+                        icon     : 'person',
+                        url      : '/system',
+                    }
+                ]
+            },
+            {
                 id       : 'entitlement',
                 title    : 'Entitlement',
                 translate: 'FEATURES.ENTITLEMENT.TITLE',

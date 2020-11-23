@@ -70,10 +70,16 @@ export class AuthUserService {
             translate: 'FEATURES.CALENDER.HOLIDAYS.TITLE',
         },
         {
-            id: 'leaves',
+            id: 'system-management',
+            icon: 'settings',
+            url: '',
+            translate: 'FEATURES.SYSTEM_MANAGEMENT.TITLE',
+        },
+        {
+            id: 'system-audit-log',
             icon: 'update',
-            url: '/calender/leaves',
-            translate: 'FEATURES.CALENDER.LEAVES.TITLE',
+            url: '/system',
+            translate: 'FEATURES.SYSTEM_MANAGEMENT.LOGS.TITLE',
         },
     ];
 

@@ -40,12 +40,9 @@ export const MODULES = {
     WORKING_WEEK: 'Working Week',
     LEAVES: 'Leaves',
     HOLIDAYS: 'Holidays',
+    SYSTEM_MANAGEMENT: 'System Management',
 };
-export const NATIONALITY_LIST: Array<Select> = [
-    { id: '1', name: 'Pakistan' },
-    { id: '2', name: 'Bahrain' },
-    { id: '3', name: 'Kuwait' },
-];
+
 
 const ENTITLEMENT = '/api/v1/entitlements/';
 const REFERENCE = '/api/v1/references/';
@@ -69,6 +66,7 @@ export const URI = {
     COUNTRIES: `${REFERENCE}countries`,
     CUSTOMERS: `${ONBOARDING}customers`,
     CUSTOMER360: `${ONBOARDING}customers`,
+    SYSTEM_AUDIT: `${ENTITLEMENT}audit/system`,
 };
 
 export const DEFAULT_IMAGE = 'assets/images/not-available.png';

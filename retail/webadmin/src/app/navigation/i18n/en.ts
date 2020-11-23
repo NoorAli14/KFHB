@@ -25,6 +25,13 @@ export const locale = {
                     BADGE: '25',
                 }
             },
+            SYSTEM_MANAGEMENT: {
+                TITLE: 'System Management',
+                LOGS: {
+                    TITLE: 'Logs',
+                    BADGE: '25',
+                }
+            },
             CALENDER: {
                 TITLE: 'Calender',
                 WORKING_DAYS: {
