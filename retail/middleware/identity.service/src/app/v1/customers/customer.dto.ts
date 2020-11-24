@@ -57,7 +57,13 @@ export class NewCustomerInput {
   @IsString()
   @IsOptional()
   @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
-  last_step: string;
+  entity_id: string;
+
+  @Field({ nullable: true })
+  @IsString()
+  @IsOptional()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  entity_member_id: string;
 }
 
 @InputType()

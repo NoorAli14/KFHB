@@ -20,7 +20,8 @@ input CreateCustomerInput {
   device_id: String
   platform: String
   fcm_token_id: String
-  last_step: String
+  entity_id: String
+  entity_member_id: String
 }
 
 input CreatedOnParams {
@@ -63,6 +64,8 @@ type Customer {
   updated_by: String
   deleted_on: String
   deleted_by: String
+  entity_id: String
+  entity_member_id: String
   documents: [Document!]!
 }
 
