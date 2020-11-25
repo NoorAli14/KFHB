@@ -12,4 +12,7 @@ export class SystemManagementService {
     getAuditLogs(queryParams): Observable<any> {
         return this._networkService.getAll(`${URI.SYSTEM_AUDIT}?${queryParams}`);
     }
+    getUsers(queryParams?): Observable<any> {
+        return this._networkService.getAll(`${URI.USER}?${queryParams}`);
+    }
 }

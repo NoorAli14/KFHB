@@ -28,7 +28,7 @@ export const locale = {
             SYSTEM_MANAGEMENT: {
                 TITLE: 'System Management',
                 LOGS: {
-                    TITLE: 'Logs',
+                    TITLE: 'System Audit Log',
                     BADGE: '25',
                 }
             },

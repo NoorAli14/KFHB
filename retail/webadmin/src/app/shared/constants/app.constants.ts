@@ -33,6 +33,18 @@ export const WORKING_DAYS: Array<Select> = [
     { id: 'SATURDAY', name: 'SATURDAY' },
     { id: 'SUNDAY', name: 'SUNDAY' },
 ];
+export const STATUS_CODE_LIST: Array<Select> = [
+    { id: 'LOGIN_USER_SUCCESS', name: 'LOGIN_USER_SUCCESS' },
+    { id: 'LOGIN_USER_FAILED', name: 'LOGIN_USER_FAILED' },
+    { id: 'LOGOUT_USER_SUCCESS', name: 'LOGOUT_USER_SUCCESS' },
+    { id: 'CREATE_USER_SUCCESS', name: 'CREATE_USER_SUCCESS' },
+    { id: 'UPDATE_USER_SUCCESS', name: 'UPDATE_USER_SUCCESS' },
+    { id: 'DELETE_USER_SUCCESS', name: 'DELETE_USER_SUCCESS' },
+    { id: 'UPDATE_PASSWORD_SUCCESS', name: 'UPDATE_PASSWORD_SUCCESS' },
+    { id: 'UPDATE_PASSWORD_FAILED', name: 'UPDATE_PASSWORD_FAILED' },
+    { id: 'FORGET_PASSWORD_REQUEST_SUCCESS', name: 'FORGET_PASSWORD_REQUEST_SUCCESS' },
+    { id: 'FORGET_PASSWORD_REQUEST_FAILED', name: 'FORGET_PASSWORD_REQUEST_FAILED' },
+];
 
 export const MODULES = {
     USER_MANAGEMENT: 'User Management',

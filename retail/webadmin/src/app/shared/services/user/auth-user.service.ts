@@ -70,6 +70,12 @@ export class AuthUserService {
             translate: 'FEATURES.CALENDER.HOLIDAYS.TITLE',
         },
         {
+            id: 'leaves',
+            icon: 'history',
+            url: '/calender/leaves',
+            translate: 'FEATURES.CALENDER.LEAVES.TITLE',
+        },
+        {
             id: 'system-management',
             icon: 'settings',
             url: '',

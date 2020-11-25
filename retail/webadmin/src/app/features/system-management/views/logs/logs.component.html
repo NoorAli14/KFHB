@@ -8,45 +8,52 @@
     <div class="center">
 
         <!-- HEADER -->
-        <div  class="header accent" style="min-height: 95px !important; height:95px !important; " fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-between center">
+        <div class="header accent" style="min-height: 95px !important; height:95px !important; " fxLayout="column"
+            fxLayoutAlign="center center" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-between center">
 
             <!-- APP TITLE -->
             <div class="logo mb-24 mb-md-0" style="flex: 0 1 30%;" fxLayout="row" fxLayoutAlign="start center">
                 <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
-                    update
+                    history
                 </mat-icon>
                 <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
-                    Logs
+                    System Audit Logs
                 </span>
             </div>
             <!-- / APP TITLE -->
+
             <!-- SEARCH -->
-            <div class="search-wrapper mx-32 mx-md-0 flex1" style="flex:1; max-width: none; ">
-                <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
-                    <mat-icon>search</mat-icon>
-                    <input type="text" placeholder="Search for a user" matInput [formControl]="control" >
-                   
-                </div>
+            <div style="flex:1">
+                <app-logs-advance-search (filterChange)="onFilter($event)" (filterReset)="onReset()">
+                </app-logs-advance-search>
             </div>
-            <div style="flex:1; "></div>
+            <div style="flex:1">
+
+            </div>
+
             <!-- / SEARCH -->
-            
+
         </div>
         <!-- / HEADER -->
 
         <!-- CONTENT CARD -->
         <div class="content-card" fusePerfectScrollbar>
-           
-            <mat-table #table matSort matSortActive="auditCode" matSortDirection="asc"
+
+            <mat-table #table matSort matSortActive="createdOn" matSortDirection="desc"
                 (matSortChange)="sortData($event)" [dataSource]="dataSource">
                 <!-- COLUMNS AND ROWS-->
                 <ng-container *ngFor="let key of displayedColumns" [matColumnDef]="key">
-                    <mat-header-cell *matHeaderCellDef [disabled]=" key=='auditText' || key=='tenantId' || key=='userId' ? true  : false "
-                    [mat-sort-header]="key=='auditText' || key=='tenantId' || key=='userId'  ? null : key ">
+                    <mat-header-cell *matHeaderCellDef [disabled]=" key=='auditText'  || key=='userId' ? true  : false "
+                        [mat-sort-header]="key=='auditText' || key=='userId'  ? null : key ">
                         {{ camelToSentenceCase(key) }}</mat-header-cell>
 
                     <mat-cell *matCellDef="let element; let i = dataIndex" class="text-elipsis">
                         <ng-container [ngSwitch]="key">
+                            <span *ngSwitchCase="'userId'">
+                                <span *ngIf="element[key]; else defaultText">
+                                    {{ element['user'].first_name + ' ' + element['user'].last_name}}
+                                </span>
+                            </span>
                             <span *ngSwitchCase="'createdOn'">
                                 {{element[key] | date:'mediumDate'}}
                             </span>

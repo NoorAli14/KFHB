@@ -5,7 +5,6 @@ import {
     ViewChild,
     ViewEncapsulation,
 } from "@angular/core";
-import { FormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
@@ -23,7 +22,6 @@ import {
 } from "@shared/helpers/global.helper";
 import { Pagination } from "@shared/models/pagination.model";
 import * as QueryString from "query-string";
-import { debounceTime, distinctUntilChanged } from "rxjs/operators";
 
 @Component({
     selector: "app-logs",
@@ -36,11 +34,10 @@ export class LogsComponent extends BaseComponent implements OnInit {
     dialogRef: any;
     auditLogs: any[];
     displayedColumns = [
-        "auditCode",
-        "userId",
-        "tenantId",
-        "auditText",
         "createdOn",
+        "userId",
+        "auditCode",
+        "auditText",
     ];
     pageSize: number = CONFIG.PAGE_SIZE;
     pageSizeOptions: Array<number> = CONFIG.PAGE_SIZE_OPTIONS;
@@ -49,8 +46,6 @@ export class LogsComponent extends BaseComponent implements OnInit {
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
     config: object;
-    control: FormControl;
-    filteredUser: Array<any>;
     constructor(
         public _matDialog: MatDialog,
         private _service: SystemManagementService,
@@ -64,16 +59,14 @@ export class LogsComponent extends BaseComponent implements OnInit {
         this.config = this.initParams();
         this.getData(this.config);
         this.pagination = new Pagination();
-        this.control = new FormControl();
-        this.initSearch();
     }
 
     initParams(): object {
         return {
             limit: CONFIG.PAGE_SIZE,
             page: 1,
-            sort_order: "asc",
-            sort_by: "audit_code",
+            sort_order: "desc",
+            sort_by: "created_on",
         };
     }
     getQueryString(params): string {
@@ -85,6 +78,15 @@ export class LogsComponent extends BaseComponent implements OnInit {
             ...this.config,
             ...params,
         };
+    }
+    onFilter(form): void {
+        this.config = { ...this.config, ...form };
+        debugger
+        this.getData(form);
+    }
+    onReset(): void {
+        this.config = this.initParams();
+        this.getData({});
     }
     getData(params): void {
         const queryParams = QueryString.stringify(
@@ -112,17 +114,7 @@ export class LogsComponent extends BaseComponent implements OnInit {
         this.dataSource.data = data;
     }
 
-    initSearch(): void {
-        this.control.valueChanges
-            .pipe(debounceTime(400), distinctUntilChanged())
-            .subscribe((value) => {
-                const filterValue = value?.toLowerCase();
-                this.filteredUser = [];
-                const queryParams = QueryString.stringify({
-                    first_name: filterValue,
-                });
-            });
-    }
+  
 
     ngAfterViewInit(): void {
         this.dataSource.paginator = this.paginator;
