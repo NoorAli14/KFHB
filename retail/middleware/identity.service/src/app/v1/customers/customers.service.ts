@@ -44,6 +44,19 @@ export class CustomersService {
     return this.customerDB.findOne({ id: id, deleted_on: null, tenant_id: currentUser.tenant_id }, output);
   }
 
+  async findByCorporateIds(
+    currentUser: ICurrentUser,
+    entity_id: string,
+    entity_member_id: string,
+    output?: string[]): Promise<Customer> {
+    return this.customerDB.findOne({
+      entity_id,
+      entity_member_id,
+      deleted_on: null,
+      tenant_id: currentUser.tenant_id 
+    }, output);
+  }
+
   async update(
       current_user: ICurrentUser,
       id: string,

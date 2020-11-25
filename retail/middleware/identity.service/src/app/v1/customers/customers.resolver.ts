@@ -79,6 +79,24 @@ export class CustomersResolver {
     return customer;
   }
 
+  @UseGuards(AuthGuard)
+  @Query(() => Customer)
+  async findCustomerByCorporateIds(
+    @Args('entity_id') entity_id: string,
+    @Args('entity_member_id') entity_member_id: string,
+    @CurrentUser() current_user: ICurrentUser,
+    @Fields() output: string[],
+  ): Promise<Customer> {
+    const customer: Customer = await this.customerService.findByCorporateIds(
+      current_user,
+      entity_id,
+      entity_member_id,
+      output,
+    );
+    if(!customer) throw new CustomerNotFoundException(entity_member_id);
+    return customer;
+  }
+
   @ResolveField(() => [Document])
   documents(
     @Parent() customer: Customer,
