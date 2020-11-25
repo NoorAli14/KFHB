@@ -1,6 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { USER_STATUSES } from '@common/constants';
-import {PaginationDTO} from "@common/dtos";
+import { PaginationDTO } from "@common/dtos";
+import { User } from "@app/v1/users/user.entity";
+import { IsOptional } from "class-validator";
 
 export class Leave {
   @ApiProperty({
@@ -51,7 +53,6 @@ export class Leave {
   })
   status: string;
 
-
   @ApiProperty({
     required: false,
     description: 'timestamp without time zone',
@@ -69,6 +70,14 @@ export class Leave {
 
   @ApiProperty({ required: false })
   updated_by: string;
+
+  @ApiProperty({
+    type: User,
+    description: 'User object in detail',
+    required: false,
+  })
+  @IsOptional()
+  user?: User;
 }
 
 export class LeavePaginationList {
