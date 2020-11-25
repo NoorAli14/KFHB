@@ -171,3 +171,57 @@ export class UsersWithPagination {
   @Type(() => User)
   data: User[];
 }
+
+// user response for system audit log
+@ObjectType()
+export class UserForSAL {
+  @Field(() => ID, {nullable: true})
+  @IsString()
+  @IsUUID()
+  @IsOptional()
+  id: string;
+
+  @Field({nullable: true})
+  @IsString()
+  @IsOptional()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  @IsEmail()
+  email: string;
+
+  @Field({nullable: true})
+  @IsString()
+  @IsOptional()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  contact_no: string;
+
+  @Field({nullable: true})
+  @IsString()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  @IsOptional()
+  first_name: string;
+
+  @Field({nullable: true})
+  @IsString()
+  @IsOptional()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  middle_name: string;
+
+  @Field({nullable: true})
+  @IsString()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  @IsOptional()
+  last_name: string;
+
+  @Field({ nullable: true })
+  @IsString()
+  @IsOptional()
+  @IsIn(Object.values(GENDER))
+  gender: string;
+
+  @Field({ nullable: true })
+  @IsString()
+  @IsOptional()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  @IsIn(Object.values(STATUS))
+  status: string;
+}
