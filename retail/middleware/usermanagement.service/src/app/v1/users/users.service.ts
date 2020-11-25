@@ -102,7 +102,7 @@ export class UserService {
       id,
       input,
       output,
-      SYSTEM_AUDIT_LOG_STRINGS.INVITATION_TOKEN_RESET + ` of user ${id}`,
+      SYSTEM_AUDIT_LOG_STRINGS.RESET_INVITATION_TOKEN_SUCCESS + ` of user ${id}`,
     );
   }
 
@@ -147,8 +147,8 @@ export class UserService {
     if (currentUser.entity_id) whereCondition['entity_id'] = currentUser.entity_id;
     const [result] = await this.userDB.update(whereCondition, userObj, output);
     await this.systemAuditLogService.create(currentUser.tenant_id, {
-      audit_code: eventHeading || SYSTEM_AUDIT_CODES.USER_MODIFIED,
-      audit_text: eventString || ( SYSTEM_AUDIT_LOG_STRINGS.USER_MODIFIED + ` of id ${id} `),
+      audit_code: eventHeading || SYSTEM_AUDIT_CODES.UPDATE_USER_SUCCESS,
+      audit_text: eventString || ( SYSTEM_AUDIT_LOG_STRINGS.UPDATE_USER_SUCCESS + ` of id ${id} `),
       user_id: currentUser.id,
     });
     return result;
@@ -181,8 +181,8 @@ export class UserService {
     if (currentUser.entity_id) newUser['entity_id'] = currentUser.entity_id;
     const [result] = await this.userDB.create(newUser, output);
     await this.systemAuditLogService.create(currentUser.tenant_id, {
-      audit_code: SYSTEM_AUDIT_CODES.USER_CREATED,
-      audit_text: SYSTEM_AUDIT_LOG_STRINGS.USER_CREATED + ` of id ${result.id}`,
+      audit_code: SYSTEM_AUDIT_CODES.CREATE_USER_SUCCESS,
+      audit_text: SYSTEM_AUDIT_LOG_STRINGS.CREATE_USER_SUCCESS + ` of id ${result.id}`,
       user_id: currentUser.id,
     });
     return result;
@@ -196,8 +196,8 @@ export class UserService {
       currentUser.entity_id,
     );
     await this.systemAuditLogService.create(currentUser.tenant_id, {
-      audit_code: SYSTEM_AUDIT_CODES.USER_DELETED,
-      audit_text: SYSTEM_AUDIT_LOG_STRINGS.USER_DELETED + ` of id ${id}`,
+      audit_code: SYSTEM_AUDIT_CODES.DELETE_USER_SUCCESS,
+      audit_text: SYSTEM_AUDIT_LOG_STRINGS.DELETE_USER_SUCCESS + ` of id ${id}`,
       user_id: currentUser.id,
     });
     return !!result;
@@ -216,8 +216,8 @@ export class UserService {
       )
     ) {
       await this.systemAuditLogService.create(currentUser.tenant_id, {
-        audit_code: SYSTEM_AUDIT_CODES.INVALID_PASSWORD,
-        audit_text: SYSTEM_AUDIT_LOG_STRINGS.PASSWORD_CHANGE_FAILED + ` of user ${user.id}`,
+        audit_code: SYSTEM_AUDIT_CODES.UPDATE_PASSWORD_FAILED,
+        audit_text: SYSTEM_AUDIT_LOG_STRINGS.UPDATE_PASSWORD_FAILED + ` of user ${user.id}`,
         user_id: currentUser.id,
       });
       throw new PasswordMismatchException(user.id);
@@ -230,8 +230,8 @@ export class UserService {
       user.id,
       userObj,
       output,
-      SYSTEM_AUDIT_LOG_STRINGS.PASSWORD_CHANGE_SUCCESS + ` of user ${user.id}`,
-      SYSTEM_AUDIT_CODES.PASSWORD_UPDATED
+      SYSTEM_AUDIT_LOG_STRINGS.UPDATE_PASSWORD_SUCCESS + ` of user ${user.id}`,
+      SYSTEM_AUDIT_CODES.UPDATE_PASSWORD_SUCCESS
     );
   }
 

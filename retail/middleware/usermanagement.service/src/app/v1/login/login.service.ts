@@ -31,25 +31,25 @@ export class LoginService {
       if (this.encrypter.comparePassword(input.password, user.password_digest)) {
         delete user.password_digest;
         await this.systemAuditLogService.create(tenant.id, {
-          audit_code: SYSTEM_AUDIT_CODES.USER_LOGIN,
+          audit_code: SYSTEM_AUDIT_CODES.LOGIN_USER_SUCCESS,
           audit_text:
-            SYSTEM_AUDIT_LOG_STRINGS.LOGIN_SUCCESS + ` with email ${input.email}`,
+            SYSTEM_AUDIT_LOG_STRINGS.LOGIN_USER_SUCCESS + ` with email ${input.email}`,
           user_id: user.id
         });
         return user;
       } else {
         await this.systemAuditLogService.create(tenant.id, {
-          audit_code: SYSTEM_AUDIT_CODES.INVALID_PASSWORD,
+          audit_code: SYSTEM_AUDIT_CODES.LOGIN_USER_FAILED,
           audit_text:
-            SYSTEM_AUDIT_LOG_STRINGS.LOGIN_FAILED + `. Wrong password with email ${input.email}`,
+            SYSTEM_AUDIT_LOG_STRINGS.LOGIN_USER_FAILED + ` due to wrong password with email ${input.email}`,
           user_id: user.id
         });
       }
     } else {
       await this.systemAuditLogService.create(tenant.id, {
-        audit_code: SYSTEM_AUDIT_CODES.USER_LOGIN,
+        audit_code: SYSTEM_AUDIT_CODES.LOGIN_USER_FAILED,
         audit_text:
-          SYSTEM_AUDIT_LOG_STRINGS.LOGIN_FAILED + `. No user found with email ${input.email}`,
+          SYSTEM_AUDIT_LOG_STRINGS.LOGIN_USER_FAILED + `. No user found with email ${input.email}`,
       });
     }
     throw new InvalidEmailPasswordException(input.email);

@@ -360,6 +360,7 @@ type SystemAuditLog {
   audit_text: String
   created_on: String!
   created_by: String!
+  user: UserForSAL!
 }
 
 input SystemAuditLogInput {
@@ -421,6 +422,17 @@ type User {
   password_reset_token: String
   password_reset_token_expiry: DateTime
   leaves: [Leave!]!
+}
+
+type UserForSAL {
+  id: ID
+  email: String
+  contact_no: String
+  first_name: String
+  middle_name: String
+  last_name: String
+  gender: String
+  status: String
 }
 
 input UsersFilterParams {

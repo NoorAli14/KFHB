@@ -15,6 +15,16 @@ export class SystemAuditLogService {
     audit_text
     created_by
     created_on
+    user {
+      id
+      email
+      first_name
+      middle_name
+      last_name
+      status
+      contact_no
+      gender
+    }
   }`;
 
   constructor(private readonly gqlClient: GqlClientService) { }

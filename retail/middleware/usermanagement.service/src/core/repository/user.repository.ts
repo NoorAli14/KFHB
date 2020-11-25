@@ -247,4 +247,13 @@ export class UserRepository extends BaseRepository {
     };
     return this.findOne(conditions, output);
   }
+
+  async listUsersByIds(userIds: string[] | any): Promise<any> {
+    const condition = {};
+    condition[`${TABLE.USER}.status`] = STATUS.ACTIVE;
+    return this._connection(TABLE.USER)
+      .select(this.__attributes)
+      .whereIn(`${TABLE.USER}.id`, userIds)
+      .where(condition)
+  }
 }

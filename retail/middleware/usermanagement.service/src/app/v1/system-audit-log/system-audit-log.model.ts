@@ -1,7 +1,10 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { IsIn, IsOptional, IsString, IsUUID, MaxLength } from 'class-validator';
+import {Type} from "class-transformer";
+
 import { NUMBERS, SYSTEM_AUDIT_CODES } from '@common/constants';
 import { ENT_PaginationModel } from '@common/models';
+import {User} from "@app/v1/users/user.model";
 
 @ObjectType()
 export class SystemAuditLog {
@@ -40,6 +43,11 @@ export class SystemAuditLog {
   @Field()
   @IsString()
   created_by: string;
+
+  @Field(() => User, { nullable: true })
+  @IsOptional()
+  @Type(() => User)
+  user: User;
 }
 
 @ObjectType()
