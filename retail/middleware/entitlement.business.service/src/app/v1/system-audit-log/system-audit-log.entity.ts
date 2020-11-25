@@ -1,6 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {IsIn, IsOptional, IsString, IsUUID} from "class-validator";
 import {PaginationDTO, SYSTEM_AUDIT_CODES} from "@rubix/common";
+import {Module} from "@app/v1/modules/module.entity";
+import {User} from "@app/v1/users/user.entity";
 
 export class SystemAuditLog {
   @ApiProperty({
@@ -64,6 +66,14 @@ export class SystemAuditLog {
   })
   @IsString()
   created_by: string;
+
+  @ApiProperty({
+    type: User,
+    description: 'User object in detail',
+    required: false,
+  })
+  @IsOptional()
+  user?: User;
 }
 
 export class SALPaginationList {
