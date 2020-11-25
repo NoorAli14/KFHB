@@ -3,6 +3,7 @@ import { ENT_PaginationModel } from '@common/models';
 import { Type } from 'class-transformer';
 import { IsIn, IsOptional, IsString, IsUUID, MaxLength } from 'class-validator';
 import { NUMBERS, STATUS } from '@common/constants';
+import { User } from "@app/v1/users/user.model";
 
 @ObjectType()
 export class Leave {
@@ -72,6 +73,11 @@ export class Leave {
   @IsString()
   @IsOptional()
   deleted_by: string;
+
+  @Field(() => User, { nullable: true })
+  @IsOptional()
+  @Type(() => User)
+  user: User;
 }
 
 @ObjectType()
