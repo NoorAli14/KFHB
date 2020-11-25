@@ -207,8 +207,8 @@ export class AuthController {
       await this.authService.getCookieForLogOut(user.id),
     );
     await this.systemAuditLogService.create({
-      audit_code: SYSTEM_AUDIT_CODES.USER_LOGOUT,
-      audit_text: `${SYSTEM_AUDIT_LOG_STRINGS.LOGOUT_SUCCESS} with email ${user.email}`,
+      audit_code: SYSTEM_AUDIT_CODES.LOGOUT_USER_SUCCESS,
+      audit_text: `${SYSTEM_AUDIT_LOG_STRINGS.LOGOUT_USER_SUCCESS} with email ${user.email}`,
       user_id: user.id
     });
     return null;
