@@ -13,7 +13,7 @@ import {
   SubModulesLoader,
   LeavesLoader,
   ModulesLoader,
-  RolesLoader,
+  RolesLoader, UsersDataLoader, UsersLoader,
 } from './';
 import { RepositoryModule } from '@core/repository/repository.module';
 
@@ -24,13 +24,15 @@ const loaders: any = [
   PermissionsDataLoader,
   ModulesDataLoaderByUser,
   LeavesDataLoader,
+  UsersDataLoader,
 
+  RolesLoader,
+  ModulesLoader,
+  SubModulesLoader,
   PermissionLoader,
   UserModulesDataLoader,
-  SubModulesLoader,
   LeavesLoader,
-  ModulesLoader,
-  RolesLoader,
+  UsersLoader
 ];
 
 @Module({
