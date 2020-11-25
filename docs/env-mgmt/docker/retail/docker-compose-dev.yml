@@ -21,6 +21,11 @@ services:
       - ${ENV_RBX_VOLUME_PATH}/gateway.service/certs/private.key:/etc/nginx/domainssl/domain.key
     networks:
       - core_service_network
+    depends_on: 
+      - retail-reference
+      - retail-onboarding
+      - retail-entitlement
+      - retail-webportal
     ports:
       - 80:80
       - 443:443
