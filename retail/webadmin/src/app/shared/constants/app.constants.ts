@@ -33,6 +33,18 @@ export const WORKING_DAYS: Array<Select> = [
     { id: 'SATURDAY', name: 'SATURDAY' },
     { id: 'SUNDAY', name: 'SUNDAY' },
 ];
+export const STATUS_CODE_LIST: Array<Select> = [
+    { id: 'LOGIN_USER_SUCCESS', name: 'LOGIN_USER_SUCCESS' },
+    { id: 'LOGIN_USER_FAILED', name: 'LOGIN_USER_FAILED' },
+    { id: 'LOGOUT_USER_SUCCESS', name: 'LOGOUT_USER_SUCCESS' },
+    { id: 'CREATE_USER_SUCCESS', name: 'CREATE_USER_SUCCESS' },
+    { id: 'UPDATE_USER_SUCCESS', name: 'UPDATE_USER_SUCCESS' },
+    { id: 'DELETE_USER_SUCCESS', name: 'DELETE_USER_SUCCESS' },
+    { id: 'UPDATE_PASSWORD_SUCCESS', name: 'UPDATE_PASSWORD_SUCCESS' },
+    { id: 'UPDATE_PASSWORD_FAILED', name: 'UPDATE_PASSWORD_FAILED' },
+    { id: 'FORGET_PASSWORD_REQUEST_SUCCESS', name: 'FORGET_PASSWORD_REQUEST_SUCCESS' },
+    { id: 'FORGET_PASSWORD_REQUEST_FAILED', name: 'FORGET_PASSWORD_REQUEST_FAILED' },
+];
 
 export const MODULES = {
     USER_MANAGEMENT: 'User Management',
@@ -40,12 +52,9 @@ export const MODULES = {
     WORKING_WEEK: 'Working Week',
     LEAVES: 'Leaves',
     HOLIDAYS: 'Holidays',
+    SYSTEM_MANAGEMENT: 'System Management',
 };
-export const NATIONALITY_LIST: Array<Select> = [
-    { id: '1', name: 'Pakistan' },
-    { id: '2', name: 'Bahrain' },
-    { id: '3', name: 'Kuwait' },
-];
+
 
 const ENTITLEMENT = '/api/v1/entitlements/';
 const REFERENCE = '/api/v1/references/';
@@ -69,6 +78,7 @@ export const URI = {
     COUNTRIES: `${REFERENCE}countries`,
     CUSTOMERS: `${ONBOARDING}customers`,
     CUSTOMER360: `${ONBOARDING}customers`,
+    SYSTEM_AUDIT: `${ENTITLEMENT}audit/system`,
 };
 
 export const DEFAULT_IMAGE = 'assets/images/not-available.png';

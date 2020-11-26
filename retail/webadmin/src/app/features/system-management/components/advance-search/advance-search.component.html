@@ -1,0 +1,69 @@
+<div class="s008">
+    <form>
+        <div class="inner-form">
+            <div class="search-wrapper mx-32 mx-md-0">
+                <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center" style="position: relative;">
+                    <mat-icon>search</mat-icon>
+                    <input  [formControl]="control" class="my-form-input advance-input">
+                    <a (click)="openAdvance(false)" *ngIf="isAdvance" class="search-arrow hover">▲</a>
+                    <a (click)="openAdvance(true)" *ngIf="!isAdvance" class="search-arrow hover">▼</a>
+                </div>
+            </div>
+
+            <div class="row search-box">
+                <div class="col-8">
+                    <div *ngIf="isAdvance" class="advance-search " [@slideInOut]>
+                        <form class="p-24" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0" [formGroup]="searchForm"
+                            novalidate name="searchForm" (ngSubmit)="onSubmit()" novalidate [formGroup]="searchForm">
+                            <div fxLayout="row wrap" fxLayout.lt-lg="column" fxLayoutAlign.lt-lg="center"
+                                fxLayoutAlign="start center" fxFlex="1 1 auto">
+
+                                <mat-form-field appearance="outline" fxFlex="100" class="pr-16">
+                                    <mat-label>User</mat-label>
+                                    <input matInput formControlName="userId" placeholder="Enter user first name" [matAutocomplete]="auto" />
+                                    <mat-autocomplete (optionSelected)="onSelectUser($event.option.value)"
+                                    autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn">
+                                    <mat-option *ngIf="filteredUser && filteredUser.length>0">
+                                        <a class="user" value="">
+                                            Reset Filter
+                                        </a>
+                                    </mat-option>
+                                    <mat-option *ngFor="let item of filteredUser" [value]="item.id">
+                                        <a class="user"
+                                            *ngIf="item.firstName && item.lastName">{{item.firstName + ' ' +  item.lastName}}
+                                        </a>
+                                        <{{ item.email}}>
+                                    </mat-option>
+                                </mat-autocomplete>
+                                </mat-form-field>
+                                 <mat-form-field appearance="outline" fxFlex="100" class="pr-16">
+                                    <mat-label>Audit Code 
+                                    </mat-label>
+                                    <mat-select formControlName="auditCode">
+                                        <mat-option *ngFor="let item of auditCodeList" [value]="item.id">
+                                            {{ item.name }}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-icon matSuffix class="secondary-text">face</mat-icon>
+                                </mat-form-field>
+                              
+
+                            </div>
+                            <div class="actions" fxLayoutGap="10px" fxLayout="row" fxLayoutAlign="end center">
+                                <button type="button" mat-raised-button (click)="onReset()" color="secondary"
+                                    aria-label="Follow">
+                                    Reset
+                                </button>
+                                &nbsp;
+                                <button type="submit" class="submit-button" mat-raised-button color="accent"
+                                    aria-label="Send Message">
+                                    Submit
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
