@@ -46,7 +46,7 @@ export class LeaveComponent extends BaseComponent implements OnInit {
     dialogRef: any;
     leaves: Leave[];
     displayedColumns = [
-        "User",
+        "userId",
         "leaveTypeId",
         "startDate",
         "endDate",
@@ -58,7 +58,6 @@ export class LeaveComponent extends BaseComponent implements OnInit {
     pagination: Pagination;
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
-    users: Array<any>;
     leaveTypes: Array<any>;
     config: object;
     control: FormControl;
@@ -107,7 +106,6 @@ export class LeaveComponent extends BaseComponent implements OnInit {
                 this.leaves = snakeToCamelArray(response[0].data);
                 this.pagination = response[0].pagination;
                 this.leaveTypes = snakeToCamelArray(response[1]);
-                this.users = snakeToCamelArray(response[2].data);
                 this.dataSource = new MatTableDataSource(
                     snakeToCamelArray(this.leaves)
                 );
@@ -120,18 +118,14 @@ export class LeaveComponent extends BaseComponent implements OnInit {
     getLeaveType(id): string {
         return getName(id, "name", this.leaveTypes);
     }
-    getUserName(id): string {
-        const user = this.users.find((x) => x.id === id);
-        return user ? `${user.firstName} ${user.lastName}` : "N/A";
-    }
+  
     openDialog(data): void {
         const _this = this;
         this.dialogRef = this._matDialog
             .open(LeaveFormComponent, {
                 data: {
                     leave: data ? data : new Leave(),
-                    leaveTypes: this.leaveTypes,
-                    users: this.users,
+                    leaveTypes: this.leaveTypes
                 },
                 panelClass: "app-leave-form",
                 disableClose: true,

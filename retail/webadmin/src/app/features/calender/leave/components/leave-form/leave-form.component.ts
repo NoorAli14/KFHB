@@ -9,6 +9,7 @@ import {
     Output,
     ViewEncapsulation,
 } from "@angular/core";
+import { isUUID } from "@shared/helpers/global.helper";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { Leave } from "@feature/calender/models/leave.model";
@@ -53,13 +54,6 @@ export class LeaveFormComponent
 
     ngOnInit(): void {
         this.leaveTypes = this.data.leaveTypes;
-        const users = this.data.users?.filter(
-            (x) =>
-                x.roles.find((item) => item.name !== "SUPER ADMIN") &&
-                x.status === "ACTIVE"
-        );
-        this.users = [...users];
-        this.filteredUser = [...users];
 
         this.leaveForm = new FormGroup({
             id: new FormControl(this.data.leave.id),
@@ -109,6 +103,22 @@ export class LeaveFormComponent
                 });
             });
     }
+   
+    initSearch(): void {
+        this.leaveForm.get('userId').valueChanges
+            .pipe(debounceTime(400), distinctUntilChanged())
+            .subscribe((value) => {
+                const filterValue = value?.toLowerCase();
+                if (isUUID(filterValue)) return;
+                this.filteredUser = [];
+                const queryParams = QueryString.stringify({
+                    first_name: filterValue,
+                });
+                this._service.getUsers(queryParams).subscribe((response) => {
+                    this.filteredUser = snakeToCamelArray(response.data);
+                });
+            });
+    }
     displayFn = (id: string): string => {
         if (!id) {
             return;
@@ -116,7 +126,6 @@ export class LeaveFormComponent
         const user = this.filteredUser.find((item) => item.id === id);
         return user ? `${user.firstName} ${user.lastName}` : "";
     };
-
     validateDate(control: FormControl): { [s: string]: boolean } {
         if (
             this.leaveForm &&
