@@ -39,8 +39,8 @@ export class LeavesController {
   @Get('/')
   @ApiOperation({
     description:
-      'A successful request returns the HTTP 200 OK status code and a JSON response body that shows list of holidays information with pagination.',
-    summary: 'List of all holidays.',
+      'A successful request returns the HTTP 200 OK status code and a JSON response body that shows list of leaves information with pagination.',
+    summary: 'List of all leaves.',
   })
   @ApiOkResponse({
     type: LeavePaginationList,
