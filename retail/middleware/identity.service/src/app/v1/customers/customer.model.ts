@@ -89,6 +89,12 @@ export class Customer {
 
   @Field({ nullable: true })
   deleted_by?: string;
+
+  @Field({ nullable: true })
+  entity_id?: string;
+
+  @Field({ nullable: true })
+  entity_member_id?: string;
 }
 
 @ObjectType()

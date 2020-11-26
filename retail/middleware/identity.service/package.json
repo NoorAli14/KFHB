@@ -13,7 +13,7 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/src/main",
-    "db:migrate": "knex  --knexfile database.ts  migrate:latest",
+    "db:migrate": "knex  --knexfile database.ts migrate:latest",
     "db:rollback": "knex --knexfile database.ts migrate:rollback",
     "db:seed": "knex  --knexfile database.ts seed:run",
     "migrate:make": "knex migrate:make -x ts --knexfile database.ts",

@@ -21,6 +21,8 @@ input CreateCustomerInput {
   platform: String
   fcm_token_id: String
   last_step: String
+  entity_id: String
+  entity_member_id: String
 }
 
 input CreatedOnParams {
@@ -63,6 +65,8 @@ type Customer {
   updated_by: String
   deleted_on: String
   deleted_by: String
+  entity_id: String
+  entity_member_id: String
   documents: [Document!]!
 }
 
@@ -167,6 +171,7 @@ input ProcessDocumentInput {
 type Query {
   customersList(sort_by: SortingParam, filters: CustomersFilterParams, pagination: PaginationParams): CustomerWithPagination!
   findCustomerById(id: String!): Customer!
+  findCustomerByCorporateIds(entity_member_id: String!, entity_id: String!): Customer!
   previewAttachment(input: PreviewDocumentInput!): PreviewDocument!
 }
 
