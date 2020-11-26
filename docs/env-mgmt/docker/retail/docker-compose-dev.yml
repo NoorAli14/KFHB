@@ -86,11 +86,11 @@ services:
       - ENV_RBX_HTTP_TIMEOUT=$ENV_RBX_HTTP_TIMEOUT
     restart: always
     depends_on: 
-      - retail-user-management
       - retail-notification
+      - retail-user-management
       - retail-compliance
-      - retail-identity
-    networks:
+      - retail-identity 
+   networks:
       - core_service_network
 
   #=================================================================
@@ -117,11 +117,11 @@ services:
       - ENV_RBX_HTTP_TIMEOUT=$ENV_RBX_HTTP_TIMEOUT
     restart: always
     depends_on: 
-      - retail-user-management
       - retail-notification
+      - retail-user-management
       - retail-compliance
-      - retail-identity
-      - retail-videocall
+      - retail-identity 
+      - retail-video 
     volumes:
       - ${ENV_RBX_VOLUME_PATH}/videocall.service/uploads:/home/aiondigital/rubix/uploads/
     networks:
