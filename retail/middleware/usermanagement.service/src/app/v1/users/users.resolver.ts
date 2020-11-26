@@ -73,9 +73,9 @@ export class UsersResolver {
     @Fields() output: string[],
     @CurrentUser() currentUser: ICurrentUser,
   ): Promise<User> {
-    const user: User = await this.userService.findById(currentUser, id, ['id']);
+    const user: User = await this.userService.findById(currentUser, id, ['id', 'email']);
     if (!user) throw new UserNotFoundException(id);
-    return this.userService.resetInvitationToken(currentUser, id, output);
+    return this.userService.resetInvitationToken(currentUser, user, output);
   }
 
   @Mutation(() => User)
@@ -87,7 +87,7 @@ export class UsersResolver {
     const user: User = await this.userService.findById(
       currentUser,
       currentUser.id,
-      ['id', 'password_digest'],
+      ['id', 'email', 'password_digest'],
     );
     if (!user) throw new UserNotFoundException(currentUser.id);
     return this.userService.updateUserPassword(
@@ -123,9 +123,9 @@ export class UsersResolver {
     @Fields() output: string[],
     @CurrentUser() currentUser: ICurrentUser,
   ): Promise<User> {
-    const user: User = await this.userService.findById(currentUser, id, ['id']);
+    const user: User = await this.userService.findById(currentUser, id, ['id', 'email']);
     if (!user) throw new UserNotFoundException(id);
-    return this.userService.update(currentUser, id, input, output);
+    return this.userService.update(currentUser, user, input, output);
   }
 
   @Mutation(() => Boolean)
@@ -133,9 +133,9 @@ export class UsersResolver {
     @Args('id') id: string,
     @CurrentUser() currentUser: ICurrentUser,
   ): Promise<boolean> {
-    const user: User = await this.userService.findById(currentUser, id, ['id']);
+    const user: User = await this.userService.findById(currentUser, id, ['id', 'email']);
     if (!user) throw new UserNotFoundException(id);
-    return this.userService.delete(currentUser, id);
+    return this.userService.delete(currentUser, user);
   }
 
   @ResolveField('roles', () => [Role])

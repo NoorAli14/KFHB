@@ -90,7 +90,7 @@ export class ForgotPasswordService {
     const user: User = await this.userDB.findByTenantIdAndToken(
       tenant.id,
       input.password_reset_token,
-      ['id', 'password_reset_token_expiry'],
+      ['id', 'email', 'password_reset_token_expiry'],
     );
     if (!user) {
       await this.systemAuditLogService.create(tenant.id, {
@@ -118,7 +118,7 @@ export class ForgotPasswordService {
       );
       await this.systemAuditLogService.create(tenant.id, {
         audit_code: SYSTEM_AUDIT_CODES.UPDATE_PASSWORD_SUCCESS,
-        audit_text: SYSTEM_AUDIT_LOG_STRINGS.UPDATE_PASSWORD_SUCCESS + ` of user ${user.id}`,
+        audit_text: SYSTEM_AUDIT_LOG_STRINGS.UPDATE_PASSWORD_SUCCESS + ` of user ${user.email}`,
         user_id: user.id
       });
       return result;
