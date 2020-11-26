@@ -88,7 +88,7 @@ export class UserService {
 
   async resetInvitationToken(
     currentUser: ICurrentUser,
-    id: string,
+    user: User,
     output?: string[],
   ): Promise<User> {
     const input: any = {
@@ -99,10 +99,10 @@ export class UserService {
     };
     return this.update(
       currentUser,
-      id,
+      user,
       input,
       output,
-      SYSTEM_AUDIT_LOG_STRINGS.RESET_INVITATION_TOKEN_SUCCESS + ` of user ${id}`,
+      SYSTEM_AUDIT_LOG_STRINGS.RESET_INVITATION_TOKEN_SUCCESS + ` of user ${user.email}`,
     );
   }
 
@@ -123,7 +123,7 @@ export class UserService {
 
   async update(
     currentUser: ICurrentUser,
-    id: string,
+    user: User,
     userObj: Record<string, any>,
     output: string[],
     eventString?: string,
@@ -140,7 +140,7 @@ export class UserService {
       updated_by: currentUser.id,
     };
     const whereCondition = {
-      id: id,
+      id: user.id,
       deleted_on: null,
       tenant_id: currentUser.tenant_id
     };
@@ -148,7 +148,7 @@ export class UserService {
     const [result] = await this.userDB.update(whereCondition, userObj, output);
     await this.systemAuditLogService.create(currentUser.tenant_id, {
       audit_code: eventHeading || SYSTEM_AUDIT_CODES.UPDATE_USER_SUCCESS,
-      audit_text: eventString || ( SYSTEM_AUDIT_LOG_STRINGS.UPDATE_USER_SUCCESS + ` of id ${id} `),
+      audit_text: eventString || ( SYSTEM_AUDIT_LOG_STRINGS.UPDATE_USER_SUCCESS + ` of email ${user.email} `),
       user_id: currentUser.id,
     });
     return result;
@@ -182,22 +182,22 @@ export class UserService {
     const [result] = await this.userDB.create(newUser, output);
     await this.systemAuditLogService.create(currentUser.tenant_id, {
       audit_code: SYSTEM_AUDIT_CODES.CREATE_USER_SUCCESS,
-      audit_text: SYSTEM_AUDIT_LOG_STRINGS.CREATE_USER_SUCCESS + ` of id ${result.id}`,
+      audit_text: SYSTEM_AUDIT_LOG_STRINGS.CREATE_USER_SUCCESS + ` of email ${newUser.email}`,
       user_id: currentUser.id,
     });
     return result;
   }
 
-  async delete(currentUser: ICurrentUser, id: string): Promise<boolean> {
+  async delete(currentUser: ICurrentUser, user: User): Promise<boolean> {
     const result = await this.userDB.markAsDelete(
       currentUser.tenant_id,
       currentUser.id,
-      id,
+      user.id,
       currentUser.entity_id,
     );
     await this.systemAuditLogService.create(currentUser.tenant_id, {
       audit_code: SYSTEM_AUDIT_CODES.DELETE_USER_SUCCESS,
-      audit_text: SYSTEM_AUDIT_LOG_STRINGS.DELETE_USER_SUCCESS + ` of id ${id}`,
+      audit_text: SYSTEM_AUDIT_LOG_STRINGS.DELETE_USER_SUCCESS + ` of email ${user.email}`,
       user_id: currentUser.id,
     });
     return !!result;
@@ -217,7 +217,7 @@ export class UserService {
     ) {
       await this.systemAuditLogService.create(currentUser.tenant_id, {
         audit_code: SYSTEM_AUDIT_CODES.UPDATE_PASSWORD_FAILED,
-        audit_text: SYSTEM_AUDIT_LOG_STRINGS.UPDATE_PASSWORD_FAILED + ` of user ${user.id}`,
+        audit_text: SYSTEM_AUDIT_LOG_STRINGS.UPDATE_PASSWORD_FAILED + ` of user ${user.email}`,
         user_id: currentUser.id,
       });
       throw new PasswordMismatchException(user.id);
@@ -227,10 +227,10 @@ export class UserService {
     };
     return this.update(
       currentUser,
-      user.id,
+      user,
       userObj,
       output,
-      SYSTEM_AUDIT_LOG_STRINGS.UPDATE_PASSWORD_SUCCESS + ` of user ${user.id}`,
+      SYSTEM_AUDIT_LOG_STRINGS.UPDATE_PASSWORD_SUCCESS + ` of user ${user.email}`,
       SYSTEM_AUDIT_CODES.UPDATE_PASSWORD_SUCCESS
     );
   }
