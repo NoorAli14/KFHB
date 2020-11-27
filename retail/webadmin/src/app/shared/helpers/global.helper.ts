@@ -72,7 +72,7 @@ export const removeRandom = (text) => {
 export const extractErrorString = (response) => {
     if (response.errors && !isArray(response.errors)) {
         return response.errors.message;
-    } else if (response.errors && isArray(response.errors)) {
+    } else if (response.errors && isArray(response.errors && response.errors.length>0)) {
         return response.errors[0].message;
     } else {
         return MESSAGES.UNKNOWN;

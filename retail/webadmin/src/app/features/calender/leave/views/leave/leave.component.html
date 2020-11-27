@@ -77,8 +77,10 @@
                             <span *ngSwitchCase="'leaveTypeId'">
                                 {{getLeaveType(element[key])}}
                             </span>
-                            <span *ngSwitchCase="'User'">
-                                {{getUserName(element['userId'])}}
+                            <span *ngSwitchCase="'userId'">
+                                <span *ngIf="element[key]; else defaultText">
+                                    {{ element['user'].first_name + ' ' + element['user'].last_name}}
+                                </span>
                             </span>
 
                             <span *ngSwitchCase="'action'">
