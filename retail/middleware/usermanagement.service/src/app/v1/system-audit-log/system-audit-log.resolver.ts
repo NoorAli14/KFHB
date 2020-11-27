@@ -1,4 +1,6 @@
-import { Resolver, Query, Args } from '@nestjs/graphql';
+import { Resolver, Query, Args, Mutation, ResolveField, Parent } from '@nestjs/graphql';
+import { Loader } from 'nestjs-dataloader';
+import * as DataLoader from "dataloader";
 
 import { CurrentUser, Fields } from '@common/decorators';
 import { ICurrentUser } from '@common/interfaces';
@@ -6,6 +8,8 @@ import { PaginationParams, SortingParam } from '@common/dtos';
 import { SALWithPagination, SystemAuditLog } from './system-audit-log.model';
 import { SALFilterParams } from './dtos';
 import { SystemAuditLogService } from './system-audit-log.service';
+import { SystemAuditLogInput } from "./system-audit-log.dto";
+import { UserForSAL } from "@app/v1/users/user.model";
 
 @Resolver(SystemAuditLog)
 export class SystemAuditLogResolver {
@@ -26,5 +30,25 @@ export class SystemAuditLogResolver {
       sortingParams,
       output,
     );
+  }
+
+  @Mutation(() => SystemAuditLog)
+  async addSystemAuditLog(
+    @Args('input') input: SystemAuditLogInput,
+    @Fields() output: string[],
+    @CurrentUser() currentUser: ICurrentUser,
+  ): Promise<SystemAuditLog> {
+    return this.systemAuditLogService.create(currentUser.tenant_id, input, output);
+  }
+
+  @ResolveField('user', () => UserForSAL)
+  async getUser(
+    @Parent() sal: SystemAuditLog,
+    @Loader('UsersDataLoader')
+      usersLoader: DataLoader<UserForSAL['id'], UserForSAL[]>,
+  ): Promise<any> {
+    if (!sal.user_id) return {};
+    const [res] = await usersLoader.load(sal.user_id);
+    return res;
   }
 }

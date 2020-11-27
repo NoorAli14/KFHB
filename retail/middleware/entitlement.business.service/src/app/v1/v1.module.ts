@@ -26,6 +26,7 @@ import { LeaveModule } from './leaves/leave.module';
 import { LeaveTypeModule } from './leave-types/leave-type.module';
 import { RegistryService } from '@common/services';
 import { OtpModule } from './otp/otp.module';
+import {SystemAuditLogModule} from "@app/v1/system-audit-log/system-audit-log.module";
 
 class AuthenticatedDataSource extends RemoteGraphQLDataSource {
   async willSendRequest({ request, context }) {
@@ -72,6 +73,7 @@ class BuildServiceModule {}
     LeaveTypeModule,
     LeaveModule,
     OtpModule,
+    SystemAuditLogModule,
     GraphQLGatewayModule.forRootAsync({
       imports: [CommonModule, BuildServiceModule],
       useFactory: async (schema: RegistryService) => ({

@@ -19,6 +19,16 @@ export class LeavesService {
     created_by
     updated_on
     updated_by
+    user {
+      id
+      email
+      first_name
+      middle_name
+      last_name
+      status
+      contact_no
+      gender
+    }
   }`;
 
   constructor(private readonly gqlClient: GqlClientService) { }

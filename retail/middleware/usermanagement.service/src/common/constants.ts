@@ -216,6 +216,26 @@ export const MODULES = [
       },
     ],
   },
+  {
+    name: 'System Management',
+    slug: 'system-management',
+    permissions: [
+      {
+        name: 'view',
+      },
+    ],
+    sub_modules: [
+      {
+        name: 'System Audit Log',
+        slug: 'system-audit-log',
+        permissions: [
+          {
+            name: 'view',
+          }
+        ],
+      }
+    ],
+  },
 ];
 
 export const WEEK_DAYS = {
@@ -254,35 +274,35 @@ export const MESSAGES = {
 };
 
 export const SYSTEM_AUDIT_CODES = {
-  USER_LOGIN: 'USER_LOGIN',
-  USER_CREATED: 'USER_CREATED',
-  USER_MODIFIED: 'USER_MODIFIED',
-  INVALID_PASSWORD: 'INVALID_PASSWORD',
-  PASSWORD_UPDATED: 'PASSWORD_UPDATED',
-  PASSWORD_UPDATE_FAILED: 'PASSWORD_UPDATE_FAILED',
-  FORGET_PASSWORD_REQUEST: 'FORGET_PASSWORD_REQUEST',
-  USER_DELETED: 'USER_DELETED',
-  USER_LOGOUT: 'USER_LOGOUT', // not used yet
+  LOGIN_USER_SUCCESS: 'LOGIN_USER_SUCCESS',
+  LOGIN_USER_FAILED: 'LOGIN_USER_FAILED',
+  LOGOUT_USER_SUCCESS: 'LOGOUT_USER_SUCCESS',
+  CREATE_USER_SUCCESS: 'CREATE_USER_SUCCESS',
+  UPDATE_USER_SUCCESS: 'UPDATE_USER_SUCCESS',
+  DELETE_USER_SUCCESS: 'DELETE_USER_SUCCESS',
+  UPDATE_PASSWORD_SUCCESS: 'UPDATE_PASSWORD_SUCCESS',
+  UPDATE_PASSWORD_FAILED: 'UPDATE_PASSWORD_FAILED',
+  FORGET_PASSWORD_REQUEST_SUCCESS: 'FORGET_PASSWORD_REQUEST_SUCCESS',
+  FORGET_PASSWORD_REQUEST_FAILED: 'FORGET_PASSWORD_REQUEST_FAILED',
 };
 
 export const SYSTEM_AUDIT_LOG_STRINGS = {
-  LOGIN_SUCCESS: 'Logged in Successfully',
-  LOGIN_FAILED: 'Login attempt failed',
-  USER_LOGOUT: 'Logged out successfully',
-  PASSWORD_RESET_SUCCESS: 'Password reset successfully',
-  PASSWORD_RESET_FAILED_WRONG_TOKEN: 'Password reset attempt failed due to wrong token',
-  PASSWORD_RESET_FAILED_TIMED_OUT_TOKEN:
-    'Password reset attempt failed due to timed-out token',
-  PASSWORD_RESET_REQUEST_SUCCESS:
-    'Successfully made request for password reset',
-  PASSWORD_RESET_REQUEST_FAILED: 'Password reset request failed',
-  INVITATION_TOKEN_RESET: 'Invitation token reset',
-  PASSWORD_CHANGE_FAILED:
-    'Password change failed due to wrong current password',
-  PASSWORD_CHANGE_SUCCESS: 'Password changed successfully',
-  USER_CREATED: 'User created successfully',
-  USER_MODIFIED: 'User modified successfully',
-  USER_DELETED: 'User deleted successfully',
+  LOGIN_USER_SUCCESS: 'User logged in Successfully',
+  LOGIN_USER_FAILED: 'Login attempt failed',
+  LOGOUT_USER_SUCCESS: 'User logged out successfully',
+  FORGET_PASSWORD_REQUEST_SUCCESS:
+    'Successfully made request for forget password',
+  FORGET_PASSWORD_REQUEST_FAILED: 'Password update request failed',
+  RESET_INVITATION_TOKEN_SUCCESS: 'Invitation token reset successfully',
+  UPDATE_PASSWORD_FAILED:
+    'Password update failed due to wrong current password',
+  UPDATE_PASSWORD_FAILED_WRONG_TOKEN: 'Password update attempt failed due to wrong token',
+  UPDATE_PASSWORD_FAILED_TIMED_OUT_TOKEN:
+    'Password update attempt failed due to timed-out token',
+  UPDATE_PASSWORD_SUCCESS: 'Password updated successfully',
+  CREATE_USER_SUCCESS: 'User created successfully',
+  UPDATE_USER_SUCCESS: 'User updated successfully',
+  DELETE_USER_SUCCESS: 'User deleted successfully',
 };
 
 export const DATABASE_MIGRATION_TABLE_NAME = 'RUBIX_ENTITLEMENT_MIGRATIONS';

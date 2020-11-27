@@ -22,7 +22,6 @@ export const graphqlFields = (info: { [key: string]: any }): string[] => {
       keys.push(item.name.value);
     }
   });
-
   // filtering some keys
   const filters = [
     'id',
@@ -32,11 +31,11 @@ export const graphqlFields = (info: { [key: string]: any }): string[] => {
     'permissions',
     'sub_modules',
     'leaves',
+    'user'
   ];
   keys = keys.filter(function(key) {
     return filters.indexOf(key) === -1;
   });
-
   // we need the id in every query
   keys.push('id');
   keys.push('created_on');

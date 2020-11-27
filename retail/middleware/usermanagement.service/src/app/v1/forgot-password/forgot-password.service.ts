@@ -45,9 +45,9 @@ export class ForgotPasswordService {
     );
     if (!user) {
       await this.systemAuditLogService.create(tenant.id, {
-        audit_code: SYSTEM_AUDIT_CODES.FORGET_PASSWORD_REQUEST,
+        audit_code: SYSTEM_AUDIT_CODES.FORGET_PASSWORD_REQUEST_FAILED,
         audit_text:
-          SYSTEM_AUDIT_LOG_STRINGS.PASSWORD_RESET_REQUEST_FAILED +
+          SYSTEM_AUDIT_LOG_STRINGS.FORGET_PASSWORD_REQUEST_FAILED +
           ` with email ${input.email}`,
       });
       throw new UserNotFoundException(input.email);
@@ -73,9 +73,9 @@ export class ForgotPasswordService {
       output,
     );
     await this.systemAuditLogService.create(tenant.id, {
-      audit_code: SYSTEM_AUDIT_CODES.FORGET_PASSWORD_REQUEST,
+      audit_code: SYSTEM_AUDIT_CODES.FORGET_PASSWORD_REQUEST_SUCCESS,
       audit_text:
-        SYSTEM_AUDIT_LOG_STRINGS.PASSWORD_RESET_REQUEST_SUCCESS +
+        SYSTEM_AUDIT_LOG_STRINGS.FORGET_PASSWORD_REQUEST_SUCCESS +
         ` with email ${input.email}`,
       user_id: user.id
     });
@@ -94,8 +94,8 @@ export class ForgotPasswordService {
     );
     if (!user) {
       await this.systemAuditLogService.create(tenant.id, {
-        audit_code: SYSTEM_AUDIT_CODES.PASSWORD_UPDATE_FAILED,
-        audit_text: SYSTEM_AUDIT_LOG_STRINGS.PASSWORD_RESET_FAILED_WRONG_TOKEN,
+        audit_code: SYSTEM_AUDIT_CODES.UPDATE_PASSWORD_FAILED,
+        audit_text: SYSTEM_AUDIT_LOG_STRINGS.UPDATE_PASSWORD_FAILED_WRONG_TOKEN,
       });
       throw new TokenInvalidOrExpiredException(input.password_reset_token);
     }
@@ -117,16 +117,16 @@ export class ForgotPasswordService {
         output,
       );
       await this.systemAuditLogService.create(tenant.id, {
-        audit_code: SYSTEM_AUDIT_CODES.PASSWORD_UPDATED,
-        audit_text: SYSTEM_AUDIT_LOG_STRINGS.PASSWORD_RESET_SUCCESS + ` of user ${user.id}`,
+        audit_code: SYSTEM_AUDIT_CODES.UPDATE_PASSWORD_SUCCESS,
+        audit_text: SYSTEM_AUDIT_LOG_STRINGS.UPDATE_PASSWORD_SUCCESS + ` of user ${user.id}`,
         user_id: user.id
       });
       return result;
     } else {
       await this.systemAuditLogService.create(tenant.id, {
-        audit_code: SYSTEM_AUDIT_CODES.PASSWORD_UPDATE_FAILED,
+        audit_code: SYSTEM_AUDIT_CODES.UPDATE_PASSWORD_FAILED,
         audit_text:
-          SYSTEM_AUDIT_LOG_STRINGS.PASSWORD_RESET_FAILED_TIMED_OUT_TOKEN,
+          SYSTEM_AUDIT_LOG_STRINGS.UPDATE_PASSWORD_FAILED_TIMED_OUT_TOKEN,
         user_id: user.id
       });
       throw new TokenInvalidOrExpiredException(input.password_reset_token);

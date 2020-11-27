@@ -1,8 +1,11 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, ResolveField, Parent } from '@nestjs/graphql';
+import { Loader } from "nestjs-dataloader";
+import * as DataLoader from "dataloader";
+
 import { KeyValInput } from '@common/inputs/key-val.input';
-import { Leave, LeavesWithPagination } from '@app/v1/leave/leave.model';
-import { LeavesService } from '@app/v1/leave/leaves.service';
-import { LeaveCreateInput, LeaveInput } from '@app/v1/leave/leave.dto';
+import { Leave, LeavesWithPagination } from './leave.model';
+import { LeavesService } from './leaves.service';
+import { LeaveCreateInput, LeaveInput } from './leave.dto';
 import { CurrentUser, Fields } from '@common/decorators';
 import { User } from '@app/v1/users/user.model';
 import { UserService } from '@app/v1/users/users.service';
@@ -13,7 +16,8 @@ import { LeaveNotFoundException } from '@app/v1/leave/exceptions';
 import { LeaveTypeNotFoundException } from '@app/v1/leave_type/exceptions';
 import { UserNotFoundException } from '../users/exceptions';
 import { PaginationParams, SortingParam } from '@common/dtos';
-import { LeavesFilterParams } from '@app/v1/leave/dtos';
+import { LeavesFilterParams } from './dtos';
+
 
 @Resolver(Leave)
 export class LeavesResolver {
@@ -121,5 +125,16 @@ export class LeavesResolver {
     ]);
     if (!leave) throw new LeaveNotFoundException(id);
     return this.leavesService.delete(current_user, id);
+  }
+
+  @ResolveField('user', () => User)
+  async getUser(
+    @Parent() leave: Leave,
+    @Loader('UsersDataLoader')
+      usersLoader: DataLoader<User['id'], User[]>,
+  ): Promise<any> {
+    if (!leave.user_id) return {};
+    const [res] = await usersLoader.load(leave.user_id);
+    return res;
   }
 }
