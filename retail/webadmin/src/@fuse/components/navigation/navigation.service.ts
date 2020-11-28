@@ -136,6 +136,30 @@ export class FuseNavigationService {
                 },
             ],
         };
+        const refferalsItem = {
+            id: 'referrals',
+            title: 'Referrals',
+            type: 'item',
+            icon: 'people_outline',
+            url: '/referrals',
+        };
+        const serviceRequestsItem = {
+            id: 'service-requests',
+            title: 'Service Requests',
+            type: 'item',
+            icon: 'receipt',
+            url: '/req',
+        };
+        const findRefferal = navigation.find((x) => x.id == 'referrals');
+        if (!findRefferal) {
+            navigation.push(refferalsItem);
+        }
+        const findserviceRequests = navigation.find((x) => x.id == 'service-requests');
+        if (!findserviceRequests) {
+            navigation.push(serviceRequestsItem);
+        }
+
+
         const find = navigation.find((x) => x.id === 'custom-function');
         if (!find) {
             // navigation.push(customFunctionNavItem);

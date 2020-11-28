@@ -4,6 +4,9 @@ const VERSION = '';
 export function createUrl(actionName: string): string {
     return `${environment.API_BASE_URL}${actionName}${VERSION}`;
 }
+export function createUrl2(baseUrl, actionName: string): string {
+    return `${baseUrl}${actionName}${VERSION}`;
+}
 
 export const DATE_FORMAT = 'YYYY-MM-DD';
 export enum APP_CONST {
@@ -59,6 +62,8 @@ export const MODULES = {
 const ENTITLEMENT = '/api/v1/entitlements/';
 const REFERENCE = '/api/v1/references/';
 const ONBOARDING = '/api/v1/onboarding/';
+const SERVICEREQUEST = '/requests/api/v1/service/request/';
+const REFERRALREQUEST = '/customers/api/v1/customers/';
 
 export const URI = {
     USER_INVITATION: `${ENTITLEMENT}invitations`,
@@ -79,6 +84,13 @@ export const URI = {
     CUSTOMERS: `${ONBOARDING}customers`,
     CUSTOMER360: `${ONBOARDING}customers`,
     SYSTEM_AUDIT: `${ENTITLEMENT}audit/system`,
+    SERVICE_REQUEST_LIST: `${SERVICEREQUEST}user/all`,
+    SERVICE_REQUEST_DETAILS: `${SERVICEREQUEST}`,
+    SERVICE_REQUEST_UBDATE_STATUS: `${SERVICEREQUEST}status/update`,
+    SERVICE_REQUEST_REPORT: `${SERVICEREQUEST}excel/report`,
+    REFERRAL: `${REFERRALREQUEST}referral`,
+    REFERRAL_TRANSACTIONS: `${REFERRALREQUEST}referral/transactions`,
+    REFERRAL_TRANSACTIONS_REPORT: `${REFERRALREQUEST}referral/transactions/excel/report`
 };
 
 export const DEFAULT_IMAGE = 'assets/images/not-available.png';

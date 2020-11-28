@@ -39,6 +39,14 @@ const routes: Routes = [
     loadChildren: () => import('./system-management/system-management.module').then(m => m.SystemManagementModule)
   },
   {
+    path: 'referrals',
+    loadChildren: () => import('./referrals/referrals.module').then(m => m.ReferralsModule)
+  },
+  {
+    path: 'req',
+    loadChildren: () => import('./service-requests/service-requests.module').then(m => m.ServiceRequestModule)
+  },
+  {
     path: '**', redirectTo: 'error'
   }
 ];
