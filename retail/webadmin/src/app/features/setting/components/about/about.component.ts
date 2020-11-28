@@ -1,7 +1,6 @@
 import { getName } from '@shared/helpers/global.helper';
 import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
 import { fuseAnimations } from '@fuse/animations';
-import { NATIONALITY_LIST } from '@shared/constants/app.constants';
 
 @Component({
     selector: 'app-about',

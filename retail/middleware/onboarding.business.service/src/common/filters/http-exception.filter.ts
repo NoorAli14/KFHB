@@ -3,32 +3,44 @@ import {
   Catch,
   ExceptionFilter,
   HttpException,
-  HttpStatus,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
-  catch(error: HttpException | any, host: ArgumentsHost) {
+  catch(exception: HttpException | any, host: ArgumentsHost): void {
+    if (Array.isArray(exception['response'])) {
+      exception['response'].map(validationError => {
+        const property: string = validationError['property'];
+        if (property?.includes('_')) {
+          const constraints = validationError['constraints'];
+          Object.keys(constraints).map(function (constraintKey) {
+            constraints[constraintKey] = constraints[constraintKey].replace('_', ' ');
+          });
+        }
+      });
+    }
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
-    const status = error.getStatus();
-
-    if (status === HttpStatus.UNAUTHORIZED) {
-      if (typeof error.response !== 'string') {
-        error.response['message'] =
-          error.response.message ||
-          'You do not have permission to access this resource';
-      }
+    const status = exception.getStatus();
+    if (exception?.response?.name && exception?.response?.errors) {
+      response.status(status).json({
+        statusCode: status,
+        name: exception.response.name,
+        errors: exception.response.errors || [],
+        timestamp: new Date().toISOString(),
+        path: request?.url || null,
+      });
+    } else {
+      response.status(status).json({
+        statusCode: status,
+        name: exception.name || exception.response.name,
+        errors: exception.response || [],
+        timestamp: new Date().toISOString(),
+        path: request?.url || null,
+      });
     }
-    response.status(status).json({
-      statusCode: status,
-      error: error.response.name || error.name,
-      message: error.response.message || error.message,
-      errors: error.response.errors || null,
-      timestamp: new Date().toISOString(),
-      path: request ? request.url : null,
-    });
+
   }
 }

@@ -2,7 +2,11 @@ import { Module, OnModuleDestroy } from '@nestjs/common';
 import { KnexModule, InjectKnex, Knex } from 'nestjs-knex';
 import { CommonModule } from '@rubix/common/common.module';
 import { DBConfigurationService } from '@rubix/common/configuration/dbconfiguration.service';
-import { UserRepository, PostRepository, CommentRepository } from '@rubix/core/repository/';
+import {
+  UserRepository,
+  PostRepository,
+  CommentRepository,
+} from '@rubix/core/repository/';
 const repositories: any = [UserRepository, PostRepository, CommentRepository];
 @Module({
   imports: [

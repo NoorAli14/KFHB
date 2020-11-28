@@ -1,12 +1,17 @@
 import { Transport } from '@nestjs/microservices';
-import { INestApplication, ValidationPipe, Logger } from '@nestjs/common';
-import { CommonModule } from '@common/common.module';
+import { INestApplication, ValidationPipe, Logger, ValidationError } from '@nestjs/common';
+import * as cookieParser from 'cookie-parser';
 import {
+  CommonModule,
+  ConfigurationService,
+  GqlExceptionFilter,
+  HttpExceptionFilter,
   LoggingInterceptor,
   TransformInterceptor,
-} from '@common/interceptors/';
-import { HttpExceptionFilter } from '@common/filters/http-exception.filter';
-import { ConfigurationService } from '@common/configuration/configuration.service';
+  ValidationExceptionFilter,
+  ValidationException
+} from '@common/index';
+
 import { KernelMiddleware } from '@core/middlewares/index';
 
 export default class Server {
@@ -45,9 +50,14 @@ export default class Server {
     this.app.enableShutdownHooks();
     this.app.useGlobalInterceptors(new TransformInterceptor());
     this.app.useGlobalInterceptors(new LoggingInterceptor());
-    this.app.useGlobalFilters(new HttpExceptionFilter());
-    this.app.useGlobalPipes(new ValidationPipe());
+    this.app.useGlobalFilters(new HttpExceptionFilter(), new ValidationExceptionFilter(), new GqlExceptionFilter());
+    this.app.useGlobalPipes(new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      exceptionFactory: (errors: ValidationError[] | any[]) => new ValidationException(errors)
+    }));
     this.app.setGlobalPrefix(this.Config.APP.API_URL_PREFIX);
+    this.app.use(cookieParser());
   }
 
   /** Microservices use the TCP transport layer by default and other options are:

@@ -11,10 +11,26 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
+    "skipLibCheck": true,
     "paths": {
-      "@common/*": ["./src/common/*"],
-      "@app/*": ["./src/app/*"],
-      "@core/*": ["./src/core/*"]
+      "@root/*": [
+        "./*"
+      ],
+      "@rubix/*": [
+        "./src/*"
+      ],
+      "@common/*": [
+        "./src/common/*"
+      ],
+      "@app/*": [
+        "./src/app/*"
+      ],
+      "@core/*": [
+        "./src/core/*"
+      ],
+      "@volumes/*": [
+        "volumes/*"
+      ]
     }
   }
 }

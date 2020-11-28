@@ -3,9 +3,8 @@ import { CommentRepository } from '@rubix/core/repository/';
 
 @Injectable()
 export class CommentsService {
+  constructor(private commentDB: CommentRepository) {}
 
-  constructor(private commentDB: CommentRepository) { }
-  
   async list(keys: string[]): Promise<any> {
     return this.commentDB.findAll(keys);
   }
@@ -31,7 +30,7 @@ export class CommentsService {
     const [user] = await this.commentDB.create(newUser, keys);
     return user;
   }
-  
+
   async delete(id: string): Promise<any> {
     return await this.commentDB.delete({ id: id });
   }

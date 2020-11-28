@@ -1,4 +1,5 @@
 import { INestApplication } from '@nestjs/common';
+import { Request, NextFunction } from 'express';
 import * as helmet from 'helmet';
 import * as hpp from 'hpp';
 import * as compression from 'compression';
@@ -7,6 +8,9 @@ import { Swagger } from '@core/providers/swagger.provider';
 import { RateLimiterMiddleware } from './rate-limiter.middleware';
 import { CorrelationMiddleware } from './correlation.middleware';
 import { CorsMiddleware } from './cors.middleware';
+import { RegistryMiddleware } from "./registry.middleware";
+import { formattedHeader } from '@common/utilities';
+import { RequestContextMiddleware, setContext } from '@core/context';
 export class KernelMiddleware {
   public static init(
     app: INestApplication,
@@ -52,6 +56,19 @@ export class KernelMiddleware {
     if (config.RATE_LIMITER.ENABLE) {
       app = RateLimiterMiddleware.init(app, config);
     }
+
+    /*
+     * Middleware: Authorize requests based on channels and services
+     */
+    app.use(RegistryMiddleware());
+    /** Express.js middleware that is responsible for initializing the context for each request. */
+    app.use(RequestContextMiddleware());
+
+    /** Set HttpHeader is Request Context Lifecycle */
+    app.use((req: Request, res: Response, next: NextFunction): void => {
+      setContext('HttpHeaders', formattedHeader(req));
+      next();
+    });
 
     return app;
   }

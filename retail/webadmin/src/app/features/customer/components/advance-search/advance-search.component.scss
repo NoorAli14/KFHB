@@ -40,7 +40,7 @@
     border-radius: 2px;
     position: absolute;
     top: -5px;
-    right: 354px;
+    width: 100%;
 }
 
 .s008 form .inner-form .advance-search .desc {
@@ -134,3 +134,6 @@
 
 
 
+.search-wrapper{
+    max-width: none !important
+}

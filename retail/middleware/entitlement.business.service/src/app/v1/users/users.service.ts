@@ -1,33 +1,54 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { SuccessDto } from '@common/dtos/';
-import { User } from './user.entity';
-import { toGraphql } from '@common/utilities';
-import { GqlClientService } from '@common/libs/gqlclient/gqlclient.service';
+import {
+  Injectable,
+  UnprocessableEntityException,
+  Logger,
+} from '@nestjs/common';
+import { User, UserPaginationList } from './user.entity';
+import { GqlClientService, PAGINATION_OUTPUT, toGraphql } from '@common/index';
+import { ChangePasswordDto, UpdateUserDto } from './user.dto';
+
 @Injectable()
 export class UserService {
+  private readonly logger: Logger = new Logger(UserService.name);
   private readonly output: string = ` {
     id
     first_name
     middle_name
     last_name
-    username
     email
     contact_no
     gender
     nationality_id
     date_of_birth
+    entity_id
     roles {
       id
       name
+      description
+      status
+      created_on
+      created_by
     }
     modules {
-      id
-      name
-      parent_id
-      sub_modules {
         id
         name
+        slug
         parent_id
+        sub_modules {
+          id
+          name
+          slug
+          parent_id
+          permissions {
+            id
+            record_type
+            created_on
+            created_by
+          }
+          status
+          created_on
+          created_by
+        }
         permissions {
           id
           record_type
@@ -38,16 +59,6 @@ export class UserService {
         created_on
         created_by
       }
-      permissions {
-        id
-        record_type
-        created_on
-        created_by
-      }
-      status
-      created_on
-      created_by
-    }
     status
     created_on
     created_by
@@ -55,81 +66,87 @@ export class UserService {
     updated_by
   }`;
 
-  constructor(private readonly gqlClient: GqlClientService) {}
+  constructor(private readonly gqlClient: GqlClientService) { }
 
-  async list(): Promise<User[]> {
-    const params = `query {
-      users: usersList {
-        id
-        first_name
-        middle_name
-        last_name
-        username
-        email
-        contact_no
-        gender
-        nationality_id
-        date_of_birth
-        roles {
+  async list(params?: any): Promise<UserPaginationList> {
+    const query = `query {
+      result: usersList(
+        filters: ${toGraphql(params?.filters)}
+        sort_by: ${toGraphql(params?.sort_by)}
+        pagination: ${toGraphql(params?.pagination)}
+      ) {
+        pagination ${PAGINATION_OUTPUT}
+        data {
           id
-          name
+          first_name
+          middle_name
+          last_name
+          email
+          contact_no
+          gender
+          nationality_id
+          date_of_birth
+          entity_id
+          roles {
+            id
+            name
+            description
+            status
+            created_on
+            created_by
+          }
           status
           created_on
           created_by
+          updated_on
+          updated_by
         }
-        status
-        created_on
-        created_by
-        updated_on
-        updated_by
       }
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.users;
+    return this.gqlClient.send(query);
   }
 
   async create(input: any): Promise<User> {
-    const params = `mutation {
-      user: addUser(input: ${toGraphql(input)}) ${this.output}
+    const user: User = await this.findByEmail(input.email);
+    if (user) {
+      throw new UnprocessableEntityException(
+        `User Already Exist with email ${input.email}`,
+      );
+    }
+    const mutation = `mutation {
+      result: addUser(input: ${toGraphql(input)}) ${this.output}
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.user;
+    return this.gqlClient.send(mutation);
   }
 
   async findOne(id: string, output?: string): Promise<User> {
     const _output: string = output ? output : this.output;
-    const params = `query {
-      user: findUserById(id: "${id}") ${_output}
+    this.logger.log(`Find user by id [${id}]`);
+    const query = `query {
+      result: findUserById(id: "${id}") ${_output}
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.user;
-  }
-
-  async findOneByToken(token: string): Promise<User> {
-    // return this.users.find(role => role.id === token);
-    return new User();
+    return this.gqlClient.send(query);
   }
 
   async login(email: string, password: string): Promise<any> {
-    const params = `query {
-        user: login(input: ${toGraphql({ email, password })}) ${this.output}
+    const query = `query {
+        result: login(input: ${toGraphql({ email, password })}) ${this.output}
       }`;
-    const result = await this.gqlClient.send(params);
-    return result?.user;
+    return this.gqlClient.send(query);
   }
 
-  async findBy(condition: any, output?: string): Promise<User[]> {
-    console.log(`Condition is: ${JSON.stringify(condition, null, 2)}`);
+  async findBy(
+    condition: [Record<string, unknown>],
+    output?: string,
+  ): Promise<User[]> {
     const _output: string = output ? output : this.output;
     const params = `query {
-      user: findUserBy(checks: ${toGraphql(condition)}) ${_output}
+      result: findUserBy(checks: ${toGraphql(condition)}) ${_output}
     }`;
-    console.log(`Params is: ${params}`);
-    const result = await this.gqlClient.send(params);
-    return result?.user;
+    return this.gqlClient.send(params);
   }
 
-  async findByEmail(email: string) {
+  async findByEmail(email: string): Promise<User> {
     const [user] = await this.findBy(
       [
         {
@@ -137,55 +154,64 @@ export class UserService {
           record_value: email,
         },
       ],
-      `{id email}`,
+      `{id email status}`,
     );
     return user;
   }
 
-  async findByPasswordResetToken(token: string) {
+  async findByInvitationToken(token: string): Promise<any> {
     const [user] = await this.findBy(
       [
         {
-          record_key: 'token',
+          record_key: 'invitation_token',
           record_value: token,
         },
       ],
-      `{id token token_expiry}`,
+      `{id status invitation_token invitation_token_expiry}`,
     );
     return user;
   }
 
-  async updateByToken(token: string, user: any): Promise<User> {
-    // this.users[token] = user;
-    return new User();
-
-    // return user;
+  async findByPasswordResetToken(token: string): Promise<any> {
+    const [user] = await this.findBy(
+      [
+        {
+          record_key: 'password_reset_token',
+          record_value: token,
+        },
+      ],
+      `{id password_reset_token password_reset_token_expiry status}`,
+    );
+    return user;
   }
-  async update(id: string, input: any): Promise<User> {
-    const user: User = await this.findOne(id, `{id}`);
-    if (!user) {
-      throw new NotFoundException('User Not Found');
-    }
-    const params = `mutation {
-      user: updateUser(id: "${id}", input: ${toGraphql(input)}) ${this.output}
+
+  async update(
+    id: string,
+    input: UpdateUserDto,
+  ): Promise<User> {
+    this.logger.log(`Start updating user with ID [${id}]`);
+    const mutation = `mutation {
+      result: updateUser(id: "${id}", input: ${toGraphql(input)}) ${this.output}
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.user;
+    return this.gqlClient.send(mutation);
   }
 
   async delete(id: string): Promise<boolean> {
-    const user: User = await this.findOne(id, `{id}`);
-    if (!user) {
-      throw new NotFoundException('User Not Found');
-    }
-    const params = `mutation {
-      user: deleteUser(id: "${id}") 
+    this.logger.log(`Start deleting user with ID [${id}]`);
+    const mutation = `mutation {
+      result: deleteUser(id: "${id}") 
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.user;
+    return this.gqlClient.send(mutation);
   }
 
-  async resendInvitationLink(user_id: string) {
-    return true;
+  async changePassword(input: ChangePasswordDto): Promise<User> {
+    this.logger.log(`Init Change Password request`);
+    const mutation = `mutation{
+      result: updatePassword(input: ${toGraphql(input)}){
+          id
+          email
+      }
+    }`;
+    return this.gqlClient.send(mutation);
   }
 }

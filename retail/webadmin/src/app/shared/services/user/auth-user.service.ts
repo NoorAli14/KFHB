@@ -71,9 +71,21 @@ export class AuthUserService {
         },
         {
             id: 'leaves',
-            icon: 'update',
+            icon: 'history',
             url: '/calender/leaves',
             translate: 'FEATURES.CALENDER.LEAVES.TITLE',
+        },
+        {
+            id: 'system-management',
+            icon: 'settings',
+            url: '',
+            translate: 'FEATURES.SYSTEM_MANAGEMENT.TITLE',
+        },
+        {
+            id: 'system-audit-log',
+            icon: 'update',
+            url: '/system',
+            translate: 'FEATURES.SYSTEM_MANAGEMENT.LOGS.TITLE',
         },
     ];
 

@@ -1,12 +1,18 @@
 import { NestFactory } from '@nestjs/core';
 import { Transport } from '@nestjs/microservices';
-import { INestApplication, ValidationPipe, Logger } from '@nestjs/common';
+import {
+  INestApplication,
+  ValidationPipe,
+  ValidationError,
+  Logger,
+} from '@nestjs/common';
 import { ApplicationModule } from '@rubix/app/index';
 import { CommonModule } from '@rubix/common/common.module';
 import { LoggingInterceptor } from '@rubix/common/interceptors/';
-import { HttpExceptionFilter } from '@rubix/common/filters/http-exception.filter';
+import { HttpExceptionFilter } from '@rubix/common/filters/';
 import { ConfigurationService } from '@rubix/common/configuration/configuration.service';
 import { KernelMiddleware } from '@rubix/core/middlewares/index';
+import { ValidationException } from '@rubix/common/exceptions';
 
 class Server {
   private _app: INestApplication;
@@ -44,7 +50,14 @@ class Server {
     this.app.enableShutdownHooks();
     this.app.useGlobalInterceptors(new LoggingInterceptor());
     this.app.useGlobalFilters(new HttpExceptionFilter());
-    this.app.useGlobalPipes(new ValidationPipe({transform: true}));
+    this.app.useGlobalPipes(
+      new ValidationPipe({
+        transform: true,
+        whitelist: true,
+        exceptionFactory: (errors: ValidationError[] | any[]) =>
+          new ValidationException(errors),
+      }),
+    );
     this.app.setGlobalPrefix(this.Config.APP.API_URL_PREFIX);
   }
 

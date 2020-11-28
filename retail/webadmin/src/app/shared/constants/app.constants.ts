@@ -5,10 +5,6 @@ export function createUrl(actionName: string): string {
     return `${environment.API_BASE_URL}${actionName}${VERSION}`;
 }
 
-export function createUrl2(baseUrl, actionName: string): string {
-    return `${baseUrl}${actionName}${VERSION}`;
-}
-
 export const DATE_FORMAT = 'YYYY-MM-DD';
 export enum APP_CONST {
     CURRENT_USER = '_currentUser',
@@ -37,6 +33,18 @@ export const WORKING_DAYS: Array<Select> = [
     { id: 'SATURDAY', name: 'SATURDAY' },
     { id: 'SUNDAY', name: 'SUNDAY' },
 ];
+export const STATUS_CODE_LIST: Array<Select> = [
+    { id: 'LOGIN_USER_SUCCESS', name: 'LOGIN_USER_SUCCESS' },
+    { id: 'LOGIN_USER_FAILED', name: 'LOGIN_USER_FAILED' },
+    { id: 'LOGOUT_USER_SUCCESS', name: 'LOGOUT_USER_SUCCESS' },
+    { id: 'CREATE_USER_SUCCESS', name: 'CREATE_USER_SUCCESS' },
+    { id: 'UPDATE_USER_SUCCESS', name: 'UPDATE_USER_SUCCESS' },
+    { id: 'DELETE_USER_SUCCESS', name: 'DELETE_USER_SUCCESS' },
+    { id: 'UPDATE_PASSWORD_SUCCESS', name: 'UPDATE_PASSWORD_SUCCESS' },
+    { id: 'UPDATE_PASSWORD_FAILED', name: 'UPDATE_PASSWORD_FAILED' },
+    { id: 'FORGET_PASSWORD_REQUEST_SUCCESS', name: 'FORGET_PASSWORD_REQUEST_SUCCESS' },
+    { id: 'FORGET_PASSWORD_REQUEST_FAILED', name: 'FORGET_PASSWORD_REQUEST_FAILED' },
+];
 
 export const MODULES = {
     USER_MANAGEMENT: 'User Management',
@@ -44,19 +52,12 @@ export const MODULES = {
     WORKING_WEEK: 'Working Week',
     LEAVES: 'Leaves',
     HOLIDAYS: 'Holidays',
-    SERVICEREQUEST: 'Service Requests',
-    REFERRAL: 'Referrals'
+    SYSTEM_MANAGEMENT: 'System Management',
 };
-export const NATIONALITY_LIST: Array<Select> = [
-    { id: '1', name: 'Pakistan' },
-    { id: '2', name: 'Bahrain' },
-    { id: '3', name: 'Kuwait' },
-];
+
 
 const ENTITLEMENT = '/api/v1/entitlements/';
 const REFERENCE = '/api/v1/references/';
-const SERVICEREQUEST = '/requests/api/v1/service/request/';
-const REFERRALREQUEST = '/customers/api/v1/customers/';
 const ONBOARDING = '/api/v1/onboarding/';
 
 export const URI = {
@@ -77,14 +78,7 @@ export const URI = {
     COUNTRIES: `${REFERENCE}countries`,
     CUSTOMERS: `${ONBOARDING}customers`,
     CUSTOMER360: `${ONBOARDING}customers`,
-     SERVICE_REQUEST_LIST: `${SERVICEREQUEST}user/all`,
-    SERVICE_REQUEST_DETAILS: `${SERVICEREQUEST}`,
-    SERVICE_REQUEST_UBDATE_STATUS: `${SERVICEREQUEST}status/update`,
-    SERVICE_REQUEST_REPORT: `${SERVICEREQUEST}excel/report`,
-    REFERRAL: `${REFERRALREQUEST}referral`,
-    REFERRAL_TRANSACTIONS: `${REFERRALREQUEST}referral/transactions`,
-    REFERRAL_TRANSACTIONS_REPORT: `${REFERRALREQUEST}referral/transactions/excel/report`
-
+    SYSTEM_AUDIT: `${ENTITLEMENT}audit/system`,
 };
 
 export const DEFAULT_IMAGE = 'assets/images/not-available.png';

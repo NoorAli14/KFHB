@@ -59,7 +59,6 @@ export class AuthInterceptorService implements HttpInterceptor {
                         const clonedRequest = request.clone(options);
                         return next.handle(clonedRequest);
                     }
-
                     // this.eventService.emit(
                     //     new EmitEvent(Events.SESSION_EXPIRED, true)
                     // );

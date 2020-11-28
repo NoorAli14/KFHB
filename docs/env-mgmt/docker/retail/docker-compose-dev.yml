@@ -1,0 +1,327 @@
+version: "3.2"
+
+services:
+  #=================================================================
+  # Redis Server
+  #=================================================================
+  redis-server:
+    image: redis:alpine
+    container_name: cache
+    networks:
+      - core_service_network
+  #=================================================================
+  # Gateway Service
+  #=================================================================
+  retail-gateway:
+    image: rubixgateway:dev
+    container_name: retail_gateway
+    volumes:
+      - ${ENV_RBX_VOLUME_PATH}/gateway.service/domain.conf:/etc/nginx/conf.d/default.conf
+      - ${ENV_RBX_VOLUME_PATH}/gateway.service/certs/fullchain.pem:/etc/nginx/domainssl/domain.crt
+      - ${ENV_RBX_VOLUME_PATH}/gateway.service/certs/private.key:/etc/nginx/domainssl/domain.key
+    networks:
+      - core_service_network
+    depends_on: 
+      - retail-reference
+      - retail-onboarding
+      - retail-entitlement
+      - retail-webportal
+    ports:
+      - 80:80
+      - 443:443
+      - 8443:8443
+  #=================================================================
+  # Admin Web Portal Service
+  #=================================================================
+  retail-webportal:
+    image: rubixretailwebadmin:dev
+    container_name: retail_webportal
+    environment:
+      - ENV_RBX_API_BASE_URL=$ENV_RBX_API_BASE_URL
+      - ENV_RBX_APP_SECRET=$ENV_RBX_APP_SECRET
+      - ENV_RBX_CHANNEL_ID=$ENV_RBX_CHANNEL_ID
+      - ENV_RBX_TENANT_ID=$ENV_RBX_TENANT_ID
+      - ENV_RBX_VIDEO_URL=$ENV_RBX_VIDEO_URL
+    restart: always
+    networks:
+      - core_service_network
+  #=================================================================
+  # Video Call Portal Service
+  #=================================================================
+  video-portal:
+    image: videoportal:dev
+    container_name: video_portal
+    environment:
+      - REACT_APP_IV=$REACT_APP_IV
+      - REACT_APP_BASE_URL=$REACT_APP_BASE_URL
+      - REACT_APP_SIGNAL_SERVER=$REACT_APP_SIGNAL_SERVER
+      - REACT_APP_XMPP_HOST=$REACT_APP_XMPP_HOST
+      - RUBIX_BASE_URL=$RUBIX_BASE_URL
+      - REACT_APP_XMPP_PORT=$REACT_APP_XMPP_PORT
+      - REACT_APP_SSL=$REACT_APP_SSL
+    restart: always
+    networks:
+      - core_service_network
+  #=================================================================
+  # Entitlement Business Service
+  #=================================================================
+  retail-entitlement:
+    image: rubixentitlements:dev
+    container_name: retail_entitlement
+    environment:
+      - ENV_RBX_PORT=5000
+      - ENV_RBX_APP_NAME=Rubix | Entitlement Business Service
+      - ENV_RBX_SWAGGER_ENABLED=true
+      - ENV_RBX_API_URL_PREFIX=api/v1/entitlements
+      - ENV_RBX_CORS_ORIGIN=$ENV_RBX_CORS_ORIGIN
+      - ENV_RBX_CORS_ENABLED=$ENV_RBX_CORS_ENABLED
+      - ENV_RBX_JWT_EXPIRY_MINUTES=$ENV_RBX_JWT_EXPIRY_MINUTES
+      - ENV_RBX_JWT_REFRESH_EXPIRY_DAYS=$ENV_RBX_JWT_REFRESH_EXPIRY_DAYS
+      - ENV_RBX_JWT_SECRET=$ENV_RBX_JWT_SECRET
+      - ENV_RBX_JWT_REFRESH_SECRET=$ENV_RBX_JWT_REFRESH_SECRET
+      - ENV_RBX_JWT_ALGORITHM=$ENV_RBX_JWT_ALGORITHM
+      - ENV_RBX_WEB_ONBOARDING_LINK=$ENV_RBX_WEB_ONBOARDING_LINK
+      - ENV_RBX_WEB_RESET_PASSWORD_LINK=$ENV_RBX_WEB_RESET_PASSWORD_LINK
+      - ENV_RBX_REDIS_URL=$ENV_RBX_REDIS_URL
+      - ENV_RBX_HTTP_TIMEOUT=$ENV_RBX_HTTP_TIMEOUT
+    restart: always
+    depends_on: 
+      - retail-notification
+      - retail-user-management
+      - retail-compliance
+      - retail-identity 
+    networks:
+      - core_service_network
+
+  #=================================================================
+  # Onboarding Business Service
+  #=================================================================
+  retail-onboarding:
+    image: rubixretailonboarding:dev
+    container_name: retail_onboarding
+    environment:
+      - ENV_RBX_PORT=4000
+      - ENV_RBX_APP_NAME=Rubix | Onboarding Business Service
+      - ENV_RBX_SWAGGER_ENABLED=true
+      - ENV_RBX_API_URL_PREFIX=api/v1/onboarding
+      - ENV_RBX_CORS_ORIGIN=$ENV_RBX_CORS_ORIGIN
+      - ENV_RBX_CORS_ENABLED=$ENV_RBX_CORS_ENABLED
+      - ENV_RBX_JWT_EXPIRY_MINUTES=$ENV_RBX_JWT_EXPIRY_MINUTES
+      - ENV_RBX_JWT_REFRESH_EXPIRY_DAYS=$ENV_RBX_JWT_REFRESH_EXPIRY_DAYS
+      - ENV_RBX_JWT_SECRET=$ENV_RBX_JWT_SECRET
+      - ENV_RBX_JWT_REFRESH_SECRET=$ENV_RBX_JWT_REFRESH_SECRET
+      - ENV_RBX_JWT_ALGORITHM=$ENV_RBX_JWT_ALGORITHM
+      - ENV_RBX_REDIS_URL=$ENV_RBX_REDIS_URL
+      - ENV_RBX_BASIC_AUTH_KEY=$ENV_RBX_BASIC_AUTH_KEY
+      - ENV_RBX_BASIC_AUTH_SECRET=$ENV_RBX_BASIC_AUTH_SECRET
+      - ENV_RBX_HTTP_TIMEOUT=$ENV_RBX_HTTP_TIMEOUT
+    restart: always
+    depends_on: 
+      - retail-notification
+      - retail-user-management
+      - retail-compliance
+      - retail-identity 
+      - retail-videocall
+    volumes:
+      - ${ENV_RBX_VOLUME_PATH}/videocall.service/uploads:/home/aiondigital/rubix/uploads/
+    networks:
+      - core_service_network
+
+  #=================================================================
+  # Identity Service
+  #=================================================================
+  retail-identity:
+    image: rubixretailidentity:dev
+    container_name: retail_identity
+    environment:
+      - ENV_RBX_PORT=4010
+      - ENV_RBX_DB_USERNAME=$ENV_RBX_DB_USERNAME
+      - ENV_RBX_DB_PASS=$ENV_RBX_DB_PASS
+      - ENV_RBX_DB_NAME=$ENV_RBX_DB_NAME
+      - ENV_RBX_DB_HOST=$ENV_RBX_DB_HOST
+      - ENV_RBX_DB_PORT=$ENV_RBX_DB_PORT
+      - ENV_RBX_DB_TIMEOUT=$ENV_RBX_DB_TIMEOUT
+      - ENV_RBX_DB_DIALECT=$ENV_RBX_DB_DIALECT
+      - ENV_RBX_DB_DEBUG=$ENV_RBX_DB_DEBUG
+      - ENV_RBX_GRAPHQL_DEBUG=$ENV_RBX_GRAPHQL_DEBUG
+      - ENV_RBX_GRAPHQL_PLAYGROUND=$ENV_RBX_GRAPHQL_PLAYGROUND
+      - ENV_RBX_IDENTITYX_BASE_URL=$ENV_RBX_IDENTITYX_BASE_URL
+      - ENV_RBX_IDENTITYX_API_VERSION=$ENV_RBX_IDENTITYX_API_VERSION
+      - ENV_RBX_IDENTITYX_TOKEN=$ENV_RBX_IDENTITYX_TOKEN
+      - ENV_RBX_IDENTITYX_TENANT=$ENV_RBX_IDENTITYX_TENANT
+      - ENV_RBX_IDENTITYX_USERNAME=$ENV_RBX_IDENTITYX_USERNAME
+      - ENV_RBX_IDENTITYX_PASSWORD=$ENV_RBX_IDENTITYX_PASSWORD
+      - ENV_RBX_IDENTITYX_REG_POLICY=$ENV_RBX_IDENTITYX_REG_POLICY
+      - ENV_RBX_IDENTITYX_APPLICATION=$ENV_RBX_IDENTITYX_APPLICATION
+      - ENV_RBX_IDENTITYX_EVALUATION_POLICY=$ENV_RBX_IDENTITYX_EVALUATION_POLICY
+      - NODE_TLS_REJECT_UNAUTHORIZED=$NODE_TLS_REJECT_UNAUTHORIZED
+    restart: always
+    volumes:
+      - ${ENV_RBX_VOLUME_PATH}/identity.service:/home/aiondigital/rubix/volumes/
+    networks:
+      - core_service_network
+
+  #=================================================================
+  # Video Call Service
+  #=================================================================
+  retail-videocall:
+    image: rubixretailvideocall:dev
+    container_name: retail_videocall
+    environment:
+      - ENV_RBX_PORT=4020
+      - ENV_RBX_DB_USERNAME=$ENV_RBX_DB_USERNAME
+      - ENV_RBX_DB_PASS=$ENV_RBX_DB_PASS
+      - ENV_RBX_DB_NAME=$ENV_RBX_DB_NAME
+      - ENV_RBX_DB_HOST=$ENV_RBX_DB_HOST
+      - ENV_RBX_DB_PORT=$ENV_RBX_DB_PORT
+      - ENV_RBX_DB_TIMEOUT=$ENV_RBX_DB_TIMEOUT
+      - ENV_RBX_DB_DIALECT=$ENV_RBX_DB_DIALECT
+      - ENV_RBX_DB_DEBUG=$ENV_RBX_DB_DEBUG
+      - ENV_RBX_GRAPHQL_DEBUG=$ENV_RBX_GRAPHQL_DEBUG
+      - ENV_RBX_GRAPHQL_PLAYGROUND=$ENV_RBX_GRAPHQL_PLAYGROUND
+      - ENV_RBX_CRON_JOB_TIME=$ENV_RBX_CRON_JOB_TIME
+      - ENV_RBX_MAX_APPOINTMENTS_AT_A_TIME=$ENV_RBX_MAX_APPOINTMENTS_AT_A_TIME
+      - ENV_RBX_NOTIFICATION_SERVER=$ENV_RBX_NOTIFICATION_SERVER
+      - ENV_RBX_ENTITLEMENT_SERVER=$ENV_RBX_ENTITLEMENT_SERVER
+      - ENV_RBX_IDENTITY_SERVER=$ENV_RBX_IDENTITY_SERVER
+      - ENV_RBX_REDIS_URL=$ENV_RBX_REDIS_URL
+    restart: always
+    volumes:
+      - ${ENV_RBX_VOLUME_PATH}/videocall.service/uploads:/home/aiondigital/rubix/uploads/
+    networks:
+      - core_service_network
+  #=================================================================
+  # Compliance Service
+  #=================================================================
+  retail-compliance:
+    image: rubixcompliance:dev
+    container_name: retail_compliance
+    environment:
+      - ENV_RBX_PORT=5010
+      - ENV_RBX_DB_USERNAME=$ENV_RBX_DB_USERNAME
+      - ENV_RBX_DB_PASS=$ENV_RBX_DB_PASS
+      - ENV_RBX_DB_NAME=$ENV_RBX_DB_NAME
+      - ENV_RBX_DB_HOST=$ENV_RBX_DB_HOST
+      - ENV_RBX_DB_PORT=$ENV_RBX_DB_PORT
+      - ENV_RBX_DB_TIMEOUT=$ENV_RBX_DB_TIMEOUT
+      - ENV_RBX_DB_DIALECT=$ENV_RBX_DB_DIALECT
+      - ENV_RBX_DB_DEBUG=$ENV_RBX_DB_DEBUG
+      - ENV_RBX_GRAPHQL_DEBUG=$ENV_RBX_GRAPHQL_DEBUG
+      - ENV_RBX_GRAPHQL_PLAYGROUND=$ENV_RBX_GRAPHQL_PLAYGROUND
+      - ENV_RBX_AML_BASE_URL=$ENV_RBX_AML_BASE_URL
+      - ENV_RBX_IDX_BASE_URL=$ENV_RBX_IDX_BASE_URL
+      - ENV_RBX_AML_SUCCESS_CODE=$ENV_RBX_AML_SUCCESS_CODE
+    restart: always
+    networks:
+      - core_service_network
+
+  #=================================================================
+  # User Management Service
+  #=================================================================
+  retail-user-management:
+    image: rubixusermgmt:dev
+    container_name: retail_user_management
+    environment:
+      - ENV_RBX_PORT=5020
+      - ENV_RBX_DB_USERNAME=$ENV_RBX_DB_USERNAME
+      - ENV_RBX_DB_PASS=$ENV_RBX_DB_PASS
+      - ENV_RBX_DB_NAME=$ENV_RBX_DB_NAME
+      - ENV_RBX_DB_HOST=$ENV_RBX_DB_HOST
+      - ENV_RBX_DB_PORT=$ENV_RBX_DB_PORT
+      - ENV_RBX_DB_TIMEOUT=$ENV_RBX_DB_TIMEOUT
+      - ENV_RBX_DB_DIALECT=$ENV_RBX_DB_DIALECT
+      - ENV_RBX_DB_DEBUG=$ENV_RBX_DB_DEBUG
+      - ENV_RBX_GRAPHQL_DEBUG=$ENV_RBX_GRAPHQL_DEBUG
+      - ENV_RBX_GRAPHQL_PLAYGROUND=$ENV_RBX_GRAPHQL_PLAYGROUND
+    restart: always
+    networks:
+      - core_service_network
+
+  #=================================================================
+  # Notification Service
+  #=================================================================
+  retail-notification:
+    image: rubixnotifications:dev
+    container_name: retail_notification
+    environment:
+      - ENV_RBX_PORT=5030
+      - ENV_RBX_DB_USERNAME=$ENV_RBX_DB_USERNAME
+      - ENV_RBX_DB_PASS=$ENV_RBX_DB_PASS
+      - ENV_RBX_DB_NAME=$ENV_RBX_DB_NAME
+      - ENV_RBX_DB_HOST=$ENV_RBX_DB_HOST
+      - ENV_RBX_DB_PORT=$ENV_RBX_DB_PORT
+      - ENV_RBX_DB_TIMEOUT=$ENV_RBX_DB_TIMEOUT
+      - ENV_RBX_DB_DIALECT=$ENV_RBX_DB_DIALECT
+      - ENV_RBX_DB_DEBUG=$ENV_RBX_DB_DEBUG
+      - ENV_RBX_GRAPHQL_DEBUG=$ENV_RBX_GRAPHQL_DEBUG
+      - ENV_RBX_GRAPHQL_PLAYGROUND=$ENV_RBX_GRAPHQL_PLAYGROUND
+      - ENV_RBX_SMTP_HOST=$ENV_RBX_SMTP_HOST
+      - ENV_RBX_SMTP_PORT=$ENV_RBX_SMTP_PORT
+      - ENV_RBX_SMTP_IGNORETLS=$ENV_RBX_SMTP_IGNORETLS
+      - ENV_RBX_SMTP_SECURE=$ENV_RBX_SMTP_SECURE
+      - ENV_RBX_SMTP_USER=$ENV_RBX_SMTP_USER
+      - ENV_RBX_SMTP_PASS=$ENV_RBX_SMTP_PASS
+      - ENV_RBX_SMTP_SENDING_NAME=$ENV_RBX_SMTP_SENDING_NAME
+      - ENV_RBX_SMTP_SENDING_EMAIL=$ENV_RBX_SMTP_SENDING_EMAIL
+      - ENV_RBX_FIREBASE_CLINET_EMAIL=$ENV_RBX_FIREBASE_CLINET_EMAIL
+      - ENV_RBX_FIREBASE_PRIVATE_KEY=$ENV_RBX_FIREBASE_PRIVATE_KEY
+      - ENV_RBX_FIREBASE_PROJECT_ID=$ENV_RBX_FIREBASE_PROJECT_ID
+      - ENV_RBX_HTTP_TIMEOUT=$ENV_RBX_HTTP_TIMEOUT
+      - ENV_RBX_HTTP_MAX_REDIRECTS=$ENV_RBX_HTTP_MAX_REDIRECTS
+      - ENV_RBX_OTP_LENGTH=$ENV_RBX_OTP_LENGTH
+      - ENV_RBX_OTP_PATTERN=$ENV_RBX_OTP_PATTERN
+      - ENV_RBX_OTP_STATUS=$ENV_RBX_OTP_STATUS
+      - ENV_RBX_OTP_BY_API=$ENV_RBX_OTP_BY_API
+      - ENV_RBX_OTP_DURATION=$ENV_RBX_OTP_DURATION
+      - ENV_RBX_SMS_API_URL=$ENV_RBX_SMS_API_URL
+      - ENV_RBX_SMS_SENDER=$ENV_RBX_SMS_SENDER
+      - ENV_RBX_OTP_GENERATOR_API=$ENV_RBX_OTP_GENERATOR_API
+    restart: always
+    networks:
+      - core_service_network
+
+  #=================================================================
+  # Reference Service
+  #=================================================================
+  retail-reference:
+    image: rubixreference:dev
+    container_name: retail_reference
+    environment:
+      - ENV_RBX_PORT=2000
+      - ENV_RBX_APP_NAME=Rubix | References Service
+      - ENV_RBX_CORS_ORIGIN=$ENV_RBX_CORS_ORIGIN
+      - ENV_RBX_CORS_ENABLED=$ENV_RBX_CORS_ENABLED
+      - ENV_RBX_SWAGGER_ENABLED=true
+      - ENV_RBX_API_URL_PREFIX=api/v1/references
+      - ENV_RBX_SWAGGER_ROUTE=api/v1/references/docs
+      - ENV_RBX_DB_USERNAME=$ENV_RBX_DB_USERNAME
+      - ENV_RBX_DB_PASS=$ENV_RBX_DB_PASS
+      - ENV_RBX_DB_NAME=$ENV_RBX_DB_NAME
+      - ENV_RBX_DB_HOST=$ENV_RBX_DB_HOST
+      - ENV_RBX_DB_PORT=$ENV_RBX_DB_PORT
+      - ENV_RBX_DB_TIMEOUT=$ENV_RBX_DB_TIMEOUT
+      - ENV_RBX_DB_DIALECT=$ENV_RBX_DB_DIALECT
+    restart: always
+    networks:
+      - core_service_network
+
+  #=================================================================
+  # AML Integration Layer
+  #=================================================================
+  rubix-rubixintegrationlayerkfhb:
+    image: testdaon.azurecr.io/rubixintegrationlayerkfhb:develop_latest
+    container_name: rubix_rubixintegrationlayerkfhb
+    environment:
+      - ENV_RBX_TZ=$ENV_RBX_TZ
+      - ENV_RBX_IS_MOCK=true
+      - ENV_RBX_CORE_BANKING_USER_NAME=$ENV_RBX_CORE_BANKING_USER_NAME
+      - ENV_RBX_CORE_BANKING_PASSWORD=$ENV_RBX_CORE_BANKING_PASSWORD
+      - ENV_RBX_CORE_BANKING_BASE_URL=$ENV_RBX_CORE_BANKING_BASE_URL
+
+    restart: always
+    networks:
+      - core_service_network
+
+networks:
+  core_service_network:
+    driver: bridge

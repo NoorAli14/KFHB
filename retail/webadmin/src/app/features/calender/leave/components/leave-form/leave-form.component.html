@@ -64,15 +64,24 @@
                     <mat-form-field appearance="outline" fxFlex="48" class="pr-4">
                         <mat-label>User <app-required-indicator></app-required-indicator>
                         </mat-label>
-                        <input type="text" placeholder="User" matInput formControlName="userId"
+                        <input type="text" placeholder="Search for a user" matInput formControlName="userId"
                             [matAutocomplete]="auto">
                         <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn">
+                            <mat-option *ngIf="filteredUser && filteredUser.length>0">
+                                <a class="user" value="">
+                                    Reset Filter
+                                </a>
+                            </mat-option>
                             <mat-option *ngFor="let item of filteredUser" [value]="item.id">
-                                <span *ngIf="item.firstName && item.lastName">{{item.firstName + ' ' +  item.lastName}}
-                                </span>
+                                <a class="user"
+                                    *ngIf="item.firstName && item.lastName">{{item.firstName + ' ' +  item.lastName}}
+                                </a>
                                 <{{ item.email}}>
                             </mat-option>
                         </mat-autocomplete>
+
+
+
                         <mat-icon matSuffix class="secondary-text">person</mat-icon>
                         <mat-error>
                             <app-mat-error [control]="leaveForm.get('userId')"></app-mat-error>
