@@ -57,8 +57,8 @@ export class LogsComponent extends BaseComponent implements OnInit {
 
     ngOnInit(): void {
         this.config = this.initParams();
-        this.getData(this.config);
         this.pagination = new Pagination();
+        this.getData(this.config);
     }
 
     initParams(): object {
@@ -81,7 +81,6 @@ export class LogsComponent extends BaseComponent implements OnInit {
     }
     onFilter(form): void {
         this.config = { ...this.config, ...form };
-        debugger
         this.getData(form);
     }
     onReset(): void {
@@ -95,6 +94,7 @@ export class LogsComponent extends BaseComponent implements OnInit {
         this._service.getAuditLogs(queryParams).subscribe(
             (response) => {
                 this.auditLogs = snakeToCamelArray(response.data);
+                this.pagination=response.pagination;
                 this.dataSource = new MatTableDataSource(
                     snakeToCamelArray(this.auditLogs)
                 );
@@ -113,8 +113,6 @@ export class LogsComponent extends BaseComponent implements OnInit {
     updateGrid(data): void {
         this.dataSource.data = data;
     }
-
-  
 
     ngAfterViewInit(): void {
         this.dataSource.paginator = this.paginator;

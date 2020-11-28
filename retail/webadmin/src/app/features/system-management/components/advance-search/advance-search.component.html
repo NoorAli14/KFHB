@@ -21,7 +21,7 @@
                                 <mat-form-field appearance="outline" fxFlex="100" class="pr-16">
                                     <mat-label>User</mat-label>
                                     <input matInput formControlName="userId" placeholder="Enter user first name" [matAutocomplete]="auto" />
-                                    <mat-autocomplete (optionSelected)="onSelectUser($event.option.value)"
+                                    <mat-autocomplete 
                                     autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn">
                                     <mat-option *ngIf="filteredUser && filteredUser.length>0">
                                         <a class="user" value="">
