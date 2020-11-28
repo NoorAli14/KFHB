@@ -71,7 +71,6 @@ export class UserComponent extends BaseComponent implements OnInit {
 
     ngOnInit(): void {
         this.config = this.initParams();
-        debugger 
         this.getData(this.config);
         this.pagination = new Pagination();
         this.control=new FormControl();
