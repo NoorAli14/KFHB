@@ -18,7 +18,7 @@ export const MESSAGES = {
     CUSTOM: (message) => `${message} ${getRandomNumber()}`,
     EXISTS: (type) => `${type} already exists. `,
     INVALID_DATE:`Date is invalid`,
-     CHANGE_STATUS: (status) => `Are you sure you want to ${status} ?`,
+    CHANGE_STATUS: (status) => `Are you sure you want to ${status} ?`,
 };
 const getRandomNumber = () => {
     return Math.floor(Math.random() * 11);

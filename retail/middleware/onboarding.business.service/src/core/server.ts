@@ -1,12 +1,19 @@
 import { Transport } from '@nestjs/microservices';
-import { INestApplication, ValidationPipe, Logger } from '@nestjs/common';
-import { CommonModule } from '@common/common.module';
+import { INestApplication, ValidationPipe, Logger, ValidationError } from '@nestjs/common';
+import * as cookieParser from 'cookie-parser';
+import * as bodyParser from 'body-parser';
+
 import {
+  CommonModule,
+  ConfigurationService,
+  HttpExceptionFilter,
   LoggingInterceptor,
   TransformInterceptor,
-} from '@common/interceptors/';
-import { HttpExceptionFilter } from '@common/filters/http-exception.filter';
-import { ConfigurationService } from '@common/configuration/configuration.service';
+  ValidationException,
+  ValidationExceptionFilter,
+  GqlExceptionFilter
+} from '@common/index';
+
 import { KernelMiddleware } from '@core/middlewares/index';
 
 export default class Server {
@@ -16,8 +23,8 @@ export default class Server {
   constructor(app: INestApplication) {
     this._app = app;
     this.mountConfig();
+    this.mountMiddleware();
     this.mountGlobals();
-    this.mountMiddlewares();
   }
   get app(): INestApplication {
     return this._app;
@@ -28,12 +35,14 @@ export default class Server {
 
   private mountConfig(): void {
     this._config = this.app.select(CommonModule).get(ConfigurationService);
+    this._app.use(bodyParser.json({ limit: '50mb' }));
+    this._app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
   }
 
   /**
    * Mounts all the defined middlewares
    */
-  private mountMiddlewares(): void {
+  private mountMiddleware(): void {
     this._app = KernelMiddleware.init(this.app, this.Config);
   }
 
@@ -45,9 +54,14 @@ export default class Server {
     this.app.enableShutdownHooks();
     this.app.useGlobalInterceptors(new TransformInterceptor());
     this.app.useGlobalInterceptors(new LoggingInterceptor());
-    this.app.useGlobalFilters(new HttpExceptionFilter());
-    this.app.useGlobalPipes(new ValidationPipe());
+    this.app.useGlobalFilters(new HttpExceptionFilter(), new ValidationExceptionFilter(), new GqlExceptionFilter());
+    this.app.useGlobalPipes(new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      exceptionFactory: (errors: ValidationError[] | any[]) => new ValidationException(errors)
+    }));
     this.app.setGlobalPrefix(this.Config.APP.API_URL_PREFIX);
+    this.app.use(cookieParser());
   }
 
   /** Microservices use the TCP transport layer by default and other options are:
@@ -91,9 +105,7 @@ export default class Server {
    */
   private onStartUp(): void {
     Logger.log(``);
-    Logger.log(
-      `Application start listing on ${this.Config.APPLICATION_HOST}/${this.Config.APP.API_URL_PREFIX}`,
-    );
+    Logger.log(`Application start listing on ${this.Config.APPLICATION_HOST}/${this.Config.APP.API_URL_PREFIX}`);
     Logger.log(``);
     Logger.log('-------------------------------------------------------');
     Logger.log(`Service      : ${this.Config.APP.NAME}`);
@@ -104,9 +116,7 @@ export default class Server {
     //     this.log.debug(`API Info     : ${app.get('host')}:${app.get('port')}${ApiInfo.getRoute()}`);
     // }
     if (this.Config.IS_SWAGGER_ENABLED) {
-      Logger.log(
-        `Swagger      : ${this.Config.APPLICATION_HOST}${this.Config.SWAGGER.ROUTE}`,
-      );
+      Logger.log(`Swagger      : ${this.Config.APPLICATION_HOST}${this.Config.SWAGGER.ROUTE}`);
     }
     Logger.log(`Health Check : ${this.Config.APPLICATION_HOST}/health`);
     // if (Environment.isTruthy(process.env.MONITOR_ENABLED)) {

@@ -1,0 +1,159 @@
+.root-video {
+  width: 35%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  background-color: #000;
+  z-index: 1;
+  position: relative;
+  .expand-collaps {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    height: 20px;
+    width: 20px;
+    z-index: 9;
+  }
+}
+.remoteVideosContainer {
+  height: 500px;
+  width: 700px;
+  max-width: 100%;
+  position: relative;
+}
+.remoteVideosContainer .expand-collaps svg {
+  width: 16px;
+  height: 16px;
+}
+
+.remoteVideosContainer .expand-collaps {
+  position: absolute;
+  right: 30px;
+  top: 16px;
+  display: block;
+  z-index: 3;
+}
+.collaps .root-video .expand-collaps svg.smallscreen {
+  display: block;
+}
+.collaps .root-video .expand-collaps svg.fullscreen {
+  display: none;
+}
+.customer-video-popup.collaps {
+  height: 220px;
+  width: 300px;
+  top: inherit;
+  right: 40px;
+  left: inherit;
+  bottom: 40px;
+}
+.collaps .customerbasic-details {
+  display: none;
+}
+.collaps .root-video {
+  // visibility: visible;
+  height: 220px;
+  width: 300px;
+}
+.collaps .root-video .localvideo-container {
+  width: 100px;
+  height: 100px;
+  right: 10px;
+  bottom: 0px;
+}
+.collaps .root-video .localvideo-container video {
+  height: 100%;
+  width: 100%;
+}
+.remoteVideosContainer .expand-collaps svg.smallscreen {
+  display: none;
+}
+.remoteVideosContainer video {
+  height: 100%;
+  width: 100%;
+}
+.collaps .root-video .remoteVideosContainer {
+  height: 220px;
+  width: 300px;
+}
+.localvideo-container {
+  width: 70%;
+  text-align: right;
+  position: absolute;
+  right: 15px;
+  bottom: 70px;
+}
+.localvideo-container video {
+  height: 110px;
+  width: 130px;
+  max-width: 100%;
+  box-shadow: none;
+}
+.video-bottom {
+  bottom: 9% !important;
+}
+.videocall-controls-overlay {
+  position: absolute;
+  bottom: 2%;
+  width: 230px;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 10px;
+  visibility: visible;
+  opacity: 1;
+  z-index: 3;
+  i {
+    height: 60px;
+    width: 60px;
+    display: inline-block;
+  }
+}
+.remoteVideosContainer:hover .videocall-controls-overlay {
+  visibility: visible;
+  opacity: 1;
+}
+.previewimg {
+  position: absolute;
+  margin: 0 auto;
+  left: 0;
+  top: 20%;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+}
+.previewimg img {
+  width: 50%;
+  height: 50%;
+}
+@media only screen and (min-width: 1367px) {
+  .remoteVideosContainer {
+    height: 650px;
+    width: 1000px;
+    max-width: 100%;
+  }
+  .localvideo-container video {
+    height: 110px;
+    width: 130px;
+    max-width: 100%;
+  }
+}
+.customerbasic-left {
+  width: 44%;
+}
+
+.screenshot-container {
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: "30px";
+  display: "flex";
+  justify-content: "center";
+}
+.screenshot-container img {
+  margin-left: 20px;
+  margin-bottom: 20px;
+}
+
+.active-btn{
+  background-color: #069899 !important;
+}

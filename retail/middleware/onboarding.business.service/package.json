@@ -1,8 +1,8 @@
 {
-  "name": "onboarding-business-gateway",
-  "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "name": "onboarding-business-service",
+  "version": "0.4.0",
+  "description": "The orchestration service to handle the full retail onboarding flow, exposed through REST APIs.",
+  "author": "Faizan AH <faizan@aiondigital.com>",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -12,7 +12,7 @@
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
+    "start:prod": "node dist/src/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "update:packages": "npm ncu -u",
     "generate:docs": "npx compodoc -p tsconfig.json -s",
@@ -24,24 +24,32 @@
   },
   "dependencies": {
     "@apollo/federation": "^0.17.0",
-    "@apollo/gateway": "^0.17.0",
+    "@apollo/gateway": "^0.20.0",
     "@nestjs/common": "^7.0.0",
     "@nestjs/core": "^7.0.0",
-    "@nestjs/graphql": "^7.5.1",
+    "@nestjs/graphql": "^7.7.0",
+    "@nestjs/jwt": "^7.1.0",
     "@nestjs/microservices": "^7.3.2",
+    "@nestjs/passport": "^7.1.0",
     "@nestjs/platform-express": "^7.0.0",
-    "@nestjs/swagger": "^4.5.11",
+    "@nestjs/swagger": "^4.6.1",
     "@nestjs/terminus": "^7.0.1",
     "apollo-server-express": "^2.15.1",
     "class-transformer": "^0.2.3",
     "class-validator": "^0.12.2",
+    "cls-hooked": "^4.2.2",
     "compression": "^1.7.4",
+    "cookie-parser": "^1.4.5",
     "dotenv": "^8.2.0",
     "express-rate-limit": "^5.1.3",
     "graphql": "^14.7.0",
     "graphql-tools": "^6.0.12",
     "helmet": "^3.23.3",
     "hpp": "^0.2.3",
+    "nestjs-redis": "^1.2.8",
+    "passport": "^0.4.1",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.5.4",
     "swagger-ui-express": "^4.1.4"
@@ -51,11 +59,14 @@
     "@nestjs/cli": "^7.0.0",
     "@nestjs/schematics": "^7.0.0",
     "@nestjs/testing": "^7.0.0",
+    "@types/cls-hooked": "^4.3.1",
     "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.3",
     "@types/jest": "25.2.3",
     "@types/lodash": "^4.14.157",
     "@types/node": "12.12.43",
+    "@types/passport-jwt": "^3.0.3",
+    "@types/passport-local": "^1.0.33",
     "@types/readable-stream": "2.3.5",
     "@types/supertest": "^2.0.8",
     "@typescript-eslint/eslint-plugin": "3.0.2",
@@ -65,8 +76,9 @@
     "eslint": "7.1.0",
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-import": "^2.20.1",
-    "husky": "^4.2.5",
+    "husky": "^4.3.0",
     "jest": "26.0.1",
+    "lint-staged": "^10.5.0",
     "npm-check-updates": "^7.0.1",
     "prettier": "^1.19.1",
     "rimraf": "^3.0.2",
@@ -77,10 +89,8 @@
     "tsconfig-paths": "^3.9.0",
     "typescript": "^3.7.4"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "concurrently -r \"npm run lint\" "
-    }
+  "engines": {
+    "node": ">=14.15.0"
   },
   "jest": {
     "moduleFileExtensions": [
@@ -95,5 +105,17 @@
     },
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.ts": [
+      "npm run format",
+      "eslint --fix --max-warnings 1",
+      "git add"
+    ]
   }
 }

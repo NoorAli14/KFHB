@@ -1,0 +1,91 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+directive @key(fields: String!) on OBJECT | INTERFACE
+
+directive @extends on OBJECT | INTERFACE
+
+directive @external on OBJECT | FIELD_DEFINITION
+
+directive @requires(fields: String!) on FIELD_DEFINITION
+
+directive @provides(fields: String!) on FIELD_DEFINITION
+
+type Appointment {
+  id: String!
+  call_time: String
+  gender: String
+  status: String
+  user: UserGQL!
+  created_on: String!
+  created_by: String!
+  updated_on: String!
+  updated_by: String!
+}
+
+type Attachment {
+  id: String!
+  tenant_id: String!
+  customer_id: String
+  file_name: String
+  file_size: String
+  file_path: String
+  attachment_type: String
+  status: String
+  created_on: String
+  created_by: String
+  updated_on: String
+  updated_by: String
+  deleted_on: String
+  deleted_by: String
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Mutation {
+  addAppointment(appointment: NewAppointmentInput!): Appointment!
+  addAttachment(input: NewAttachmentInput!): Attachment!
+}
+
+input NewAppointmentInput {
+  call_time: DateTime!
+  gender: String
+  status: String
+  user_id: String!
+}
+
+input NewAttachmentInput {
+  customer_id: String!
+  attachment_type: String!
+  file_content: String!
+  type: String
+}
+
+type Query {
+  findAppointment(appointment_id: String!): Appointment!
+  findAppointmentByUserId(user_id: String!): Appointment!
+  attachmentList(customer_id: String!): [Attachment!]!
+  findAttachment(id: String!, customer_id: String!): Attachment!
+}
+
+type UserGQL {
+  id: String!
+  first_name: String!
+  middle_name: String!
+  last_name: String!
+  platform: String!
+  device_id: String!
+  fcm_token_id: String!
+  email: String!
+  gender: String!
+  date_of_birth: DateTime!
+  nationality_id: String!
+  username: String!
+  contact_no: String!
+  created_on: DateTime!
+  updated_on: DateTime!
+}

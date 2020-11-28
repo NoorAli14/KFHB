@@ -6,10 +6,10 @@ import {
   Param,
   Put,
   Delete,
-  NotFoundException,
   ParseUUIDPipe,
   HttpCode,
   UseGuards,
+  HttpStatus,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -25,14 +25,14 @@ import {
 import { Module } from './module.entity';
 import { ModuleDto } from './module.dto';
 import { ModuleService } from './modules.service';
-import { AuthGuard } from '@common/guards/';
+import { AuthGuard } from '@common/index';
 
 @ApiTags('Module')
 @Controller('modules')
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
 export class ModulesController {
-  constructor(private readonly moduleService: ModuleService) {}
+  constructor(private readonly moduleService: ModuleService) { }
 
   @Post('/')
   @ApiBody({ description: 'Sets the module properties.', type: ModuleDto })
@@ -49,7 +49,9 @@ export class ModulesController {
     type: Error,
     description: 'Input Validation failed.',
   })
-  async create(@Body() moduleDto: ModuleDto): Promise<Module> {
+  async create(
+    @Body() moduleDto: ModuleDto,
+  ): Promise<Module> {
     return this.moduleService.create(moduleDto);
   }
 
@@ -78,12 +80,10 @@ export class ModulesController {
     type: Error,
     description: 'Module Not Found.',
   })
-  async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<Module> {
-    const module = await this.moduleService.findOne(id);
-    if (!module) {
-      throw new NotFoundException('Module Not Found');
-    }
-    return module;
+  async findOne(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<Module> {
+    return this.moduleService.findOne(id);
   }
 
   @Put(':id')
@@ -125,8 +125,10 @@ export class ModulesController {
     type: Error,
     description: 'Module Not Found.',
   })
-  @HttpCode(204)
-  async delete(@Param('id', ParseUUIDPipe) id: string): Promise<any> {
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async delete(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<any> {
     return this.moduleService.delete(id);
   }
 }

@@ -1,9 +1,9 @@
 import { NgModule,ErrorHandler } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AuthInterceptorService } from '@core/services/auth-interceptor/auth-interceptor.service';
-import { GlobalErrorService } from '@core/services/global-error/global-error.service';
-import { ErrorInterceptorService } from '@core/services/error-interceptor/error-interceptor.service';
+import { AuthInterceptorService } from '@shared/services/auth-interceptor/auth-interceptor.service';
+import { GlobalErrorService } from '@shared/services/global-error/global-error.service';
+import { ErrorInterceptorService } from '@shared/services/error-interceptor/error-interceptor.service';
 
 @NgModule({
   declarations: [],

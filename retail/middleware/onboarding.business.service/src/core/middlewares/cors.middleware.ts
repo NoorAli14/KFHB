@@ -1,22 +1,14 @@
 import { INestApplication } from '@nestjs/common';
-import {
-  X_CORRELATION_KEY,
-  X_ACCESS_TOKEN,
-  X_REFRESH_TOKEN,
-} from '@common/constants';
+import { X_CORRELATION_KEY, X_ACCESS_TOKEN, X_REFRESH_TOKEN } from '@common/constants';
 
 export class CorsMiddleware {
-  public static init(
-    app: INestApplication,
-    origins?: string,
-  ): INestApplication {
+  public static init(app: INestApplication, origins?: string): INestApplication {
     const corsOptions = {
       optionsSuccessStatus: 200,
       origin: (origin, callback) => {
         const whitelist = origins.split(',') || [];
         // allow requests with no origin
         // (like mobile apps or curl requests)
-        console.log(whitelist);
         if (whitelist.indexOf(origin) !== -1 || !origin) {
           callback(null, true);
         } else {
@@ -26,7 +18,7 @@ export class CorsMiddleware {
       },
       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
       credentials: true,
-      exposedHeaders: [X_REFRESH_TOKEN, X_ACCESS_TOKEN, X_CORRELATION_KEY],
+      exposedHeaders: [X_REFRESH_TOKEN, X_ACCESS_TOKEN, X_CORRELATION_KEY, 'Set-Cookie'],
     };
     app.enableCors(corsOptions);
     return app;

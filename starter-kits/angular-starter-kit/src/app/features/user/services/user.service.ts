@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { User } from "../user.model";
-import { NetworkService } from "@core/services/network/network.service";
+import { NetworkService } from "@shared/services/network/network.service";
 import { USER } from '../user.constant';
 
 @Injectable({

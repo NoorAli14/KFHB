@@ -1,13 +1,11 @@
-import { SettingService } from './../../setting.service';
 import { Component, OnInit, ViewEncapsulation, Inject, Output, EventEmitter, Injector, OnDestroy } from '@angular/core';
 import { FormGroup,  FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import {  DATE_FORMAT, GENDER_LIST, NATIONALITY_LIST } from '@shared/constants/app.constants';
+import {  DATE_FORMAT, GENDER_LIST } from '@shared/constants/app.constants';
 import { fuseAnimations } from '@fuse/animations';
 import { User } from '@feature/entitlement/models/user.model';
 import { BaseComponent } from '@shared/components/base/base.component';
 import { ValidatorService } from '@shared/services/validator-service/validator.service';
-import { takeUntil } from 'rxjs/operators';
 import { getName } from '@shared/helpers/global.helper';
 import { cloneDeep } from 'lodash';
 import * as moment from 'moment';

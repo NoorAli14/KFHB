@@ -17,10 +17,7 @@ import { NewCommentInput, UpdateCommentInput } from './comment.dto';
 
 @Resolver(Comment)
 export class CommentsResolver {
-
-  constructor(
-    private readonly commentService: CommentsService,
-  ) {}
+  constructor(private readonly commentService: CommentsService) {}
 
   @Query(() => [Comment])
   comments(@Fields() columns: string[]): Promise<Comment[]> {
@@ -36,9 +33,12 @@ export class CommentsResolver {
   }
 
   @Query(() => Comment)
-  async findComment(@Args('id', ParseUUIDPipe) id: string, @Fields() columns: string[]): Promise<Comment> {
+  async findComment(
+    @Args('id', ParseUUIDPipe) id: string,
+    @Fields() columns: string[],
+  ): Promise<Comment> {
     const post: Comment = await this.commentService.findById(id, columns);
-    if(!post) {
+    if (!post) {
       throw new NotFoundException('Comment not found');
     }
     return post;
@@ -47,7 +47,7 @@ export class CommentsResolver {
   @Mutation(() => Comment)
   addComment(
     @Args('input') input: NewCommentInput,
-    @Fields() columns: string[]
+    @Fields() columns: string[],
   ): Promise<Comment> {
     return this.commentService.create(input, columns);
   }
@@ -56,7 +56,7 @@ export class CommentsResolver {
   updateComment(
     @Args('id', ParseUUIDPipe) id: string,
     @Args('input') input: UpdateCommentInput,
-    @Fields() columns: string[]
+    @Fields() columns: string[],
   ): Promise<Comment> {
     return this.commentService.update(id, input, columns);
   }
@@ -64,7 +64,7 @@ export class CommentsResolver {
   @Mutation(() => Boolean)
   async deleteComment(@Args('id', ParseUUIDPipe) id: string): Promise<boolean> {
     const comment: Comment = await this.commentService.findById(id, ['id']);
-    if(!comment) {
+    if (!comment) {
       throw new NotFoundException('Comment not found');
     }
     return this.commentService.delete(id);

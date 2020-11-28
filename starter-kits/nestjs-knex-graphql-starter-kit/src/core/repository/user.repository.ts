@@ -8,16 +8,16 @@ export class UserRepository extends BaseRepository {
     super(TABLE.USER);
   }
   async findByIdsLoader(ids: readonly string[]): Promise<any> {
-     const users: any = await this.connection
+    const users: any = await this.connection
       .table(this.tableName)
       .whereIn('id', ids)
       .select();
-      const userLookups = {};
-      users.forEach(user => {
-        if (!userLookups[user.id]) {
-          userLookups[user.id] = user;
-        }
-      });
-      return ids.map(id => userLookups[id]);
+    const userLookups = {};
+    users.forEach(user => {
+      if (!userLookups[user.id]) {
+        userLookups[user.id] = user;
+      }
+    });
+    return ids.map(id => userLookups[id]);
   }
 }

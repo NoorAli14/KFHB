@@ -35,6 +35,10 @@ const routes: Routes = [
     loadChildren: () => import('./customer/customer.module').then(m => m.CustomerModule)
   },
   {
+    path: 'system',
+    loadChildren: () => import('./system-management/system-management.module').then(m => m.SystemManagementModule)
+  },
+  {
     path: 'referrals',
     loadChildren: () => import('./referrals/referrals.module').then(m => m.ReferralsModule)
   },

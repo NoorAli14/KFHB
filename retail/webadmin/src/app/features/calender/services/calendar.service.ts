@@ -52,7 +52,7 @@ export class CalendarService {
         return this._networkService.onDelete(`${URI.LEAVES}/${id}`);
     }
     forkLeaveData(params): Observable<any> {
-        return forkJoin([this.getLeaves(params), this.getLeaveType(), this.getUsers()]);
+        return forkJoin([this.getLeaves(params), this.getLeaveType(), ]);
     }
 
     getLeaveType(): Observable<any> {

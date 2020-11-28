@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, Length } from 'class-validator';
+import {IsString, MaxLength} from 'class-validator';
+import {NUMBERS} from "@rubix/common";
 
 export class PermissionDto {
   @ApiProperty({
@@ -7,9 +8,7 @@ export class PermissionDto {
     example: 'users:create',
     description: 'Name of the permission',
   })
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsString()
-  @Length(3, 28, {
-    message: 'Name must be between 3 and 28 characters',
-  })
   record_type: string;
 }
