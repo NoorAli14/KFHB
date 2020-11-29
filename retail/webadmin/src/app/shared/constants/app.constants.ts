@@ -71,7 +71,7 @@ export const URI = {
     ROLE: `${ENTITLEMENT}roles`,
     PERMISSION: `${ENTITLEMENT}permissions`,
     MODULE: `${ENTITLEMENT}modules`,
-    LOGIN: `${ENTITLEMENT}auth/login`,
+    LOGIN: `${ENTITLEMENT}auth/login/`,
     REFRESH: `${ENTITLEMENT}auth/refresh-token`,
     LOGOUT: `${ENTITLEMENT}auth/logout`,
     FORGOT_PASSWORD: `${ENTITLEMENT}users/password`,
