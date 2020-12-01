@@ -1,14 +1,13 @@
 import {
   IsString,
   IsOptional,
-  Length,
   MaxLength,
-  MinLength,
-  IsDate,
   IsIn,
+  IsNotEmpty,
+  Matches,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { GENDER } from '@common/constants';
+import {GENDER, NUMBERS, PASSWORD_REGEX} from '@common/constants';
 
 export class UpdateInvitationDto {
   @ApiProperty({
@@ -18,9 +17,7 @@ export class UpdateInvitationDto {
     required: true,
   })
   @IsString()
-  @Length(3, 255, {
-    message: 'First name must be between 3 and 255 characters',
-  })
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   first_name?: string;
 
   @ApiProperty({
@@ -28,7 +25,7 @@ export class UpdateInvitationDto {
     description: 'Middle Name of the user.',
     required: false,
   })
-  @MaxLength(255)
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsString()
   @IsOptional()
   middle_name?: string;
@@ -40,18 +37,8 @@ export class UpdateInvitationDto {
     required: true,
   })
   @IsString()
-  @Length(3, 255, {
-    message: 'Last name must be between 3 and 255 characters',
-  })
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   last_name: string;
-
-  @ApiProperty({
-    title: 'Username',
-    description: 'username of the user.',
-    required: false,
-  })
-  @IsOptional()
-  username?: string;
 
   @ApiProperty({
     title: 'Contact No',
@@ -59,6 +46,7 @@ export class UpdateInvitationDto {
     required: true,
   })
   @IsString()
+  @IsNotEmpty()
   contact_no: string;
 
   @ApiProperty({
@@ -66,7 +54,7 @@ export class UpdateInvitationDto {
     description: 'Date of Birth of user.',
     required: true,
   })
-  @IsDate()
+  @IsString()
   date_of_birth: string;
 
   @ApiProperty({
@@ -75,7 +63,7 @@ export class UpdateInvitationDto {
     required: true,
   })
   @IsString()
-  @MaxLength(36)
+  @MaxLength(NUMBERS.NATIONALITY_ID_LENGTH)
   nationality_id: string;
 
   @ApiProperty({
@@ -87,7 +75,8 @@ export class UpdateInvitationDto {
   })
   @IsIn(GENDER)
   @IsString()
-  gender?: string;
+  @IsNotEmpty()
+  gender: string;
 
   @ApiProperty({
     title: 'Password',
@@ -95,6 +84,9 @@ export class UpdateInvitationDto {
     required: true,
   })
   @IsString()
-  @MinLength(6)
-  password: string;
+  @IsNotEmpty()
+  @Matches(PASSWORD_REGEX, {
+    message: 'password too weak',
+  })
+  readonly password: string;
 }

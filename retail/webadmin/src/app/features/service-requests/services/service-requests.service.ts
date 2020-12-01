@@ -4,7 +4,6 @@ import { ApiService } from '@shared/services/network/api.service';
 import { environment } from '../../../../environments/environment';
 import { Observable } from 'rxjs';
 
-
 @Injectable({
     providedIn: 'root',
 })

@@ -19,12 +19,15 @@ export interface iAPP {
   VERSION?: string;
   /** The port number of the http server to listen on. */
   PORT: number;
+  HTTP_TIMEOUT: number;
   HOST?: string;
   API_URL_PREFIX: string;
   API_INFO_ROUTE?: string;
   API_INFO_ENABLED?: boolean;
   SWAGGER_ENABLED?: boolean;
   MONITOR_ENABLED?: boolean;
+  WEB_ONBOARDING_LINK?: string;
+  WEB_RESET_PASSWORD_LINK?: string;
 }
 export interface iDATABASE {
   USERNAME: string;

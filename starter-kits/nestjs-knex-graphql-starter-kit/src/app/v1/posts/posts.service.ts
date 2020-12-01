@@ -4,7 +4,6 @@ import { Post } from './post.model';
 
 @Injectable()
 export class PostsService {
-  
   constructor(private postDB: PostRepository) {}
 
   async list(columns: string[]): Promise<Post[]> {
@@ -21,14 +20,17 @@ export class PostsService {
 
   async update(
     id: string,
-    postOBJ: {[key: string]: any},
+    postOBJ: { [key: string]: any },
     columns?: string[],
   ): Promise<Post> {
     const [user] = await this.postDB.update({ id }, postOBJ, columns);
     return user;
   }
 
-  async create(postOBJ: {[key: string]: any}, columns?: string[]): Promise<Post> {
+  async create(
+    postOBJ: { [key: string]: any },
+    columns?: string[],
+  ): Promise<Post> {
     const [user] = await this.postDB.create(postOBJ, columns);
     return user;
   }

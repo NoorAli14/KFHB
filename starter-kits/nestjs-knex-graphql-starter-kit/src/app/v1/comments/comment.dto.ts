@@ -1,8 +1,4 @@
-import {
-  IsOptional,
-  Length,
-  MaxLength,
-} from 'class-validator';
+import { IsOptional, Length, MaxLength } from 'class-validator';
 import { Field, InputType } from '@nestjs/graphql';
 
 @InputType('NewCommentInput')

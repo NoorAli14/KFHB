@@ -1,18 +1,12 @@
-import {
-  ExecutionContext,
-  Injectable,
-  Logger,
-  NestInterceptor,
-  CallHandler,
-} from '@nestjs/common';
+import { ExecutionContext, Injectable, Logger, NestInterceptor, CallHandler } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-
+import { X_CORRELATION_KEY } from '@common/index';
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const now = Date.now();
-
+    const request = context.switchToHttp().getRequest();
     /*
      * next.handle() is responsible for invoking the router handler.
      * @return handle() method returns an Observable. we can use powerful RxJS operators to further manipulate the response stream.
@@ -23,9 +17,7 @@ export class LoggingInterceptor implements NestInterceptor {
     return next
       .handle()
       .pipe(
-        tap(() =>
-          Logger.log(` ${Date.now() - now}ms`, context.getClass().name),
-        ),
+        tap(() => Logger.log(` [${request.get(X_CORRELATION_KEY)}] [${Date.now() - now}ms]`, context.getClass().name)),
       );
   }
 }

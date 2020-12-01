@@ -1,85 +1,102 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  Logger,
+} from '@nestjs/common';
 import { Permission } from './permission.entity';
 import { PermissionDto } from './permission.dto';
-import { toGraphql } from '@common/utilities';
-import { GqlClientService } from '@common/libs/gqlclient/gqlclient.service';
+import { toGraphql, GqlClientService } from '@common/index';
 
 @Injectable()
 export class PermissionService {
-  constructor(private readonly gqlClient: GqlClientService) {}
+  private readonly logger: Logger = new Logger(PermissionService.name);
+
+  constructor(private readonly gqlClient: GqlClientService) { }
+
+  private _output = `{
+    id
+    record_type
+    created_on
+    created_by
+  }`;
 
   async list(): Promise<Permission[]> {
-    const params = `query {
-      permissions: permissionsList {
-        id
-        record_type
-        created_on
-        created_by
-      }
+    this.logger.log(`Start fetching list of all permissions`);
+    const query = `query {
+      result: permissionsList ${this._output}
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.permissions;
+    return this.gqlClient.send(query);
+  }
+
+  async findBy(
+    condition: [Record<string, unknown>],
+    output?: string,
+  ): Promise<Permission[]> {
+    this.logger.log(
+      `Find Permission with key: [${condition[0].record_key}] and value: [${condition[0].record_value}]`,
+    );
+
+    const _output: string = output ? output : this._output;
+    const query = `query {
+      result: findPermissionBy(checks: ${toGraphql(condition)}) ${_output}
+    }`;
+    return this.gqlClient.send(query);
   }
 
   async create(input: PermissionDto): Promise<Permission> {
-    const params = `mutation{
-      permission: addPermission(input: ${toGraphql(
-        input,
-      )}) {id record_type created_on created_by}
+    const [permission] = await this.findBy(
+      [
+        {
+          record_key: 'record_type',
+          record_value: input.record_type,
+        },
+      ],
+      `{id}`,
+    );
+    if (permission) {
+      throw new BadRequestException(`Permission Already Exist`);
+    }
+    const query = `mutation{
+      result: addPermission(input: ${toGraphql(input)}) ${this._output}
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.permission;
+    return this.gqlClient.send(query);
   }
 
   async findOne(id: string): Promise<Permission> {
-    const params = `query {
-      permission: findPermission(id: "${id}") {
-        id
-        record_type
-        created_on
-        created_by
-      }
+    this.logger.log(`Find One permission with ID [${id}]`);
+    const query = `query {
+      result: findPermissionById(id: "${id}") ${this._output}
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.permission;
+    return this.gqlClient.send(query);
   }
 
   async findById(id: string): Promise<Permission> {
-    const params = `query {
-      permission: findPermission(id: "${id}") {
+    this.logger.log(`Find permission with ID [${id}]`);
+    const query = `query {
+      result: findPermissionById(id: "${id}") {
         id
       }
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.permission;
+    return this.gqlClient.send(query);
   }
 
-  async update(id: string, input: PermissionDto): Promise<Permission> {
-    const permission: Permission = await this.findById(id);
-    if (!permission) {
-      throw new NotFoundException('Permission Not Found');
-    }
-    const params = `mutation {
-      permission: updatePermission(id: "${id}", input: ${toGraphql(input)}) {
-        id
-        record_type
-        created_by
-        created_on
-      } 
+  async update(
+    id: string,
+    input: PermissionDto,
+  ): Promise<Permission> {
+    this.logger.log(`Start Updating permission with ID [${id}]`);
+    const query = `mutation {
+      result: updatePermission(id: "${id}", input: ${toGraphql(input)}) ${this._output
+      }
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.permission;
+    return this.gqlClient.send(query);
   }
 
   async delete(id: string): Promise<boolean> {
-    const permission: Permission = await this.findById(id);
-    if (!permission) {
-      throw new NotFoundException('Permission Not Found');
-    }
-    const params = `mutation {
-      permission: deletePermission(id: "${id}") 
+    this.logger.log(`Start Deleting permission with ID [${id}]`);
+    const query = `mutation {
+      result: deletePermission(id: "${id}") 
     }`;
-    const result = await this.gqlClient.send(params);
-    return result?.permission;
+    return this.gqlClient.send(query);
   }
 }

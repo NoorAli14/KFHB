@@ -8,6 +8,7 @@ import {
   Delete,
   ParseUUIDPipe,
   HttpCode,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -20,6 +21,7 @@ import {
   ApiBadRequestResponse,
   ApiNotFoundResponse,
 } from '@nestjs/swagger';
+import { AuthGuard } from '@common/index';
 import { Permission } from './permission.entity';
 import { PermissionService } from './permissions.service';
 import { PermissionDto } from './permission.dto';
@@ -27,8 +29,9 @@ import { PermissionDto } from './permission.dto';
 @ApiTags('Permission')
 @Controller('permissions')
 @ApiBearerAuth()
+@UseGuards(AuthGuard)
 export class PermissionsController {
-  constructor(private readonly permissionService: PermissionService) {}
+  constructor(private readonly permissionService: PermissionService) { }
 
   @Post('/')
   @ApiBody({
@@ -48,7 +51,9 @@ export class PermissionsController {
     type: Error,
     description: 'Input Validation failed.',
   })
-  async create(@Body() permissionDto: PermissionDto): Promise<Permission> {
+  async create(
+    @Body() permissionDto: PermissionDto,
+  ): Promise<Permission> {
     return this.permissionService.create(permissionDto);
   }
 
@@ -80,8 +85,12 @@ export class PermissionsController {
     type: Error,
     description: 'Permission Not Found.',
   })
-  async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<Permission> {
-    return this.permissionService.findOne(id);
+  async findOne(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<Permission> {
+    return this.permissionService.findOne(
+      id,
+    );
   }
 
   @Put(':id')
@@ -127,7 +136,9 @@ export class PermissionsController {
     description: 'Permission Not Found.',
   })
   @HttpCode(204)
-  async delete(@Param('id', ParseUUIDPipe) id: string): Promise<any> {
+  async delete(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<any> {
     return this.permissionService.delete(id);
   }
 }

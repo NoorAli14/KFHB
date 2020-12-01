@@ -59,7 +59,6 @@ export class AuthInterceptorService implements HttpInterceptor {
                         const clonedRequest = request.clone(options);
                         return next.handle(clonedRequest);
                     }
-
                     // this.eventService.emit(
                     //     new EmitEvent(Events.SESSION_EXPIRED, true)
                     // );
@@ -92,7 +91,7 @@ export class AuthInterceptorService implements HttpInterceptor {
                 'x-tenant-id': environment.TENANT_ID,
             }),
         };
-        if (baseUrl.includes('https://rubix-dev01.conduit-aiondigital.com')) {
+        if (baseUrl.includes(environment.API_BASE_URL)) {
             httpOptions.headers = httpOptions.headers.set(
                 'x-channel-id', environment.CHANNEL_ID
             );

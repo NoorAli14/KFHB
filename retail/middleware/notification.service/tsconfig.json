@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es2017",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "paths": {
+      "@rubix/*": [
+        "./src/*"
+      ],
+      "@common/*": [
+        "./src/common/*"
+      ],
+      "@app/*": [
+        "./src/app/*"
+      ],
+      "@core/*": [
+        "./src/core/*"
+      ]
+    }
+  }
+}

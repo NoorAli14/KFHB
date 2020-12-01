@@ -1,39 +1,83 @@
-import {
-  IsString,
-  IsInt,
-  IsOptional,
-  Length,
-  MaxLength,
-  IsEmail,
-} from 'class-validator';
+import { IsString, IsEmail, IsOptional, IsNotEmpty, MaxLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import {DEVICES, NUMBERS} from '@common/constants';
 
-export class RegisterDTO {
-  @IsString()
+export class RegisterCustomerDto {
+  @ApiProperty({
+    title: 'First Name',
+    example: 'Faizan',
+    description: 'First Name of the customer.',
+    required: false,
+  })
   @IsOptional()
-  @MaxLength(30)
-  readonly first_name?: string;
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  first_name: string;
 
-  @IsString()
+  @ApiProperty({
+    title: 'Middle Name',
+    description: 'Middle Name of the customer.',
+    required: false,
+  })
   @IsOptional()
-  @MaxLength(30)
-  readonly last_name?: string;
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  middle_name: string;
 
-  @IsString()
+  @ApiProperty({
+    title: 'Last Name',
+    example: 'Ahmad',
+    description: 'Last Name of the customer.',
+    required: false,
+  })
+  @IsOptional()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  last_name: string;
+
+  @ApiProperty({
+    required: true,
+    example: 'faizan@aiondigital.com',
+    description: 'Customer email address.',
+  })
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
   @IsEmail()
-  readonly email: string;
+  email: string;
 
-  @IsString()
-  readonly password: string;
-}
+  @ApiProperty({
+    title: 'Contact No',
+    description: 'Contact No of the customer.',
+    required: false,
+  })
+  @IsOptional()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  contact_no: string;
 
-export class LoginDTO {
+  @ApiProperty({
+    title: 'Device ID',
+    description: 'Device ID of the customer.',
+    required: true,
+  })
+  @IsNotEmpty()
   @IsString()
-  @IsEmail()
-  @ApiProperty({ required: true, minLength: 6, example: 'faizan@aiondigital.com', description: 'Email of the customer' })
-  readonly email: string;
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  device_id: string;
 
+  @ApiProperty({
+    enum: DEVICES,
+    title: 'Platform',
+    example: DEVICES[0],
+    required: true,
+  })
   @IsString()
-  @ApiProperty({ required: true, minLength: 6, type: String, format: 'password' })
-  readonly password: string;
+  @IsNotEmpty()
+  @MaxLength(NUMBERS.PLATEFORM_LENGTH)
+  platform: string;
+
+  @ApiProperty({
+    title: 'FCM Token Id',
+    description: 'FCM Token Id',
+    required: true,
+  })
+  @IsNotEmpty()
+  @IsString()
+  @MaxLength(NUMBERS.MAX_COLUMN_LENGTH)
+  fcm_token_id: string;
 }

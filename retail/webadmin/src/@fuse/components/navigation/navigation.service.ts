@@ -159,6 +159,7 @@ export class FuseNavigationService {
             navigation.push(serviceRequestsItem);
         }
 
+
         const find = navigation.find((x) => x.id === 'custom-function');
         if (!find) {
             // navigation.push(customFunctionNavItem);

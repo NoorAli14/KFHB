@@ -4,8 +4,11 @@ import {
   Body,
   Param,
   Put,
-  NotFoundException,
+  Delete,
   ParseUUIDPipe,
+  UseGuards,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -15,27 +18,32 @@ import {
   ApiBearerAuth,
   ApiBadRequestResponse,
   ApiNotFoundResponse,
+  ApiNoContentResponse,
 } from '@nestjs/swagger';
+import { AuthGuard, PermissionsGuard, Permissions, PaginationDTO, SortByDTO } from '@common/index';
 import { UserService } from './users.service';
-import { User } from './user.entity';
-import { ChangePasswordDto, UpdateUserDto } from './user.dto';
-import { SuccessDto } from '@common/dtos/';
+import { User, UserPaginationList } from './user.entity';
+import { UpdateUserDto } from './user.dto';
+import { Query } from "@nestjs/common";
+import { UserFilterDto } from "@app/v1/users/dtos";
 
 @ApiTags('User')
 @Controller('users')
 @ApiBearerAuth()
+@UseGuards(AuthGuard, PermissionsGuard)
 export class UsersController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
 
   @Get('/')
   @ApiOperation({
     description:
-      'A successful request returns the HTTP 200 OK status code and a JSON response body that shows list of users information.',
+      'A successful request returns the HTTP 200 OK status code and a JSON response body that shows list of users information with pagination.',
     summary: 'List of all users.',
   })
-  @ApiOkResponse({ type: [User], description: 'List of all users.' })
-  async list(): Promise<User[]> {
-    return this.userService.list();
+  @ApiOkResponse({ type: UserPaginationList, description: 'List of all users.' })
+  @Permissions('view:users')
+  async list(@Query() pagination: PaginationDTO, @Query() filters: UserFilterDto, @Query() sort_by: SortByDTO): Promise<UserPaginationList> {
+    return this.userService.list({ pagination, filters, sort_by });
   }
 
   @Get(':id')
@@ -52,12 +60,11 @@ export class UsersController {
     type: Error,
     description: 'User Not Found.',
   })
-  async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<User> {
-    const user = await this.userService.findOne(id);
-    if (!user) {
-      throw new NotFoundException('User Not Found');
-    }
-    return user;
+  @Permissions('view:users')
+  async findOne(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<User> {
+    return this.userService.findOne(id);
   }
 
   @Put(':id')
@@ -79,33 +86,59 @@ export class UsersController {
     type: Error,
     description: 'User Not Found.',
   })
+  @Permissions('edit:users')
   async update(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() userDto: UpdateUserDto,
+    @Body() input: UpdateUserDto,
   ): Promise<User> {
-    const user = await this.userService.findOne(id);
-    if (!user) {
-      throw new NotFoundException('User Not Found');
-    }
-    return this.userService.update(id, userDto);
+    return this.userService.update(id, input);
   }
 
-  @Put('/password')
-  @ApiBody({
-    description: 'Sets the user properties.',
-    type: ChangePasswordDto,
-  })
+  @Delete(':id')
   @ApiOperation({
-    summary: 'Update user password',
-    description: 'A successful request returns the HTTP 200 OK status code.',
+    summary: 'Delete a User by ID',
+    description:
+      'A successful request returns the HTTP 204 No Content status code with empty response body.',
+  })
+  @ApiNoContentResponse({
+    description: 'User has been successfully deleted.',
+  })
+  @ApiNotFoundResponse({
+    type: Error,
+    description: 'User Not Found.',
+  })
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Permissions('delete:users')
+  async delete(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<any> {
+    return this.userService.delete(id);
+  }
+
+  @Put(':id/link/:entity_id')
+  @ApiBody({ description: 'Associates user with the specified Entity ID.' })
+  @ApiOperation({
+    summary: 'Associate a user with Entity ID',
+    description:
+      'A successful request returns the HTTP 200 OK status code and a JSON response body that shows user information.',
   })
   @ApiOkResponse({
-    type: SuccessDto,
-    description: 'User has been successfully updated their password.',
+    type: User,
+    description: 'User has been successfully associated.',
   })
-  async update_password(
-    @Body() changePasswordDto: ChangePasswordDto,
-  ): Promise<any> {
-    // this.userService.create(userDto);
+  @ApiBadRequestResponse({
+    type: Error,
+    description: 'Input Validation failed.',
+  })
+  @ApiNotFoundResponse({
+    type: Error,
+    description: 'User Not Found.',
+  })
+  @Permissions('edit:users')
+  async updateEntityID(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Param('entity_id', ParseUUIDPipe) entity_id: string,
+  ): Promise<User> {
+    return this.userService.update(id, { entity_id });
   }
 }
