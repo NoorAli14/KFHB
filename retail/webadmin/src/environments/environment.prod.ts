@@ -7,7 +7,7 @@ export const environment = {
     hmr: false,
     APP_SECRETE: window['env']['ENV_RBX_APP_SECRETE'],
     API_BASE_URL: window['env']['ENV_RBX_API_BASE_URL'],
-     API_BASE_URL_2: 'https://aionj2middlewaredev.uksouth.cloudapp.azure.com',
+    API_BASE_URL_2: window['env']['ENV_RBX_API_BASE_URL_2'],
     CHANNEL_ID: window['env']['ENV_RBX_CHANNEL_ID'],
     TENANT_ID: window['env']['ENV_RBX_TENANT_ID'],
     VIDEO_URL: window['env']['ENV_RBX_VIDEO_URL'],
