@@ -75,7 +75,7 @@
                         </div>
                     </div>
                     <div fxLayout="row wrap" class="fuse-card  mb-24" fxFlex="100"
-                        *ngIf="serviceRequest?.result.length>0  && !serviceRequest.letterType.includes('Auto Release Letter') ">
+                        *ngIf="serviceRequest?.result.length>0  && !serviceRequest.letterType?.includes('Auto Release Letter') ">
                         <div fxFlex="32" *ngFor='let item of serviceRequest?.result; let i = index'>
                             <div>
                                 <div class="info-line p-24" *ngIf='item.status && item.title'>
