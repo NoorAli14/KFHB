@@ -8,6 +8,8 @@ import { CRSTemplate } from "./crsTemplate";
 import { AMLCheck } from "./amlCheck";
 import { RemarksTab } from "./remarks";
 import { ScreenShots } from "./screenshots";
+import { showError, showSuccess, showWarning } from "../shared/helper";
+
 class CustomerDetails extends React.Component {
   constructor(props) {
     super(props);
@@ -29,12 +31,13 @@ class CustomerDetails extends React.Component {
       faceImage: null,
       selectedPassport: "passport",
       screenShotImages: [],
-      nationalIdActive:'nationalIdFront',
-      passportActive:'passport'
+      nationalIdActive: "nationalIdFront",
+      passportActive: "passport",
     };
     this.convertTime = this.convertTime.bind(this);
     this.setImageActive = this.setImageActive.bind(this);
     this.setPassportActive = this.setPassportActive.bind(this);
+    this.onSubmitResponse = this.onSubmitResponse.bind(this);
   }
 
   convertTime(time) {
@@ -45,6 +48,64 @@ class CustomerDetails extends React.Component {
 
     return dateFormat + " " + timeFormat;
   }
+  onSubmitResponse = (data) => {
+    debugger;
+    const { screenShotImages } = this.state;
+    console.log(screenShotImages.length);
+    if (data.status === "A" && (this.civilIdImageFront === null || this.civilIdBack === null) ) {
+      showWarning(
+        "Please upload all the screenshot to continue the Onboarding Process."
+      );
+      return;
+    }
+    const token = localStorage.getItem("access-token");
+    const tenantId = localStorage.getItem("tenant");
+    let customerId = localStorage.getItem("customerId");
+    const model = {
+      UserId: customerId,
+      cashDeposit: "null",
+      cashWithdrawal: "null",
+      chequeDeposit: "null",
+      chequeWithdrawal: "null",
+      internalTransfer: "null",
+      moneyTransfers: "null",
+      inwardInternational: "null",
+      outnwardInternational: "null",
+      ddStatus: data.status,
+      remarks: data.remarks,
+    };
+
+    axios
+      .post(
+        `${window._env_.ACCOUNT_BASE_URL}/account/api/v1/video/call/create/account`,
+        model,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json, text/plain, */*",
+            "x-tenant-id": tenantId,
+            "x-access-token": token,
+          },
+        }
+      )
+      .then((res) => {
+        debugger;
+        console.log(res);
+        if (data.status === "A") {
+          showSuccess("Account created successfully.");
+        } else if (data.status !== "A") {
+          showSuccess("Remarks has been sent successfully");
+        }
+        // const {customer}=this.state;
+        // customer.status= data.status;
+        // customer.remarks= data.remarks;
+        // this.setState({customer})
+      })
+      .catch((error) => {
+        debugger;
+        showError("An error has occured while adding remarks.");
+      });
+  };
 
   componentDidUpdate(prevProps, prevState) {
     const self = this;
@@ -124,21 +185,22 @@ class CustomerDetails extends React.Component {
               console.log(error);
             });
 
-            axios
+          axios
             .get(
               window._env_.RUBIX_BASE_URL +
-                `/onboarding/customers/${customerId}/attachments`,{
-                  headers: {
-                    "Content-Type": "application/json",
-                    "x-access-token":token ,
-                    'x-channel-id': channelId,
-                    "x-tenant-id":tenantId,
-                  },
-                }
+                `/onboarding/customers/${customerId}/attachments`,
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  "x-access-token": token,
+                  "x-channel-id": channelId,
+                  "x-tenant-id": tenantId,
+                },
+              }
             )
             .then((res) => {
               console.log(res);
-              this.setState({screenShotImages:res.data})
+              this.setState({ screenShotImages: res.data });
             })
             .catch((error) => {
               console.log(error);
@@ -176,10 +238,10 @@ class CustomerDetails extends React.Component {
     }
   }
   setImageActive = (image) => {
-    this.setState({ selectedImage: image,nationalIdActive:image });
+    this.setState({ selectedImage: image, nationalIdActive: image });
   };
   setPassportActive = (image) => {
-    this.setState({ selectedPassport: image,passportActive:image });
+    this.setState({ selectedPassport: image, passportActive: image });
   };
   openphoto = (url) => {
     this.setState(
@@ -217,7 +279,7 @@ class CustomerDetails extends React.Component {
       civilIdImageBack,
       civilIdImageFront,
       selectedImage,
-      customerId
+      customerId,
     } = this.state;
     const civilIdBackProcessData =
       customer && customer.documents.length > 0
@@ -409,50 +471,87 @@ class CustomerDetails extends React.Component {
               </TabPanel>
 
               <TabPanel>
-
-              <div className="details" ></div>
-
+                <div className="details"></div>
               </TabPanel>
               <TabPanel>
-              <div className="details" >
-              <FatcaTemplate template={fatcaTemplate} />
-                <CRSTemplate />
-
-              </div>
-               
-              </TabPanel>
-              <TabPanel><div className="details" >
-
-                <BankingTransaction template={bankingTransactionTemplate} />
-              </div>
+                <div className="details">
+                  <FatcaTemplate template={fatcaTemplate} />
+                  <CRSTemplate />
+                </div>
               </TabPanel>
               <TabPanel>
-              <div className="details" >
-                <AMLCheck aml={amlCheck} />
-              </div>
+                <div className="details">
+                  <BankingTransaction template={bankingTransactionTemplate} />
+                </div>
               </TabPanel>
               <TabPanel>
-              <div className="details" >
-                <RemarksTab />
-              </div>
+                <div className="details">
+                  <AMLCheck aml={amlCheck} />
+                </div>
+              </TabPanel>
+              <TabPanel>
+                <div className="details">
+                  <RemarksTab
+                    onSubmit={(e) => this.onSubmitResponse(e)}
+                    customer={customer}
+                  />
+                </div>
               </TabPanel>
             </Tabs>
           </div>
           <div className="customerbasic-details">
             <Tabs>
-              <TabList >
+              <TabList>
                 <Tab>ID Card</Tab>
                 <Tab>Passport</Tab>
                 <Tab>Additional Data</Tab>
                 <Tab>Screen shots</Tab>
               </TabList>
 
-              <TabPanel >
+              <TabPanel>
                 <div className="details">
-                  <div style={{width:'100%', display: 'flex', justifyContent: 'center'}}>
-                    <a className={`image-btns ${nationalIdActive==='nationalIdFace'?'active-btn' :''}`}  onClick={()=>this.setImageActive('nationalIdFace')} style={{cursor:'pointer'}} >Face Image</a> &nbsp;&nbsp;
-                    <a className={`image-btns ${nationalIdActive==='nationalIdFront'?'active-btn' :''}`}  onClick={()=>this.setImageActive('nationalIdFront')} style={{cursor:'pointer'}}>Front Image</a>&nbsp;&nbsp;
-                    <a className={`image-btns ${nationalIdActive==='nationalIdBack'?'active-btn' :''}`}  onClick={()=>this.setImageActive('nationalIdBack')} style={{cursor:'pointer'}}>Back Image</a>
+                  <div
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <a
+                      className={`image-btns ${
+                        nationalIdActive === "nationalIdFace"
+                          ? "active-btn"
+                          : ""
+                      }`}
+                      onClick={() => this.setImageActive("nationalIdFace")}
+                      style={{ cursor: "pointer" }}
+                    >
+                      Face Image
+                    </a>{" "}
+                    &nbsp;&nbsp;
+                    <a
+                      className={`image-btns ${
+                        nationalIdActive === "nationalIdFront"
+                          ? "active-btn"
+                          : ""
+                      }`}
+                      onClick={() => this.setImageActive("nationalIdFront")}
+                      style={{ cursor: "pointer" }}
+                    >
+                      Front Image
+                    </a>
+                    &nbsp;&nbsp;
+                    <a
+                      className={`image-btns ${
+                        nationalIdActive === "nationalIdBack"
+                          ? "active-btn"
+                          : ""
+                      }`}
+                      onClick={() => this.setImageActive("nationalIdBack")}
+                      style={{ cursor: "pointer" }}
+                    >
+                      Back Image
+                    </a>
                   </div>
                   <div
                     style={{
@@ -486,30 +585,67 @@ class CustomerDetails extends React.Component {
                 </div>
               </TabPanel>
 
-              <TabPanel >
-                 <div className="details" >
-                  <div style={{width:'100%', display: 'flex', justifyContent: 'center'}}>
-                      <a className={`image-btns ${passportActive==='passport'?'active-btn' :''}`}  onClick={()=>this.setPassportActive('passport')} style={{cursor:'pointer'}}>Passport</a> &nbsp;&nbsp;
-                      <a className={`image-btns ${passportActive==='passportFace'?'active-btn' :''}`}  onClick={()=>this.setPassportActive('passportFace')} style={{cursor:'pointer'}}>Passport Face</a>
-                    </div>
-                    <div style={{ marginTop:'30px', display: 'flex', justifyContent: 'center'}}>
-                    {selectedPassport=='passportFace' && (
-                        <img style={{maxHeight:'250px'}} src={passportFace} alt="Passport Face"/>
-
+              <TabPanel>
+                <div className="details">
+                  <div
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <a
+                      className={`image-btns ${
+                        passportActive === "passport" ? "active-btn" : ""
+                      }`}
+                      onClick={() => this.setPassportActive("passport")}
+                      style={{ cursor: "pointer" }}
+                    >
+                      Passport
+                    </a>{" "}
+                    &nbsp;&nbsp;
+                    <a
+                      className={`image-btns ${
+                        passportActive === "passportFace" ? "active-btn" : ""
+                      }`}
+                      onClick={() => this.setPassportActive("passportFace")}
+                      style={{ cursor: "pointer" }}
+                    >
+                      Passport Face
+                    </a>
+                  </div>
+                  <div
+                    style={{
+                      marginTop: "30px",
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {selectedPassport == "passportFace" && (
+                      <img
+                        style={{ maxHeight: "250px" }}
+                        src={passportFace}
+                        alt="Passport Face"
+                      />
                     )}
-                    {selectedPassport=='passport' && (
-                        <img style={{maxHeight:'250px'}} src={passportImage} alt="Passport"/>
-                        
+                    {selectedPassport == "passport" && (
+                      <img
+                        style={{ maxHeight: "250px" }}
+                        src={passportImage}
+                        alt="Passport"
+                      />
                     )}
                   </div>
                 </div>
               </TabPanel>
-              <TabPanel > <div className="details" ></div></TabPanel>
-              <TabPanel >
-              <div className="details" >
-              <ScreenShots images={screenShotImages} />
-              </div>
-                
+              <TabPanel>
+                {" "}
+                <div className="details"></div>
+              </TabPanel>
+              <TabPanel>
+                <div className="details">
+                  <ScreenShots images={screenShotImages} />
+                </div>
               </TabPanel>
             </Tabs>
           </div>
