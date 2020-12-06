@@ -18,7 +18,7 @@ export class VideoComponent implements OnInit, OnDestroy {
         private sanitizer: DomSanitizer,
         private authService: AuthenticationService,
         private _fuseSidebarService: FuseSidebarService,
-    ) { }
+    ) {}
 
     ngOnInit(): void {
         this.loadIframe();
@@ -29,12 +29,12 @@ export class VideoComponent implements OnInit, OnDestroy {
         const token = this.authService.accessToken;
         const channelId = environment.CHANNEL_ID;
         const tenantId = environment.TENANT_ID;
-        const VIDEO_URL = 'https://rubix-dev01.conduit-aiondigital.com:8443';
+        
         this.url = this.sanitizer.bypassSecurityTrustResourceUrl(
-            `https://rubix-dev01.conduit-aiondigital.com:8443/login?token=${​​​​​​​​token}​​​​​​​​&channelid=${​​​​​​​​channelId}​​​​​​​​&tenantid=${​​​​​​​​tenantId}​​​​​​​​`
-            );
+            `${environment.VIDEO_URL}/login?token=${token}&channelid=${channelId}&tenantid=${tenantId}`
+        );
     }
-    ngOnDestroy(): void {
+    ngOnDestroy(): void{
         // this._fuseSidebarService.getSidebar('navbar').toggleFold();
     }
 }
