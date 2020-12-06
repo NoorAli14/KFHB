@@ -31,7 +31,7 @@ export class VideoComponent implements OnInit, OnDestroy {
         const tenantId = environment.TENANT_ID;
         
         this.url = this.sanitizer.bypassSecurityTrustResourceUrl(
-            `${environment.VIDEO_URL}/login?token=${token}&channelid=${channelId}&tenantid=${tenantId}`
+            `https://rubix-dev01.conduit-aiondigital.com:8443/login?token=${token}&channelid=${channelId}&tenantid=${tenantId}`
         );
     }
     ngOnDestroy(): void{
