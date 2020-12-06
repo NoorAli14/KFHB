@@ -52,7 +52,7 @@ class CustomerDetails extends React.Component {
     debugger;
     const { screenShotImages } = this.state;
     console.log(screenShotImages.length);
-    if (data.status === "A" && (this.civilIdImageFront === null || this.civilIdBack === null) ) {
+    if (data.status === "A" && screenShotImages.length < 5) {
       showWarning(
         "Please upload all the screenshot to continue the Onboarding Process."
       );
