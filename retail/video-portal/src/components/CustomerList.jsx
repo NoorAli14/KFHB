@@ -95,6 +95,9 @@ class CustomerList extends React.Component {
             }
         })
             .then(res => {
+                this.setState({
+                    isLoading: false
+                })
                 if (res.data.response !== undefined) {
                     let result = res.data.response
                     this.setState({
