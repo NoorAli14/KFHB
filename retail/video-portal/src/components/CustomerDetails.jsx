@@ -49,15 +49,14 @@ class CustomerDetails extends React.Component {
     return dateFormat + " " + timeFormat;
   }
   onSubmitResponse = (data) => {
-    debugger;
     const { screenShotImages } = this.state;
     console.log(screenShotImages.length);
-    // if (data.status === "A" && screenShotImages.length < 5) {
-    //   showWarning(
-    //     "Please upload all the screenshot to continue the Onboarding Process."
-    //   );
-    //   return;
-    // }
+    if (data.status === "A" && screenShotImages.length < 5) {
+      showWarning(
+        "Please upload all the screenshot to continue the Onboarding Process."
+      );
+      return;
+    }
     const token = localStorage.getItem("access-token");
     const tenantId = localStorage.getItem("tenant");
     let customerId = localStorage.getItem("customerId");
@@ -89,7 +88,6 @@ class CustomerDetails extends React.Component {
         }
       )
       .then((res) => {
-        debugger;
         console.log(res);
         if (data.status === "A") {
           showSuccess("Account created successfully.");
@@ -102,7 +100,6 @@ class CustomerDetails extends React.Component {
         // this.setState({customer})
       })
       .catch((error) => {
-        debugger;
         showError("An error has occured while adding remarks.");
       });
   };
@@ -139,7 +136,9 @@ class CustomerDetails extends React.Component {
             )
             .then((res) => {
               console.log(res);
-
+              this.setState({
+                isLoading: false,
+              });
               const data = res.data?.templates?.map((item) => {
                 return { ...item, results: JSON.parse(atob(item.results)) };
               });
@@ -183,6 +182,9 @@ class CustomerDetails extends React.Component {
             })
             .catch((error) => {
               console.log(error);
+              this.setState({
+                isLoading: false,
+              });
             });
 
           axios

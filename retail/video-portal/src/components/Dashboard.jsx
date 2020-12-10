@@ -118,6 +118,9 @@ class Dashboard extends React.Component {
             })
             .catch(error => {
                 console.log(error)
+                self.setState({
+                    isLoading: false
+                })
                 store.dispatch(getLoginToken(result.username, result.webAccessToken))
             })
     }
@@ -136,6 +139,9 @@ class Dashboard extends React.Component {
             }, headers: { "Authorization": token }
         })
             .then(res => {
+                self.setState({
+                    isLoading: false
+                })
                 if (res.data.status === 200) {
 
                     self.setState({
@@ -155,6 +161,9 @@ class Dashboard extends React.Component {
             .catch(error => {
                 console.log(error)
                 store.dispatch(getLoginToken(result.username, result.webAccessToken))
+                self.setState({
+                    isLoading: false
+                })
             })
     }
 
@@ -167,6 +176,9 @@ class Dashboard extends React.Component {
             }
         }
         if (prevProps.call !== this.props.call) {
+            this.setState({
+                isLoading: false,
+            })
             if (this.props.call.callStatus === "ENDED" || this.props.call.callStatus === "CALL_ENDED" || this.props.call.callStatus === "END_CALL" || this.props.call.callStatus === "decline_call") {
                 this.getCallLog(localStorage.getItem('token'))
             }

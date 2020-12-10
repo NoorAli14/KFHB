@@ -67,6 +67,9 @@ class MissedCallLog extends React.Component {
             }, headers: { "Authorization": token }
         })
             .then(res => {
+                self.setState({
+                    isLoading: false
+                })
                 if (res.data.status === 200) {
                     self.setState({
                         missedcallCount: res.data.count,
@@ -85,6 +88,9 @@ class MissedCallLog extends React.Component {
             .catch(error => {
                 console.log(error)
                 store.dispatch(getLoginToken(result.username, result.webAccessToken))
+                self.setState({
+                    isLoading: false
+                })
             })
     }
 

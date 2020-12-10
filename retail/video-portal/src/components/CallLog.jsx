@@ -70,11 +70,13 @@ class CallLog extends React.Component {
             }, headers: { "Authorization": token }
         })
             .then(res => {
+                self.setState({
+                    isLoading: false
+                })
                 if (res.data.status === 200) {
                     self.setState({
                         callCount: res.data.count,
                         callLog: res.data.data,
-                        isLoading: false,
                         buttonDisabled: false,
                         totalItem: res.data.totalRecords ? res.data.totalRecords : 0
                     })
@@ -90,7 +92,11 @@ class CallLog extends React.Component {
             })
             .catch(error => {
                 console.log(error)
+                
                 store.dispatch(getLoginToken(result.username, result.webAccessToken))
+                self.setState({
+                    isLoading: false
+                })
             })
     }
 
