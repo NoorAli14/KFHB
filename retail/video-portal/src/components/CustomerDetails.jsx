@@ -52,17 +52,17 @@ class CustomerDetails extends React.Component {
     debugger;
     const { screenShotImages } = this.state;
     console.log(screenShotImages.length);
-    if (data.status === "A" && screenShotImages.length < 5) {
-      showWarning(
-        "Please upload all the screenshot to continue the Onboarding Process."
-      );
-      return;
-    }
+    // if (data.status === "A" && screenShotImages.length < 5) {
+    //   showWarning(
+    //     "Please upload all the screenshot to continue the Onboarding Process."
+    //   );
+    //   return;
+    // }
     const token = localStorage.getItem("access-token");
     const tenantId = localStorage.getItem("tenant");
     let customerId = localStorage.getItem("customerId");
     const model = {
-      UserId: customerId,
+      userId: customerId,
       cashDeposit: "null",
       cashWithdrawal: "null",
       chequeDeposit: "null",
