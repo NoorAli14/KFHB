@@ -179,7 +179,7 @@ export class CustomerDetailComponent implements OnInit, AfterContentChecked {
             return DEFAULT_IMAGE;
         }
 
-        let url = `/onboarding/customers/${customerId}/attachments/${document.id}/preview?x-access-token=${token}&x-tenant-id=${tenantId}&x-channel-id=${channelId}`;
+        let url = `/onboarding/customers/${customerId}/documents/${document.id}/preview?x-access-token=${token}&x-tenant-id=${tenantId}&x-channel-id=${channelId}`;
         if (isExtracted) {
             url = `${url}&extracted-image=true`;
         }
