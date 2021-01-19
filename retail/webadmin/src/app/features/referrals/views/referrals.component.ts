@@ -31,9 +31,9 @@ export class ReferralsComponent extends BaseComponent implements OnInit {
   pageSize: number = CONFIG.PAGE_SIZE;
   pageSizeOptions: Array<number> = CONFIG.PAGE_SIZE_OPTIONS;
   displayedColumns = [
-    'rimOfReferredCustomer​',
+    'rimOfReferredCustomer',
     'nameOfReferredCustomer',
-    'rimOfReferringCustomer​',
+    'rimOfReferringCustomer',
     'nameOfReferringCustomer',
     'dateOfJazeelRegistration',
     'customerOpenedAccount',
