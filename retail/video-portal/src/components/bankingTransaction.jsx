@@ -4,10 +4,10 @@
 import React from 'react'
 
 export const BankingTransaction=({template})=>{
-
+const isFlag = template?.results?.sections;
     return (
         <div style={{width: "100%"}} >
-            {template && template.results.sections.map(section=>{
+            {isFlag && template?.results?.sections.map(section=>{
                 return (
                     <div className="c-row">
                           {section.questions.map(question=>{
@@ -22,7 +22,7 @@ export const BankingTransaction=({template})=>{
                     </div>
                 )
             })}
-               {!template && (
+               {!isFlag && (
                 <div>
                     No template available
                 </div>

@@ -28,7 +28,9 @@ class VideoComponent extends React.Component {
     this.takePictureHandler = this.takePictureHandler.bind(this);
     this.fullscreen = this.fullscreen.bind(this);
     this.smallscreen = this.smallscreen.bind(this);
+    this.clearCanvas = this.clearCanvas.bind(this);
   }
+
 
   fullscreen() {
     this.setState({ isLargeScreen: false });
@@ -178,8 +180,22 @@ class VideoComponent extends React.Component {
     const base64 = data.replace(/^data:image.+;base64,/, "");
     // this.downloadURI(data, value);
     context.clearRect(0, 0, canvas.width, canvas.height);
+    this.clearCanvas();
     this.saveScreenShot(value,base64);
   }
+  clearCanvas() {
+    const element = document.getElementById("canvas");
+    element.remove();
+    document.createElement('canvas');
+    var newCanvas = document.createElement("canvas");   // Create a <button> element
+    document.body.appendChild(newCanvas);
+ 
+    var canvas = document.getElementsByTagName("canvas")[0];   // Get the first <h1> element in the document
+    var att = document.createAttribute("id");       // Create a "class" attribute
+    att.value = "canvas";
+    canvas.setAttributeNode(att);
+  }
+  
   saveScreenShot(type,base64) {
     const token = localStorage.getItem("access-token");
     const tenantId = localStorage.getItem("tenant");
