@@ -30,60 +30,60 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CalendarService", function() { return CalendarService; });
 /* harmony import */ var _shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @shared/constants/app.constants */ "./src/app/shared/constants/app.constants.ts");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/__ivy_ngcc__/fesm2015/core.js");
-/* harmony import */ var _shared_services_network_network_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @shared/services/network/network.service */ "./src/app/shared/services/network/network.service.ts");
+/* harmony import */ var _shared_services_network_network_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @shared/services/rubix-network/rubix-network.service.ts */ "./src/app/shared/services/rubix-network/rubix-network.service.ts");
 
 
 
 
 class CalendarService {
-    constructor(_networkService) {
-        this._networkService = _networkService;
+    constructor(_RubixNetworkService) {
+        this._RubixNetworkService = _RubixNetworkService;
     }
     getWorkingDays() {
-        return this._networkService.getAll(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].WORKING_DAYS);
+        return this._RubixNetworkService.getAll(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].WORKING_DAYS);
     }
     createWorkingDay(model) {
-        return this._networkService.post(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].WORKING_DAYS, model);
+        return this._RubixNetworkService.post(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].WORKING_DAYS, model);
     }
     editWorkingDay(id, model) {
-        return this._networkService.onUpdate(`${_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].WORKING_DAYS}/${id}`, model);
+        return this._RubixNetworkService.onUpdate(`${_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].WORKING_DAYS}/${id}`, model);
     }
     deleteWorkingDay(id) {
-        return this._networkService.onDelete(`${_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].WORKING_DAYS}/${id}`);
+        return this._RubixNetworkService.onDelete(`${_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].WORKING_DAYS}/${id}`);
     }
     getHolidays() {
-        return this._networkService.getAll(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].HOLIDAYS);
+        return this._RubixNetworkService.getAll(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].HOLIDAYS);
     }
     createHoliday(model) {
-        return this._networkService.post(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].HOLIDAYS, model);
+        return this._RubixNetworkService.post(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].HOLIDAYS, model);
     }
     editHoliday(id, model) {
-        return this._networkService.onUpdate(`${_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].HOLIDAYS}/${id}`, model);
+        return this._RubixNetworkService.onUpdate(`${_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].HOLIDAYS}/${id}`, model);
     }
     deleteHoliday(id) {
-        return this._networkService.onDelete(`${_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].HOLIDAYS}/${id}`);
+        return this._RubixNetworkService.onDelete(`${_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].HOLIDAYS}/${id}`);
     }
     getLeaves() {
-        return this._networkService.getAll(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].LEAVES);
+        return this._RubixNetworkService.getAll(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].LEAVES);
     }
     createLeave(model) {
-        return this._networkService.post(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].LEAVES, model);
+        return this._RubixNetworkService.post(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].LEAVES, model);
     }
     editLeave(id, model) {
-        return this._networkService.onUpdate(`${_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].LEAVES}/${id}`, model);
+        return this._RubixNetworkService.onUpdate(`${_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].LEAVES}/${id}`, model);
     }
     deleteLeave(id) {
-        return this._networkService.onDelete(`${_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].LEAVES}/${id}`);
+        return this._RubixNetworkService.onDelete(`${_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].LEAVES}/${id}`);
     }
 }
-CalendarService.ɵfac = function CalendarService_Factory(t) { return new (t || CalendarService)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵinject"](_shared_services_network_network_service__WEBPACK_IMPORTED_MODULE_2__["NetworkService"])); };
+CalendarService.ɵfac = function CalendarService_Factory(t) { return new (t || CalendarService)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵinject"](_shared_services_network_network_service__WEBPACK_IMPORTED_MODULE_2__["RubixNetworkService"])); };
 CalendarService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineInjectable"]({ token: CalendarService, factory: CalendarService.ɵfac, providedIn: "root" });
 /*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵsetClassMetadata"](CalendarService, [{
         type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"],
         args: [{
                 providedIn: "root",
             }]
-    }], function () { return [{ type: _shared_services_network_network_service__WEBPACK_IMPORTED_MODULE_2__["NetworkService"] }]; }, null); })();
+    }], function () { return [{ type: _shared_services_network_network_service__WEBPACK_IMPORTED_MODULE_2__["RubixNetworkService"] }]; }, null); })();
 
 
 /***/ }),

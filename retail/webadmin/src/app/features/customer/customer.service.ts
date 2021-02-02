@@ -1,5 +1,5 @@
 import { forkJoin, Observable } from 'rxjs';
-import { NetworkService } from './../../shared/services/network/network.service';
+import { RubixNetworkService } from './../../shared/services/rubix-network/rubix-network.service';
 import { Injectable } from '@angular/core';
 import { URI } from '@shared/constants/app.constants';
 
@@ -7,7 +7,7 @@ import { URI } from '@shared/constants/app.constants';
     providedIn: 'root'
 })
 export class CustomerService {
-    constructor(private network: NetworkService) {
+    constructor(private network: RubixNetworkService) {
         
     }
     getCustomers(queryParams): Observable<any>{

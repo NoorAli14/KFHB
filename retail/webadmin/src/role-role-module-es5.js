@@ -2199,42 +2199,42 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
     var _shared_services_network_network_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
-    /*! @shared/services/network/network.service */
-    "./src/app/shared/services/network/network.service.ts");
+    /*! @shared/services/rubix-network/rubix-network.service.ts */
+    "./src/app/shared/services/rubix-network/rubix-network.service.ts");
 
     var RoleService =
     /*#__PURE__*/
     function () {
-      function RoleService(_networkService) {
+      function RoleService(_RubixNetworkService) {
         _classCallCheck(this, RoleService);
 
-        this._networkService = _networkService;
+        this._RubixNetworkService = _RubixNetworkService;
       }
 
       _createClass(RoleService, [{
         key: "getModules",
         value: function getModules() {
-          return this._networkService.getAll(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].MODULE);
+          return this._RubixNetworkService.getAll(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].MODULE);
         }
       }, {
         key: "getRoles",
         value: function getRoles() {
-          return this._networkService.getAll(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].ROLE);
+          return this._RubixNetworkService.getAll(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].ROLE);
         }
       }, {
         key: "createRole",
         value: function createRole(model) {
-          return this._networkService.post(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].ROLE, model);
+          return this._RubixNetworkService.post(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].ROLE, model);
         }
       }, {
         key: "editRole",
         value: function editRole(id, model) {
-          return this._networkService.onUpdate("".concat(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].ROLE, "/").concat(id), model);
+          return this._RubixNetworkService.onUpdate("".concat(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].ROLE, "/").concat(id), model);
         }
       }, {
         key: "deleteRole",
         value: function deleteRole(id) {
-          return this._networkService.onDelete("".concat(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].ROLE, "/").concat(id));
+          return this._RubixNetworkService.onDelete("".concat(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].ROLE, "/").concat(id));
         }
       }, {
         key: "forkRolesData",
@@ -2244,7 +2244,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
       }, {
         key: "getPermissions",
         value: function getPermissions() {
-          return this._networkService.getAll(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].PERMISSION);
+          return this._RubixNetworkService.getAll(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].PERMISSION);
         }
       }, {
         key: "getSelectedPermissions",
@@ -2288,7 +2288,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
     }();
 
     RoleService.ɵfac = function RoleService_Factory(t) {
-      return new (t || RoleService)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵinject"](_shared_services_network_network_service__WEBPACK_IMPORTED_MODULE_3__["NetworkService"]));
+      return new (t || RoleService)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵinject"](_shared_services_network_network_service__WEBPACK_IMPORTED_MODULE_3__["RubixNetworkService"]));
     };
 
     RoleService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineInjectable"]({
@@ -2306,7 +2306,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
         }]
       }], function () {
         return [{
-          type: _shared_services_network_network_service__WEBPACK_IMPORTED_MODULE_3__["NetworkService"]
+          type: _shared_services_network_network_service__WEBPACK_IMPORTED_MODULE_3__["RubixNetworkService"]
         }];
       }, null);
     })();

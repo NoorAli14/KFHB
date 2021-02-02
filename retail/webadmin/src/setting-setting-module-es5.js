@@ -1849,8 +1849,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 
     var _shared_services_network_network_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
-    /*! @shared/services/network/network.service */
-    "./src/app/shared/services/network/network.service.ts");
+    /*! @shared/services/rubix-network/rubix-network.service.ts */
+    "./src/app/shared/services/rubix-network/rubix-network.service.ts");
     /* harmony import */
 
 
@@ -1861,22 +1861,22 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     var SettingService =
     /*#__PURE__*/
     function () {
-      function SettingService(_networkService, _refService) {
+      function SettingService(_RubixNetworkService, _refService) {
         _classCallCheck(this, SettingService);
 
-        this._networkService = _networkService;
+        this._RubixNetworkService = _RubixNetworkService;
         this._refService = _refService;
       }
 
       _createClass(SettingService, [{
         key: "updatePassword",
         value: function updatePassword(model) {
-          return this._networkService.onUpdate(_setting_constant__WEBPACK_IMPORTED_MODULE_1__["UPDATE_PASSWORD"], model);
+          return this._RubixNetworkService.onUpdate(_setting_constant__WEBPACK_IMPORTED_MODULE_1__["UPDATE_PASSWORD"], model);
         }
       }, {
         key: "updateProfile",
         value: function updateProfile(model) {
-          return this._networkService.onUpdate(_setting_constant__WEBPACK_IMPORTED_MODULE_1__["UPDATE_PROFILE"], model);
+          return this._RubixNetworkService.onUpdate(_setting_constant__WEBPACK_IMPORTED_MODULE_1__["UPDATE_PROFILE"], model);
         }
       }, {
         key: "getNationalities",
@@ -1889,7 +1889,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     }();
 
     SettingService.ɵfac = function SettingService_Factory(t) {
-      return new (t || SettingService)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_shared_services_network_network_service__WEBPACK_IMPORTED_MODULE_2__["NetworkService"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_shared_services_reference_reference_service__WEBPACK_IMPORTED_MODULE_3__["ReferenceService"]));
+      return new (t || SettingService)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_shared_services_network_network_service__WEBPACK_IMPORTED_MODULE_2__["RubixNetworkService"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_shared_services_reference_reference_service__WEBPACK_IMPORTED_MODULE_3__["ReferenceService"]));
     };
 
     SettingService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjectable"]({
@@ -1907,7 +1907,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         }]
       }], function () {
         return [{
-          type: _shared_services_network_network_service__WEBPACK_IMPORTED_MODULE_2__["NetworkService"]
+          type: _shared_services_network_network_service__WEBPACK_IMPORTED_MODULE_2__["RubixNetworkService"]
         }, {
           type: _shared_services_reference_reference_service__WEBPACK_IMPORTED_MODULE_3__["ReferenceService"]
         }];

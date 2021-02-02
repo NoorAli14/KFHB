@@ -868,7 +868,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SettingService", function() { return SettingService; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/__ivy_ngcc__/fesm2015/core.js");
 /* harmony import */ var _setting_constant__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./setting.constant */ "./src/app/features/setting/setting.constant.ts");
-/* harmony import */ var _shared_services_network_network_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @shared/services/network/network.service */ "./src/app/shared/services/network/network.service.ts");
+/* harmony import */ var _shared_services_network_network_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @shared/services/rubix-network/rubix-network.service.ts */ "./src/app/shared/services/rubix-network/rubix-network.service.ts");
 /* harmony import */ var _shared_services_reference_reference_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @shared/services/reference/reference.service */ "./src/app/shared/services/reference/reference.service.ts");
 
 
@@ -876,26 +876,26 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class SettingService {
-    constructor(_networkService, _refService) {
-        this._networkService = _networkService;
+    constructor(_RubixNetworkService, _refService) {
+        this._RubixNetworkService = _RubixNetworkService;
         this._refService = _refService;
     }
     updatePassword(model) {
-        return this._networkService.onUpdate(_setting_constant__WEBPACK_IMPORTED_MODULE_1__["UPDATE_PASSWORD"], model);
+        return this._RubixNetworkService.onUpdate(_setting_constant__WEBPACK_IMPORTED_MODULE_1__["UPDATE_PASSWORD"], model);
     }
     updateProfile(model) {
-        return this._networkService.onUpdate(_setting_constant__WEBPACK_IMPORTED_MODULE_1__["UPDATE_PROFILE"], model);
+        return this._RubixNetworkService.onUpdate(_setting_constant__WEBPACK_IMPORTED_MODULE_1__["UPDATE_PROFILE"], model);
     }
     getNationalities() {
         return this._refService.getCountries();
     }
 }
-SettingService.ɵfac = function SettingService_Factory(t) { return new (t || SettingService)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_shared_services_network_network_service__WEBPACK_IMPORTED_MODULE_2__["NetworkService"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_shared_services_reference_reference_service__WEBPACK_IMPORTED_MODULE_3__["ReferenceService"])); };
+SettingService.ɵfac = function SettingService_Factory(t) { return new (t || SettingService)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_shared_services_network_network_service__WEBPACK_IMPORTED_MODULE_2__["RubixNetworkService"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_shared_services_reference_reference_service__WEBPACK_IMPORTED_MODULE_3__["ReferenceService"])); };
 SettingService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjectable"]({ token: SettingService, factory: SettingService.ɵfac, providedIn: 'root' });
 /*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵsetClassMetadata"](SettingService, [{
         type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"],
         args: [{ providedIn: 'root' }]
-    }], function () { return [{ type: _shared_services_network_network_service__WEBPACK_IMPORTED_MODULE_2__["NetworkService"] }, { type: _shared_services_reference_reference_service__WEBPACK_IMPORTED_MODULE_3__["ReferenceService"] }]; }, null); })();
+    }], function () { return [{ type: _shared_services_network_network_service__WEBPACK_IMPORTED_MODULE_2__["RubixNetworkService"] }, { type: _shared_services_reference_reference_service__WEBPACK_IMPORTED_MODULE_3__["ReferenceService"] }]; }, null); })();
 
 
 /***/ }),

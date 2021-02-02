@@ -1,10 +1,10 @@
 import { Select } from './../models/common.model';
 import { environment } from '@env/environment';
 const VERSION = '';
-export function createUrl(actionName: string): string {
+export function createRubixUrl(actionName: string): string {
     return `${environment.API_BASE_URL}${actionName}${VERSION}`;
 }
-export function createUrl2(baseUrl, actionName: string): string {
+export function createRetailUrl(baseUrl, actionName: string): string {
     return `${baseUrl}${actionName}${VERSION}`;
 }
 

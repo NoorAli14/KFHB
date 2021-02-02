@@ -1,7 +1,7 @@
 import { APP_CONST } from '@shared/constants/app.constants';
 import { URI } from './../../../shared/constants/app.constants';
 import { AuthUserService } from '@shared/services/user/auth-user.service';
-import { NetworkService } from '@shared/services/network/network.service';
+import { RubixNetworkService } from '@shared/services/rubix-network/rubix-network.service';
 import { Login } from './../../../auth/model/login.model';
 import {
     throwError as observableThrowError,
@@ -21,7 +21,7 @@ import { HttpHeaders } from '@angular/common/http';
 })
 export class AuthenticationService {
     constructor(
-        private network: NetworkService,
+        private network: RubixNetworkService,
         private userService: AuthUserService,
         private storage: StorageService,
         private _refService: ReferenceService

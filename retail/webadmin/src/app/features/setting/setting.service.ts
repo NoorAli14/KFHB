@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { NetworkService } from '@shared/services/network/network.service';
+import { RubixNetworkService } from '@shared/services/rubix-network/rubix-network.service.ts';
 import { Injectable } from '@angular/core';
 import { ChangePasswordModel } from './models/setting.model';
 import { UPDATE_PASSWORD, UPDATE_PROFILE } from './setting.constant';
@@ -8,13 +8,13 @@ import { HttpHeaders } from '@angular/common/http';
 
 @Injectable({providedIn: 'root'})
 export class SettingService {
-    constructor(private _networkService: NetworkService, private _refService: ReferenceService) { }
+    constructor(private _RubixNetworkService: RubixNetworkService, private _refService: ReferenceService) { }
 
     updatePassword(model: ChangePasswordModel): Observable<any>{
-       return this._networkService.onUpdate(UPDATE_PASSWORD, model);
+       return this._RubixNetworkService.onUpdate(UPDATE_PASSWORD, model);
     }
     updateProfile(model: ChangePasswordModel): Observable<any>{
-       return this._networkService.onUpdate(UPDATE_PROFILE, model);
+       return this._RubixNetworkService.onUpdate(UPDATE_PROFILE, model);
     }
     getNationalities(): Observable<any>{
       return this._refService.getCountries();

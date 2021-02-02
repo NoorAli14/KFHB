@@ -10,7 +10,7 @@ import {
 import { Observable, throwError } from 'rxjs';
 import { StorageService } from '../storage/storage.service';
 import { catchError, mergeMap } from 'rxjs/operators';
-import { APP_CONST, URI, createUrl } from '@shared/constants/app.constants';
+import { APP_CONST, URI, createRubixUrl} from '@shared/constants/app.constants';
 import { EventBusService } from '../event-bus/event-bus.service';
 import { AuthenticationService } from '../auth/authentication.service';
 import { Router } from '@angular/router';
@@ -79,7 +79,7 @@ export class AuthInterceptorService implements HttpInterceptor {
         }
     }
     refreshToken(): Observable<any> {
-        const endPoint = `${createUrl(URI.REFRESH)}`;
+        const endPoint = `${createRubixUrl(URI.REFRESH)}`;
         return this.http.post(endPoint, null, { observe: 'response' });
     }
     getHttpOption(refreshing, baseUrl?): any {

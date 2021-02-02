@@ -1415,77 +1415,77 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
     var _shared_services_network_network_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
-    /*! @shared/services/network/network.service */
-    "./src/app/shared/services/network/network.service.ts");
+    /*! @shared/services/rubix-network/rubix-network.service.ts */
+    "./src/app/shared/services/rubix-network/rubix-network.service.ts");
 
     var CalendarService =
     /*#__PURE__*/
     function () {
-      function CalendarService(_networkService) {
+      function CalendarService(_RubixNetworkService) {
         _classCallCheck(this, CalendarService);
 
-        this._networkService = _networkService;
+        this._RubixNetworkService = _RubixNetworkService;
       }
 
       _createClass(CalendarService, [{
         key: "getWorkingDays",
         value: function getWorkingDays() {
-          return this._networkService.getAll(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].WORKING_DAYS);
+          return this._RubixNetworkService.getAll(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].WORKING_DAYS);
         }
       }, {
         key: "createWorkingDay",
         value: function createWorkingDay(model) {
-          return this._networkService.post(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].WORKING_DAYS, model);
+          return this._RubixNetworkService.post(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].WORKING_DAYS, model);
         }
       }, {
         key: "editWorkingDay",
         value: function editWorkingDay(id, model) {
-          return this._networkService.onUpdate("".concat(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].WORKING_DAYS, "/").concat(id), model);
+          return this._RubixNetworkService.onUpdate("".concat(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].WORKING_DAYS, "/").concat(id), model);
         }
       }, {
         key: "deleteWorkingDay",
         value: function deleteWorkingDay(id) {
-          return this._networkService.onDelete("".concat(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].WORKING_DAYS, "/").concat(id));
+          return this._RubixNetworkService.onDelete("".concat(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].WORKING_DAYS, "/").concat(id));
         }
       }, {
         key: "getHolidays",
         value: function getHolidays() {
-          return this._networkService.getAll(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].HOLIDAYS);
+          return this._RubixNetworkService.getAll(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].HOLIDAYS);
         }
       }, {
         key: "createHoliday",
         value: function createHoliday(model) {
-          return this._networkService.post(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].HOLIDAYS, model);
+          return this._RubixNetworkService.post(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].HOLIDAYS, model);
         }
       }, {
         key: "editHoliday",
         value: function editHoliday(id, model) {
-          return this._networkService.onUpdate("".concat(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].HOLIDAYS, "/").concat(id), model);
+          return this._RubixNetworkService.onUpdate("".concat(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].HOLIDAYS, "/").concat(id), model);
         }
       }, {
         key: "deleteHoliday",
         value: function deleteHoliday(id) {
-          return this._networkService.onDelete("".concat(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].HOLIDAYS, "/").concat(id));
+          return this._RubixNetworkService.onDelete("".concat(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].HOLIDAYS, "/").concat(id));
         }
       }, {
         key: "getLeaves",
         value: function getLeaves() {
-          return this._networkService.getAll(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].LEAVES);
+          return this._RubixNetworkService.getAll(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].LEAVES);
         }
       }, {
         key: "createLeave",
         value: function createLeave(model) {
-          return this._networkService.post(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].LEAVES, model);
+          return this._RubixNetworkService.post(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].LEAVES, model);
         }
       }, {
         key: "editLeave",
         value: function editLeave(id, model) {
-          return this._networkService.onUpdate("".concat(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].LEAVES, "/").concat(id), model);
+          return this._RubixNetworkService.onUpdate("".concat(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].LEAVES, "/").concat(id), model);
         }
       }, {
         key: "deleteLeave",
         value: function deleteLeave(id) {
-          return this._networkService.onDelete("".concat(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].LEAVES, "/").concat(id));
+          return this._RubixNetworkService.onDelete("".concat(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].LEAVES, "/").concat(id));
         }
       }]);
 
@@ -1493,7 +1493,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
     }();
 
     CalendarService.ɵfac = function CalendarService_Factory(t) {
-      return new (t || CalendarService)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵinject"](_shared_services_network_network_service__WEBPACK_IMPORTED_MODULE_2__["NetworkService"]));
+      return new (t || CalendarService)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵinject"](_shared_services_network_network_service__WEBPACK_IMPORTED_MODULE_2__["RubixNetworkService"]));
     };
 
     CalendarService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineInjectable"]({
@@ -1511,7 +1511,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
         }]
       }], function () {
         return [{
-          type: _shared_services_network_network_service__WEBPACK_IMPORTED_MODULE_2__["NetworkService"]
+          type: _shared_services_network_network_service__WEBPACK_IMPORTED_MODULE_2__["RubixNetworkService"]
         }];
       }, null);
     })();

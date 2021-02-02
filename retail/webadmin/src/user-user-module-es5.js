@@ -1589,8 +1589,8 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
     var _shared_services_network_network_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
-    /*! @shared/services/network/network.service */
-    "./src/app/shared/services/network/network.service.ts");
+    /*! @shared/services/rubix-network/rubix-network.service.ts */
+    "./src/app/shared/services/rubix-network/rubix-network.service.ts");
     /* harmony import */
 
 
@@ -1601,10 +1601,10 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
     var UserService =
     /*#__PURE__*/
     function () {
-      function UserService(_networkService, _refService) {
+      function UserService(_RubixNetworkService, _refService) {
         _classCallCheck(this, UserService);
 
-        this._networkService = _networkService;
+        this._RubixNetworkService = _RubixNetworkService;
         this._refService = _refService;
         this.modules = [];
       }
@@ -1612,37 +1612,37 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
       _createClass(UserService, [{
         key: "createUser",
         value: function createUser(user) {
-          return this._networkService.post(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].USER_INVITATION, user);
+          return this._RubixNetworkService.post(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].USER_INVITATION, user);
         }
       }, {
         key: "resendInvite",
         value: function resendInvite(id) {
-          return this._networkService.post("".concat(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].USER_INVITATION, "/").concat(id, "/resend"), {});
+          return this._RubixNetworkService.post("".concat(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].USER_INVITATION, "/").concat(id, "/resend"), {});
         }
       }, {
         key: "getUserById",
         value: function getUserById(id) {
-          return this._networkService.getById("".concat(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].USER, "/").concat(id));
+          return this._RubixNetworkService.getById("".concat(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].USER, "/").concat(id));
         }
       }, {
         key: "getUsers",
         value: function getUsers() {
-          return this._networkService.getAll(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].USER);
+          return this._RubixNetworkService.getAll(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].USER);
         }
       }, {
         key: "getRoles",
         value: function getRoles() {
-          return this._networkService.getAll(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].ROLE);
+          return this._RubixNetworkService.getAll(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].ROLE);
         }
       }, {
         key: "editUser",
         value: function editUser(id, model) {
-          return this._networkService.onUpdate("".concat(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].USER, "/").concat(id), model);
+          return this._RubixNetworkService.onUpdate("".concat(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].USER, "/").concat(id), model);
         }
       }, {
         key: "deleteUser",
         value: function deleteUser(id) {
-          return this._networkService.onDelete("".concat(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].USER, "/").concat(id));
+          return this._RubixNetworkService.onDelete("".concat(_shared_constants_app_constants__WEBPACK_IMPORTED_MODULE_0__["URI"].USER, "/").concat(id));
         }
       }, {
         key: "forkUserData",
@@ -1677,7 +1677,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
     }();
 
     UserService.ɵfac = function UserService_Factory(t) {
-      return new (t || UserService)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵinject"](_shared_services_network_network_service__WEBPACK_IMPORTED_MODULE_3__["NetworkService"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵinject"](_shared_services_reference_reference_service__WEBPACK_IMPORTED_MODULE_4__["ReferenceService"]));
+      return new (t || UserService)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵinject"](_shared_services_network_network_service__WEBPACK_IMPORTED_MODULE_3__["RubixNetworkService"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵinject"](_shared_services_reference_reference_service__WEBPACK_IMPORTED_MODULE_4__["ReferenceService"]));
     };
 
     UserService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineInjectable"]({
@@ -1695,7 +1695,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
         }]
       }], function () {
         return [{
-          type: _shared_services_network_network_service__WEBPACK_IMPORTED_MODULE_3__["NetworkService"]
+          type: _shared_services_network_network_service__WEBPACK_IMPORTED_MODULE_3__["RubixNetworkService"]
         }, {
           type: _shared_services_reference_reference_service__WEBPACK_IMPORTED_MODULE_4__["ReferenceService"]
         }];
