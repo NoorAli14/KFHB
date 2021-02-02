@@ -21,7 +21,7 @@ import { map, debounceTime, distinctUntilChanged, skip } from 'rxjs/operators';
 import { GENDER_LIST } from '@shared/constants/app.constants';
 import { fuseAnimations } from '@fuse/animations';
 import { BaseComponent } from '@shared/components/base/base.component';
-
+var _context;
 @Component({
     selector: 'app-advance-search',
     templateUrl: './advance-search.component.html',
@@ -53,6 +53,7 @@ export class AdvanceSearchComponent extends BaseComponent implements AfterConten
     statusList = STATUS_LIST;
     filteredNationalities: any[] = [];
     maxDate: Date;
+    _context:any;
     @Input() nationalityList;
     @Output() filterChange = new EventEmitter();
     @Output() filterReset = new EventEmitter();
@@ -69,6 +70,7 @@ export class AdvanceSearchComponent extends BaseComponent implements AfterConten
         this.initSearch();
         this.genderList = [...this.genderList, { id: '', name: 'All' }];
         this.filteredNationalities = this.nationalityList;
+        _context=this;
     }
 
     openAdvance(status): void {
@@ -133,7 +135,7 @@ export class AdvanceSearchComponent extends BaseComponent implements AfterConten
         if (!id) {
             return '';
         }
-        return getName(id, 'nationality', cloneDeep(this.nationalityList));
+        return getName(id, 'nationality', cloneDeep(_context.nationalityList));
     }
 
     onReset(): void {

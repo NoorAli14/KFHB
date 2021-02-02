@@ -1,13 +1,14 @@
 import { forkJoin, Observable } from 'rxjs';
-import { RubixNetworkService } from './../../shared/services/rubix-network/rubix-network.service';
 import { Injectable } from '@angular/core';
 import { URI } from '@shared/constants/app.constants';
+import { RubixNetworkService } from '@shared/services/rubix-network/rubix-network.service';
+import { CorporateNetworkService } from '@shared/services/corporate-network/corporate-network.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class CustomerService {
-    constructor(private network: RubixNetworkService) {
+    constructor(private network: RubixNetworkService, private cobNetwork: CorporateNetworkService) {
         
     }
     getCustomers(queryParams): Observable<any>{
@@ -19,10 +20,35 @@ export class CustomerService {
     getCustomersScreenShots(id): Observable<any>{
         return this.network.getAll(`${URI.CUSTOMER360}/${id}/attachments`);
     }
+    updateCustomer(id,model): Observable<any>{
+        return this.network.onUpdate(`${URI.CUSTOMER360}/${id}`,model);
+    }
+    createAccount(id): Observable<any>{
+        return this.network.post(`${URI.CUSTOMER360}/${id}/account`,{});
+    }
+    getAMLData(id): Observable<any>{
+        return this.network.post(`${URI.AML}screening?customer_id=${id}`,{});
+    }
+  
     forkCustomer360(id){
         return forkJoin([
             this.getCustomerById(id),
             this.getCustomersScreenShots(id)
         ]);
+    }
+    getCompanyDetail(id): Observable<any>{
+        return this.cobNetwork.getAll(`${URI.COMPANY_DETAIL}/${id}`);
+    }
+    getMemberDetails(id): Observable<any>{
+        return this.cobNetwork.getAll(`${URI.MEMBER_DETAIL}/${id}`);
+    }
+    getCorporateCustomerData(entityId,entityMemberId){
+        return forkJoin([
+            this.getCompanyDetail(entityId),
+            this.getMemberDetails(entityMemberId)
+        ]);
+    }
+    updateCorporateMember(id,model): Observable<any>{
+        return this.cobNetwork.onUpdate(`${URI.MEMBER_DETAIL}/${id}`,model);
     }
 }

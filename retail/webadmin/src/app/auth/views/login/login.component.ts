@@ -9,6 +9,7 @@ import { AuthenticationService } from "@shared/services/auth/authentication.serv
 import { BaseComponent } from "@shared/components/base/base.component";
 import { takeUntil } from "rxjs/operators";
 import { MESSAGES } from "@shared/constants/messages.constant";
+import { MatDialog } from "@angular/material/dialog";
 
 @Component({
     selector: 'app-login',
@@ -26,6 +27,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
         private _authService: AuthenticationService,
         private route: ActivatedRoute,
         private router: Router,
+        public _matDialog: MatDialog,
         injector: Injector
     ) {
         super(injector);
@@ -53,6 +55,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
             email: new FormControl("", [Validators.required, Validators.email]),
             password: new FormControl("", [Validators.required]),
         });
+        this._matDialog.closeAll();
     }
     onSubmit = (): void => {
         const model = this.loginForm.value;

@@ -1,6 +1,11 @@
 <ng-container [ngSwitch]="status" >
-    <span *ngSwitchCase="'IN_ACTIVE'" class="status text-truncate h6 p-4 orange-500 label-status" >In Active</span>
+    <span *ngSwitchCase="'IN_ACTIVE'" class="status text-truncate h6 p-4 voilet-500 label-status" >In Active</span>
     <span *ngSwitchCase="'ACTIVE'" class="status text-truncate h6 p-4 green-800 label-status" > Active</span>
     <span *ngSwitchCase="'LOCKED'" class="status text-truncate h6 p-4 orange-500 label-status" > Locked</span>
-    <span *ngSwitchCase="'PENDING'" class="status text-truncate h6 p-4 orange-500 label-status" >Pending</span>
+    <span *ngSwitchCase="'PENDING'" class="status text-truncate h6 p-4 purple-500 label-status" >Pending</span>
+    <span *ngSwitchCase="'REJECTED'" class="status text-truncate h6 p-4 red-500 label-status" >Rejected</span>
+    <span *ngSwitchCase="'DROPPED'" class="status text-truncate h6 p-4 yellow-500 label-status" >Dropped</span>
+    <span *ngSwitchCase="'REFER_TO_BUSINESS'" class="status text-truncate h6 p-4 grey-500 label-status" >Referred</span>
+    <span *ngSwitchCase="'ACCEPTED'" class="status text-truncate h6 p-4 blue-500 label-status" >Accepted</span>
+    <span *ngSwitchCase="'RETRY'" class="status text-truncate h6 p-4 pink-500 label-status" >Retry</span>
 </ng-container>

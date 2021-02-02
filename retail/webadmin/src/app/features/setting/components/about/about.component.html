@@ -42,7 +42,7 @@
 
                     <div class="info-line">
                         <div class="title">Date of Birth</div>
-                        <div class="info" *ngIf="user.dateOfBirth ; else defaultText">{{user.dateOfBirth | date:'mediumDate'}}</div>
+                        <div class="info" *ngIf="user.dateOfBirth ; else defaultText">{{user.dateOfBirth | dateFormat}}</div>
                     </div>
                     <div class="info-line">
                         <div class="title">Contact</div>
@@ -51,7 +51,7 @@
 
                     <div class="info-line">
                         <div class="title">Created On</div>
-                        <div class="info" *ngIf="user.createdOn ; else defaultText">{{user.createdOn | date:'mediumDate'}}</div>
+                        <div class="info" *ngIf="user.createdOn ; else defaultText">{{user.createdOn | dateFormat}}</div>
                     </div>
 
                     <ng-template #defaultText>

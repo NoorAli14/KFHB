@@ -14,8 +14,9 @@ import { AdvanceSearchComponent } from './components/advance-search/advance-sear
 import { MatSortModule } from '@angular/material/sort';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MaterialFormsModule } from '@shared/modules/material-forms/material-forms.module';
+import { CobCustomerDetailComponent } from './components/cob-customer-detail/cob-customer-detail.component';
 @NgModule({
-  declarations: [CustomerComponent, CustomerDetailComponent, AdvanceSearchComponent],
+  declarations: [CustomerComponent, CustomerDetailComponent, AdvanceSearchComponent, CobCustomerDetailComponent],
   imports: [
     CommonModule,
     CustomerRoutingModule,

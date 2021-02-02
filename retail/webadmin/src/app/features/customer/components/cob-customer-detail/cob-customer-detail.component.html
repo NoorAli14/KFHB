@@ -1,0 +1,215 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar class="mat-accent m-0">
+        <mat-toolbar-row fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+            <div class="logo mb-24 mb-md-0" fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon mr-12" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+                    person
+                </mat-icon>
+                <span class="logo-text" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                    <span *ngIf="customerReponse && customerReponse['first_name']"> {{customerReponse['first_name'] }}</span>
+                </span>
+            </div>
+            <button mat-icon-button (click)="matDialogRef.close()" aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <div mat-dialog-content class="p-24 m-0" style="max-height: 83vh !important">
+        <mat-tab-group>
+            <mat-tab label="COMPANY DETAILS">
+                <div class="tab-content p-24 ">
+                    <div class="profile-box info-box general">
+                        <div class="content" fusePerfectScrollbar>
+                            <div fxLayout="row wrap">
+
+                                <div class="info-line">
+                                    <div class="title">Country</div>
+                                    <div class="info"
+                                        *ngIf="companyDetail && companyDetail.country ; else defaultText">
+                                        {{companyDetail.country.name }}</div>
+                                </div>
+                                <div class="info-line">
+                                    <div class="title">Company Type</div>
+                                    <div class="info"
+                                        *ngIf="companyDetail && companyDetail.company_type ; else defaultText">
+                                        {{companyDetail.company_type.type }}</div>
+                                </div>
+                                <div class="info-line">
+                                    <div class="title">Company Status</div>
+                                    <div class="info"
+                                        *ngIf="companyDetail?.status ; else defaultText">
+                                        {{companyDetail.status }}</div>
+                                </div>
+                                <div class="info-line">
+                                    <div class="title">Nationality</div>
+                                    <div class="info"
+                                    *ngIf="companyDetail && companyDetail.nationality ; else defaultText">
+                                    {{companyDetail.nationality.nationality }}</div>
+                                </div>
+                                <div class="info-line">
+                                    <div class="title">Registration Date</div>
+                                    <div class="info"
+                                    *ngIf="companyDetail?.registration_date ; else defaultText">
+                                    {{companyDetail.registration_date  | dateFormat }}</div>
+                                </div>
+                                <div class="info-line">
+                                    <div class="title">Company Period</div>
+                                    <div class="info"
+                                    *ngIf="companyDetail?.company_period ; else defaultText">
+                                    {{companyDetail.company_period }}</div>
+                                </div>
+
+                                <div class="info-line">
+                                    <div class="title">Permission Status</div>
+                                    <div class="info"
+                                    *ngIf="companyDetail?.permission_status ; else defaultText">
+                                    {{companyDetail.permission_status }}</div>
+                                </div>
+                                <div class="info-line">
+                                    <div class="title">Condition</div>
+                                    <div class="info"
+                                    *ngIf="companyDetail?.condition ; else defaultText">
+                                    {{companyDetail.condition }}</div>
+                                </div>
+                                <div class="info-line">
+                                    <div class="title">BCCI Issue Date</div>
+                                    <div class="info"
+                                    *ngIf="companyDetail?.bcci_issue_date ; else defaultText">
+                                    {{companyDetail.bcci_issue_date  | dateFormat }}</div>
+                                </div>
+                                <div class="info-line">
+                                    <div class="title">BCCI Expiry Date</div>
+                                    <div class="info"
+                                    *ngIf="companyDetail?.bcci_expiry_date ; else defaultText">
+                                    {{companyDetail.bcci_expiry_date  | dateFormat }}</div>
+                                </div>
+                                <div class="info-line">
+                                    <div class="title">Activity Expiry Date</div>
+                                    <div class="info"
+                                    *ngIf="companyDetail?.expiry_date ; else defaultText">
+                                    {{companyDetail.expiry_date  | dateFormat }}</div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab label="MEMBER DETAILS">
+                <div class="tab-content p-24 ">
+                    <div class="profile-box info-box general">
+                        <div class="content" fusePerfectScrollbar>
+                            <div fxLayout="row wrap">
+
+                                <div class="info-line">
+                                    <div class="title">Name</div>
+                                    <div class="info"
+                                        *ngIf="memberDetail?.profile?.name_en ; else defaultText">
+                                        {{memberDetail?.profile?.name_en }}</div>
+                                </div>
+                                <div class="info-line">
+                                    <div class="title">Nationality</div>
+                                    <div class="info"
+                                    *ngIf="memberDetail?.profile?.nationality ; else defaultText">
+                                    {{memberDetail?.profile?.nationality.nationality }}</div>
+                                </div>
+                                <div class="info-line">
+                                    <div class="title">Number of shares</div>
+                                    <div class="info"
+                                        *ngIf="memberDetail?.profile?.no_shares ; else defaultText">
+                                        {{memberDetail?.profile?.no_shares }}</div>
+                                </div>
+                                <div class="info-line">
+                                    <div class="title">Ownership</div>
+                                    <div class="info"
+                                    *ngIf="memberDetail?.profile?.ownership ; else defaultText">
+                                    {{memberDetail?.profile?.ownership }}</div>
+                                </div>
+                                <div class="info-line">
+                                    <div class="title">Status</div>
+                                    <div class="info"
+                                    *ngIf="memberDetail?.status ; else defaultText">
+                                    {{memberDetail?.status }}</div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab label="MEMBER PASSPORT COPY">
+                <div class="tab-content p-24 " fusePerfectScrollbar>
+                    <div class="profile-box info-box general">
+                        <div class="content">
+                            <div fxLayout="row wrap" fxLayoutAlign="center center">
+                                <div *ngFor="let item of passportDocuments; index as i">
+                                    <div class="product-image">
+                                        <img [lightbox]="i" class="gallery" [gallery]="'passportDocuments'"
+                                            [src]="item.data.thumb">
+                                        <strong>{{item.data.title}}</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab label="REMARKS">
+                <div class="tab-content p-24 " fusePerfectScrollbar>
+                    <div class="profile-box info-box general">
+                        <div class="content" fxLayout="row" fxLayoutAlign="center start">
+                            <div fxLayout="row" style="width: 50%;" fxLayoutAlign="center center">
+                                <form class="p-24" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0"
+                                    name="remarksForm" (ngSubmit)="onSubmit()" novalidate [formGroup]="remarksForm">
+                                    <div fxLayout="row " *ngIf="customerReponse.account" class="green-800"
+                                        style="padding:15px 10px; margin-bottom: 20px;">
+                                        Customer account has been created.
+                                    </div>
+                                    <div fxLayout="row wrap" fxLayout.lt-lg="column" fxLayoutAlign.lt-lg="center"
+                                        fxLayoutAlign="start center" fxFlex="1 1 auto">
+                                        <mat-form-field appearance="outline" fxFlex="100">
+                                            <mat-label>Status <app-required-indicator></app-required-indicator>
+                                            </mat-label>
+                                            <mat-select formControlName="agent_status">
+                                                <mat-option *ngFor="let item of remarksList" [value]="item.id">
+                                                    {{ item.name }}
+                                                </mat-option>
+                                            </mat-select>
+                                            <mat-icon matSuffix class="secondary-text">security</mat-icon>
+                                            <mat-error>
+                                                <app-mat-error [control]="remarksForm.get('agent_status')"></app-mat-error>
+                                            </mat-error>
+                                        </mat-form-field>
+                                        <mat-form-field appearance="outline" fxFlex="100">
+                                            <mat-label>Remarks </mat-label>
+                                            <textarea matInput placeholder="Remarks"
+                                                formControlName="agent_remarks"></textarea>
+                                            <mat-error>
+                                                <app-mat-error [control]="remarksForm.get('agent_remarks')"></app-mat-error>
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div class="actions" fxLayoutGap="10px" fxLayout="row" fxLayoutAlign="end center">
+
+                                        <button appPermission [permissions]="userPermissions" [type]="'edit'"
+                                            type="submit" [disabled]="remarksForm.invalid || customerReponse.account"
+                                            class="submit-button" mat-raised-button color="accent"
+                                            aria-label="Send Message">
+                                            Submit
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+</div>
+
+<ng-template #defaultText>
+    <app-default-text></app-default-text>
+</ng-template>

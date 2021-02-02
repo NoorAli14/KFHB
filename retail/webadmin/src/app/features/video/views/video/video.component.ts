@@ -27,11 +27,11 @@ export class VideoComponent implements OnInit, OnDestroy {
 
     loadIframe(): void {
         const token = this.authService.accessToken;
+        const refreshToken = this.authService.refreshToken;
         const channelId = environment.CHANNEL_ID;
         const tenantId = environment.TENANT_ID;
-        
         this.url = this.sanitizer.bypassSecurityTrustResourceUrl(
-            `${environment.VIDEO_URL}/login?token=${token}&channelid=${channelId}&tenantid=${tenantId}`
+            `${environment.VIDEO_URL}/login?token=${token}&channelid=${channelId}&tenantid=${tenantId}&refreshtoken=${refreshToken}`
         );
     }
     ngOnDestroy(): void{

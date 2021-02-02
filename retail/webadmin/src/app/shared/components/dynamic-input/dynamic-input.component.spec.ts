@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { LogsAdvanceSearchComponent } from './advance-search.component';
 
+import { DynamicInputComponent } from './dynamic-input.component';
 
-describe('LogsAdvanceSearchComponent', () => {
-  let component: LogsAdvanceSearchComponent;
-  let fixture: ComponentFixture<LogsAdvanceSearchComponent>;
+describe('DynamicInputComponent', () => {
+  let component: DynamicInputComponent;
+  let fixture: ComponentFixture<DynamicInputComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LogsAdvanceSearchComponent ]
+      declarations: [ DynamicInputComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LogsAdvanceSearchComponent);
+    fixture = TestBed.createComponent(DynamicInputComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

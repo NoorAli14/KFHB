@@ -72,7 +72,7 @@ export const removeRandom = (text) => {
 export const extractErrorString = (response) => {
     if (response.errors && !isArray(response.errors)) {
         return response.errors.message;
-    } else if (response.errors && isArray(response.errors && response.errors.length>0)) {
+    } else if (response.errors && isArray(response.errors) && response.errors.length > 0) {
         return response.errors[0].message;
     } else {
         return MESSAGES.UNKNOWN;
@@ -115,3 +115,28 @@ export const isUUID = (uuid) => {
     }
     return true;
 };
+
+export const uniqeBy = (a, key) => {
+    var seen = {};
+    return a.filter(function (item) {
+        var k = item[key];
+        return seen.hasOwnProperty(k) ? false : (seen[k] = true);
+    })
+
+}
+
+export const b64DecodeUnicode = (str) => {
+    // Going backwards: from bytestream, to percent-encoding, to original string.
+    return decodeURIComponent(atob(str).split('').map(function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+}
+
+export const getRecentRecord = (array, date) => {
+    const mostRecentDate = new Date(Math.max(...array.map(e => new Date(e[date]))));
+    const mostRecentObject = array.filter(e => {
+        const d = new Date(e[date]);
+        return d.getTime() == mostRecentDate.getTime();
+    });
+    return mostRecentObject && mostRecentObject.length > 0 ? mostRecentObject[0] : null;
+}

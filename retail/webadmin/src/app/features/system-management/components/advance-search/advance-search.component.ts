@@ -111,11 +111,7 @@ export class LogsAdvanceSearchComponent extends BaseComponent implements AfterCo
         });
     }
     onSelectUser(id?) {
-        if (id) {
-           debugger
-        } else {
-            debugger
-        }
+       
     }
 
     onReset(): void {

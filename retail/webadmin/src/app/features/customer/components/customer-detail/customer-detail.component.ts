@@ -1,9 +1,10 @@
-import { DEFAULT_IMAGE } from "./../../../../shared/constants/app.constants";
-import { snakeToCamelObject } from "@shared/helpers/global.helper";
+import { DEFAULT_IMAGE, MODULES, REMARKS_LIST } from "@shared/constants/app.constants";
+import { b64DecodeUnicode,  getRecentRecord, snakeToCamelObject, uniqeBy } from "@shared/helpers/global.helper";
 import {
     AfterContentChecked,
     Component,
     Inject,
+    Injector,
     OnInit,
     ViewEncapsulation,
 } from "@angular/core";
@@ -18,6 +19,9 @@ import {
     ImageSize,
 } from "@ngx-gallery/core";
 import { AuthenticationService } from "@shared/services/auth/authentication.service";
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { CustomerService } from '@feature/customer/customer.service';
+import { BaseComponent } from '@shared/components/base/base.component';
 @Component({
     selector: "app-customer-detail",
     templateUrl: "./customer-detail.component.html",
@@ -25,7 +29,8 @@ import { AuthenticationService } from "@shared/services/auth/authentication.serv
     animations: fuseAnimations,
     encapsulation: ViewEncapsulation.None,
 })
-export class CustomerDetailComponent implements OnInit, AfterContentChecked {
+export class CustomerDetailComponent extends BaseComponent implements OnInit, AfterContentChecked {
+
     nationalIdDocuments: GalleryItem[];
     passportDocuments: GalleryItem[];
     screenShots: GalleryItem[];
@@ -38,28 +43,44 @@ export class CustomerDetailComponent implements OnInit, AfterContentChecked {
     customerReponse: any;
     screenShotsResponse: any;
     screenShotsMapped = [];
+    remarksList = REMARKS_LIST;
+    remarksForm: FormGroup;
+    isCreateAccount: boolean;
+    amlResponse: any
     constructor(
         public gallery: Gallery,
         public matDialogRef: MatDialogRef<CustomerDetailComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
-        private authService: AuthenticationService
-    ) {}
+        private authService: AuthenticationService,
+        private customerService: CustomerService,
+        injector: Injector
+    ) {
+        super(injector, MODULES.CUSTOMERS);
+        super.ngOnInit();
+    }
 
     ngOnInit(): void {
         this.customerReponse = this.data[0];
         this.screenShotsResponse = this.data[1];
         this.initData();
+        this.remarksForm = new FormGroup({
+            remarks: new FormControl(this.customerReponse.remarks,),
+            status: new FormControl(this.customerReponse.status, [Validators.required]),
+        });
     }
     initData(): void {
+
         let data = this.customerReponse.templates?.map((item) => {
-            return { ...item, results: JSON.parse(atob(item.results)) };
+            return {
+                ...item, results: JSON.parse(b64DecodeUnicode(item.results))
+            }
         });
         data = data ? data : [];
         const civilIdBackProcessData =
             this.customerReponse.documents.length > 0
                 ? this.customerReponse.documents.find(
-                      (x) => x.name === "NATIONAL_ID_BACK_SIDE"
-                  )
+                    (x) => x.name === "NATIONAL_ID_BACK_SIDE"
+                )
                 : null;
         this.civilIdBackProcessed = civilIdBackProcessData
             ? JSON.parse(civilIdBackProcessData.processed_data)?.mrz
@@ -67,15 +88,22 @@ export class CustomerDetailComponent implements OnInit, AfterContentChecked {
         const passportProcessData =
             this.customerReponse.documents.length > 0
                 ? this.customerReponse.documents.find(
-                      (x) => x.name === "PASSPORT"
-                  )
+                    (x) => x.name === "PASSPORT"
+                )
                 : null;
         this.passportProcessed = passportProcessData
             ? JSON.parse(passportProcessData.processed_data)?.mrz
             : null;
         this.customer = snakeToCamelObject(this.customerReponse);
         this.FATCA = data.find((x) => x.results.name === "FATCA");
-        this.bankingTransaction = data.find((x) => x.results.name === "KYC");
+        const bankingTransaction = data.filter((x) => x.results.name === "Banking Transactions");
+
+        this.bankingTransaction = getRecentRecord(bankingTransaction, 'created_on');
+        const amlResponse = this.customerReponse.amlResponses ? this.customerReponse.amlResponses[0] : null;
+        if (amlResponse && amlResponse.responses) {
+            this.amlResponse = getRecentRecord(amlResponse.responses, 'created_on');
+            this.amlResponse['response_text'] = JSON.parse(this.amlResponse['response_text'])
+        }
 
         const _nationalIdDocuments = [
             {
@@ -163,7 +191,7 @@ export class CustomerDetailComponent implements OnInit, AfterContentChecked {
     }
 
     getUrl(url): string {
-        return `${environment.API_BASE_URL}/api/v1${url}`;
+        return `${environment.RETAIL_API_BASE_URL}/api/v1${url}`;
     }
 
     previewDocumentUrl(type, isExtracted): string {
@@ -203,5 +231,36 @@ export class CustomerDetailComponent implements OnInit, AfterContentChecked {
         });
 
         lightboxGalleryRef.load(images);
+    }
+
+    onSubmit() {
+        const model = this.remarksForm.value;
+        if (model.status === 'ACCEPTED' && this.screenShots.length < 5) {
+            this._notifier.warning('Please upload screenshots to continue the onboarding process')
+            return;
+        }
+        this.customerService.updateCustomer(this.customer.id, model).subscribe((response) => {
+            if (model.status === 'ACCEPTED') {
+                this.createAccount();
+                return;
+            } else {
+                this._notifier.success('Remarks added successfully')
+            }
+        },
+            (response) => super.onError(response))
+    }
+    createAccount() {
+        this.customerService.createAccount(this.customer.id)
+            .subscribe((response) => {
+                this._notifier.success('Account created successfully')
+            }, (response) => super.onError(response))
+    }
+    getAMLData() {
+        this.customerService.getAMLData(this.customer.id)
+            .subscribe((response) => {
+                this.amlResponse = getRecentRecord(response.responses, 'created_on');
+                this.amlResponse['response_text'] = JSON.parse(this.amlResponse['response_text'])
+                this._notifier.success('AML data fetched successfully.');
+            }, (response) => super.onError(response))
     }
 }

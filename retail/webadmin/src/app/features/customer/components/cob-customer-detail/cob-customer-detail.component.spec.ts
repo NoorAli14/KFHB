@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { LogsAdvanceSearchComponent } from './advance-search.component';
 
+import { CobCustomerDetailComponent } from './cob-customer-detail.component';
 
-describe('LogsAdvanceSearchComponent', () => {
-  let component: LogsAdvanceSearchComponent;
-  let fixture: ComponentFixture<LogsAdvanceSearchComponent>;
+describe('CobCustomerDetailComponent', () => {
+  let component: CobCustomerDetailComponent;
+  let fixture: ComponentFixture<CobCustomerDetailComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LogsAdvanceSearchComponent ]
+      declarations: [ CobCustomerDetailComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LogsAdvanceSearchComponent);
+    fixture = TestBed.createComponent(CobCustomerDetailComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

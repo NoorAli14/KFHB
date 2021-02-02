@@ -15,6 +15,10 @@ import { DefaultTextComponent } from './components/default-text/default-text.com
 import { MessageBoxComponent } from './components/message-box/message-box.component';
 import { RequiredIndicatorComponent } from './components/required-indicator/required-indicator.component';
 import { StatusComponent } from './components/status/status.component';
+import { DateFormatPipe } from './pipes/date/date.pipe';
+import { DateTimeFormatPipe } from './pipes/date-time/date-time.pipe';
+import { DynamicInputComponent } from './components/dynamic-input/dynamic-input.component';
+import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
     declarations: [
@@ -28,11 +32,15 @@ import { StatusComponent } from './components/status/status.component';
         MessageBoxComponent,
         RequiredIndicatorComponent,
         StatusComponent,
+        DateFormatPipe,
+        DateTimeFormatPipe,
+        DynamicInputComponent,
     ],
     imports: [
         ReactiveFormsModule,
         FormsModule,
         CommonModule,
+        MatRadioModule,
         FlexLayoutModule,
         MatToolbarModule,
         MaterialModule,
@@ -46,7 +54,10 @@ import { StatusComponent } from './components/status/status.component';
         BaseComponent,
         DefaultTextComponent,
         RequiredIndicatorComponent,
-        StatusComponent
+        StatusComponent,
+        DateFormatPipe,
+        DateTimeFormatPipe,
+        DynamicInputComponent
     ],
 })
 export class SharedModule {}
