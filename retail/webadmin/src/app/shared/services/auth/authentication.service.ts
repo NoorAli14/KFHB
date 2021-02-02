@@ -1,7 +1,6 @@
 import { APP_CONST } from '@shared/constants/app.constants';
 import { URI } from './../../../shared/constants/app.constants';
 import { AuthUserService } from '@shared/services/user/auth-user.service';
-import { NetworkService } from '@shared/services/network/network.service';
 import { Login } from './../../../auth/model/login.model';
 import {
     throwError as observableThrowError,
@@ -16,12 +15,13 @@ import { StorageService } from '../storage/storage.service';
 import * as jwt_decode from 'jwt-decode';
 import { ReferenceService } from '../reference/reference.service';
 import { HttpHeaders } from '@angular/common/http';
+import { RubixNetworkService } from '../rubix-network/rubix-network.service';
 @Injectable({
     providedIn: 'root',
 })
 export class AuthenticationService {
     constructor(
-        private network: NetworkService,
+        private network: RubixNetworkService,
         private userService: AuthUserService,
         private storage: StorageService,
         private _refService: ReferenceService

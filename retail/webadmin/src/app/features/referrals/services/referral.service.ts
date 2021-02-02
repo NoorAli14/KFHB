@@ -1,18 +1,18 @@
 import { URI } from '@shared/constants/app.constants';
 import { Injectable } from '@angular/core';
 import { Observable, forkJoin } from 'rxjs';
-import { ApiService } from '@shared/services/network/api.service';
+import { RetailNetworkService } from '@shared/services/network/retail-network.service';
 import { environment } from '../../../../environments/environment';
 
 @Injectable({
     providedIn: 'root',
 })
 export class ReferralService {
-    constructor(private _networkService: ApiService) { }
+    constructor(private _RetailNetworkService: RetailNetworkService) { }
     getTransactions(): Observable<any> {
-        return this._networkService.getAll(environment.API_BASE_URL_2, URI.REFERRAL_TRANSACTIONS);
+        return this._RetailNetworkService.getAll(environment.API_BASE_URL_2, URI.REFERRAL_TRANSACTIONS);
     }
     getTransactionsReport(): Observable<any> {
-        return this._networkService.getAll(environment.API_BASE_URL_2, URI.REFERRAL_TRANSACTIONS_REPORT);
+        return this._RetailNetworkService.getAll(environment.API_BASE_URL_2, URI.REFERRAL_TRANSACTIONS_REPORT);
     }
 }

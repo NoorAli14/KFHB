@@ -6,7 +6,7 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { EventBusService } from '../event-bus/event-bus.service';
 import { EmitEvent } from '@shared/models/emit-event.model';
 import { Events } from '@shared/enums/events.enum';
-import { snakeToCamelObject } from '@shared/helpers/global.helper';
+import { snakeToCamelObject, uniqeBy } from '@shared/helpers/global.helper';
 import { cloneDeep } from 'lodash';
 
 @Injectable({ providedIn: 'root' })
@@ -115,10 +115,10 @@ export class AuthUserService {
     }
 
     set User(user) {
-        
+
         this._user = snakeToCamelObject(user);
         this.eventService.emit(
-            new EmitEvent(Events.USER_UPDATED, this._user )
+            new EmitEvent(Events.USER_UPDATED, this._user)
         );
         this.storage.setItem(APP_CONST.CURRENT_USER, this._user);
     }
@@ -130,13 +130,33 @@ export class AuthUserService {
     setData(response): void {
         const clone = cloneDeep(response);
         const sidebarModules = this.configureModules(clone.modules);
-        this.modules = sidebarModules;
+        
+        this.modules = this.removeDuplicates(sidebarModules);
         this.User = cloneDeep(response);
     }
     isLoggedIn(): boolean {
         return this._isLoggedIn;
     }
+    removeDuplicates(modules: any[]) {
+        const copy: any[] = cloneDeep(modules);
+        const distinctModules = [];
+        modules.forEach((item) => {
+            const duplicates = copy.filter(x => x.id == item.id);
+            if (duplicates?.length > 1) {
+                item.permissions = this.getMergedPermissions(duplicates);
+            }
+            distinctModules.push(item)
+        })
+        return uniqeBy(distinctModules,'id');
+    }
+    getMergedPermissions(modules: any[]) {
+        let permissions = [];
+        modules.forEach(item => {
+            permissions = [...item.permissions, ...permissions]
+        })
 
+        return uniqeBy(permissions, 'record_type');
+    }
     getPermissionsByModule(name): any {
         let modules;
         if (this._sidebarModules) { modules = this._sidebarModules; }
@@ -147,7 +167,7 @@ export class AuthUserService {
     }
     private configureModules(modules: any[]): any {
         return modules.map((item) => {
-            const isChildren = item.sub_modules &&  item.sub_modules.length > 0;
+            const isChildren = item.sub_modules && item.sub_modules.length > 0;
             item.type = isChildren ? 'collapsable' : 'item';
             const data = this.config.find((x) => x.id === item.slug);
             if (isChildren) {

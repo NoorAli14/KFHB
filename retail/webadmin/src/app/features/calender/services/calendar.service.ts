@@ -1,16 +1,16 @@
 import { URI } from '@shared/constants/app.constants';
 import { Injectable } from '@angular/core';
-import { NetworkService } from '@shared/services/network/network.service';
 import { WorkingDay } from '../models/working-day.model';
 import { Holiday } from '../models/holiday.model';
 import { Leave } from '../models/leave.model';
 import { forkJoin, Observable } from 'rxjs';
+import { RubixNetworkService } from '@shared/services/rubix-network/rubix-network.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class CalendarService {
-    constructor(private _networkService: NetworkService) {}
+    constructor(private _networkService: RubixNetworkService) {}
 
     getWorkingDays(): Observable<any> {
         return this._networkService.getAll(URI.WORKING_DAYS);

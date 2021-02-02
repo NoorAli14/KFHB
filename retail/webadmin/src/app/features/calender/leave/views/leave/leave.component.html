@@ -69,10 +69,10 @@
                     <mat-cell *matCellDef="let element; let i = dataIndex" class="text-elipsis">
                         <ng-container [ngSwitch]="key">
                             <span *ngSwitchCase="'startDate'">
-                                {{element[key] | date:'mediumDate'}}
+                                {{element[key] | dateFormat}}
                             </span>
                             <span *ngSwitchCase="'endDate'">
-                                {{element[key] | date:'mediumDate'}}
+                                {{element[key] | dateFormat}}
                             </span>
                             <span *ngSwitchCase="'leaveTypeId'">
                                 {{getLeaveType(element[key])}}

@@ -1,4 +1,4 @@
-import { camelToSnakeCaseText } from "./../../../../shared/helpers/global.helper";
+import { camelToSnakeCaseText } from "@shared/helpers/global.helper";
 import { CustomerService } from "./../../customer.service";
 import {
     camelToSentenceCase,
@@ -22,10 +22,10 @@ import { MatSort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
 import { CONFIG } from "@config/index";
 import { takeUntil } from "rxjs/operators";
-import { MESSAGES } from "@shared/constants/messages.constant";
 import { Pagination } from "@shared/models/pagination.model";
 import * as QueryString from "query-string";
 import { ReferenceService } from "@shared/services/reference/reference.service";
+import { CobCustomerDetailComponent } from "@feature/customer/components/cob-customer-detail/cob-customer-detail.component";
 @Component({
     selector: "app-customer",
     templateUrl: "./customer.component.html",
@@ -62,7 +62,7 @@ export class CustomerComponent
         private _refService: ReferenceService,
         private _service: CustomerService
     ) {
-        super(injector, MODULES.ROLE_MANAGEMENT);
+        super(injector, MODULES.CUSTOMERS);
         super.ngOnInit();
         this.pagination = new Pagination();
     }
@@ -124,8 +124,8 @@ export class CustomerComponent
         return {
             limit: CONFIG.PAGE_SIZE,
             page: 1,
-            sort_order: 'asc',
-            sort_by: 'first_name'
+            sort_order: 'desc',
+            sort_by: 'created_on'
         };
     }
     onReset(): void {
@@ -135,7 +135,7 @@ export class CustomerComponent
     camelToSentenceCase(text): string {
         return camelToSentenceCase(text);
     }
-    openDialog(data): void {
+    openRetailDialog(data): void {
         const _this = this;
         this.dialogRef = this._matDialog.open(CustomerDetailComponent, {
             data: data,
@@ -144,14 +144,28 @@ export class CustomerComponent
             panelClass: "app-customer-detail",
         });
     }
+    openCorporateDialog(data): void {
+        this.dialogRef = this._matDialog.open(CobCustomerDetailComponent, {
+            data: data,
+            disableClose: true,
+            hasBackdrop: true,
+            panelClass: "app-customer-detail",
+        });
+    }
     getCustomerDetail(id): void {
-        //  id = "34A8F400-23F0-445F-A20C-5407BDC1C6FC";
+    //   id = "34A8F400-23F0-445F-A20C-5407BDC1C6FC";
+    //   id = "880F7EF3-E4C7-4068-8B89-3998F61D7EB8";
         this._service
             .forkCustomer360(id)
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe(
                 (response) => {
-                    this.openDialog(response);
+                    const customer360= response[0];
+                    if(customer360 && customer360.entity_id && customer360.entity_member_id){
+                        this.openCorporateDialog(response);
+                    }else{
+                        this.openRetailDialog(response);
+                    }
                 },
                 (response) => super.onError(response)
             );

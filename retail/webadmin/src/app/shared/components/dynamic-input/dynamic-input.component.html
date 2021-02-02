@@ -1,0 +1,34 @@
+<div [ngSwitch]="type">
+    <ng-container *ngSwitchCase="'dropdown'">
+        <mat-form-field  style="width: 291px;" [value]="answer" appearance="outline" class="pr-4">
+            <mat-label>{{label}} </mat-label>
+            <mat-select disabled="true" [value]="answer">
+                <mat-option *ngFor="let item of options" [value]="item.name">
+                    {{ item.name }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </ng-container>
+    <ng-container *ngSwitchCase="'text'">
+        <mat-form-field disabled="true" style="width: 291px;" appearance="outline">
+            <mat-label>{{label}} </mat-label>
+            <input matInput [value]="answer" />
+        </mat-form-field>
+    </ng-container>
+    <ng-container *ngSwitchCase="'radio'">
+        <mat-radio-group>
+            <mat-radio-button disabled="true" style="margin-left: 10px;" [checked]="item.name==answer" *ngFor="let item of options" [value]="item.name">{{item.name}}
+            </mat-radio-button>
+        </mat-radio-group>
+    </ng-container>
+    <ng-container *ngSwitchCase="'checkbox'">
+        <section fxLayout="row " fxLayoutAlign="start">
+            <mat-checkbox disabled="true" class="control-margin" *ngFor="let item of options; let i=index"
+                [checked]="getChecked(item.name)">{{item.name}}
+            </mat-checkbox>
+        </section>
+    </ng-container>
+    <ng-container *ngSwitchCase="'upload'">
+        <input disabled="true" type="file">
+    </ng-container>
+</div>

@@ -9,7 +9,7 @@
 # Stage 01: Building angular webapp
 # ###################################
 
-FROM node:12.18.1 as nodeBuild
+FROM node:14.15.1 as nodeBuild
 
 LABEL maintainer="AionDigital"
 LABEL version="0.1.0 (alpha)"

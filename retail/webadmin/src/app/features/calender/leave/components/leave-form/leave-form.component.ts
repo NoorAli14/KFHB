@@ -22,7 +22,7 @@ import {
     snakeToCamelArray,
 } from "@shared/helpers/global.helper";
 import * as moment from "moment";
-import { debounceTime, distinctUntilChanged,  } from "rxjs/operators";
+import { debounceTime, distinctUntilChanged, } from "rxjs/operators";
 import * as QueryString from "query-string";
 import { CalendarService } from "@feature/calender/services/calendar.service";
 
@@ -103,7 +103,7 @@ export class LeaveFormComponent
                 });
             });
     }
-   
+
     initSearch(): void {
         this.leaveForm.get('userId').valueChanges
             .pipe(debounceTime(400), distinctUntilChanged())
@@ -122,6 +122,9 @@ export class LeaveFormComponent
     displayFn = (id: string): string => {
         if (!id) {
             return;
+        }
+        if (this.data.leave.user) {
+            return `${this.data.leave.user.first_name} ${this.data.leave.user.last_name}`
         }
         const user = this.filteredUser.find((item) => item.id === id);
         return user ? `${user.firstName} ${user.lastName}` : "";

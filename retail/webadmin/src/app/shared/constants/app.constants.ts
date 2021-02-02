@@ -1,10 +1,13 @@
 import { Select } from './../models/common.model';
 import { environment } from '@env/environment';
 const VERSION = '';
-export function createUrl(actionName: string): string {
-    return `${environment.API_BASE_URL}${actionName}${VERSION}`;
+export function createRubixUrl(actionName: string): string {
+    return `${environment.RETAIL_API_BASE_URL}${actionName}${VERSION}`;
 }
-export function createUrl2(baseUrl, actionName: string): string {
+export function createCorporateUrl(actionName: string): string {
+    return `${environment.CORPORATE_API_BASE_URL}${actionName}${VERSION}`;
+}
+export function createRetailUrl(baseUrl, actionName: string): string {
     return `${baseUrl}${actionName}${VERSION}`;
 }
 
@@ -23,6 +26,18 @@ export const STATUS_LIST: Array<Select> = [
     { id: 'LOCKED', name: 'Locked' },
     { id: 'PENDING', name: 'Pending' },
 ];
+
+export const REMARKS_LIST = [
+    { id: 'ACCEPTED', name: 'Accepted' },
+    { id: 'REJECTED', name: 'Rejected' },
+    { id: 'DROPPED', name: 'Dropped' },
+    { id: 'REFER_TO_BUSINESS', name: 'Refer to Business' },
+    { id: 'RETRY', name: 'Retry' }];
+export const CORPORATE_REMARKS_LIST = [
+    { id: 'FACE_MATCHED', name: 'Faced Matched' },
+    { id: 'FACE_UNMATCHED', name: 'Faced Unmatched' }
+];
+
 export const GENDER_LIST: Array<Select> = [
     { id: 'M', name: 'Male' },
     { id: 'F', name: 'Female' },
@@ -56,6 +71,7 @@ export const MODULES = {
     LEAVES: 'Leaves',
     HOLIDAYS: 'Holidays',
     SYSTEM_MANAGEMENT: 'System Management',
+    CUSTOMERS: 'Customers',
 };
 
 
@@ -84,6 +100,9 @@ export const URI = {
     CUSTOMERS: `${ONBOARDING}customers`,
     CUSTOMER360: `${ONBOARDING}customers`,
     SYSTEM_AUDIT: `${ENTITLEMENT}audit/system`,
+    AML: `${ONBOARDING}aml/`,
+    COMPANY_DETAIL: `${ONBOARDING}company/company-information`,
+    MEMBER_DETAIL: `${ONBOARDING}company/member`,
     SERVICE_REQUEST_LIST: `${SERVICEREQUEST}user/all`,
     SERVICE_REQUEST_DETAILS: `${SERVICEREQUEST}`,
     SERVICE_REQUEST_UBDATE_STATUS: `${SERVICEREQUEST}status/update`,
@@ -94,3 +113,8 @@ export const URI = {
 };
 
 export const DEFAULT_IMAGE = 'assets/images/not-available.png';
+
+export const DATES = {
+    DATE_FMT: 'mediumDate',
+    DATE_TIME_FMT: `medium`
+}

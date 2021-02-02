@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { URI } from '@shared/constants/app.constants';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { NetworkService } from '../network/network.service';
+import { RubixNetworkService } from '../rubix-network/rubix-network.service';
 import { StorageService } from '../storage/storage.service';
 
 @Injectable({
@@ -11,7 +11,7 @@ import { StorageService } from '../storage/storage.service';
 })
 export class ReferenceService {
     constructor(
-        private _service: NetworkService,
+        private _service: RubixNetworkService,
         private storage: StorageService
     ) {}
     getCountries(): Observable<any> {
