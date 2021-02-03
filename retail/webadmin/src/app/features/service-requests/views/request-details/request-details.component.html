@@ -52,7 +52,7 @@
                         </div>
                     </div>
                     <div class="fuse-card  mb-24" fxLayout="row wrap" fxFlex="100"
-                        *ngIf='serviceRequest?.result2 && serviceRequest.result2.type'>
+                        *ngIf='serviceRequest?.result2 && (serviceRequest?.result2?.type?.includes("Mobile")|| serviceRequest?.result2?.type?.includes("Email"))'>
                         <div fxLayout="column" fxFlex="32">
                             <div class="info-line p-24">
                                 <div class="title text-bold" *ngIf='serviceRequest.result2.type'>
