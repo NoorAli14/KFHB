@@ -10,9 +10,9 @@ import { environment } from '../../../../environments/environment';
 export class ReferralService {
     constructor(private _RetailNetworkService: RetailNetworkService) { }
     getTransactions(): Observable<any> {
-        return this._RetailNetworkService.getAll(environment.API_BASE_URL_2, URI.REFERRAL_TRANSACTIONS);
+        return this._RetailNetworkService.getAll(environment.API_BASE_URL, URI.REFERRAL_TRANSACTIONS);
     }
     getTransactionsReport(): Observable<any> {
-        return this._RetailNetworkService.getAll(environment.API_BASE_URL_2, URI.REFERRAL_TRANSACTIONS_REPORT);
+        return this._RetailNetworkService.getAll(environment.API_BASE_URL, URI.REFERRAL_TRANSACTIONS_REPORT);
     }
 }
