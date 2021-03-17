@@ -1,5 +1,5 @@
 import { DEFAULT_IMAGE, MODULES, REMARKS_LIST } from "@shared/constants/app.constants";
-import { b64DecodeUnicode,  getRecentRecord, snakeToCamelObject, uniqeBy } from "@shared/helpers/global.helper";
+import { b64DecodeUnicode, getRecentRecord, snakeToCamelObject, uniqeBy } from "@shared/helpers/global.helper";
 import {
     AfterContentChecked,
     Component,
@@ -22,6 +22,8 @@ import { AuthenticationService } from "@shared/services/auth/authentication.serv
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CustomerService } from '@feature/customer/customer.service';
 import { BaseComponent } from '@shared/components/base/base.component';
+import { MESSAGES } from "@shared/constants/messages.constant";
+
 @Component({
     selector: "app-customer-detail",
     templateUrl: "./customer-detail.component.html",
@@ -39,6 +41,7 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
     bankingTransaction: any;
     passportProcessed: any;
     civilIdBackProcessed: any;
+    civilIdFrontProcessed: any;
     customer: any;
     customerReponse: any;
     screenShotsResponse: any;
@@ -76,12 +79,14 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
             }
         });
         data = data ? data : [];
+
         const civilIdBackProcessData =
             this.customerReponse.documents.length > 0
                 ? this.customerReponse.documents.find(
                     (x) => x.name === "NATIONAL_ID_BACK_SIDE"
                 )
                 : null;
+
         this.civilIdBackProcessed = civilIdBackProcessData
             ? JSON.parse(civilIdBackProcessData.processed_data)?.mrz
             : null;
@@ -97,7 +102,6 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
         this.customer = snakeToCamelObject(this.customerReponse);
         this.FATCA = data.find((x) => x.results.name === "FATCA");
         const bankingTransaction = data.filter((x) => x.results.name === "Banking Transactions");
-
         this.bankingTransaction = getRecentRecord(bankingTransaction, 'created_on');
         const amlResponse = this.customerReponse.amlResponses ? this.customerReponse.amlResponses[0] : null;
         if (amlResponse && amlResponse.responses) {
@@ -258,8 +262,14 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
     getAMLData() {
         this.customerService.getAMLData(this.customer.id)
             .subscribe((response) => {
-                this.amlResponse = getRecentRecord(response.responses, 'created_on');
-                this.amlResponse['response_text'] = JSON.parse(this.amlResponse['response_text'])
+                const parsedResponse = getRecentRecord(response.responses, 'created_on');
+                parsedResponse['response_text'] = JSON.parse(parsedResponse['response_text']);
+
+                if (parsedResponse['response_text'].error || parsedResponse['response_text'].status === 400) {
+                    this._notifier.error(MESSAGES.UNKNOWN);
+                    return;
+                }
+                this.amlResponse = parsedResponse;
                 this._notifier.success('AML data fetched successfully.');
             }, (response) => super.onError(response))
     }
