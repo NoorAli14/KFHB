@@ -17,7 +17,7 @@
                         </span>
                  
                     <span *ngSwitchCase="'createdOn'">
-                        {{element[camelToSnakeCase(key)] | date:'mediumDate'}}
+                        {{element[camelToSnakeCase(key)] | dateFormat}}
                     </span>
                     <span  *ngSwitchDefault>
                         <span *ngIf="element[camelToSnakeCase(key)]; else defaultText">

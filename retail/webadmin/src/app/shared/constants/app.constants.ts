@@ -22,7 +22,7 @@ export enum APP_CONST {
 
 export const STATUS_LIST: Array<Select> = [
     { id: 'ACTIVE', name: 'Active' },
-    { id: 'IN_ACTIVE', name: 'In Active' },
+    { id: 'INACTIVE', name: 'In Active' },
     { id: 'LOCKED', name: 'Locked' },
     { id: 'PENDING', name: 'Pending' },
 ];
@@ -102,7 +102,7 @@ export const URI = {
     SYSTEM_AUDIT: `${ENTITLEMENT}audit/system`,
     AML: `${ONBOARDING}aml/`,
     COMPANY_DETAIL: `${ONBOARDING}company/company-information`,
-    MEMBER_DETAIL: `${ONBOARDING}company/member`,
+     MEMBER_DETAIL: `${ONBOARDING}company/member/profile/id`,
     SERVICE_REQUEST_LIST: `${SERVICEREQUEST}user/all`,
     SERVICE_REQUEST_DETAILS: `${SERVICEREQUEST}`,
     SERVICE_REQUEST_UBDATE_STATUS: `${SERVICEREQUEST}status/update`,
