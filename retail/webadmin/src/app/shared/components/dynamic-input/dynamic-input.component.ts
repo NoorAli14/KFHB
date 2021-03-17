@@ -16,6 +16,6 @@ export class DynamicInputComponent implements OnInit {
   }
 
   getChecked(item) {
-    return this.answer.find(x => x === item)
+    return Array.isArray(this.answer) ? this.answer.find(x => x === item) : this.answer === item;
   }
 }

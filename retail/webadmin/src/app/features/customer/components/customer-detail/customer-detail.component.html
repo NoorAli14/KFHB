@@ -35,8 +35,8 @@
                                 <div class="info-line">
                                     <div class="title">Full Name</div>
                                     <div class="info"
-                                        *ngIf="civilIdBackProcessed && civilIdBackProcessed['Surname And Given Names'] ; else defaultText">
-                                        {{civilIdBackProcessed['Surname And Given Names']}}</div>
+                                        *ngIf="civilIdBackProcessed && civilIdBackProcessed['Given Names'] ; else defaultText">
+                                        {{civilIdBackProcessed['Given Names'] + ' ' + civilIdBackProcessed['Surname']}}</div>
                                 </div>
 
                                 <div class="info-line">
