@@ -27,7 +27,6 @@
             <mat-table #table matSort matSortActive="dateOfAccountOpening​" matSortDirection="desc" matSortDisableClear
                 [dataSource]="dataSource">
                 <ng-container *ngFor="let key of displayedColumns" [matColumnDef]="key">
-                    }
                     <mat-header-cell class="text-left" *matHeaderCellDef mat-sort-header>
                         {{camelToSentenceCase(key) }}</mat-header-cell>
                     <mat-cell *matCellDef="let element; let i = dataIndex" class="pl-24">

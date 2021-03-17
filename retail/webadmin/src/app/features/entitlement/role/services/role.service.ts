@@ -9,21 +9,21 @@ import { RubixNetworkService } from '@shared/services/rubix-network/rubix-networ
     providedIn: 'root',
 })
 export class RoleService {
-    constructor(private _RubixNetworkService: RubixNetworkService) {}
+    constructor(private _networkService: RubixNetworkService) {}
     getModules(): Observable< any> {
-        return this._RubixNetworkService.getAll(URI.MODULE);
+        return this._networkService.getAll(URI.MODULE);
     }
     getRoles(queryParams): Observable< any> {
-        return this._RubixNetworkService.getAll(`${URI.ROLE}?${queryParams}`);
+        return this._networkService.getAll(`${URI.ROLE}?${queryParams}`);
     }
     createRole(model: Role): Observable< any> {
-        return this._RubixNetworkService.post(URI.ROLE, model);
+        return this._networkService.post(URI.ROLE, model);
     }
     editRole(id: string, model: Role): Observable< any> {
-        return this._RubixNetworkService.onUpdate(`${URI.ROLE}/${id}`, model);
+        return this._networkService.onUpdate(`${URI.ROLE}/${id}`, model);
     }
     deleteRole(id: string): Observable< any> {
-        return this._RubixNetworkService.onDelete(`${URI.ROLE}/${id}`);
+        return this._networkService.onDelete(`${URI.ROLE}/${id}`);
     }
     forkRolesData(params): Observable< any> {
         return forkJoin([
@@ -33,7 +33,7 @@ export class RoleService {
         ]);
     }
     getPermissions(): Observable< any> {
-        return this._RubixNetworkService.getAll(URI.PERMISSION);
+        return this._networkService.getAll(URI.PERMISSION);
     }
     getSelectedPermissions(data, element): any {
         const checked = Object.keys(element).filter((key) => {

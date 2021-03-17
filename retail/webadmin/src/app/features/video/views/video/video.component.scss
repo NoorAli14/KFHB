@@ -1,5 +1,17 @@
 @import "src/@fuse/scss/fuse";
 
 app-video {
-    width: 100%;
+  width: 100%;
+}
+
+.customer-video-popup {
+  .root-video {
+    .videocall-controls-overlay + div {
+      position: absolute;
+      bottom: 15px;
+      left: 0;
+      right: 0;
+      align-items: center;
+    }
+  }
 }
