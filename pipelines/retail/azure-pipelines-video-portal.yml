@@ -13,9 +13,8 @@ resources:
 
 variables:
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: '76498237-6ffd-4497-92bb-6730789de17c'
-  imageRepository: 'rubixvideoportal'
-  containerRegistry: 'testdaon.azurecr.io'
+  dockerRegistryServiceConnection: '07d52cd8-b201-48d0-8ab0-ce8a8c5496d7'
+  imageRepository: 'kfhbretailwebvideoportal'
   dockerfilePath: '$(Build.SourcesDirectory)/retail/video-portal/Dockerfile'
   tag: '$(Build.BuildId)'
   tagLatest: $(Build.SourceBranchName)_latest
@@ -32,6 +31,7 @@ stages:
     pool:
       vmImage: $(vmImageName)
     steps:
+    # Build and push an image to Azure container registry "kfhbrubixcontainer.azurecr.io"
     - task: Docker@2
       displayName: Build and push an image to container registry
       inputs:
