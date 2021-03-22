@@ -164,3 +164,17 @@ font-size: 14px;
     font-weight: 600;
     color: black !important
 }
+
+.edit-actions {
+    position: absolute;
+    top: 40px;
+}
+
+.edit-actions mat-icon {
+    box-shadow: -1px 5px 24px -7px rgba(0, 0, 0, 0.75);
+    -webkit-box-shadow: -1px 5px 24px -7px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: -1px 5px 24px -7px rgba(0, 0, 0, 0.75);
+    border-radius: 5px;
+    background:rgb(0 0 0 / 14%);
+    cursor: pointer;
+}

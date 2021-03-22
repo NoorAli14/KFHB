@@ -1,5 +1,5 @@
 import { DEFAULT_IMAGE, MODULES, REMARKS_LIST } from "@shared/constants/app.constants";
-import { b64DecodeUnicode, getRecentRecord, snakeToCamelObject, uniqeBy } from "@shared/helpers/global.helper";
+import { b64DecodeUnicode, camelToSentenceCase, camelToSnakeCaseText, getRecentRecord, snakeToCamelObject, uniqeBy } from "@shared/helpers/global.helper";
 import {
     AfterContentChecked,
     Component,
@@ -41,15 +41,18 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
     bankingTransaction: any;
     passportProcessed: any;
     civilIdBackProcessed: any;
-    civilIdFrontProcessed: any;
+    enabledField: string;
     customer: any;
     customerReponse: any;
     screenShotsResponse: any;
     screenShotsMapped = [];
     remarksList = REMARKS_LIST;
     remarksForm: FormGroup;
+    customerForm: FormGroup;
     isCreateAccount: boolean;
-    amlResponse: any
+    amlResponse: any;
+    updatedResponse:any;
+
     constructor(
         public gallery: Gallery,
         public matDialogRef: MatDialogRef<CustomerDetailComponent>,
@@ -69,6 +72,11 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
         this.remarksForm = new FormGroup({
             remarks: new FormControl(this.customerReponse.remarks,),
             status: new FormControl(this.customerReponse.status, [Validators.required]),
+        });
+        this.customerForm = new FormGroup({
+            firstName: new FormControl(this.customerReponse.first_name,),
+            middleName: new FormControl(this.customerReponse.middle_name),
+            lastName: new FormControl(this.customerReponse.last_name),
         });
     }
     initData(): void {
@@ -239,10 +247,7 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
 
     onSubmit() {
         const model = this.remarksForm.value;
-        if (model.status === 'ACCEPTED' && this.screenShots.length < 5) {
-            this._notifier.warning('Please upload screenshots to continue the onboarding process')
-            return;
-        }
+   
         this.customerService.updateCustomer(this.customer.id, model).subscribe((response) => {
             if (model.status === 'ACCEPTED') {
                 this.createAccount();
@@ -271,6 +276,30 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
                 }
                 this.amlResponse = parsedResponse;
                 this._notifier.success('AML data fetched successfully.');
+            }, (response) => super.onError(response))
+    }
+
+    onMouseEnter(field) {
+        console.log(field)
+        this.enabledField = field;
+    }
+    onMouseLeave() {
+        this.enabledField = null;
+    }
+    onResetEditControl(control) {
+        this.customerForm.patchValue({ [control]: this.customerReponse[camelToSnakeCaseText(control)] })
+    }
+
+    updateCustomer(field) {
+        const newValue = this.customerForm.get(field).value;
+        const oldValue = this.customerReponse[camelToSnakeCaseText(field)]
+        if (newValue == oldValue) return;
+
+        this.customerService.updateCustomer(this.customer.id, { [camelToSnakeCaseText(field)]: this.customerForm.get(field).value })
+            .subscribe((response) => {
+                this.updatedResponse=response;
+                this._notifier.success(`${camelToSentenceCase(field)} updated successfully`);
+
             }, (response) => super.onError(response))
     }
 }

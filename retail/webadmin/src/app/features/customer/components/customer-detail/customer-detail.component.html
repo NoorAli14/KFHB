@@ -7,7 +7,7 @@
                 </mat-icon>
                 <span *ngIf="customerReponse && customerReponse['first_name'];"> {{customerReponse['first_name'] }}</span>
             </div>
-            <button mat-icon-button (click)="matDialogRef.close()" aria-label="Close dialog">
+            <button mat-icon-button (click)="matDialogRef.close(updatedResponse)" aria-label="Close dialog">
                 <mat-icon>close</mat-icon>
             </button>
         </mat-toolbar-row>
@@ -16,28 +16,68 @@
     <div mat-dialog-content class="p-24 m-0" style="max-height: 83vh !important">
         <mat-tab-group>
             <mat-tab label="CIVIL ID">
-                <div class="tab-content p-24 ">
-                    <div class="profile-box info-box general">
-                        <div class="content" fusePerfectScrollbar>
-                            <div fxLayout="row wrap">
-                                <div class="info-line">
-                                    <div class="title">First Name</div>
-                                    <div class="info"
-                                        *ngIf="customerReponse && customerReponse.first_name ; else defaultText">
-                                        {{customerReponse.first_name }}</div>
-                                </div>
-                                <div class="info-line">
-                                    <div class="title">Last Name</div>
-                                    <div class="info"
-                                        *ngIf="customerReponse && customerReponse.last_name ; else defaultText">
-                                        {{customerReponse.last_name }}</div>
-                                </div>
-                                <div class="info-line">
-                                    <div class="title">Full Name</div>
-                                    <div class="info"
-                                        *ngIf="civilIdBackProcessed && civilIdBackProcessed['Given Names'] ; else defaultText">
-                                        {{civilIdBackProcessed['Given Names'] + ' ' + civilIdBackProcessed['Surname']}}</div>
-                                </div>
+                <form [formGroup]="customerForm">
+                    <div class="tab-content p-24 ">
+                        <div class="profile-box info-box general">
+                            <div class="content" fusePerfectScrollbar>
+                                <div fxLayout="row wrap">
+                                    <div class="info-line no-margin-bottom">
+                                        <div class="title">First Name</div>
+                                        <div (mouseenter)="onMouseEnter('firstName')" (mouseleave)="onMouseLeave()">
+                                            <div fxFlex fxLayout="column">
+                                                <mat-form-field appearance="outline" fxFlex="100">
+                                                    <input matInput formControlName="firstName" />
+                                                </mat-form-field>
+                                                <div *ngIf="enabledField==='firstName'" fxFlexAlign="end"
+                                                    class="edit-actions">
+                                                    <mat-icon (click)="updateCustomer('firstName')">done</mat-icon>
+                                                    &nbsp;
+                                                    <mat-icon (click)="onResetEditControl('firstName')">close</mat-icon>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="info-line no-margin-bottom">
+                                        <div class="title">Middle Name</div>
+                                        <div (mouseenter)="onMouseEnter('middleName')" (mouseleave)="onMouseLeave()">
+                                            <div fxFlex fxLayout="column">
+                                                <mat-form-field appearance="outline" fxFlex="100">
+                                                    <input matInput formControlName="middleName" />
+                                                </mat-form-field>
+                                                <div *ngIf="enabledField==='middleName'" fxFlexAlign="end"
+                                                    class="edit-actions">
+                                                    <mat-icon (click)="updateCustomer('middleName')">done</mat-icon>
+                                                    &nbsp;
+                                                    <mat-icon (click)="onResetEditControl('middleName')">close
+                                                    </mat-icon>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="info-line no-margin-bottom">
+                                        <div class="title">Last Name</div>
+                                        <div (mouseenter)="onMouseEnter('lastName')" (mouseleave)="onMouseLeave()">
+                                            <div fxFlex fxLayout="column">
+                                                <mat-form-field appearance="outline" fxFlex="100">
+                                                    <input matInput formControlName="lastName" />
+                                                </mat-form-field>
+                                                <div *ngIf="enabledField==='lastName'" fxFlexAlign="end"
+                                                    class="edit-actions">
+                                                    <mat-icon (click)="updateCustomer('lastName')">done</mat-icon>
+                                                    &nbsp;
+                                                    <mat-icon (click)="onResetEditControl('lastName')">close</mat-icon>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="info-line">
+                                        <div class="title">Full Name</div>
+                                        <div class="info"
+                                            *ngIf="civilIdBackProcessed && civilIdBackProcessed['Given Names'] ; else defaultText">
+                                            {{civilIdBackProcessed['Given Names'] + ' ' +
+                                            civilIdBackProcessed['Surname']}}
+                                        </div>
+                                    </div>
 
                                 <div class="info-line">
                                     <div class="title">Mobile Number</div>
@@ -80,7 +120,7 @@
                         </div>
                     </div>
                 </div>
-
+</form>
             </mat-tab>
             <mat-tab label="PASSPORT">
                 <div class="tab-content p-24 ">
@@ -103,8 +143,8 @@
                                 <div class="info-line">
                                     <div class="title">Full Name</div>
                                     <div class="info"
-                                        *ngIf="passportProcessed && passportProcessed['Surname And Given Names'] ; else defaultText">
-                                        {{passportProcessed['Surname And Given Names']}}</div>
+                                        *ngIf="passportProcessed && passportProcessed['Given Names'] ; else defaultText">
+                                        {{passportProcessed['Given Names'] + ' ' + passportProcessed['Surname']}}</div>
                                 </div>
                                 <div class="info-line">
                                     <div class="title">Birth Date</div>
