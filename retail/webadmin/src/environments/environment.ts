@@ -11,7 +11,7 @@ export const environment = {
     authTokenKey: 'authce9d77b308c149d5992a80073637e4d5',
     APP_SECRETE: 'abfFGHIepqrstuvwSTUCDEXYZ',
     RETAIL_API_BASE_URL: 'https://rubix-dev01.conduit-aiondigital.com',
-    CORPORATE_API_BASE_URL: 'https://rubixcorp-dev01.uksouth.cloudapp.azure.com',
+    CORPORATE_API_BASE_URL: 'http://rubixcorp-dev01.uksouth.cloudapp.azure.com',
     CHANNEL_ID: 'RUBIX-DEV-INT',
     API_BASE_URL: 'https://www.kfhbonline.com/J2Retail',
     TENANT_ID: '9013C327-1190-4875-A92A-83ACA9029160',

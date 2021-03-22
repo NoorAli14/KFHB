@@ -1,4 +1,4 @@
-import { camelToSnakeCaseText } from "@shared/helpers/global.helper";
+import { camelToSnakeCaseText, snakeToCamelObject } from "@shared/helpers/global.helper";
 import { CustomerService } from "./../../customer.service";
 import {
     camelToSentenceCase,
@@ -143,6 +143,16 @@ export class CustomerComponent
             hasBackdrop: true,
             panelClass: "app-customer-detail",
         });
+        this.dialogRef.afterClosed().subscribe(
+            (response) => {
+                const cloned = [...this.dataSource.data];
+                const index = cloned.findIndex(x => x.id == response.id);
+                if (index > -1) {
+                    cloned[index] = snakeToCamelObject(response);
+                    this.dataSource.data = cloned;
+                }
+            }
+        )
     }
     openCorporateDialog(data): void {
         this.dialogRef = this._matDialog.open(CobCustomerDetailComponent, {
