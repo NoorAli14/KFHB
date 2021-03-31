@@ -164,10 +164,9 @@ font-size: 14px;
     font-weight: 600;
     color: black !important
 }
-
-.edit-actions {
-    position: absolute;
-    top: 40px;
+.mat-form-field-wrapper{
+    margin-top: 4px !important;
+    padding: 0% !important;
 }
 
 .edit-actions mat-icon {
@@ -177,4 +176,6 @@ font-size: 14px;
     border-radius: 5px;
     background:rgb(0 0 0 / 14%);
     cursor: pointer;
+    margin: 0 !important;
+    padding: 0 !important;
 }
