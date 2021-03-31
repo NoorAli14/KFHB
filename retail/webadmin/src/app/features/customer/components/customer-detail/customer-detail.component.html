@@ -25,7 +25,7 @@
                                         <div class="title">First Name</div>
                                         <div (mouseenter)="onMouseEnter('firstName')" (mouseleave)="onMouseLeave()">
                                             <div fxFlex fxLayout="column">
-                                                <mat-form-field appearance="outline" fxFlex="100">
+                                                <mat-form-field   appearance="outline" fxFlex="100">
                                                     <input matInput formControlName="firstName" />
                                                 </mat-form-field>
                                                 <div *ngIf="enabledField==='firstName'" fxFlexAlign="end"
@@ -58,11 +58,11 @@
                                         <div class="title">Last Name</div>
                                         <div (mouseenter)="onMouseEnter('lastName')" (mouseleave)="onMouseLeave()">
                                             <div fxFlex fxLayout="column">
-                                                <mat-form-field appearance="outline" fxFlex="100">
+                                                <mat-form-field  appearance="outline" fxFlex="100">
                                                     <input matInput formControlName="lastName" />
                                                 </mat-form-field>
                                                 <div *ngIf="enabledField==='lastName'" fxFlexAlign="end"
-                                                    class="edit-actions mt-92">
+                                                    class="edit-actions">
                                                     <mat-icon (click)="updateCustomer('lastName')">done</mat-icon>
                                                     &nbsp;
                                                     <mat-icon (click)="onResetEditControl('lastName')">close</mat-icon>
