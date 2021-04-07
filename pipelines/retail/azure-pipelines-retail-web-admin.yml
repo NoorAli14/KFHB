@@ -4,7 +4,7 @@
 
 trigger:
 - master
-
+- dev-kfhb
 # Disable pipeline for pull requets
 pr: none
 
