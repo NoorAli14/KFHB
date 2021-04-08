@@ -100,6 +100,7 @@ export class InternationalTransferRequestsComponent extends BaseComponent implem
         width: '40vw',
         disableClose: true,
         hasBackdrop: true,
+        panelClass: 'custom-dialog-container'
       });
     dialogRef.afterClosed().subscribe((res) => {
       if (res) {

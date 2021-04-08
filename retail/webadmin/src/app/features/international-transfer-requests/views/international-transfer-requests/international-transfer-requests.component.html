@@ -11,10 +11,10 @@
                     International Transfer Requests
                 </span>
             </div>
-            <form [formGroup]="searchForm" (submit)="search()" class="row" fxFlex="100">
+            <form [formGroup]="searchForm" (submit)="search()" class="row" fxLayoutAlign="center center">
 
 
-                <div class="search-wrapper mx-32" fxFlex="25">
+                <div class="search-wrapper mx-12" fxFlex="30">
                     <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
                         <input matInput [matDatepicker]="picker1" (focus)="picker1.open()" placeholder="Start Date"
                             [max]="searchForm.controls.toDate.value" (click)="picker1.open()"
@@ -24,7 +24,7 @@
                     </div>
                 </div>
 
-                <div class="search-wrapper mx-32" fxFlex="25">
+                <div class="search-wrapper mx-12" fxFlex="30">
                     <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
                         <input matInput [matDatepicker]="picker2" (focus)="picker2.open()" placeholder="End Date"
                             [min]="searchForm.controls.fromDate.value" (click)="picker2.open()"
@@ -33,7 +33,7 @@
                         <mat-datepicker #picker2></mat-datepicker>
                     </div>
                 </div>
-                <div class="search-wrapper mx-32" fxFlex="25">
+                <div class="search-wrapper mx-12" fxFlex="30">
                     <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
                         <mat-select formControlName="status" placeholder="Status">
                             <mat-option *ngFor="let obj of statusDropdown" [value]="obj.value">
@@ -42,7 +42,7 @@
                         </mat-select>
                     </div>
                 </div>
-                <div class="mx-32" fxFlex="25">
+                <div class="mx-12" fxFlex="10">
                     <button mat-raised-button color="accent" type='submit' class="fuse-white mt-24 mt-md-0">
                         <span>Search</span>
                     </button>
@@ -58,15 +58,15 @@
                     <mat-header-cell class="text-left" *matHeaderCellDef mat-sort-header>
                         {{camelToSentenceCase(key) }}</mat-header-cell>
                     <mat-cell *matCellDef="let element; let i = dataIndex" class="pl-24">
-                        <span style="width:100%;word-wrap: break-word;">
+                        <span >
                             <ng-container [ngSwitch]="key">
-                                <span *ngSwitchCase="'action'">
-                                    <button mat-raised-button color="accent" class="mx-24"> 
+                                <span *ngSwitchCase="'action'" fxLayout ="row">
+                                    <button mat-raised-button color="accent" class="mr-8"> 
                                         <span>Show Detail</span>
                                     </button>
 
-                                    <button mat-raised-button color="accent" class="mx-24" (click)="openDialogStatus(element)">
-                                        <span>Show Status</span>
+                                    <button mat-raised-button color="accent" (click)="openDialogStatus(element)">
+                                        <span>Approve / Reject</span>
                                     </button>
 
 
