@@ -91,6 +91,14 @@ export const navigation: FuseNavigation[] = [
                 icon     : 'calendar_today',
                 url      : '/referrals',
             },
+            {
+                id       : 'international',
+                title    : 'International Transfer Requests',
+                translate: 'FEATURES.INTERNATIONALTRANSFERREQUEST.TITLE',
+                type     : 'item',
+                icon     : 'calendar_today',
+                url      : '/international-transfer-requests',
+            },
 ]
         
     }

@@ -1,0 +1,98 @@
+<div class="page-container page-layout carded fullwidth inner-scroll">
+    <div class="top-bg accent"></div>
+    <div class="center">
+        <div class="header accent" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row"
+            fxLayoutAlign.gt-sm="space-between center">
+            <div class="logo mb-24 mb-md-0" fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+                    people_outline
+                </mat-icon>
+                <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                    International Transfer Requests
+                </span>
+            </div>
+            <form [formGroup]="searchForm" (submit)="search()" class="row" fxFlex="100">
+
+
+                <div class="search-wrapper mx-32" fxFlex="25">
+                    <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
+                        <input matInput [matDatepicker]="picker1" (focus)="picker1.open()" placeholder="Start Date"
+                            [max]="searchForm.controls.toDate.value" (click)="picker1.open()"
+                            formControlName="fromDate" />
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                    </div>
+                </div>
+
+                <div class="search-wrapper mx-32" fxFlex="25">
+                    <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
+                        <input matInput [matDatepicker]="picker2" (focus)="picker2.open()" placeholder="End Date"
+                            [min]="searchForm.controls.fromDate.value" (click)="picker2.open()"
+                            formControlName="toDate" />
+                        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                        <mat-datepicker #picker2></mat-datepicker>
+                    </div>
+                </div>
+                <div class="search-wrapper mx-32" fxFlex="25">
+                    <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
+                        <mat-select formControlName="status" placeholder="Status">
+                            <mat-option *ngFor="let obj of statusDropdown" [value]="obj.value">
+                                {{ obj.text }}
+                            </mat-option>
+                        </mat-select>
+                    </div>
+                </div>
+                <div class="mx-32" fxFlex="25">
+                    <button mat-raised-button color="accent" type='submit' class="fuse-white mt-24 mt-md-0">
+                        <span>Search</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="content-card" fusePerfectScrollbar>
+            <app-message-box [type]="errorType" [message]="responseMessage"></app-message-box>
+            <mat-table #table matSort matSortActive="dateOfAccountOpening​" matSortDirection="desc" matSortDisableClear
+                [dataSource]="dataSource">
+                <ng-container *ngFor="let key of displayedColumns" [matColumnDef]="key">
+                    }
+                    <mat-header-cell class="text-left" *matHeaderCellDef mat-sort-header>
+                        {{camelToSentenceCase(key) }}</mat-header-cell>
+                    <mat-cell *matCellDef="let element; let i = dataIndex" class="pl-24">
+                        <span style="width:100%;word-wrap: break-word;">
+                            <ng-container [ngSwitch]="key">
+                                <span *ngSwitchCase="'action'">
+                                    <button mat-raised-button color="accent" class="mx-24"> 
+                                        <span>Show Detail</span>
+                                    </button>
+
+                                    <button mat-raised-button color="accent" class="mx-24" (click)="openDialogStatus(element)">
+                                        <span>Show Status</span>
+                                    </button>
+
+
+                                </span>
+                                <span *ngSwitchCase="'date'">
+                                    {{element[camelToSnakeCase(key)] | dateFormat}}
+                                </span>
+                                <span *ngSwitchDefault>
+                                    <span *ngIf="element[key]; else defaultText">
+                                        {{ key.includes('date') ?(element[(key)]| date: "dd-MM-yyyy"):element[(key)]}}
+                                    </span>
+                                </span>
+                            </ng-container>
+
+                        </span>
+                        <ng-template #defaultText>
+                            <app-default-text></app-default-text>
+                        </ng-template>
+                    </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;" [@animate]="{value:'*',params:{y:'100%'}}">
+                </mat-row>
+            </mat-table>
+            <mat-paginator #paginator [pageIndex]="0" [pageSize]="pageSize" showFirstLastButtons
+                [pageSizeOptions]="pageSizeOptions"></mat-paginator>
+        </div>
+    </div>
+</div>

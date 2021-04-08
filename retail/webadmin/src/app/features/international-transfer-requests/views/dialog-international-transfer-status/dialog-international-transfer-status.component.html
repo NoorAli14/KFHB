@@ -1,0 +1,51 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar class="mat-accent m-0">
+        <mat-toolbar-row fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+            <div class="logo mb-24 mb-md-0" fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon mr-12" [@animate]="{
+                        value: '*',
+                        params: { delay: '50ms', scale: '0.2' }
+                    }">
+                    how_to_reg
+                </mat-icon>
+                <span class="logo-text" [@animate]="{
+                        value: '*',
+                        params: { delay: '100ms', x: '-25px' }
+                    }">
+                    Edit Status
+                </span>
+            </div>
+            <button mat-icon-button mat-dialog-close aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+
+    <div mat-dialog-content class="py-24 m-0" fusePerfectScrollbar>
+        <div fxLayout="row">
+            <form class="p-24" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0" name="userForm"
+                (ngSubmit)="onSubmit()" [formGroup]="form">
+                <div fxLayout="row wrap" fxLayout.lt-lg="column" fxLayoutAlign.lt-lg="center" fxLayoutGap="10px"
+                    fxLayoutAlign="start center" fxFlex="1 1 auto">
+
+                    <mat-form-field appearance="outline" fxFlex="48" class="pl-4">
+                        <mat-label>Comments <app-required-indicator></app-required-indicator>
+                        </mat-label>
+                        <textarea matInput placeholder="Enter Comments" formControlName="comments" ></textarea>
+                    </mat-form-field>
+                </div>
+
+                <div class="actions" fxLayoutGap="10px" fxLayout="row" fxLayoutAlign="end center">
+                    <button type="submit" [disabled]="!form.controls.comments.valid" mat-raised-button mat-dialog-close color="secondary" aria-label="Follow">
+                        Reject
+                    </button>
+                    &nbsp;&nbsp;&nbsp;
+                    <button type="submit" [disabled]="!form.controls.comments.valid" class="submit-button" mat-raised-button color="accent">
+                        Approved
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

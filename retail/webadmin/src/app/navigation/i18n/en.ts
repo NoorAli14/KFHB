@@ -52,6 +52,9 @@ export const locale = {
             },
             REFERRALS: {
                 TITLE: 'Referrals'
+            },
+            INTERNATIONALTRANSFERREQUEST:{
+                TITLE:'International Transfer Requests'
             }
            
         }
