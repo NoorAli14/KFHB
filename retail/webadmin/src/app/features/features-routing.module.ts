@@ -47,6 +47,10 @@ const routes: Routes = [
     loadChildren: () => import('./service-requests/service-requests.module').then(m => m.ServiceRequestModule)
   },
   {
+    path: 'international-transfer-requests',
+    loadChildren: () => import('./international-transfer-requests/international-transfer-requests.module').then(m => m.InternationalTransferRequestsModule)
+  },
+  {
     path: '**', redirectTo: 'error'
   }
 ];

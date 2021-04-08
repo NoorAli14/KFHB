@@ -87,6 +87,12 @@ export class AuthUserService {
             url: '/system',
             translate: 'FEATURES.SYSTEM_MANAGEMENT.LOGS.TITLE',
         },
+        {
+            id: 'international',
+            icon: 'update',
+            url: '/international-transfer-requests',
+            translate: 'FEATURES.INTERNATIONALTRANSFERREQUEST.TITLE',
+        },
     ];
 
     constructor(
