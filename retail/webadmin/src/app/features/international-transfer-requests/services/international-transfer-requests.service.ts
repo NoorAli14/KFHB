@@ -9,4 +9,9 @@ import { environment } from '../../../../environments/environment';
 })
 export class InternationalTransferRequestsService {
     constructor(private _RetailNetworkService: RetailNetworkService) { }
+    
+    // getInternationalTransferReportById(id: string): Observable<any> {
+    //     return this._RetailNetworkService.getById(environment.API_BASE_URL,`${URI.INTERNATIONAL_TRANSFER_REPORT}${id}` );
+    // }
+    
 }
