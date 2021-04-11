@@ -10,9 +10,10 @@ import { MatInputModule } from '@angular/material/input';
 import { InternationalTransferRequestsComponent } from './views/international-transfer-requests/international-transfer-requests.component';
 import { InternationalTransferRequestsRoutingModule } from './international-transfer-requests-routing.module';
 import { DialogInternationalTransferStatusComponent } from './views/dialog-international-transfer-status/dialog-international-transfer-status.component';
+import { InternationalTransferReportComponent } from './views/international-transfer-report/international-transfer-report.component';
 
 @NgModule({
-    declarations: [InternationalTransferRequestsComponent, DialogInternationalTransferStatusComponent],
+    declarations: [InternationalTransferRequestsComponent, DialogInternationalTransferStatusComponent, InternationalTransferReportComponent],
     imports: [CommonModule,
         InternationalTransferRequestsRoutingModule,
         SharedModule,
