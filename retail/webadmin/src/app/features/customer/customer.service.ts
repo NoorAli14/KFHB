@@ -48,7 +48,7 @@ export class CustomerService {
             this.getMemberDetails(entityMemberId)
         ]);
     }
-    updateCorporateMember(id,model): Observable<any>{
-        return this.cobNetwork.onUpdate(`${URI.MEMBER_DETAIL}/${id}`,model);
+    async updateCorporateMember(id,model): Promise<any>{
+        return this.cobNetwork.onUpdate(`${URI.UPDATE_MEMBER}/${id}`,model).toPromise();
     }
 }

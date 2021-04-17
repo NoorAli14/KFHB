@@ -193,7 +193,7 @@
 
                                     <div class="actions" fxLayoutGap="10px" fxLayout="row" fxLayoutAlign="end center">
 
-                                        <button appPermission [permissions]="userPermissions" [type]="'edit'"
+                                        <button *ngIf="canSubmitTask" appPermission [permissions]="userPermissions" [type]="'edit'"
                                             type="submit" [disabled]="remarksForm.invalid || customerReponse.account"
                                             class="submit-button" mat-raised-button color="accent"
                                             aria-label="Send Message">

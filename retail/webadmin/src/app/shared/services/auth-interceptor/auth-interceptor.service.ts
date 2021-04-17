@@ -7,10 +7,10 @@ import {
     HttpHeaders,
     HttpClient,
 } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable,  throwError } from 'rxjs';
 import { StorageService } from '../storage/storage.service';
 import { catchError, mergeMap } from 'rxjs/operators';
-import { APP_CONST, URI, createRubixUrl} from '@shared/constants/app.constants';
+import { APP_CONST, URI, createRubixUrl } from '@shared/constants/app.constants';
 import { EventBusService } from '../event-bus/event-bus.service';
 import { AuthenticationService } from '../auth/authentication.service';
 import { Router } from '@angular/router';
@@ -23,7 +23,7 @@ export class AuthInterceptorService implements HttpInterceptor {
         private http: HttpClient,
         private eventService: EventBusService,
         private authService: AuthenticationService, private router: Router
-    ) { }
+    ) {}
 
     intercept(
         request: HttpRequest<any>,
@@ -59,6 +59,7 @@ export class AuthInterceptorService implements HttpInterceptor {
                         const clonedRequest = request.clone(options);
                         return next.handle(clonedRequest);
                     }
+                    
                     // this.eventService.emit(
                     //     new EmitEvent(Events.SESSION_EXPIRED, true)
                     // );
@@ -78,7 +79,7 @@ export class AuthInterceptorService implements HttpInterceptor {
             return next.handle(clonedRequest);
         }
     }
-    refreshToken(): Observable<any> {
+    refreshToken(): Observable<any>  {
         const endPoint = `${createRubixUrl(URI.REFRESH)}`;
         return this.http.post(endPoint, null, { observe: 'response' });
     }

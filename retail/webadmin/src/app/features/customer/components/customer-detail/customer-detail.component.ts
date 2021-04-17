@@ -1,4 +1,4 @@
-import { DEFAULT_IMAGE, MODULES, REMARKS_LIST } from "@shared/constants/app.constants";
+import { CUSTOMER_STATUSES, DEFAULT_IMAGE, MODULES, REMARKS_LIST, STATUS_LIST } from "@shared/constants/app.constants";
 import { b64DecodeUnicode, camelToSentenceCase, camelToSnakeCaseText, getRecentRecord, snakeToCamelObject, uniqeBy } from "@shared/helpers/global.helper";
 import {
     AfterContentChecked,
@@ -23,7 +23,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CustomerService } from '@feature/customer/customer.service';
 import { BaseComponent } from '@shared/components/base/base.component';
 import { MESSAGES } from "@shared/constants/messages.constant";
-
 @Component({
     selector: "app-customer-detail",
     templateUrl: "./customer-detail.component.html",
@@ -69,6 +68,9 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
         this.customerReponse = this.data[0];
         this.screenShotsResponse = this.data[1];
         this.initData();
+
+        this.updateRemarksOptionsForStatus(this.customerReponse.status);
+
         this.remarksForm = new FormGroup({
             remarks: new FormControl(this.customerReponse.remarks,),
             status: new FormControl(this.customerReponse.status, [Validators.required]),
@@ -301,5 +303,18 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
                 this._notifier.success(`${camelToSentenceCase(field)} updated successfully`);
 
             }, (response) => super.onError(response))
+    }
+
+    updateRemarksOptionsForStatus(status: string) {
+
+        if (status == CUSTOMER_STATUSES.PENDING) {
+            this.remarksList = REMARKS_LIST;
+        }
+        else if (status == CUSTOMER_STATUSES.REFER_TO_BUSINESS) {
+            this.remarksList = REMARKS_LIST.filter(x => [CUSTOMER_STATUSES.ACCEPTED, CUSTOMER_STATUSES.REJECTED].includes(x.id));
+        }
+        else {
+            this.remarksList = REMARKS_LIST.filter(x=> x.id == status);
+        }
     }
 }
