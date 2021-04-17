@@ -5,7 +5,8 @@
                 <mat-icon class="logo-icon mr-12" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
                     person
                 </mat-icon>
-                <span *ngIf="customerReponse && customerReponse['first_name'];"> {{customerReponse['first_name'] }}</span>
+                <span *ngIf="customerReponse && customerReponse['first_name'];"> {{customerReponse['first_name']
+                    }}</span>
             </div>
             <button mat-icon-button (click)="matDialogRef.close(updatedResponse)" aria-label="Close dialog">
                 <mat-icon>close</mat-icon>
@@ -25,7 +26,7 @@
                                         <div class="title">First Name</div>
                                         <div (mouseenter)="onMouseEnter('firstName')" (mouseleave)="onMouseLeave()">
                                             <div fxFlex fxLayout="column">
-                                                <mat-form-field   appearance="outline" fxFlex="100">
+                                                <mat-form-field appearance="outline" fxFlex="100">
                                                     <input matInput formControlName="firstName" />
                                                 </mat-form-field>
                                                 <div *ngIf="enabledField==='firstName'" fxFlexAlign="end"
@@ -58,7 +59,7 @@
                                         <div class="title">Last Name</div>
                                         <div (mouseenter)="onMouseEnter('lastName')" (mouseleave)="onMouseLeave()">
                                             <div fxFlex fxLayout="column">
-                                                <mat-form-field  appearance="outline" fxFlex="100">
+                                                <mat-form-field appearance="outline" fxFlex="100">
                                                     <input matInput formControlName="lastName" />
                                                 </mat-form-field>
                                                 <div *ngIf="enabledField==='lastName'" fxFlexAlign="end"
@@ -79,48 +80,49 @@
                                         </div>
                                     </div>
 
-                                <div class="info-line">
-                                    <div class="title">Mobile Number</div>
-                                    <div class="info" *ngIf="customer.contactNo ; else defaultText">
-                                        {{customer.contactNo}}</div>
-                                </div>
-                                <div class="info-line">
-                                    <div class="title">Gender</div>
-                                    <div class="info"
-                                        *ngIf="civilIdBackProcessed && civilIdBackProcessed.Sex ; else defaultText">
-                                        {{civilIdBackProcessed.Sex}}</div>
-                                </div>
-                                <div class="info-line">
-                                    <div class="title">Date Of Expiry</div>
-                                    <div class="info"
-                                        *ngIf="civilIdBackProcessed && civilIdBackProcessed['Date Of Expiry'] ; else defaultText">
-                                        {{civilIdBackProcessed['Date Of Expiry']}}</div>
-                                </div>
 
-                                <div class="info-line">
-                                    <div class="title">Email</div>
-                                    <div class="info" *ngIf="customer.email ; else defaultText">
-                                        {{customer.email }}</div>
-                                </div>
+                                    <div class="info-line">
+                                        <div class="title">Mobile Number</div>
+                                        <div class="info" *ngIf="customer.contactNo ; else defaultText">
+                                            {{customer.contactNo}}</div>
+                                    </div>
+                                    <div class="info-line">
+                                        <div class="title">Gender</div>
+                                        <div class="info"
+                                            *ngIf="civilIdBackProcessed && civilIdBackProcessed.Sex ; else defaultText">
+                                            {{civilIdBackProcessed.Sex}}</div>
+                                    </div>
+                                    <div class="info-line">
+                                        <div class="title">Date Of Expiry</div>
+                                        <div class="info"
+                                            *ngIf="civilIdBackProcessed && civilIdBackProcessed['Date Of Expiry'] ; else defaultText">
+                                            {{civilIdBackProcessed['Date Of Expiry']}}</div>
+                                    </div>
 
-                                <div class="info-line">
-                                    <div class="title">Birth Date</div>
-                                    <div class="info"
-                                        *ngIf="civilIdBackProcessed && civilIdBackProcessed['Date Of Birth'] ; else defaultText">
-                                        {{civilIdBackProcessed['Date Of Birth']}}</div>
-                                </div>
-                                <div class="info-line">
-                                    <div class="title">Status</div>
-                                    <div class="info"
-                                        *ngIf="civilIdBackProcessed && civilIdBackProcessed['status'] ; else defaultText">
-                                        {{civilIdBackProcessed['status']}}
+                                    <div class="info-line">
+                                        <div class="title">Email</div>
+                                        <div class="info" *ngIf="customer.email ; else defaultText">
+                                            {{customer.email }}</div>
+                                    </div>
+
+                                    <div class="info-line">
+                                        <div class="title">Birth Date</div>
+                                        <div class="info"
+                                            *ngIf="civilIdBackProcessed && civilIdBackProcessed['Date Of Birth'] ; else defaultText">
+                                            {{civilIdBackProcessed['Date Of Birth']}}</div>
+                                    </div>
+                                    <div class="info-line">
+                                        <div class="title">Status</div>
+                                        <div class="info"
+                                            *ngIf="civilIdBackProcessed && civilIdBackProcessed['status'] ; else defaultText">
+                                            {{civilIdBackProcessed['status']}}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-</form>
+                </form>
             </mat-tab>
             <mat-tab label="PASSPORT">
                 <div class="tab-content p-24 ">
