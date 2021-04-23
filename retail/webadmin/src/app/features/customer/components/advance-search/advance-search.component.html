@@ -4,7 +4,7 @@
             <div class="search-wrapper mx-32 mx-md-0">
                 <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center" style="position: relative;">
                     <mat-icon>search</mat-icon>
-                    <input placeholder="Enter National Id" [formControl]="civilId" class="my-form-input advance-input">
+                    <input placeholder="Enter National Id" id="nationalId" [formControl]="civilId" class="my-form-input advance-input">
                     <a (click)="openAdvance(false)" *ngIf="isAdvance" class="search-arrow hover">▲</a>
                     <a (click)="openAdvance(true)" *ngIf="!isAdvance" class="search-arrow hover">▼</a>
                 </div>
@@ -56,8 +56,8 @@
                                         [matAutocomplete]="auto">
                                     <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
                                         [displayWith]="displayFn">
-                                        <mat-option *ngFor="let item of filteredNationalities" [value]="item.id">
-                                            {{ item.nationality }}
+                                        <mat-option *ngFor="let item of filteredNationalities" [value]="item.name">
+                                            {{ item.name }}
                                         </mat-option>
                                     </mat-autocomplete>
                                 </mat-form-field>

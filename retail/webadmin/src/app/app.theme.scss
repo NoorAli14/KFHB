@@ -199,3 +199,8 @@ mat-form-field.mat-form-field.mat-form-field-appearance-outline>div.mat-form-fie
     position: sticky;
     z-index: 10;
   }
+
+  .no-margin-bottom{
+      margin-bottom: 0px !important;
+      position: relative;
+  }

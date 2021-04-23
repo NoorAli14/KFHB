@@ -29,6 +29,11 @@ import * as QueryString from "query-string";
     selector: "app-role",
     templateUrl: "./role.component.html",
     animations: fuseAnimations,
+    styles: [`
+    .mat-form-field-appearance-fill .mat-form-field-flex {
+        padding: 0 !important;
+    }
+    `],
     encapsulation: ViewEncapsulation.None,
 })
 export class RoleComponent extends BaseComponent implements OnInit {

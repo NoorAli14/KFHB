@@ -14,11 +14,13 @@ import { SystemManagementService } from "@feature/system-management/system.servi
 import { fuseAnimations } from "@fuse/animations";
 import { BaseComponent } from "@shared/components/base/base.component";
 import { MODULES } from "@shared/constants/app.constants";
+import { MatSortDirection } from "@shared/enums/app.enum";
 import {
     snakeToCamelArray,
     camelToSentenceCase,
     camelToSnakeCase,
     camelToSnakeCaseText,
+    toggleSort,
 } from "@shared/helpers/global.helper";
 import { Pagination } from "@shared/models/pagination.model";
 import * as QueryString from "query-string";
@@ -46,6 +48,8 @@ export class LogsComponent extends BaseComponent implements OnInit {
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
     config: object;
+    previousFilterState: MatSortDirection;
+    
     constructor(
         public _matDialog: MatDialog,
         private _service: SystemManagementService,
@@ -65,7 +69,7 @@ export class LogsComponent extends BaseComponent implements OnInit {
         return {
             limit: CONFIG.PAGE_SIZE,
             page: 1,
-            sort_order: "desc",
+            sort_order: MatSortDirection.desc,
             sort_by: "created_on",
         };
     }
@@ -119,8 +123,10 @@ export class LogsComponent extends BaseComponent implements OnInit {
         this.dataSource.sort = this.sort;
     }
     sortData(e): void {
+        this.previousFilterState = toggleSort(this.previousFilterState, e.direction);
+        this.sort.direction =  this.previousFilterState;
         this.getData({
-            sort_order: e.direction ? e.direction : "asc",
+            sort_order:  this.previousFilterState ,
             sort_by: camelToSnakeCaseText(e.active),
         });
     }

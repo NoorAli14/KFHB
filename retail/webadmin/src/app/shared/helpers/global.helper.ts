@@ -1,5 +1,6 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from "@angular/forms";
 import { MESSAGES } from "@shared/constants/messages.constant";
+import { MatSortDirection } from "@shared/enums/app.enum";
 import { isArray } from "lodash";
 
 export const cloneDeep = (value) => {
@@ -20,6 +21,11 @@ export const snakeToCamelArray = (array) => {
 
     return response;
 };
+
+export const constantCaseToSentenceCase = text => {
+    return text.split('_').map(word => word[0].toUpperCase() + word.slice(1,).toLowerCase().replace("screenshot", "")).join(' ')
+};
+  
 export const snakeToCamelObject = (data) => {
     if (!data) {
         return;
@@ -139,4 +145,11 @@ export const getRecentRecord = (array, date) => {
         return d.getTime() == mostRecentDate.getTime();
     });
     return mostRecentObject && mostRecentObject.length > 0 ? mostRecentObject[0] : null;
+}
+
+
+export const toggleSort = (previous, current) => {
+    const state = previous ? previous : current;
+    const updated = state == MatSortDirection.asc ? MatSortDirection.desc : MatSortDirection.asc;
+    return updated;
 }

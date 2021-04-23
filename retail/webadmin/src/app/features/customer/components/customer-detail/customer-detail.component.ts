@@ -1,5 +1,5 @@
 import { CUSTOMER_STATUSES, DEFAULT_IMAGE, MODULES, REMARKS_LIST, STATUS_LIST } from "@shared/constants/app.constants";
-import { b64DecodeUnicode, camelToSentenceCase, camelToSnakeCaseText, getRecentRecord, snakeToCamelObject, uniqeBy } from "@shared/helpers/global.helper";
+import { b64DecodeUnicode, camelToSentenceCase, camelToSnakeCaseText, getRecentRecord, snakeToCamelObject, constantCaseToSentenceCase } from "@shared/helpers/global.helper";
 import {
     AfterContentChecked,
     Component,
@@ -35,6 +35,7 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
     nationalIdDocuments: GalleryItem[];
     passportDocuments: GalleryItem[];
     screenShots: GalleryItem[];
+    additionalDocuments: GalleryItem[];
     FATCA: any;
     amlData: any;
     bankingTransaction: any;
@@ -43,8 +44,11 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
     enabledField: string;
     customer: any;
     customerReponse: any;
-    screenShotsResponse: any;
+    attachmentsResponse: any;
+    screenshotsResponse: any;
+    additionalDocsResponse: any;
     screenShotsMapped = [];
+    additionalDocsMapped = [];
     remarksList = REMARKS_LIST;
     remarksForm: FormGroup;
     customerForm: FormGroup;
@@ -66,7 +70,11 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
 
     ngOnInit(): void {
         this.customerReponse = this.data[0];
-        this.screenShotsResponse = this.data[1];
+        this.attachmentsResponse = this.data[1];
+
+        const customerId = this.customerReponse.id;
+        this.screenshotsResponse = this.attachmentsResponse?.filter(x => x.created_by != customerId);
+        this.additionalDocsResponse = this.attachmentsResponse?.filter(x=> x.created_by == customerId); 
         this.initData();
 
         this.updateRemarksOptionsForStatus(this.customerReponse.status);
@@ -154,6 +162,9 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
         this.findScreenShotType("Address", "ADDRESS_SCREENSHOT");
         this.findScreenShotType("Visa", "VISA_SCREENSHOT");
 
+        // Show additional document images in the tab
+        this.mapAdditionalDocuments();
+
         this.nationalIdDocuments = _nationalIdDocuments.map((item) => {
             const url = this.previewDocumentUrl(item.type, item.isExtracted);
             return new ImageItem({ src: url, thumb: url, title: item.title });
@@ -163,10 +174,16 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
             const url = this.previewDocumentUrl(item.type, item.isExtracted);
             return new ImageItem({ src: url, thumb: url, title: item.title });
         });
+
         this.screenShots = this.screenShotsMapped.map((item) => {
-            const url = this.previewScreenShotUrl(item.id);
+            const url = this.previewAttachmentsUrl(item.id);
             return new ImageItem({ src: url, thumb: url, title: item.title });
         });
+
+        this.additionalDocuments = this.additionalDocsMapped.map((item) => {
+            const url = this.previewAttachmentsUrl(item.id);
+            return new ImageItem({ src: url, thumb: url, title: item.title });
+        })
 
         this.basicLightboxExample(this.passportDocuments);
         this.basicLightboxExample(this.nationalIdDocuments);
@@ -179,6 +196,7 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
             this.passportDocuments
         );
         this.withCustomGalleryConfig("screenshots", this.screenShots);
+        this.withCustomGalleryConfig("additionalDocuments", this.additionalDocuments);
 
         this.withCustomGalleryConfig(
             "nationalIdDocuments",
@@ -187,13 +205,22 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
     }
 
     findScreenShotType(title, type) {
-        const data = this.screenShotsResponse.find(
+        const data = this.screenshotsResponse.find(
             (x) => x.attachment_type == type
         );
         if (data) {
             this.screenShotsMapped.push({ id: data.id, title });
         }
     }
+
+    mapAdditionalDocuments() {
+        this.additionalDocsResponse?.forEach(doc => {
+            const docTitle: string = constantCaseToSentenceCase(doc.attachment_type);
+            const docId: string = doc.id;
+            this.additionalDocsMapped.push({id: docId, title: docTitle});
+        });
+    }
+
     ngAfterContentChecked(): void {
         const el = document.querySelectorAll(".g-image-item");
         el.forEach((x) => {
@@ -227,7 +254,7 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
         }
         return this.getUrl(url);
     }
-    previewScreenShotUrl(attachmentId) {
+    previewAttachmentsUrl(attachmentId) {
         const tenantId = environment.TENANT_ID;
         const channelId = environment.CHANNEL_ID;
         const token = this.authService.accessToken;
@@ -251,12 +278,7 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
         const model = this.remarksForm.value;
    
         this.customerService.updateCustomer(this.customer.id, model).subscribe((response) => {
-            if (model.status === 'ACCEPTED') {
-                this.createAccount();
-                return;
-            } else {
-                this._notifier.success('Remarks added successfully')
-            }
+            this._notifier.success('Remarks has been added successfully.')
         },
             (response) => super.onError(response))
     }
