@@ -420,6 +420,26 @@
                     </div>
                 </div>
             </mat-tab>
+            <mat-tab label="ADDITIONAL DOCUMENTS">
+                <div class="tab-content p-24 " fusePerfectScrollbar>
+                    <div class="profile-box info-box general">
+                        <div class="content">
+                            <div fxLayout="row wrap" fxLayoutAlign="center center">
+                                <div *ngFor="let item of additionalDocuments; index as i">
+                                    <div class="product-image">
+                                        <img [lightbox]="i" class="gallery" [gallery]="'additionalDocuments'"
+                                            [src]="item.data.thumb">
+                                        <strong>{{item.data.title}}</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="additionalDocuments.length<1" fxFlex fxLayout="row" fxLayoutAlign="center center">
+                            <strong>There are no additional documents available</strong>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
             <mat-tab label="REMARKS">
                 <div class="tab-content p-24 " fusePerfectScrollbar>
                     <div class="profile-box info-box general">

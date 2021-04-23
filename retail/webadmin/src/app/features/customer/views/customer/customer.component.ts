@@ -1,4 +1,4 @@
-import { camelToSnakeCaseText, snakeToCamelObject } from "@shared/helpers/global.helper";
+import { camelToSnakeCaseText, snakeToCamelObject, toggleSort } from "@shared/helpers/global.helper";
 import { CustomerService } from "./../../customer.service";
 import {
     camelToSentenceCase,
@@ -26,6 +26,7 @@ import { Pagination } from "@shared/models/pagination.model";
 import * as QueryString from "query-string";
 import { ReferenceService } from "@shared/services/reference/reference.service";
 import { CobCustomerDetailComponent } from "@feature/customer/components/cob-customer-detail/cob-customer-detail.component";
+import { MatSortDirection } from "@shared/enums/app.enum";
 @Component({
     selector: "app-customer",
     templateUrl: "./customer.component.html",
@@ -45,12 +46,15 @@ export class CustomerComponent
     dataSource = new MatTableDataSource<any>();
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
+    previousFilterState: MatSortDirection;
+
     displayedColumns = [
         "firstName",
         "lastName",
         "email",
         "contactNo",
         "nationalIdNo",
+        "nationality",
         "status",
         "createdOn",
         "action",
@@ -76,10 +80,11 @@ export class CustomerComponent
     ngAfterViewInit(): void {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+
     }
 
     getQueryString(params): string {
-        return QueryString.stringify(params);
+        return QueryString.stringify(params,{encode:false});
     }
 
     createQueryObject(params): any {
@@ -105,6 +110,7 @@ export class CustomerComponent
             .subscribe(
                 (response) => {
                     this.customers = snakeToCamelArray(response.data);
+
                     this.pagination = response.pagination;
                     this.dataSource = new MatTableDataSource(this.customers);
                     this.pagination.page = this.pagination.page - 1;
@@ -117,14 +123,15 @@ export class CustomerComponent
     }
 
     onFilter(form): void {
-        this.config = { ...this.config, ...form };
-        this.getData(form);
+        this.config = this.initParams();
+        this.config = { ...form, ...this.config, };
+        this.getData(this.config);
     }
     initParams(): object {
         return {
             limit: CONFIG.PAGE_SIZE,
             page: 1,
-            sort_order: 'desc',
+            sort_order: MatSortDirection.desc,
             sort_by: 'created_on'
         };
     }
@@ -163,17 +170,17 @@ export class CustomerComponent
         });
     }
     getCustomerDetail(id): void {
-    //   id = "34A8F400-23F0-445F-A20C-5407BDC1C6FC";
-    //   id = "880F7EF3-E4C7-4068-8B89-3998F61D7EB8";
+        //   id = "34A8F400-23F0-445F-A20C-5407BDC1C6FC";
+        //   id = "880F7EF3-E4C7-4068-8B89-3998F61D7EB8";
         this._service
             .forkCustomer360(id)
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe(
                 (response) => {
-                    const customer360= response[0];
-                    if(customer360 && customer360.entity_id && customer360.entity_member_id){
+                    const customer360 = response[0];
+                    if (customer360 && customer360.entity_id && customer360.entity_member_id) {
                         this.openCorporateDialog(response);
-                    }else{
+                    } else {
                         this.openRetailDialog(response);
                     }
                 },
@@ -181,8 +188,10 @@ export class CustomerComponent
             );
     }
     sortData(e): void {
+        this.previousFilterState = toggleSort(this.previousFilterState, e.direction);
+        this.sort.direction = this.previousFilterState;
         this.getData({
-            sort_order: e.direction ? e.direction : "asc",
+            sort_order: this.previousFilterState,
             sort_by: camelToSnakeCaseText(e.active),
         });
     }

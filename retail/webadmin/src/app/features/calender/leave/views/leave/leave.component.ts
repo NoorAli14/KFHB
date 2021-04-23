@@ -1,4 +1,4 @@
-import { isUUID } from "@shared/helpers/global.helper";
+import { isUUID, toggleSort } from "@shared/helpers/global.helper";
 import { Leave } from "./../../../models/leave.model";
 import {
     Component,
@@ -32,8 +32,9 @@ import { fuseAnimations } from "@fuse/animations";
 import { MODULES } from "@shared/constants/app.constants";
 import { Pagination } from "@shared/models/pagination.model";
 import { FormControl } from "@angular/forms";
-import {  debounceTime, distinctUntilChanged } from "rxjs/operators";
+import { debounceTime, distinctUntilChanged } from "rxjs/operators";
 import * as QueryString from "query-string";
+import { MatSortDirection } from "@shared/enums/app.enum";
 
 @Component({
     selector: "app-leave",
@@ -52,6 +53,8 @@ export class LeaveComponent extends BaseComponent implements OnInit {
         "endDate",
         "action",
     ];
+    previousFilterState: MatSortDirection;
+
     pageSize: number = CONFIG.PAGE_SIZE;
     pageSizeOptions: Array<number> = CONFIG.PAGE_SIZE_OPTIONS;
     dataSource = new MatTableDataSource<Leave>();
@@ -83,7 +86,7 @@ export class LeaveComponent extends BaseComponent implements OnInit {
         return {
             limit: CONFIG.PAGE_SIZE,
             page: 1,
-            sort_order: "desc",
+            sort_order: MatSortDirection.desc,
             sort_by: "created_on",
         };
     }
@@ -118,7 +121,7 @@ export class LeaveComponent extends BaseComponent implements OnInit {
     getLeaveType(id): string {
         return getName(id, "name", this.leaveTypes);
     }
-  
+
     openDialog(data): void {
         const _this = this;
         this.dialogRef = this._matDialog
@@ -239,8 +242,10 @@ export class LeaveComponent extends BaseComponent implements OnInit {
         this.dataSource.sort = this.sort;
     }
     sortData(e): void {
+        this.previousFilterState = toggleSort(this.previousFilterState, e.direction);
+        this.sort.direction = this.previousFilterState;
         this.getData({
-            sort_order: e.direction ? e.direction : "asc",
+            sort_order: this.previousFilterState,
             sort_by: camelToSnakeCaseText(e.active),
         });
     }

@@ -53,7 +53,7 @@ export class AdvanceSearchComponent extends BaseComponent implements AfterConten
     statusList = STATUS_LIST;
     filteredNationalities: any[] = [];
     maxDate: Date;
-    _context:any;
+    _context: any;
     @Input() nationalityList;
     @Output() filterChange = new EventEmitter();
     @Output() filterReset = new EventEmitter();
@@ -70,15 +70,20 @@ export class AdvanceSearchComponent extends BaseComponent implements AfterConten
         this.initSearch();
         this.genderList = [...this.genderList, { id: '', name: 'All' }];
         this.filteredNationalities = this.nationalityList;
-        _context=this;
+        _context = this;
+
+        const target = document.getElementById('nationalId');
+        target.addEventListener('paste', (e) => {
+            this.isAdvance = false;
+            let paste = (e.clipboardData || window['clipboardData']).getData('text');
+            const filters = this.filterKeys();
+            this.filterChange.emit({ national_id_no: paste, ...filters });
+        })
     }
 
     openAdvance(status): void {
-        this.civilId.setValue('');
         this.isAdvance = status;
     }
-
-  
 
     ngAfterContentChecked(): void {
         const el = document.querySelectorAll('.mat-form-field-label');
@@ -107,11 +112,12 @@ export class AdvanceSearchComponent extends BaseComponent implements AfterConten
             )
             .subscribe((text: string) => {
                 this.isAdvance = false;
-                this.filterChange.emit({ national_id_no: text });
+                const filters = this.filterKeys();
+                this.filterChange.emit({ national_id_no: text, ...filters });
             });
     }
 
-    initForm(): void  {
+    initForm(): void {
         this.searchForm = new FormGroup({
             firstName: new FormControl(),
             email: new FormControl(),
@@ -132,10 +138,7 @@ export class AdvanceSearchComponent extends BaseComponent implements AfterConten
     }
 
     displayFn(id): string {
-        if (!id) {
-            return '';
-        }
-        return getName(id, 'nationality', cloneDeep(_context.nationalityList));
+        return id
     }
 
     onReset(): void {
@@ -145,12 +148,18 @@ export class AdvanceSearchComponent extends BaseComponent implements AfterConten
     }
 
     onSubmit(): void {
-        const filters = this.searchForm.value;
-        Object.keys(filters).forEach(
-            (key) => !filters[key] && delete filters[key]
-        );
+        const filters = this.filterKeys();
         if (!Boolean(filters)) { return; }
         this.filterChange.emit(camelToSnakeCase(filters));
         this.isAdvance = false;
+    }
+
+    filterKeys() {
+        const filters = this.searchForm.value;
+        filters.national_id_no = this.civilId.value;
+        Object.keys(filters).forEach(
+            (key) => !filters[key] && delete filters[key]
+        );
+        return filters;
     }
 }

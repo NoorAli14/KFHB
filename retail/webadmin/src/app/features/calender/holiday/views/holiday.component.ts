@@ -15,6 +15,7 @@ import {
     camelToSnakeCaseText,
     snakeToCamelArray,
     snakeToCamelObject,
+    toggleSort,
 } from "@shared/helpers/global.helper";
 import { MatTableDataSource } from "@angular/material/table";
 import { MatPaginator } from "@angular/material/paginator";
@@ -34,6 +35,7 @@ import * as QueryString from "query-string";
 import { FormControl } from "@angular/forms";
 import { Pagination } from "@shared/models/pagination.model";
 import * as moment from "moment";
+import { MatSortDirection } from "@shared/enums/app.enum";
 @Component({
     selector: "app-holiday",
     templateUrl: "./holiday.component.html",
@@ -54,7 +56,7 @@ export class HolidayComponent extends BaseComponent implements OnInit {
 
     dataSource = new MatTableDataSource<Holiday>();
     pagination: Pagination;
-
+    previousFilterState: MatSortDirection;
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: false }) sort: MatSort;
     config: object;
@@ -81,7 +83,7 @@ export class HolidayComponent extends BaseComponent implements OnInit {
         return {
             limit: CONFIG.PAGE_SIZE,
             page: 1,
-            sort_order: "desc",
+            sort_order:  MatSortDirection.desc,
             sort_by: "holiday_date",
         };
     }
@@ -205,8 +207,10 @@ export class HolidayComponent extends BaseComponent implements OnInit {
         this.dataSource.sort = this.sort;
     }
     sortData(e): void {
+        this.previousFilterState = toggleSort(this.previousFilterState, e.direction);
+        this.sort.direction =  this.previousFilterState;
         this.getData({
-            sort_order: e.direction ? e.direction : "asc",
+            sort_order: this.previousFilterState,
             sort_by: camelToSnakeCaseText(e.active),
         });
     }
