@@ -39,6 +39,7 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
     FATCA: any;
     amlData: any;
     bankingTransaction: any;
+    crsTemplate: any;
     passportProcessed: any;
     civilIdBackProcessed: any;
     enabledField: string;
@@ -54,7 +55,7 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
     customerForm: FormGroup;
     isCreateAccount: boolean;
     amlResponse: any;
-    updatedResponse:any;
+    updatedResponse: any;
 
     constructor(
         public gallery: Gallery,
@@ -74,7 +75,7 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
 
         const customerId = this.customerReponse.id;
         this.screenshotsResponse = this.attachmentsResponse?.filter(x => x.created_by != customerId);
-        this.additionalDocsResponse = this.attachmentsResponse?.filter(x=> x.created_by == customerId); 
+        this.additionalDocsResponse = this.attachmentsResponse?.filter(x => x.created_by == customerId);
         this.initData();
 
         this.updateRemarksOptionsForStatus(this.customerReponse.status);
@@ -119,8 +120,19 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
             : null;
         this.customer = snakeToCamelObject(this.customerReponse);
         this.FATCA = data.find((x) => x.results.name === "FATCA");
+
         const bankingTransaction = data.filter((x) => x.results.name === "Banking Transactions");
         this.bankingTransaction = getRecentRecord(bankingTransaction, 'created_on');
+
+        const crsTemplate = data.filter((x) => x.results.name === "CRS");
+        const recent = getRecentRecord(crsTemplate, 'created_on');
+        this.crsTemplate = recent ? recent.results : null;
+      
+        if (!this.crsTemplate) {
+            this.getCRSTemplate();
+        } else {
+            this.validateIfCRSAllowed();
+        }
         const amlResponse = this.customerReponse.amlResponses ? this.customerReponse.amlResponses[0] : null;
         if (amlResponse && amlResponse.responses) {
             this.amlResponse = getRecentRecord(amlResponse.responses, 'created_on');
@@ -202,6 +214,13 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
             "nationalIdDocuments",
             this.nationalIdDocuments
         );
+    }
+
+    validateIfCRSAllowed() {
+        const allowed = this.checkFatcaForAnswers(this.FATCA);
+        if (!allowed) {
+            this.crsTemplate = null;
+        }
     }
 
     findScreenShotType(title, type) {
@@ -288,6 +307,30 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
                 this._notifier.success('Account created successfully')
             }, (response) => super.onError(response))
     }
+    getCRSTemplate() {
+        this.customerService.getCRSTemplate()
+            .subscribe((response) => {
+                this.crsTemplate = response;
+                this.validateIfCRSAllowed();
+            }, (response) => super.onError(response))
+    }
+
+    checkFatcaForAnswers = (fatcaResp) => {
+        let shouldAllow = false;
+        fatcaResp?.results?.sections.forEach(section => {
+            section?.questions.forEach(ques => {
+                if (ques["answer"] == "Yes" || ques["answer"] == "yes") {
+                    shouldAllow = true;
+                }
+            });
+        });
+
+        if (!fatcaResp) {
+            shouldAllow = false;
+        }
+        return shouldAllow;
+    }
+
     getAMLData() {
         this.customerService.getAMLData(this.customer.id)
             .subscribe((response) => {

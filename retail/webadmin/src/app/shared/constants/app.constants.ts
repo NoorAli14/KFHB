@@ -119,7 +119,7 @@ export const URI = {
     COMPANY_DETAIL: `${ONBOARDING}company/company-information`,
     MEMBER_DETAIL: `${ONBOARDING}company/member/profile/id`,
     UPDATE_MEMBER: `${ONBOARDING}company/member`,
-
+    COMPLIANCE_CRS: `${ONBOARDING}compliance-template/crs`,
     WORFLOW: {
         NEXT_TASK: `${ONBOARDING}workflow/task/user/:user_type/corporate/:corporate_id/var`,
         SUBMIT_TASK: `${ONBOARDING}workflow/cob_task/submit`,
