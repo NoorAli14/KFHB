@@ -191,7 +191,7 @@
                     </div>
                 </div>
             </mat-tab>
-            <mat-tab label="FATCA">
+            <mat-tab label="FATCA & CRS">
                 <div class="tab-content p-24 ">
                     <div class="profile-box info-box general">
                         <div class="content" style="flex-direction:column" fusePerfectScrollbar>
@@ -208,11 +208,35 @@
                                 <br>
                                 <hr> <br>
                             </ng-container>
+                            <div *ngIf="!FATCA" class="empty-box" fxFlex fxLayout="column"
+                                fxLayoutAlign="center center">
+                                <strong>There is no template available for FATCA</strong>
+                                <hr class="spliter"> <br>
+                            </div>
 
+                            <ng-container *ngFor="let item of crsTemplate?.sections">
+                                <strong>{{item.name}}</strong>
+                                <br><br>
+                                <div fxFlex fxLayout="row wrap">
+                                    <div class="info-line" *ngFor="let question of item.questions">
+                                        <div class="quest">
+                                            <h4>{{question.title}}</h4>
+                                        </div>
+                                        <div class="control-section">
+                                            <app-dynamic-input [answer]="question.answer" [label]="question.title"
+                                                [type]="question.type" [options]="question.options">
+                                            </app-dynamic-input>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr> <br>
+                            </ng-container>
+                            <div *ngIf="!crsTemplate" fxFlex fxLayout="row" fxLayoutAlign="center center">
+                                <strong>There is no template available for CRS</strong>
+                            </div>
                         </div>
-                        <div *ngIf="!FATCA" fxFlex fxLayout="row" fxLayoutAlign="center center">
-                            <strong>There is no data available</strong>
-                        </div>
+
                     </div>
                 </div>
             </mat-tab>

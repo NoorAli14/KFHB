@@ -26,6 +26,9 @@ export class CustomerService {
     createAccount(id): Observable<any>{
         return this.network.post(`${URI.CUSTOMER360}/${id}/account`,{});
     }
+    getCRSTemplate(): Observable<any>{
+        return this.network.getAll(`${URI.COMPLIANCE_CRS}`,{});
+    }
     getAMLData(id): Observable<any>{
         return this.network.post(`${URI.AML}screening?customer_id=${id}`,{});
     }

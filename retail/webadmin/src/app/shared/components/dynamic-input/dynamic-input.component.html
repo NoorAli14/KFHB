@@ -12,10 +12,10 @@
     <ng-container *ngSwitchCase="'text'">
         <mat-form-field disabled="true" style="width: 291px;" appearance="outline">
             <mat-label>{{label}} </mat-label>
-            <input matInput [value]="answer" />
+            <input matInput [value]="answer?answer:''" />
         </mat-form-field>
     </ng-container>
-    <ng-container *ngSwitchCase="'radio'">
+    <ng-container *ngSwitchCase="'radiobutton'">
         <mat-radio-group>
             <mat-radio-button disabled="true" style="margin-left: 10px;" [checked]="item.name==answer" *ngFor="let item of options" [value]="item.name">{{item.name}}
             </mat-radio-button>
