@@ -1,6 +1,6 @@
 <div [ngSwitch]="type">
     <ng-container *ngSwitchCase="'dropdown'">
-        <mat-form-field  style="width: 291px;" [value]="answer" appearance="outline" class="pr-4">
+        <mat-form-field  style="width: 291px;"  appearance="outline" class="pr-4">
             <mat-label>{{label}} </mat-label>
             <mat-select disabled="true" [value]="answer">
                 <mat-option *ngFor="let item of options" [value]="item.name">

@@ -127,7 +127,6 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
         const crsTemplate = data.filter((x) => x.results.name === "CRS");
         const recent = getRecentRecord(crsTemplate, 'created_on');
         this.crsTemplate = recent ? recent.results : null;
-      
         if (!this.crsTemplate) {
             this.getCRSTemplate();
         } else {
@@ -194,7 +193,7 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
 
         this.additionalDocuments = this.additionalDocsMapped.map((item) => {
             const url = this.previewAttachmentsUrl(item.id);
-            return new ImageItem({ src: url, thumb: url, title: item.title });
+            return new ImageItem({ src: url, thumb: url, title: item.title.replace(" Screenshot", "") });
         })
 
         this.basicLightboxExample(this.passportDocuments);
@@ -236,7 +235,7 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
         this.additionalDocsResponse?.forEach(doc => {
             const docTitle: string = constantCaseToSentenceCase(doc.attachment_type);
             const docId: string = doc.id;
-            this.additionalDocsMapped.push({id: docId, title: docTitle});
+            this.additionalDocsMapped.push({ id: docId, title: docTitle });
         });
     }
 
@@ -295,7 +294,7 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
 
     onSubmit() {
         const model = this.remarksForm.value;
-   
+
         this.customerService.updateCustomer(this.customer.id, model).subscribe((response) => {
             this._notifier.success('Remarks has been added successfully.')
         },
@@ -364,7 +363,7 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
 
         this.customerService.updateCustomer(this.customer.id, { [camelToSnakeCaseText(field)]: this.customerForm.get(field).value })
             .subscribe((response) => {
-                this.updatedResponse=response;
+                this.updatedResponse = response;
                 this._notifier.success(`${camelToSentenceCase(field)} updated successfully`);
 
             }, (response) => super.onError(response))
@@ -379,7 +378,7 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
             this.remarksList = REMARKS_LIST.filter(x => [CUSTOMER_STATUSES.ACCEPTED, CUSTOMER_STATUSES.REJECTED].includes(x.id));
         }
         else {
-            this.remarksList = REMARKS_LIST.filter(x=> x.id == status);
+            this.remarksList = REMARKS_LIST.filter(x => x.id == status);
         }
     }
 }
