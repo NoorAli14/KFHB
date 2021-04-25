@@ -196,10 +196,10 @@
                     <div class="profile-box info-box general">
                         <div class="content" style="flex-direction:column" fusePerfectScrollbar>
                             <ng-container *ngFor="let item of FATCA?.results?.sections">
-                                <div fxLayout="column" fxFlex="100">
+                                <div fxFlex fxLayout="row wrap" >
                                     <div class="info-line" *ngFor="let question of item.questions">
-                                        <div class="quest"><strong>Question:</strong> &nbsp;{{question.title}} </div>
-                                        <div class="info">
+                                        <div class="quest-fatca"><strong>Question:</strong> &nbsp;{{question.title}} </div>
+                                        <div class="answer">
                                             <strong>Answer: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong> <span
                                                 *ngIf="question.answer ; else defaultText">{{question.answer}}</span>
                                         </div>
@@ -218,11 +218,11 @@
                                 <strong>{{item.name}}</strong>
                                 <br><br>
                                 <div fxFlex fxLayout="row wrap">
-                                    <div class="info-line" *ngFor="let question of item.questions">
+                                    <div class="info-line" style="margin-bottom: 0px;" *ngFor="let question of item.questions">
                                         <div class="quest">
                                             <h4>{{question.title}}</h4>
                                         </div>
-                                        <div class="control-section">
+                                        <div >
                                             <app-dynamic-input [answer]="question.answer" [label]="question.title"
                                                 [type]="question.type" [options]="question.options">
                                             </app-dynamic-input>
@@ -249,7 +249,7 @@
                                 <br><br>
                                 <div fxFlex fxLayout="row wrap">
                                     <div class="info-line" *ngFor="let question of item.questions">
-                                        <div class="quest">
+                                        <div class="quest-fatca">
                                             <h4>{{question.title}}</h4>
                                         </div>
                                         <div class="control-section">
