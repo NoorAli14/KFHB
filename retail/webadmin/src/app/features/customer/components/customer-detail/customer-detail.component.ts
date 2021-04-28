@@ -296,7 +296,12 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
         const model = this.remarksForm.value;
 
         this.customerService.updateCustomer(this.customer.id, model).subscribe((response) => {
-            this._notifier.success('Remarks has been added successfully.')
+            if (model.status === 'ACCEPTED') {
+                this.createAccount();
+                return;
+            } else {
+                this._notifier.success('Remarks added successfully')
+            }
         },
             (response) => super.onError(response))
     }
@@ -372,9 +377,11 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
     updateRemarksOptionsForStatus(status: string) {
 
         if (status == CUSTOMER_STATUSES.PENDING) {
+            this.customerReponse.status = null;
             this.remarksList = REMARKS_LIST;
         }
         else if (status == CUSTOMER_STATUSES.REFER_TO_BUSINESS) {
+            this.customerReponse.status = null;
             this.remarksList = REMARKS_LIST.filter(x => [CUSTOMER_STATUSES.ACCEPTED, CUSTOMER_STATUSES.REJECTED].includes(x.id));
         }
         else {
