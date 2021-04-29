@@ -39,6 +39,7 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
     FATCA: any;
     amlData: any;
     bankingTransaction: any;
+    kycData: any;
     crsTemplate: any;
     passportProcessed: any;
     civilIdBackProcessed: any;
@@ -123,10 +124,14 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
 
         const bankingTransaction = data.filter((x) => x.results.name === "Banking Transactions");
         this.bankingTransaction = getRecentRecord(bankingTransaction, 'created_on');
+        
+        const kyc = data.filter((x) => x.results.name === "KYC");
+        this.kycData = getRecentRecord(kyc, 'created_on');
 
         const crsTemplate = data.filter((x) => x.results.name === "CRS");
         const recent = getRecentRecord(crsTemplate, 'created_on');
         this.crsTemplate = recent ? recent.results : null;
+
         if (!this.crsTemplate) {
             this.getCRSTemplate();
         } else {
@@ -160,18 +165,11 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
             { title: "Passport", type: "PASSPORT", isExtracted: false },
             { title: "Passport Face", type: "PASSPORT", isExtracted: true },
         ];
-        this.findScreenShotType(
-            "Civil Id Front",
-            "NATIONAL_ID_FRONT_SIDE_SCREENSHOT"
-        );
-        this.findScreenShotType(
-            "Civil Id Back",
-            "NATIONAL_ID_BACK_SIDE_SCREENSHOT"
-        );
 
-        this.findScreenShotType("Passport", "PASSPORT_SCREENSHOT");
-        this.findScreenShotType("Address", "ADDRESS_SCREENSHOT");
-        this.findScreenShotType("Visa", "VISA_SCREENSHOT");
+        this.screenshotsResponse.forEach(item => {
+            const title = constantCaseToSentenceCase(item.attachment_type)
+            this.screenShotsMapped.push({ id: item.id, title });
+        });
 
         // Show additional document images in the tab
         this.mapAdditionalDocuments();
@@ -185,7 +183,6 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
             const url = this.previewDocumentUrl(item.type, item.isExtracted);
             return new ImageItem({ src: url, thumb: url, title: item.title });
         });
-
         this.screenShots = this.screenShotsMapped.map((item) => {
             const url = this.previewAttachmentsUrl(item.id);
             return new ImageItem({ src: url, thumb: url, title: item.title });
@@ -219,7 +216,17 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
         const allowed = this.checkFatcaForAnswers(this.FATCA);
         if (!allowed) {
             this.crsTemplate = null;
+        } else {
+            this.crsTemplate = this.sortTemplate(this.crsTemplate)
         }
+    }
+
+    sortTemplate(template) {
+        let sections = template?.results?.sections;
+        if (!sections) return null;
+        sections = sections.sort((a, b) => a.level.localeCompare(b.level));
+        template.results.sections = sections;
+        return template;
     }
 
     findScreenShotType(title, type) {
