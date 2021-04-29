@@ -193,7 +193,7 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
 
         this.additionalDocuments = this.additionalDocsMapped.map((item) => {
             const url = this.previewAttachmentsUrl(item.id);
-            return new ImageItem({ src: url, thumb: url, title: item.title.replace(" Screenshot", "") });
+            return new ImageItem({ src: url, thumb: url, title: item.title });
         })
 
         this.basicLightboxExample(this.passportDocuments);
@@ -376,7 +376,7 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
 
     updateRemarksOptionsForStatus(status: string) {
 
-        if (status == CUSTOMER_STATUSES.PENDING) {
+        if (status == CUSTOMER_STATUSES.PENDING || status == CUSTOMER_STATUSES.DROPPED) {
             this.customerReponse.status = null;
             this.remarksList = REMARKS_LIST;
         }
