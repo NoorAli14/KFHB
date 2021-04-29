@@ -32,6 +32,7 @@ export const CUSTOMER_STATUSES = {
 export const STATUS_LIST: Array<Select> = [
     { id: 'ACCEPTED', name: 'Accepted' },
     { id: 'PENDING', name: 'Pending' },
+    { id: 'DROPPED', name: 'Dropped' },
     { id: 'REJECTED', name: 'Rejected' },
     { id: 'REFER_TO_BUSINESS', name: 'Refer to Business' },
     { id: 'RETRY', name: 'Retry'}

@@ -110,7 +110,6 @@ export class CustomerComponent
             .subscribe(
                 (response) => {
                     this.customers = snakeToCamelArray(response.data);
-
                     this.pagination = response.pagination;
                     this.dataSource = new MatTableDataSource(this.customers);
                     this.pagination.page = this.pagination.page - 1;
@@ -191,7 +190,7 @@ export class CustomerComponent
         this.previousFilterState = toggleSort(this.previousFilterState, e.direction);
         this.sort.direction = this.previousFilterState;
         this.getData({
-            sort_order: this.previousFilterState,
+            sort_order:  this.previousFilterState,
             sort_by: camelToSnakeCaseText(e.active),
         });
     }
