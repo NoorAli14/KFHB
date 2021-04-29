@@ -269,6 +269,35 @@
                     </div>
                 </div>
             </mat-tab>
+            <mat-tab label="ADDITIONAL DATA">
+                <div class="tab-content p-24 ">
+                    <div class="profile-box info-box general">
+                        <div class="content" style="flex-direction:column;" fusePerfectScrollbar>
+                            <ng-container *ngFor="let item of kycData?.results?.sections">
+                                <strong>{{item.name}}</strong>
+                                <br><br>
+                                <div fxFlex fxLayout="row wrap">
+                                    <div class="info-line" *ngFor="let question of item.questions">
+                                        <div class="quest-fatca">
+                                            <h4>{{question.title}}</h4>
+                                        </div>
+                                        <div class="control-section">
+                                            <app-dynamic-input [answer]="question.answer" [label]="question.title"
+                                                [type]="question.type" [options]="question.options">
+                                            </app-dynamic-input>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr> <br>
+                            </ng-container>
+
+                        </div>
+                        <div *ngIf="!kycData" fxFlex fxLayout="row" fxLayoutAlign="center center">
+                            <strong>There is no data available</strong>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
             <mat-tab label="AML">
                 <div class="tab-content p-24 ">
                     <div class="profile-box info-box general">
@@ -429,7 +458,7 @@
                     <div class="profile-box info-box general">
                         <div class="content">
                             <div fxLayout="row wrap" fxLayoutAlign="center center">
-                                <div *ngFor="let item of screenShots; index as i">
+                                <div *ngFor="let item of screenShots; index as i" style="margin-bottom: 30px;">
                                     <div class="product-image">
                                         <img [lightbox]="i" class="gallery" [gallery]="'screenshots'"
                                             [src]="item.data.thumb">
