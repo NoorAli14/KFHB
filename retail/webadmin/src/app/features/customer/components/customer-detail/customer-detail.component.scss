@@ -23,10 +23,7 @@ app-customer-detail {
         }
 
         .content {
-            flex-direction: column;
-            padding: 20px;
-            min-height: 400px;
-            max-height: 400px;
+            flex-direction: column;padding: 20px;    min-height: 400px;max-height: 400px;
         }
 
         footer {
@@ -39,7 +36,7 @@ app-customer-detail {
                 margin-bottom: 24px;
                 display: flex;
                 width: 50%;
-                padding: 0px 20px;
+                padding:0px 20px;
                 justify-content: space-between;
                 .title {
                     font-size: 15px;
@@ -91,12 +88,11 @@ app-customer-detail {
 .tab-height {
     height: 400px;
 }
-.empty-box {
+.empty-box{
     padding: 20px;
 }
-.spliter {
-    width: 100%;
-    margin-top: 20px;
+.spliter{
+    width: 100%;margin-top: 20px;
 }
 .container {
     display: flex;
@@ -146,42 +142,42 @@ img {
         width: auto;
         max-width: none;
     }
-    strong {
+    strong{
         margin-top: 10px;
     }
 }
-.test1 {
-    background-size: "contain" !important;
+.test1{
+    background-size: 'contain' !important;
 }
 
-.color-success {
-    color: rgb(0, 102, 68);
+.color-success{
+    color:rgb(0, 102, 68);
     font-size: 14px;
 }
-.color-warn {
-    color: rgb(255, 240, 179);
-    font-size: 14px;
+.color-warn{
+color:rgb(255, 240, 179);
+font-size: 14px;
 }
-.color-info {
-    color: rgb(0, 82, 204);
-    font-size: 14px;
+.color-info{
+color:rgb(0, 82, 204);
+font-size: 14px;
 }
-.color-danger {
-    color: rgb(191, 38, 0);
-    font-size: 14px;
+.color-danger{
+color:rgb(191, 38, 0);
+font-size: 14px;
 }
 
-.aml-status {
+.aml-status{
     margin-left: 15px;
 }
 
-.control-section {
+.control-section{
     margin-top: 20px;
 }
 
-.aml-th {
+.aml-th{
     font-weight: 600;
-    color: black !important;
+    color: black !important
 }
 
 .mat-form-field-wrapper{
@@ -194,6 +190,6 @@ img {
     -webkit-box-shadow: -1px 5px 24px -7px rgba(0, 0, 0, 0.75);
     -moz-box-shadow: -1px 5px 24px -7px rgba(0, 0, 0, 0.75);
     border-radius: 5px;
-    background: rgb(0 0 0 / 14%);
+    background:rgb(0 0 0 / 14%);
     cursor: pointer;
 }
