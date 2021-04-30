@@ -1,7 +1,7 @@
 <div [ngSwitch]="type">
     <ng-container *ngSwitchCase="'dropdown'">
         <mat-form-field style="width: 291px;" appearance="outline" class="pr-4">
-            <mat-label>{{label}} </mat-label>
+            <mat-label> </mat-label>
             <mat-select disabled="true" [value]="answer">
                 <mat-option value="">
                 </mat-option>
@@ -13,7 +13,6 @@
     </ng-container>
     <ng-container *ngSwitchCase="'text'">
         <mat-form-field disabled="true" style="width: 291px;" appearance="outline">
-            <mat-label>{{label}} </mat-label>
             <input matInput [value]="answer?answer:null" />
         </mat-form-field>
     </ng-container>
