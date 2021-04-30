@@ -10,8 +10,8 @@ export const environment = {
     TENANT_ID: window["env"]["ENV_RBX_TENANT_ID"],
     VIDEO_URL: window["env"]["ENV_RBX_VIDEO_URL"],
     RETAIL_API_BASE_URL: window["env"]["ENV_RBX_RETAIL_API_BASE_URL"],
-    CORPORATE_API_BASE_URL: window["env"]["ENV_RBX_CORPORATE_API_BASE_URL"]
-    ,API_BASE_URL: 'http://10.5.1.37',
+    CORPORATE_API_BASE_URL: window["env"]["ENV_RBX_CORPORATE_API_BASE_URL"],
+    API_BASE_URL: 'http://172.18.4.21/',
   };
   
   setTimeout(() => {
