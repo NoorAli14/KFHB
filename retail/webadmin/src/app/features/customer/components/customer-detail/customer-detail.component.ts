@@ -82,7 +82,7 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
         this.updateRemarksOptionsForStatus(this.customerReponse.status);
 
         this.remarksForm = new FormGroup({
-            remarks: new FormControl(this.customerReponse.remarks,),
+            remarks: new FormControl(this.customerReponse.remarks,[Validators.required]),
             status: new FormControl(this.customerReponse.status, [Validators.required]),
         });
         this.customerForm = new FormGroup({
@@ -222,10 +222,10 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
     }
 
     sortTemplate(template) {
-        let sections = template?.results?.sections;
+        let sections = template?.sections;
         if (!sections) return null;
         sections = sections.sort((a, b) => a.level.localeCompare(b.level));
-        template.results.sections = sections;
+        template.sections = sections;
         return template;
     }
 
@@ -383,8 +383,11 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
 
     updateRemarksOptionsForStatus(status: string) {
 
-        if (status == CUSTOMER_STATUSES.PENDING || status == CUSTOMER_STATUSES.DROPPED) {
+        if (status == CUSTOMER_STATUSES.PENDING) {
             this.customerReponse.status = null;
+            this.remarksList = REMARKS_LIST;
+        }
+        else if (status == CUSTOMER_STATUSES.DROPPED) {
             this.remarksList = REMARKS_LIST;
         }
         else if (status == CUSTOMER_STATUSES.REFER_TO_BUSINESS) {
