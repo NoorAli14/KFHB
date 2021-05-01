@@ -11,9 +11,9 @@ export const environment = {
     VIDEO_URL: window["env"]["ENV_RBX_VIDEO_URL"],
     RETAIL_API_BASE_URL: window["env"]["ENV_RBX_RETAIL_API_BASE_URL"],
     CORPORATE_API_BASE_URL: window["env"]["ENV_RBX_CORPORATE_API_BASE_URL"],
-    API_BASE_URL: 'http://172.18.4.21',
+    API_BASE_URL: window["env"]["ENV_RBX_API_BASE_URL"]
   };
-  
+
   setTimeout(() => {
     window["env"] = null;
   }, 5000);
