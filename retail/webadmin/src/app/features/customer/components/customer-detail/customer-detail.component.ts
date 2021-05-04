@@ -82,7 +82,7 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
         this.updateRemarksOptionsForStatus(this.customerReponse.status);
 
         this.remarksForm = new FormGroup({
-            remarks: new FormControl(this.customerReponse.remarks,[Validators.required]),
+            remarks: new FormControl(this.customerReponse.remarks, [Validators.required]),
             status: new FormControl(this.customerReponse.status, [Validators.required]),
         });
         this.customerForm = new FormGroup({
@@ -124,7 +124,7 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
 
         const bankingTransaction = data.filter((x) => x.results.name === "Banking Transactions");
         this.bankingTransaction = getRecentRecord(bankingTransaction, 'created_on');
-        
+
         const kyc = data.filter((x) => x.results.name === "KYC");
         this.kycData = getRecentRecord(kyc, 'created_on');
 
@@ -212,6 +212,13 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
         );
     }
 
+    getFullName() {
+        if (!this.customer?.firstName && !this.customer?.middleName && !this.customer?.lastName) {
+            return null;
+        }
+
+        return `${this.customer.firstName ? this.customer.firstName : ''} ${this.customer.middleName ? this.customer.middleName : ''}  ${this.customer.lastName ? this.customer.lastName : ''} `
+    }
     validateIfCRSAllowed() {
         const allowed = this.checkFatcaForAnswers(this.FATCA);
         if (!allowed) {
@@ -303,6 +310,7 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
         const model = this.remarksForm.value;
 
         this.customerService.updateCustomer(this.customer.id, model).subscribe((response) => {
+            this.updatedResponse = response;
             if (model.status === 'ACCEPTED') {
                 this.createAccount();
                 return;
@@ -345,15 +353,18 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
     getAMLData() {
         this.customerService.getAMLData(this.customer.id)
             .subscribe((response) => {
-                const parsedResponse = getRecentRecord(response.responses, 'created_on');
-                parsedResponse['response_text'] = JSON.parse(parsedResponse['response_text']);
+                if (response.responses) {
+                    const parsedResponse = getRecentRecord(response.responses, 'created_on');
+                    parsedResponse['response_text'] = JSON.parse(parsedResponse['response_text']);
 
-                if (parsedResponse['response_text'].error || parsedResponse['response_text'].status === 400) {
-                    this._notifier.error(MESSAGES.UNKNOWN);
-                    return;
+                    if (parsedResponse['response_text'].error || parsedResponse['response_text'].status === 400) {
+                        this._notifier.error(MESSAGES.UNKNOWN);
+                        return;
+                    }
+                    this.amlResponse = parsedResponse;
+                    this._notifier.success('AML data fetched successfully.');
                 }
-                this.amlResponse = parsedResponse;
-                this._notifier.success('AML data fetched successfully.');
+
             }, (response) => super.onError(response))
     }
 
@@ -376,6 +387,7 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
         this.customerService.updateCustomer(this.customer.id, { [camelToSnakeCaseText(field)]: this.customerForm.get(field).value })
             .subscribe((response) => {
                 this.updatedResponse = response;
+                this.customer[field] = response[camelToSnakeCaseText(field)]
                 this._notifier.success(`${camelToSentenceCase(field)} updated successfully`);
 
             }, (response) => super.onError(response))
