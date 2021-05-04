@@ -73,10 +73,8 @@
                                     </div>
                                     <div class="info-line">
                                         <div class="title">Full Name</div>
-                                        <div class="info"
-                                            *ngIf="civilIdBackProcessed && civilIdBackProcessed['Given Names'] ; else defaultText">
-                                            {{civilIdBackProcessed['Given Names'] + ' ' +
-                                            civilIdBackProcessed['Surname']}}
+                                        <div class="info" *ngIf="getFullName() ; else defaultText">
+                                            {{getFullName()}}
                                         </div>
                                     </div>
 
@@ -110,6 +108,12 @@
                                         <div class="info"
                                             *ngIf="civilIdBackProcessed && civilIdBackProcessed['Date Of Birth'] ; else defaultText">
                                             {{civilIdBackProcessed['Date Of Birth']}}</div>
+                                    </div>
+                                    <div class="info-line">
+                                        <div class="title">Civil Id</div>
+                                        <div class="info" *ngIf="customer && customer.nationalIdNo ; else defaultText">
+                                            {{customer.nationalIdNo}}
+                                        </div>
                                     </div>
                                     <div class="info-line">
                                         <div class="title">Status</div>
@@ -196,9 +200,10 @@
                     <div class="profile-box info-box general">
                         <div class="content" style="flex-direction:column" fusePerfectScrollbar>
                             <ng-container *ngFor="let item of FATCA?.results?.sections">
-                                <div fxFlex fxLayout="row wrap" >
+                                <div fxFlex fxLayout="row wrap">
                                     <div class="info-line" *ngFor="let question of item.questions">
-                                        <div class="quest-fatca"><strong>Question:</strong> &nbsp;{{question.title}} </div>
+                                        <div class="quest-fatca"><strong>Question:</strong> &nbsp;{{question.title}}
+                                        </div>
                                         <div class="answer">
                                             <strong>Answer: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong> <span
                                                 *ngIf="question.answer ; else defaultText">{{question.answer}}</span>
@@ -218,11 +223,12 @@
                                 <strong>{{item.name}}</strong>
                                 <br><br>
                                 <div fxFlex fxLayout="row wrap">
-                                    <div class="info-line" style="margin-bottom: 0px;" *ngFor="let question of item.questions">
+                                    <div class="info-line" style="margin-bottom: 0px;"
+                                        *ngFor="let question of item.questions">
                                         <div class="quest">
                                             <h4>{{question.title}}</h4>
                                         </div>
-                                        <div >
+                                        <div>
                                             <app-dynamic-input [answer]="question.answer" [label]="question.title"
                                                 [type]="question.type" [options]="question.options">
                                             </app-dynamic-input>

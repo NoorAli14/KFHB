@@ -21,11 +21,14 @@ export const snakeToCamelArray = (array) => {
 
     return response;
 };
-
 export const constantCaseToSentenceCase = text => {
-    return text.split('_').map(word => word[0].toUpperCase() + word.slice(1,).toLowerCase().replace("screenshot", "")).join(' ')
+    return text.split('_').map(word => {
+        const mapped = word.toLowerCase().replace("screenshot", "")
+        const result = mapped.replace(/([A-Z])/g, " $1");
+        return result.charAt(0).toUpperCase() + result.slice(1);
+    }).join(' ');
 };
-  
+
 export const snakeToCamelObject = (data) => {
     if (!data) {
         return;
