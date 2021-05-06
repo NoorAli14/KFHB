@@ -87,8 +87,16 @@
                                     <div class="info-line">
                                         <div class="title">Gender</div>
                                         <div class="info"
-                                            *ngIf="civilIdBackProcessed && civilIdBackProcessed.Sex ; else defaultText">
-                                            {{civilIdBackProcessed.Sex}}</div>
+                                            *ngIf="civilIdBackProcessed && civilIdBackProcessed.Sex; else defaultText">
+                                            <span
+                                                *ngIf="civilIdBackProcessed.Sex == 'M' || civilIdBackProcessed.Sex == 'Male'">
+                                                Male
+                                            </span>
+                                            <span
+                                                *ngIf="civilIdBackProcessed.Sex == 'F' || civilIdBackProcessed.Sex == 'Female'">
+                                                Female
+                                            </span>
+                                        </div>
                                     </div>
                                     <div class="info-line">
                                         <div class="title">Date Of Expiry</div>
@@ -116,10 +124,15 @@
                                         </div>
                                     </div>
                                     <div class="info-line">
+                                        <div class="title">Existing customer</div>
+                                        <div class="info">
+                                            {{customer && customer.externalRefId ? 'Yes' : 'No'}}
+                                        </div>
+                                    </div>
+                                    <div class="info-line">
                                         <div class="title">Status</div>
-                                        <div class="info"
-                                            *ngIf="civilIdBackProcessed && civilIdBackProcessed['status'] ; else defaultText">
-                                            {{civilIdBackProcessed['status']}}
+                                        <div class="info" *ngIf="customer && customer['status'] ; else defaultText">
+                                            {{customer['status']}}
                                         </div>
                                     </div>
                                 </div>
@@ -174,8 +187,14 @@
                                 <div class="info-line">
                                     <div class="title">Gender</div>
                                     <div class="info"
-                                        *ngIf="passportProcessed && passportProcessed.Sex ; else defaultText">
-                                        {{passportProcessed.Sex}}</div>
+                                        *ngIf="passportProcessed && passportProcessed.Sex; else defaultText">
+                                        <span *ngIf="passportProcessed.Sex == 'M' || passportProcessed.Sex == 'Male'">
+                                            Male
+                                        </span>
+                                        <span *ngIf="passportProcessed.Sex == 'F' || passportProcessed.Sex == 'Female'">
+                                            Female
+                                        </span>
+                                    </div>
                                 </div>
                                 <div class="info-line">
                                     <div class="title">Date Of Expiry</div>
