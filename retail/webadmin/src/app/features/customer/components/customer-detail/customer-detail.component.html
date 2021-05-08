@@ -214,6 +214,155 @@
                     </div>
                 </div>
             </mat-tab>
+
+            <ng-container *ngIf="customer.isMinor">
+                <mat-tab label="GUARDIAN CIVIL ID">
+                    <form [formGroup]="customerForm">
+                        <div class="tab-content p-24 ">
+                            <div class="profile-box info-box general">
+                                <div class="content" fusePerfectScrollbar>
+                                    <div fxLayout="row wrap">
+                                        <div class="info-line ">
+                                            <div class="title">First Name</div>
+                                            <div class="info" *ngIf="guardianCivilIdBackProcessed['Given Names'] ; else defaultText">
+                                                {{guardianCivilIdBackProcessed['Given Names']}}</div>
+                                        </div>
+                                       
+                                        <div class="info-line ">
+                                            <div class="title">Last Name</div>
+                                            <div class="info" *ngIf="guardianCivilIdBackProcessed['Surname'] ; else defaultText">
+                                                {{guardianCivilIdBackProcessed['Surname']}}</div>
+                                        </div>
+                                        <div class="info-line">
+                                            <div class="title">Full Name</div>
+                                            <div class="info" *ngIf="guardianCivilIdBackProcessed['Surname And Given Names'] ; else defaultText">
+                                                {{guardianCivilIdBackProcessed['Surname And Given Names']}}</div>
+                                        </div>
+                                     
+                                        <div class="info-line">
+                                            <div class="title">Gender</div>
+                                            <div class="info"
+                                                *ngIf="guardianCivilIdBackProcessed && guardianCivilIdBackProcessed.Sex; else defaultText">
+                                                <span
+                                                    *ngIf="guardianCivilIdBackProcessed.Sex == 'M' || guardianCivilIdBackProcessed.Sex == 'Male'">
+                                                    Male
+                                                </span>
+                                                <span
+                                                    *ngIf="guardianCivilIdBackProcessed.Sex == 'F' || guardianCivilIdBackProcessed.Sex == 'Female'">
+                                                    Female
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="info-line">
+                                            <div class="title">Date Of Expiry</div>
+                                            <div class="info"
+                                                *ngIf="guardianCivilIdBackProcessed && guardianCivilIdBackProcessed['Date Of Expiry'] ; else defaultText">
+                                                {{guardianCivilIdBackProcessed['Date Of Expiry']}}</div>
+                                        </div>
+
+
+                                        <div class="info-line">
+                                            <div class="title">Birth Date</div>
+                                            <div class="info"
+                                                *ngIf="guardianCivilIdBackProcessed && guardianCivilIdBackProcessed['Date Of Birth'] ; else defaultText">
+                                                {{guardianCivilIdBackProcessed['Date Of Birth']}}</div>
+                                        </div>
+                                        <div class="info-line">
+                                            <div class="title">Document Number</div>
+                                            <div class="info"
+                                                *ngIf="guardianCivilIdBackProcessed && guardianCivilIdBackProcessed['Document Number'] ; else defaultText">
+                                                {{guardianCivilIdBackProcessed['Document Number']}}
+                                            </div>
+                                        </div>
+                                        <div class="info-line">
+                                            <div class="title">Issuing State Name</div>
+                                            <div class="info" *ngIf="guardianCivilIdBackProcessed && guardianCivilIdBackProcessed['Issuing State Name'] ; else defaultText">
+                                                {{guardianCivilIdBackProcessed['Issuing State Name']}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </mat-tab>
+                <mat-tab label="GUARDIAN PASSPORT">
+                    <div class="tab-content p-24 ">
+                        <div class="profile-box info-box general">
+                            <div class="content" fusePerfectScrollbar>
+                                <div fxLayout="row wrap">
+
+                                    <div class="info-line">
+                                        <div class="title">First Name</div>
+                                        <div class="info"
+                                            *ngIf="guardianPassportProcessed && guardianPassportProcessed['Given Names'] ; else defaultText">
+                                            {{guardianPassportProcessed['Given Names'] }}</div>
+                                    </div>
+                                    <div class="info-line">
+                                        <div class="title">Last Name</div>
+                                        <div class="info"
+                                            *ngIf="guardianPassportProcessed && guardianPassportProcessed['Surname'] ; else defaultText">
+                                            {{guardianPassportProcessed['Surname'] }}</div>
+                                    </div>
+                                    <div class="info-line">
+                                        <div class="title">Full Name</div>
+                                        <div class="info"
+                                            *ngIf="guardianPassportProcessed && guardianPassportProcessed['Given Names'] ; else defaultText">
+                                            {{guardianPassportProcessed['Given Names'] + ' ' + guardianPassportProcessed['Surname']}}
+                                        </div>
+                                    </div>
+                                    <div class="info-line">
+                                        <div class="title">Birth Date</div>
+                                        <div class="info"
+                                            *ngIf="guardianPassportProcessed && guardianPassportProcessed['Date Of Birth'] ; else defaultText">
+                                            {{guardianPassportProcessed['Date Of Birth']}}</div>
+                                    </div>
+                                    <div class="info-line">
+                                        <div class="title">Age</div>
+                                        <div class="info"
+                                            *ngIf="guardianPassportProcessed && guardianPassportProcessed.Age ; else defaultText">
+                                            {{guardianPassportProcessed.Age}}</div>
+                                    </div>
+                                    <div class="info-line">
+                                        <div class="title">Issuing State</div>
+                                        <div class="info"
+                                            *ngIf="guardianPassportProcessed && guardianPassportProcessed['Issuing State Name'] ; else defaultText">
+                                            {{guardianPassportProcessed['Issuing State Name']}}</div>
+                                    </div>
+
+                                    <div class="info-line">
+                                        <div class="title">Gender</div>
+                                        <div class="info"
+                                            *ngIf="guardianPassportProcessed && guardianPassportProcessed.Sex; else defaultText">
+                                            <span
+                                                *ngIf="guardianPassportProcessed.Sex == 'M' || guardianPassportProcessed.Sex == 'Male'">
+                                                Male
+                                            </span>
+                                            <span
+                                                *ngIf="guardianPassportProcessed.Sex == 'F' || guardianPassportProcessed.Sex == 'Female'">
+                                                Female
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="info-line">
+                                        <div class="title">Date Of Expiry</div>
+                                        <div class="info"
+                                            *ngIf="guardianPassportProcessed && guardianPassportProcessed['Date Of Expiry'] ; else defaultText">
+                                            {{guardianPassportProcessed['Date Of Expiry']}}</div>
+                                    </div>
+                                    <div class="info-line">
+                                        <div class="title">Document Number</div>
+                                        <div class="info"
+                                            *ngIf="guardianPassportProcessed && guardianPassportProcessed['Document Number'] ; else defaultText">
+                                            {{guardianPassportProcessed['Document Number'] }}</div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </mat-tab>
+            </ng-container>
             <mat-tab label="FATCA & CRS">
                 <div class="tab-content p-24 ">
                     <div class="profile-box info-box general">
@@ -224,8 +373,8 @@
                                         <div class="quest-fatca"><strong>Question:</strong> &nbsp;{{question.title}}
                                         </div>
                                         <div class="answer">
-                                            <strong>Answer: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong> <span
-                                                *ngIf="question.answer ; else defaultText">{{question.answer}}</span>
+                                            <strong>Answer: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>
+                                            <span *ngIf="question.answer ; else defaultText">{{question.answer}}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -248,9 +397,7 @@
                                             <h4>{{question.title}}</h4>
                                         </div>
                                         <div>
-                                            <app-dynamic-input [answer]="question.answer" [label]="question.title"
-                                                [type]="question.type" [options]="question.options">
-                                            </app-dynamic-input>
+                                            <span *ngIf="question.answer ; else defaultText">{{question.answer}}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -302,14 +449,12 @@
                                 <strong>{{item.name}}</strong>
                                 <br><br>
                                 <div fxFlex fxLayout="row wrap">
-                                    <div class="info-line" *ngFor="let question of item.questions">
+                                    <div class="info-line no-bottom" *ngFor="let question of item.questions">
                                         <div class="quest-fatca">
-                                            <h4>{{question.title}}</h4>
+                                            <h4>{{question.title}}:</h4>
                                         </div>
                                         <div class="control-section">
-                                            <app-dynamic-input [answer]="question.answer" [label]="question.title"
-                                                [type]="question.type" [options]="question.options">
-                                            </app-dynamic-input>
+                                            <span *ngIf="question.answer ; else defaultText">{{question.answer}}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -478,6 +623,44 @@
                     </div>
                 </div>
             </mat-tab>
+
+            <ng-container *ngIf="customer.isMinor">
+                <mat-tab label="GUARDIAN CIVIL ID DOCUMENT">
+                    <div class="tab-content p-24 " fusePerfectScrollbar>
+                        <div class="profile-box info-box general">
+                            <div class="content">
+                                <div fxLayout="row wrap" fxLayoutAlign="center center">
+                                    <div *ngFor="let item of guardianNationalIdDocuments; index as i">
+                                        <div class="product-image">
+                                            <img [lightbox]="i" class="gallery" [gallery]="'guardianNationalIdDocuments'"
+                                                [src]="item.data.thumb">
+                                            <strong>{{item.data.title}}</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-tab>
+                <mat-tab label="GUARDIAN PASSPORT DOCUMENT">
+                    <div class="tab-content p-24 " fusePerfectScrollbar>
+                        <div class="profile-box info-box general">
+                            <div class="content">
+                                <div fxLayout="row wrap" fxLayoutAlign="center center">
+                                    <div *ngFor="let item of guardianPassportDocuments; index as i">
+                                        <div class="product-image">
+                                            <img [lightbox]="i" class="gallery" [gallery]="'guardianPassportDocuments'"
+                                                [src]="item.data.thumb">
+                                            <strong>{{item.data.title}}</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-tab>
+            </ng-container>
+
             <mat-tab label="SCREENSHOTS">
                 <div class="tab-content p-24 " fusePerfectScrollbar>
                     <div class="profile-box info-box general">

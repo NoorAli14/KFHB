@@ -33,7 +33,9 @@ import { MESSAGES } from "@shared/constants/messages.constant";
 export class CustomerDetailComponent extends BaseComponent implements OnInit, AfterContentChecked {
 
     nationalIdDocuments: GalleryItem[];
+    guardianNationalIdDocuments: GalleryItem[];
     passportDocuments: GalleryItem[];
+    guardianPassportDocuments: GalleryItem[];
     screenShots: GalleryItem[];
     additionalDocuments: GalleryItem[];
     FATCA: any;
@@ -42,7 +44,9 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
     kycData: any;
     crsTemplate: any;
     passportProcessed: any;
+    guardianPassportProcessed: any;
     civilIdBackProcessed: any;
+    guardianCivilIdBackProcessed: any;
     enabledField: string;
     customer: any;
     customerReponse: any;
@@ -110,6 +114,9 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
         this.civilIdBackProcessed = civilIdBackProcessData
             ? JSON.parse(civilIdBackProcessData.processed_data)?.mrz
             : null;
+
+
+
         const passportProcessData =
             this.customerReponse.documents.length > 0
                 ? this.customerReponse.documents.find(
@@ -119,6 +126,30 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
         this.passportProcessed = passportProcessData
             ? JSON.parse(passportProcessData.processed_data)?.mrz
             : null;
+
+        // guardian data
+        const guardianCivilIdBackProcessData =
+            this.customerReponse.documents.length > 0
+                ? this.customerReponse.documents.find(
+                    (x) => x.name === "GUARDIAN_NATIONAL_ID_BACK_SIDE"
+                )
+                : null;
+
+        this.guardianCivilIdBackProcessed = guardianCivilIdBackProcessData
+            ? JSON.parse(guardianCivilIdBackProcessData.processed_data)?.mrz
+            : null;
+
+        const guardianPassportProcessData =
+            this.customerReponse.documents.length > 0
+                ? this.customerReponse.documents.find(
+                    (x) => x.name === "GUARDIAN_PASSPORT"
+                )
+                : null;
+        this.guardianPassportProcessed = guardianPassportProcessData
+            ? JSON.parse(guardianPassportProcessData.processed_data)?.mrz
+            : null;
+
+
         this.customer = snakeToCamelObject(this.customerReponse);
         this.FATCA = data.find((x) => x.results.name === "FATCA");
 
@@ -160,10 +191,26 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
                 isExtracted: true,
             },
         ];
+        const _guardianNationalIdDocuments = [
+            {
+                title: "National Id Front",
+                type: "GUARDIAN_NATIONAL_ID_FRONT_SIDE",
+                isExtracted: false,
+            },
+            {
+                title: "National Id Back",
+                type: "GUARDIAN_NATIONAL_ID_BACK_SIDE",
+                isExtracted: false,
+            },
+        ];
 
         const _passportDocuments = [
             { title: "Passport", type: "PASSPORT", isExtracted: false },
             { title: "Passport Face", type: "PASSPORT", isExtracted: true },
+        ];
+
+        const _guardianPassportDocuments = [
+            { title: "Passport", type: "GUARDIAN_PASSPORT", isExtracted: false },
         ];
 
         this.screenshotsResponse.forEach(item => {
@@ -173,21 +220,37 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
 
         // Show additional document images in the tab
         this.mapAdditionalDocuments();
-
+        //  CIVIL ID MAPPING
         this.nationalIdDocuments = _nationalIdDocuments.map((item) => {
             const url = this.previewDocumentUrl(item.type, item.isExtracted);
             return new ImageItem({ src: url, thumb: url, title: item.title });
         });
 
+        // PASSPORT MAPPING
         this.passportDocuments = _passportDocuments.map((item) => {
             const url = this.previewDocumentUrl(item.type, item.isExtracted);
             return new ImageItem({ src: url, thumb: url, title: item.title });
         });
+        debugger
+        // GUARDIAN CIVIL ID MAPPING
+        this.guardianNationalIdDocuments = _guardianNationalIdDocuments.map((item) => {
+            const url = this.previewDocumentUrl(item.type, item.isExtracted);
+            return new ImageItem({ src: url, thumb: url, title: item.title });
+        });
+
+        // GUARDIAN PASSPORT MAPPING
+        this.guardianPassportDocuments = _guardianPassportDocuments.map((item) => {
+            const url = this.previewDocumentUrl(item.type, item.isExtracted);
+            return new ImageItem({ src: url, thumb: url, title: item.title });
+        });
+
+        // SCREENSHOTS MAPPING
         this.screenShots = this.screenShotsMapped.map((item) => {
             const url = this.previewAttachmentsUrl(item.id);
             return new ImageItem({ src: url, thumb: url, title: item.title });
         });
 
+        // ADDITIONAL DOCUMENTS MAPPING
         this.additionalDocuments = this.additionalDocsMapped.map((item) => {
             const url = this.previewAttachmentsUrl(item.id);
             return new ImageItem({ src: url, thumb: url, title: item.title });
@@ -209,6 +272,16 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
         this.withCustomGalleryConfig(
             "nationalIdDocuments",
             this.nationalIdDocuments
+        );
+
+        this.withCustomGalleryConfig(
+            "guardianNationalIdDocuments",
+            this.guardianNationalIdDocuments
+        );
+
+        this.withCustomGalleryConfig(
+            "guardianPassportDocuments",
+            this.guardianPassportDocuments
         );
     }
 
