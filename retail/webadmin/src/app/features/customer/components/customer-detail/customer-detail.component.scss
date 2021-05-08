@@ -9,7 +9,9 @@ app-customer-detail {
         overflow: hidden;
         margin-bottom: 16px;
         @include mat-elevation(2);
-
+        .no-bottom{
+            margin-bottom: 0px !important;
+        }
         header {
             padding: 16px;
 
