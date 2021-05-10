@@ -84,7 +84,7 @@ export class CustomerComponent
     }
 
     getQueryString(params): string {
-        return QueryString.stringify(params,{encode:false});
+        return QueryString.stringify(params, { encode: false });
     }
 
     createQueryObject(params): any {
@@ -151,6 +151,7 @@ export class CustomerComponent
         });
         this.dialogRef.afterClosed().subscribe(
             (response) => {
+                if (!response) return;
                 const cloned = [...this.dataSource.data];
                 const index = cloned.findIndex(x => x.id == response.id);
                 if (index > -1) {
@@ -190,7 +191,7 @@ export class CustomerComponent
         this.previousFilterState = toggleSort(this.previousFilterState, e.direction);
         this.sort.direction = this.previousFilterState;
         this.getData({
-            sort_order:  this.previousFilterState,
+            sort_order: this.previousFilterState,
             sort_by: camelToSnakeCaseText(e.active),
         });
     }

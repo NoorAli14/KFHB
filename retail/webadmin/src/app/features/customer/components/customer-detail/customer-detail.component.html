@@ -224,21 +224,24 @@
                                     <div fxLayout="row wrap">
                                         <div class="info-line ">
                                             <div class="title">First Name</div>
-                                            <div class="info" *ngIf="guardianCivilIdBackProcessed['Given Names'] ; else defaultText">
+                                            <div class="info"
+                                                *ngIf="guardianCivilIdBackProcessed && guardianCivilIdBackProcessed['Given Names'] ; else defaultText">
                                                 {{guardianCivilIdBackProcessed['Given Names']}}</div>
                                         </div>
-                                       
+
                                         <div class="info-line ">
                                             <div class="title">Last Name</div>
-                                            <div class="info" *ngIf="guardianCivilIdBackProcessed['Surname'] ; else defaultText">
+                                            <div class="info"
+                                                *ngIf="guardianCivilIdBackProcessed && guardianCivilIdBackProcessed['Surname'] ; else defaultText">
                                                 {{guardianCivilIdBackProcessed['Surname']}}</div>
                                         </div>
                                         <div class="info-line">
                                             <div class="title">Full Name</div>
-                                            <div class="info" *ngIf="guardianCivilIdBackProcessed['Surname And Given Names'] ; else defaultText">
+                                            <div class="info"
+                                                *ngIf="guardianCivilIdBackProcessed && guardianCivilIdBackProcessed['Surname And Given Names'] ; else defaultText">
                                                 {{guardianCivilIdBackProcessed['Surname And Given Names']}}</div>
                                         </div>
-                                     
+
                                         <div class="info-line">
                                             <div class="title">Gender</div>
                                             <div class="info"
@@ -276,7 +279,8 @@
                                         </div>
                                         <div class="info-line">
                                             <div class="title">Issuing State Name</div>
-                                            <div class="info" *ngIf="guardianCivilIdBackProcessed && guardianCivilIdBackProcessed['Issuing State Name'] ; else defaultText">
+                                            <div class="info"
+                                                *ngIf="guardianCivilIdBackProcessed && guardianCivilIdBackProcessed['Issuing State Name'] ; else defaultText">
                                                 {{guardianCivilIdBackProcessed['Issuing State Name']}}
                                             </div>
                                         </div>
@@ -308,7 +312,8 @@
                                         <div class="title">Full Name</div>
                                         <div class="info"
                                             *ngIf="guardianPassportProcessed && guardianPassportProcessed['Given Names'] ; else defaultText">
-                                            {{guardianPassportProcessed['Given Names'] + ' ' + guardianPassportProcessed['Surname']}}
+                                            {{guardianPassportProcessed['Given Names'] + ' ' +
+                                            guardianPassportProcessed['Surname']}}
                                         </div>
                                     </div>
                                     <div class="info-line">
@@ -593,13 +598,11 @@
                 <div class="tab-content p-24 " fusePerfectScrollbar>
                     <div class="profile-box info-box general">
                         <div class="content">
-                            <div fxLayout="row wrap" fxLayoutAlign="center center">
-                                <div *ngFor="let item of nationalIdDocuments; index as i">
-                                    <div class="product-image">
-                                        <img [lightbox]="i" class="gallery" [gallery]="'nationalIdDocuments'"
-                                            [src]="item.data.thumb">
-                                        <strong>{{item.data.title}}</strong>
-                                    </div>
+                            <div fxLayout="row wrap " class="img-box">
+                                <div class="product-image" *ngFor="let item of nationalIdDocuments; index as i">
+                                    <img [lightbox]="i" class="gallery" [gallery]="'nationalIdDocuments'"
+                                        [src]="item.data.thumb">
+                                    <strong>{{item.data.title}}</strong>
                                 </div>
                             </div>
                         </div>
@@ -610,13 +613,11 @@
                 <div class="tab-content p-24 " fusePerfectScrollbar>
                     <div class="profile-box info-box general">
                         <div class="content">
-                            <div fxLayout="row wrap" fxLayoutAlign="center center">
-                                <div *ngFor="let item of passportDocuments; index as i">
-                                    <div class="product-image">
-                                        <img [lightbox]="i" class="gallery" [gallery]="'passportDocuments'"
-                                            [src]="item.data.thumb">
-                                        <strong>{{item.data.title}}</strong>
-                                    </div>
+                            <div fxLayout="row wrap " class="img-box">
+                                <div *ngFor="let item of passportDocuments; index as i" class="product-image">
+                                    <img [lightbox]="i" class="gallery" [gallery]="'passportDocuments'"
+                                        [src]="item.data.thumb">
+                                    <strong>{{item.data.title}}</strong>
                                 </div>
                             </div>
                         </div>
@@ -629,13 +630,12 @@
                     <div class="tab-content p-24 " fusePerfectScrollbar>
                         <div class="profile-box info-box general">
                             <div class="content">
-                                <div fxLayout="row wrap" fxLayoutAlign="center center">
-                                    <div *ngFor="let item of guardianNationalIdDocuments; index as i">
-                                        <div class="product-image">
-                                            <img [lightbox]="i" class="gallery" [gallery]="'guardianNationalIdDocuments'"
-                                                [src]="item.data.thumb">
-                                            <strong>{{item.data.title}}</strong>
-                                        </div>
+                                <div fxLayout="row wrap " class="img-box">
+                                    <div class="product-image"
+                                        *ngFor="let item of guardianNationalIdDocuments; index as i">
+                                        <img [lightbox]="i" class="gallery" [gallery]="'guardianNationalIdDocuments'"
+                                            [src]="item.data.thumb">
+                                        <strong>{{item.data.title}}</strong>
                                     </div>
                                 </div>
                             </div>
@@ -646,13 +646,12 @@
                     <div class="tab-content p-24 " fusePerfectScrollbar>
                         <div class="profile-box info-box general">
                             <div class="content">
-                                <div fxLayout="row wrap" fxLayoutAlign="center center">
-                                    <div *ngFor="let item of guardianPassportDocuments; index as i">
-                                        <div class="product-image">
-                                            <img [lightbox]="i" class="gallery" [gallery]="'guardianPassportDocuments'"
-                                                [src]="item.data.thumb">
-                                            <strong>{{item.data.title}}</strong>
-                                        </div>
+                                <div fxLayout="row wrap" class="img-box">
+                                    <div class="product-image"
+                                        *ngFor="let item of guardianPassportDocuments; index as i">
+                                        <img [lightbox]="i" class="gallery" [gallery]="'guardianPassportDocuments'"
+                                            [src]="item.data.thumb">
+                                        <strong>{{item.data.title}}</strong>
                                     </div>
                                 </div>
                             </div>
@@ -665,13 +664,12 @@
                 <div class="tab-content p-24 " fusePerfectScrollbar>
                     <div class="profile-box info-box general">
                         <div class="content">
-                            <div fxLayout="row wrap" fxLayoutAlign="center center">
-                                <div *ngFor="let item of screenShots; index as i" style="margin-bottom: 30px;">
-                                    <div class="product-image">
-                                        <img [lightbox]="i" class="gallery" [gallery]="'screenshots'"
-                                            [src]="item.data.thumb">
-                                        <strong>{{item.data.title}}</strong>
-                                    </div>
+                            <div fxLayout="row wrap" class="img-box">
+                                <div class="product-image" *ngFor="let item of screenShots; index as i"
+                                    style="margin-bottom: 30px;">
+                                    <img [lightbox]="i" class="gallery" [gallery]="'screenshots'"
+                                        [src]="item.data.thumb">
+                                    <strong>{{item.data.title}}</strong>
                                 </div>
                             </div>
                         </div>
@@ -685,13 +683,12 @@
                 <div class="tab-content p-24 " fusePerfectScrollbar>
                     <div class="profile-box info-box general">
                         <div class="content">
-                            <div fxLayout="row wrap" fxLayoutAlign="center center">
-                                <div *ngFor="let item of additionalDocuments; index as i">
-                                    <div class="product-image">
-                                        <img [lightbox]="i" class="gallery" [gallery]="'additionalDocuments'"
-                                            [src]="item.data.thumb">
-                                        <strong>{{item.data.title}}</strong>
-                                    </div>
+                            <div fxLayout="row wrap" class="img-box">
+                                <div class="product-image" style="margin-bottom: 30px;"
+                                    *ngFor="let item of additionalDocuments; index as i">
+                                    <img [lightbox]="i" class="gallery" [gallery]="'additionalDocuments'"
+                                        [src]="item.data.thumb">
+                                    <strong>{{item.data.title}}</strong>
                                 </div>
                             </div>
                         </div>
