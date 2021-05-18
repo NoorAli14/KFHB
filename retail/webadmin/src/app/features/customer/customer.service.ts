@@ -23,6 +23,9 @@ export class CustomerService {
     updateCustomer(id,model): Observable<any>{
         return this.network.onUpdate(`${URI.CUSTOMER360}/${id}`,model);
     }
+    updateGuardian(id,model): Observable<any>{
+        return this.network.onUpdate(`${URI.CUSTOMER360}/${id}/guardian`,model);
+    }
     createAccount(id): Observable<any>{
         return this.network.post(`${URI.CUSTOMER360}/${id}/account`,{});
     }

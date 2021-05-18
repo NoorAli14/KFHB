@@ -58,6 +58,7 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
     remarksList = REMARKS_LIST;
     remarksForm: FormGroup;
     customerForm: FormGroup;
+    guardianForm: FormGroup;
     isCreateAccount: boolean;
     amlResponse: any;
     updatedResponse: any;
@@ -93,6 +94,12 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
             firstName: new FormControl(this.customerReponse.first_name,),
             middleName: new FormControl(this.customerReponse.middle_name),
             lastName: new FormControl(this.customerReponse.last_name),
+        });
+        const guardian: any = this.customerReponse?.guardians && this.customerReponse?.guardians.length > 0 ? snakeToCamelObject(this.customerReponse?.guardians[0]) : null;
+        this.guardianForm = new FormGroup({
+            firstName: new FormControl(guardian?.firstName),
+            middleName: new FormControl(guardian?.middleName),
+            lastName: new FormControl(guardian?.lastName),
         });
     }
     initData(): void {
@@ -231,7 +238,6 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
             const url = this.previewDocumentUrl(item.type, item.isExtracted);
             return new ImageItem({ src: url, thumb: url, title: item.title });
         });
-        debugger
         // GUARDIAN CIVIL ID MAPPING
         this.guardianNationalIdDocuments = _guardianNationalIdDocuments.map((item) => {
             const url = this.previewDocumentUrl(item.type, item.isExtracted);
@@ -291,6 +297,15 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
         }
 
         return `${this.customer.firstName ? this.customer.firstName : ''} ${this.customer.middleName ? this.customer.middleName : ''}  ${this.customer.lastName ? this.customer.lastName : ''} `
+    }
+    getGuardianFullName() {
+        const guardian: any = this.customer?.guardians && this.customer?.guardians[0] ? snakeToCamelObject(this.customer?.guardians[0]) : null;
+
+        if (!guardian?.firstName && !guardian?.middleName && !guardian?.lastName) {
+            return null;
+        }
+
+        return `${guardian?.firstName ? guardian?.firstName : ''} ${guardian?.middleName ? guardian?.middleName : ''}  ${guardian?.lastName ? guardian?.lastName : ''} `
     }
     validateIfCRSAllowed() {
         const allowed = this.checkFatcaForAnswers(this.FATCA);
@@ -451,16 +466,34 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
     onResetEditControl(control) {
         this.customerForm.patchValue({ [control]: this.customerReponse[camelToSnakeCaseText(control)] })
     }
+    onResetGuardianEditControl(control) {
+        this.guardianForm.patchValue({ [control]: this.customerReponse.guardians[0][camelToSnakeCaseText(control)] })
+    }
 
     updateCustomer(field) {
         const newValue = this.customerForm.get(field).value;
         const oldValue = this.customerReponse[camelToSnakeCaseText(field)]
-        if (newValue == oldValue) return;
+        if (newValue == oldValue || newValue.length<1) return;
 
         this.customerService.updateCustomer(this.customer.id, { [camelToSnakeCaseText(field)]: this.customerForm.get(field).value })
             .subscribe((response) => {
                 this.updatedResponse = response;
                 this.customer[field] = response[camelToSnakeCaseText(field)]
+                this._notifier.success(`${camelToSentenceCase(field)} updated successfully`);
+
+            }, (response) => super.onError(response))
+    }
+    updateGuardian(field) {
+
+        const newValue = this.guardianForm.get(field).value;
+        const guardian: any = this.customer?.guardians && this.customer?.guardians[0] ? this.customer?.guardians[0] : null;
+        const oldValue = guardian[camelToSnakeCaseText(field)]
+        if (newValue == oldValue || newValue.length<1) return;
+
+        this.customerService.updateGuardian(this.customer.id, { [camelToSnakeCaseText(field)]: this.guardianForm.get(field).value })
+            .subscribe((response) => {
+                this.updatedResponse = response;
+                this.customer.guardians[0][field] = response[camelToSnakeCaseText(field)]
                 this._notifier.success(`${camelToSentenceCase(field)} updated successfully`);
 
             }, (response) => super.onError(response))

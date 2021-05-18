@@ -124,6 +124,12 @@
                                         </div>
                                     </div>
                                     <div class="info-line">
+                                        <div class="title">Last step</div>
+                                        <div class="info" *ngIf="customer && customer.lastStep ; else defaultText">
+                                            {{customer.lastStep}}
+                                        </div>
+                                    </div>
+                                    <div class="info-line">
                                         <div class="title">Existing customer</div>
                                         <div class="info">
                                             {{customer && customer.externalRefId ? 'Yes' : 'No'}}
@@ -217,29 +223,70 @@
 
             <ng-container *ngIf="customer.isMinor">
                 <mat-tab label="GUARDIAN CIVIL ID">
-                    <form [formGroup]="customerForm">
+                    <form [formGroup]="guardianForm">
                         <div class="tab-content p-24 ">
                             <div class="profile-box info-box general">
                                 <div class="content" fusePerfectScrollbar>
                                     <div fxLayout="row wrap">
-                                        <div class="info-line ">
+                                        <div class="info-line no-margin-bottom">
                                             <div class="title">First Name</div>
-                                            <div class="info"
-                                                *ngIf="guardianCivilIdBackProcessed && guardianCivilIdBackProcessed['Given Names'] ; else defaultText">
-                                                {{guardianCivilIdBackProcessed['Given Names']}}</div>
+                                            <div (mouseenter)="onMouseEnter('firstName')" (mouseleave)="onMouseLeave()">
+                                                <div fxFlex fxLayout="column">
+                                                    <mat-form-field appearance="outline" fxFlex="100">
+                                                        <input matInput formControlName="firstName" />
+                                                    </mat-form-field>
+                                                    <div *ngIf="enabledField==='firstName'" fxFlexAlign="end"
+                                                        class="edit-actions">
+                                                        <mat-icon (click)="updateGuardian('firstName')">done</mat-icon>
+                                                        &nbsp;
+                                                        <mat-icon (click)="onResetGuardianEditControl('firstName')">
+                                                            close</mat-icon>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
 
-                                        <div class="info-line ">
+                                        <div class="info-line no-margin-bottom">
+                                            <div class="title">Middle Name</div>
+                                            <div (mouseenter)="onMouseEnter('middleName')"
+                                                (mouseleave)="onMouseLeave()">
+                                                <div fxFlex fxLayout="column">
+                                                    <mat-form-field appearance="outline" fxFlex="100">
+                                                        <input matInput formControlName="middleName" />
+                                                    </mat-form-field>
+                                                    <div *ngIf="enabledField==='middleName'" fxFlexAlign="end"
+                                                        class="edit-actions">
+                                                        <mat-icon (click)="updateGuardian('middleName')">done</mat-icon>
+                                                        &nbsp;
+                                                        <mat-icon (click)="onResetGuardianEditControl('middleName')">
+                                                            close</mat-icon>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="info-line no-margin-bottom">
                                             <div class="title">Last Name</div>
-                                            <div class="info"
-                                                *ngIf="guardianCivilIdBackProcessed && guardianCivilIdBackProcessed['Surname'] ; else defaultText">
-                                                {{guardianCivilIdBackProcessed['Surname']}}</div>
+                                            <div (mouseenter)="onMouseEnter('lastName')" (mouseleave)="onMouseLeave()">
+                                                <div fxFlex fxLayout="column">
+                                                    <mat-form-field appearance="outline" fxFlex="100">
+                                                        <input matInput formControlName="lastName" />
+                                                    </mat-form-field>
+                                                    <div *ngIf="enabledField==='lastName'" fxFlexAlign="end"
+                                                        class="edit-actions">
+                                                        <mat-icon (click)="updateGuardian('lastName')">done</mat-icon>
+                                                        &nbsp;
+                                                        <mat-icon (click)="onResetGuardianEditControl('lastName')">close
+                                                        </mat-icon>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="info-line">
                                             <div class="title">Full Name</div>
-                                            <div class="info"
-                                                *ngIf="guardianCivilIdBackProcessed && guardianCivilIdBackProcessed['Surname And Given Names'] ; else defaultText">
-                                                {{guardianCivilIdBackProcessed['Surname And Given Names']}}</div>
+                                            <div class="info" *ngIf="getGuardianFullName() ; else defaultText">
+                                                {{getGuardianFullName()}}
+                                            </div>
+
                                         </div>
 
                                         <div class="info-line">
