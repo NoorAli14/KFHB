@@ -26,7 +26,6 @@ export const CUSTOMER_STATUSES = {
     REJECTED:'REJECTED',
     REFER_TO_BUSINESS: 'REFER_TO_BUSINESS',
     DROPPED: 'DROPPED',
-    RETRY: 'RETRY'
 };
 
 export const STATUS_LIST: Array<Select> = [

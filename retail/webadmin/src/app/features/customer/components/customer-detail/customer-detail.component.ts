@@ -396,21 +396,21 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
 
     onSubmit() {
         const model = this.remarksForm.value;
-
         this.customerService.updateCustomer(this.customer.id, model).subscribe((response) => {
-            this.updatedResponse = response;
             if (model.status === 'ACCEPTED') {
-                this.createAccount();
+                this.createAccount(response);
                 return;
             } else {
+                this.updatedResponse = response;
                 this._notifier.success('Remarks added successfully')
             }
         },
             (response) => super.onError(response))
     }
-    createAccount() {
+    createAccount(customerDetails) {
         this.customerService.createAccount(this.customer.id)
             .subscribe((response) => {
+                this.updatedResponse = customerDetails;
                 this._notifier.success('Account created successfully')
             }, (response) => super.onError(response))
     }
@@ -473,7 +473,7 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
     updateCustomer(field) {
         const newValue = this.customerForm.get(field).value;
         const oldValue = this.customerReponse[camelToSnakeCaseText(field)]
-        if (newValue == oldValue || newValue.length<1) return;
+        if (newValue == oldValue || newValue.length < 1) return;
 
         this.customerService.updateCustomer(this.customer.id, { [camelToSnakeCaseText(field)]: this.customerForm.get(field).value })
             .subscribe((response) => {
@@ -488,7 +488,7 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
         const newValue = this.guardianForm.get(field).value;
         const guardian: any = this.customer?.guardians && this.customer?.guardians[0] ? this.customer?.guardians[0] : null;
         const oldValue = guardian[camelToSnakeCaseText(field)]
-        if (newValue == oldValue || newValue.length<1) return;
+        if (newValue == oldValue || newValue.length < 1) return;
 
         this.customerService.updateGuardian(this.customer.id, { [camelToSnakeCaseText(field)]: this.guardianForm.get(field).value })
             .subscribe((response) => {
