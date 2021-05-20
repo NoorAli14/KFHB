@@ -41,7 +41,6 @@ export const REMARKS_LIST = [
     { id: 'ACCEPTED', name: 'Accepted' },
     { id: 'REJECTED', name: 'Rejected' },
     { id: 'REFER_TO_BUSINESS', name: 'Refer to Business' },
-    { id: 'RETRY', name: 'Retry' },
     { id: 'DROPPED', name: 'Dropped' }];
 
 export const AGENT_REMARKS = {
