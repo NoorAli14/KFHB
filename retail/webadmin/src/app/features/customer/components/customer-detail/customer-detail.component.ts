@@ -40,6 +40,7 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
     additionalDocuments: GalleryItem[];
     FATCA: any;
     amlData: any;
+    amlsdnDetailsList: any = []
     bankingTransaction: any;
     kycData: any;
     crsTemplate: any;
@@ -179,6 +180,10 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
         if (amlResponse && amlResponse.responses) {
             this.amlResponse = getRecentRecord(amlResponse.responses, 'created_on');
             this.amlResponse['response_text'] = JSON.parse(this.amlResponse['response_text'])
+            this.amlsdnDetailsList = this.amlResponse && this.amlResponse?.response_text && this.amlResponse?.response_text?.data?.sdnDetailsList?.sdnDetailsList;
+            if (this.amlsdnDetailsList && !Array.isArray(this.amlsdnDetailsList)) {
+                this.amlsdnDetailsList = [this.amlsdnDetailsList]
+            }
         }
 
         const _nationalIdDocuments = [
@@ -450,6 +455,10 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
                         return;
                     }
                     this.amlResponse = parsedResponse;
+                    this.amlsdnDetailsList = this.amlResponse && this.amlResponse?.response_text && this.amlResponse?.response_text?.data?.sdnDetailsList?.sdnDetailsList;
+                    if (this.amlsdnDetailsList && !Array.isArray(this.amlsdnDetailsList)) {
+                        this.amlsdnDetailsList = [this.amlsdnDetailsList]
+                    }
                     this._notifier.success('AML data fetched successfully.');
                 }
 
