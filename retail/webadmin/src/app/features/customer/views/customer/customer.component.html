@@ -51,7 +51,7 @@
                             <app-status [status]="element[key]"></app-status>
                         </span>
                         <span  *ngSwitchCase="'createdOn'">
-                            {{element[key] | dateFormat}}
+                            {{element[key] | dateTimeFormat}}
                         </span>
                         <span  *ngSwitchDefault>
                             <span *ngIf="element[key]; else defaultText">
