@@ -136,7 +136,7 @@ export const DEFAULT_IMAGE = 'assets/images/not-available.png';
 
 export const DATES = {
     DATE_FMT: 'mediumDate',
-    DATE_TIME_FMT: `medium`
+    DATE_TIME_FMT: `dd/MM/yy hh:mm a`
 }
 
 export const USER_TYPE = {
