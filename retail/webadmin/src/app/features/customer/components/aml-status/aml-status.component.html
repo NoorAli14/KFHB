@@ -1,0 +1,9 @@
+<ng-container *ngIf="status" [ngSwitch]="status">
+  <span *ngSwitchCase="'CLEAN'" class="status aml-status text-truncate h6 p-4 green-500 label-status">{{status}}</span>
+  <span *ngSwitchCase="'SUSPECT'"
+    class="status aml-status text-truncate h6 p-4 yellow-500 label-status">{{status}}</span>
+  <span *ngSwitchCase="'BLOCK'" class="status aml-status text-truncate h6 p-4 red-500 label-status">{{status}}</span>
+  <span *ngSwitchCase="'PENDING'" class="status aml-status text-truncate h6 p-4 blue-500 label-status">{{status}}</span>
+  <span *ngSwitchDefault> &nbsp; <app-default-text></app-default-text>
+  </span>
+</ng-container>
