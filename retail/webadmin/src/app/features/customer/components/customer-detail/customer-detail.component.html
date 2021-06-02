@@ -15,7 +15,7 @@
     </mat-toolbar>
 
     <div mat-dialog-content class="p-24 m-0" style="max-height: 83vh !important">
-        <mat-tab-group>
+        <mat-tab-group [(selectedIndex)]="tabIndex" (selectedIndexChange)="tabIndex=$event">
             <mat-tab label="CIVIL ID">
                 <form [formGroup]="customerForm">
                     <div class="tab-content p-24 ">
@@ -525,118 +525,31 @@
                     <div class="profile-box info-box general">
                         <div class="content" fusePerfectScrollbar>
                             <div fxLayout="column">
-                                <div fxLayout="row " style="padding: 0px 20px;" fxLayoutAlign="space-between"
-                                    style="border-bottom: 1px solid #80808038;">
-                                    <div class="info-line aml-status">
-                                        <div class="title" fxLayout="row">
-                                            <span>AML Status : &nbsp;&nbsp; </span>
-                                            <ng-container *ngIf="amlResponse" [ngSwitch]="amlResponse?.status">
-                                                <span *ngSwitchCase="'CLEAN'"
-                                                    class="status aml-status text-truncate h6 p-4 green-500 label-status">{{amlResponse?.status}}</span>
-                                                <span *ngSwitchCase="'SUSPECT'"
-                                                    class="status aml-status text-truncate h6 p-4 yellow-500 label-status">{{amlResponse?.status}}</span>
-                                                <span *ngSwitchCase="'BLOCK'"
-                                                    class="status aml-status text-truncate h6 p-4 red-500 label-status">{{amlResponse?.status}}</span>
-                                                <span *ngSwitchCase="'PENDING'"
-                                                    class="status aml-status text-truncate h6 p-4 blue-500 label-status">{{amlResponse?.status}}</span>
-                                                <span *ngSwitchDefault> &nbsp; <app-default-text></app-default-text>
-                                                </span>
-                                            </ng-container>
-                                            <ng-container *ngIf="!amlResponse">
-                                                <span class="status aml-status text-truncate h6 p-4  label-status">
-                                                    <app-default-text></app-default-text>
-                                                </span>
-                                            </ng-container>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <button type="button" (click)="getAMLData()" class="submit-button"
-                                            mat-raised-button color="accent">
-                                            Get Data
-                                        </button>
-                                    </div>
+                                <div fxLayout="row " class="p-30" fxLayoutAlign="flex-end">
+                                    <button type="button" (click)="getAMLData()" class="submit-button" mat-raised-button
+                                        color="accent">
+                                        Get Data
+                                    </button>
                                 </div>
                                 <br>
-                                <div fxLayout="row wrap" fxLayoutAlign="start"
-                                    style="padding: 10px 20px;border-bottom: 1px solid rgba(128, 128, 128, 0.22);">
-                                    <div class="info-line">
-                                        <div class="title">Calculate Risk Rating</div>
-                                        <div class="info"
-                                            *ngIf="amlResponse && amlResponse.response_text ; else defaultText">
-                                            {{amlResponse.response_text.data.calculateRiskRating }}</div>
-                                    </div>
-                                    <div class="info-line">
-                                        <div class="title">Response Message Match</div>
-                                        <div class="info"
-                                            *ngIf="amlResponse && amlResponse.response_text ; else defaultText">
-                                            {{amlResponse.response_text.data.reponseMessageMatch }}</div>
-                                    </div>
-                                    <div class="info-line">
-                                        <div class="title">Request Id</div>
-                                        <div class="info"
-                                            *ngIf="amlResponse && amlResponse.response_text ; else defaultText">
-                                            {{amlResponse.response_text.data.requestId }}</div>
-                                    </div>
-                                    <div class="info-line">
-                                        <div class="title">Case Id</div>
-                                        <div class="info"
-                                            *ngIf="amlResponse && amlResponse.response_text ; else defaultText">
-                                            {{amlResponse.response_text.data.caseId }}</div>
-                                    </div>
-                                    <div class="info-line">
-                                        <div class="title">Percentage Matched</div>
-                                        <div class="info"
-                                            *ngIf="amlResponse && amlResponse.response_text ; else defaultText">
-                                            {{amlResponse.response_text.data.percentageMatched }}</div>
-                                    </div>
-                                </div>
-                                <div fxLayout="row wrap" *ngIf="amlResponse && amlResponse.response_text"
-                                    fxLayoutAlign="start" style="padding: 10px 20px;">
-                                    <strong class="ml-16">SDN Details List:</strong>
-                                    <div class="content">
-                                        <table class="simple invoice-table">
-                                            <thead>
-                                                <tr>
-                                                    <th class="aml-th">SDN ID</th>
-                                                    <!-- <th class="aml-th">Category</th> -->
-                                                    <th class="aml-th">Countries</th>
-                                                    <th class="aml-th">Full Name</th>
-                                                    <th class="aml-th">List Name</th>
-                                                    <th class="aml-th">Match Percentage</th>
-                                                    <th class="aml-th">Name Type</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr
-                                                    *ngFor="let item of amlsdnDetailsList">
-                                                    <td>
-                                                        <div class="detail">{{item.sdnId}}</div>
-                                                    </td>
-                                                    <!-- <td>
-                                                        <div class="detail">xsi:nil: {{item.category['$']['xsi:nil']}}</div>
-                                                    </td> -->
-                                                    <td>
-                                                        <div class="detail">{{item.countries}}</div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="detail">{{item.fullName}}</div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="detail">{{item.listName}}</div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="detail">{{item.matchPercentage}}</div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="detail">{{item.nameType}}</div>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
+                                <ng-container *ngIf="customerAml && !guardianAml;">
+                                    <app-aml-screening [status]="amlResponse?.response_text?.status"
+                                        [amlData]="customerAml"></app-aml-screening>
+                                </ng-container>
+                                <ng-container *ngIf="tabIndex==7 && guardianAml">
+                                    <mat-tab-group mat-align-tabs="center">
+                                        <mat-tab label="CUSTOMER">
+                                            <app-aml-screening
+                                                [status]="guardianAml ? customerAml?.aml_screening_status : amlResponse?.response_text?.status"
+                                                [amlData]="customerAml"></app-aml-screening>
+                                        </mat-tab>
+                                        <mat-tab label="GUARDIAN">
+                                            <app-aml-screening [status]="guardianAml?.aml_screening_status"
+                                                [amlData]="guardianAml"></app-aml-screening>
+                                        </mat-tab>
+                                    </mat-tab-group>
+                                </ng-container>
                             </div>
-
                         </div>
                     </div>
                 </div>

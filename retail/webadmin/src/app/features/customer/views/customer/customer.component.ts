@@ -172,6 +172,7 @@ export class CustomerComponent
     getCustomerDetail(id): void {
         //   id = "34A8F400-23F0-445F-A20C-5407BDC1C6FC";
         //   id = "99CFE035-51E3-4790-9773-B692CCC792EA";
+        //   id = "BE899A66-77E0-46D8-96F6-AC46F141A016";
         this._service
             .forkCustomer360(id)
             .pipe(takeUntil(this._unsubscribeAll))

@@ -39,7 +39,6 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
     screenShots: GalleryItem[];
     additionalDocuments: GalleryItem[];
     FATCA: any;
-    amlData: any;
     amlsdnDetailsList: any = []
     bankingTransaction: any;
     kycData: any;
@@ -50,6 +49,7 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
     guardianCivilIdBackProcessed: any;
     enabledField: string;
     customer: any;
+    tabIndex: number = 0;
     customerReponse: any;
     attachmentsResponse: any;
     screenshotsResponse: any;
@@ -61,9 +61,10 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
     customerForm: FormGroup;
     guardianForm: FormGroup;
     isCreateAccount: boolean;
-    amlResponse: any;
     updatedResponse: any;
-
+    amlResponse: any;
+    guardianAml: any;
+    customerAml: any;
     constructor(
         public gallery: Gallery,
         public matDialogRef: MatDialogRef<CustomerDetailComponent>,
@@ -176,13 +177,16 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
         } else {
             this.validateIfCRSAllowed();
         }
-        const amlResponse = this.customerReponse.amlResponses ? this.customerReponse.amlResponses[0] : null;
-        if (amlResponse && amlResponse.responses) {
-            this.amlResponse = getRecentRecord(amlResponse.responses, 'created_on');
+        this.amlResponse = this.customerReponse.amlResponses ? this.customerReponse.amlResponses[0] : null;
+        if (this.amlResponse && this.amlResponse.responses) {
+            this.amlResponse = getRecentRecord(this.amlResponse.responses, 'created_on');
             this.amlResponse['response_text'] = JSON.parse(this.amlResponse['response_text'])
-            this.amlsdnDetailsList = this.amlResponse && this.amlResponse?.response_text && this.amlResponse?.response_text?.data?.sdnDetailsList?.sdnDetailsList;
-            if (this.amlsdnDetailsList && !Array.isArray(this.amlsdnDetailsList)) {
-                this.amlsdnDetailsList = [this.amlsdnDetailsList]
+            const isMinor = Array.isArray(this.amlResponse['response_text']?.data);
+            if (!isMinor) {
+                this.customerAml = this.amlResponse['response_text']?.data;
+            } else {
+                this.guardianAml = this.amlResponse['response_text']?.data?.find(x => x.aml_screening_type == 'AML_GUARDIAN_SCREENING');
+                this.customerAml = this.amlResponse['response_text']?.data?.find(x => x.aml_screening_type == 'AML_CUSTOMER_SCREENING');
             }
         }
 
@@ -447,17 +451,19 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
         this.customerService.getAMLData(this.customer.id)
             .subscribe((response) => {
                 if (response.responses) {
-                    const parsedResponse = getRecentRecord(response.responses, 'created_on');
-                    parsedResponse['response_text'] = JSON.parse(parsedResponse['response_text']);
-
-                    if (parsedResponse['response_text'].error || parsedResponse['response_text'].status === 400) {
+                    this.amlResponse = getRecentRecord(response.responses, 'created_on');
+                    this.amlResponse['response_text'] = JSON.parse(this.amlResponse['response_text']);
+                    if (this.amlResponse['response_text'].error || this.amlResponse['response_text'].status === 400) {
                         this._notifier.error(MESSAGES.UNKNOWN);
                         return;
                     }
-                    this.amlResponse = parsedResponse;
-                    this.amlsdnDetailsList = this.amlResponse && this.amlResponse?.response_text && this.amlResponse?.response_text?.data?.sdnDetailsList?.sdnDetailsList;
-                    if (this.amlsdnDetailsList && !Array.isArray(this.amlsdnDetailsList)) {
-                        this.amlsdnDetailsList = [this.amlsdnDetailsList]
+
+                    const isMinor = Array.isArray(this.amlResponse['response_text']?.data);
+                    if (!isMinor) {
+                        this.customerAml = this.amlResponse['response_text']?.data;
+                    } else {
+                        this.guardianAml = this.amlResponse['response_text']?.data?.find(x => x.aml_screening_type == 'AML_GUARDIAN_SCREENING');
+                        this.customerAml = this.amlResponse['response_text']?.data?.find(x => x.aml_screening_type == 'AML_CUSTOMER_SCREENING');
                     }
                     this._notifier.success('AML data fetched successfully.');
                 }
