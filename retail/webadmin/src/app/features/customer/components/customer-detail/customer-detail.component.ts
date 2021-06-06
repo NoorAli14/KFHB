@@ -8,7 +8,7 @@ import {
     OnInit,
     ViewEncapsulation,
 } from "@angular/core";
-import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { environment } from "@env/environment";
 import { fuseAnimations } from "@fuse/animations";
 import {
@@ -23,6 +23,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CustomerService } from '@feature/customer/customer.service';
 import { BaseComponent } from '@shared/components/base/base.component';
 import { MESSAGES } from "@shared/constants/messages.constant";
+import { ConfirmDialogComponent, ConfirmDialogModel } from "@shared/components/confirm-dialog/confirm-dialog.component";
+import { STATUS_CODES } from "http";
 @Component({
     selector: "app-customer-detail",
     templateUrl: "./customer-detail.component.html",
@@ -70,6 +72,7 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
         public matDialogRef: MatDialogRef<CustomerDetailComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
         private authService: AuthenticationService,
+        public _matDialog: MatDialog,
         private customerService: CustomerService,
         injector: Injector
     ) {
@@ -402,11 +405,31 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
 
         lightboxGalleryRef.load(images);
     }
-
     onSubmit() {
         const model = this.remarksForm.value;
+        if (model.status !== CUSTOMER_STATUSES.REJECTED) {
+            this.addRemarks();
+            return;
+        }
+        const message = `${MESSAGES.REJECT_CONFIRMATION}${this.customer.nationalIdNo ? ': ' + this.customer.nationalIdNo : ''}?`
+        const dialogData = new ConfirmDialogModel("Confirm Action", message);
+        const dialogRef = this._matDialog.open(ConfirmDialogComponent, {
+            data: dialogData,
+            disableClose: true,
+            panelClass: "app-confirm-dialog",
+            hasBackdrop: true,
+        });
+
+        dialogRef.afterClosed().subscribe((status) => {
+            if (status) {
+                this.addRemarks()
+            }
+        });
+    }
+    addRemarks() {
+        const model = this.remarksForm.value;
         this.customerService.updateCustomer(this.customer.id, model).subscribe((response) => {
-            if (model.status === 'ACCEPTED') {
+            if (model.status === CUSTOMER_STATUSES.ACCEPTED) {
                 this.createAccount(response);
                 return;
             } else {
