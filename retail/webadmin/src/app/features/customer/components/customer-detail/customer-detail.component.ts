@@ -502,16 +502,16 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
         this.enabledField = null;
     }
     onResetEditControl(control) {
-        this.customerForm.patchValue({ [control]: this.customerReponse[camelToSnakeCaseText(control)] })
+        this.customerForm.patchValue({ [control]: this.customer[control] })
     }
     onResetGuardianEditControl(control) {
-        this.guardianForm.patchValue({ [control]: this.customerReponse.guardians[0][camelToSnakeCaseText(control)] })
+        this.guardianForm.patchValue({ [control]: this.customer.guardians[0][camelToSnakeCaseText(control)] })
     }
 
     updateCustomer(field) {
         const newValue = this.customerForm.get(field).value;
-        const oldValue = this.customerReponse[camelToSnakeCaseText(field)]
-        if (newValue == oldValue || newValue.length < 1) return;
+        const oldValue =  this.customer[field]
+        if (newValue == oldValue || (newValue.length < 1 && field != 'middleName')) return;
 
         this.customerService.updateCustomer(this.customer.id, { [camelToSnakeCaseText(field)]: this.customerForm.get(field).value })
             .subscribe((response) => {
@@ -525,13 +525,13 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
 
         const newValue = this.guardianForm.get(field).value;
         const guardian: any = this.customer?.guardians && this.customer?.guardians[0] ? this.customer?.guardians[0] : null;
-        const oldValue = guardian[camelToSnakeCaseText(field)]
-        if (newValue == oldValue || newValue.length < 1) return;
+        const oldValue =guardian && guardian[camelToSnakeCaseText(field)]
+        if (newValue == oldValue || (newValue.length < 1 && field != 'middleName')) return;
 
         this.customerService.updateGuardian(this.customer.id, { [camelToSnakeCaseText(field)]: this.guardianForm.get(field).value })
             .subscribe((response) => {
                 this.updatedResponse = response;
-                this.customer.guardians[0][field] = response[camelToSnakeCaseText(field)]
+                this.customer.guardians[0][camelToSnakeCaseText(field)] = response[camelToSnakeCaseText(field)]
                 this._notifier.success(`${camelToSentenceCase(field)} updated successfully`);
 
             }, (response) => super.onError(response))
