@@ -129,7 +129,8 @@ export const URI = {
     SERVICE_REQUEST_REPORT: `${SERVICEREQUEST}excel/report`,
     REFERRAL: `${REFERRALREQUEST}referral`,
     REFERRAL_TRANSACTIONS: `${REFERRALREQUEST}referral/transactions`,
-    REFERRAL_TRANSACTIONS_REPORT: `${REFERRALREQUEST}referral/transactions/excel/report`
+    REFERRAL_TRANSACTIONS_REPORT: `${REFERRALREQUEST}referral/transactions/excel/report`,
+    FINANCE_APPLICATIONS: `/api/v1/finance`
 };
 
 export const DEFAULT_IMAGE = 'assets/images/not-available.png';

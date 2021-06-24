@@ -55,6 +55,9 @@ export const locale = {
             },
             INTERNATIONALTRANSFERREQUEST:{
                 TITLE:'International Transfer Requests'
+            },
+            FINANCE_APPLICATION:{
+                TITLE:'Finance Application'
             }
            
         }

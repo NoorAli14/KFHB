@@ -150,6 +150,13 @@ export class FuseNavigationService {
             icon: 'receipt',
             url: '/req',
         };
+        const financeItem = {
+            id: 'finance-application',
+            title: 'Finance Application',
+            type: 'item',
+            icon: 'account_balance',
+            url: '/finance',
+        };
         const findRefferal = navigation.find((x) => x.id == 'referrals');
         if (!findRefferal) {
             navigation.push(refferalsItem);
@@ -157,6 +164,10 @@ export class FuseNavigationService {
         const findserviceRequests = navigation.find((x) => x.id == 'service-requests');
         if (!findserviceRequests) {
             navigation.push(serviceRequestsItem);
+        }
+        const financeItemRequest = navigation.find((x) => x.id == 'finance-application');
+        if (!financeItemRequest) {
+            navigation.push(financeItem);
         }
 
 

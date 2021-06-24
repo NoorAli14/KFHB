@@ -1,0 +1,73 @@
+<div class="s008">
+    <form>
+        <div class="inner-form">
+            <div class="search-wrapper mx-32 mx-md-0">
+                <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center" style="position: relative;">
+                    <mat-icon>search</mat-icon>
+                    <input placeholder="Enter CPR/RIM" id="nationalId" [formControl]="civilId"
+                        class="my-form-input advance-input">
+                    <a (click)="openAdvance(false)" *ngIf="isAdvance" class="search-arrow hover">▲</a>
+                    <a (click)="openAdvance(true)" *ngIf="!isAdvance" class="search-arrow hover">▼</a>
+                </div>
+            </div>
+
+            <div class="row search-box">
+                <div class="col-8">
+                    <div *ngIf="isAdvance" class="advance-search " [@slideInOut]>
+                        <form class="p-24" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0" [formGroup]="searchForm"
+                            novalidate name="searchForm" (ngSubmit)="onSubmit()" novalidate [formGroup]="searchForm">
+                            <div fxLayout="row wrap" fxLayout.lt-lg="column" fxLayoutAlign.lt-lg="center"
+                                fxLayoutAlign="start center" fxFlex="1 1 auto">
+
+                                <mat-form-field appearance="outline" fxFlex="50" class="pl-8">
+                                    <mat-label>Start Date <app-required-indicator></app-required-indicator>
+                                    </mat-label>
+                                    <input matInput [matDatepicker]="picker" formControlName="startDate" />
+                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker></mat-datepicker>
+                                </mat-form-field>
+                                <mat-form-field appearance="outline" fxFlex="50" class="pl-8">
+                                    <mat-label>End Date<app-required-indicator></app-required-indicator>
+                                    </mat-label>
+                                    <input matInput [matDatepicker]="picker2" formControlName="endDate" />
+                                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker2></mat-datepicker>
+                                </mat-form-field>
+                                <mat-form-field appearance="outline" fxFlex="50" class="pl-8">
+                                    <mat-label>Application Completed
+                                    </mat-label>
+                                    <mat-select formControlName="applicationCompleted">
+                                        <mat-option *ngFor="let item of statusList" [value]="item.id">
+                                            {{ item.name }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" fxFlex="50" class="pl-8">
+                                    <mat-label>Status
+                                    </mat-label>
+                                    <mat-select formControlName="status">
+                                        <mat-option *ngFor="let item of statusList" [value]="item.id">
+                                            {{ item.name }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="actions" fxLayoutGap="10px" fxLayout="row" fxLayoutAlign="end center">
+                                <button type="button" mat-raised-button (click)="onReset()" color="secondary"
+                                    aria-label="Follow">
+                                    Reset
+                                </button>
+                                &nbsp;
+                                <button type="submit" class="submit-button" mat-raised-button color="accent"
+                                    aria-label="Send Message">
+                                    Submit
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

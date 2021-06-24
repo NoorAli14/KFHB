@@ -99,6 +99,14 @@ export const navigation: FuseNavigation[] = [
                 icon     : 'calendar_today',
                 url      : '/international-transfer-requests',
             },
+            {
+                id       : 'finance-application',
+                title    : 'Finance Application',
+                translate: 'FEATURES.FINANCE_APPLICATION.TITLE',
+                type     : 'item',
+                icon     : 'account_balance',
+                url      : '/finance',
+            },
 ]
         
     }
