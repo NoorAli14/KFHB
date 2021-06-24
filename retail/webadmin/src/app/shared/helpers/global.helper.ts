@@ -42,6 +42,12 @@ export const snakeToCamelObject = (data) => {
     });
     return mapped;
 };
+
+export const snakeToSentenceCase = (str) => {
+    const res = str.split('_').map(t => t[0].toUpperCase()+t.slice(1,)).join(" ");
+    return res;
+}
+
 export const getName = (id, key, array) => {
     if (!array) {
         return;
