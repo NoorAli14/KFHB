@@ -37,11 +37,11 @@
                 </div>
 
                 <div class="actions" fxLayoutGap="10px" fxLayout="row" fxLayoutAlign="end center">
-                    <button type="submit" [disabled]="!form.controls.comments.valid" mat-raised-button mat-dialog-close color="secondary" aria-label="Follow">
+                    <button type="button" (click)="reject()"  [disabled]="!form.controls.comments.valid" mat-raised-button mat-dialog-close color="secondary" aria-label="Follow">
                         Reject
                     </button>
                     &nbsp;&nbsp;&nbsp;
-                    <button type="submit" [disabled]="!form.controls.comments.valid" class="submit-button" mat-raised-button color="accent">
+                    <button type="button" (click)="approve()" [disabled]="!form.controls.comments.valid" class="submit-button" mat-raised-button color="accent">
                         Approved
                     </button>
                 </div>

@@ -1,6 +1,8 @@
 import { Component, Inject, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { InternationalTransferRequest } from '@feature/international-transfer-requests/models/transfer-request.model';
+import { InternationalTransferRequestsService } from '@feature/international-transfer-requests/services/international-transfer-requests.service';
 import { fuseAnimations } from '@fuse/animations';
 
 @Component({
@@ -17,13 +19,23 @@ export class DialogInternationalTransferStatusComponent implements OnInit {
     comments: new FormControl('', [Validators.required]),
   })
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private dialogRef: MatDialogRef<DialogInternationalTransferStatusComponent>) { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: InternationalTransferRequest, 
+  private dialogRef: MatDialogRef<DialogInternationalTransferStatusComponent>,
+  private _service: InternationalTransferRequestsService) { }
 
   ngOnInit(): void {
-    this.data
+    
   }
+
+  reject() : void {
+    this._service.approve(this.data.id);
+  }
+
+  approve(): void {
+    this._service.reject(this.data.id);
+  }
+
   onSubmit() {
-    console.log(this.form.value)
     if (this.form.valid) {
       this.dialogRef.close(this.form)
     }
