@@ -8,28 +8,17 @@ import {
   Injector,
 } from '@angular/core';
 import { fuseAnimations } from '@fuse/animations';
-import { MatDialog } from '@angular/material/dialog';
-import { MODULES } from '@shared/constants/app.constants';
-
 import { FormControl } from '@angular/forms';
-import { User } from '@feature/entitlement/models/user.model';
-import { Role } from '@feature/entitlement/models/role.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import {
   camelToSentenceCase,
   camelToSnakeCaseText,
-  snakeToCamelObject,
-  removeRandom,
   toggleSort,
 } from '@shared/helpers/global.helper';
-import {
-  ConfirmDialogModel,
-  ConfirmDialogComponent,
-} from '@shared/components/confirm-dialog/confirm-dialog.component';
+
 import { debounceTime, distinctUntilChanged, map, skip, takeUntil } from 'rxjs/operators';
-import { MESSAGES } from '@shared/constants/messages.constant';
 import { Pagination } from '@shared/models/pagination.model';
 import * as QueryString from 'query-string';
 import { MatSortDirection } from '@shared/enums/app.enum';
@@ -45,7 +34,6 @@ import { FinanceService } from '@feature/finance/services/finance.service';
 })
 export class FinanceComponent extends BaseComponent implements OnInit {
 
-  dialogRef: any;
   applications: any[];
   userPermissions: any[];
   pageSize: number = CONFIG.PAGE_SIZE;
@@ -61,11 +49,10 @@ export class FinanceComponent extends BaseComponent implements OnInit {
   config: object;
   control: FormControl;
   constructor(
-    public _matDialog: MatDialog,
     private _service: FinanceService,
     injector: Injector
   ) {
-    super(injector, MODULES.USER_MANAGEMENT);
+    super(injector);
     super.ngOnInit();
   }
 
@@ -123,55 +110,11 @@ export class FinanceComponent extends BaseComponent implements OnInit {
   camelToSnakeCase(text): void {
     return camelToSnakeCaseText(text);
   }
-  // openDialog(data): void {
-  //     const _this = this;
-  //     this.dialogRef = this._matDialog
-  //         .open(UserFormComponent, {
-  //             data: {
-  //                 nationalities: this.nationalities,
-  //                 roles: this.roles,
-  //                 user:
-  //                     data && data.id ? snakeToCamelObject(data) : new User(),
-  //             },
-  //             disableClose: true,
-  //             hasBackdrop: true,
-  //             panelClass: 'app-user-form',
-  //         })
-  //         .componentInstance.sendResponse.subscribe((response) => {
-  //             if (response.id) {
-  //                 _this.editUser(response);
-  //             } else {
-  //                 _this.createUser(response);
-  //             }
-  //         });
-  // }
-  // onDetail(id): void {
-  //     this._service
-  //         .getUserById(id)
-  //         .pipe(takeUntil(this._unsubscribeAll))
-  //         .subscribe(
-  //             (response) => {
-  //                 this.openUserDetailModal(response);
-  //             },
-  //             (response) => super.onError(response))
-  // }
-  // openUserDetailModal(response): void {
-  //     response.modules = this._mapperService.makeModulesFlat(response.modules);
-  //     response = snakeToCamelObject(response);
-  //     this.dialogRef = this._matDialog.open(UserDetailComponent, {
-  //         data: response,
-  //         panelClass: 'app-user-detail',
-  //     });
-  // }
+ 
+
   camelToSentenceCase(text): string {
     return camelToSentenceCase(text);
   }
-
-
-
-
-
-
   initSearch(): void {
     this.control.valueChanges
       .pipe(
@@ -198,5 +141,4 @@ export class FinanceComponent extends BaseComponent implements OnInit {
   onPageFired(data): void {
     this.getData({ page: data['pageIndex'] + 1, limit: data['pageSize'] });
   }
-
 }

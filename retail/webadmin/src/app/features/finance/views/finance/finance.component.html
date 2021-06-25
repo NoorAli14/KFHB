@@ -7,32 +7,33 @@
   <!-- CENTER -->
   <div class="center">
 
- <!-- HEADER -->
- <div class="header accent" style="min-height: 95px !important; height:95px !important; " fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-between center">
+    <!-- HEADER -->
+    <div class="header accent" style="min-height: 95px !important; height:95px !important; " fxLayout="column"
+      fxLayoutAlign="center center" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-between center">
 
-  <!-- APP TITLE -->
-  <div class="logo mb-24 mb-md-0" style="flex: 0 1 30%;" fxLayout="row" fxLayoutAlign="start center" >
-    <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
-      account_balance
-    </mat-icon>
-    <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
-      Finance Application
-    </span>
-  </div>
-  <!-- / APP TITLE -->
+      <!-- APP TITLE -->
+      <div class="logo mb-24 mb-md-0" style="flex: 0 1 30%;" fxLayout="row" fxLayoutAlign="start center">
+        <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+          account_balance
+        </mat-icon>
+        <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+          Finance Application
+        </span>
+      </div>
+      <!-- / APP TITLE -->
 
-  <!-- SEARCH -->
- <div style="flex:1">
-  <app-advance-search (filterChange)="onFilter($event)"  (filterReset)="onReset()">
-  </app-advance-search>
- </div>
- <div style="flex:1">
+      <!-- SEARCH -->
+      <div style="flex:1">
+        <app-advance-search (filterChange)="onFilter($event)" (filterReset)="onReset()">
+        </app-advance-search>
+      </div>
+      <div style="flex:1">
 
- </div>
-  <!-- / SEARCH -->
+      </div>
+      <!-- / SEARCH -->
 
-</div>
-<!-- / HEADER -->
+    </div>
+    <!-- / HEADER -->
 
     <!-- CONTENT CARD -->
     <div class="content-card" fusePerfectScrollbar>
@@ -46,8 +47,10 @@
           <mat-cell *matCellDef="let element; let i = dataIndex" class="text-elipsis">
             <ng-container [ngSwitch]="key">
               <span *ngSwitchCase="'action'">
-                <mat-icon class="hover" matTooltip="Open Detail" color="warn" type="button"> fullscreen_exit
-                </mat-icon>
+                <a [routerLink]="['/finance', element.id]">
+                  <mat-icon class="hover" matTooltip="Open Detail" color="warn" type="button"> fullscreen_exit
+                  </mat-icon>
+                </a>
               </span>
               <span *ngSwitchCase="'createdOn'">
                 {{element[camelToSnakeCase(key)] | dateFormat}}

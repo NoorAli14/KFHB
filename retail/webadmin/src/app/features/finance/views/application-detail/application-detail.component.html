@@ -1,0 +1,141 @@
+<div class="page-container page-layout carded fullwidth inner-scroll">
+
+  <!-- TOP BACKGROUND -->
+  <div class="top-bg accent"></div>
+  <!-- / TOP BACKGROUND -->
+
+  <!-- CENTER -->
+  <div class="center">
+
+    <!-- HEADER -->
+    <div class="header accent" style="min-height: 95px !important; height:95px !important; " fxLayout="column"
+      fxLayoutAlign="center center" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-between center">
+
+      <!-- APP TITLE -->
+      <div class="logo mb-24 mb-md-0" style="flex: 0 1 30%;" fxLayout="row" fxLayoutAlign="start center">
+        <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+          account_balance
+        </mat-icon>
+        <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+          Finance Application
+        </span>
+      </div>
+      <!-- / APP TITLE -->
+
+      <!-- SEARCH -->
+
+
+      <!-- / SEARCH -->
+
+    </div>
+    <!-- / HEADER -->
+
+    <!-- CONTENT CARD -->
+    <div class="content-card" fusePerfectScrollbar>
+      <mat-tab-group>
+        <mat-tab label="APPLICANT DETAIL">
+          <div class="tab-content p-24 ">
+            <div class="profile-box info-box general">
+              <div class="content" fusePerfectScrollbar>
+                <div fxLayout="row wrap">
+
+                  <div class="info-line">
+                    <div class="title">Mobile Number</div>
+                    <div class="info" *ngIf="application.contactNo ; else defaultText">
+                      {{application.contactNo}}</div>
+                  </div>
+                  <div class="info-line">
+                    <div class="title">Mobile Number</div>
+                    <div class="info" *ngIf="application.contactNo ; else defaultText">
+                      {{application.contactNo}}</div>
+                  </div>
+                  <div class="info-line">
+                    <div class="title">Mobile Number</div>
+                    <div class="info" *ngIf="application.contactNo ; else defaultText">
+                      {{application.contactNo}}</div>
+                  </div>
+                  <div class="info-line">
+                    <div class="title">Mobile Number</div>
+                    <div class="info" *ngIf="application.contactNo ; else defaultText">
+                      {{application.contactNo}}</div>
+                  </div>
+                  <div class="info-line">
+                    <div class="title">Mobile Number</div>
+                    <div class="info" *ngIf="application.contactNo ; else defaultText">
+                      {{application.contactNo}}</div>
+                  </div>
+                  <div class="info-line">
+                    <div class="title">Mobile Number</div>
+                    <div class="info" *ngIf="application.contactNo ; else defaultText">
+                      {{application.contactNo}}</div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+        <mat-tab label="BENEFIT REPORT">
+          <div class="tab-content p-24 ">
+            <div class="profile-box info-box general">
+              <div class="content" fusePerfectScrollbar>
+                <div fxLayout="row wrap">
+
+                  <div class="info-line">
+                    <div class="title">Mobile Number</div>
+                    <div class="info" *ngIf="application.contactNo ; else defaultText">
+                      {{application.contactNo}}</div>
+                  </div>
+                  <div class="info-line">
+                    <div class="title">Mobile Number</div>
+                    <div class="info" *ngIf="application.contactNo ; else defaultText">
+                      {{application.contactNo}}</div>
+                  </div>
+                  <div class="info-line">
+                    <div class="title">Mobile Number</div>
+                    <div class="info" *ngIf="application.contactNo ; else defaultText">
+                      {{application.contactNo}}</div>
+                  </div>
+                  <div class="info-line">
+                    <div class="title">Mobile Number</div>
+                    <div class="info" *ngIf="application.contactNo ; else defaultText">
+                      {{application.contactNo}}</div>
+                  </div>
+                  <div class="info-line">
+                    <div class="title">Mobile Number</div>
+                    <div class="info" *ngIf="application.contactNo ; else defaultText">
+                      {{application.contactNo}}</div>
+                  </div>
+                  <div class="info-line">
+                    <div class="title">Mobile Number</div>
+                    <div class="info" *ngIf="application.contactNo ; else defaultText">
+                      {{application.contactNo}}</div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+        <mat-tab label="DOCUMENTS">
+          <div class="tab-content p-24 ">
+            <div class="profile-box info-box general">
+              <div class="content" fusePerfectScrollbar>
+                <app-finance-documents [applicationId]="application?.id" [documents]="application?.documentList"></app-finance-documents>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+
+      </mat-tab-group>
+
+    </div>
+
+  </div>
+  <!-- / CONTENT CARD -->
+</div>
+<!-- / CENTER -->
+
+<ng-template #defaultText>
+  <app-default-text></app-default-text>
+</ng-template>

@@ -1,0 +1,24 @@
+<mat-table #table [dataSource]="dataSource">
+  <!-- COLUMNS AND ROWS-->
+  <ng-container *ngFor="let key of displayedColumns" [matColumnDef]="key">
+    <mat-header-cell *matHeaderCellDef>{{ camelToSentenceCase(key) }}</mat-header-cell>
+    <mat-cell *matCellDef="let element; let i = dataIndex">
+      <ng-container [ngSwitch]="key">
+        <span *ngSwitchCase="'action'">
+          <mat-icon class="hover" (click)="onPreview(element.id)" matTooltip="Preview" color="warn" type="button">
+            remove_red_eye
+          </mat-icon>
+        </span>
+        <span *ngSwitchCase="'name'">
+          {{element.Document_label}}
+        </span>
+      </ng-container>
+
+    </mat-cell>
+  </ng-container>
+  <!-- -->
+  <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;" [@animate]="{value:'*',params:{y:'100%'}}">
+  </mat-row>
+
+</mat-table>
