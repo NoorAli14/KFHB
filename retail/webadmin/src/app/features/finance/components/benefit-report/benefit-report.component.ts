@@ -6,6 +6,9 @@ import {
   ViewEncapsulation,
   ViewChild,
   Injector,
+  Input,
+  OnChanges,
+  SimpleChanges,
 } from '@angular/core';
 import { fuseAnimations } from '@fuse/animations';
 import { FormControl } from '@angular/forms';
@@ -15,33 +18,30 @@ import { MatSort } from '@angular/material/sort';
 import {
   camelToSentenceCase,
   camelToSnakeCaseText,
+  snakeToCamelArray,
   toggleSort,
 } from '@shared/helpers/global.helper';
 
-import { debounceTime, distinctUntilChanged, map, skip, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { Pagination } from '@shared/models/pagination.model';
 import * as QueryString from 'query-string';
 import { MatSortDirection } from '@shared/enums/app.enum';
 import { FinanceService } from '@feature/finance/services/finance.service';
 
-
 @Component({
-  selector: 'app-finance',
-  templateUrl: './finance.component.html',
-  styleUrls: ['./finance.component.scss'],
+  selector: 'app-benefit-report',
+  templateUrl: './benefit-report.component.html',
+  styleUrls: ['./benefit-report.component.scss'],
   animations: fuseAnimations,
   encapsulation: ViewEncapsulation.None,
 })
-export class FinanceComponent extends BaseComponent implements OnInit {
-
-  applications: any[];
+export class BenefitReportComponent extends BaseComponent implements OnInit,OnChanges {
+  @Input() liabilities: any[];
   userPermissions: any[];
   pageSize: number = CONFIG.PAGE_SIZE;
   pageSizeOptions: Array<number> = CONFIG.PAGE_SIZE_OPTIONS;
   nationalities: any[];
-  displayedColumns = ['fullName', 'cpr', 'rimNo', 'financingAmount', 'tenor', 'rate', 'createdOn','isCompleted','applicationType', 'status',
-   //'creditSheet', 'checkList',
-    'action',];
+  displayedColumns = ['name', 'loanAmount', 'outstandingAmount', 'installment', 'doSettle', 'subscriberName', 'numberOfAccountHolder', 'accountPosition', 'paymentFrequency', 'firstMissedPaymentDate', 'lastMissedPaymentDate', 'overdueAmount', 'numberOfPayment', 'amountStatus', 'loanDuration', 'maturityDate', 'openDate', 'paymentMethod'];
   pagination: Pagination;
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
   previousFilterState: MatSortDirection;
@@ -57,13 +57,17 @@ export class FinanceComponent extends BaseComponent implements OnInit {
     super(injector);
     super.ngOnInit();
   }
+  ngOnChanges(changes: SimpleChanges): void {
+    if(changes.liabilities.previousValue!=changes.liabilities.currentValue){
+      const data=snakeToCamelArray(this.liabilities);
+      this.dataSource = new MatTableDataSource(data);
+    }
+  }
 
   ngOnInit(): void {
     this.config = this.initParams();
-    this.getData(this.config);
     this.pagination = new Pagination();
     this.control = new FormControl();
-    this.initSearch();
   }
   initParams(): object {
     return {
@@ -101,10 +105,10 @@ export class FinanceComponent extends BaseComponent implements OnInit {
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe(
         (response) => {
-          this.applications = response.data;
+          this.liabilities = response.data;
           this.pagination = response.pagination;
           this.pagination.page = this.pagination.page - 1;
-          this.dataSource = new MatTableDataSource(this.applications);
+          this.dataSource = new MatTableDataSource(this.liabilities);
         },
         (response) => super.onError(response))
   }
@@ -112,26 +116,14 @@ export class FinanceComponent extends BaseComponent implements OnInit {
   camelToSnakeCase(text): void {
     return camelToSnakeCaseText(text);
   }
- 
 
   camelToSentenceCase(text): string {
     return camelToSentenceCase(text);
   }
-  initSearch(): void {
-    this.control.valueChanges
-      .pipe(
-        skip(1),
-        map((value: any) => {
-          return value;
-        }),
-        debounceTime(400),
-        distinctUntilChanged()
-      )
-      .subscribe((text: string) => {
-        this.getData({ first_name: text })
-      });
-  }
+
   ngAfterViewInit(): void {
+    // this.pagination = this.liabilities.pagination;
+    // this.pagination.page = this.pagination.page - 1;
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
@@ -143,4 +135,5 @@ export class FinanceComponent extends BaseComponent implements OnInit {
   onPageFired(data): void {
     this.getData({ page: data['pageIndex'] + 1, limit: data['pageSize'] });
   }
+
 }

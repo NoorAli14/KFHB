@@ -44,14 +44,23 @@
           <mat-header-cell *matHeaderCellDef [disabled]=" key=='action'  ? true : false "
             [mat-sort-header]=" key=='action' ? null : key ">{{ key.includes('action') ? 'Action' :
             camelToSentenceCase(key) }}</mat-header-cell>
-          <mat-cell *matCellDef="let element; let i = dataIndex" class="text-elipsis">
+          <mat-cell *matCellDef="let element; let i = dataIndex" class="text-elipsis cell-padding">
             <ng-container [ngSwitch]="key">
               <span *ngSwitchCase="'action'">
-                <a [routerLink]="['/finance', element.id]">
-                  <mat-icon class="hover" matTooltip="Open Detail" color="warn" type="button"> fullscreen_exit
-                  </mat-icon>
+                <a [routerLink]="['/finance', element.id]" mat-flat-button color="accent">
+                 Detail
                 </a>
               </span>
+              <!-- <span *ngSwitchCase="'creditSheet'" style="margin-bottom:3px">
+                <button type="button" class="submit-button" mat-raised-button color="accent" aria-label="Send Message">
+                  credit sheet
+                </button>
+              </span>
+              <span *ngSwitchCase="'checkList'">
+                <button type="button" class="submit-button" mat-raised-button color="accent" aria-label="Send Message">
+                  check list
+                </button>
+              </span> -->
               <span *ngSwitchCase="'createdOn'">
                 {{element[camelToSnakeCase(key)] | dateFormat}}
               </span>

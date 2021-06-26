@@ -1,0 +1,36 @@
+<div class="content-card" fusePerfectScrollbar>
+  <mat-table #table matSort matSortActive="firstName" matSortDirection="asc" (matSortChange)="sortData($event)"
+    [dataSource]="dataSource">
+    <!-- COLUMNS AND ROWS-->
+    <ng-container *ngFor="let key of displayedColumns" [matColumnDef]="key">
+      <mat-header-cell *matHeaderCellDef [disabled]=" key=='action'  ? true : false "
+        [mat-sort-header]=" key=='action' ? null : key ">{{ key.includes('action') ? 'Action' :
+        camelToSentenceCase(key) }}</mat-header-cell>
+      <mat-cell *matCellDef="let element; let i = dataIndex" class="text-elipsis">
+        <ng-container [ngSwitch]="key">
+          <span *ngSwitchCase="'action'">
+           
+          </span>
+          <span *ngSwitchDefault>
+            <span *ngIf="element[key]; else defaultText">
+              {{element[key]}}
+            </span>
+          </span>
+        </ng-container>
+        <ng-template #defaultText>
+          <app-default-text></app-default-text>
+        </ng-template>
+      </mat-cell>
+    </ng-container>
+    <!-- -->
+    <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;" [@animate]="{value:'*',params:{y:'100%'}}">
+    </mat-row>
+
+  </mat-table>
+  <mat-paginator class="mat-paginator-sticky" #paginator [pageIndex]="pagination.page" (page)="onPageFired($event)"
+    [length]="pagination.total" [pageSize]="pagination.pageSize" showFirstLastButtons
+    [pageSizeOptions]="pageSizeOptions"></mat-paginator>
+
+
+</div>

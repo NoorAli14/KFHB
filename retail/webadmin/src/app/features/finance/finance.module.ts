@@ -11,10 +11,11 @@ import { FinanceDocumentsComponent } from './components/finance-documents/financ
 import { GalleryModule } from '@ngx-gallery/core';
 import { ApplicationDetailComponent } from './views/application-detail/application-detail.component';
 import { PreviewDocumentComponent } from './components/preview-document/preview-document.component';
+import { BenefitReportComponent } from './components/benefit-report/benefit-report.component';
 
 
 @NgModule({
-  declarations: [FinanceComponent,AdvanceSearchComponent,  FinanceDocumentsComponent, ApplicationDetailComponent, PreviewDocumentComponent],
+  declarations: [FinanceComponent,AdvanceSearchComponent,  FinanceDocumentsComponent, ApplicationDetailComponent, PreviewDocumentComponent, BenefitReportComponent],
   imports: [
     CommonModule,
     FinanceRoutingModule,

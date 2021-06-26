@@ -49,6 +49,7 @@ export class AdvanceSearchComponent extends BaseComponent implements AfterConten
     civilId: FormControl;
     genderList = GENDER_LIST;
     statusList = STATUS_LIST;
+    applicationTypes = ['Real State','Auto Finance'];
     filteredNationalities: any[] = [];
     maxDate: Date;
     _context: any;
@@ -119,6 +120,7 @@ export class AdvanceSearchComponent extends BaseComponent implements AfterConten
             endDate: new FormControl(),
             applicationCompleted: new FormControl(),
             status: new FormControl(),
+            applicationType: new FormControl(),
         });
     }
 
