@@ -8,11 +8,11 @@
         camelToSentenceCase(key) }}</mat-header-cell>
       <mat-cell *matCellDef="let element; let i = dataIndex" class="text-elipsis">
         <ng-container [ngSwitch]="key">
-          <span *ngSwitchCase="'action'">
-           
+          <span *ngSwitchCase="'doSettle'">
+            {{element['isSelected']==true ?'Yes': 'No'}}
           </span>
           <span *ngSwitchDefault>
-            <span *ngIf="element[key]; else defaultText">
+            <span *ngIf="element[key]!=null && element[key]!=undefined; else defaultText">
               {{element[key]}}
             </span>
           </span>

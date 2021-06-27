@@ -15,6 +15,7 @@ import { MatSort } from '@angular/material/sort';
 import {
   camelToSentenceCase,
   camelToSnakeCaseText,
+  snakeToCamelArray,
   toggleSort,
 } from '@shared/helpers/global.helper';
 
@@ -39,8 +40,8 @@ export class FinanceComponent extends BaseComponent implements OnInit {
   pageSize: number = CONFIG.PAGE_SIZE;
   pageSizeOptions: Array<number> = CONFIG.PAGE_SIZE_OPTIONS;
   nationalities: any[];
-  displayedColumns = ['fullName', 'cpr', 'rimNo', 'financingAmount', 'tenor', 'rate', 'createdOn','isCompleted','applicationType', 'status',
-   //'creditSheet', 'checkList',
+  displayedColumns = ['fullName', 'cpr', 'rimNo', 'financingAmount', 'tenor', 'rate',  'isCompleted', 'applicationType', 'status','createdOn',
+    //'creditSheet', 'checkList',
     'action',];
   pagination: Pagination;
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
@@ -67,10 +68,7 @@ export class FinanceComponent extends BaseComponent implements OnInit {
   }
   initParams(): object {
     return {
-      limit: CONFIG.PAGE_SIZE,
-      page: 1,
-      sort_order: MatSortDirection.desc,
-      sort_by: 'first_name',
+      applicationType: "Real Estate"
     };
   }
   getQueryString(params): string {
@@ -91,19 +89,15 @@ export class FinanceComponent extends BaseComponent implements OnInit {
       ...params,
     };
   }
-  getData(params): void {
-    const queryParams = QueryString.stringify(
-      this.createQueryObject(params)
-    );
-
+  getData(model): void {
     this._service
-      .getApplications(queryParams)
+      .getApplications(model)
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe(
         (response) => {
-          this.applications = response.data;
-          this.pagination = response.pagination;
-          this.pagination.page = this.pagination.page - 1;
+          this.applications = snakeToCamelArray(response.data)
+          // this.pagination = response.pagination;
+          // this.pagination.page = this.pagination.page - 1;
           this.dataSource = new MatTableDataSource(this.applications);
         },
         (response) => super.onError(response))
@@ -112,7 +106,6 @@ export class FinanceComponent extends BaseComponent implements OnInit {
   camelToSnakeCase(text): void {
     return camelToSnakeCaseText(text);
   }
- 
 
   camelToSentenceCase(text): string {
     return camelToSentenceCase(text);
@@ -132,8 +125,8 @@ export class FinanceComponent extends BaseComponent implements OnInit {
       });
   }
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    // this.dataSource.paginator = this.paginator;
+    // this.dataSource.sort = this.sort;
   }
   sortData(e): void {
     this.previousFilterState = toggleSort(this.previousFilterState, e.direction);

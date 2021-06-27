@@ -106,8 +106,9 @@ export class BenefitReportComponent extends BaseComponent implements OnInit,OnCh
       .subscribe(
         (response) => {
           this.liabilities = response.data;
-          this.pagination = response.pagination;
-          this.pagination.page = this.pagination.page - 1;
+          // this.pagination = response.pagination;
+          // this.pagination.page = this.pagination.page - 1;
+          
           this.dataSource = new MatTableDataSource(this.liabilities);
         },
         (response) => super.onError(response))
@@ -122,10 +123,8 @@ export class BenefitReportComponent extends BaseComponent implements OnInit,OnCh
   }
 
   ngAfterViewInit(): void {
-    // this.pagination = this.liabilities.pagination;
-    // this.pagination.page = this.pagination.page - 1;
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    // this.dataSource.paginator = this.paginator;
+    // this.dataSource.sort = this.sort;
   }
   sortData(e): void {
     this.previousFilterState = toggleSort(this.previousFilterState, e.direction);

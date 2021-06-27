@@ -1,8 +1,5 @@
-import { STATUS_LIST } from './../../../../shared/constants/app.constants';
 import {
     camelToSnakeCase,
-    cloneDeep,
-    getName,
 } from '@shared/helpers/global.helper';
 import { ReferenceService } from '@shared/services/reference/reference.service';
 import {
@@ -16,7 +13,6 @@ import {
 import { trigger, transition, style, animate } from '@angular/animations';
 import { FormGroup, FormControl } from '@angular/forms';
 import { map, debounceTime, distinctUntilChanged, skip } from 'rxjs/operators';
-import { GENDER_LIST } from '@shared/constants/app.constants';
 import { fuseAnimations } from '@fuse/animations';
 import { BaseComponent } from '@shared/components/base/base.component';
 var _context;
@@ -46,35 +42,32 @@ var _context;
 export class AdvanceSearchComponent extends BaseComponent implements AfterContentChecked, OnInit {
     isAdvance = false;
     searchForm: FormGroup;
-    civilId: FormControl;
-    genderList = GENDER_LIST;
-    statusList = STATUS_LIST;
-    applicationTypes = ['Real State','Auto Finance'];
-    filteredNationalities: any[] = [];
+    cpr: FormControl;
+    statusList = ['Review', 'Accept', 'Reject', 'Request'];
+    applicationTypes = ['Real State', 'Auto Finance'];
     maxDate: Date;
     _context: any;
     @Output() filterChange = new EventEmitter();
     @Output() filterReset = new EventEmitter();
 
-    constructor(private _refService: ReferenceService, injector: Injector) {
+    constructor( injector: Injector) {
         super(injector);
         this.initForm();
     }
 
     ngOnInit(): void {
-        this.civilId = new FormControl('');
+        this.cpr = new FormControl('');
         this.maxDate = new Date();
         this.maxDate.setDate(this.maxDate.getDate());
         this.initSearch();
-        this.genderList = [...this.genderList, { id: '', name: 'All' }];
         _context = this;
 
-        const target = document.getElementById('nationalId');
+        const target = document.getElementById('cpr');
         target.addEventListener('paste', (e) => {
             this.isAdvance = false;
             let paste = (e.clipboardData || window['clipboardData']).getData('text');
             const filters = this.filterKeys();
-            this.filterChange.emit({ national_id_no: paste, ...filters });
+            this.filterChange.emit({ cpr: paste, ...filters });
         })
     }
 
@@ -98,7 +91,7 @@ export class AdvanceSearchComponent extends BaseComponent implements AfterConten
     }
 
     initSearch(): void {
-        this.civilId.valueChanges
+        this.cpr.valueChanges
             .pipe(
                 skip(1),
                 map((value: any) => {
@@ -110,14 +103,14 @@ export class AdvanceSearchComponent extends BaseComponent implements AfterConten
             .subscribe((text: string) => {
                 this.isAdvance = false;
                 const filters = this.filterKeys();
-                this.filterChange.emit({ national_id_no: text, ...filters });
+                this.filterChange.emit({ cpr: text, ...filters });
             });
     }
 
     initForm(): void {
         this.searchForm = new FormGroup({
-            startDate: new FormControl(),
-            endDate: new FormControl(),
+            dateFrom: new FormControl(),
+            dateTo: new FormControl(),
             applicationCompleted: new FormControl(),
             status: new FormControl(),
             applicationType: new FormControl(),
@@ -143,7 +136,7 @@ export class AdvanceSearchComponent extends BaseComponent implements AfterConten
 
     filterKeys() {
         const filters = this.searchForm.value;
-        filters.national_id_no = this.civilId.value;
+        filters.cpr = this.cpr.value;
         Object.keys(filters).forEach(
             (key) => !filters[key] && delete filters[key]
         );

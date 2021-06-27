@@ -39,83 +39,194 @@
           <div class="tab-content p-24 ">
             <div class="profile-box info-box general">
               <div class="content" fusePerfectScrollbar>
+                <div class="h2 mb-24">
+                  Applicant Detail
+                </div>
                 <div fxLayout="row wrap">
+                  <div class="info-line">
+                    <div class="title">Full Name</div>
+                    <app-display-value [prop]="application.fullName">
+                    </app-display-value>
+                  </div>
+                  <div class="info-line">
+                    <div class="title">CPR</div>
+                    <app-display-value [prop]="application.cpr">
+                    </app-display-value>
+                  </div>
+                  <div class="info-line">
+                    <div class="title">Rim No</div>
+                    <app-display-value [prop]="application.rimNo">
+                    </app-display-value>
+                  </div>
+                  <div class="info-line">
+                    <div class="title">Gender</div>
+                    <app-display-value [prop]="application.gen">
+                    </app-display-value>
+                  </div>
+                  <div class="info-line">
+                    <div class="title">Jazeel Account</div>
+                    <app-display-value [prop]="application.jazeelAccount">
+                    </app-display-value>
+                  </div>
+                  <div class="info-line">
+                    <div class="title">Employer Grade</div>
+                    <app-display-value [prop]="application.employerGrade">
+                    </app-display-value>
+                  </div>
+                  <div class="info-line">
+                    <div class="title">Employer Name</div>
+                    <app-display-value [prop]="application.employer">
+                    </app-display-value>
+                  </div>
+                  <div class="info-line">
+                    <div class="title">Fixed Allowance</div>
+                    <app-display-value [prop]="application.fixedAllowance">
+                    </app-display-value>
+                  </div>
+                  <div class="info-line">
+                    <div class="title">Basic Salary</div>
+                    <app-display-value [prop]="application.basicIncome">
+                    </app-display-value>
+                  </div>
+                  <div class="info-line">
+                    <div class="title">Total Income</div>
+                    <app-display-value [prop]="application.monthlyIncome">
+                    </app-display-value>
+                  </div>
+                  <div class="info-line">
+                    <div class="title">Benefit Nationality</div>
+                    <app-display-value [prop]="application.nat">
+                    </app-display-value>
+                  </div>
+                </div>
 
+              </div>
+            </div>
+            <div class="profile-box info-box general">
+              <div class="content" fusePerfectScrollbar>
+                <div class="h2 mb-24">
+                  Tamweely Application
+                </div>
+                <div fxLayout="row wrap">
                   <div class="info-line">
                     <div class="title">Consent Date</div>
-                    <div class="info" *ngIf="application.contactNo ; else defaultText">
-                      {{application.contactNo}}</div>
+                    <app-display-value [prop]="application.dob">
+                    </app-display-value>
                   </div>
                   <div class="info-line">
                     <div class="title">Financing Amount</div>
-                    <div class="info" *ngIf="application.financingAmount ; else defaultText">
-                      {{application.financingAmount}}</div>
+                    <app-display-value [prop]="application.financingAmount">
+                    </app-display-value>
+
                   </div>
                   <div class="info-line">
                     <div class="title">Tenure</div>
-                    <div class="info" *ngIf="application.tenor ; else defaultText">
-                      {{application.tenor}}</div>
+                    <app-display-value [prop]="application.tenure">
+                    </app-display-value>
                   </div>
                   <div class="info-line">
                     <div class="title">Rate</div>
-                    <div class="info" *ngIf="application.rate ; else defaultText">
-                      {{application.rate}}</div>
+                    <app-display-value [prop]="application.rate">
+                    </app-display-value>
                   </div>
                   <div class="info-line">
                     <div class="title">APR</div>
-                    <div class="info" *ngIf="application.apr ; else defaultText">
-                      {{application.apr}}</div>
+                    <app-display-value [prop]="application.apr">
+                    </app-display-value>
                   </div>
                   <div class="info-line">
                     <div class="title">Installment Amount</div>
-                    <div class="info" *ngIf="application.installmentAmount ; else defaultText">
-                      {{application.installmentAmount}}</div>
+                    <app-display-value [prop]="application.installmentAmount">
+                    </app-display-value>
                   </div>
                   <div class="info-line">
                     <div class="title">Purpose</div>
-                    <div class="info" *ngIf="application.purpose ; else defaultText">
-                      {{application.purpose}}</div>
+                    <app-display-value [prop]="application.purpose">
+                    </app-display-value>
                   </div>
                   <div class="info-line">
                     <div class="title">Cash in Hand</div>
-                    <div class="info" *ngIf="application.cashInHand ; else defaultText">
-                      {{application.cashInHand}}</div>
+                    <app-display-value [prop]="application.cashInHand">
+                    </app-display-value>
                   </div>
                   <div class="info-line">
                     <div class="title">Is your salary in KFHB</div>
-                    <div class="info" *ngIf="application.contactNo ; else defaultText">
-                      {{application.contactNo}}</div>
+                    <app-display-value [prop]="application.isKfhSalary">
+                    </app-display-value>
                   </div>
                   <div class="info-line">
                     <div class="title">Salary Account</div>
-                    <div class="info">
-                      {{application.isKfhSalary?'Yes':'No'}}</div>
+                    <app-display-value [prop]="application.salaryAccount">
+                    </app-display-value>
                   </div>
                   <div class="info-line">
                     <div class="title">Settlement Amount</div>
-                    <div class="info" *ngIf="application.totalLoanSettlement ; else defaultText">
-                      {{application.totalLoanSettlement}}</div>
+                    <app-display-value [prop]="application.totalLoanSettlement">
+                    </app-display-value>
                   </div>
                   <div class="info-line">
                     <div class="title">Brokerage Fee</div>
-                    <div class="info" *ngIf="application.brokerageFee ; else defaultText">
-                      {{application.brokerageFee}}</div>
+                    <app-display-value [prop]="application.brokerageFee">
+                    </app-display-value>
                   </div>
                 </div>
-                <div class="actions" fxLayoutGap="10px" fxLayout="row" fxLayoutAlign="end end">
-                  <button type="button" (click)="openDialog()" mat-raised-button color="primary" aria-label="Follow">
-                    Send Document Notification
-                  </button>
-                  &nbsp;
-                  <button type="button" (click)="openDialog()" class="submit-button" mat-raised-button color="accent"
-                    aria-label="Send Message">
-                    Approve
-                  </button>
-                  <button type="button" (click)="openDialog()" class="submit-button" mat-raised-button color="warn" aria-label="Send Message">
-                    Reject
-                  </button>
-                </div>
+
               </div>
+            </div>
+            <div class="profile-box info-box general">
+              <div class="content" fusePerfectScrollbar>
+                <div class="h2 mb-24">
+                  Financial Health
+                </div>
+                <div fxLayout="row wrap">
+                  <div class="info-line">
+                    <div class="title">Benefit Profit</div>
+                    <app-display-value [prop]="application.tmIdNo">
+                    </app-display-value>
+                  </div>
+                  <div class="info-line">
+                    <div class="title">Benefit Score</div>
+                    <app-display-value [prop]="application.score">
+                    </app-display-value>
+
+                  </div>
+                  <div class="info-line">
+                    <div class="title">Pass Overdue</div>
+                    <app-display-value [prop]="application.gracePeriod">
+                    </app-display-value>
+                  </div>
+                  <div class="info-line">
+                    <div class="title">No. of overdues</div>
+                    <app-display-value [prop]="application.noOfOverdue">
+                    </app-display-value>
+                  </div>
+                  <div class="info-line">
+                    <div class="title">Mortgage Load</div>
+                    <app-display-value [prop]="application.mortgageLoad">
+                    </app-display-value>
+                  </div>
+                  <div class="info-line">
+                    <div class="title">Max DBR</div>
+                    <app-display-value [prop]="application.dbr">
+                    </app-display-value>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            <div class="actions" fxLayoutGap="10px" fxLayout="row" fxLayoutAlign="end end">
+              <button type="button" (click)="openDialog()" mat-raised-button color="primary" aria-label="Follow">
+                Send Document Notification
+              </button>
+              &nbsp;
+              <button type="button" (click)="openDialog()" class="submit-button" mat-raised-button color="accent"
+                aria-label="Send Message">
+                Approve
+              </button>
+              <button type="button" (click)="openDialog()" class="submit-button" mat-raised-button color="warn"
+                aria-label="Send Message">
+                Reject
+              </button>
             </div>
           </div>
         </mat-tab>

@@ -94,7 +94,7 @@ const REFERENCE = '/api/v1/references/';
 const ONBOARDING = '/api/v1/onboarding/';
 const SERVICEREQUEST = '/requests/api/v1/service/request/';
 const REFERRALREQUEST = '/customers/api/v1/customers/';
-
+const V2='/api/v2'
 export const URI = {
     USER_INVITATION: `${ENTITLEMENT}invitations`,
     USER: `${ENTITLEMENT}users`,
@@ -130,7 +130,7 @@ export const URI = {
     REFERRAL: `${REFERRALREQUEST}referral`,
     REFERRAL_TRANSACTIONS: `${REFERRALREQUEST}referral/transactions`,
     REFERRAL_TRANSACTIONS_REPORT: `${REFERRALREQUEST}referral/transactions/excel/report`,
-    FINANCE_APPLICATIONS: `/api/v1/finance`
+    FINANCE_APPLICATIONS: `${V2}/finance/getApplicationList`
 };
 
 export const DEFAULT_IMAGE = 'assets/images/not-available.png';

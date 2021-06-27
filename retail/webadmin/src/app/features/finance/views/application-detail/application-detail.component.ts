@@ -43,6 +43,7 @@ export class ApplicationDetailComponent extends BaseComponent implements OnInit 
       .subscribe(
         (response) => {
           const data = snakeToCamelObject(response.data);
+          debugger
           this.application = data;
         },
         (response) => super.onError(response))

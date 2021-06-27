@@ -1,0 +1,17 @@
+<div *ngIf="isNumber || isString || isBoolean; else defaultText">
+  <div class="info" *ngIf="isNumber">
+    {{prop}}
+  </div>
+  <div class="info" *ngIf="isString">
+    <span *ngIf="prop.length>0; else defaultText">
+      {{prop}}
+    </span>
+  </div>
+  <div class=" info" *ngIf="isBoolean">
+    {{prop ==true ? 'Yes' :'No'}}
+  </div>
+
+</div>
+<ng-template #defaultText>
+  <app-default-text></app-default-text>
+</ng-template>

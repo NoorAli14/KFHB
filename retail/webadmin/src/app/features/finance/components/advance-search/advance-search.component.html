@@ -4,7 +4,7 @@
             <div class="search-wrapper mx-32 mx-md-0">
                 <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center" style="position: relative;">
                     <mat-icon>search</mat-icon>
-                    <input placeholder="Enter CPR/RIM" id="nationalId" [formControl]="civilId"
+                    <input placeholder="Enter CPR/RIM" id="cpr" [formControl]="cpr"
                         class="my-form-input advance-input">
                     <a (click)="openAdvance(false)" *ngIf="isAdvance" class="search-arrow hover">▲</a>
                     <a (click)="openAdvance(true)" *ngIf="!isAdvance" class="search-arrow hover">▼</a>
@@ -22,14 +22,14 @@
                                 <mat-form-field appearance="outline" fxFlex="50" class="pl-8">
                                     <mat-label>Start Date <app-required-indicator></app-required-indicator>
                                     </mat-label>
-                                    <input matInput [matDatepicker]="picker" formControlName="startDate" />
+                                    <input matInput [matDatepicker]="picker" formControlName="dateFrom" />
                                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                                     <mat-datepicker #picker></mat-datepicker>
                                 </mat-form-field>
                                 <mat-form-field appearance="outline" fxFlex="50" class="pl-8">
                                     <mat-label>End Date<app-required-indicator></app-required-indicator>
                                     </mat-label>
-                                    <input matInput [matDatepicker]="picker2" formControlName="endDate" />
+                                    <input matInput [matDatepicker]="picker2" formControlName="dateTo" />
                                     <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                                     <mat-datepicker #picker2></mat-datepicker>
                                 </mat-form-field>

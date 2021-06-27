@@ -8,7 +8,7 @@ import { FinanceService } from '@feature/finance/services/finance.service';
 import { fuseAnimations } from '@fuse/animations';
 import { BaseComponent } from '@shared/components/base/base.component';
 import { MatSortDirection } from '@shared/enums/app.enum';
-import { camelToSentenceCase } from '@shared/helpers/global.helper';
+import { camelToSentenceCase, snakeToCamelArray } from '@shared/helpers/global.helper';
 import { Pagination } from '@shared/models/pagination.model';
 import { EventEmitter } from 'events';
 import { takeUntil } from 'rxjs/operators';
@@ -45,10 +45,14 @@ export class FinanceDocumentsComponent extends BaseComponent implements OnInit {
     super(injector);
     super.ngOnInit();
   }
-
-  ngOnInit(): void {
-    this.dataSource = new MatTableDataSource(this.documents);
+  ngOnChanges(changes: SimpleChanges): void {
+    if(changes.documents.previousValue!=changes.documents.currentValue){
+      const docs= snakeToCamelArray(this.documents)
+      debugger
+      this.dataSource = new MatTableDataSource(docs);
+    }
   }
+
   camelToSentenceCase(text): string {
     return camelToSentenceCase(text);
   }

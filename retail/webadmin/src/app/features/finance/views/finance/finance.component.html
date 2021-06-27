@@ -44,11 +44,11 @@
           <mat-header-cell *matHeaderCellDef [disabled]=" key=='action'  ? true : false "
             [mat-sort-header]=" key=='action' ? null : key ">{{ key.includes('action') ? 'Action' :
             camelToSentenceCase(key) }}</mat-header-cell>
-          <mat-cell *matCellDef="let element; let i = dataIndex" class="text-elipsis cell-padding">
+          <mat-cell *matCellDef="let element; let i = dataIndex" class="wrapword cell-padding">
             <ng-container [ngSwitch]="key">
               <span *ngSwitchCase="'action'">
                 <a [routerLink]="['/finance', element.id]" mat-flat-button color="accent">
-                 Detail
+                  Detail
                 </a>
               </span>
               <!-- <span *ngSwitchCase="'creditSheet'" style="margin-bottom:3px">
@@ -62,11 +62,14 @@
                 </button>
               </span> -->
               <span *ngSwitchCase="'createdOn'">
-                {{element[camelToSnakeCase(key)] | dateFormat}}
+                {{element[key] | dateFormat}}
+              </span>
+              <span *ngSwitchCase="'isCompleted'">
+                {{element[key] ==true ? 'Yes' :'No'}}
               </span>
               <span *ngSwitchDefault>
-                <span *ngIf="element[camelToSnakeCase(key)]; else defaultText">
-                  {{element[camelToSnakeCase(key)]}}
+                <span *ngIf="element[key]!=null && element[key]!=undefined; else defaultText">
+                  {{element[key]}}
                 </span>
               </span>
             </ng-container>
@@ -81,10 +84,10 @@
         </mat-row>
 
       </mat-table>
-      <mat-paginator class="mat-paginator-sticky" #paginator [pageIndex]="pagination.page" (page)="onPageFired($event)"
+      <!-- <mat-paginator class="mat-paginator-sticky" #paginator [pageIndex]="pagination.page" (page)="onPageFired($event)"
         [length]="pagination.total" [pageSize]="pagination.pageSize" showFirstLastButtons
         [pageSizeOptions]="pageSizeOptions"></mat-paginator>
-
+ -->
 
     </div>
     <!-- / CONTENT CARD -->

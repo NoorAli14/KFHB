@@ -19,6 +19,7 @@ import { DateFormatPipe } from './pipes/date/date.pipe';
 import { DateTimeFormatPipe } from './pipes/date-time/date-time.pipe';
 import { DynamicInputComponent } from './components/dynamic-input/dynamic-input.component';
 import { MatRadioModule } from '@angular/material/radio';
+import { DisplayValueComponent } from './components/display-value/display-value.component';
 
 @NgModule({
     declarations: [
@@ -35,6 +36,7 @@ import { MatRadioModule } from '@angular/material/radio';
         DateFormatPipe,
         DateTimeFormatPipe,
         DynamicInputComponent,
+        DisplayValueComponent,
     ],
     imports: [
         ReactiveFormsModule,
@@ -51,6 +53,7 @@ import { MatRadioModule } from '@angular/material/radio';
         WTimeDialogComponent,
         PermissionDirective,
         MessageBoxComponent,
+        DisplayValueComponent,
         BaseComponent,
         DefaultTextComponent,
         RequiredIndicatorComponent,
