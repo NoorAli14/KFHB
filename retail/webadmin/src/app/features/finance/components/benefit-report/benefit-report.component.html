@@ -1,10 +1,9 @@
 <div class="content-card" fusePerfectScrollbar>
-  <mat-table #table matSort matSortActive="firstName" matSortDirection="asc" (matSortChange)="sortData($event)"
-    [dataSource]="dataSource">
+  <mat-table #table [dataSource]="dataSource">
     <!-- COLUMNS AND ROWS-->
     <ng-container *ngFor="let key of displayedColumns" [matColumnDef]="key">
-      <mat-header-cell *matHeaderCellDef [disabled]=" key=='action'  ? true : false "
-        [mat-sort-header]=" key=='action' ? null : key ">{{ key.includes('action') ? 'Action' :
+      <mat-header-cell *matHeaderCellDef >{{ key.includes('action') ?
+        'Action' :
         camelToSentenceCase(key) }}</mat-header-cell>
       <mat-cell *matCellDef="let element; let i = dataIndex" class="text-elipsis">
         <ng-container [ngSwitch]="key">
@@ -28,9 +27,4 @@
     </mat-row>
 
   </mat-table>
-  <mat-paginator class="mat-paginator-sticky" #paginator [pageIndex]="pagination.page" (page)="onPageFired($event)"
-    [length]="pagination.total" [pageSize]="pagination.pageSize" showFirstLastButtons
-    [pageSizeOptions]="pageSizeOptions"></mat-paginator>
-
-
 </div>

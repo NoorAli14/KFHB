@@ -47,8 +47,8 @@
           <mat-cell *matCellDef="let element; let i = dataIndex" class="wrapword cell-padding">
             <ng-container [ngSwitch]="key">
               <span *ngSwitchCase="'action'">
-                <a [routerLink]="['/finance', element.id]" mat-flat-button color="accent">
-                  Detail
+                <a [routerLink]="['/finance', element.id]" >
+                  <mat-icon class="hover" matTooltip="View Detail" color="warn" type="button">fullscreen</mat-icon>
                 </a>
               </span>
               <!-- <span *ngSwitchCase="'creditSheet'" style="margin-bottom:3px">

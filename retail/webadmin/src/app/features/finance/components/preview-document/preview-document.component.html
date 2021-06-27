@@ -3,7 +3,7 @@
     <mat-toolbar-row fxFlex fxLayout="row" fxLayoutAlign="space-between center">
       <div class="logo mb-24 mb-md-0" fxLayout="row" fxLayoutAlign="start center">
 
-        <span> {{data?.Document_label}}</span>
+        <span> {{data?.documentLabel}}</span>
       </div>
       <button mat-icon-button mat-dialog-close aria-label="Close dialog">
         <mat-icon>close</mat-icon>
@@ -12,7 +12,7 @@
   </mat-toolbar>
 
   <div mat-dialog-content class="p-24 m-0" style="max-height: 83vh !important">
-    <img src="{{'data:image/png;base64,' + data?.Document_image }}" />
+    <img src="{{'data:image/png;base64,' + data?.documentImage }}" />
 
   </div>
 </div>
