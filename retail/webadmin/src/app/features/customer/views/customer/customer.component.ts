@@ -110,6 +110,7 @@ export class CustomerComponent
             .subscribe(
                 (response) => {
                     this.customers = snakeToCamelArray(response.data);
+
                     this.pagination = response.pagination;
                     this.dataSource = new MatTableDataSource(this.customers);
                     this.pagination.page = this.pagination.page - 1;
@@ -170,7 +171,7 @@ export class CustomerComponent
         });
     }
     getCustomerDetail(id): void {
-        //   id = "34A8F400-23F0-445F-A20C-5407BDC1C6FC";
+        //   id = "852FB5E3-D9D8-4292-9A4F-B141E31FAF6F";
         //   id = "99CFE035-51E3-4790-9773-B692CCC792EA";
         //   id = "BE899A66-77E0-46D8-96F6-AC46F141A016";
         this._service

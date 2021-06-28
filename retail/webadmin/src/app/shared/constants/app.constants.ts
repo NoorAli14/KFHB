@@ -23,7 +23,7 @@ export enum APP_CONST {
 export const CUSTOMER_STATUSES = {
     ACCEPTED: 'ACCEPTED',
     PENDING: 'PENDING',
-    REJECTED:'REJECTED',
+    REJECTED: 'REJECTED',
     REFER_TO_BUSINESS: 'REFER_TO_BUSINESS',
     DROPPED: 'DROPPED',
 };
@@ -34,7 +34,7 @@ export const STATUS_LIST: Array<Select> = [
     { id: 'DROPPED', name: 'Dropped' },
     { id: 'REJECTED', name: 'Rejected' },
     { id: 'REFER_TO_BUSINESS', name: 'Refer to Business' },
-    { id: 'RETRY', name: 'Retry'}
+    { id: 'RETRY', name: 'Retry' }
 ];
 
 export const REMARKS_LIST = [

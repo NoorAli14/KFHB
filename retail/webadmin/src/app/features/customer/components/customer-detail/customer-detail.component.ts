@@ -271,7 +271,7 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
         // ADDITIONAL DOCUMENTS MAPPING
         this.additionalDocuments = this.additionalDocsMapped.map((item) => {
             const url = this.previewAttachmentsUrl(item.id);
-            return new ImageItem({ src: url, thumb: url, title: item.title });
+            return new ImageItem({ src: url, thumb: url, title: item.title.replace(" Screenshot", "") });
         })
 
         this.basicLightboxExample(this.passportDocuments);
@@ -429,23 +429,12 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit, Af
     addRemarks() {
         const model = this.remarksForm.value;
         this.customerService.updateCustomer(this.customer.id, model).subscribe((response) => {
-            if (model.status === CUSTOMER_STATUSES.ACCEPTED) {
-                this.createAccount(response);
-                return;
-            } else {
-                this.updatedResponse = response;
-                this._notifier.success('Remarks added successfully')
-            }
+            this.updatedResponse = response;
+            this._notifier.success('Remarks added successfully')
         },
             (response) => super.onError(response))
     }
-    createAccount(customerDetails) {
-        this.customerService.createAccount(this.customer.id)
-            .subscribe((response) => {
-                this.updatedResponse = customerDetails;
-                this._notifier.success('Account created successfully')
-            }, (response) => super.onError(response))
-    }
+
     getCRSTemplate() {
         this.customerService.getCRSTemplate()
             .subscribe((response) => {
