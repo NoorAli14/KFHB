@@ -35,6 +35,7 @@ export class BaseComponent implements OnInit {
         );
     }
     onError(response): void {
+        
         const message = extractErrorString(response);
         this._notifier.error(message);
     }

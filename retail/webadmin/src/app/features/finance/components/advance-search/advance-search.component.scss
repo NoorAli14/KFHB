@@ -1,0 +1,139 @@
+
+
+
+/*=====  End of Choices  ======*/
+
+* {
+    box-sizing: border-box;
+}
+
+.s008 {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+    justify-content: flex-start;
+    -ms-flex-align: center;
+    align-items: center;
+    position: relative;
+    z-index: 999;
+    // background: url("../images/Searchs_008.png");
+    background-size: cover;
+    // padding: 15px;
+    // font-family: 'Roboto', sans-serif;
+}
+
+.s008 form {
+    width: 100%;
+    // max-width: 790px;
+    margin: 0;
+}
+
+.s008 form .inner-form {
+    width: 100%;
+}
+
+
+.s008 form .inner-form .advance-search {
+    background: #fffefe;
+    // padding: 16px 21px 0px 21px;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    position: absolute;
+    top: -5px;
+    width: 100%;
+}
+
+.s008 form .inner-form .advance-search .desc {
+    font-size: 15px;
+    color: #999;
+    display: block;
+    margin-bottom: 26px;
+}
+
+.s008 form .inner-form .advance-search .row {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -ms-flex-align: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.s008 form .inner-form .advance-search .row.second {
+    margin-bottom: 46px;
+}
+
+.s008 form .inner-form .advance-search .row.third {
+    margin-bottom: 0;
+}
+
+.s008 form .inner-form .advance-search .row.third .input-field {
+    width: 100%;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -ms-flex-align: center;
+    align-items: center;
+}
+
+.s008 form .inner-form .advance-search .row.third .input-field .result-count {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: start;
+    justify-content: flex-end;
+    -ms-flex-align: center;
+    align-items: center;
+    width: 110px;
+    font-weight: bold;
+    color: #fff;
+    font-size: 14px;
+}
+
+
+
+
+@media screen and (max-width: 767px) {
+    .s008 form .inner-form .advance-search .row {
+        display: block;
+    }
+}
+
+
+/*# sourceMappingURL=Searchs_008.css.map */
+
+.advance-input {
+    /* styling */
+    display: inline-block;
+    font: inherit;
+    line-height: 1.5em;
+    padding: 0.5em 3.5em 0.5em 1em;
+    /* reset */
+    margin: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+.search-arrow {
+    position: absolute;
+    right: 27px;
+}
+
+.search-arrow:hover {
+    background-color: blue($color: #000000);
+}
+
+.search-box {
+    position: relative;
+    z-index: 1;
+}
+
+
+
+.search-wrapper{
+    max-width: none !important
+}

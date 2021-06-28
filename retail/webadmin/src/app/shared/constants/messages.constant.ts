@@ -20,6 +20,9 @@ export const MESSAGES = {
     EXISTS: (type) => `${type} already exists. `,
     INVALID_DATE:`Date is invalid`,
     CHANGE_STATUS: (status) => `Are you sure you want to ${status} ?`,
+    FINANCE_NOTIFY_CONFIRM:'Are you sure you want to send notification?',
+    FINANCE_ACCEPT_CONFIRM:'Are you sure you want to accept?',
+    FINANCE_REJECT_CONFIRM:'Are you sure you want to reject?'
 };
 const getRandomNumber = () => {
     return Math.floor(Math.random() * 11);

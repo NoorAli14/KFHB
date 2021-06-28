@@ -93,6 +93,12 @@ export class AuthUserService {
             url: '/international-transfer-requests',
             translate: 'FEATURES.INTERNATIONALTRANSFERREQUEST.TITLE',
         },
+        {
+            id: 'finance-application',
+            icon: 'update',
+            url: '/finance',
+            translate: 'FEATURES.FINANCE_APPLICATION.TITLE',
+        },
     ];
     
 

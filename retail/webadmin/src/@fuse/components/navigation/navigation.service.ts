@@ -150,6 +150,14 @@ export class FuseNavigationService {
             icon: 'receipt',
             url: '/req',
         };
+        const financeItem = {
+            id: 'finance-application',
+            title: 'Finance Application',
+            type: 'item',
+            icon: 'account_balance',
+            url: '/finance',
+        };
+
         const internationalItem = {
             id: 'international',
             title: 'International Transfer Requests',
@@ -165,6 +173,10 @@ export class FuseNavigationService {
         const findserviceRequests = navigation.find((x) => x.id == 'service-requests');
         if (!findserviceRequests) {
             navigation.push(serviceRequestsItem);
+        }
+        const financeItemRequest = navigation.find((x) => x.id == 'finance-application');
+        if (!financeItemRequest) {
+            navigation.push(financeItem);
         }
         const internationalObj = navigation.find((x) => x.id == 'international');
         if (!internationalObj) {

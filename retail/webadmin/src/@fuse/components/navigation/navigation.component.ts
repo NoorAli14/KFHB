@@ -53,9 +53,7 @@ export class FuseNavigationComponent implements OnInit
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe(() => {
                 // Load the navigation
-                
                 this.navigation = this._fuseNavigationService.getCurrentNavigation();
-
                 // Mark for check
                 this._changeDetectorRef.markForCheck();
             });

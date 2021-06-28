@@ -51,6 +51,10 @@ const routes: Routes = [
     loadChildren: () => import('./international-transfer-requests/international-transfer-requests.module').then(m => m.InternationalTransferRequestsModule)
   },
   {
+    path: 'finance',
+    loadChildren: () => import('./finance/finance.module').then(m => m.FinanceModule)
+  },
+  {
     path: '**', redirectTo: 'error'
   }
 ];

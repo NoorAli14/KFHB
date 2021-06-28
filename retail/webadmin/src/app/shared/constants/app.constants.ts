@@ -94,7 +94,9 @@ const REFERENCE = '/api/v1/references/';
 const ONBOARDING = '/api/v1/onboarding/';
 const SERVICEREQUEST = '/requests/api/v1/service/request/';
 const REFERRALREQUEST = '/customers/api/v1/customers/';
-const TRANSFER = '/api/v2/transfer';
+const V2='/api/v2'
+const V1='/api/v1'
+
 const BANKTRANSACTION = '/api/v1/transfer';
 const JAZELREQUEST= "/jazeel1proxy/api/v2/transfer";
 
@@ -133,6 +135,9 @@ export const URI = {
     REFERRAL: `${REFERRALREQUEST}referral`,
     REFERRAL_TRANSACTIONS: `${REFERRALREQUEST}referral/transactions`,
     REFERRAL_TRANSACTIONS_REPORT: `${REFERRALREQUEST}referral/transactions/excel/report`,
+    FINANCE_APPLICATIONS: `/business${V1}/finance/getApplicationList`,
+    FINANCE_APPLICATION: `/business${V1}/finance/getApplicationDetail`,
+    FINANCE_APPLICATION_DOCS: `/business${V1}/finance/getApplicationDocument`,
     INTERNATIONAL_TRANSFER_REQUEST: `${JAZELREQUEST}/getInternationalTransferHistory`,
     APPROVE_TRANSFER_REQUEST: `${TRANSFER}/approveInternationalAmountAndCharges`,
     REJECT_TRANSFER_REQUEST: `${TRANSFER}/reverseInternationalAmountAndCharges`,
