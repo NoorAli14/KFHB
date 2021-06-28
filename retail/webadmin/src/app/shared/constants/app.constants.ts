@@ -96,7 +96,7 @@ const SERVICEREQUEST = '/requests/api/v1/service/request/';
 const REFERRALREQUEST = '/customers/api/v1/customers/';
 const TRANSFER = '/api/v2/transfer';
 const BANKTRANSACTION = '/api/v1/transfer';
-const JAZELREQUEST= "J2Retail/jazeel1proxy/api/v2/transfer"
+const JAZELREQUEST= "/J2Retail/jazeel1proxy/api/v2/transfer"
 
 export const URI = {
     USER_INVITATION: `${ENTITLEMENT}invitations`,
