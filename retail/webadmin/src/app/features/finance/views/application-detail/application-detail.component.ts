@@ -40,7 +40,7 @@ export class ApplicationDetailComponent extends BaseComponent implements OnInit 
 
   getApplication(id): void {
     this._service
-      .getApplicationsById({ applicationId: '38cc9b92-ec52-45e5-8511-3a0507c70f13' })
+      .getApplicationsById({ applicationId: id })
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe(
         (response) => {

@@ -16,9 +16,9 @@
         </button>
 
         <!-- APP TITLE -->
-        <div class="logo mb-24 mb-md-0" style="flex: 0 1 30%;" fxLayout="row" fxLayoutAlign="start center">
-          <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
-            Application
+        <div class="logo mb-24 mb-md-0" fxLayout="row" fxLayoutAlign="start center">
+          <span class="logo-text h2" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+            {{application.fullName?application.fullName:'Application'}}
           </span>
         </div>
       </div>
@@ -81,12 +81,14 @@
                   </div>
                   <div class="info-line">
                     <div class="title">Gender</div>
-                    <app-display-value [prop]="application.gen">
-                    </app-display-value>
+                    <div class=" info">
+                      <span *ngIf="application.gen =='F' || application.gen =='Female'">Female</span>
+                      <span *ngIf="application.gen =='M' || application.gen =='Male'">Male</span>
+                    </div>
                   </div>
                   <div class="info-line">
                     <div class="title">Jazeel Account</div>
-                    <app-display-value [prop]="application.jazeelAccount">
+                    <app-display-value [prop]="application.accountNo">
                     </app-display-value>
                   </div>
                   <div class="info-line">
@@ -101,7 +103,7 @@
                   </div>
                   <div class="info-line">
                     <div class="title">Fixed Allowance</div>
-                    <app-display-value [prop]="application.fixedAllowance">
+                    <app-display-value [prop]="application.allowance">
                     </app-display-value>
                   </div>
                   <div class="info-line">
@@ -142,7 +144,7 @@
                   </div>
                   <div class="info-line">
                     <div class="title">Tenure</div>
-                    <app-display-value [prop]="application.tenure">
+                    <app-display-value [prop]="application.tenor">
                     </app-display-value>
                   </div>
                   <div class="info-line">
@@ -201,19 +203,21 @@
                 </div>
                 <div fxLayout="row wrap">
                   <div class="info-line">
-                    <div class="title">Benefit Profit</div>
-                    <app-display-value [prop]="application.tmIdNo">
-                    </app-display-value>
+                    <div class="title">Benefit Profile</div>
+                    <div class=" info">
+                      {{application.benefitProfile ==1 ? 'Yes' :'No'}}
+                    </div>
                   </div>
                   <div class="info-line">
                     <div class="title">Benefit Score</div>
-                    <app-display-value [prop]="application.score">
+
+                    <app-display-value [bool]="true" [prop]="application.score">
                     </app-display-value>
 
                   </div>
                   <div class="info-line">
                     <div class="title">Pass Overdue</div>
-                    <app-display-value [prop]="application.gracePeriod">
+                    <app-display-value [prop]="application.passOverdue">
                     </app-display-value>
                   </div>
                   <div class="info-line">

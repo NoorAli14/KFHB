@@ -16,6 +16,7 @@ import { map, debounceTime, distinctUntilChanged, skip } from 'rxjs/operators';
 import { fuseAnimations } from '@fuse/animations';
 import { BaseComponent } from '@shared/components/base/base.component';
 import * as moment from 'moment';
+import { DATE_FORMAT } from '@shared/constants/app.constants';
 var _context;
 @Component({
     selector: 'app-advance-search',
@@ -45,7 +46,7 @@ export class AdvanceSearchComponent extends BaseComponent implements AfterConten
     searchForm: FormGroup;
     cpr: FormControl;
     statusList = ['Review', 'Accept', 'Reject', 'Request'];
-    applicationTypes = ['Real State', 'Auto Finance'];
+    applicationTypes = ['Real Estate', 'Auto Finance'];
     maxDate: Date;
     _context: any;
     @Output() filterChange = new EventEmitter();
@@ -82,10 +83,13 @@ export class AdvanceSearchComponent extends BaseComponent implements AfterConten
             x['style'].color = 'rgba(0, 0, 0, 0.6)';
         });
         const inputs = document.querySelectorAll('.mat-input-element');
-        const dropdown = document.querySelector('.mat-select-value-text>span');
-        if (dropdown) {
-            dropdown['style'].color = '#3c4252';
+        const dropdowns = document.querySelectorAll('.mat-select-value-text');
+        if (dropdowns) {
+            dropdowns.forEach((x) => {
+                x['style'].color = '#3c4252';
+            });
         }
+
         inputs.forEach((x) => {
             x['style'].color = '#3c4252';
         });
@@ -110,8 +114,8 @@ export class AdvanceSearchComponent extends BaseComponent implements AfterConten
 
     initForm(): void {
         this.searchForm = new FormGroup({
-            dateFrom: new FormControl('', [Validators.required]),
-            dateTo: new FormControl('', [Validators.required]),
+            dateFrom: new FormControl(moment().subtract(7, 'd').format(DATE_FORMAT), [Validators.required]),
+            dateTo: new FormControl(moment().format(DATE_FORMAT), [Validators.required]),
             isCompleted: new FormControl(),
             status: new FormControl(),
             applicationType: new FormControl(),
@@ -126,6 +130,11 @@ export class AdvanceSearchComponent extends BaseComponent implements AfterConten
         this.isAdvance = false;
         this.filterReset.emit();
         this.searchForm.reset();
+        this.searchForm.patchValue({
+            dateFrom: moment().subtract(7, 'd').format(DATE_FORMAT),
+            dateTo: moment().format(DATE_FORMAT),
+            applicationType: "Real Estate"
+        })
     }
 
     onSubmit(): void {

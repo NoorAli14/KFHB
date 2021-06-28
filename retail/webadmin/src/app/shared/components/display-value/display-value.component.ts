@@ -7,20 +7,23 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
 })
 export class DisplayValueComponent implements OnChanges {
   @Input() prop: any;
-  isNumber:boolean;
-  isString:boolean;
-  isBoolean:boolean;
+  @Input() bool: boolean;
+
+  isNumber: boolean;
+  isString: boolean;
+  isBoolean: boolean;
+
   ngOnChanges(changes: SimpleChanges): void {
-    if(changes.prop.previousValue!=changes.prop.currentValue){
+    if (changes.prop.previousValue != changes.prop.currentValue) {
       switch (typeof this.prop) {
         case 'number':
-          this.isNumber=true;
+          this.isNumber = true;
           break;
         case 'string':
-          this.isString=true;
+          this.isString = true;
           break;
         case 'boolean':
-          this.isBoolean=true;
+          this.isBoolean = true;
           break;
       }
     }
