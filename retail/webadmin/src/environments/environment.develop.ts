@@ -7,6 +7,7 @@ export const environment = {
 	authTokenKey: 'authce9d77b308c149d5992a80073637e4d5',
 	APP_SECRETE: "abfFGHIepqrstuvwadkalekd",
 	CORPORATE_API_BASE_URL: '',
+	API_BASE_URL: 'https://www.kfhbonline.com',
 	RETAIL_API_BASE_URL:"",
 	hmr:false
 };

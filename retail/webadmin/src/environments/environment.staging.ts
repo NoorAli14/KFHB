@@ -8,7 +8,7 @@ export const environment = {
 	CORPORATE_API_BASE_URL: '',
 	APP_SECRETE: "abfFGHIepqrstuvwadkalekd",
 	RETAIL_API_BASE_URL:"",
-    API_BASE_URL:"",
+	API_BASE_URL: 'https://www.kfhbonline.com',
 	CHANNEL_ID:"",
     hmr       : false
 };

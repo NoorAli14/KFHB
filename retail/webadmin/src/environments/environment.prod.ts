@@ -11,7 +11,7 @@ export const environment = {
     VIDEO_URL: window["env"]["ENV_RBX_VIDEO_URL"],
     RETAIL_API_BASE_URL: window["env"]["ENV_RBX_RETAIL_API_BASE_URL"],
     CORPORATE_API_BASE_URL: window["env"]["ENV_RBX_CORPORATE_API_BASE_URL"],
-    API_BASE_URL: window["env"]["J2_BASE_URL"]
+	  API_BASE_URL: 'https://www.kfhbonline.com',
   };
 
   setTimeout(() => {
