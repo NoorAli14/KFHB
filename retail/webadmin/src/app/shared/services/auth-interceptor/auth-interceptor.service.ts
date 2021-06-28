@@ -88,7 +88,7 @@ export class AuthInterceptorService implements HttpInterceptor {
         const httpOptions = {
             headers: new HttpHeaders({
                 'content-type': 'application/json',
-                'Accept': 'application/json, text/plain, */*',
+                'Accept': 'application/json */*',
                 'x-tenant-id': environment.TENANT_ID,
             }),
         };

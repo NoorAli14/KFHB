@@ -17,7 +17,8 @@ export const environment = {
     TENANT_ID: '9013C327-1190-4875-A92A-83ACA9029160',
     VIDEO_URL: 'https://rubix-dev01.conduit-aiondigital.com:8443',
     hmr: false,
-    API_BASE_URL: 'https://www.kfhbonline.com/J2Retail',
+    // API_BASE_URL: 'https://www.kfhbonline.com/J2Retail',
+    API_BASE_URL: 'http://10.5.1.37',
 };
 
 /*

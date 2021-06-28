@@ -11,10 +11,11 @@ import {
     AfterContentChecked,
 } from '@angular/core';
 import { trigger, transition, style, animate } from '@angular/animations';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { map, debounceTime, distinctUntilChanged, skip } from 'rxjs/operators';
 import { fuseAnimations } from '@fuse/animations';
 import { BaseComponent } from '@shared/components/base/base.component';
+import * as moment from 'moment';
 var _context;
 @Component({
     selector: 'app-advance-search',
@@ -50,7 +51,7 @@ export class AdvanceSearchComponent extends BaseComponent implements AfterConten
     @Output() filterChange = new EventEmitter();
     @Output() filterReset = new EventEmitter();
 
-    constructor( injector: Injector) {
+    constructor(injector: Injector) {
         super(injector);
         this.initForm();
     }
@@ -109,9 +110,9 @@ export class AdvanceSearchComponent extends BaseComponent implements AfterConten
 
     initForm(): void {
         this.searchForm = new FormGroup({
-            dateFrom: new FormControl(),
-            dateTo: new FormControl(),
-            applicationCompleted: new FormControl(),
+            dateFrom: new FormControl('', [Validators.required]),
+            dateTo: new FormControl('', [Validators.required]),
+            isCompleted: new FormControl(),
             status: new FormControl(),
             applicationType: new FormControl(),
         });
@@ -129,8 +130,18 @@ export class AdvanceSearchComponent extends BaseComponent implements AfterConten
 
     onSubmit(): void {
         const filters = this.filterKeys();
+        const form = this.searchForm.value;
+
+        if (moment(form.dateFrom) > moment(form.dateTo)) {
+            this._notifier.error('Invalid date');
+            return;
+        }
+        if (form.isCompleted) {
+            form.isCompleted = form.isCompleted == 'Yes' ? true : false
+        }
+
         if (!Boolean(filters)) { return; }
-        this.filterChange.emit(camelToSnakeCase(filters));
+        this.filterChange.emit(filters);
         this.isAdvance = false;
     }
 

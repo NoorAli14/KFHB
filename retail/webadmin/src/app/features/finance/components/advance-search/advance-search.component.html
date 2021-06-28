@@ -34,9 +34,9 @@
                                     <mat-datepicker #picker2></mat-datepicker>
                                 </mat-form-field>
                                 <mat-form-field appearance="outline" fxFlex="50" class="pl-8">
-                                    <mat-label>Application Completed
+                                    <mat-label>Completed
                                     </mat-label>
-                                    <mat-select formControlName="applicationCompleted">
+                                    <mat-select formControlName="isCompleted">
                                         <mat-option *ngFor="let item of ['Yes','No']" [value]="item">
                                             {{ item }}
                                         </mat-option>
@@ -47,8 +47,8 @@
                                     <mat-label>Status
                                     </mat-label>
                                     <mat-select formControlName="status">
-                                        <mat-option *ngFor="let item of statusList" [value]="item.id">
-                                            {{ item.name }}
+                                        <mat-option *ngFor="let item of statusList" [value]="item">
+                                            {{ item }}
                                         </mat-option>
                                     </mat-select>
                                 </mat-form-field>
@@ -68,7 +68,7 @@
                                     Reset
                                 </button>
                                 &nbsp;
-                                <button type="submit" class="submit-button" mat-raised-button color="accent"
+                                <button type="submit" [disabled]="searchForm.invalid" class="submit-button" mat-raised-button color="accent"
                                     aria-label="Send Message">
                                     Submit
                                 </button>

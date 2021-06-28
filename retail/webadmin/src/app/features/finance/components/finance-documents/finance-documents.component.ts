@@ -45,7 +45,7 @@ export class FinanceDocumentsComponent extends BaseComponent implements OnInit {
 
   onPreview(id): void {
     this._service
-      .getDocumentById(this.applicationId, id)
+      .getDocumentById({ applicationId: this.applicationId, documentId: id })
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe(
         (response) => {

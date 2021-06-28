@@ -33,10 +33,31 @@
     <!-- / HEADER -->
 
     <!-- CONTENT CARD -->
-    <div class="content-card" >
+    <div class="content-card">
       <mat-tab-group>
         <mat-tab label="APPLICANT DETAIL">
           <div class="tab-content p-24 ">
+            <div class="profile-box info-box general">
+              <div class="content" fusePerfectScrollbar>
+                <div fxLayout="row wrap">
+                  <div class="info-line ">
+                    <div class="title">Application Id</div>
+                    <app-display-value [prop]="application.id">
+                    </app-display-value>
+                  </div>
+                  <div class="info-line">
+                    <div class="title">Status</div>
+                    <app-display-value [prop]="application.status">
+                    </app-display-value>
+                  </div>
+                  <div class="info-line">
+                    <div class="title">Updated By</div>
+                    <app-display-value [prop]="application.updatedBy">
+                    </app-display-value>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div class="profile-box info-box general">
               <div class="content" fusePerfectScrollbar>
                 <div class="h2 mb-24">
@@ -215,15 +236,16 @@
               </div>
             </div>
             <div class="actions" fxLayoutGap="10px" fxLayout="row" fxLayoutAlign="end end">
-              <button type="button" (click)="openDialog()" mat-raised-button color="primary" aria-label="Follow">
+              <button type="button" (click)="sendNotification('notification')" mat-raised-button color="primary"
+                aria-label="Follow">
                 Send Document Notification
               </button>
               &nbsp;
-              <button type="button" (click)="openDialog()" class="submit-button" mat-raised-button color="accent"
+              <button type="button" (click)="onAccept('Accept')" class="submit-button" mat-raised-button color="accent"
                 aria-label="Send Message">
                 Approve
               </button>
-              <button type="button" (click)="openDialog()" class="submit-button" mat-raised-button color="warn"
+              <button type="button" (click)="onReject('Reject')" class="submit-button" mat-raised-button color="warn"
                 aria-label="Send Message">
                 Reject
               </button>

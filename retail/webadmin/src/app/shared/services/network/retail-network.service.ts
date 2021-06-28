@@ -41,7 +41,12 @@ export class RetailNetworkService {
         return this.http
             .post<any[]>(endPoint, req, options);
     }
-
+    postSafe(baseUrl: string, url: string, model: any, options?): Observable<any> {
+        const endPoint = `${createRetailUrl(baseUrl, url)}`;
+        const req = JSON.stringify(model);
+        return this.http
+            .post<any[]>(endPoint, req, options);
+    }
     onUpdate(baseUrl: string, url: string, model: any, options?): Observable<any> {
         const endPoint = `${createRetailUrl(baseUrl, url)}`;
         return this.http

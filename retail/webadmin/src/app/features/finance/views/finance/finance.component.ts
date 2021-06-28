@@ -19,12 +19,12 @@ import {
   toggleSort,
 } from '@shared/helpers/global.helper';
 
-import { debounceTime, distinctUntilChanged, map, skip, takeUntil } from 'rxjs/operators';
+import {  takeUntil } from 'rxjs/operators';
 import { Pagination } from '@shared/models/pagination.model';
-import * as QueryString from 'query-string';
 import { MatSortDirection } from '@shared/enums/app.enum';
 import { FinanceService } from '@feature/finance/services/finance.service';
-
+import { DATE_FORMAT } from '@shared/constants/app.constants';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-finance',
@@ -40,9 +40,7 @@ export class FinanceComponent extends BaseComponent implements OnInit {
   pageSize: number = CONFIG.PAGE_SIZE;
   pageSizeOptions: Array<number> = CONFIG.PAGE_SIZE_OPTIONS;
   nationalities: any[];
-  displayedColumns = ['fullName', 'cpr', 'rimNo', 'financingAmount', 'tenor', 'rate',  'isCompleted', 'applicationType', 'status','createdOn',
-    //'creditSheet', 'checkList',
-    'action',];
+  displayedColumns = ['fullName', 'cpr', 'rimNo', 'financingAmount', 'tenor', 'rate', 'isCompleted', 'applicationType', 'status', 'createdOn', 'action',];
   pagination: Pagination;
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
   previousFilterState: MatSortDirection;
@@ -64,31 +62,30 @@ export class FinanceComponent extends BaseComponent implements OnInit {
     this.getData(this.config);
     this.pagination = new Pagination();
     this.control = new FormControl();
-    this.initSearch();
   }
   initParams(): object {
     return {
-      applicationType: "Real Estate"
+      "dateFrom": moment().subtract(7, 'd').format(DATE_FORMAT),
+      "dateTo": moment().format(DATE_FORMAT),
+      "applicationType": "Real Estate",
     };
   }
-  getQueryString(params): string {
-    return QueryString.stringify(params);
-  }
   onFilter(form): void {
+    if (form.dateFrom) {
+      form.dateFrom = moment(form.dateFrom).format(DATE_FORMAT)
+    }
+    if (form.dateTo) {
+      form.dateTo = moment(form.dateTo).format(DATE_FORMAT)
+    }
     this.config = this.initParams();
-    this.config = { ...form, ...this.config, };
+    this.config = { ...this.config, ...form };
     this.getData(this.config);
   }
   onReset(): void {
     this.config = this.initParams();
-    this.getData({});
+    this.getData(this.config);
   }
-  createQueryObject(params): any {
-    return {
-      ...this.config,
-      ...params,
-    };
-  }
+ 
   getData(model): void {
     this._service
       .getApplications(model)
@@ -110,20 +107,7 @@ export class FinanceComponent extends BaseComponent implements OnInit {
   camelToSentenceCase(text): string {
     return camelToSentenceCase(text);
   }
-  initSearch(): void {
-    this.control.valueChanges
-      .pipe(
-        skip(1),
-        map((value: any) => {
-          return value;
-        }),
-        debounceTime(400),
-        distinctUntilChanged()
-      )
-      .subscribe((text: string) => {
-        this.getData({ first_name: text })
-      });
-  }
+
   ngAfterViewInit(): void {
     // this.dataSource.paginator = this.paginator;
     // this.dataSource.sort = this.sort;
