@@ -124,7 +124,6 @@ export class InternationalTransferRequestsComponent extends BaseComponent implem
     }
 
     updateGrid(response): void {
-        debugger;
         this.dataSource = new MatTableDataSource(response.data.records);
         this.dataSource.paginator = this.paginator;
         this.pageSize = response.data.pageSize;
@@ -132,7 +131,6 @@ export class InternationalTransferRequestsComponent extends BaseComponent implem
 
 
     getData = () => {
-        debugger;
         const status = this.searchForm.value.status;
         const fromDate = this.searchForm.value.fromDate ? this.searchForm.value.fromDate.toISOString() : ''
         const toDate = this.searchForm.value.toDate ? this.searchForm.value.toDate.toISOString() : ''

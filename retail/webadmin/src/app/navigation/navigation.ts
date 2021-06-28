@@ -92,13 +92,21 @@ export const navigation: FuseNavigation[] = [
                 url      : '/referrals',
             },
             {
+                id       : 'referrals',
+                title    : 'Referrals',
+                translate: 'FEATURES.REFERRALS.TITLE',
+                type     : 'item',
+                icon     : 'calendar_today',
+                url      : '/referrals',
+            },
+            {
                 id       : 'international',
                 title    : 'International Transfer Requests',
                 translate: 'FEATURES.INTERNATIONALTRANSFERREQUEST.TITLE',
                 type     : 'item',
                 icon     : 'calendar_today',
                 url      : '/international-transfer-requests',
-            },
+            }
 ]
         
     }
