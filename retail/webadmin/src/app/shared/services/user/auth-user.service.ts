@@ -100,6 +100,7 @@ export class AuthUserService {
             translate: 'FEATURES.FINANCE_APPLICATION.TITLE',
         },
     ];
+    
 
     constructor(
         private storage: StorageService,

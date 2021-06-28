@@ -23,7 +23,7 @@ export enum APP_CONST {
 export const CUSTOMER_STATUSES = {
     ACCEPTED: 'ACCEPTED',
     PENDING: 'PENDING',
-    REJECTED:'REJECTED',
+    REJECTED: 'REJECTED',
     REFER_TO_BUSINESS: 'REFER_TO_BUSINESS',
     DROPPED: 'DROPPED',
 };
@@ -34,7 +34,7 @@ export const STATUS_LIST: Array<Select> = [
     { id: 'DROPPED', name: 'Dropped' },
     { id: 'REJECTED', name: 'Rejected' },
     { id: 'REFER_TO_BUSINESS', name: 'Refer to Business' },
-    { id: 'RETRY', name: 'Retry'}
+    { id: 'RETRY', name: 'Retry' }
 ];
 
 export const REMARKS_LIST = [
@@ -96,6 +96,10 @@ const SERVICEREQUEST = '/requests/api/v1/service/request/';
 const REFERRALREQUEST = '/customers/api/v1/customers/';
 const V2='/api/v2'
 const V1='/api/v1'
+
+const BANKTRANSACTION = '/api/v1/transfer';
+const JAZELREQUEST= "/jazeel1proxy/api/v2/transfer";
+
 export const URI = {
     USER_INVITATION: `${ENTITLEMENT}invitations`,
     USER: `${ENTITLEMENT}users`,
@@ -133,7 +137,12 @@ export const URI = {
     REFERRAL_TRANSACTIONS_REPORT: `${REFERRALREQUEST}referral/transactions/excel/report`,
     FINANCE_APPLICATIONS: `/business${V1}/finance/getApplicationList`,
     FINANCE_APPLICATION: `/business${V1}/finance/getApplicationDetail`,
-    FINANCE_APPLICATION_DOCS: `/business${V1}/finance/getApplicationDocument`
+    FINANCE_APPLICATION_DOCS: `/business${V1}/finance/getApplicationDocument`,
+    INTERNATIONAL_TRANSFER_REQUEST: `${JAZELREQUEST}/getInternationalTransferHistory`,
+    APPROVE_TRANSFER_REQUEST: `${TRANSFER}/approveInternationalAmountAndCharges`,
+    REJECT_TRANSFER_REQUEST: `${TRANSFER}/reverseInternationalAmountAndCharges`,
+    REJECT_BANK_TRANSACTION: `${BANKTRANSACTION}/rejectInternationalTransfer`,
+    APPROVE_BANK_TRANSACTION: `${BANKTRANSACTION}/approveInternationalTransfer`
 };
 
 export const DEFAULT_IMAGE = 'assets/images/not-available.png';

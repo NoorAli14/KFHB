@@ -239,17 +239,17 @@
                                                         class="edit-actions">
                                                         <mat-icon (click)="updateGuardian('firstName')">done</mat-icon>
                                                         &nbsp;
-                                                        <mat-icon (click)="onResetGuardianEditControl('firstName')">
-                                                            close</mat-icon>
+
+                                                        <mat-icon (click)="onResetGuardianEditControl('firstName')">close</mat-icon>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
 
+                                       
                                         <div class="info-line no-margin-bottom">
                                             <div class="title">Middle Name</div>
-                                            <div (mouseenter)="onMouseEnter('middleName')"
-                                                (mouseleave)="onMouseLeave()">
+                                            <div (mouseenter)="onMouseEnter('middleName')" (mouseleave)="onMouseLeave()">
                                                 <div fxFlex fxLayout="column">
                                                     <mat-form-field appearance="outline" fxFlex="100">
                                                         <input matInput formControlName="middleName" />
@@ -258,8 +258,8 @@
                                                         class="edit-actions">
                                                         <mat-icon (click)="updateGuardian('middleName')">done</mat-icon>
                                                         &nbsp;
-                                                        <mat-icon (click)="onResetGuardianEditControl('middleName')">
-                                                            close</mat-icon>
+
+                                                        <mat-icon (click)="onResetGuardianEditControl('middleName')">close</mat-icon>
                                                     </div>
                                                 </div>
                                             </div>
@@ -275,8 +275,8 @@
                                                         class="edit-actions">
                                                         <mat-icon (click)="updateGuardian('lastName')">done</mat-icon>
                                                         &nbsp;
-                                                        <mat-icon (click)="onResetGuardianEditControl('lastName')">close
-                                                        </mat-icon>
+
+                                                        <mat-icon (click)="onResetGuardianEditControl('lastName')">close</mat-icon>
                                                     </div>
                                                 </div>
                                             </div>
@@ -532,11 +532,11 @@
                                     </button>
                                 </div>
                                 <br>
-                                <ng-container *ngIf="customerAml && !guardianAml;">
+                                <ng-container *ngIf="!customer.isMinor">
                                     <app-aml-screening [status]="amlResponse?.response_text?.status"
                                         [amlData]="customerAml"></app-aml-screening>
                                 </ng-container>
-                                <ng-container *ngIf="tabIndex==7 && guardianAml">
+                                <ng-container *ngIf="tabIndex==7 && customer.isMinor">
                                     <mat-tab-group mat-align-tabs="center">
                                         <mat-tab label="CUSTOMER">
                                             <app-aml-screening
