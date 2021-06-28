@@ -12,9 +12,9 @@ import { MESSAGES } from "@shared/constants/messages.constant";
 import { MatDialog } from "@angular/material/dialog";
 
 @Component({
-    selector: 'app-login',
-    templateUrl: './login.component.html',
-    styleUrls: ['./login.component.scss'],
+    selector: "app-login",
+    templateUrl: "./login.component.html",
+    styleUrls: ["./login.component.scss"],
     encapsulation: ViewEncapsulation.None,
     animations: fuseAnimations,
 })
@@ -50,7 +50,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+        this.returnUrl = this.route.snapshot.queryParamMap.get("returnUrl");
         this.loginForm = new FormGroup({
             email: new FormControl("", [Validators.required, Validators.email]),
             password: new FormControl("", [Validators.required]),

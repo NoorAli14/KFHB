@@ -1,4 +1,4 @@
-import { CORPORATE_REMARKS_LIST, DEFAULT_IMAGE, MODULES, REMARKS_LIST } from "@shared/constants/app.constants";
+import { AGENT_REMARKS, CORPORATE_REMARKS_LIST, DEFAULT_IMAGE, MODULES, USER_TYPE } from "@shared/constants/app.constants";
 import { b64DecodeUnicode, snakeToCamelObject } from "@shared/helpers/global.helper";
 import {
   AfterContentChecked,
@@ -23,6 +23,9 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CustomerService } from '@feature/customer/customer.service';
 import { BaseComponent } from '@shared/components/base/base.component';
 import { takeUntil } from "rxjs/operators";
+import { MESSAGES } from "@shared/constants/messages.constant";
+import { WorkflowService } from "@shared/services/workflow/workflow.service";
+import { WorkflowActionDto, WorkflowActionParameterDto } from "@shared/models/workflow.model";
 @Component({
   selector: 'app-customer-detail',
   templateUrl: './cob-customer-detail.component.html',
@@ -40,12 +43,14 @@ export class CobCustomerDetailComponent extends BaseComponent implements OnInit,
   memberDetail: any;
   remarksList = CORPORATE_REMARKS_LIST;
   remarksForm: FormGroup;
+  canSubmitTask: boolean;
   constructor(
     public gallery: Gallery,
     public matDialogRef: MatDialogRef<CobCustomerDetailComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private authService: AuthenticationService,
     private _service: CustomerService,
+    private _workflowService: WorkflowService,
     injector: Injector
   ) {
     super(injector, MODULES.CUSTOMERS);
@@ -145,19 +150,23 @@ export class CobCustomerDetailComponent extends BaseComponent implements OnInit,
     lightboxGalleryRef.load(images);
   }
 
-  onSubmit() {
+  async onSubmit() {
     let model = this.remarksForm.value;
     model = {
       ...model,
       member_profile_id: this.memberDetail.member_profile_id,
       member_type_id: this.memberDetail.member_type_id
     }
-    this._service.updateCorporateMember(this.memberDetail.id, model).subscribe((response) => {
+    const memberResponse = await this._service.updateCorporateMember(this.memberDetail.id, model);
+    if(memberResponse) {
+      await this.submitRequest(this.remarksForm.controls["agent_status"].value);
       this._notifier.success('Remarks added successfully')
-    },
-      (response) => super.onError(response))
+    }
+    else {
+      this._notifier.error(MESSAGES.UNKNOWN);
+    }
   }
-  getCustomerDetail(): void {
+  getCustomerDetail(): void { {}
     this._service
       .getCorporateCustomerData(this.customerReponse.entity_id, this.customerReponse.entity_member_id)
       .pipe(takeUntil(this._unsubscribeAll))
@@ -167,6 +176,7 @@ export class CobCustomerDetailComponent extends BaseComponent implements OnInit,
           this.companyDetail = response[0].data;
           this.memberDetail = response[1].member;
 
+          this.getUserTask(this.companyDetail.id,this.memberDetail.member_profile_id);
           this.remarksForm.patchValue({
             agent_remarks: this.memberDetail.agent_remarks,
             agent_status: this.memberDetail.agent_status,
@@ -174,5 +184,61 @@ export class CobCustomerDetailComponent extends BaseComponent implements OnInit,
         },
         (response) => super.onError(response)
       );
+  }
+
+  async getUserTask(corporate_id: string, member_profile_id: string) {
+    try {
+      const params = {
+        varKey: "companyMember",
+        varValue: member_profile_id
+      }
+
+      this.canSubmitTask = false;
+      const response = await this._workflowService.GetNextTaskByUserType(USER_TYPE.AGENT, corporate_id, params);
+
+      if (response) {
+        if (response.uiRouting == "failure")  {
+          this._notifier.error(MESSAGES.UNKNOWN);
+        }
+        else if(response.uiRouting == "agent_video_call") {
+          this.canSubmitTask = true;
+        }
+      }
+      else {
+        this._notifier.error(MESSAGES.UNKNOWN);
+      }
+    }
+    catch (error) {
+      this._notifier.error(MESSAGES.UNKNOWN);
+    }
+  }
+
+  async submitRequest(value: string) {  
+    const actionDto: WorkflowActionDto = {
+      code: this._workflowService.CurrentTask.actions.length > 0 ? this._workflowService.CurrentTask.actions[0].code : "submit",
+      actionParameters: [
+        {
+          key: "identityVerified",
+          value: value == AGENT_REMARKS.FACE_MATCHED ? "true" : "false",
+          dataType: 'string'
+        }
+      ]
+    };
+
+    try {
+      const response = await this._workflowService.SubmitTask(this.companyDetail.id, this._workflowService.CurrentTask.code, USER_TYPE.AGENT, actionDto);
+
+      if (response) {
+        if (response && response.uiRouting == "failure") {
+          this._notifier.error(MESSAGES.UNKNOWN);
+        }
+      }
+      else {
+        this._notifier.error(MESSAGES.UNKNOWN);
+      }
+    }
+    catch (error) {
+      this._notifier.error(MESSAGES.UNKNOWN);
+    }
   }
 }

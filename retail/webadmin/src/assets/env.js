@@ -7,5 +7,6 @@
     window["env"]["ENV_RBX_VIDEO_URL"] = ""
     window["env"]["ENV_RBX_RETAIL_API_BASE_URL"] = ""
     window["env"]["ENV_RBX_CORPORATE_API_BASE_URL"] = ""
+    window["env"]["J2_BASE_URL"] = ""
    
   })(this);

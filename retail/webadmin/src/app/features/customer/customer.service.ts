@@ -23,8 +23,14 @@ export class CustomerService {
     updateCustomer(id,model): Observable<any>{
         return this.network.onUpdate(`${URI.CUSTOMER360}/${id}`,model);
     }
+    updateGuardian(id,model): Observable<any>{
+        return this.network.onUpdate(`${URI.CUSTOMER360}/${id}/guardian`,model);
+    }
     createAccount(id): Observable<any>{
         return this.network.post(`${URI.CUSTOMER360}/${id}/account`,{});
+    }
+    getCRSTemplate(): Observable<any>{
+        return this.network.getAll(`${URI.COMPLIANCE_CRS}`,{});
     }
     getAMLData(id): Observable<any>{
         return this.network.post(`${URI.AML}screening?customer_id=${id}`,{});
@@ -48,7 +54,7 @@ export class CustomerService {
             this.getMemberDetails(entityMemberId)
         ]);
     }
-    updateCorporateMember(id,model): Observable<any>{
-        return this.cobNetwork.onUpdate(`${URI.MEMBER_DETAIL}/${id}`,model);
+    async updateCorporateMember(id,model): Promise<any>{
+        return this.cobNetwork.onUpdate(`${URI.UPDATE_MEMBER}/${id}`,model).toPromise();
     }
 }

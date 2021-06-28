@@ -1,0 +1,87 @@
+<div fxLayout="column">
+  <div fxLayout="row wrap" fxLayoutAlign="start"
+    style="padding: 10px 20px;border-bottom: 1px solid rgba(128, 128, 128, 0.22);">
+    <div class="info-line">
+      <div class="title">AML Status</div>
+      <div class="info" *ngIf="status else amltemplate">
+        <app-aml-status [status]="status">
+        </app-aml-status>
+      </div>
+    </div>
+    <div class="info-line">
+      <div class="title">Calculate Risk Rating</div>
+      <div class="info" *ngIf="amlData ; else defaultText">
+        {{amlData.calculateRiskRating }}</div>
+    </div>
+    <div class="info-line">
+      <div class="title">Response Message Match</div>
+      <div class="info" *ngIf="amlData; else defaultText">
+        {{amlData.reponseMessageMatch }}</div>
+    </div>
+    <div class="info-line">
+      <div class="title">Request Id</div>
+      <div class="info" *ngIf="amlData; else defaultText">
+        {{amlData.requestId }}</div>
+    </div>
+    <div class="info-line">
+      <div class="title">Case Id</div>
+      <div class="info" *ngIf="amlData; else defaultText">
+        {{amlData.caseId }}</div>
+    </div>
+    <div class="info-line">
+      <div class="title">Percentage Matched</div>
+      <div class="info" *ngIf="amlData; else defaultText">
+        {{amlData.percentageMatched }}</div>
+    </div>
+  </div>
+  <div fxLayout="row wrap" *ngIf="amlData" fxLayoutAlign="start" style="padding: 10px 20px;">
+    <strong class="ml-16">SDN Details List:</strong>
+    <div class="content">
+      <table class="simple invoice-table">
+        <thead>
+          <tr>
+            <th class="aml-th">SDN ID</th>
+            <th class="aml-th">Countries</th>
+            <th class="aml-th">Full Name</th>
+            <th class="aml-th">List Name</th>
+            <th class="aml-th">Match Percentage</th>
+            <th class="aml-th">Name Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of amlsdnDetailsList">
+            <td>
+              <div class="detail">{{item.sdnId}}</div>
+            </td>
+            <td>
+              <div class="detail">{{item.countries}}</div>
+            </td>
+            <td>
+              <div class="detail">{{item.fullName}}</div>
+            </td>
+            <td>
+              <div class="detail">{{item.listName}}</div>
+            </td>
+            <td>
+              <div class="detail">{{item.matchPercentage}}</div>
+            </td>
+            <td>
+              <div class="detail">{{item.nameType}}</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #defaultText>
+  <app-default-text></app-default-text>
+</ng-template>
+
+<ng-template #amltemplate>
+  <span class="status aml-status text-truncate h6 p-4  label-status">
+    <app-default-text></app-default-text>
+  </span>
+</ng-template>

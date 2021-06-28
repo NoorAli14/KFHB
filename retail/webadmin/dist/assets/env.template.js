@@ -3,5 +3,5 @@
   
   // Environment variables
   window["env"]["ENV_RBX_APP_SECRETE"] = "${ENV_RBX_APP_SECRETE}";
-  window["env"]["ENV_RBX_API_BASE_URL"] = "${ENV_RBX_API_BASE_URL}";
+  window["env"]["J2_BASE_URL"] = "${J2_BASE_URL}";
 })(this);

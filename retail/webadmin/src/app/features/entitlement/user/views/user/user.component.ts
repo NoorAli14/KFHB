@@ -25,6 +25,7 @@ import {
     camelToSnakeCaseText,
     snakeToCamelObject,
     removeRandom,
+    toggleSort,
 } from '@shared/helpers/global.helper';
 import {
     ConfirmDialogModel,
@@ -34,7 +35,8 @@ import { UserDetailComponent } from '../../components/user-detail/user-detail.co
 import { debounceTime, distinctUntilChanged, map, skip, takeUntil } from 'rxjs/operators';
 import { MESSAGES } from '@shared/constants/messages.constant';
 import { Pagination } from '@shared/models/pagination.model';
-    import * as QueryString from 'query-string';
+import * as QueryString from 'query-string';
+import { MatSortDirection } from '@shared/enums/app.enum';
 
 
 @Component({
@@ -55,6 +57,7 @@ export class UserComponent extends BaseComponent implements OnInit {
     displayedColumns = ['firstName', 'lastName', 'email', 'createdOn', 'status', 'action'];
     pagination: Pagination;
     dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
+    previousFilterState: MatSortDirection;
 
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: false }) sort: MatSort;
@@ -73,14 +76,14 @@ export class UserComponent extends BaseComponent implements OnInit {
         this.config = this.initParams();
         this.getData(this.config);
         this.pagination = new Pagination();
-        this.control=new FormControl();
+        this.control = new FormControl();
         this.initSearch();
     }
-    initParams(): object{
+    initParams(): object {
         return {
             limit: CONFIG.PAGE_SIZE,
             page: 1,
-            sort_order: 'asc',
+            sort_order: MatSortDirection.desc,
             sort_by: 'first_name',
         };
     }
@@ -103,10 +106,10 @@ export class UserComponent extends BaseComponent implements OnInit {
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe(
                 (response) => {
-                    this.users=  response[0].data;
-                    this.pagination=response[0].pagination;
-                    this.roles= response[1].data;
-                    this.nationalities=response[2];
+                    this.users = response[0].data;
+                    this.pagination = response[0].pagination;
+                    this.roles = response[1].data;
+                    this.nationalities = response[2];
                     this.pagination.page = this.pagination.page - 1;
                     this.dataSource = new MatTableDataSource(this.users);
                 },
@@ -131,7 +134,7 @@ export class UserComponent extends BaseComponent implements OnInit {
                 panelClass: 'app-user-form',
             })
             .componentInstance.sendResponse.subscribe((response) => {
-                  if (response.id) {
+                if (response.id) {
                     _this.editUser(response);
                 } else {
                     _this.createUser(response);
@@ -205,7 +208,7 @@ export class UserComponent extends BaseComponent implements OnInit {
                 (response) => super.onError(response))
 
     }
-  
+
     editUser(model: User): void {
         this._service
             .editUser(model.id, model)
@@ -233,7 +236,7 @@ export class UserComponent extends BaseComponent implements OnInit {
                         (x) => x.id === id
                     );
                     this.users.splice(index, 1);
-   
+
                     this.dataSource = new MatTableDataSource(this.users);
                     this._notifier.success(MESSAGES.DELETED('User'));
                 },
@@ -252,7 +255,7 @@ export class UserComponent extends BaseComponent implements OnInit {
                 distinctUntilChanged()
             )
             .subscribe((text: string) => {
-                this.getData({first_name: text})
+                this.getData({ first_name: text })
             });
     }
     ngAfterViewInit(): void {
@@ -260,7 +263,9 @@ export class UserComponent extends BaseComponent implements OnInit {
         this.dataSource.sort = this.sort;
     }
     sortData(e): void {
-        this.getData({ sort_order: e.direction ? e.direction : 'asc', sort_by: camelToSnakeCaseText(e.active) });
+        this.previousFilterState = toggleSort(this.previousFilterState, e.direction);
+        this.sort.direction =  this.previousFilterState;
+        this.getData({ sort_order:  this.previousFilterState, sort_by: camelToSnakeCaseText(e.active) });
     }
     onPageFired(data): void {
         this.getData({ page: data['pageIndex'] + 1, limit: data['pageSize'] });

@@ -1,6 +1,7 @@
 export const MESSAGES = {
     UNKNOWN:  `We are unable to process the request. `,
     REMOVE_CONFIRMATION: `Are you sure you want to delete?`,
+    REJECT_CONFIRMATION: `Do you want to reject customer`,
     RESEND_INVITE:  `Are you sure you want to resend invitation?`,
     INVITE_RESENT: `Invitation link has been sent to user email. `,
     INVALID_CREDENTIAL: () => `Email or password is incorrect. ${getRandomNumber()}`,

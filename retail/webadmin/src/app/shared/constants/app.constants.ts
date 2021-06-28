@@ -20,22 +20,36 @@ export enum APP_CONST {
     APP_NAME = 'Rubix',
 }
 
+export const CUSTOMER_STATUSES = {
+    ACCEPTED: 'ACCEPTED',
+    PENDING: 'PENDING',
+    REJECTED:'REJECTED',
+    REFER_TO_BUSINESS: 'REFER_TO_BUSINESS',
+    DROPPED: 'DROPPED',
+};
+
 export const STATUS_LIST: Array<Select> = [
-    { id: 'ACTIVE', name: 'Active' },
-    { id: 'INACTIVE', name: 'In Active' },
-    { id: 'LOCKED', name: 'Locked' },
+    { id: 'ACCEPTED', name: 'Accepted' },
     { id: 'PENDING', name: 'Pending' },
+    { id: 'DROPPED', name: 'Dropped' },
+    { id: 'REJECTED', name: 'Rejected' },
+    { id: 'REFER_TO_BUSINESS', name: 'Refer to Business' },
+    { id: 'RETRY', name: 'Retry'}
 ];
 
 export const REMARKS_LIST = [
     { id: 'ACCEPTED', name: 'Accepted' },
     { id: 'REJECTED', name: 'Rejected' },
-    { id: 'DROPPED', name: 'Dropped' },
     { id: 'REFER_TO_BUSINESS', name: 'Refer to Business' },
-    { id: 'RETRY', name: 'Retry' }];
+    { id: 'DROPPED', name: 'Dropped' }];
+
+export const AGENT_REMARKS = {
+    FACE_MATCHED: 'FACE_MATCHED',
+    FACE_MISMATCHED: 'FACE_MISMATCHED'
+}
 export const CORPORATE_REMARKS_LIST = [
-    { id: 'FACE_MATCHED', name: 'Faced Matched' },
-    { id: 'FACE_UNMATCHED', name: 'Faced Unmatched' }
+    { id: AGENT_REMARKS.FACE_MATCHED, name: 'Face Matched' },
+    { id: AGENT_REMARKS.FACE_MISMATCHED, name: 'Face Mismatch' }
 ];
 
 export const GENDER_LIST: Array<Select> = [
@@ -80,6 +94,7 @@ const REFERENCE = '/api/v1/references/';
 const ONBOARDING = '/api/v1/onboarding/';
 const SERVICEREQUEST = '/requests/api/v1/service/request/';
 const REFERRALREQUEST = '/customers/api/v1/customers/';
+const TRANSFER = '/api/v2/transfer';
 
 export const URI = {
     USER_INVITATION: `${ENTITLEMENT}invitations`,
@@ -102,19 +117,32 @@ export const URI = {
     SYSTEM_AUDIT: `${ENTITLEMENT}audit/system`,
     AML: `${ONBOARDING}aml/`,
     COMPANY_DETAIL: `${ONBOARDING}company/company-information`,
-     MEMBER_DETAIL: `${ONBOARDING}company/member/profile/id`,
+    MEMBER_DETAIL: `${ONBOARDING}company/member/profile/id`,
+    UPDATE_MEMBER: `${ONBOARDING}company/member`,
+    COMPLIANCE_CRS: `${ONBOARDING}compliance-template/crs`,
+    WORFLOW: {
+        NEXT_TASK: `${ONBOARDING}workflow/task/user/:user_type/corporate/:corporate_id/var`,
+        SUBMIT_TASK: `${ONBOARDING}workflow/cob_task/submit`,
+    },
     SERVICE_REQUEST_LIST: `${SERVICEREQUEST}user/all`,
     SERVICE_REQUEST_DETAILS: `${SERVICEREQUEST}`,
     SERVICE_REQUEST_UBDATE_STATUS: `${SERVICEREQUEST}status/update`,
     SERVICE_REQUEST_REPORT: `${SERVICEREQUEST}excel/report`,
     REFERRAL: `${REFERRALREQUEST}referral`,
     REFERRAL_TRANSACTIONS: `${REFERRALREQUEST}referral/transactions`,
-    REFERRAL_TRANSACTIONS_REPORT: `${REFERRALREQUEST}referral/transactions/excel/report`
+    REFERRAL_TRANSACTIONS_REPORT: `${REFERRALREQUEST}referral/transactions/excel/report`,
+    INTERNATIONAL_TRANSFER_REQUEST: `${TRANSFER}/getInternationalTransferHistory`,
+    APPROVE_TRANSFER_REQUEST: `${TRANSFER}/approveInternationalAmountAndCharges`,
+    REJECT_TRANSFER_REQUEST: `${TRANSFER}/reverseInternationalAmountAndCharges`
 };
 
 export const DEFAULT_IMAGE = 'assets/images/not-available.png';
 
 export const DATES = {
     DATE_FMT: 'mediumDate',
-    DATE_TIME_FMT: `medium`
+    DATE_TIME_FMT: `dd/MM/yy hh:mm a`
+}
+
+export const USER_TYPE = {
+    AGENT: 'AGENT'
 }
