@@ -94,7 +94,7 @@ const REFERENCE = '/api/v1/references/';
 const ONBOARDING = '/api/v1/onboarding/';
 const SERVICEREQUEST = '/requests/api/v1/service/request/';
 const REFERRALREQUEST = '/customers/api/v1/customers/';
-const V2='/api/v2'
+const TRANSFER = '/api/v2/transfer';
 const V1='/api/v1'
 
 const BANKTRANSACTION = '/api/v1/transfer';
