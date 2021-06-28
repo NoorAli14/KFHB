@@ -10,12 +10,12 @@ import { tap } from 'rxjs/operators';
     providedIn: 'root',
 })
 export class InternationalTransferRequestsService {
-    approve(id: string) {
-        this._RetailNetworkService.post(environment.API_BASE_URL, `${URI.APPROVE_TRANSFER_REQUEST}`, {transactionId: id});
+    approve(obj) {
+        this._RetailNetworkService.post(environment.API_BASE_URL, `${URI.APPROVE_BANK_TRANSACTION}`, obj);
     }
     
-    reject(id: string) {
-        this._RetailNetworkService.post(environment.API_BASE_URL, `${URI.REJECT_TRANSFER_REQUEST}`, {transactionId: id});
+    reject(obj: any) {
+        this._RetailNetworkService.post(environment.API_BASE_URL, `${URI.REJECT_BANK_TRANSACTION}`, obj);
     }
 
     constructor(private _RetailNetworkService: RetailNetworkService) {
