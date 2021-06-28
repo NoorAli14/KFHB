@@ -94,6 +94,7 @@ export class AuthUserService {
             translate: 'FEATURES.INTERNATIONALTRANSFERREQUEST.TITLE',
         },
     ];
+    
 
     constructor(
         private storage: StorageService,

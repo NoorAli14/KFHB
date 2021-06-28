@@ -1,0 +1,130 @@
+<div class="page-container page-layout carded fullwidth inner-scroll">
+    <div class="top-bg accent"></div>
+    <div class="center">
+        <div class="header accent" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row"
+            fxLayoutAlign.gt-sm="space-between center">
+            <div class="logo mb-24 mb-md-0" fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+                    people_outline
+                </mat-icon>
+                <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                    International Transfer Reports
+                </span>
+            </div>
+            <button mat-raised-button color="accent" class="add-product-button fuse-white mt-24 mt-md-0">
+                <mat-icon>local_printshop</mat-icon> <span> INTERNATIONAL REQUEST</span>
+            </button>
+        </div>
+        <div class="content-card">
+
+            <div class="profile-box info-box general">
+                <div class="content">
+                    <div fxLayout="row wrap">
+
+                        <div class="info-line" fxFlex="50" fxFlex.gt-sm="50" fxFlex.gt-xs="100">
+                            <div class="title" fxFlex="25" fxFlex.gt-sm="50" fxFlex.gt-xs="50">Date</div>
+                            <div class="info" fxFlex="25" fxFlex="25" fxFlex.gt-sm="50" fxFlex.gt-xs="50">
+                                {{transferDetail['system_date_time'] | date:'short'}}</div>
+                        </div>
+                        <div class="info-line" fxFlex="50" fxFlex.gt-sm="50" fxFlex.gt-xs="100">
+                            <div class="title" fxFlex="25" fxFlex.gt-sm="50" fxFlex.gt-xs="50">Request Id</div>
+                            <div class="info" fxFlex="25" fxFlex.gt-sm="50" fxFlex.gt-xs="50">
+                                {{transferDetail['id'] }}</div>
+                        </div>
+                        <div class="info-line" fxFlex="50" fxFlex.gt-sm="50" fxFlex.gt-xs="100">
+                            <div class="title" fxFlex="25" fxFlex.gt-sm="50" fxFlex.gt-xs="50">Customer Name</div>
+                            <div class="info" fxFlex="25" fxFlex.gt-sm="50" fxFlex.gt-xs="50">
+                                {{transferDetail['customer_name']}}</div>
+                        </div>
+                        <div class="info-line" fxFlex="50" fxFlex.gt-sm="50" fxFlex.gt-xs="100">
+                            <div class="title" fxFlex="25" fxFlex.gt-sm="50" fxFlex.gt-xs="50">Rim no.</div>
+                            <div class="info" fxFlex="25" fxFlex.gt-sm="50" fxFlex.gt-xs="50">
+                                {{transferDetail['from_rim_no']}}</div>
+                        </div>
+                        <div class="info-line" fxFlex="50" fxFlex.gt-sm="50" fxFlex.gt-xs="100">
+                            <div class="title" fxFlex="25" fxFlex.gt-sm="50" fxFlex.gt-xs="50">Account no.</div>
+                            <div class="info" fxFlex="25" fxFlex.gt-sm="50" fxFlex.gt-xs="50">
+                                {{transferDetail['from_account_id']}}</div>
+                        </div>
+                        <div class="info-line" fxFlex="50" fxFlex.gt-sm="50" fxFlex.gt-xs="100">
+                            <div class="title" fxFlex="25" fxFlex.gt-sm="50" fxFlex.gt-xs="50">Local Amount</div>
+                            <div class="info" fxFlex="25" fxFlex.gt-sm="50" fxFlex.gt-xs="50">
+                                {{transferDetail['local_eq']}}</div>
+                        </div>
+                        <div class="info-line" fxFlex="50" fxFlex.gt-sm="50" fxFlex.gt-xs="100">
+                            <div class="title" fxFlex="25" fxFlex.gt-sm="50" fxFlex.gt-xs="50">Account Currency</div>
+                            <div class="info" fxFlex="25" fxFlex.gt-sm="50" fxFlex.gt-xs="50">
+                                {{transferDetail['from_currency_id']}}</div>
+                        </div>
+                        <div class="info-line" fxFlex="50" fxFlex.gt-sm="50" fxFlex.gt-xs="100">
+                            <div class="title" fxFlex="25" fxFlex.gt-sm="50" fxFlex.gt-xs="50">Exchange Rate</div>
+                            <div class="info" fxFlex="25" fxFlex.gt-sm="50" fxFlex.gt-xs="50">
+                                {{transferDetail['ex_rate']}}</div>
+                        </div>
+                        <div class="info-line" fxFlex="50" fxFlex.gt-sm="50" fxFlex.gt-xs="100">
+                            <div class="title" fxFlex="25" fxFlex.gt-sm="50" fxFlex.gt-xs="50">Beneficiary Name</div>
+                            <div class="info" fxFlex="25" fxFlex.gt-sm="50" fxFlex.gt-xs="50">
+                                {{transferDetail['to_full_name']}}</div>
+                        </div>
+                        <div class="info-line" fxFlex="50" fxFlex.gt-sm="50" fxFlex.gt-xs="100">
+                            <div class="title" fxFlex="25" fxFlex.gt-sm="50" fxFlex.gt-xs="50">Beneficiary IBAN</div>
+                            <div class="info" fxFlex="25" fxFlex.gt-sm="50" fxFlex.gt-xs="50">
+                                {{transferDetail['to_iban']}}</div>
+                        </div>
+                        <div class="info-line" fxFlex="50" fxFlex.gt-sm="50" fxFlex.gt-xs="100">
+                            <div class="title" fxFlex="25" fxFlex.gt-sm="50" fxFlex.gt-xs="50">Transfer Currency</div>
+                            <div class="info" fxFlex="25" fxFlex.gt-sm="50" fxFlex.gt-xs="50">
+                                {{transferDetail['to_currency_id']}}</div>
+                        </div>
+                        <div class="info-line" fxFlex="50" fxFlex.gt-sm="50" fxFlex.gt-xs="100">
+                            <div class="title" fxFlex="25" fxFlex.gt-sm="50" fxFlex.gt-xs="50"> Transfer Amount</div>
+                            <div class="info" fxFlex="25" fxFlex.gt-sm="50" fxFlex.gt-xs="50">
+                                {{transferDetail['amount']}}</div>
+                        </div>
+                        <div class="info-line" fxFlex="50" fxFlex.gt-sm="50" fxFlex.gt-xs="100">
+                            <div class="title" fxFlex="25" fxFlex.gt-sm="50" fxFlex.gt-xs="50"> Beneficiary Bank Name
+                            </div>
+                            <div class="info" fxFlex="25" fxFlex.gt-sm="50" fxFlex.gt-xs="50">
+                                {{transferDetail['beneficiary_bank_name']}}</div>
+                        </div>
+                        <div class="info-line" fxFlex="50" fxFlex.gt-sm="50" fxFlex.gt-xs="100">
+                            <div class="title" fxFlex="25" fxFlex.gt-sm="50" fxFlex.gt-xs="50">Beneficiary Bank SWIFT
+                            </div>
+                            <div class="info" fxFlex="25" fxFlex.gt-sm="50" fxFlex.gt-xs="50">
+                                {{transferDetail['beneficiary_bank_swift']}}</div>
+                        </div>
+                        <div class="info-line" fxFlex="50" fxFlex.gt-sm="50" fxFlex.gt-xs="100">
+                            <div class="title" fxFlex="25" fxFlex.gt-sm="50" fxFlex.gt-xs="50"> Beneficiary BIC/SortCode
+                            </div>
+                            <div class="info" fxFlex="25" fxFlex.gt-sm="50" fxFlex.gt-xs="50">
+                                {{transferDetail['beneficiary_bic_sort_code']}}</div>
+                        </div>
+                        <div class="info-line" fxFlex="50" fxFlex.gt-sm="50" fxFlex.gt-xs="100">
+                            <div class="title" fxFlex="25" fxFlex.gt-sm="50" fxFlex.gt-xs="50"> Beneficiary Address
+                            </div>
+                            <div class="info" fxFlex="25" fxFlex.gt-sm="50" fxFlex.gt-xs="50">
+                                {{transferDetail['beneficiary_address']}}</div>
+                        </div>
+                        <div class="info-line" fxFlex="50" fxFlex.gt-sm="50" fxFlex.gt-xs="100">
+                            <div class="title" fxFlex="25" fxFlex.gt-sm="50" fxFlex.gt-xs="50"> Beneficiary Country
+                            </div>
+                            <div class="info" fxFlex="25" fxFlex.gt-sm="50" fxFlex.gt-xs="50">
+                                {{transferDetail['to_country_code']}}</div>
+                        </div>
+                        <div class="info-line" fxFlex="50" fxFlex.gt-sm="50" fxFlex.gt-xs="100">
+                            <div class="title" fxFlex="25" fxFlex.gt-sm="50" fxFlex.gt-xs="50"> Charges Type</div>
+                            <div class="info" fxFlex="25" fxFlex.gt-sm="50" fxFlex.gt-xs="50">
+                                {{transferDetail['charge_type']}}</div>
+                        </div>
+                        <div class="info-line" fxFlex="50" fxFlex.gt-sm="50" fxFlex.gt-xs="100">
+                            <div class="title" fxFlex="25" fxFlex.gt-sm="50" fxFlex.gt-xs="50">Purpose Of Transfer</div>
+                            <div class="info" fxFlex="25" fxFlex.gt-sm="50" fxFlex.gt-xs="50">
+                                {{transferDetail['description']}}</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

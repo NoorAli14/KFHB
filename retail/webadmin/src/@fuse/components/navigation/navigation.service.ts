@@ -150,6 +150,14 @@ export class FuseNavigationService {
             icon: 'receipt',
             url: '/req',
         };
+        const internationalItem = {
+            id: 'international',
+            title: 'International Transfer Requests',
+            type: 'item',
+            icon: 'calendar_today',
+            url: '/international-transfer-requests',
+        };
+        
         const findRefferal = navigation.find((x) => x.id == 'referrals');
         if (!findRefferal) {
             navigation.push(refferalsItem);
@@ -157,6 +165,10 @@ export class FuseNavigationService {
         const findserviceRequests = navigation.find((x) => x.id == 'service-requests');
         if (!findserviceRequests) {
             navigation.push(serviceRequestsItem);
+        }
+        const internationalObj = navigation.find((x) => x.id == 'international');
+        if (!internationalObj) {
+            navigation.push(internationalItem);
         }
 
 
