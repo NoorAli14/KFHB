@@ -29,4 +29,5 @@ export class InternationalTransferRequest extends BaseModel {
     authorize_time: string;
     authorize_terminal: string;
     bank_trx_ref_no: string;
+    beneficiary_bank_name:string
 }

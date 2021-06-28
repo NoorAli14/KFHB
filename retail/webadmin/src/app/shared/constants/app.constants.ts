@@ -95,6 +95,8 @@ const ONBOARDING = '/api/v1/onboarding/';
 const SERVICEREQUEST = '/requests/api/v1/service/request/';
 const REFERRALREQUEST = '/customers/api/v1/customers/';
 const TRANSFER = '/api/v2/transfer';
+const BANKTRANSACTION = '/api/v1/transfer';
+const JAZELREQUEST= "J2Retail/jazeel1proxy/api/v2/transfer"
 
 export const URI = {
     USER_INVITATION: `${ENTITLEMENT}invitations`,
@@ -131,9 +133,11 @@ export const URI = {
     REFERRAL: `${REFERRALREQUEST}referral`,
     REFERRAL_TRANSACTIONS: `${REFERRALREQUEST}referral/transactions`,
     REFERRAL_TRANSACTIONS_REPORT: `${REFERRALREQUEST}referral/transactions/excel/report`,
-    INTERNATIONAL_TRANSFER_REQUEST: `${TRANSFER}/getInternationalTransferHistory`,
+    INTERNATIONAL_TRANSFER_REQUEST: `${JAZELREQUEST}/getInternationalTransferHistory`,
     APPROVE_TRANSFER_REQUEST: `${TRANSFER}/approveInternationalAmountAndCharges`,
-    REJECT_TRANSFER_REQUEST: `${TRANSFER}/reverseInternationalAmountAndCharges`
+    REJECT_TRANSFER_REQUEST: `${TRANSFER}/reverseInternationalAmountAndCharges`,
+    REJECT_BANK_TRANSACTION: `${BANKTRANSACTION}/rejectInternationalTransfer`,
+    APPROVE_BANK_TRANSACTION: `${BANKTRANSACTION}/approveInternationalTransfer`
 };
 
 export const DEFAULT_IMAGE = 'assets/images/not-available.png';

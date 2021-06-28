@@ -28,11 +28,28 @@ export class DialogInternationalTransferStatusComponent implements OnInit {
   }
 
   reject() : void {
-    this._service.approve(this.data.id);
+    this._service.reject({bank_trx_ref_no: this.data.bank_trx_ref_no});
   }
 
   approve(): void {
-    this._service.reject(this.data.id);
+    const obj = {
+      // bank_code: this.data.bank_code,
+      // benifitiary_bank_name: this.data.beneficiary_bank_name,
+      // reference_number:"01800730000059069990",
+      // transaction_currency_code:"USD",
+      // transfer_amount: "69600.00",
+      // sender_iban_no: "/BH32KFHO00991010002083",
+      // sender_name: "FRENCH HOUSE DESIGN W.L.L.",
+      // sender_address: "FLAT 11,BLDG 63 ,ROAD 1, BLOCK 604",
+      // sender_po_box: "Sender PO Box",
+      // benifitiary_swift_code: "MEDLLBBX",
+      // beneficiary_account_no: "/SA9480000121608010502338",
+      // beneficiary_name: "MOSAIQUE S.A.L",
+      // beneficiary_charges_type:"OUR",
+      // phoenix_reference_no:"GA800740000062169718",
+      // bank_trx_ref_no:"REF@1234"
+  }
+    this._service.approve(obj);
   }
 
   onSubmit() {
